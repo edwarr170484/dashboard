@@ -1,0 +1,283 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme userForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block title %}{% trans %} Панель управления - Редактировать группу{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_users') }}">Пользователи</a></li>
+            <li class="active">Редактировать пользователя</li>
+        </ol>
+        <h1 class="page-header">Пользователь <small>Редактировать пользователя</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информаци о пользовтеле</h4>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#useradverts">Объявления ({{ user.products | length }})</a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#userfriends">Друзья ({{ user.friends | length }})</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                {{ form_start(userForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label class="m-b-15">Аватар</label>
+                                            {% if userForm.userinfo.vars.value %}
+                                                {% if userForm.userinfo.vars.value.avatar%}
+                                                    <img class="m-b-15" src="{{ asset('bundles/images/users/avatars/') }}{{userForm.userinfo.vars.value.avatar}}" alt="" title="" width="100%" />
+                                                {% endif %}
+                                            {% endif %}
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    {{ form_widget(userForm.userinfo.avatarNew) }}
+                                                    {{ form_widget(userForm.userinfo.avatar) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.isConfirm)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.isConfirm)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.isActive)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.isActive)}}
+                                                </div>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.firstname)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.userinfo.firstname)}}
+                                                </div>
+                                            </div> 
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.midname)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.userinfo.midname)}}
+                                                </div>
+                                            </div> 
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.lastname)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.userinfo.lastname)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.sex)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.userinfo.sex)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.email)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.email)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Новый пароль (при заполнении этого поля пароль для пользователя будет изменен на введенный)</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.password)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.phone)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.userinfo.phone)}}
+                                                </div>
+                                            </div> 
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.userpurse.balanse)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.userpurse.balanse)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.advertNumber)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.advertNumber)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">День рождения</label>
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-4">
+                                                            {{ form_widget(userForm.userinfo.birthdayday, {'id':'birthdayday'})}}
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4">
+                                                            {{ form_widget(userForm.userinfo.birthdaymonth, {'id':'birthdaymonth'})}}
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4">
+                                                            {{ form_widget(userForm.userinfo.birthdayyear, {'id':'birthdayyear'})}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.region)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.userinfo.region)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.city)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.userinfo.city)}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">{{ form_label(userForm.roles)}}</label>
+                                                <div class="col-md-9">
+                                                    {{ form_widget(userForm.roles)}}
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 ">{{ form_label(userForm.save)}}</label>
+                                        <div class="col-md-9">
+                                            {{ form_widget(userForm.save,{'type' : 'submit'})}}
+                                        </div>
+                                    </div> 
+                                {{ form_end(userForm)}}
+                            </div>
+                            <div id="useradverts" class="tab-pane fade">
+                                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                                    <div class="panel-heading ui-sortable-handle">
+                                        <h4 class="panel-title">Объявления</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            {% if user.products | length > 0 %}
+                                                <form action="{{ path('admin_user_edit', {"userId" : user.id })}}" method="POST" name="deleteSelected" id="deleteSelected">
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Название</th>
+                                                                <th>Изображение</th>
+                                                                <th>Действия</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for product in user.products %}
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}" target="_blank">{{ product.name }}</a>
+                                                                    </td>
+                                                                    <td>
+                                                                        {% if product.mainfoto %}
+                                                                            <img class="m-b-15" src="{{ asset('bundles/images/products/') }}{{product.mainfoto}}" alt="" title="" width="200px" />
+                                                                        {% endif %}
+                                                                    </td>
+                                                                    <td>
+                                                                        <a class="btn btn-success" href="{{ path('admin_product_edit', {'productId' : product.id}) }}">
+                                                                            <i class="fa fa-pencil" title="Редактировать объявление"></i>
+                                                                        </a>
+                                                                        <a class="btn btn-danger" href="{{ path('admin_product_delete', {'productId' : product.id}) }}" 
+                                                                                                  onclick="if(!confirm('Вы уверены, что хотите удалить объявление?'))return false;">
+                                                                            <i class="fa fa-times" title="Удалить объявление"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+                                            {% else %}
+                                                Это пользователь еще не добавил ни одного объявления
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="userfriends" class="tab-pane fade">
+                                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                                    <div class="panel-heading ui-sortable-handle">
+                                        <h4 class="panel-title">Друзья</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            {% if user.friends | length > 0 %}
+                                                    <table class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Пользователь</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for friend in user.friends %}
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="{{ path('admin_user_edit', {'userId' : friend.user.id}) }}">{{ friend.user.userinfo.firstname }} {{ friend.user.userinfo.lastname }}</a>
+                                                                    </td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                            {% else %}
+                                                Это пользователь еще не привел друзей
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+			</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

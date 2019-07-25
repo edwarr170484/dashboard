@@ -1,0 +1,78 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Служебные шаблоны{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Служебные шаблоны</li>
+    </ol>
+    <h1 class="page-header">Служебные шаблоны <small>Редактирование служебных шаблонов сайта</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <h4 class="panel-title">Служебные шаблоны</h4>
+                </div>
+                <div class="panel-body">
+                    {% if locales %}
+                        {% set i = 0 %}
+                        <ul class="nav nav-tabs">
+                            {% for locale in locales %}
+                                <li {% if i == 0 %}class="active"{% endif %}>
+                                    <a data-toggle="tab" href="#locale_{{ locale.id }}"><img src="{{ asset('bundles/Default/img/flags/' ~ locale.country) }}" style="width:32px;"/> {{ locale.name }}</a>
+                                </li>    
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content">
+                            {% set i = 0 %}
+                            {% for locale in locales %}
+                                <div id="locale_{{ locale.id }}" class="tab-pane fade {% if i == 0 %}active in{% endif %}">
+                                    {% if locale.pages | length > 0 %}
+                                        <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Название</th>
+                                                        <th>Действия</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                        {% for page in locale.pages %}
+                                                            {% if page.isUserpage == 0 %}
+                                                                <tr>
+                                                                    <td>
+                                                                        {{ page.title }}
+                                                                    </td>
+                                                                    <td>
+                                                                        <a class="btn btn-success" href="{{ path('admin_pages_edit',{ pageId : page.id }) }}">
+                                                                            <i class="fa fa-pencil" title="Редактировать страницу"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                </tbody>
+                                        </table>
+                                    {% else %}
+                                        Страницы для локализации не добавлены
+                                    {% endif %}
+                                </div>
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

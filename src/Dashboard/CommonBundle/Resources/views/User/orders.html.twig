@@ -1,0 +1,260 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Pieprasījumi{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_orders')}}">{% trans %}Pieprasījumi{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_ordersLocale',{'_locale' : app.request.locale})}}">{% trans %}Pieprasījumi{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-4 col-md-4">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-8 col-md-8">
+            <div class="account-purchase-menu">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            {% if  app.request.locale == 'lv' %}
+                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% else %}
+                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if  app.request.locale == 'lv' %}
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Saņemtie pasūtījumi{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                            <div class="user-orders-received">
+                            {% if orders %}
+                                <table class="table table-striped table-responsive orders-table">
+                                    <thead>
+                                        <tr>
+                                            <th>{% trans %}Sīkāka informācija{% endtrans %}</th>
+                                            <th>{% trans %}Pievienošanas datums{% endtrans %}</th>
+                                            <th>{% trans %}Statuss{% endtrans %}</th>
+                                            <th>{% trans %}Darbības{% endtrans %}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                            <tr>
+                                                <td width="40%">
+                                                    <div><strong>{% trans %}Istaba{% endtrans %}:</strong>{{ order.id }}</div>
+                                                    {% if order.product %}
+                                                        <div><strong>{% trans %}Reklāma{% endtrans %}: </strong><a href="{{ path('product', {'productId' : order.product.id,'productName' : order.product.translit}) }}">{{ order.product.name }}</a></div>
+                                                    {% else %}
+                                                        <div><strong>{% trans %}Reklāma{% endtrans %}: </strong>{% trans %}Noņemts{% endtrans %}</div>
+                                                    {% endif %}
+                                                    <div><strong>{% trans %}Lietotājs{% endtrans %}: </strong>
+                                                        {% if order.userSended %}
+                                                            <a href="{{ path('profile', {'userId' : order.userSended.id}) }}">{{ order.name }}</a>
+                                                        {% else %}
+                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div><strong>Email:</strong> {{ order.email }}</div>
+                                                    <div><strong>{% trans %}Tālruņa numurs{% endtrans %}:</strong> {{ order.phone }}</div>
+                                                    {% if order.comment %}
+                                                        <div><strong>{% trans %}Komentārs{% endtrans %}:</strong> {{ order.comment }}</div>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ order.dateAdded | date("d.m.Y в H:i") }}</td>
+                                                <td>
+                                                    {% if order.status == 7 %}
+                                                        {% trans %}Pabeigts{% endtrans %}
+                                                    {% else %}
+                                                        <select class="form-control" name="order-status" onchange="changeOrderStatus($(this),{{ order.id }}, '{{ locale.code}}');">
+                                                            {% for status in orderStatuses %}
+                                                                <option value="{{ status.id }}" {% if status.id == order.status%} selected="selected" {% endif%}>
+                                                                    {% if status.translations | length > 0 %}
+                                                                        {% for translation in status.translations %}
+                                                                            {% if translation.locale.id == locale.id %}
+                                                                                {{ translation.value }}
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% else %}
+                                                                        {{ status.name }}
+                                                                    {% endif %}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <div class="change-order-status-result"><i class="fa fa-spin fa-spinner fa-2x"></i></div>
+                                                        <div class="reviewStatusCommentBlock">
+                                                            <input name="reviewStatusComment" id="reviewStatusComment" class="form-control" placeholder="Укажите причину" />
+                                                            <button class="btn btn-sm btn-primary" type="button" onclick="changeOrderCommentStatus($(this), {{ order.id }}, '{{ locale.code}}')">Отправить</button>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if order.statusComment %}
+                                                        <div class="statusComment"><strong>{% trans %}Iemesls{% endtrans %}: </strong>{{ order.statusComment }}</div>
+                                                    {% endif %}
+                                                </td>
+                                                <td align="center">
+                                                    <a class="message-delete" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties dzēst pasūtījumu{% endtrans %}?')) return false;" href="{{ path('account_deleteorder',{'orderId' : order.id, 'route' : 'account_orders'  }) }}"></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% if pagination %}
+                                    <div class="row">
+                                        <div class="col-lg-12 padination">
+                                            {{ pagination | raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="page-no-data">{% trans %}Jūs vēl neesat saņēmis pasūtījumus{% endtrans %}.</div>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        {% else %}
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Saņemtie pasūtījumi{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                            <div class="user-orders-received">
+                            {% if orders %}
+                                <table class="table table-striped table-responsive orders-table">
+                                    <thead>
+                                        <tr>
+                                            <th>{% trans %}Sīkāka informācija{% endtrans %}</th>
+                                            <th>{% trans %}Pievienošanas datums{% endtrans %}</th>
+                                            <th>{% trans %}Statuss{% endtrans %}</th>
+                                            <th>{% trans %}Darbības{% endtrans %}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                            <tr>
+                                                <td width="40%">
+                                                    <div><strong>{% trans %}Istaba{% endtrans %}:</strong>{{ order.id }}</div>
+                                                    {% if order.product %}
+                                                        <div><strong>{% trans %}Reklāma{% endtrans %}: </strong><a href="{{ path('productLocale', {'_locale' : app.request.locale,'productId' : order.product.id,'productName' : order.product.translit}) }}">{{ order.product.name }}</a></div>
+                                                    {% else %}
+                                                        <div><strong>{% trans %}Reklāma{% endtrans %}: </strong>{% trans %}Noņemts{% endtrans %}</div>
+                                                    {% endif %}
+                                                    <div><strong>{% trans %}Lietotājs{% endtrans %}: </strong>
+                                                        {% if order.userSended %}
+                                                            <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : order.userSended.id}) }}">{{ order.name }}</a>
+                                                        {% else %}
+                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div><strong>Email:</strong> {{ order.email }}</div>
+                                                    <div><strong>{% trans %}Tālruņa numurs{% endtrans %}:</strong> {{ order.phone }}</div>
+                                                    {% if order.comment %}
+                                                        <div><strong>{% trans %}Komentārs{% endtrans %}:</strong> {{ order.comment }}</div>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ order.dateAdded | date("d.m.Y в H:i") }}</td>
+                                                <td>
+                                                    {% if order.status == 7 %}
+                                                        {% trans %}Pabeigts{% endtrans %}
+                                                    {% else %}
+                                                        <select class="form-control" name="order-status" onchange="changeOrderStatus($(this),{{ order.id }}, '{{ locale.code}}');">
+                                                            {% for status in orderStatuses %}
+                                                                <option value="{{ status.id }}" {% if status.id == order.status%} selected="selected" {% endif%}>
+                                                                    {% if status.translations | length > 0 %}
+                                                                        {% for translation in status.translations %}
+                                                                            {% if translation.locale.id == locale.id %}
+                                                                                {{ translation.value }}
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% else %}
+                                                                        {{ status.name }}
+                                                                    {% endif %}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <div class="change-order-status-result"><i class="fa fa-spin fa-spinner fa-2x"></i></div>
+                                                        <div class="reviewStatusCommentBlock">
+                                                            <input name="reviewStatusComment" id="reviewStatusComment" class="form-control" placeholder="Укажите причину" />
+                                                            <button class="btn btn-sm btn-primary" type="button" onclick="changeOrderCommentStatus($(this), {{ order.id }}, '{{ locale.code}}')">Отправить</button>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if order.statusComment %}
+                                                        <div class="statusComment"><strong>{% trans %}Iemesls{% endtrans %}: </strong>{{ order.statusComment }}</div>
+                                                    {% endif %}
+                                                </td>
+                                                <td align="center">
+                                                    <a class="message-delete" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties dzēst pasūtījumu{% endtrans %}?')) return false;" href="{{ path('account_deleteorderLocale',{'_locale' : app.request.locale,'orderId' : order.id, 'route' : 'account_orders'}) }}"></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% if pagination %}
+                                    <div class="row">
+                                        <div class="col-lg-12 padination">
+                                            {{ pagination | raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="page-no-data">{% trans %}Jūs vēl neesat saņēmis pasūtījumus{% endtrans %}.</div>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock%}
+
+

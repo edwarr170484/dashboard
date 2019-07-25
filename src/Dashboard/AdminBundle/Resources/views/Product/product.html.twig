@@ -1,0 +1,190 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Объявления{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Объявления</li>
+    </ol>
+    <h1 class="page-header">Объявления <small>Работа с объявлениями</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <!--<div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('admin_product_edit') }}">Добавить объявление</a></li>
+                            <li><a href="#">Сохранить</a></li>
+                        </ul>
+                    </div>-->
+                    <h4 class="panel-title">Обявления</h4>
+                </div>
+                <div class="panel-body">
+                     <div class="panel-body">
+                        {{ form_start(productForm, {'method' : 'POST', 'attr' : {'class' : 'form-inline'}})}}
+                            <div class="form-group m-r-10">
+                                {{ form_widget(productForm.id)}}
+                            </div>
+                            <div class="form-group m-r-10">
+                                {{ form_widget(productForm.name)}}
+                            </div>
+                            {{ form_widget(productForm.save,{'type' : 'submit'})}}
+                        {{ form_end(productForm)}}
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a data-toggle="tab" href="#current">Обычние объявления</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#payment">Оплаченные объявления</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="current" class="tab-pane fade active in">
+                            <div class="table-responsive">
+                            {% if products %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Изображение</th>
+                                            <th>Название</th>
+                                            <th>Категория</th>
+                                            <th>Дата добавления</th>
+                                            <th>Пользователь</th>
+                                            <th>Заказов</th>
+                                            <th>Отзывов</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form method="POST" name="deleteSelected" id="deleteSelected">
+                                                {% for product in products %}
+                                                    {% if not product.service %}
+                                                    <tr>
+                                                        <td>{{ product.id }}</td>
+                                                        <td>
+                                                            {% if product.mainfoto %}
+                                                                <img src="{{ asset('bundles/images/products/')}}{{ product.mainfoto }}" alt="" tile="" width="100px"/>
+                                                            {% else %}
+                                                                <img src="{{ asset('bundles/images/products/thumbs/bez-foto-thumb.png')}}" alt="" tile="" width="100px"/>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td><a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}" target="_blank">{{ product.name }}</a></td>
+                                                        <td>
+                                                            {% if product.category %}
+                                                                {{ product.category.title }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ product.dateAdded | date("d.m.Y в H:i") }}</td>
+                                                        <td><a href="{{ path('admin_user_edit', {'userId' : product.user.id}) }}">{{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}</a></td>
+                                                        <td>{{ product.orders | length }}</td>
+                                                        <td>{{ product.reviews | length }}</td>
+                                                        <td>
+                                                            <a class="btn btn-success" href="{{ path('admin_product_edit', {'productId' : product.id}) }}" title="Просмотреть объявление">
+                                                                <i class="fa fa-pencil" title="Редактировать объявление"></i>
+                                                            </a>
+                                                            <a class="btn btn-danger" href="{{ path('admin_product_delete', {'productId' : product.id}) }}" 
+                                                                                      onclick="if(!confirm('Вы уверены, что хотите удалить объявление?'))return false;">
+                                                                <i class="fa fa-times" title="Удалить объявление"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                        </form>
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                Не добавлено ни одного объявления
+                            {% endif%}
+                        </div>    
+                        </div>
+                        <div id="payment" class="tab-pane fade">
+                            <div class="table-responsive">
+                            {% if products %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Изображение</th>
+                                            <th>Название</th>
+                                            <th>Категория</th>
+                                            <th>Пользователь</th>
+                                            <th>Услуга</th>
+                                            <th>Заказов</th>
+                                            <th>Отзывов</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form method="POST" name="deleteSelected" id="deleteSelected">
+                                                {% for product in products %}
+                                                    {% if product.service %}
+                                                    <tr>
+                                                        <td>{{ product.id }}</td>
+                                                        <td>
+                                                            {% if product.mainfoto %}
+                                                                <img src="{{ asset('bundles/images/products/')}}{{ product.mainfoto }}" alt="" tile="" width="100px"/>
+                                                            {% else %}
+                                                                <img src="{{ asset('bundles/images/products/thumbs/bez-foto-thumb.png')}}" alt="" tile="" width="100px"/>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td><a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}" target="_blank">{{ product.name }}</a></td>
+                                                        <td>
+                                                            {% if product.category %}
+                                                                {{ product.category.title }}
+                                                            {% endif %}
+                                                        </td>
+                                                        <td><a href="{{ path('admin_user_edit', {'userId' : product.user.id}) }}">{{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}</a></td>
+                                                        <td>{{ product.service.service.title }}</td>
+                                                        <td>{{ product.orders | length }}</td>
+                                                        <td>{{ product.reviews | length }}</td>
+                                                        <td>
+                                                            <a class="btn btn-success" href="{{ path('admin_product_edit', {'productId' : product.id}) }}" title="Просмотреть объявление">
+                                                                <i class="fa fa-pencil" title="Редактировать объявление"></i>
+                                                            </a>
+                                                            
+                                                            
+                                                            <a class="btn btn-danger" href="{{ path('admin_product_delete', {'productId' : product.id}) }}" 
+                                                                                      onclick="if(!confirm('К объявлению привязана услуга {{ product.service.service.title }}, срок действия которой до {{ product.service.dateEnd | date("d.m.Y H:i") }} . Вы уверены, что хотите удалить объявление?'))return false;">
+                                                                <i class="fa fa-times" title="Удалить объявление"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                        </form>
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                Не добавлено ни одного объявления
+                            {% endif%}
+                        </div> 
+                            
+                        </div>
+                        {% if pagination %}
+                            <div class="pagination">
+                                {{ pagination | raw }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

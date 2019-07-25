@@ -1,0 +1,32 @@
+<?php
+
+namespace Dashboard\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Table()
+ * @ORM\Entity()
+ */
+class Payment
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
+     */
+    private $title;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true, options={"default":"0"})
+     */
+    private $description;
+    
+    
+}

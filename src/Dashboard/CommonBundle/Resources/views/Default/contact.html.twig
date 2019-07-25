@@ -1,0 +1,135 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% form_theme messageForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block title %}{{ page.metaTagTitle}}{% endblock %}
+{% block metatags %}
+    <meta content="{{ page.metaTagDescription }}" name="description" />
+    <meta content="{{ page.metaTagAuthor }}" name="author" />
+    <meta content="{{ page.metaTagRobots }}" name="robots" />
+    <meta content="{{ page.metaTagKeywords }}" name="keywords" />
+{% endblock %}
+{% block body %}
+<script>
+            
+            var messageCaptcha;
+            
+            var onloadCallback = function() {
+              messageCaptcha = grecaptcha.render('messageCaptcha', {
+                'sitekey' : '6Lc6wCkTAAAAAHoOUvGPxIsIVZ67R09ZYGhmILND'
+              });
+            };
+
+</script>
+<nav class="navbar navbar-default">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %} 
+                        <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li><a href="">{{ page.title }}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li><a href="">{{ page.title }}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+	<div class="row content-row">
+		<div class="col-lg-9 col-md-9 left-column">
+			<div class="content-block-header">
+                            <h1>{{ page.title }}</h1>
+                        </div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="page-content">
+                            {{ page.text | raw }}
+                            <div class="row contact-us">
+                                {{ form_start(messageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-lg-12 col-md-12">{{ form_label(messageForm.authorName) }}</label>
+                                            <div class="col-lg-12 col-md-12">
+                                                {{ form_widget(messageForm.authorName) }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-12 col-md-12">{{ form_label(messageForm.authorEmail) }}</label>
+                                            <div class="col-lg-12 col-md-12">
+                                                {{ form_widget(messageForm.authorEmail) }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-lg-12 col-md-12">{{ form_label(messageForm.messageSubject) }}</label>
+                                            <div class="col-lg-12 col-md-12">
+                                                {{ form_widget(messageForm.messageSubject) }}
+                                            </div>
+                                        </div>
+                                    </div>   
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-lg-12 col-md-12">{{ form_label(messageForm.messageText) }}</label>
+                                            <div class="col-lg-12 col-md-12">
+                                                {{ form_widget(messageForm.messageText, {'attr' : {'style' : 'height:192px'}}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if settings.isShowCaptcha %}
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="form-group">
+                                                <div class="col-lg-6 col-md-6"></div>
+                                                <div class="col-lg-6 col-md-6 right-text">
+
+                                                    <div class="g-recaptcha pull-right" id="messageCaptcha"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="form-group">
+                                            <div class="col-lg-4 col-md-4"></div>
+                                            <div class="col-lg-8 col-md-8 right-text">
+                                                {{ form_widget(messageForm.save, {'type' : 'submit'}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {{ form_end(messageForm) }}
+                            </div>
+                        </div>
+		</div>
+		<div class="col-lg-3 col-md-3 right-column">
+			<div class="advertise-block hidden-sm hidden-xs" id="bannersSticky">
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
+			</div>
+                        <div class="advertise-block hidden-lg hidden-md">
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+

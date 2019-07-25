@@ -1,0 +1,293 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme filterForm _self %}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block _filter_categories_widget -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('_filter_categories_entry_row') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {{- block('_filter_categories_entry_row') -}}
+    </select>
+{%- endblock -%}
+
+{%- block _filter_categories_entry_row -%}
+    {% for choice in options %}
+        {%- set parent = '' %}
+        {% if choice.data.children | length > 0 and choice.data.parent is null %}
+            <option style="font-weight:bold" value="{{ choice.data.id }}" {% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.data.title }}</option>
+            {%- set options = choice.data.children -%}
+            {%- set parent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' -%}
+            {{- block('_filter_categories_entry_subrow') -}}
+        {% endif %}
+    {% endfor %}
+{%- endblock -%}
+
+{%- block _filter_categories_entry_subrow -%}
+    {%- set parent1 = parent %}
+    {% for choice in options %}
+        {% set selected = '' %}
+        {% if filter.categories %}
+            {% for category in filter.categories %}
+                {% if category.id == choice.id %}
+                    {% set selected = 'selected="selected"' %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if choice.children | length > 0 %}
+            <option style="font-weight:bold" value="{{ choice.id }}" {{ selected }}>{{ parent1 | raw }}{{ choice.title }}</option>
+            {%- set options = choice.children -%}
+            {%- set parent = parent1 ~ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' -%}
+            {{- block('_filter_categories_entry_subrow') -}}
+        {% else %}
+            <option value="{{ choice.id }}" {{ selected }}>{{ parent1 | raw }}{{ choice.title }}</option>
+        {% endif %}
+    {% endfor %}
+{%- endblock -%}
+
+{% block _filter_translations_widget %}
+    <table class="table table-bordered table-translations">
+        <thead>
+            <tr>
+                <th>{% trans %}Локализация{% endtrans %}</th>
+                <th>{% trans %}Перевод{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _filter_translations_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.locale)}}</td>
+        <td>{{ form_widget(form.value)}}{{ form_widget(form.mark)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить перевод для языка"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block _filter_values_entry_translations_widget %}
+    <button class="btn btn-sm btn-success m-b-15 add-translation-sub" type="button"><i class="fa fa-plus" aria-hidden="true"></i>Добавить перевод</button>
+    <table class="table table-bordered table-translations-sub">
+        <thead>
+            <tr>
+                <th>{% trans %}Локализация{% endtrans %}</th>
+                <th>{% trans %}Перевод{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _filter_values_entry_translations_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.locale)}}</td>
+        <td>{{ form_widget(form.value)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить перевод для языка"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block _filter_values_widget %}
+    
+    <table class="table table-bordered table-filter-values">
+        <thead>
+            <tr>
+                <th>{% trans %}Значение{% endtrans %}</th>
+                <th>{% trans %}Переводы{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock _filter_values_widget %}
+
+{% block _filter_values_entry_row %}
+    <tr>
+        <td>
+            <div class="form-group">
+                <div class="col-md-12">
+                    {{ form_widget(form.value)}}
+                </div>
+            </div> 
+        </td>
+        <td>
+            {{ form_widget(form.translations,{'id' : 'object_translations_sub'})}}
+        </td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить значение?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить значение"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block title %}{% trans %} Панель управления - Редактировать фильтр{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_filters') }}">Фильтры</a></li>
+            <li class="active">Редактировать фильтр</li>
+        </ol>
+        <h1 class="page-header">Фильтры <small>Редактировать фильтр</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация о фильтре</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(filterForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#translations">Переводы</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#filtervalues">Значения фильтра</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#filtercategory">Категории</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(filterForm.name)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(filterForm.name)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(filterForm.type)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(filterForm.type)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(filterForm.isRequired)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(filterForm.isRequired)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(filterForm.isSearch)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(filterForm.isSearch)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(filterForm.isSelltype)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(filterForm.isSelltype)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(filterForm.isShowCard)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(filterForm.isShowCard)}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="translations" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-translation" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить перевод</button>
+                                        {{ form_widget(filterForm.translations,{'id' : 'object_translations'})}}
+                                        {% if filterForm.translations | length <= 0 %}
+                                            Переводы не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="filtervalues" class="tab-pane fade">
+                                <button class="btn btn-sm btn-success m-b-15" id="add-filter-value" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить значение для фильтра</button>     
+                                {{ form_widget(filterForm.values)}}
+                                                            
+                                {% if filterForm.values | length <= 0 %}
+                                    Значений для фильтров не найдено
+                                {% endif %}
+                            </div>
+                            <div id="filtercategory" class="tab-pane fade">
+                                <div class="form-group">
+                                    <label class="col-md-12 ">{{ form_label(filterForm.categories)}}</label>
+                                    <div class="col-md-12">
+                                        {{ form_widget(filterForm.categories,{'filter' : filter})}}
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-group">
+                            <label class="col-md-3 ">{{ form_label(filterForm.save)}}</label>
+                            <div class="col-md-9">
+                                {{ form_widget(filterForm.save,{'type' : 'submit'})}}
+                            </div>
+                        </div> 
+                        {{ form_end(filterForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

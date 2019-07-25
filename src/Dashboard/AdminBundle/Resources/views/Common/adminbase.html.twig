@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	<title>{% block title %}{% endblock %}</title>
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+        <meta content="" name="description" />
+        <meta content="" name="author" />
+	
+	
+	<!-- ================== BEGIN BASE CSS STYLE ================== -->
+	<link href="http://fonts.googleapis.com/css-family=Open+Sans-300,400,600,700.css" rel="stylesheet">
+	<link href="{{ asset('bundles/Admin/assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/css/animate.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/css/style.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/css/style-responsive.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/css/theme/default.css') }}" rel="stylesheet" id="theme" />
+	<!-- ================== END BASE CSS STYLE ================== -->
+	
+	<!-- ================== BEGIN PAGE LEVEL CSS STYLE ================== -->
+        <link href="{{ asset('bundles/Admin/assets/plugins/jquery-jvectormap/jquery-jvectormap-1.2.2.css') }}" rel="stylesheet" />
+        <link href="{{ asset('bundles/Admin/assets/plugins/bootstrap-calendar/css/bootstrap_calendar.css') }}" rel="stylesheet" />
+        <link href="{{ asset('bundles/Admin/assets/plugins/gritter/css/jquery.gritter.css') }}" rel="stylesheet" />
+        <link href="{{ asset('bundles/Admin/assets/plugins/morris/morris.css') }}" rel="stylesheet" />
+        <link href="{{ asset('bundles/Admin/assets/plugins/switchery/switchery.min.css') }}" rel="stylesheet" />
+	<!-- ================== END PAGE LEVEL CSS STYLE ================== -->
+	
+	<!-- ================== BEGIN BASE JS ================== -->
+	<script src="{{ asset('bundles/Admin/assets/plugins/pace/pace.min.js') }}"></script>
+	<!-- ================== END BASE JS ================== -->
+</head>
+<body>
+	<!-- begin #page-loader -->
+	<div id="page-loader" class="fade in"><span class="spinner"></span></div>
+	<!-- end #page-loader -->
+	
+	<!-- begin #page-container -->
+	<div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
+		{{ render(controller('DashboardAdminBundle:Default:getHeader')) }}
+		{{ render(controller('DashboardAdminBundle:Default:getSidebar')) }}		
+		
+	{% block body %}{% endblock %}			
+		<!-- begin scroll to top btn -->
+		<a href="javascript:;" class="btn btn-icon btn-circle btn-success btn-scroll-to-top fade" data-click="scroll-top"><i class="fa fa-angle-up"></i></a>
+		<!-- end scroll to top btn -->
+	</div>
+	<!-- end page container -->
+	
+	<!-- ================== BEGIN BASE JS ================== -->
+	<script src="{{ asset('bundles/Admin/assets/plugins/jquery/jquery-1.9.1.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/jquery/jquery-migrate-1.1.0.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+	<!--[if lt IE 9]>
+		<script src="{{ asset('bundles/Admin/assets/crossbrowserjs/html5shiv.js') }}"></script>
+		<script src="{{ asset('bundles/Admin/assets/crossbrowserjs/respond.min.js') }}"></script>
+		<script src="{{ asset('bundles/Admin/assets/crossbrowserjs/excanvas.min.js') }}"></script>
+	<![endif]-->
+	<script src="{{ asset('bundles/Admin/assets/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/jquery-cookie/jquery.cookie.js') }}"></script>
+	<!-- ================== END BASE JS ================== -->
+	
+	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+        <script src="{{ asset('bundles/Admin/assets/plugins/jquery-jvectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
+        <script src="{{ asset('bundles/Admin/assets/plugins/jquery-jvectormap/jquery-jvectormap-world-merc-en.js') }}"></script>
+        <script src="{{ asset('bundles/Admin/assets/plugins/bootstrap-calendar/js/bootstrap_calendar.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/gritter/js/jquery.gritter.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/js/dashboard-v2.min.js') }}"></script>
+        <script src="{{ asset('bundles/Admin/assets/plugins/switchery/switchery.min.js') }}" ></script>
+        <script src="{{ asset('bundles/Admin/assets/js/form-slider-switcher.demo.min.js') }}"></script>
+        <script src="{{ asset('bundles/Admin/assets/js/dashboard.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/js/apps.min.js') }}"></script>
+        <script src="{{ asset('bundles/Admin/assets/js/custom.js') }}"></script>
+        <script src="{{ asset('bundles/Admin/assets/plugins/TinyMCE/tinymce.min.js') }}"></script>
+        <script type="text/javascript">
+            tinymce.init({
+                    language: "ru",
+                    valid_elements : "*[*]",
+                    cleanup : false,
+                    height:"300",
+                    verify_html : false,
+                    cleanup_on_startup : false,
+                    forced_root_block : "",
+                    validate_children : false,
+                    remove_redundant_brs : false,
+                    remove_linebreaks : false,
+                    force_p_newlines : false,
+                    force_br_newlines : false,
+                    valid_children : "+a[div|p|img|br|strong],+ol[p|img|br|strong],+ul[p|img|br|strong]",
+                    validate: false,
+                    fix_table_elements : false,
+                    fix_list_elements:false,
+                    image_advtab: true,
+                    external_filemanager_path:"/bundles/Admin/assets/plugins/TinyMCE/plugins/filemanager/",
+                    selector: "textarea.tinyeditor",
+                    plugins: "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table contextmenu paste textcolor filemanager",
+                    toolbar: "insertfile undo redo | styleselect | bold italic | forecolor | backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | filemanager"
+            });
+        </script>
+	<!-- ================== END PAGE LEVEL JS ================== -->
+	
+	<script>
+		$(document).ready(function() {
+			App.init();
+			DashboardV2.init();
+                        FormSliderSwitcher.init();
+                        
+		});
+	</script>
+</body>
+</html>
+
+

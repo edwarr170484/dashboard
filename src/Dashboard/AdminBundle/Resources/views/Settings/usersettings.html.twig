@@ -1,0 +1,60 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme settingsForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{% block title %}{% trans %} Панель управления - Редактировать группу{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_roles') }}">Пользователи</a></li>
+            <li class="active">Настройки пользователей</li>
+        </ol>
+        <h1 class="page-header">Настройки для пользователей <small>Редактировать</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Настройки для пользователей</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(settingsForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">{{ form_label(settingsForm.userDefaultGroup)}}</label>
+                            <div class="col-md-9">
+                                {{ form_widget(settingsForm.userDefaultGroup)}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">{{ form_label(settingsForm.userAdvertLimitText)}}</label>
+                            <div class="col-md-9">
+                                {{ form_widget(settingsForm.userAdvertLimitText)}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 ">{{ form_label(settingsForm.save)}}</label>
+                            <div class="col-md-9">
+                                {{ form_widget(settingsForm.save,{'type' : 'submit'})}}
+                            </div>
+                        </div> 
+                        {{ form_end(settingsForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

@@ -1,0 +1,483 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% form_theme productForm _self %}
+
+{%- block checkbox_widget -%}
+    {%- for attrname, attrvalue in attr -%}
+        {%- if attrname in ['id'] -%}
+            <div class="div-checkbox small-margin {% if checked %} active {% endif %}" {{ attrvalue }}></div>
+        {%- endif -%} 
+        {%- if attrname in ['text'] -%}
+            {{ attrvalue | raw }}
+        {%- endif -%}
+    {%- endfor -%}   
+    <input type="checkbox" {{ block('widget_attributes') }} value="1" {% if checked %} checked="checked"{% endif %} />
+{%- endblock checkbox_widget -%}
+
+{%- block collection_widget -%}
+    {% if prototype is defined %}
+        {%- set attr = attr|merge({'data-prototype': '<div class="product-foto-inputs" data-nameid="__name__">
+                                                        <input type="hidden" id="product_fotos___name___foto" name="product[fotos][__name__][foto]" /> 
+                                                        <input type="hidden" id="product_fotos___name___sortorder" name="product[fotos][__name__][sortorder]" /> 
+                                                        <input type="hidden" id="product_fotos___name___product" name="product[fotos][__name__][product]" />
+                                                     </div>', 'class' : 'dropzone' }) -%}
+    {% endif %}
+    {{- block('form_widget') -}}
+{%- endblock collection_widget -%}
+
+{% block _product_fotos_widget %}
+    {{ form_widget(form) }}
+    <script>
+         $(document).ready(function(){
+            
+            Dropzone.autoDiscover = false;
+    
+            var dz_fotos = $(".dropzone").find(".dz-preview").length;
+
+            myDropzone = new Dropzone("div.dropzone", {url: "/account/ajaxloadfotos", 
+                                         dictDefaultMessage : '<div class="adv-foto-frame main-foto add-more"><div class="adv-foto"></div></div>',
+                                         dictInvalidFileType : "{% trans %}Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.{% endtrans %}",
+                                         dictFileTooBig : "{% trans %}Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.{% endtrans %}",
+                                         dictMaxFilesExceeded : "{% trans %}Jūs nevarat augšupielādēt vairāk kā{% endtrans %} {{ role.advertFotoNumber }} {% trans %}изображений{% endtrans %}.",
+                                         maxFilesize: 5,
+                                         filesizeBase: 1024,
+                                         maxFiles: {{ role.advertFotoNumber }} - dz_fotos,
+                                         previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  \n\
+                                                                <div class=\"dz-image\">\n\
+                                                                    <img data-dz-thumbnail />\n\
+                                                                </div>\n  \n\
+                                                                \n\<div class=\"dz-details\">\n\
+                                                                        <div class=\"dz-filename\">\n\
+                                                                            <span data-dz-name></span>\n\
+                                                                        </div>\n\
+                                                                   </div>\n\
+                                                                <div class=\"dz-progress\">\n\
+                                                                    <span class=\"dz-upload\" data-dz-uploadprogress></span>\n\
+                                                                </div>\n  \n\
+                                                                <div class=\"dz-error-message\">\n\
+                                                                    <span data-dz-errormessage></span>\n\
+                                                                </div>\n  \n\
+                                                            </div>",
+                                         acceptedFiles: 'image/*',
+                                         error: function(file, errorMessage){
+                                             alert(errorMessage);
+                                             myDropzone.removeFile(file);
+                                         },
+                                         success: function(file, response){
+                                             var answer = JSON.parse(response);
+
+                                             var prototype = $("#product_fotos").data("prototype");
+                                            
+                                             var count = 0;
+                                             $(".add-more").remove();
+                                             $(".dropzone").append('<div class="adv-foto-frame main-foto add-more"><div class="adv-foto"></div></div>');
+                                             $(".product-foto-inputs").each(function(){count = $(this).data('nameid')})
+                                             
+                                             var newForm = prototype.replace(/__name__/g, (count + 1));
+
+                                             file.previewElement.innerHTML = file.previewElement.innerHTML + newForm + 
+                                             '<button class="delete-product-image" id="delete-product-image' + (count + 1) + '" type="button" onclick=""><i class="fa fa-times" aria-hidden="true"></i></button>';
+                                             /*$("#product_fotos").append('<div class="adv-foto-frame main-foto add-more" style="margin-top:15px;"><div class="adv-foto"></div><div class="adv-foto-description">{% trans %}Pievienot fotoattēlu{% endtrans %}</div></div>');*/
+                                             $(".add-more").click(function(){$(this).parent().trigger('click');});
+                                             
+                                             $("#product_fotos_" + (count + 1) + "_foto").val(answer.imageName);
+                                             $("#product_fotos_" + (count + 1) + "_sortorder").val(count + 1);
+                                             $("#product_fotos_" + (count + 1) + "_product").val({{ productId }});
+                                             
+                                             var fileItem = file;
+                                             $("#delete-product-image" + (count + 1)).click(function(){
+                                                if(confirm('Удалить изображение?'))
+                                                {
+                                                    myDropzone.removeFile(fileItem);
+                                                }
+                                             });
+                                         }});
+
+            $( ".adv-other-fotos" ).sortable({items: ".dz-preview", stop: function( event, ui ) {
+                    var i = 0;
+                    $(".product-foto-inputs").each(function(){
+                        $(this).find("input").eq(1).val(i);
+                        i++;
+                    });
+            }});
+            
+            //$( ".adv-other-fotos" ).disableSelection();
+         });
+         
+        function deleteProductFoto(button)
+        {
+            button.parent().remove();
+            var dz_fotos = $(".dropzone").find(".dz-preview").length;
+            myDropzone.options.maxFiles = {{ role.advertFotoNumber }} - dz_fotos;
+        }
+    </script>
+{% endblock _product_fotos_widget %}    
+
+{% block _product_fotos_entry_row %}
+        <div class="dz-preview">
+                <div class="dz-image">
+                    <img data-dz-thumbnail="" src='/bundles/images/products/{{ form.foto.vars.value }}' width="100%" />
+                </div>
+                <div class="dz-details">
+                    <div class="dz-filename">
+                        <span data-dz-name>{{ form.foto.vars.value }}</span>
+                    </div>
+                </div>
+                <button class="delete-product-image" type="button" onclick="if(confirm('Удалить изображение?'))deleteProductFoto($(this));else return false;"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <div class="product-foto-inputs" data-nameid="{{ form.vars.name }}">
+                    {{ form_widget(form.foto)}}
+                    {{ form_widget(form.sortorder)}}
+                    {{ form_widget(form.product)}}
+                </div>
+        </div> 
+{% endblock _product_fotos_entry_row %}    
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        {%- for error in errors -%}
+            <div class="form-group">
+                <div class="col-lg-1"></div>
+                <div class="col-sm-12 col-md-11">
+                    <div class="alert alert-danger">
+                        <button class="close-alert" data-dismiss="alert" type="button">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        {{ error.message }}
+                    </div>
+                </div>
+            </div>
+        {%- endfor -%}
+    {%- endif -%}
+{%- endblock form_errors -%}
+
+{% block title %}{% trans %}Rediģēt reklāmu{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %} 
+                        <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Rediģēt reklāmu{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Rediģēt reklāmu{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+	<div class="row content-row">
+		<div class="col-lg-9 col-md-9 left-column">
+                    <div class="content-block-header"><h1>{% trans %}Rediģēt reklāmu{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        {% for flashMessage in app.session.flashbag.get('notice_errors') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        {{ form_start(productForm, {'method':'POST','multipart':true,'attr': {'onsubmit' : 'return checkAdvertForm($(this))','class': 'form-horizontal add-advert-form'}}) }}
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label class="col-sm-6 control-label">{% trans %}Jūsu vārds{% endtrans %}: *</label>
+                                    <div class="col-sm-6">
+                                      {{ form_widget(productForm.authorName) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-6 control-label">{% trans %}Jūsu tālrunis{% endtrans %}: *</label>
+                                    <div class="col-sm-6">
+                                      {{ form_widget(productForm.authorPhone) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-6 control-label">{% trans %}Jūsu e-pasts{% endtrans %}: *</label>
+                                    <div class="col-sm-6">
+                                      {{ form_widget(productForm.authorEmail) }}
+                                    </div>
+                                </div> 
+                                <div class="form-group">
+                                    <label class="col-sm-6 control-label"></label>
+                                    <div class="col-sm-6">
+                                        <div class="addadvert-selected-category-name">{% trans %}Kategorija{% endtrans %}: 
+                                            {% if product.category %}
+                                                {% if product.category.translations | length > 0 %}
+                                                    {% for translation in product.category.translations %}
+                                                        {% if translation.locale.id == locale.id %}
+                                                            {{ translation.value }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}        
+                                                    {{ product.category.title }}
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6"></div>
+                                    <div class="col-sm-6">
+                                        <a class="button-select-category" data-toggle="modal" data-target="#categories">{% trans %}Rediģēt{% endtrans %}</a>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="categories" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                                          <h4 class="modal-title" id="myModalLabel">{% trans %}Izvēlieties kategoriju{% endtrans %}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-lg-12" id="categoriesList">
+                                                    {% if categories %}
+                                                        {{ include ('DashboardCommonBundle:User:category.html.twig', {items : categories, locale : locale}) }}
+                                                    {% endif%}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    {{ form_widget(productForm.category, {'id':'category'})}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <div class="col-lg-1"></div>
+                                    <label class="col-sm-6 col-md-5 control-label">{% trans %}Atrašanās vieta{% endtrans %}: *</label>
+                                    <div class="col-sm-6">
+                                        {{ form_widget(productForm.region, {'id':'region'})}}
+                                    </div>
+                                    <script>
+                                        $('#region').change(function() {
+                                            var $form = $('.add-advert-form');
+                                            var data = {};
+                                            data[$('#region').attr('name')] = $('#region').val();
+                                          
+                                            $.ajax({
+                                                url : $form.attr('action'),
+                                                type: $form.attr('method'),
+                                                data : data,
+                                                    success: function(html) {
+                                                        $('#regionCities').html($(html).find('#regionCities').html());
+                                                        $('#city').customSelect();
+                                                    }
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-1"></div>
+                                    <label class="col-sm-6 col-md-5 control-label">{% trans %}Pilsēta/volost{% endtrans %}: *</label>
+                                    <div class="col-sm-6" id="regionCities">
+                                        {{ form_widget(productForm.city, {'id':'city'})}}
+                                    </div>
+                                </div>
+                                {{ form_errors(productForm) }}
+                            </div>
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group load-category-filters-spinner">
+                                    <label class="col-sm-3 control-label"></label>
+                                    <div class="col-sm-9"><i class="fa fa-spinner fa-pulse fa-fw"></i> {% trans %}Reklāmas ielādes iespējas{% endtrans %}</div>
+                                </div>
+                                <div class="category-loaded-filters">
+                                    {% if filters %}
+                                        {{ filters | raw }}
+                                    {% endif %}    
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{% trans %}Reklāmas nosaukums{% endtrans %}: *</label>
+                                    <div class="col-sm-9">
+                                      {{ form_widget(productForm.name) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{% trans %}Termiņš{% endtrans %}: *</label>
+                                    <div class="col-sm-9">
+                                      {{ form_widget(productForm.term) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{% trans %}Apraksts{% endtrans %} ({% trans %}ne vairāk kā 3000 simboli{% endtrans %}): *</label>
+                                    <div class="col-sm-9">
+                                        <div class="descriptionFlash">
+                                            <div class = "alert alert-danger alert-dismissible fade in" role="alert" style="padding-left:15px">
+                                                {% trans %}<strong>Kļūda!</strong> Apraksts nedrīkst pārsniegt 3000 rakstzīmes.{% endtrans %}
+                                            </div>
+                                        </div>
+                                        {{ form_widget(productForm.description) }}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{% trans %}Cena{% endtrans %}: *</label>
+                                    <div class="col-sm-3 adv-price-block">
+                                        {{ form_widget(productForm.price) }} <span>{{ settings.currency.name }}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{% trans %}Bildes{% endtrans %}: </label>
+                                    <div class="col-sm-9 adv-other-fotos" style="padding-left:15px">
+                                        {{ form_widget(productForm.fotos, {'role' : role , 'productId' : productId })}}
+                                    </div>
+                                </div>
+                                <!--<div class="form-group">
+                                    <label class="col-sm-5"></label>
+                                    <div class="col-sm-7 adv-other-fotos alter-form">
+                                        Возникли пробемы? Воспользуйтесь <a href="">альтернативной формой</a>
+                                    </div>
+                                </div>-->
+                                {% if settings.isShowType %}
+                                <div class="form-group">
+                                    <label class="col-sm-5"></label>
+                                    <div class="col-sm-7 adv-other-fotos">
+                                        <div class="advert-type-block">
+                                            {% if  app.request.locale == 'lv' %}
+                                                <table class="advert-type-block-table">
+                                                    <tr>
+                                                        <td colspan="2" class="advert-type-block-item">
+                                                            {{ form_widget(productForm.viewcommon, {'id':'viewcommon'})}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="advert-type-block-item">
+                                                            {{ form_widget(productForm.viewpremium, {'id':'viewpremium'})}}
+                                                        </td>
+                                                        <td class="advert-type-block-item">
+                                                            <a href="/pages/Reklama_na_sayte" >{% trans %}Uzziniet vairāk{% endtrans %}</a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="advert-type-block-item">
+                                                            {{ form_widget(productForm.viewselected, {'id':'viewselected'})}}
+                                                        </td>
+                                                        <td class="advert-type-block-item ">
+                                                            <a href="/pages/Reklama_na_sayte" >{% trans %}Uzziniet vairāk{% endtrans %}</a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            {% else %}
+                                                <table class="advert-type-block-table">
+                                                    <tr>
+                                                        <td colspan="2" class="advert-type-block-item">
+                                                            {{ form_widget(productForm.viewcommon, {'id':'viewcommon'})}}
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="advert-type-block-item">
+                                                            {{ form_widget(productForm.viewpremium, {'id':'viewpremium'})}}
+                                                        </td>
+                                                        <td class="advert-type-block-item">
+                                                            <a href="/{{app.request.locale}}/pages/Reklama_na_sayte" >{% trans %}Uzziniet vairāk{% endtrans %}</a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="advert-type-block-item">
+                                                            {{ form_widget(productForm.viewselected, {'id':'viewselected'})}}
+                                                        </td>
+                                                        <td class="advert-type-block-item ">
+                                                            <a href="/{{app.request.locale}}/pages/Reklama_na_sayte" >{% trans %}Uzziniet vairāk{% endtrans %}</a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                    <div style="display:none">
+                                        {{ form_widget(productForm.viewcommon, {'id':'viewcommon','checked' : 'checked'})}}
+                                        {{ form_widget(productForm.viewpremium, {'id':'viewpremium'})}}
+                                        {{ form_widget(productForm.viewselected, {'id':'viewselected'})}}
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label class="col-sm-3"></label>
+                                    <div class="col-sm-9 adv-other-fotos">
+                                        <div class="row">
+                                            <div class="col-lg-8 col-md-8 captcha"></div>
+                                            <div class="col-lg-4 col-md-4 form-buttons">
+                                                {% if isBlocked or isCorrect %}
+                                                    {{ form_widget(productForm.save,{'type' : 'submit', 'label' : 'Отправить повторно'})}}
+                                                {% else %}
+                                                    {{ form_widget(productForm.save,{'type' : 'submit'})}}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{ form_end(productForm) }}
+                    <script>
+                        function checkAdvertForm(element)
+                        {
+                            var error = 0;
+
+                            element.find('input[required="required"]').each(function(){
+                               if($(this).val() == 0 || $(this).val() == "")
+                               {
+                                   error = 1;
+                               }
+                            });
+
+                            element.find('select[required="required"]').each(function(){
+
+                               if($(this).val() == 0 || $(this).val() == "")
+                               {
+                                   error = 1;
+                                   $(this).prev().prev().css({"border-color" : "red"});
+                               }
+                            });
+
+                            if(error)
+                            {
+                                alert("{% trans %}Aizpildiet obligātos laukus. Tie ir norādīti ar simbolu *{% endtrans %}");
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    </script>
+		</div>
+		<div class="col-lg-3 col-md-3 right-column">
+                    {{ settings.userAdvertWorkRight | raw }}
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="howToBuyModal" tabindex="-1" role="dialog" aria-labelledby="howToBuyModalLabel">
+	  <div class="modal-dialog" role="document">
+		<form class="form-horizontal region-select-form" action="" method="post">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+				<h4 class="modal-title" id="regionModalLabel">{% trans %}Kā pareizi norādīt cenu{% endtrans %}?</h4>
+			  </div>
+			  <div class="modal-body">
+				{{ settings.textblockHowToPrice | raw }}
+			  </div>
+			  <div class="modal-footer">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4">
+                                    <button type="submit" class="btn" data-dismiss="modal" aria-label="Close">{% trans %}Aizvērt{% endtrans %}</button>
+                                </div>
+				<div class="col-sm-4"></div>
+			  </div>
+			</div>
+		</form>
+	  </div>
+</div>
+{% endblock %}
+

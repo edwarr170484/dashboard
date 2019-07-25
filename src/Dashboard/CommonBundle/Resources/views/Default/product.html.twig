@@ -1,0 +1,1091 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% if app.user %}
+
+{% form_theme orderForm _self %}
+
+{% form_theme productMessageForm _self %}
+
+{% form_theme friendMessageForm _self %}
+
+{% form_theme complaintMessageForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+
+
+{%- block checkbox_widget -%}
+    {%- for attrname, attrvalue in attr -%}
+        {%- if attrname in ['id'] -%}
+            <div class="div-checkbox {% if checked %} active {% endif %}" data-checkbox="{{ attrvalue }}"></div> {% trans %}Sūtiet man vēstules kopiju{% endtrans %}
+        {%- endif -%}
+    {%- endfor -%}   
+    <input type="checkbox" {{ block('widget_attributes') }} value="1" {% if checked %} checked="checked"{% endif %} />
+{%- endblock checkbox_widget -%}
+
+{% endif %}
+
+{% block title %}
+    {% if product.metaTagTitle%}
+        {{ product.metaTagTitle }}
+    {% else %}
+        {{ product.name }}
+    {% endif %}
+{% endblock %}
+
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : product.category, 'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block metatags %}
+    <meta content="{{ product.metaTagDescription }}" name="description" />
+    <meta content="" name="author" />
+    <meta content="" name="robots" />
+    <meta content="" name="keywords" />
+{% endblock %}
+
+{% block metasocials %}
+{% if product.mainfoto %}
+<link rel="image_src" href="{{ absolute_url(asset('bundles/images/products/' ~ product.mainfoto)) }}" />
+{% endif %}
+<meta property="og:title" content="{{ product.name }}" />
+<meta property="og:description" content="{{ product.name }}" />
+{% if product.mainfoto %}
+<meta property="og:image" content="{{ absolute_url(asset('bundles/images/products/' ~ product.mainfoto)) }}" />
+{% endif %}
+<meta property="og:url" content="{{ absolute_url(path('product', {'productId' : product.id,'productName' : product.translit}))}}" />
+<meta property="og:site_name" content="Доска объявлений gribupardot.sunweb.by." />
+<link rel="canonical" href="{{ absolute_url(path('product', {'productId' : product.id,'productName' : product.translit}))}}" />
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                       <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
+                       {% if categoriesBread %}
+                           {% for cat in categoriesBread %}
+                               <li class="arrow">
+                                   <a href="{{ path('category', {'categoryName' : cat.name }) }}">
+                                       {% if cat.translations | length > 0 %}
+                                           {% for translation in cat.translations %}
+                                               {% if translation.locale.id == locale.id %}
+                                                   {{ translation.value }}
+                                               {% endif %}
+                                           {% endfor %}
+                                       {% else %}        
+                                           {{ cat.title}}
+                                       {% endif %}
+                                   </a>
+                               </li>
+                           {% endfor %}
+                       {% endif %}
+                       <li class="arrow"><a href="">{{ product.name | slice(0, 60) }}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        {% if categoriesBread %}
+                            {% for cat in categoriesBread %}
+                                <li class="arrow">
+                                    <a href="{{ path('categoryLocale', {'_locale' : app.request.locale,'categoryName' : cat.name }) }}">
+                                        {% if cat.translations | length > 0 %}
+                                            {% for translation in cat.translations %}
+                                                {% if translation.locale.id == locale.id %}
+                                                    {{ translation.value }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}        
+                                            {{ cat.title}}
+                                        {% endif %}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        <li class="arrow"><a href="">{{ product.name | slice(0, 60) }}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+	<div class="row content-row">
+		<div class="col-lg-9 col-md-9 left-column">
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}      
+                        <div class="row product-block">
+                            <div class="col-lg-12">
+                                <div class="content-block-header"><h1>{{ product.name }}</h1></div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 product-time-watch">{% trans %}Hosted by{% endtrans %} {{ product.dateAdded | date("d.m.Y в H:i")}}</div>
+                            <div class="col-lg-6 col-md-6 product-time-watch right-text">{% trans %}Skatījumi{% endtrans %}: {% trans %}kopā{% endtrans %}: {{ product.views }}, {% trans %}šodien{% endtrans %}: {{ product.viewsPerDate }}</div>
+                            <div class="{% if product.fotos | length > 0 %}col-lg-9 col-md-9{%else%}col-lg-12 col-md-12{% endif %} product-main-image">
+                                {% if product.mainfoto %}
+                                    <img src="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                {% else %}
+                                    {% if product.fotos | length > 0 %}
+                                        <img src="{{ asset('bundles/images/products/') }}{{ product.fotos[0].foto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            {% if product.fotos | length > 0 %}
+                                <div class="col-lg-3 col-md-3 product-image-thumbs">
+                                    {% if product.fotos | length > 5 %}
+                                        <div class="product-image-thumbs-nav">
+                                            <a href="#" class="jcarousel-control-prev">&lsaquo;</a>
+                                            <a href="#" class="jcarousel-control-next">&rsaquo;</a>
+                                        </div>
+                                    {% endif %}
+                                    <div class="jcarousel">
+                                        <ul class="list-unstyled list-inline product-images-thumbs">
+                                            {% if product.mainfoto %}
+                                                <li>
+                                                    <a href="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" data-image="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" data-lightbox="product-fotos"><img src="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
+                                                    <!--<div class="product-thumb-cover"></div>-->
+                                                </li> 
+                                            {% endif %}
+                                            {% for image in product.fotos %}
+                                                <li>
+                                                    <a href="{{ asset('bundles/images/products/') }}{{ image.foto }}" data-lightbox="product-fotos" data-image="{{ asset('bundles/images/products/') }}{{ image.foto }}" data-title="{{ image.alt }}"><img src="{{ asset('bundles/images/products/') }}{{ image.foto }}" alt="{{ image.alt }}" title="{{ image.title }}" /></a>
+                                                    <!--<div class="product-thumb-cover"></div>-->
+                                                </li>    
+                                            {% endfor%}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="col-lg-12 col-md-12">
+                                {% if categories %}
+                                    <div class="product-breadscrumbs">
+                                        {% if  app.request.locale == 'lv' %}
+                                            <ul class="list-inline list-unstyled">
+                                                {% set i = categories | length %}
+                                                {% for category in categories %}
+                                                   <li><a href="{{ path('category', {'categoryName' : category.name}) }}">
+                                                            {% if category.translations | length > 0 %}
+                                                                {% for translation in category.translations %}
+                                                                    {% if translation.locale.id == locale.id %}
+                                                                        {{ translation.value }}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% else %}        
+                                                                {{ category.title }}
+                                                            {% endif %}
+                                                       </a>
+                                                   {% if i > 1 %}
+                                                       &nbsp;&nbsp;&rarr;
+                                                   {% endif %}
+                                                   </li>
+                                                   {% set i = i - 1 %}
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            <ul class="list-inline list-unstyled">
+                                                {% set i = categories | length %}
+                                                {% for category in categories %}
+                                                   <li><a href="{{ path('categoryLocale', {'_locale' : app.request.locale,'categoryName' : category.name}) }}">
+                                                            {% if category.translations | length > 0 %}
+                                                                {% for translation in category.translations %}
+                                                                    {% if translation.locale.id == locale.id %}
+                                                                        {{ translation.value }}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% else %}        
+                                                                {{ category.title }}
+                                                            {% endif %}
+                                                       </a>
+                                                   {% if i > 1 %}
+                                                       &nbsp;&nbsp;&rarr;
+                                                   {% endif %}
+                                                   </li>
+                                                   {% set i = i - 1 %}
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>    
+                                {% endif %}
+                                {% if productFilters | length > 0%}
+                                    <div class="product-options">
+                                        <table>
+                                            {% for key,filter in productFilters %}
+                                                    <tr>
+                                                        <td>
+                                                            <b>
+                                                                {% if filter.filter.translations | length > 0 %}
+                                                                    {% for translation in filter.filter.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}:
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}        
+                                                                    {{ filter.filter.name }}:
+                                                                {% endif %}
+                                                            </b>
+                                                        </td>
+                                                        {% if filter.values | length > 0 %}
+                                                            {% set marker = filter.values | length - 1 %}
+                                                            <td>
+                                                                <div class="product-filter-values" style="padding-left:7px;">
+                                                                    {% for value in filter.values %}
+                                                                        {% if value.translations | length > 0 %}
+                                                                            {% for translation in value.translations %}
+                                                                                {% if translation.locale.id == locale.id %}
+                                                                                    {{ translation.value }}{% if marker %},{% endif %}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}        
+                                                                            {{ value.value }}{% if marker %},{% endif %}
+                                                                        {% endif %}
+                                                                        {% set marker = marker - 1 %}
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </td>
+                                                        {% endif %}
+                                                    </tr> 
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                {% endif %}
+                                {% if product.typenew %}
+                                    <div class="product-type"><strong>{% trans %}Nosacījums{% endtrans %}: </strong>{% trans %}Jauns{% endtrans %}</div>
+                                {% endif %}
+                                {% if product.typebu %}
+                                    <div class="product-type"><strong>{% trans %}Nosacījums{% endtrans %}: </strong>{% trans %}Б/У{% endtrans %}</div>
+                                {% endif %}
+                                <div class="product-description justify-text">
+                                    {{ product.description | raw }}
+                                </div>
+                                <div class="product-advert-number">{% trans %}Reklāmas numurs{% endtrans %}: {{ product.id }}</div>
+                            </div>
+                        </div>
+                            <div class="row">
+                                <div class="col-lg-12 product-tabs">
+                                <div class="product-tabs-inner">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        <li role="presentation">
+                                            <a href="#write" aria-controls="home" role="tab" data-toggle="tab">
+                                                <span><i class="fa fa-comment fa-2x"></i></span>&nbsp; {% trans %}Sazinieties ar īpašnieku{% endtrans %}
+                                            </a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#tofriend" aria-controls="profile" role="tab" data-toggle="tab">
+                                                <span><i class="fa fa-paper-plane fa-2x" aria-hidden="true"></i></span>&nbsp; {% trans %}Pastāsti draugam{% endtrans %}
+                                            </a>
+                                        </li>
+                                        <li role="presentation">
+                                            <a href="#letter" aria-controls="messages" role="tab" data-toggle="tab">
+                                                <span><i class="fa fa-exclamation-triangle fa-2x" aria-hidden="true"></i></span>&nbsp; {% trans %}Sūdzas{% endtrans %}
+                                            </a>
+                                        </li>
+                                        <li role="presentation">
+                                            {% if app.user %}
+                                                <a href="javascript:void(0);" onclick="addFavoriteProduct({{ product.id }},'{{ app.request.locale }}', 0)" aria-controls="settings" role="tab" data-toggle="tab">
+                                                    <span>
+                                                    {% if favoriteProductIs%}
+                                                        <i class="fa fa-star fa-2x" aria-hidden="true"></i>
+                                                    {% else %}
+                                                        <i class="fa fa-star-o fa-2x" aria-hidden="true"></i>
+                                                    {% endif %}
+                                                    </span>&nbsp; {% trans %}Pievienot favorītiem{% endtrans %}
+                                                </a>
+                                            {% else %}
+                                                {% if  app.request.locale == 'lv' %}
+                                                    <a href="{{ path('login') }}">
+                                                        <span><i class="fa fa-star fa-2x" aria-hidden="true"></i></span>
+                                                        &nbsp; {% trans %}Pievienot favorītiem{% endtrans %}
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('loginLocale',{'_locale' : app.request.locale}) }}">
+                                                        <span><i class="fa fa-star fa-2x" aria-hidden="true"></i></span>
+                                                        &nbsp; {% trans %}Pievienot favorītiem{% endtrans %}
+                                                    </a>
+                                                {% endif %}
+                                            {% endif %}
+                                        </li>
+                                        <li >
+                                            <div class="tabs-social">
+                                                <noindex>
+                                                    <script type="text/javascript">(function() {
+                                                      if (window.pluso)if (typeof window.pluso.start == "function") return;
+                                                      if (window.ifpluso==undefined) { window.ifpluso = 1;
+                                                        var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+                                                        s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+                                                        s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+                                                        var h=d[g]('body')[0];
+                                                        h.appendChild(s);
+                                                      }})();</script>
+                                                    <div class="pluso" data-background="transparent" data-options="small,square,line,horizontal,nocounter,theme=04" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,linkedin"></div>
+                                                </noindex>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane" id="write">
+                                            {% if app.user %}
+                                                {% if product.user.id == user.id %}
+                                                   {% trans %}Jūs esat šīs reklāmas īpašnieks un jūs nevarat nosūtīt ziņu sev{% endtrans %}.
+                                                {% else %}
+                                                    {{ form_start(productMessageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                                                        <div class="row">
+                                                            <div class="col-lg-6 col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-6 col-md-6">{% trans %}Jūsu vārds{% endtrans %}:*</label>
+                                                                    <div class="col-lg-6 col-md-6">
+                                                                        {{ form_widget(productMessageForm.userName) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-6 col-md-6">{% trans %}Jūsu e-pasts{% endtrans %}:*</label>
+                                                                    <div class="col-lg-6 col-md-6">
+                                                                        {{ form_widget(productMessageForm.userEmail) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-6 col-md-6">{% trans %}Jūsu tālrunis{% endtrans %}:*</label>
+                                                                    <div class="col-lg-6 col-md-6">
+                                                                        {{ form_widget(productMessageForm.userPhone) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-6 col-md-6"></div>
+                                                            <div class="col-lg-12 col-md-12 send-copy-email">
+                                                                {{ form_widget(productMessageForm.copytoemail, {'id' : 'copytoemail'}) }}
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-3 col-md-3">{{ form_label(productMessageForm.message) }}</label>
+                                                                    <div class="col-lg-9 col-md-9">
+                                                                        {{ form_widget(productMessageForm.message) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-3 col-md-3"></label>
+                                                                    <div class="col-lg-9 col-md-9 right-text">
+                                                                        {{ form_widget(productMessageForm.save,{'type' : 'submit'}) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {{ form_end(productMessageForm) }}
+                                                {% endif %}
+                                            {% else %}
+                                                {% if  app.request.locale == 'lv' %}
+                                                    {% trans %}Lai nosūtītu ziņas, jums ir{% endtrans %} <a href="{{ path('login') }}">{% trans %}piesakieties{% endtrans %}</a> {% trans %}vai{% endtrans %} <a href="{{ path('register') }}">{% trans %}reģistrēties{% endtrans %}</a>.
+                                                {% else %}
+                                                    {% trans %}Lai nosūtītu ziņas, jums ir{% endtrans %} <a href="{{ path('loginLocale',{'_locale' : app.request.locale}) }}">{% trans %}piesakieties{% endtrans %}</a> {% trans %}vai{% endtrans %} <a href="{{ path('registerLocale',{'_locale' : app.request.locale}) }}">{% trans %}reģistrēties{% endtrans %}</a>.
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="tofriend">
+                                            {% if app.user %}
+                                                    {{ form_start(friendMessageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-4 col-md-4">{{ form_label(friendMessageForm.friendemail) }}</label>
+                                                                    <div class="col-lg-8 col-md-8">
+                                                                        {{ form_widget(friendMessageForm.friendemail) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-4 col-md-4">{{ form_label(friendMessageForm.friendname) }}</label>
+                                                                    <div class="col-lg-8 col-md-8">
+                                                                        {{ form_widget(friendMessageForm.friendname) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <div class="col-lg-4 col-md-4"></div>
+                                                                    <div class="col-lg-8 col-md-8 right-text">
+                                                                        {{ form_widget(friendMessageForm.save,{'type' : 'submit'}) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {{ form_end(friendMessageForm)}}
+                                            {% else %}
+                                                {% if  app.request.locale == 'lv' %}
+                                                    {% trans %}Lai nosūtītu ziņas, jums ir{% endtrans %} <a href="{{ path('login') }}">{% trans %}piesakieties{% endtrans %}</a> {% trans %}vai{% endtrans %} <a href="{{ path('register') }}">{% trans %}reģistrēties{% endtrans %}</a>.
+                                                {% else %}
+                                                    {% trans %}Lai nosūtītu ziņas, jums ir{% endtrans %} <a href="{{ path('loginLocale',{'_locale' : app.request.locale}) }}">{% trans %}piesakieties{% endtrans %}</a> {% trans %}vai{% endtrans %} <a href="{{ path('registerLocale',{'_locale' : app.request.locale}) }}">{% trans %}reģistrēties{% endtrans %}</a>.
+                                                {% endif%}
+                                            {% endif %}
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="letter">
+                                            {% if app.user %}
+                                                {% if product.user.id == user.id %}
+                                                   {% trans %}Jūs esat šīs reklāmas īpašnieks un jūs nevarat viņam iesniegt sūdzību{% endtrans %}.
+                                                {% else %}
+                                                {{ form_start(complaintMessageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                                                        <div class="row">
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-4 col-md-4">{{ form_label(complaintMessageForm.username) }}</label>
+                                                                    <div class="col-lg-8 col-md-8">
+                                                                        {{ form_widget(complaintMessageForm.username) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="col-lg-4 col-md-4">{{ form_label(complaintMessageForm.reason) }}</label>
+                                                                    <div class="col-lg-8 col-md-8">
+                                                                        {{ form_widget(complaintMessageForm.reason) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12">
+                                                                <div class="form-group">
+                                                                    <div class="col-lg-4 col-md-4"></div>
+                                                                    <div class="col-lg-8 col-md-8 right-text">
+                                                                        {{ form_widget(complaintMessageForm.save,{'type' : 'submit'}) }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {{ form_end(complaintMessageForm) }} 
+                                                {% endif %}
+                                            {% else %}
+                                                {% if  app.request.locale == 'lv' %}
+                                                    {% trans %}Lai nosūtītu ziņas, jums ir{% endtrans %} <a href="{{ path('login') }}">{% trans %}piesakieties{% endtrans %}</a> {% trans %}vai{% endtrans %} <a href="{{ path('register') }}">{% trans %}reģistrēties{% endtrans %}</a>.
+                                                {% else %}
+                                                    {% trans %}Lai nosūtītu ziņas, jums ir{% endtrans %} <a href="{{ path('loginLocale',{'_locale' : app.request.locale}) }}">{% trans %}piesakieties{% endtrans %}</a> {% trans %}vai{% endtrans %} <a href="{{ path('registerLocale',{'_locale' : app.request.locale}) }}">{% trans %}reģistrēties{% endtrans %}</a>.
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        <div class="productpage-banner hidden-sm hidden-xs">
+				{{ render(controller('DashboardCommonBundle:Default:getBanners',{'position' : 'centerpage'})) }}
+			</div>
+                        {% if sameProducts | length > 0%}
+                        <div class="row advert-category-adverts">
+                            <div class="col-lg-12 col-md-12">
+                                    <div class="content-block-header"><h1>{% trans %}Līdzīgas reklāmas{% endtrans %}</h1></div>
+                                    <div class="premium-adverts product-premium-adverts">
+                                        {% include 'DashboardCommonBundle:Parts:productitem.html.twig' with {'products' : sameProducts, 'locale' : locale} %}
+                                    </div>    
+                            </div>
+                        </div>
+                        {% endif %}
+		</div>
+                <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs">
+                        <div class="advertise-block">
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : product.category, 'position' : 'rightcolumn'})) }}
+			</div>
+			<div class="top-sellers-block product-seller">
+                            <div class="seller-block-header">
+                                <div class="seller-block-product-price">{% trans %}Cena{% endtrans %} <span>{{ product.price }}</span> {{ settings.currency.name }}</div>
+                                
+                                <div class="seller-block-region">
+                                    {% if product.city %}{% trans %}pilsēta{% endtrans %}: 
+                                        {% if product.city.translations | length > 0 %}
+                                            {% for translation in product.city.translations %}
+                                                {% if translation.locale.id == locale.id %}
+                                                    {{ translation.value }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {{ product.city.name }}
+                                        {% endif %}
+                                    {%else%}
+                                        {% trans %}Visa Latvija{% endtrans %}
+                                    {% endif %}, 
+                                    {% if product.region %}
+                                        {% if product.region.translations | length > 0 %}
+                                            {% for translation in product.region.translations %}
+                                                {% if translation.locale.id == locale.id %}
+                                                    {{ translation.value }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {{ product.region.name }}
+                                        {% endif %}
+                                    {%else%}
+                                        {% trans %}Visa Latvija{% endtrans %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="seller-block-sellbuttons">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 no-padding-right">
+                                        {% if app.user %}
+                                        <a href="javascript:void()" onclick="addFavoriteProduct({{ product.id }},'{{ app.request.locale }}', 0)">
+                                            <span>
+                                                {% if favoriteProductIs%}
+                                                    <i class="fa fa-star fa-2x"></i>
+                                                {% else %}
+                                                    <i class="fa fa-star-o fa-2x"></i>
+                                                {% endif %}
+                                            </span>
+                                            {% trans %}Pievienot favorītiem{% endtrans %}
+                                        </a>
+                                        {% else %}
+                                        {% if  app.request.locale == 'lv' %}
+                                            <a href="{{ path('login') }}">
+                                                <span>
+                                                    <i class="fa fa-star-o fa-2x"></i>
+                                                </span>
+                                                {% trans %}Pievienot favorītiem{% endtrans %}
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('loginLocale',{'_locale' : app.request.locale}) }}">
+                                                <span>
+                                                    <i class="fa fa-star-o fa-2x"></i>
+                                                </span>
+                                                {% trans %}Pievienot favorītiem{% endtrans %}
+                                            </a>
+                                        {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 right-text">
+                                        {% if app.user %}
+                                            <button class="seller-block-sellbutton" data-toggle="modal" data-target="#orderModal">{% trans %}PASŪTĪT{% endtrans %}</button>
+                                        {% else %}
+                                            {% if  app.request.locale == 'lv' %}
+                                                <button class="seller-block-sellbutton" onclick="window.location.href='{{ path('login') }}'">{% trans %}PASŪTĪT{% endtrans %}</button>
+                                            {% else %}
+                                                <button class="seller-block-sellbutton" onclick="window.location.href='{{ path('loginLocale',{'_locale' : app.request.locale}) }}'">{% trans %}PASŪTĪT{% endtrans %}</button>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="seller-contact-header">{% trans %}KONTAKT PERSONA{% endtrans %}</div>
+                            <table>
+				<tr class="top-seller-row">
+                                    <td>
+                                        <div class="top-seller-avatar">
+                                            {% if  app.request.locale == 'lv' %}
+                                                <a href="{{ path('profile', {'userId' : product.user.id}) }}">
+                                                {% if product.user.userinfo.avatar %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/') }}{{ product.user.userinfo.avatar }}" alt="" title="" class="img-circle"/>
+                                                {% elseif product.user.userinfo.sex %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ product.user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                {% else %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" class="img-circle"/>
+                                                {% endif %}
+                                            {% else %}
+                                                <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : product.user.id}) }}">
+                                                {% if product.user.userinfo.avatar %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/') }}{{ product.user.userinfo.avatar }}" alt="" title="" class="img-circle"/>
+                                                {% elseif product.user.userinfo.sex %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ product.user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                {% else %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" class="img-circle"/>
+                                                {% endif %}
+                                            {% endif %}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="top-seller-data no-padding-right">
+                                            <div class="top-seller-name">
+                                                {% if  app.request.locale == 'lv' %}
+                                                    <a href="{{ path('profile', {'userId' : product.user.id}) }}">
+                                                        {{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : product.user.id}) }}">
+                                                        {{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                            {% if product.user.userinfo.rating %}
+                                                <div class="top-seller-rating">{% trans %}Рейтинг{% endtrans %}: {{ product.user.userinfo.rating }}%</div>
+                                            {% else %}
+                                                <div class="top-seller-rating">{% trans %}Рейтинг{% endtrans %}: 0%</div>
+                                            {% endif %}
+                                            <div class="top-seller-record">
+                                                {% if  app.request.locale == 'lv' %}
+                                                    <a href="{{ path('profile', {'userId' : product.user.id}) }}">
+                                                        {{ product.user.receivedOrders | length }} <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                    </a> /
+                                                    <a href="{{ path('user_reviews', {'userId' : product.user.id }) }}">
+                                                        {% set rating = 0 %}
+                                                        {% for review in product.user.targetReviews %}
+                                                            {% if review.status == 1%}
+                                                                {% set rating = rating + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {{ rating }} <i class="fa fa-heart" aria-hidden="true"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : product.user.id}) }}">
+                                                        {{ product.user.receivedOrders | length }} <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                    </a> /
+                                                    <a href="{{ path('user_reviewsLocale', {'_locale' : app.request.locale,'userId' : product.user.id }) }}">
+                                                        {% set rating = 0 %}
+                                                        {% for review in product.user.targetReviews %}
+                                                            {% if review.status == 1%}
+                                                                {% set rating = rating + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {{ rating }} <i class="fa fa-heart" aria-hidden="true"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        {% if  app.request.locale == 'lv' %}
+                                            <div class="seller-reviews-link no-padding-right"><a href="{{ path('user_reviews', {'userId' : product.user.id }) }}">{% trans %}Pārdevēja atsauksmes{% endtrans %}</a></div>
+                                            <div class="seller-adverts-link no-padding-right"><a href="{{ path('user_products', {'userId' : product.user.id }) }}">{% trans %}Visas reklāmas{% endtrans %}</a></div>
+                                        {% else %}
+                                            <div class="seller-reviews-link no-padding-right"><a href="{{ path('user_reviewsLocale', {'_locale' : app.request.locale,'userId' : product.user.id }) }}">{% trans %}Pārdevēja atsauksmes{% endtrans %}</a></div>
+                                            <div class="seller-adverts-link no-padding-right"><a href="{{ path('user_productsLocale', {'_locale' : app.request.locale,'userId' : product.user.id }) }}">{% trans %}Visas reklāmas{% endtrans %}</a></div>
+                                        {% endif %}
+                                    </td>
+                                </tr>    
+                            </table>
+                            <div class="seller-block-phone-number">
+                                <i class="fa fa-phone-square" aria-hidden="true"></i>
+                                <div class="seller-block-phone">+3XXX-XXX-XXX</div>
+                                {% if  app.request.locale == 'lv' %}
+                                    {% if app.user %}
+                                        <div class="seller-block-phone-show" onclick="showSellerNumer({{ product.id }})"><button>{% trans %}Rādīt istabu{% endtrans %}</button><i class="fa fa-spin fa-spinner seller-number-spinner"></i></div>    
+                                    {% else %}
+                                        <div class="seller-block-phone-show"><button onclick="window.location.href='{{ path('login') }}'">{% trans %}Rādīt istabu{% endtrans %}</button></div>
+                                    {% endif %}
+                                {% else %}
+                                    {% if app.user %}
+                                        <div class="seller-block-phone-show" onclick="showSellerNumer({{ product.id }})"><button>{% trans %}Rādīt istabu{% endtrans %}</button><i class="fa fa-spin fa-spinner seller-number-spinner"></i></div>    
+                                    {% else %}
+                                        <div class="seller-block-phone-show"><button onclick="window.location.href='{{ path('loginLocale',{'_locale' : app.request.locale}) }}'">{% trans %}Rādīt istabu{% endtrans %}</button></div>
+                                    {% endif %}
+                                {% endif %}    
+                            </div>
+                            <div class="seller-block-writemessage"><i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                {% if  app.request.locale == 'lv' %}
+                                    {% if app.user %}
+                                        <a data-toggle="modal" data-target="#messageModal" href="">{% trans %}Uzrakstiet ziņu{% endtrans %}</a>
+                                    {% else %}
+                                        <a href="{{ path('login') }}">{% trans %}Uzrakstiet ziņu{% endtrans %}</a>
+                                    {% endif %}
+                                {% else %}
+                                    {% if app.user %}
+                                        <a data-toggle="modal" data-target="#messageModal" href="">{% trans %}Uzrakstiet ziņu{% endtrans %}</a>
+                                    {% else %}
+                                        <a href="{{ path('loginLocale',{'_locale' : app.request.locale}) }}">{% trans %}Uzrakstiet ziņu{% endtrans %}</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+			</div>
+                        {% if services %}
+                            <div class="product-sellfast-block-cover">    
+                                <div class="product-sellfast-block">
+                                    <div class="product-sellfast-block-header">{% trans %}SELL ĀTRI{% endtrans %}!</div>
+                                        <table> 
+                                            {% if  app.request.locale == 'lv' %}
+                                                {% for service in services %}
+                                                    <tr>
+                                                        <td align="center">{{ service.icon | raw }}</td>
+                                                        <td>
+                                                            <a href="{{ path('account_service', {'serviceId' : service.id,'productId' : product.id}) }}">
+                                                                {% if service.translations | length > 0 %}
+                                                                    {% for translation in service.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ service.title }}
+                                                                {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                {% for service in services %}
+                                                    <tr>
+                                                        <td align="center">{{ service.icon | raw }}</td>
+                                                        <td>
+                                                            <a href="{{ path('account_serviceLocale', {'_locale' : app.request.locale,'serviceId' : service.id,'productId' : product.id}) }}">
+                                                                {% if service.translations | length > 0 %}
+                                                                    {% for translation in service.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ service.title }}
+                                                                {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </table>
+                                    </div>
+                            </div>
+                        {% endif %}
+		</div>
+                <div class="col-lg-3 col-md-3 right-column hidden-lg hidden-md">
+                        <div class="advertise-block">
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : product.category, 'position' : 'rightcolumn'})) }}
+			</div>
+			<div class="top-sellers-block product-seller">
+                            <div class="seller-block-header">
+                                <div class="seller-block-product-price">{% trans %}Cena{% endtrans %} <span>{{ product.price }}</span> {{ settings.currency.name }}</div>
+                                
+                                <div class="seller-block-region">
+                                    {% if product.city %}{% trans %}pilsēta{% endtrans %}: 
+                                        {% if product.city.translations | length > 0 %}
+                                            {% for translation in product.city.translations %}
+                                                {% if translation.locale.id == locale.id %}
+                                                    {{ translation.value }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {{ product.city.name }}
+                                        {% endif %}
+                                    {%else%}
+                                        {% trans %}Visa Latvija{% endtrans %}
+                                    {% endif %}, 
+                                    {% if product.region %}
+                                        {% if product.region.translations | length > 0 %}
+                                            {% for translation in product.region.translations %}
+                                                {% if translation.locale.id == locale.id %}
+                                                    {{ translation.value }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {{ product.region.name }}
+                                        {% endif %}
+                                    {%else%}
+                                        {% trans %}Visa Latvija{% endtrans %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="seller-block-sellbuttons">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 no-padding-right">
+                                        {% if app.user %}
+                                        <a href="javascript:void()" onclick="addFavoriteProduct({{ product.id }},'{{ app.request.locale }}', 0)">
+                                            <span>
+                                                {% if favoriteProductIs%}
+                                                    <i class="fa fa-star fa-2x"></i>
+                                                {% else %}
+                                                    <i class="fa fa-star-o fa-2x"></i>
+                                                {% endif %}
+                                            </span>
+                                            {% trans %}Pievienot favorītiem{% endtrans %}
+                                        </a>
+                                        {% else %}
+                                        {% if  app.request.locale == 'lv' %}
+                                            <a href="{{ path('login') }}">
+                                                <span>
+                                                    <i class="fa fa-star-o fa-2x"></i>
+                                                </span>
+                                                {% trans %}Pievienot favorītiem{% endtrans %}
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ path('loginLocale',{'_locale' : app.request.locale}) }}">
+                                                <span>
+                                                    <i class="fa fa-star-o fa-2x"></i>
+                                                </span>
+                                                {% trans %}Pievienot favorītiem{% endtrans %}
+                                            </a>
+                                        {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 right-text">
+                                        {% if app.user %}
+                                            <button class="seller-block-sellbutton" data-toggle="modal" data-target="#orderModal">{% trans %}PASŪTĪT{% endtrans %}</button>
+                                        {% else %}
+                                            {% if  app.request.locale == 'lv' %}
+                                                <button class="seller-block-sellbutton" onclick="window.location.href='{{ path('login') }}'">{% trans %}PASŪTĪT{% endtrans %}</button>
+                                            {% else %}
+                                                <button class="seller-block-sellbutton" onclick="window.location.href='{{ path('loginLocale',{'_locale' : app.request.locale}) }}'">{% trans %}PASŪTĪT{% endtrans %}</button>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="seller-contact-header">{% trans %}KONTAKT PERSONA{% endtrans %}</div>
+                            <table>
+				<tr class="top-seller-row">
+                                    <td>
+                                        <div class="top-seller-avatar">
+                                            {% if  app.request.locale == 'lv' %}
+                                                <a href="{{ path('profile', {'userId' : product.user.id}) }}">
+                                                {% if product.user.userinfo.avatar %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/') }}{{ product.user.userinfo.avatar }}" alt="" title="" class="img-circle"/>
+                                                {% elseif product.user.userinfo.sex %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ product.user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                {% else %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" class="img-circle"/>
+                                                {% endif %}
+                                            {% else %}
+                                                <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : product.user.id}) }}">
+                                                {% if product.user.userinfo.avatar %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/') }}{{ product.user.userinfo.avatar }}" alt="" title="" class="img-circle"/>
+                                                {% elseif product.user.userinfo.sex %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ product.user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                {% else %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" class="img-circle"/>
+                                                {% endif %}
+                                            {% endif %}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="top-seller-data no-padding-right">
+                                            <div class="top-seller-name">
+                                                {% if  app.request.locale == 'lv' %}
+                                                    <a href="{{ path('profile', {'userId' : product.user.id}) }}">
+                                                        {{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : product.user.id}) }}">
+                                                        {{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                            {% if product.user.userinfo.rating %}
+                                                <div class="top-seller-rating">{% trans %}Рейтинг{% endtrans %}: {{ product.user.userinfo.rating }}%</div>
+                                            {% else %}
+                                                <div class="top-seller-rating">{% trans %}Рейтинг{% endtrans %}: 0%</div>
+                                            {% endif %}
+                                            <div class="top-seller-record">
+                                                {% if  app.request.locale == 'lv' %}
+                                                    <a href="{{ path('profile', {'userId' : product.user.id}) }}">
+                                                        {{ product.user.receivedOrders | length }} <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                    </a> /
+                                                    <a href="{{ path('user_reviews', {'userId' : product.user.id }) }}">
+                                                        {% set rating = 0 %}
+                                                        {% for review in product.user.targetReviews %}
+                                                            {% if review.status == 1%}
+                                                                {% set rating = rating + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {{ rating }} <i class="fa fa-heart" aria-hidden="true"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : product.user.id}) }}">
+                                                        {{ product.user.receivedOrders | length }} <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                    </a> /
+                                                    <a href="{{ path('user_reviewsLocale', {'_locale' : app.request.locale,'userId' : product.user.id }) }}">
+                                                        {% set rating = 0 %}
+                                                        {% for review in product.user.targetReviews %}
+                                                            {% if review.status == 1%}
+                                                                {% set rating = rating + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {{ rating }} <i class="fa fa-heart" aria-hidden="true"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        {% if  app.request.locale == 'lv' %}
+                                            <div class="seller-reviews-link no-padding-right"><a href="{{ path('user_reviews', {'userId' : product.user.id }) }}">{% trans %}Pārdevēja atsauksmes{% endtrans %}</a></div>
+                                            <div class="seller-adverts-link no-padding-right"><a href="{{ path('user_products', {'userId' : product.user.id }) }}">{% trans %}Visas reklāmas{% endtrans %}</a></div>
+                                        {% else %}
+                                            <div class="seller-reviews-link no-padding-right"><a href="{{ path('user_reviewsLocale', {'_locale' : app.request.locale,'userId' : product.user.id }) }}">{% trans %}Pārdevēja atsauksmes{% endtrans %}</a></div>
+                                            <div class="seller-adverts-link no-padding-right"><a href="{{ path('user_productsLocale', {'_locale' : app.request.locale,'userId' : product.user.id }) }}">{% trans %}Visas reklāmas{% endtrans %}</a></div>
+                                        {% endif %}
+                                    </td>
+                                </tr>    
+                            </table>
+                            <div class="seller-block-phone-number">
+                                <i class="fa fa-phone-square" aria-hidden="true"></i>
+                                <div class="seller-block-phone">+3XXX-XXX-XXX</div>
+                                {% if  app.request.locale == 'lv' %}
+                                    {% if app.user %}
+                                        <div class="seller-block-phone-show" onclick="showSellerNumer({{ product.id }})"><button>{% trans %}Rādīt istabu{% endtrans %}</button><i class="fa fa-spin fa-spinner seller-number-spinner"></i></div>    
+                                    {% else %}
+                                        <div class="seller-block-phone-show"><button onclick="window.location.href='{{ path('login') }}'">{% trans %}Rādīt istabu{% endtrans %}</button></div>
+                                    {% endif %}
+                                {% else %}
+                                    {% if app.user %}
+                                        <div class="seller-block-phone-show" onclick="showSellerNumer({{ product.id }})"><button>{% trans %}Rādīt istabu{% endtrans %}</button><i class="fa fa-spin fa-spinner seller-number-spinner"></i></div>    
+                                    {% else %}
+                                        <div class="seller-block-phone-show"><button onclick="window.location.href='{{ path('loginLocale',{'_locale' : app.request.locale}) }}'">{% trans %}Rādīt istabu{% endtrans %}</button></div>
+                                    {% endif %}
+                                {% endif %}    
+                            </div>
+                            <div class="seller-block-writemessage"><i class="fa fa-pencil-square" aria-hidden="true"></i>
+                                {% if  app.request.locale == 'lv' %}
+                                    {% if app.user %}
+                                        <a data-toggle="modal" data-target="#messageModal" href="">{% trans %}Uzrakstiet ziņu{% endtrans %}</a>
+                                    {% else %}
+                                        <a href="{{ path('login') }}">{% trans %}Uzrakstiet ziņu{% endtrans %}</a>
+                                    {% endif %}
+                                {% else %}
+                                    {% if app.user %}
+                                        <a data-toggle="modal" data-target="#messageModal" href="">{% trans %}Uzrakstiet ziņu{% endtrans %}</a>
+                                    {% else %}
+                                        <a href="{{ path('loginLocale',{'_locale' : app.request.locale}) }}">{% trans %}Uzrakstiet ziņu{% endtrans %}</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+			</div>
+                        {% if services %}
+                            <div class="product-sellfast-block-cover">    
+                                <div class="product-sellfast-block">
+                                    <div class="product-sellfast-block-header">{% trans %}SELL ĀTRI{% endtrans %}!</div>
+                                        <table> 
+                                            {% if  app.request.locale == 'lv' %}
+                                                {% for service in services %}
+                                                    <tr>
+                                                        <td align="center">{{ service.icon | raw }}</td>
+                                                        <td>
+                                                            <a href="{{ path('account_service', {'serviceId' : service.id,'productId' : product.id}) }}">
+                                                                {% if service.translations | length > 0 %}
+                                                                    {% for translation in service.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ service.title }}
+                                                                {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                                {% for service in services %}
+                                                    <tr>
+                                                        <td align="center">{{ service.icon | raw }}</td>
+                                                        <td>
+                                                            <a href="{{ path('account_serviceLocale', {'_locale' : app.request.locale,'serviceId' : service.id,'productId' : product.id}) }}">
+                                                                {% if service.translations | length > 0 %}
+                                                                    {% for translation in service.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ service.title }}
+                                                                {% endif %}
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </table>
+                                    </div>
+                            </div>
+                        {% endif %}
+		</div>
+	</div>
+</div>
+{% if app.user %}
+    <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{ form_start(orderForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                        <h4 class="modal-title" id="regionModalLabel">{% trans %}Preču pasūtīšana{% endtrans %}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(orderForm.name) }}</label>
+                            <div class="col-lg-8 col-md-8">
+                                {{ form_widget(orderForm.name) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(orderForm.email) }}</label>
+                            <div class="col-lg-8 col-md-8">
+                                {{ form_widget(orderForm.email) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(orderForm.phone) }}</label>
+                            <div class="col-lg-8 col-md-8">
+                                {{ form_widget(orderForm.phone) }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(orderForm.comment) }}</label>
+                            <div class="col-lg-8 col-md-8">
+                                {{ form_widget(orderForm.comment) }}
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-sm-3"></div>
+                            <div class="col-sm-6">
+                                {{ form_widget(orderForm.save,{'type' : 'submit'}) }}
+                            </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                {{ form_end(orderForm)}}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{ form_start(profileMessageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title" id="regionModalLabel">{% trans %}Nosūtīt ziņu{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(profileMessageForm.subject) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                           {{ form_widget(profileMessageForm.subject) }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(profileMessageForm.message) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                            {{ form_widget(profileMessageForm.message) }}
+                        </div>
+                    </div>
+                    {{ form_widget(profileMessageForm.userFrom, {'value' : user.id }) }}
+                    {{ form_widget(profileMessageForm.userTo, {'value' : product.user.id }) }}
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+                            {{ form_widget(profileMessageForm.save,{'type' : 'submit'}) }}
+                        </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                {{ form_end(profileMessageForm)}}
+            </div>
+        </div>
+    </div>         
+{% endif %}
+{% endblock %}

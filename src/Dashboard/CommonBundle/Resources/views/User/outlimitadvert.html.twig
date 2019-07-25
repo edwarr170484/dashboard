@@ -1,0 +1,39 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Pievienot reklāmu{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Pievienot reklāmu{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Pievienot reklāmu{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+	<div class="row content-row">
+		<div class="col-lg-9 col-md-9 left-column">
+                    <div class="content-block-header"><h1>{% trans %}Pieejamo bezmaksas reklāmu limits ir izsmelts{% endtrans %}</h1></div>
+                    <div class="outlimit-text">
+                        {{ settings.userAdvertLimitText | raw }}
+                    </div>    
+		</div>
+		<div class="col-lg-3 col-md-3 right-column">
+                    {{ settings.userAdvertWorkRight | raw }}
+		</div>
+	</div>
+</div>
+{% endblock %}
+

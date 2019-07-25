@@ -1,0 +1,28 @@
+/* custom select element styles */
+.select-cover{position:relative;border:1px solid #dfe1e5;padding:8px 15px;background:#fff;font-size: 1.4rem;
+font-family: "Roboto", sans-serif;}
+.select-value{background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAHCAYAAAA8sqwkAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJZJREFUeNpilJaWDmdgYEgG4pQnT548YsACZGRkOIHUHCB+xAQVcwXiA0AJORyKtwBxFBAzM/z//58BaEsmEP8H4nvSIAZQDCrOCcR7oXLzQWKMIAJqUiaQmgbE94HYFojfQU12AuIFQOcmgtTBNUA15QCpyUB8B+RedMVgALMeyRn5UCfAnYGMMTRANUUBcSk2OYAAAwC03W2JX1Dt7QAAAABJRU5ErkJggg==') 100% 50% no-repeat;cursor:pointer;}
+.select-options{border:1px solid #dfe1e5;position:absolute;left:0;width:100%;top:100%;cursor:pointer;display:none;background:#fff;z-index:1;max-height:250px;overflow:scroll;overflow-x:hidden;}
+.select-option{padding-top:7px;padding-bottom:7px;padding-left:15px;padding-right:15px;}
+.select-option:hover,.select-option:focus{background:green;}
+.select-option-group{padding-left:10px;padding-right:10px;}
+.select-option-group-label{font-weight:bold;}
+
+/* custom checkbox element styles */
+.checkbox-cover{margin-right:7px;float:left;border:1px solid #dfe1e5;position:relative;width:20px;height:20px;background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAJCAYAAAAGuM1UAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAJJJREFUeNpi+P//PwMxWFpaWgtEMzEQAWRkZCYAqTNA2oOJCMWTgVQ+EDMDMQ8hZ0wG4v9A/BOIQ0BiIEE2IN4IxBWEFMP84ArEfkDcDrS+AuqMaUAqB4h/AXHEkydP1sCcyAjSBVSQDGTPgYqdAmIzJMXrkf0E1gA1NQ1IzYSKY1UMBmjuTgbiq0DsjSsgAAIMAABijpCmvwcuAAAAAElFTkSuQmCC') 50% 50% no-repeat #fff;}
+.checkbox-cover-inner{position:absolute;top:0;left:0;width:100%;height:100%;background:#fff;-webkit-transition: all 0.50s;-moz-transition: all 0.50s;-o-transition: all 0.50s;transition: all 0.50s;z-index:0;}
+.checkbox-cover input[type=checkbox]{position:absolute;top:0;left:0;width:100%;height:100%;margin:0;filter: alpha(opacity=0);-moz-opacity:0;opacity:0;z-index:1;}
+.checkbox-cover-inner.active{left:100%;width:0;}
+.checkbox-block:after{content:"";display:table;clear:both;}
+
+/* custom radio element styles */
+.radio-cover{margin-right:7px;float:left;border:1px solid #dfe1e5;position:relative;width:20px;height:20px;-moz-border-radius: 50%;-webkit-border-radius: 50%;border-radius: 50%;}
+.radio-cover-inner{width:100%;height:100%;z-index:0;position:absolute;top:0;left:0;}
+@keyframes scaling {
+  0%   {transform: scale(0);}
+  100% {transform: scale(1);}
+}
+.radio-cover-inner.active{background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHJJREFUeNpi/P//PwMxgAVEMDIywvjhQOwExF+AeBMQHwQJgg2DmsgJxHtBYmi4C11hNRZFMOwEUsMEtdIbj/PAcjCFbHgUciIr3I1H4VYGuEMhui5hcd98mBpGMAEJHpDiIiC2hAbPDiBegKKQGAAQYAD0zzqBIEqULQAAAABJRU5ErkJggg==') 50% 50% no-repeat #fff;}
+.radio-cover input[type=radio]{position:absolute;top:0;left:0;width:100%;height:100%;margin:0;filter: alpha(opacity=0);-moz-opacity:0;opacity:0;z-index:1;}
+.radio-block{margin-bottom:5px;}
+.radio-block:after{content:"";display:table;clear:both;}

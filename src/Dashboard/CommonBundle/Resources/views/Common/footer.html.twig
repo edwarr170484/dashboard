@@ -1,0 +1,224 @@
+<nav class="navbar navbar-default navbar-static-top hidden-sm hidden-xs" id="footer-block">
+    <div class="container bottom-nav-container">
+        <div class="row">
+            <div class="col-md-3 footerLogoBlock" >
+                {% if settings.siteLogo %}
+                    {% if  app.request.locale == 'lv' %}
+                        <a href="{{ path('main') }}" class="footerLogo pull-left">
+                            <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                        </a>
+                    {% else %}
+                        <a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}" class="footerLogo pull-left">
+                            <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                        </a>
+                    {% endif %}
+                {% endif %}
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-bottom" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>    
+            <div class="col-md-9">
+                <div id="navbar-bottom" class="navbar-collapse collapse">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="footer-menu-header">{% trans %}Informācija{% endtrans %}</div>
+                            <div class="footer-menu-list-block">
+                                <ul class="list-unstyled footer-menu-list list-inline">
+                                    {% if footerPages %}
+                                        {% for page in footerPages %}
+                                            {% if page.footerMenuSection == 1 %}
+                                                {% if  app.request.locale == 'lv' %}
+                                                    <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
+                                                {% else %}
+                                                    <li><a href="{{ path('pagesLocale',{'route' : page.route,'_locale' : app.request.locale}) }}">{{ page.title }}</a></li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="footer-menu-header">{% trans %}Pakalpojumi{% endtrans %}</div>
+                            <div class="footer-menu-list-block">
+                                <ul class="list-unstyled footer-menu-list">
+                                    {% if footerPages %}
+                                        {% for page in footerPages %}
+                                            {% if page.footerMenuSection == 2 %}
+                                                {% if  app.request.locale == 'lv' %}
+                                                    <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
+                                                {% else %}
+                                                    <li><a href="{{ path('pagesLocale',{'route' : page.route,'_locale' : app.request.locale}) }}">{{ page.title }}</a></li>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="footer-menu-header">{% trans %}Mans konts{% endtrans %}</div>
+                            <div class="footer-menu-list-block">
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <ul class="list-unstyled footer-menu-list">
+                                        <li>
+                                            {% if  app.request.locale == 'lv' %}
+                                                <a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a>
+                                            {% else %}
+                                                <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a>
+                                            {% endif %}
+                                        </li>
+                                        <li>
+                                            <a href="{{path('logout')}}" class="top-info-logout">{% trans %}Izrakstīties{% endtrans %}</a>
+                                        </li>
+                                    </ul>
+                                {% else %}
+                                <ul class="list-unstyled footer-menu-list">
+                                    {% if  app.request.locale == 'lv' %}   
+                                        <li><a href="{{path('login')}}">{% trans %}Pierakstieties{% endtrans %}</a></li>
+                                        <li><a href="{{path('register')}}">{% trans %}Reģistrācijas{% endtrans %}</a></li>
+                                    {% else %}
+                                        <li><a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Pierakstieties{% endtrans %}</a></li>
+                                        <li><a href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Reģistrācijas{% endtrans %}</a></li>
+                                    {% endif %}
+                                </ul>    
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </nav>
+	<div class="container footer">
+            <div class="row">
+		<div class="col-lg-6 col-md-6">{{ settings.copyright | raw }}</div>
+		<div class="col-lg-6 col-md-6 footer-developer">{% trans %}Attīstība{% endtrans %} <a href="https://sunweb-it.com/" target=”_blank”>Sunweb-it.com</a></div> 
+            </div>
+	</div>
+	<div class="modal fade" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+	  <div class="modal-dialog" role="document">
+		{{ form_start(regionForm,{'attr' : {'class' : 'form-horizontal siteRegionSelect'}}) }}
+                    <input name="selectFilterRegionCity" type="hidden" value="1" />
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+				<h4 class="modal-title" id="regionModalLabel">{% trans %}Izvēlies savu atrašanās vietu{% endtrans %}</h4>
+			  </div>
+			  <div class="modal-body">
+				<div class="form-group">
+                                    <label class="col-sm-4 control-label">{% trans %}Izvēlieties reģionu{% endtrans %}: </label>
+                                    <div class="col-sm-8">
+                                        {{ form_widget(regionForm.region, {'id' : 'siteRegion'})}}
+                                    </div>
+                                    <script>
+                                        $('#siteRegion').change(function() {
+                                            var $form = $(".siteRegionSelect");
+                                            var data = {};
+                                            data[$('#siteRegion').attr('name')] = $('#siteRegion').val();
+                                            $.ajax({
+                                                url : $form.attr('action'),
+                                                type: $form.attr('method'),
+                                                data : data,
+                                                    success: function(html) {
+                                                        $('#siteRegionCities').html($(html).find('#siteRegionCities').html());
+                                                        $('#siteCity').customSelect();
+                                                    }
+                                            });
+                                        });
+                                    </script>
+				</div>
+				<div class="form-group">
+                                    <label class="col-sm-4 control-label">{% trans %}Pilsēta/volost{% endtrans %}:</label>
+                                    <div class="col-sm-8" id="siteRegionCities">
+                                        {{ form_widget(regionForm.city,{'id' : 'siteCity'})}}
+                                    </div>
+				</div>
+			  </div>
+			  <div class="modal-footer">
+                            <div class="col-sm-5"></div>
+				<div class="col-sm-6"><button type="submit" class="btn">{% trans %}Izvēlieties reģionu{% endtrans %}</button></div>
+                            <div class="col-sm-1"></div>
+			  </div>
+                          {{ form_end(regionForm) }}
+			</div>
+		</form>
+	  </div>
+	</div>
+        <div class="modal fade" id="userAgreementModal" tabindex="-1" role="dialog" aria-labelledby="howToBuyModalLabel">
+	  <div class="modal-dialog" role="document">
+		<form class="form-horizontal region-select-form" action="" method="post">
+			<div class="modal-content">
+			  <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+				<h4 class="modal-title" id="regionModalLabel">{% trans %}Lietotāja līgums{% endtrans %}</h4>
+			  </div>
+			  <div class="modal-body">
+				{{ textblock.userAgreement | raw}}
+			  </div>
+			  <div class="modal-footer">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4">
+                                    <button type="submit" class="btn" data-dismiss="modal" aria-label="Close">{% trans %}Aizvērt{% endtrans %}</button>
+                                </div>
+				<div class="col-sm-4"></div>
+			  </div>
+			</div>
+		</form>
+	  </div>
+        </div>
+    <script src="{{ asset('bundles/Default/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/Default/js/ie10-viewport-bug-workaround.js') }}"></script>
+    <script src="{{ asset('bundles/Default/js/jcarousel.js') }}"></script>
+    <script src="{{ asset('bundles/Default/js/custom.js') }}"></script>
+    <script src="{{ asset('bundles/Admin/assets/plugins/TinyMCE/tinymce.min.js') }}"></script>
+    <script src="{{ asset('bundles/Default/js/lightbox.js') }}"></script>
+    <script src="{{ asset('bundles/Default/js/jquery.customform.js') }}"></script>
+    <script>
+    (function(){
+    var a = document.querySelector('#bannersSticky'), b = null, P = 15;
+    window.addEventListener('scroll', Ascroll, false);
+    document.body.addEventListener('scroll', Ascroll, false);
+        function Ascroll() {
+          if (b == null) {
+            var Sa = getComputedStyle(a, ''), s = '';
+            for (var i = 0; i < Sa.length; i++) {
+              if (Sa[i].indexOf('overflow') == 0 || Sa[i].indexOf('padding') == 0 || Sa[i].indexOf('border') == 0 || Sa[i].indexOf('outline') == 0 || Sa[i].indexOf('box-shadow') == 0 || Sa[i].indexOf('background') == 0) {
+                s += Sa[i] + ': ' +Sa.getPropertyValue(Sa[i]) + '; '
+              }
+            }
+            b = document.createElement('div');
+            b.style.cssText = s + ' box-sizing: border-box; width: ' + a.offsetWidth + 'px;';
+            a.insertBefore(b, a.firstChild);
+            var l = a.childNodes.length;
+            for (var i = 1; i < l; i++) {
+              b.appendChild(a.childNodes[1]);
+            }
+            a.style.height = b.getBoundingClientRect().height + 'px';
+            a.style.padding = '0';
+            a.style.border = '0';
+          }
+          var Ra = a.getBoundingClientRect(),
+              R = Math.round(Ra.top + b.getBoundingClientRect().height - document.querySelector('#footer-block').getBoundingClientRect().top + 0);  
+          if ((Ra.top - P) <= 0) {
+            if ((Ra.top - P) <= R) {
+              b.className = 'stop';
+              b.style.top = - R +'px';
+            } else {
+              b.className = 'sticky';
+              b.style.top = P + 'px';
+            }
+          } else {
+            b.className = '';
+            b.style.top = '';
+          }
+          window.addEventListener('resize', function() {
+            a.children[0].style.width = getComputedStyle(a, '').width
+          }, false);
+        }
+        })()
+    </script>	

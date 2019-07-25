@@ -1,0 +1,89 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Объявления на модерацию{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Объявления на модерацию</li>
+    </ol>
+    <h1 class="page-header">Объявления на модерацию <small>Одобрить или отменить объявление</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="#" onclick="if(confirm('Вы действительно хотите удалить отмеченные объявления?')){$('#action').val('delete');document.deleteSelected.submit();} else return false;">Удалить отмеченные</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Объявления на модерацию</h4>
+                </div>
+                <div class="panel-body">
+                    {%if products %}
+                        <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" class="selectAllItems" /></th>
+                                            <th>ID</th>
+                                            <th>Изображение</th>
+                                            <th>Название</th>
+                                            <th>Дата добавления</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form action="{{ path('admin_product_confirm')}}" method="POST" name="deleteSelected" id="deleteSelected">
+                                            <input name="action" value="" type="hidden" id="action"/>
+                                            {% for product in products %}
+                                                <tr>
+                                                   <td><input name="productIds[]" value="{{ product.id }}" type="checkbox" class="checkbox-item" /></td>
+                                                   <td>{{ product.id }}</td>
+                                                   <td>
+                                                        {% if product.mainfoto %}
+                                                            <img src="/bundles/images/products/{{ product.mainfoto }}" alt="" title="" width="150px" />
+                                                        {% else %}
+                                                            <img src="/bundles/images/products/thumbs/bez-foto-thumb.png" alt="" title="" width="150px" />
+                                                        {% endif %}
+                                                    </td>
+                                                   <td><a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}" target="_blank">{{ product.name }}</a></td>
+                                                   <td>{{ product.dateAdded | date("d.m.Y в H:i") }}</td>
+                                                    <td>
+                                                        <a class="btn btn-success" href="{{ path('admin_product_edit', {'productId' : product.id, 'confirm' : 1}) }}" title="Просмотреть объявление">
+                                                            <i class="fa fa-pencil" title="Редактировать объявление"></i>
+                                                        </a>
+                                                        <a class="btn btn-danger" href="{{ path('admin_product_delete', {'productId' : product.id}) }}" 
+                                                                                  onclick="if(!confirm('Вы уверены, что хотите удалить объявление?'))return false;">
+                                                            <i class="fa fa-times" title="Удалить объявление"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </form>
+                                    </tbody>
+                        </table>
+                        {% if pagination %}
+                            <div class="pagination">
+                                {{ pagination | raw }}
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        Нет новых объявлений
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,12 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Уважаемый, {{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}!</h3>
+<p>
+    На ваше объявление на портале gribupardot.sunweb.by 
+    <strong><a href="{{ absolute_url(path('product', {'productId' : product.id,'productName' : product.translit})) }}">{{ product.name }}</a></strong> 
+    поступил новый заказ.
+    <br/>
+    Номер заказа {{ order.id }}. Комментарий к заказу: {{ order.comment }}
+    <br/>
+    Вы можете обработать заказ в Вашем <a href="{{  absolute_url(path("account")) }}">личном кабинете</a> на портале gribupardot.sunweb.by.
+</p>
+

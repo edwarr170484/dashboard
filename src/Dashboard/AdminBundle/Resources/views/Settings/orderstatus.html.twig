@@ -1,0 +1,71 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Статусы заказов{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Статусы заказов</li>
+    </ol>
+    <h1 class="page-header">Статусы заказов <small>Статусы для заказов</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice_region') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('admin_settings_orderstatus_edit') }}">Добавить</a></li>
+                            <li><a href="#" onclick="if(confirm('Вы действительно хотите удалить отмеченные статусы?'))document.deleteSelectedRegion.submit(); else return false;">Удалить отмеченные</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Статусы заказов</h4>
+                </div>
+                <div class="panel-body">
+                    {%if statuses %}
+                        <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" class="selectAllItems" /></th>
+                                            <th>Статус</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form  method="POST" name="deleteSelectedRegion" id="deleteSelectedRegion">
+                                            {% for status in statuses %}
+                                                <tr>
+                                                    <td><input name="statusIds[]" value="{{ status.id }}" type="checkbox" class="checkbox-item" /></td>
+                                                    <td>
+                                                        {{ status.name }}
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-success" href="{{ path('admin_settings_orderstatus_edit',{ statusId : status.id }) }}">
+                                                            <i class="fa fa-pencil" title="Редактировать"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </form>
+                                    </tbody>
+                        </table>
+                    {% else %}
+                        Статусы пока не добавлены
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,33 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Общая статистика по сайту{% endtrans %}{% endblock %}
+
+{% block body %}
+    <!-- begin #content -->
+		<div id="content" class="content">
+			<h1 class="page-header">Панель управления сайтом</h1>
+                        <div class="row">
+			    <!-- begin col-3 -->
+			    <div class="col-md-3 col-sm-6">
+			        <div class="widget widget-stats bg-green">
+			            <div class="stats-icon stats-icon-lg"><i class="fa fa-globe fa-fw"></i></div>
+			            <div class="stats-title">Всего пользователей</div>
+			            <div class="stats-number">{{ users }}</div>
+			            <div class="stats-progress progress">
+                            <div class="progress-bar"></div>
+                        </div>
+                        </div>
+			    </div>
+			    <!-- end col-3 -->
+			    <!-- begin col-3 -->
+			    <div class="col-md-3 col-sm-6">
+			        <div class="widget widget-stats bg-blue">
+			            <div class="stats-icon stats-icon-lg"><i class="fa fa-tags fa-fw"></i></div>
+			            <div class="stats-title">Всего объявлений</div>
+			            <div class="stats-number">{{ products }}</div>
+			            <div class="stats-progress progress">
+                                        <div class="progress-bar"></div>
+                                    </div>
+                                    <div class="stats-desc">Новых за сегодня: {{ productNewNumber }}</div>
+		</div>
+{% endblock %}

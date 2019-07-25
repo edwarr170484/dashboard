@@ -1,0 +1,189 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme galleryForm _self %}
+
+{% block _gallery_items_widget %}
+    
+    <table class="table table-bordered table-gallery-items">
+        <thead>
+            <tr>
+                <th>{% trans %}Изображение{% endtrans %}</th>
+                <th>{% trans %}Данные{% endtrans %}</th>
+                <th>{% trans %}Порядок{% endtrans %}</th>
+                <th>{% trans %}Показ{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock _gallery_items_widget %}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block _gallery_items_entry_row %}
+    <tr>
+        <td>
+            {% if form.image.vars.value %}
+                <img src="{{ asset('bundles/images/gallery/') }}{{ form.image.vars.value }}" alt="" title="" width="200px" />
+            {%endif %}
+            {{ form_widget(form.imageNew)}}
+            {{ form_widget(form.image)}}
+            {{ form_widget(form.gallery) }}
+        </td>
+        <td>
+            <div class="form-group">
+                <div class="col-md-12 m-t-15"><b>{{ form_label(form.description)}}</b></div>
+                <div class="col-md-12">
+                    {{ form_widget(form.description)}}
+                </div>
+            </div> 
+            <div class="form-group">
+                <div class="col-md-12 m-t-15"><b>{{ form_label(form.alt)}}</b></div>
+                <div class="col-md-12">
+                    {{ form_widget(form.alt)}}
+                </div>
+            </div> 
+            <div class="form-group">
+                <div class="col-md-12 m-t-15"><b>{{ form_label(form.title)}}</b></div>
+                <div class="col-md-12">
+                    {{ form_widget(form.title)}}
+                </div>
+            </div>
+        </td>
+        <td>{{ form_widget(form.sort)}}</td>
+        <td>{{ form_widget(form.status)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить страницу?'))return false;else $(this).parent().parent().remove()" href="/admin/userpages/8">
+                <i class="fa fa-times" title="Удалить изображение"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+
+
+{% block title %}{% trans %}Панель управления{% endtrans %} - {% trans %}Редактировать галерею{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('dashboard_gallery_admin_index') }}">Галереи</a></li>
+            <li class="active">Редактировать галерею</li>
+        </ol>
+        <h1 class="page-header">Галерея <small>Редактировать галерею</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информаци о галерее</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(galleryForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#images">Изображения</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#maininfo">Общая информация</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            
+                                <div id="images" class="tab-pane fade active in">
+                                    <div class="row">
+                                            <div class="col-md-12">
+                                                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                                                    <div class="panel-heading ui-sortable-handle">
+                                                        <h4 class="panel-title">Изображения галереи</h4>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <button class="btn btn-sm btn-success m-b-15" id="add-gallery-image" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить изображение</button>
+                                                            {{ form_widget(galleryForm.items)}}
+                                                            
+                                                            {% if galleryForm.items | length <= 0 %}
+                                                                Изображений не найдено
+                                                            {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="maininfo" class="tab-pane fade">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(galleryForm.name)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(galleryForm.name)}}
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(galleryForm.translit)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(galleryForm.translit)}}
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(galleryForm.locale)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(galleryForm.locale)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(galleryForm.sort)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(galleryForm.sort)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(galleryForm.description)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(galleryForm.description)}}
+                                                    </div>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                </div>
+                                    <div class="row">
+                                            <label class="col-md-3 ">{{ form_label(galleryForm.save)}}</label>
+                                            <div class="col-md-9">
+                                                {{ form_widget(galleryForm.save,{'type' : 'submit'})}}
+                                            </div>
+                                    </div>
+			</div>
+                        {{ form_end(galleryForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme pageForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block title %}{% trans %} Панель управления - Редактировать страницу{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            
+            <li class="active"></li>
+        </ol>
+        <h1 class="page-header">Страницы <small>Редактировать страницу</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация о странице</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(pageForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#meta">Мета-теги</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.title)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.title,{'id' : 'forTranslit'})}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.route)}}</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            {% if isUserpage or not pageId %}
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-primary" type="button" id="generateTranslit">Транслит</button>
+                                                </div>
+                                                {{ form_widget(pageForm.route, {'attr' : {'class' : 'form-control categoryTranslit'}})}}
+                                            {% else %}
+                                                {{ form_widget(pageForm.route, {'disabled' : true ,'attr' : {'class' : 'form-control'}})}}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.locale)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.locale)}}
+                                    </div>
+                                </div>        
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.isFooterMenu)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.isFooterMenu)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.footerMenuSection)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.footerMenuSection)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.text)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.text)}}
+                                    </div>
+                                </div>    
+                            </div>
+                            <div id="meta" class="tab-pane fade">
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.metaTagTitle)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.metaTagTitle)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.metaTagDescription)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.metaTagDescription)}}
+                                    </div>
+                                </div>  
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.metaTagAuthor)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.metaTagAuthor)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.metaTagRobots)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.metaTagRobots)}}
+                                    </div>
+                                </div>  
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(pageForm.metaTagKeywords)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(pageForm.metaTagKeywords)}}
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 ">{{ form_label(pageForm.save)}}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(pageForm.save,{'type' : 'submit'})}}
+                                </div>
+                            </div> 
+                        </div>
+                        {{ form_end(pageForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+

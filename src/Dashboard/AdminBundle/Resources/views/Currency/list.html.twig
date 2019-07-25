@@ -1,0 +1,78 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Валюты сайта{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Валюты сайта</li>
+    </ol>
+    <h1 class="page-header">Валюты сайта <small>Настройка валют сайта</small></h1>    
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="notice-message">
+                    {{ flashMessage | raw }}
+                </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('currencyEditBoard') }}" title="Добавить">Добавить</a></li>
+                            <li><a href="javascript:void(0)" onclick="document.form.submit();">Сохранить</a></li>
+                            <li><a href="javascript:void(0)" onclick="if(confirm('Вы действительно хотите удалить отмеченные пункты?')){$('#form_action').val('delete');document.form.submit();}">Удалить отмеченные</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Валюты сайта</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        {% if currencies %}
+                                {{ form_start(form) }}
+                                    <table class="table table-bordered table-striped table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th><input class="selectAllItems" type="checkbox"></th>
+                                                <th>{% trans %}Название{% endtrans %}</th>
+                                                <th>{% trans %}Код валюты{% endtrans %}</th>
+                                                <th>{% trans %}Коэфициент пересчета{% endtrans %}</th>
+                                                <th>{% trans %}По умолчанию{% endtrans %}</th>
+                                                <th>{% trans %}Порядок{% endtrans %}</th>
+                                                <th>{% trans %}Действия{% endtrans %}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for currency in currencies %}
+                                                <tr>
+                                                    <td><input name="currencyId[]" value="{{ currency.id }}" type="checkbox" class="checkbox-item" /></td>
+                                                    <td>{{ currency.name }}</td>
+                                                    <td>{{ currency.code }}</td>
+                                                    <td>{{ currency.kurs }}</td>
+                                                    <td><input name="currencyDefault[]" type="radio" {% if currency.isDefault %}checked=""{% endif %} value="{{ currency.id }}" /></td>
+                                                    <td>
+                                                        <input name="sortorder[{{ currency.id }}]" value="{{ currency.sortorder }}" class="item-sortorder"/>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ path('currencyEditBoard', {'currencyId' : currency.id}) }}" class="btn btn-primary" title="{% trans %}Редактировать{% endtrans %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {{ form_end(form) }}
+                            {% else %}
+                                {% trans %}Валюты сайта не добавлены{% endtrans %}
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endblock %}

@@ -1,0 +1,9 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Копия сообщения для владельца объявления.</h3>
+<p>
+    Вы отправили сообщение владельцу объявления.<br/> 
+    <strong>Объявление: </strong><a href="{{ absolute_url(path('product', {'productId' : product.id,'productName' : product.translit})) }}">{{ product.name }}</a><br/>
+    <strong>Сообщение: </strong>{{ message }}
+</p>
+
+

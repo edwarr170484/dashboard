@@ -1,0 +1,291 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme productForm _self %}
+
+{% block _product_fotos_widget %}
+    <table class="table table-bordered table-product-fotos">
+        <thead>
+            <tr>
+                <th>{% trans %}Изображение{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock _product_fotos_widget %}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block _product_fotos_entry_row %}
+    <tr>
+        <td>
+            {% if form.foto.vars.value %}
+                <img src="{{ asset('bundles/images/products/') }}{{ form.foto.vars.value }}" alt="" title="" width="200px" />
+            {%endif %}
+            {{ form_widget(form.fotoNew)}}
+            {{ form_widget(form.foto)}}
+            {{ form_widget(form.product) }}
+        </td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить изображение?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить изображение"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+
+
+{% block title %}{% trans %}Панель управления{% endtrans %} - {% trans %}Редактировать объявление{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_product') }}">Объявления</a></li>
+            <li class="active">Редактировать объявление</li>
+        </ol>
+        <h1 class="page-header">Галерея <small>Редактировать объявление</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация об объявлении</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(productForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Общая информация</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#images">Изображения</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                                <div id="maininfo" class="tab-pane fade active in">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <label class="m-b-15">Главное фото</label>
+                                                {% if productForm.vars.value.mainfoto %}
+                                                    <img class="m-b-15" src="{{ asset('bundles/images/products/') }}{{productForm.vars.value.mainfoto}}" alt="" title="" width="100%" />
+                                                {% endif %}
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        {{ form_widget(productForm.mainfotoNew) }}
+                                                        {{ form_widget(productForm.mainfoto) }}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-12">{{ form_label(productForm.name)}}</label>
+                                                    <div class="col-md-12">
+                                                        {{ form_widget(productForm.name)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-12">{{ form_label(productForm.category)}}</label>
+                                                    <div class="col-md-12">
+                                                        {{ form_widget(productForm.category)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-12">{{ form_label(productForm.metaTagTitle)}}</label>
+                                                    <div class="col-md-12">
+                                                        {{ form_widget(productForm.metaTagTitle)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-12">{{ form_label(productForm.metaTagDescription)}}</label>
+                                                    <div class="col-md-12">
+                                                        {{ form_widget(productForm.metaTagDescription)}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.authorName)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.authorName)}}
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.authorEmail)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.authorEmail)}}
+                                                    </div>
+                                                </div>  
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.authorPhone)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.authorPhone)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.region)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.region, {'id' : 'adminRegion'})}}
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.city)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.city, {'id' : 'adminCity'})}}
+                                                    </div>
+                                                </div> 
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.selltype)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.selltype)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.price)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.price)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="col-md-3 control-label"></div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label">{{ form_label(productForm.typeno)}}</label>
+                                                            <div class="col-md-6">
+                                                                {{ form_widget(productForm.typeno,{'attr' : {'class' : 'advtype'}})}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label">{{ form_label(productForm.typenew)}}</label>
+                                                            <div class="col-md-6">
+                                                                {{ form_widget(productForm.typenew, {'attr' : {'class' : 'advtype'}})}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label">{{ form_label(productForm.typebu)}}</label>
+                                                            <div class="col-md-6">
+                                                                {{ form_widget(productForm.typebu, {'attr' : {'class' : 'advtype'}})}}
+                                                            </div>
+                                                        </div>    
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label">{{ form_label(productForm.viewcommon)}}</label>
+                                                            <div class="col-md-6">
+                                                                {{ form_widget(productForm.viewcommon, {'attr' : {'class' : 'viewtype'}})}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label">{{ form_label(productForm.viewpremium)}}</label>
+                                                            <div class="col-md-6">
+                                                                {{ form_widget(productForm.viewpremium, {'attr' : {'class' : 'viewtype'}})}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-6 control-label">{{ form_label(productForm.viewselected)}}</label>
+                                                            <div class="col-md-6">
+                                                                {{ form_widget(productForm.viewselected, {'attr' : {'class' : 'viewtype'}})}}
+                                                            </div>
+                                                        </div>    
+                                                    </div>    
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.isConfirm)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.isConfirm)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.isActive)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.isActive)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.isBlocked)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.isBlocked)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.isCorrect)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.isCorrect)}}
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label">{{ form_label(productForm.correctReason)}}</label>
+                                                    <div class="col-md-9">
+                                                        {{ form_widget(productForm.correctReason)}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="col-md-12">{{ form_label(productForm.description)}}</label>
+                                                    <div class="col-md-12">
+                                                        {{ form_widget(productForm.description)}}
+                                                    </div>
+                                                </div>      
+                                            </div>
+                                        </div>
+                                </div>
+                                <div id="images" class="tab-pane fade">
+                                    <div class="row">
+                                            <div class="col-md-12">
+                                                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                                                    <div class="panel-heading ui-sortable-handle">
+                                                        <h4 class="panel-title">Изображения галереи</h4>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <button class="btn btn-sm btn-success m-b-15" id="add-product-image" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить изображение</button>
+                                                            {{ form_widget(productForm.fotos)}}
+                                                            
+                                                            {% if productForm.fotos | length <= 0 %}
+                                                                Изображений не найдено
+                                                            {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(productForm.save)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(productForm.save,{'type' : 'submit', 'attr' : {'class' : 'btn btn-success pull-right'}})}}
+                                    </div>
+                                </div> 
+			</div>
+                        {{ form_end(productForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

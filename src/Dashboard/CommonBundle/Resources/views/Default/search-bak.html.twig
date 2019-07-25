@@ -1,0 +1,542 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{{ page.metaTagTitle }}{% endblock %}
+{% block metatags %}
+    <meta content="{{ page.metaTagDescription }}" name="description" />
+    <meta content="{{ page.metaTagAuthor }}" name="author" />
+    <meta content="{{ page.metaTagRobots }}" name="robots" />
+    <meta content="{{ page.metaTagKeywords }}" name="keywords" />
+{% endblock %}
+
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
+                    <li><a href="">{{ page.title }}</a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+	<div class="row content-row">
+		<div class="col-lg-9 col-md-9 left-column">
+			<div class="content-block-header"><h1>{{ page.title }}</h1></div>
+                        <div class="mainpage-search-block category-search">
+				<div class="search-form-block">
+					<form action="" method="post" onsubmit="if($('#selectCategory').val() && $('#selectCategory').val() != 0){$(this).attr('action','/category/' + $('#selectCategory').val())}return true;">
+					<div class="row search-form-inputs">
+						<div class="col-lg-4 col-md-4 search-box">
+                                                    <input name="searchText" placeholder="Текст поиска" type="text" {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
+						</div>
+                                                {% if allcategories | length > 0 %}
+                                                    <div class="col-lg-4 col-md-4 position-relative search-box">
+                                                        <div class="position-relative">
+                                                            <div class="div-select">Выберите категорию</div>
+                                                            <div class="div-select-options" data-select="selectCategory">
+                                                                <div class="select-option select-category-option" data-value="0">Нет</div>
+                                                                {% for category in allcategories %}
+                                                                    {% if category.name == app.request.get('searchCategory') %}
+                                                                        <div class="select-option optgroup select-category-option" data-selected="1" data-value="{{ category.name }}">{{ category.title }}</div>
+                                                                    {% else %}
+                                                                        <div class="select-option optgroup select-category-option" data-value="{{ category.name }}">{{ category.title }}</div>
+                                                                    {% endif %}
+                                                                    {% if category.children | length > 0 %}
+                                                                        {% for child in category.children %}
+                                                                            {% if child.name == app.request.get('searchCategory') %}
+                                                                                <div class="select-option option select-category-option" data-selected="1" data-value="{{ child.name }}">{{ child.title }}</div>
+                                                                            {% else %}
+                                                                                <div class="select-option option select-category-option" data-value="{{ child.name }}">{{ child.title }}</div>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                            <select name="searchCategory" class="hidden-input" id="selectCategory">
+                                                                <option value="0">Нет</option>
+                                                                {% for category in allcategories %}
+                                                                    {% if category.name == app.request.get('searchCategory') %}
+                                                                        <option value="{{ category.name }}" selected="selected">{{ category.title}}</option>
+                                                                    {% else %}
+                                                                        <option value="{{ category.name }}">{{ category.title}}</option>
+                                                                    {% endif %}
+                                                                    {% if category.children | length > 0 %}
+                                                                        {% for child in category.children %}
+                                                                            {% if child.name == app.request.get('searchCategory') %}
+                                                                                <option value="{{ child.name }}" selected="selected">{{ child.title}}</option>
+                                                                            {% else %}
+                                                                                <option value="{{ child.name }}">{{ child.title}}</option>
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if allcities %}
+                                                    <div class="col-lg-4 col-md-4">
+                                                        <div class="position-relative">
+                                                            <div class="div-select input"><input value="{% trans %}Pilsēta{% endtrans %}" class="div-select-helper" /></div>
+                                                            <div class="div-select-options" data-select="selectCity">
+                                                                <div class="select-option" data-value="0">{% trans %}Visa Latvija{% endtrans %}</div>
+                                                                {% if app.request.get('searchCity') %}
+                                                                    {% set eqCity = app.request.get('searchCity') %}
+                                                                {% else %}
+                                                                    {% set eqCity = app.session.get('sessionCity') %}
+                                                                {% endif %}
+                                                                {% for city in allcities%}
+                                                                    {% if city.id == eqCity %}
+                                                                        <div class="select-option" data-selected="1" data-value="{{ city.id }}">
+                                                                            {% if city.translations | length > 0 %}
+                                                                                {% for translation in city.translations %}
+                                                                                    {% if translation.locale.id == locale.id %}
+                                                                                        {{ translation.value }}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% else %}        
+                                                                                {{ city.name }}
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="select-option" data-value="{{ city.id }}">
+                                                                            {% if city.translations | length > 0 %}
+                                                                                {% for translation in city.translations %}
+                                                                                    {% if translation.locale.id == locale.id %}
+                                                                                        {{ translation.value }}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% else %}        
+                                                                                {{ city.name }}
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                            <select name="searchCity" class="hidden-input" id="selectCity">
+                                                                <option value="0">{% trans %}Visa Latvija{% endtrans %}</option>
+                                                                {% for city in allcities%}
+                                                                    {% if city.id == eqCity %}
+                                                                        <option value="{{ city.id }}" selected="selected">
+                                                                            {% if city.translations | length > 0 %}
+                                                                                {% for translation in city.translations %}
+                                                                                    {% if translation.locale.id == locale.id %}
+                                                                                        {{ translation.value }}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% else %}        
+                                                                                {{ city.name }}
+                                                                            {% endif %}
+                                                                        </option>
+                                                                    {% else %}
+                                                                        <option value="{{ city.id }}">
+                                                                            {% if city.translations | length > 0 %}
+                                                                                {% for translation in city.translations %}
+                                                                                    {% if translation.locale.id == locale.id %}
+                                                                                        {{ translation.value }}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% else %}        
+                                                                                {{ city.name }}
+                                                                            {% endif %}
+                                                                        </option>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+					</div>
+                                        <div class="load-category-filters-spinner">
+                                                <i class="fa fa-spinner fa-pulse fa-fw"></i> {% trans %}Filtru ielāde{% endtrans %}
+                                        </div>
+                                        <div class="row search-form-inputs category-filters">
+                                            
+                                        </div>
+					<div class="row latest-search-row">
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="checkboxes biger">
+							<table>
+								<tr>
+									<td>
+										<div class="div-checkbox {% if app.request.get('searchWithFoto') %} active {% endif %}" data-checkbox="fotocheckbox" ></div> {% trans %}C FOTO{% endtrans %}
+										<input name="searchWithFoto" type="checkbox" id="fotocheckbox" value="1" class="hidden-input" {% if app.request.get('searchWithFoto') %} checked="checked" {% endif %}/>
+									</td>
+									<td>
+										<div class="div-checkbox {% if app.request.get('searchIsBu') %} active {% endif %}" data-checkbox="bucheckbox" ></div> {% trans %}Б/У{% endtrans %}
+										<input name="searchIsBu" type="checkbox" id="bucheckbox" value="1" class="hidden-input" {% if app.request.get('searchIsBu') %} checked="checked" {% endif %}/>
+									</td>
+								</tr>
+							</table>
+                                                    </div>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<button class="submit-search-form pull-right" type="submit">{% trans %}MEKLĒT{% endtrans %}</button>
+						</div>
+					</div>
+                                        
+					</form>
+				</div>
+			</div>
+                        {% if premiumProducts %}
+                            <div class="row category-premium-adverts-block">
+                                <div class="col-lg-12 col-md-12">
+                                        <div class="premium-adverts category-premium-adverts">
+                                                <div class="content-block-header premium-block-header"><h1>{% trans %}Premium reklāmas{% endtrans %}</h1></div>
+                                                {% for premium in premiumProducts %}
+                                                    <div class="advert-frame" id="advert_frame_{{ premium.id}}">
+                                                        {%if premium.selltype %}
+                                                            <div class="advert-type sell">
+                                                                {% if premium.selltype.translations | length > 0 %}
+                                                                    {% for translation in premium.selltype.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ premium.selltype.title}}
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="premium-advert">
+                                                                {% if premium.mainfoto %}
+                                                                    <div class="premium-product-image">
+                                                                        <a href="{{ path('product', {'productId' : premium.id,'productName' : premium.translit}) }}">
+                                                                            <img src="{{ asset('bundles/images/products/') }}{{ premium.mainfoto }}" alt="{{ premium.name }}" title="{{ premium.name }}" />
+                                                                        </a>
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="premium-product-image">
+                                                                        <a href="{{ path('product', {'productId' : premium.id,'productName' : premium.translit}) }}">
+                                                                            <img src="{{ asset('bundles/images/products/bez-foto-premium.png') }}" alt="{{ premium.name }}" title="{{ premium.name }}" />
+                                                                        </a>
+                                                                    </div>
+                                                                {% endif %}
+                                                                <div class="advert-name">
+                                                                    <a href="{{ path('product', {'productId' : premium.id,'productName' : premium.translit}) }}">{{ premium.name }}</a>
+                                                                </div>
+                                                                {% if premium.price %}
+                                                                    <div class="advert-price"><span>{{ premium.price }} {{ settings.currency.name }}</span></div>
+                                                                {% else %}
+                                                                    <div class="advert-price"><span>0 {{ settings.currency.name }}</span></div>
+                                                                {% endif %}
+                                                                <div class="advert-add-info">
+                                                                    {% if premium.city %}
+                                                                        <div class="advert-town">
+                                                                            {% if premium.city.translations | length > 0 %}
+                                                                                {% for translation in premium.city.translations %}
+                                                                                    {% if translation.locale.id == locale.id %}
+                                                                                        {{ translation.value }}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% else %}
+                                                                                {{ premium.city.name }}
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="advert-town">{% trans %}Visa Latvija{% endtrans %}</div>
+                                                                    {% endif %}
+                                                                    <div class="advert-rating">
+                                                                        {% if premium.reviews | length > 0 %}
+                                                                            {{ premium.reviews | length }} <img src="{{ asset('bundles/Default/img/cloud.png') }}" alt="{{ premium.name }}" title="{{ premium.name }}" />&nbsp
+                                                                        {% endif %}
+                                                                        {% if premium.ratingLikes %}
+                                                                            {{ premium.ratingLikes }} <img src="{{ asset('bundles/Default/img/hart.png') }}" alt="{{ premium.name }}" title="{{ premium.name }}" />
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                        </div>   
+                                                    </div>      
+                                                {% endfor %}
+                                        </div>
+                                 </div>
+                            </div>
+                        {% endif %}
+                        <div class="hidden-sm hidden-xs">
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'centerpage'})) }}
+			</div>
+                        {% if products | length > 0 or selectedProducts | length > 0 or upProducts | length > 0 %}
+                            {% if selltypes %}
+                                        <div class="selltype-filter">
+                                            <ul class="list-unstyled list-inline">
+                                                <li class="active selltypeFilterItem"><a href="javascript:;">{% trans %}Viss{% endtrans %}</a></li>
+                                                {% for selltype in selltypes %}
+                                                    <li class="selltypeFilterItem" data-selltype="{{ selltype.id }}">
+                                                        <a href="javascript:;">
+                                                            {% if selltype.translations | length > 0 %}
+                                                                {% for translation in selltype.translations %}
+                                                                    {% if translation.locale.id == locale.id %}
+                                                                        {{ translation.value }}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                {{ selltype.title }}
+                                                            {% endif %}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                            {% endif %}
+                            <div class="row advert-category-adverts">
+                                <div class="col-lg-12 col-md-12">
+                                        <div class="premium-adverts">
+                                            {% if selectedProducts | length > 0 %}
+                                                {% for product in selectedProducts %}
+                                                    <div class="advert-frame selltype{{ product.selltype.id }} selltype" id="advert_frame_{{ product.id}}">
+                                                        {%if product.selltype %}
+                                                            <div class="advert-type sell">
+                                                                {% if product.selltype.translations | length > 0 %}
+                                                                    {% for translation in product.selltype.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ product.selltype.title}}
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="premium-advert {% if product.service %}{% if product.service.service.id == 2%} active {% endif %}{% endif %}">
+                                                            {% if product.mainfoto %}
+                                                                <div class="product-image">
+                                                                    <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">
+                                                                        <img src="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    </a>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="product-image">
+                                                                    <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">
+                                                                        <img src="{{ asset('bundles/images/products/thumbs/bez-foto-thumb.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    </a>
+                                                                </div>
+                                                            {% endif %}
+                                                            <div class="advert-name">
+                                                                <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">{{ product.name }}</a>
+                                                            </div>
+                                                            {% if product.price %}
+                                                                <div class="advert-price">
+                                                                    <span>{{ product.price }} {{ settings.currency.name }}</span>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="advert-price">
+                                                                    <span>0 {{ settings.currency.name }}</span>
+                                                                </div>
+                                                            {% endif %}
+                                                            <div class="advert-add-info">
+                                                                {% if product.city %}
+                                                                    <div class="advert-town">
+                                                                        {% if product.city.translations | length > 0 %}
+                                                                            {% for translation in product.city.translations %}
+                                                                                {% if translation.locale.id == locale.id %}
+                                                                                    {{ translation.value }}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}
+                                                                            {{ product.city.name }}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    {% else %}
+                                                                        <div class="advert-town">{% trans %}Visa Latvija{% endtrans %}</div>
+                                                                    {% endif %}
+                                                                <div class="advert-rating">
+                                                                    {% if product.reviews | length > 0 %}
+                                                                        {{ product.reviews | length }} <img src="{{ asset('bundles/Default/img/cloud.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />&nbsp
+                                                                    {% endif %}
+                                                                    {% if product.ratingLikes %}
+                                                                        {{ product.ratingLikes }} <img src="{{ asset('bundles/Default/img/hart.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>    
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if upProducts | length > 0 %}
+                                                {% for product in upProducts %}
+                                                    <div class="advert-frame selltype{{ product.selltype.id }} selltype" id="advert_frame_{{ product.id}}">
+                                                        {%if product.selltype %}
+                                                            <div class="advert-type sell">
+                                                                {% if product.selltype.translations | length > 0%}
+                                                                    {% for translation in product.selltype.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ product.selltype.title}}
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="premium-advert {% if product.service %}{% if product.service.id == 2%} active {% endif %}{% endif %}">
+                                                            {% if product.mainfoto %}
+                                                                <div class="product-image">
+                                                                    <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">
+                                                                        <img src="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    </a>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="product-image">
+                                                                    <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">
+                                                                        <img src="{{ asset('bundles/images/products/thumbs/bez-foto-thumb.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    </a>
+                                                                </div>
+                                                            {% endif %}
+                                                            <div class="advert-name">
+                                                                <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">{{ product.name }}</a>
+                                                            </div>
+                                                            {% if product.price %}
+                                                                <div class="advert-price">
+                                                                    <span>{{ product.price }} {{ settings.currency.name }}</span>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="advert-price">
+                                                                    <span>0 {{ settings.currency.name }}</span>
+                                                                </div>
+                                                            {% endif %}
+                                                            <div class="advert-add-info">
+                                                                {% if product.city %}
+                                                                    <div class="advert-town">
+                                                                        {% if product.city.translations | length > 0 %}
+                                                                            {% for translation in product.city.translations %}
+                                                                                {% if translation.locale.id == locale.id %}
+                                                                                    {{ translation.value }}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}
+                                                                            {{ product.city.name }}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    {% else %}
+                                                                        <div class="advert-town">{% trans %}Visa Latvija{% endtrans %}</div>
+                                                                    {% endif %}
+                                                                <div class="advert-rating">
+                                                                    {% if product.reviews | length > 0 %}
+                                                                        {{ product.reviews | length }} <img src="{{ asset('bundles/Default/img/cloud.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />&nbsp
+                                                                    {% endif %}
+                                                                    {% if product.ratingLikes %}
+                                                                        {{ product.ratingLikes }} <img src="{{ asset('bundles/Default/img/hart.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>  
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if products | length > 0 %}
+                                                {% for product in products %}
+                                                    <div class="advert-frame selltype{{ product.selltype.id }} selltype" id="advert_frame_{{ product.id}}">
+                                                        {%if product.selltype %}
+                                                            <div class="advert-type sell">
+                                                                {% if product.selltype.translations | length > 0%}
+                                                                    {% for translation in product.selltype.translations %}
+                                                                        {% if translation.locale.id == locale.id %}
+                                                                            {{ translation.value }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% else %}
+                                                                    {{ product.selltype.title}}
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endif %}
+                                                        <div class="premium-advert {% if product.service %}{% if product.service.id == 2%} active {% endif %}{% endif %}">
+                                                            {% if product.mainfoto %}
+                                                                <div class="product-image">
+                                                                    <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">
+                                                                        <img src="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    </a>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="product-image">
+                                                                    <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">
+                                                                        <img src="{{ asset('bundles/images/products/thumbs/bez-foto-thumb.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    </a>
+                                                                </div>
+                                                            {% endif %}
+                                                            <div class="advert-name">
+                                                                <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">{{ product.name }}</a>
+                                                            </div>
+                                                            {% if product.price %}
+                                                                <div class="advert-price">
+                                                                    <span>{{ product.price }} {{ settings.currency.name }}</span>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="advert-price">
+                                                                    <span>0 {{ settings.currency.name }}</span>
+                                                                </div>
+                                                            {% endif %}
+                                                            <div class="advert-add-info">
+                                                                {% if product.city %}
+                                                                    <div class="advert-town">
+                                                                        {% if product.city.translations | length > 0 %}
+                                                                            {% for translation in product.city.translations %}
+                                                                                {% if translation.locale.id == locale.id %}
+                                                                                    {{ translation.value }}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}
+                                                                            {{ product.city.name }}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="advert-town">{% trans %}Visa Latvija{% endtrans %}</div>
+                                                                {% endif %}
+                                                                <div class="advert-rating">
+                                                                    {% if product.reviews | length > 0 %}
+                                                                        {{ product.reviews | length }} <img src="{{ asset('bundles/Default/img/cloud.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />&nbsp
+                                                                    {% endif %}
+                                                                    {% if product.ratingLikes %}
+                                                                        {{ product.ratingLikes }} <img src="{{ asset('bundles/Default/img/hart.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="page-no-data">{% trans %}Nekas netika atrasts pēc jūsu pieprasījuma{% endtrans %}</div>
+                        {% endif %}
+                        {% if pagination %}
+                            <div class="row">
+                                <div class="col-lg-4"></div>
+                                <div class="col-lg-4 padination">
+                                    <ul class="list-unstyled list-inline">
+                                        <li class="current"><a href="">1</a></li>
+                                        <li><a href="">2</a></li>
+                                        <li><a href="">3</a></li>
+                                        <li><a href="">4</a></li>
+                                        <li><a href="">5</a></li>
+                                        <li><a href="">></a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-4"></div>
+                            </div>
+                        {% endif %}
+		</div>
+		<div class="col-lg-3 col-md-3 right-column">
+                    <div class="advertise-block">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
+                    </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

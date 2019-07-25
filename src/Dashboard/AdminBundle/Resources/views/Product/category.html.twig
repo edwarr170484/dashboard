@@ -1,0 +1,92 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Категории объявлений{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Категории</li>
+    </ol>
+    <h1 class="page-header">Категории <small>Категории объявлений</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('admin_product_category_edit') }}">Добавить категорию</a></li>
+                            <li><a href="#" onclick="if(confirm('Вы действительно хотите удалить отмеченные категории?'))document.deleteSelected.submit(); else return false;">Удалить отмеченные</a></li>
+                            <li><a href="#" onclick="document.deleteSelected.submit();">Сохранить</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Категории</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        {% if categories %}
+                            <form action="{{ path('admin_product_category')}}" method="POST" name="deleteSelected" id="deleteSelected">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" class="selectAllItems" /></th>
+                                            <th>Название категории</th>
+                                            <th>URL</th>
+                                            <th>Товаров в категории</th>
+                                            <th>Активна</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                            {% for category in categories %}
+                                                <tr>
+                                                    <td><input name="category[]" value="{{ category.id }}" type="checkbox" class="checkbox-item" /></td>
+                                                    <td>
+                                                        <input style="width:30px;border:1px solid #e2e7eb" name="sortorder[{{ category.id }}]" value="{{ category.sortorder }}" />&nbsp;
+                                                        {% if category.children | length > 0 %}
+                                                            <a data-category="{{ category.id }}" href="javascript:void(0)" onclick="getChildCategories({{ category.id }}, $(this), 8)">{{ category.title }} <b class="caret"></b></a>
+                                                        {% else %}
+                                                            {{ category.title }}
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {{ category.name }}
+                                                    </td>
+                                                    <td>{{ category.product | length }}</td>
+                                                    <td><input type="checkbox" name="isactive[{{ category.id }}]" value="1" {% if category.isActive == 1 %}checked="checked"{% endif %} /></td>
+                                                    <td>
+                                                        <a class="btn btn-success" href="{{ path('admin_product_category_edit',{ categoryId : category.id }) }}">
+                                                            <i class="fa fa-pencil" title="Редактировать категорию"></i>
+                                                        </a>
+                                                        <a class="btn btn-danger" href="{{ path('admin_product_category',{ categoryId : category.id }) }}" 
+                                                                                  onclick="if(!confirm('Вы уверены, что хотите удалить категорию?'))return false;">
+                                                            <i class="fa fa-times" title="Удалить категорию"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}	
+
+                                    </tbody>
+                                </table>
+                            </form>
+                        {% else %}
+                            Не добавлено ни одной категории
+                        {% endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

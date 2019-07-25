@@ -1,0 +1,259 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Настройки сайта{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li class="active">Настройки</li>
+        </ol>
+        <h1 class="page-header">Настройки <small>Все настройки сайта</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Настройки сайта</h4>
+                    </div>
+                    <div class="panel-body">
+                        {% if locales %}
+                            <ul class="nav nav-tabs">
+                                {% set i = 1 %}
+                                {% for locale in locales %}
+                                    <li {% if i == 1 %}class="active"{% endif %}>
+                                        <a class="nav-link" data-toggle="tab" role="tab" href="#locale_{{ locale.code }}" aria-controls="locale_{{ locale.code }}"><img src="{{ asset('bundles/Default/img/flags/' ~ locale.country) }}" style="width:32px;"/>&nbsp;{{ locale.name }}</a>
+                                    </li>
+                                    {% set i = i + 1%}
+                                {% endfor %}
+                            </ul>
+                            <div class="tab-content">
+                                    {% set i = 1 %}
+                                    {% for locale in locales %}
+                                        <div id="locale_{{ locale.code }}" class="tab-pane {% if i == 1 %}active{% endif %}">
+                                            {{ form_start(settingsForms[locale.code], {'attr' : {'class' : 'form-horizontal'}})}}
+                                                <ul class="nav nav-tabs">
+                                                    <li class="active">
+                                                        <a data-toggle="tab" href="#settingsmain{{ locale.code }}">Основные настройки</a>
+                                                    </li>
+                                                    <li>
+                                                        <a data-toggle="tab" href="#settingshow{{ locale.code }}">Отображение</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#settingimages{{ locale.code }}">Изображения</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#settingfinance{{ locale.code }}">Финансы</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#settingalerts{{ locale.code }}">Тексты сообщений</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#settingtextblocks{{ locale.code }}">Текстовые блоки</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div id="settingsmain{{ locale.code }}" class="tab-pane fade active in">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].siteName) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].siteName) }}
+                                                                    </div>
+                                                                </div> 
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].adminEmail) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].adminEmail) }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].dafaultOrderStatus) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].dafaultOrderStatus) }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].currency) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].currency) }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].isModerate) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].isModerate) }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].isShowCaptcha) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].isShowCaptcha) }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].isShowType) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].isShowType) }}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].copyright) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].copyright) }}
+                                                                    </div>
+                                                                </div> 
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="form-group">
+                                                                    <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].siteDescription) }}</label>
+                                                                    <div class="col-md-9">
+                                                                        {{ form_widget(settingsForms[locale.code].siteDescription) }}
+                                                                    </div>
+                                                                </div> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="settingshow{{ locale.code }}" class="tab-pane fade">
+                                                        <div class="row">
+                                                            <!--<div class="col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].categoryProductNumber) }}</label>
+                                                                        <div class="col-md-9">
+                                                                            {{ form_widget(settingsForms[locale.code].categoryProductNumber) }}
+                                                                        </div>
+                                                                    </div> 
+                                                            </div>-->
+                                                            <div class="col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].mainpageAdvertsNumber) }}</label>
+                                                                        <div class="col-md-9">
+                                                                            {{ form_widget(settingsForms[locale.code].mainpageAdvertsNumber) }}
+                                                                        </div>
+                                                                    </div> 
+                                                            </div>
+                                                            <div class="col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].catpagePremiumNumber) }}</label>
+                                                                        <div class="col-md-9">
+                                                                            {{ form_widget(settingsForms[locale.code].catpagePremiumNumber) }}
+                                                                        </div>
+                                                                    </div> 
+                                                            </div>
+                                                            <div class="col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].topsellerBlockNumber) }}</label>
+                                                                        <div class="col-md-9">
+                                                                            {{ form_widget(settingsForms[locale.code].topsellerBlockNumber) }}
+                                                                        </div>
+                                                                    </div> 
+                                                            </div>
+                                                            <div class="col-lg-12">
+                                                                    <div class="form-group">
+                                                                        <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].advertDaysShowNumber) }}</label>
+                                                                        <div class="col-md-9">
+                                                                            {{ form_widget(settingsForms[locale.code].advertDaysShowNumber) }}
+                                                                        </div>
+                                                                    </div> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="settingimages{{ locale.code }}" class="tab-pane fade">
+                                                        <div class="form-group">
+                                                                <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].siteLogoNew) }}</label>
+                                                                <div class="col-md-9">
+                                                                    {% if settingsForms[locale.code].vars.value.siteLogo %}
+                                                                        <img class="m-b-15 m-t-15" src="{{ asset('bundles/images/site/')}}{{ settingsForms[locale.code].vars.value.siteLogo }}" alt="" title="" />
+                                                                    {% endif %}
+                                                                    {{ form_widget(settingsForms[locale.code].siteLogoNew) }}
+                                                                </div>
+                                                        </div> 
+                                                        <div class="form-group">
+                                                                <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].watermarkNew) }}</label>
+                                                                <div class="col-md-9">
+                                                                    {% if settingsForms[locale.code].vars.value.watermark %}
+                                                                        <img class="m-b-15 m-t-15" src="{{ asset('bundles/images/site/')}}{{ settingsForms[locale.code].vars.value.watermark }}" alt="" title="" />
+                                                                    {% endif %}
+                                                                    {{ form_widget(settingsForms[locale.code].watermarkNew) }}
+                                                                </div>
+                                                        </div> 
+                                                    </div>
+                                                    <div id="settingfinance{{ locale.code }}" class="tab-pane fade">
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].premiumAdvPrice) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].premiumAdvPrice) }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].selectedAdvPrice) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].selectedAdvPrice) }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].upAdvPrice) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].upAdvPrice) }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].aditionalAdvertPrice) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].aditionalAdvertPrice) }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].conversationIndex) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].conversationIndex) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="settingalerts{{ locale.code }}" class="tab-pane fade">
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].successAddAdvertText) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].successAddAdvertText) }}
+                                                            </div>
+                                                        </div>   
+                                                    </div>
+                                                    <div id="settingtextblocks{{ locale.code }}" class="tab-pane fade">
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].textblockHowToPrice) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].textblockHowToPrice) }}
+                                                            </div>
+                                                        </div> 
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].textblockUserAgreement) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].textblockUserAgreement) }}
+                                                            </div>
+                                                        </div>  
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].userAdvertWorkRight) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].userAdvertWorkRight) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div><button class="btn btn-primary m-r-5 pull-right" type="submit">Сохранить</button></div>
+                                                </div> 
+                                            {{ form_end(settingsForms[locale.code]) }}
+                                        </div>
+                                    {% set i = i + 1%}
+                                    {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

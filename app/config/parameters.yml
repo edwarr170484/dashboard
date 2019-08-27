@@ -4,7 +4,7 @@ parameters:
     database_port: 3306
     database_name: dashboard
     database_user: root
-    database_password: 
+    database_password: null
     mailer_transport: smtp
     mailer_host: mail.gribupardot.sunweb.by
     mailer_user: admin@gribupardot.sunweb.by

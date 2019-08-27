@@ -9,7 +9,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: ["lv","ru"]
-    defloc: lv
+    defloc: ru
 
 framework:
     #esi:             ~

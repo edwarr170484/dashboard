@@ -1314,7 +1314,7 @@ class DefaultController extends Controller
                     $extention = $siteLogo->getClientOriginalExtension();
                     $localImageName = rand(1, 99999999).'.'.$extention;
                     $siteLogo->move('bundles/images/site',$localImageName);
-                    $settings->setSiteLogo($localImageName);
+                    $locale->getSettings()->setSiteLogo($localImageName);
                 }
 
                 $watermarkNew = $settingsForms[$locale->getCode()]['watermarkNew']->getData();
@@ -1332,7 +1332,7 @@ class DefaultController extends Controller
                     $extention = $watermarkNew->getClientOriginalExtension();
                     $localImageName = rand(1, 99999999).'.'.$extention;
                     $watermarkNew->move('bundles/images/site',$localImageName);
-                    $settings->setWatermark($localImageName);
+                    $locale->getSettings()->setWatermark($localImageName);
                 }
 
                 $manager->persist($locale->getSettings());

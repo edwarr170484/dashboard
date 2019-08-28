@@ -86,8 +86,13 @@
 		var make = function(){
 		
 			var checkboxElement = $(this);
+			if(checkboxElement.prop("checked"))
+                        {
+                            checkboxElement.wrap("<div class='checkbox-cover active'></div>");
+                        }else{
+                            checkboxElement.wrap("<div class='checkbox-cover'></div>");
+                        }
 			
-			checkboxElement.wrap("<div class='checkbox-cover'></div>");
 			var cover = checkboxElement.parent(".checkbox-cover");
 			cover.append("<div class='checkbox-cover-inner'></div>");
 			
@@ -98,6 +103,7 @@
 			
 			cover.click(function(){
 				$(this).find('.checkbox-cover-inner').toggleClass('active');
+                                $(this).toggleClass('active');
 			});
 		}
 		

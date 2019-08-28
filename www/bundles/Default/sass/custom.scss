@@ -1,33 +1,14 @@
 @import "compass/css3";
+@import "compass/css3/border-radius";
 @import "fonts";
-
-/*defines and mixins*/
-$yellow-color: #F5AA01;
-$orange-color: #EB840B;
-$black-text: #222B2A;
-$gray-color:#E7E7E7;
-$white-color:#F9F9F9;
-
-@mixin fontView($family, $color, $size, $lineHeight) {
-    font-family: $family, sans-serif;
-    color: $color;
-    font-size: $size;
-    line-height: $lineHeight;
-}
-
-@mixin flexBox($direction, $justufy, $align){
-    @include display-flex;
-    @include flex-direction($direction);
-    @include justify-content($justufy);
-    @include align-items($align);
-}
+@import "mixins";
 
 ol, ul {margin: 0;}
 a,input{outline:none !important;}
 body{font-size:10px;background:$white-color;}
-header{background: $gray-color;}
+.headerlocale{background: $gray-color;}
 .headerMenu{@include flexBox(row,space-between,center);}
-.header-locale{position: relative;}
+.header-locale{position: relative;@include flexBox(row,flex-start,center);}
 .select-language-options {display:none;}
 .select-language.active .select-language-options{display:block;}
 .select-languages{position:relative;height: 35px;}
@@ -36,10 +17,9 @@ header{background: $gray-color;}
     background: url(../img/select-arrow-down.png) 95% 13px no-repeat $gray-color;
     cursor: pointer;
     z-index: 9999;
-    position:absolute;
-    left:-12px;
-    top:0;  
     padding: 0 12px;
+    margin-left: -12px;
+    position: relative;
 }
 .select-language.active
 {
@@ -67,6 +47,82 @@ header{background: $gray-color;}
 .headerMenu ul li:hover .hover-border,.headerMenu ul li:focus .hover-border{display: block;}
 .headerMenu ul li{padding:0;margin-left: 4px;position: relative;color:$black-text;@include fontView("GothamProRegular", $black-text, 1.5rem, 100%);}
 .hover-border{position: absolute;left:0;bottom: 0;width: 100%;height: 2px;background: $orange-color;display: none;}
+.top-select-region{cursor:pointer;@include fontView("GothamProRegular", $black-text, 1.3rem, 100%);text-transform: uppercase;background: url('../img/geotag.png')0 50% no-repeat;padding-left: 30px;margin-left: 44px;padding-top: 15px;padding-bottom: 15px;}
+.top-select-region:hover,.top-select-region:focus{color:#333;text-decoration:none;}
+.siteLogo{@include flexBox(row,flex-start,center);}
+.siteMenuSearch>button{border:none;background: none;width: 19px;height: 19px;@include border-radius(0);padding: 0;}
+.siteMenuSearch>button:hover svg g path,.siteMenuSearch>button:focus svg g path{stroke:$black-text;}
+.siteMenuGamburger>button{border:none;width: 26px;height: 18px;@include border-radius(0);margin-right: 35px;margin-left: 27px;padding: 0;background: none;}
+.siteMenuGamburger>button:hover>svg path,.siteMenuGamburger>button:focus>svg path{fill:$black-text;}
+.header-functions
+{
+    @include flexBox(row,space-between,center);
+    @include flex-wrap(wrap);
+    padding:33px 0;
+}
+.header-add-button
+{
+    @include fontView("GothamProRegular", $black-text,1.3rem,1.2rem);
+    @include flexBox(row,flex-start,center); 
+    @include border-radius(40px);
+    text-transform: uppercase;
+    border: 2px solid $yellow-color;
+    padding-left: 6px;
+    padding-right:15px;
+    padding-top: 4px;
+    padding-bottom: 2px;
+    transition: $aTransition;
+}
+.header-add-button:hover,.header-add-button:focus
+{
+    background:$yellow-color;
+    text-decoration: none;
+    color: $black-text;
+}
+.header-add-button:hover i svg path,.header-add-button:focus i svg path{fill:$black-text;}
+.header-add-button i{margin-right:7px;}
+.siteMainMenu ul li a{@include fontView("GothamProRegular", $black-text, 1.6rem, 100%);display: block;padding: 1.5rem;z-index:1000;position: relative;}
+.shadowBlock{position:absolute;top: 100%;left: 0;width:100%;height:15px;background: $white-color;}
+.siteMainMenu ul li{position: relative;padding: 0;margin-right: 3.5rem;}
+.siteMainMenu ul li.active .hover-border{display: block;}
+.siteMainMenu ul li:last-child{margin-right: 0;}
+.siteMainMenu ul li a:hover,.siteMainMenu ul li a:focus{text-decoration: none;}
+.siteMainMenu ul li.submenu:hover>a,.siteMainMenu ul li.submenu:focus>a{@include box-shadow(0px -6px 22px rgba(0, 0, 0, 0.19));@include border-radius(12px 12px 0px 0px);background: $white-color;}
+.siteMainMenu ul li.submenu:hover .siteMainSubmenu,.siteMainMenu ul li.submenu:focus .siteMainSubmenu{@include flexBox(row,flex-start,flex-start);}
+.siteMainMenu ul li:hover .hover-border,.siteMainMenu ul li:focus .hover-border{display: block;}
+.siteMainSubmenu{position: absolute;top:100%;margin-top: -2px;left: 0;background: $white-color;z-index:999;@include border-radius(0 12px 12px 12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 2rem;padding-top: 11px;display: none;}
+.siteMainSubmenu ul{display: block;margin-right: 4.5rem;width:50%;}
+.siteMainSubmenu ul:last-child{margin-right: 0;}
+.siteMainSubmenu > ul > li{width:100%;}
+.siteMainSubmenu ul li a{@include fontView("GothamProRegular",$black-text,1.4rem,3rem);padding: 0;}
+.siteMainSubmenu ul li a:hover,.siteMainSubmenu ul li a:focus{text-decoration:underline;}
+.mainPageFilters{@include background-image(linear-gradient(155.75deg, #F5AA01 8.57%, #EB840B 93.78%));}
+.mainPageAutolayer{background: url('../img/car.png') 100% 50% no-repeat;}
+.mainPageFiltersBlock{background: url('../img/rings.png') 30% -210px no-repeat;padding-top: 9.9rem;padding-bottom: 20rem;}
+.mainPageFiltersHeader h1{@include fontView("GothamProBlack",#fff,4.8rem,100%);margin: 0;}
+.mainPageFiltersTabs{padding-top: 5rem;}
+.mainPageFiltersTabs ul li a{@include fontView("GothamProRegular",$black-text,1.4rem,100%);text-transform: uppercase;padding: 2rem 1.8rem 1.7rem 7.6rem;background: $gray-color;@include border-radius(12px 12px 0px 0px);}
+.mainPageFiltersTabs ul li.active a{color:$black-text;background: $gray-light-color;}
+.mainPageFiltersTabs ul li a:hover,.mainPageFiltersTabs ul li a:focus{color:$super-black-color;background:$white-color;}
+.mainPageFiltersTabs ul li.active a:hover,.mainPageFiltersTabs ul li.active a:focus{color:$black-text;background: $gray-light-color;}
+.tab-content{background: $gray-light-color;@include border-radius(0px 12px 12px 12px);padding: 3rem 2rem;}
+.tab-pane{padding: 0;}
+.tab-pane .form-group{margin-bottom: 0;}
+.tab-pane .form-group .form-control{border-radius:0;margin-bottom:0.7rem;}
+.static-filters{@include fontView("GothamProRegular",$input-black,1.3rem,100%);@include flexBox(row,flex-start,center);}
+.checkbox-cover{@include border-radius(2px);}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .footer{color:#6f6f6f;font-size:1.3rem;font-family:"Roboto", sans-serif;padding-top:0.9rem;padding-bottom:0.9rem;}
@@ -76,38 +132,8 @@ header{background: $gray-color;}
 .footerLogo img{width:100%;max-width:249px;}
 .footerLogoBlock{display:flex;flex-direction:row;justify-content: space-between;align-items: center;}
 .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand ,.navbar-right{margin:0;}
-.header-functions
-{
-	margin-top: 2.1rem;
-	margin-bottom: 2.3rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap:wrap;
-}
-.header-add-button
-{
-	/*background: url(../img/add-bg.png) 0 0 no-repeat;*/
-	display: block;
-	/*width: 195px;
-	height: 43px;*/
-        background-color: #238129;
-	color: #fff;
-	font-size: 1.3rem;
-	font-family: "Roboto", sans-serif;
-	text-transform: uppercase;
-	padding: 12px 20px;
-        padding-bottom: 12px;
-        transition: all 0.2s ease 0s;
-}
-.header-add-button:hover,.header-add-button:focus
-{
-    /*background: url(../img/add-bg-hover.png) 0 0 no-repeat;*/
-    background:#f17430;
-    text-decoration: none;
-    color: #fff;
-}
-.header-add-button i{margin-right:7px;}
+
+
 .header-search-box
 {
 	border: 2px solid #238129;
@@ -366,9 +392,7 @@ padding-bottom:0.5rem;padding-right:0; padding-left:1rem;font-weight:500;}
 .nav-tabs > li > a span{display:block;float:left}
 .button-refresh{}
 .productpage-banner{padding:2.4rem 0}
-.tab-pane{color:#6f6f6f;font-size:1.4rem;font-family:"Roboto",sans-serif;text-transform:uppercase;padding:5rem;font-weight:300;}
-.tab-pane .form-group{margin-bottom: 0;}
-.tab-pane .form-group .form-control{border-radius:0;margin-bottom:0.7rem;}
+
 .button-refresh{background: none;border:none;font-size:2.8rem;color:#2980b9;margin-left:0.2rem;}
 .send-tab-form{border:2px solid #238129;background: none; color:#238129;padding: 0.5rem 1rem;font-family:"Roboto", sans-serif;font-weight:500;}
 .send-tab-form:hover{cursor:pointer;background:#238129;color:#fff;}
@@ -429,8 +453,7 @@ padding: 0.8rem 1.5rem;display:block;float:left;margin-bottom:2rem;}
 .show-all-adverts:after{content:"";display:block;clear:both;}
 .show-all-adverts-subcategory:hover{text-decoration:none;}
 .close-subcats{background:url(../img/close.png) 0 0 no-repeat;border:none;width:32px;height:32px;position:absolute;top:25px;right:15px;cursor:pointer}
-.top-select-region{cursor:pointer;color:#999999;font-size:1.2rem;font-family:'Roboto',sans-serif;text-transform:uppercase;display:block;float:left;padding-top: 11px;border-left:2px solid #238129;padding-bottom:11px;background:url('../img/geo.png') 6px 50% no-repeat;padding-left:3.6rem;width: 40%;}
-.top-select-region:hover,.top-select-region:focus{color:#333;text-decoration:none;}
+
 .modal-header button.close{background:url(../img/close-blue.png) 0 0 no-repeat;width:32px;height:32px;opacity:1;}
 .modal-footer button.btn{font-size:1.4rem;color:#238129;font-family:"Roboto", sans-serif;text-transform:uppercase;border:2px solid #238129;padding: 0.6rem 5.5rem;background:none;font-weight:500;}
 .modal-footer button.btn:hover{background:#238129;color:#fff;}
@@ -897,8 +920,6 @@ a.send-message-smile{color:#6d6d6d;font-size:22px;line-height:100%;cursor:pointe
 .page-content{font-size:1.4rem;margin-top:15px;}
 .city-load-spinner{display:none;}
 .search-box{margin-bottom: 15px;}
-.checkbox-cover:after{content: "";display:table;clear:both;}
-.checkbox-cover{margin-bottom:5px;display:inline-block;}
 .filter-box-title{font-weight: 500; font-size: 1.4rem;margin-bottom: 8px;}
 #reviewModal .form-control{border-radius: 0;box-shadow: none;}
 .review-user-block .username{margin-bottom:5px;text-transform:uppercase;font-size: 1.4rem;color:#4b4a4a;font-family:"Roboto", sans-serif;}

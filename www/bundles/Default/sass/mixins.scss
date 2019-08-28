@@ -1,0 +1,25 @@
+/*defines and mixins*/
+$yellow-color: #F5AA01;
+$orange-color: #EB840B;
+$black-text: #222B2A;
+$super-black-color: #000000;
+$gray-color:#E7E7E7;
+$gray-light-color: #FDFDFD;
+$white-color:#F9F9F9;
+$input-black: #494949;
+
+$aTransition: all 0.2s ease 0s;
+
+@mixin fontView($family, $color, $size, $lineHeight) {
+    font-family: $family, sans-serif;
+    color: $color;
+    font-size: $size;
+    line-height: $lineHeight;
+}
+
+@mixin flexBox($direction, $justufy, $align){
+    @include display-flex;
+    @include flex-direction($direction);
+    @include justify-content($justufy);
+    @include align-items($align);
+}

@@ -35,6 +35,8 @@ $(document).ready(function(){
         });
     });
     
+    $(".blackCheckboxInput").click(function(){$(this).toggleClass("checked");})
+    
     $(".select-language").click(function(){
         $(this).toggleClass("active");
     });

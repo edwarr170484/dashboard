@@ -200,24 +200,7 @@
                     <li><a href="">Услуги</a><div class="hover-border"></div></li>
                 </ul>
             </div>
-            <!--<div class="col-lg-6 col-md-6">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        {% if  app.request.locale == 'lv' %}
-                            <form action="{{ path('search') }}" method="post">
-                        {% else %}
-                            <form action="{{ path('searchLocale',{'_locale' : app.request.locale}) }}" method="post">
-                        {% endif %}
-                            <div class="header-search-box position-relative clearfix">
-                                <input name="searchText" type="text" placeholder="{% trans %}SITE MEKLĒŠANA{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
-                                
-                                <input type="submit" class="header-search-button" value="" />
-                            </div>
-                            </form>
-                    </div>
-                </div>
-            </div>-->
-			<div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
+            <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
                             {% if  app.request.locale == 'lv' %}
                                 {% if app.user %}
                                     <a href="{{path('addproduct')}}" class="header-add-button pull-right">

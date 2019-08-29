@@ -291,7 +291,7 @@
                                     {% else %}
                                         <form action="{{ path('searchLocale',{'_locale' : app.request.locale}) }}" method="post">
                                     {% endif %}
-                                        <div class="header-search-box position-relative clearfix">
+                                        <div class="header-search-box">
                                             <input name="searchText" type="text" placeholder="{% trans %}SITE MEKLĒŠANA{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
                                             <a data-toggle="modal" data-target="#regionModal" class="top-select-region">
                                                 {% if sessionCity %}
@@ -305,6 +305,14 @@
                                                 {% endif %}
                                             </a>
                                             <input type="submit" class="header-search-button" value="" />
+                                        </div>
+                                        <div class="infoPaneCheckbox">
+                                            <div class="blackCheckbox">
+                                                <div class="blackCheckboxInput">
+                                                    <input type="checkbox" />
+                                                </div>
+                                                Искать в названиях
+                                            </div>
                                         </div>
                                     </form>
                                 </div>    
@@ -321,6 +329,9 @@
                                     <div class="description">
                                         {% trans %}<a href="">Зарегистрируйтесь</a> и добавляйте объявления{% endtrans %}
                                     </div>
+                                </div>
+                                <div class="siteInfoPaneFloat">
+                                    <a href="" class="siteInfoPaneAddadvert">Отправить заявку</a>
                                 </div>
                             </div>
                         </div>
@@ -356,6 +367,40 @@
                                     <a href="">Смотреть подробнее</a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mainPageText">
+            <div class="col-md-7 col-md-offset-3">
+                <div class="mainPageContentHeader"><h3>COnsigue el coche de tus suenos con Auto28.es, el mercado de automoviles online mas grande de Europa!</h3></div>
+            </div>
+            <div class="col-md-offset-1 col-md-10 mainPageContentText">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, esse maiores vitae nisi illum dolorum sequi assumenda aperiam ipsam dolorem quo aliquid numquam eligendi rerum reiciendis totam quos at et iste iure fugit laudantium sunt velit quidem consectetur nemo iusto ex atque ipsa adipisci repellat in nam quia maxime autem dignissimos accusantium. Dicta, assumenda, dolore, ipsam quia praesentium eius quisquam aut voluptatibus reiciendis quam cum hic. Cupiditate, earum, excepturi, beatae totam ut fugit aliquam dolore explicabo ad soluta quos temporibus dignissimos quae nemo animi dolorem cumque dolor enim aspernatur corporis deserunt delectus quod ratione! Inventore, corporis, sequi dicta veniam quo eaque repudiandae minus eius porro ratione eos similique aliquid consequatur quae molestiae ipsa nam perferendis quibusdam quam mollitia minima debitis magnam laborum quisquam est doloremque facere aspernatur nemo dolorem error adipisci iste nulla quaerat. Magni, maiores, voluptate sapiente voluptatem inventore laborum odit est perspiciatis non pariatur reprehenderit dolore iure in expedita quas similique possimus dicta. Ullam, perspiciatis, praesentium inventore quibusdam obcaecati reiciendis tempora doloribus dolorem aperiam ut fugit quod eveniet labore cupiditate cumque porro ab unde sunt deserunt consequuntur! Quibusdam, corrupti, voluptates, debitis consectetur laborum tenetur labore expedita tempora dicta necessitatibus perspiciatis quas recusandae quae illum corporis deserunt rerum molestiae praesentium accusamus beatae ex nemo doloremque architecto minus laudantium iusto id aperiam. Nihil, at, voluptas, quas ad ipsam natus officiis omnis pariatur odio modi molestiae nam amet ducimus reiciendis ea sit deserunt recusandae. Ad, ipsum iusto ratione quis qui accusantium. Deleniti reiciendis nemo eius porro dignissimos earum aut voluptas itaque iste perferendis? A, eos, iste, veritatis voluptas culpa maxime voluptatem incidunt aperiam recusandae labore in praesentium officiis vel odio quidem iure ipsam placeat possimus minus doloremque mollitia facilis debitis at aut molestiae saepe impedit eligendi omnis laudantium eum doloribus necessitatibus ad itaque magnam nam provident velit? Animi, velit, minus, sunt natus aliquam rem eaque sequi iste magnam nemo amet nam dignissimos cumque labore temporibus et voluptatum praesentium atque deleniti illum. Nemo, molestiae, nam, quisquam, laboriosam consequatur doloremque mollitia voluptatem expedita placeat velit magnam eveniet nisi tempore dolor fugiat soluta tempora minus ullam neque vero praesentium odit voluptas cupiditate aliquid assumenda ipsum amet nihil quibusdam aut. Quis, doloremque tempore inventore eum voluptas deserunt veniam praesentium asperiores. Nesciunt, cum, voluptas veritatis similique dolor eos ipsum fugit beatae necessitatibus nemo quia tenetur autem aperiam qui maxime minus aspernatur inventore dicta tempore expedita eaque asperiores natus explicabo itaque culpa. Deleniti fugit suscipit sit perspiciatis?</p>
+            </div>
+        </div>
+    </div>
+    <div class="mainPageAutoListBlock">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <div class="mainPageAutoListHeader"><h3>{% trans %}Легковые автомобили{% endtrans %}</h3></div>
+                    <div class="mainPageAutoList">
+                        <ul class="list-unstyled list-inline">
+                            <li><a href="">Audi</a></li>
+                            <li><a href="">Alfa Romeo</a></li>
+                            <li><a href="">BMW</a></li>
+                            <li><a href="">Cadillac</a></li>
+                            <li><a href="">Chevrolet</a></li>
+                            <li><a href="">Chrysler</a></li>
+                            <li><a href="">Citroen</a></li>
+                            <li><a href="">Dacia</a></li>
+                            <li><a href="">Dodge</a></li>
+                            <li><a href="">Fiat</a></li>
+                        </ul>
+                        <div class="mainPageAutoListShowAll">
+                            <button>{% trans %}Показать все{% endtrans %}</button>
                         </div>
                     </div>
                 </div>

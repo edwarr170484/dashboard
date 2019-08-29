@@ -124,7 +124,7 @@ body{font-size:10px;background:$white-color;}
 .mainPageFiltersSettings button svg{margin-left: 10px;}
 .additionalFiltersBlock{display:none;}
 .mainPageFiltersSettings button.showAllParameters.active svg{@include transform(rotate(180deg));}
-.mainPageSitHeader{padding-top: 9rem;padding-bottom: 19rem;}
+.mainPageSitHeader{padding-top: 9rem;padding-bottom: 12rem;}
 .mainPageSitHeader h2{color:$black-text;}
 .siteInfoPane{background: $yellow-color;@include border-radius(9px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding-left: 2.4rem;margin-bottom: 5rem;min-height:240px;}
 .siteInfoPaneInner{background: #fff;padding: 3.5rem 4.6rem;@include border-radius(0 9px 9px 0);position: relative;min-height:240px;}

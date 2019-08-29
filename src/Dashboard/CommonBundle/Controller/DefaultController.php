@@ -261,6 +261,9 @@ class DefaultController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
+        $sessionRegion = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionRegion'));
+        $sessionCity = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionCity'));
+        
         $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Page p WHERE p.locale=" . $locale->getId() . " AND p.isUserpage = 0 AND p.route = 'main'" );
         
         try{
@@ -328,7 +331,8 @@ class DefaultController extends Controller
                                                                                     "page" => $page,
                                                                                     "selltypes" => $selltypes,
                                                                                     "locale" => $locale,
-                                                                                    "settings" => $settings));
+                                                                                    "settings" => $settings,"sessionRegion" => $sessionRegion,
+                                                                                    "sessionCity" => $sessionCity));
     }
     
     /**

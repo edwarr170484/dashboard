@@ -43,15 +43,19 @@
 				
 				$(".select-options").removeClass("opened");
 				$(".select-options").slideUp();
+                                $(".select-cover").removeClass('active');
 				
 				var selectOptions = $(this).find(".select-options"); 
 				if(selectOptions.hasClass("opened")){
 					selectOptions.removeClass("opened");
 					selectOptions.slideUp();
+                                        $(this).removeClass('active');
 				}else{
 					selectOptions.addClass("opened");
 					selectOptions.slideDown();
+                                        $(this).addClass('active');
 				}
+                            
 			});
 			
 			selectOptions.find(".select-option").each(function(){
@@ -61,6 +65,7 @@
                                         selectElement.trigger("change");
 					cover.find(".select-value").html($(this).html());
 					selectOptions.removeClass("opened");
+                                        $(this).parent().parent().toggleClass('active');
 					selectOptions.slideUp();
 				});
 			});
@@ -68,6 +73,7 @@
 			$(".select-option-group").click(function(event){event.stopPropagation();});
 			
 			$("body").click(function(){
+                            cover.removeClass('active');
                             $(".select-options").removeClass("opened");
                             $(".select-options").slideUp();
 			});

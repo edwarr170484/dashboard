@@ -4,6 +4,7 @@
 @import "mixins";
 
 ol, ul {margin: 0;}
+h1,h2,h4{@include fontView("GothamProBlack",#fff,4.8rem,5.6rem);margin: 0;}
 a,input{outline:none !important;}
 body{font-size:10px;background:$white-color;}
 .headerlocale{background: $gray-color;}
@@ -99,11 +100,13 @@ body{font-size:10px;background:$white-color;}
 .mainPageFilters{@include background-image(linear-gradient(155.75deg, #F5AA01 8.57%, #EB840B 93.78%));}
 .mainPageAutolayer{background: url('../img/car.png') 100% 50% no-repeat;}
 .mainPageFiltersBlock{background: url('../img/rings.png') 30% -210px no-repeat;padding-top: 9.9rem;padding-bottom: 20rem;}
-.mainPageFiltersHeader h1{@include fontView("GothamProBlack",#fff,4.8rem,100%);margin: 0;}
+.mainPageFiltersHeader h1{color:#fff;}
 .mainPageFiltersTabs{padding-top: 5rem;}
-.mainPageFiltersTabs ul li a{@include fontView("GothamProRegular",$black-text,1.4rem,100%);text-transform: uppercase;padding: 2rem 1.8rem 1.7rem 7.6rem;background: $gray-color;@include border-radius(12px 12px 0px 0px);}
+.mainPageFiltersTabs ul li a{@include fontView("GothamProRegular",$black-text,1.4rem,100%);text-transform: uppercase;padding: 2rem 1.8rem 1.7rem 1.8rem;background: $gray-color;@include border-radius(12px 12px 0px 0px);@include flexBox(row,flex-start,center);}
+.mainPageFiltersTabs ul li a svg{margin-right: 1.6rem;}
 .mainPageFiltersTabs ul li.active a{color:$black-text;background: $gray-light-color;}
 .mainPageFiltersTabs ul li a:hover,.mainPageFiltersTabs ul li a:focus{color:$super-black-color;background:$white-color;}
+.mainPageFiltersTabs ul li a:hover svg path,.mainPageFiltersTabs ul li a:focus svg path{fill: $super-black-color;}
 .mainPageFiltersTabs ul li.active a:hover,.mainPageFiltersTabs ul li.active a:focus{color:$black-text;background: $gray-light-color;}
 .tab-content{background: $gray-light-color;@include border-radius(0px 12px 12px 12px);padding: 3rem 2rem;}
 .tab-pane{padding: 0;}
@@ -111,6 +114,38 @@ body{font-size:10px;background:$white-color;}
 .tab-pane .form-group .form-control{border-radius:0;margin-bottom:0.7rem;}
 .static-filters{@include fontView("GothamProRegular",$input-black,1.3rem,100%);@include flexBox(row,flex-start,center);}
 .checkbox-cover{@include border-radius(2px);}
+.static-filters .filter{margin-right: 3rem;@include flexBox(row,flex-start,center);}
+.mainPageFiltersButtons{@include flexBox(row,space-between,center);padding-top: 1rem;}
+.mainPageFiltersShowResults button{background: $yellow-color;border:none;@include border-radius(3px);@include fontView("GothamProRegular",#fff,1.4rem,100%);padding: 8px 4.5rem 6px;max-width: 220px;text-align: center;transition:$aTransition;}
+.mainPageFiltersShowResults button:hover,.mainPageFiltersShowResults button:focus{background: $orange-color;}
+.mainPageFiltersSettings{@include flexBox(row,flex-start,center);}
+.mainPageFiltersSettings button.showAllParameters{@include flexBox(row,flex-start,center);background: none;border:none;@include fontView("GothamProRegular",$orange-color,1.4rem,100%);margin-right: 4rem;padding: 0;}
+.mainPageFiltersSettings button.clearFilters{@include flexBox(row,flex-start,center);background: none;border:none;@include fontView("GothamProRegular",$input-black,1.4rem,100%);padding: 0;}
+.mainPageFiltersSettings button svg{margin-left: 10px;}
+.additionalFiltersBlock{display:none;}
+.mainPageFiltersSettings button.showAllParameters.active svg{@include transform(rotate(180deg));}
+.mainPageSitHeader{padding-top: 9rem;padding-bottom: 19rem;}
+.mainPageSitHeader h2{color:$black-text;}
+.siteInfoPane{background: $yellow-color;@include border-radius(9px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding-left: 2.4rem;margin-bottom: 5rem;min-height:240px;}
+.siteInfoPaneInner{background: #fff;padding: 3.5rem 4.6rem;@include border-radius(0 9px 9px 0);position: relative;min-height:240px;}
+.innerHeader h4{color:$black-text;}
+.siteInfoPaneContent ul{display: block;padding-top: 8px;}
+.siteInfoPaneContent ul li{padding: 0;margin-right: 2rem;}
+.siteInfoPaneContent ul li a{@include fontView("GothamProBlack",$black-text,2.8rem,100%);border-bottom: 4px solid $black-text;display: block;padding-bottom: 0.4rem;transition:$aTransition;margin-top: 8px;}
+.siteInfoPaneContent ul li a:hover,.siteInfoPaneContent ul li a:focus{text-decoration: none;border-bottom: 4px solid $yellow-color;color:$yellow-color;}
+.siteInfoPaneContent .description{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.4rem);padding-top: 2.5rem;}
+.siteInfoPaneContent .description a{color:$orange-color;text-decoration:underline;}
+.siteInfoPaneContent .description a:hover,.siteInfoPaneContent .description a:focus{text-decoration:none;}
+.siteInfoPaneContent.dilers .description{padding-top: 0;}
+.siteInfoPaneInner.dilers{background: none;}
+.siteInfoPaneContentButton{@include flexBox(row,flex-end,center);padding-top: 1.4rem;}
+.siteInfoPaneContentButton a{@include fontView("GothamProRegular",$yellow-color,1.8rem,1.7rem);display: block;background: $black-text;padding: 13px 60px 12px;@include border-radius(3px);}
+.siteInfoPaneFloat{position: absolute;top:4rem;right:4rem;}
+.header-search-box{height: 40px;@include flexBox(row,flex-start,canter);}
+.header-search-box input[name="searchText"]{display: block;border:2px solid $black-text;@include fontView("GothamProRegular",$black-text,1.4rem,1.3rem);padding: 0;padding-left: 12px;width: 270px;}
+.header-search-box a.top-select-region{display: block;border:2px solid $black-text;border-right: none;border-left: none;margin: 0;padding-left: 36px;@include fontView("GothamProRegular",$black-text,1.4rem,1.3rem);@include flexBox(row,flex-start,center);background: url('../img/geotag.png') 6px 50% no-repeat;width: 164px;}
+.header-search-box input[type="submit"]{background: url('../img/search-white.png') 50% 50% no-repeat $black-text;@include border-radius(0);width: 40px;height: 40px;border:none;}
+.header-search-box input[type="submit"]:hover,.header-search-box input[type="submit"]:focus{background-color: $yellow-color;border:2px solid $black-text;}
 
 
 
@@ -133,49 +168,6 @@ body{font-size:10px;background:$white-color;}
 .footerLogoBlock{display:flex;flex-direction:row;justify-content: space-between;align-items: center;}
 .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand ,.navbar-right{margin:0;}
 
-
-.header-search-box
-{
-	border: 2px solid #238129;
-	height: 42px;
-	padding-right: 7px;
-        overflow: hidden;
-}
-.header-search-box input
-{
-	background: none;
-	border: none;
-	font-family: "Roboto", sans-serif;
-	font-size: 1.2rem;
-	color: #999999;
-	padding-left: 1.4rem;
-	width: 60%;
-        display:block;float:left;
-        padding-top: 11px;
-}
-.header-search-box input.header-search-button
-{
-	width: 40px;
-	background: url(../img/search.png) 50% 50% no-repeat #238129;
-	position:absolute;right:0;top:0;height:100%;
-        transition: all 0.2s ease 0s;
-}
-.header-search-box input.header-search-button:hover,.header-search-box input.header-search-button:focus{background: url(../img/search.png) 50% 50% no-repeat #424242;}
-.header-advanced-search
-{
-	color: #2980b9;
-	text-decoration: underline;
-	font-family: "Roboto", sans-serif;font-weight:700;
-	font-size: 1.2rem;
-	text-transform: uppercase;
-	padding-top: 1.5rem;
-	display: block;
-}
-.header-advanced-search:hover
-{
-	color: #2980b9;
-	text-decoration: none;
-}
 /* Carousel base class */
 .carousel {
   font-family: "Roboto", sans-serif;

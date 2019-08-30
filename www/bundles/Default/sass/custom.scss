@@ -6,6 +6,7 @@
 
 ol, ul {margin: 0;}
 h1,h2,h4{@include fontView("GothamProBlack",#fff,4.8rem,5.6rem);margin: 0;}
+.container{max-width:1660px;width:100%;}
 h3{@include fontView("GothamProBlack",#fff,3.6rem,4rem);margin: 0;}
 a,input{outline:none !important;}
 body{font-size:10px;background:$white-color;}
@@ -17,21 +18,23 @@ body{font-size:10px;background:$white-color;}
 .select-languages{position:relative;height: 35px;}
 .select-language {
     line-height: 100%;
-    background: url(../img/select-arrow-down.png) 95% 13px no-repeat $gray-color;
+    background: $gray-color;
     cursor: pointer;
     z-index: 9999;
     padding: 0 12px;
     margin-left: -12px;
     position: relative;
 }
+.select-language svg{margin-left: 10px;}
 .select-language.active
 {
-    background: url(../img/select-arrow-up.png) 95% 13px no-repeat $white-color;
+    background: $white-color;
 }
+.select-language.active svg{@include transform(rotate(180deg));}
 .select-language-option-main a {
     @include fontView("GothamProRegular", $black-text, 1.3rem, 100%);
     text-transform: uppercase;
-    padding:11px 15px 11px;
+    padding:11px 0px 11px;
     padding-left: 44px;
     display: block;
 }
@@ -57,12 +60,14 @@ body{font-size:10px;background:$white-color;}
 .siteMenuSearch>button:hover svg g path,.siteMenuSearch>button:focus svg g path{stroke:$black-text;}
 .siteMenuGamburger>button{border:none;width: 26px;height: 18px;@include border-radius(0);margin-right: 35px;margin-left: 27px;padding: 0;background: none;}
 .siteMenuGamburger>button:hover>svg path,.siteMenuGamburger>button:focus>svg path{fill:$black-text;}
+.siteMenuMobileLogin>a:hover svg path,.siteMenuMobileLogin>a:focus svg path{fill:$black-text;}
 .header-functions
 {
     @include flexBox(row,space-between,center);
     @include flex-wrap(wrap);
     padding:33px 0;
 }
+.headerFunctions{@include flexBox(row,flex-start,center);}
 .header-add-button
 {
     @include fontView("GothamProRegular", $black-text,1.3rem,1.2rem);
@@ -141,7 +146,7 @@ body{font-size:10px;background:$white-color;}
 .siteInfoPaneContent.dilers .description{padding-top: 0;}
 .siteInfoPaneInner.dilers{background: none;}
 .siteInfoPaneContentButton{@include flexBox(row,flex-end,center);padding-top: 1.4rem;}
-.siteInfoPaneContentButton a{@include fontView("GothamProRegular",$yellow-color,1.8rem,1.7rem);display: block;background: $black-text;padding: 13px 60px 12px;@include border-radius(3px);transition: $aTransition;}
+.siteInfoPaneContentButton a{@include fontView("GothamProRegular",$yellow-color,1.8rem,1.7rem);display: block;background: $black-text;padding: 13px 60px 12px;@include border-radius(3px);transition: $aTransition;text-align: center;}
 .siteInfoPaneFloat{position: absolute;top:4rem;right:4rem;}
 .siteInfoPaneContentButton a:hover,.siteInfoPaneContentButton a:focus{background:$gray-color;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));color:$black-text;text-decoration: none;}
 .header-search-box{height: 40px;@include flexBox(row,flex-start,canter);}
@@ -169,21 +174,30 @@ body{font-size:10px;background:$white-color;}
 .mainPageAutoListShowAll{@include flexBox(row,center,center);}
 .mainPageAutoListShowAll button{background: $yellow-color;border:none;@include border-radius(3px);@include fontView("GothamProRegular",#fff,1.4rem,100%);padding: 1.2rem 6.2rem 1.3rem;max-width: 220px;text-align: center;transition:$aTransition;}
 .mainPageAutoListShowAll button:hover,.mainPageAutoListShowAll button:focus{background: $orange-color;}
+.mainPageBottomBanner{@include flexBox(row,center,center);padding-top: 5rem;}
+.mainPageBottomBanner img{width:100%;max-width:970px;}
+.footerSiteDescription{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.4rem);text-align: justify;padding-top: 2.5rem;}
+.footer-menu-header{@include fontView("GothamProRegular",$light-black-color,1.6rem,2.4rem);border-bottom: 2px solid $yellow-color;padding-bottom: 1.7rem;@include flexBox(row,space-between,center);}
+.footer-menu-header:hover svg path{fill:$black-text;}
+.footer-menu-header.active svg{@include transform(rotate(180deg));}
+.footer-menu-header svg{display: none;}
+footer{padding-top: 5.5rem;padding-bottom: 5rem;}
+.footer-menu-list{display:flex;flex-direction:row;justify-content:space-between;flex-wrap:wrap;margin-top: 2rem;}
+.footer-menu-list.no-flex{display: block;}
+.footer-menu-list li{padding:0;margin-bottom: 1.7rem;}
+.footer-menu-list li:nth-child(even){text-align: right;}
+.footer-menu-list.no-flex li:nth-child(even){text-align: left;}
+.footer-menu-list li a{border-bottom: 2px solid transparent;@include fontView("GothamProRegular",$light-black-color,1.4rem,1.8rem);@include transition($aTransition);}
+.footer-menu-list li a:hover,.footer-menu-list li a:focus{border-bottom: 2px solid $yellow-color;text-decoration: none;}
+.footerCopyrights{@include fontView("GothamProRegular",#747474,1.4rem,2.4rem);padding-top: 1.5rem;}
+.footerCopyrights a{@include fontView("GothamProRegular",#747474,1.4rem,2.4rem);}
+.footerCopyrights a:hover,.footerCopyrights a:focus{text-decoration: underline;}
+.footerLogo img{width:100%;max-width:142px;}
+.addAdvertButtonMobile a{display: block;position: fixed;bottom:20px;right:20px;width:56px;height:56px;z-index:100000;}
+.addAdvertButtonMobile a:hover svg path,.addAdvertButtonMobile a:focus svg path{fill:$yellow-color;}
 
 
 
-
-
-
-
-
-
-.footer{color:#6f6f6f;font-size:1.3rem;font-family:"Roboto", sans-serif;padding-top:0.9rem;padding-bottom:0.9rem;}
-.footer a{color:#6f6f6f;}
-.footer a:hover,.footer a:focus{text-decoration:underline;}
-.footerLogo{padding-top:2.5rem;display:block;}
-.footerLogo img{width:100%;max-width:249px;}
-.footerLogoBlock{display:flex;flex-direction:row;justify-content: space-between;align-items: center;}
 .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand ,.navbar-right{margin:0;}
 
 /* Carousel base class */
@@ -1090,11 +1104,7 @@ a.send-tab-form:hover{text-decoration:none;}
 .topBannerBlock img{width:100%;}
 .mainpage-search-block.page-content{font-size:1.3rem;color:#383838;font-family:"Roboto", sans-serif;padding-top:2.5rem;padding-bottom:0.7rem;}
 .mainpage-search-block.page-content h1{font-size:1.5rem;font-weight:500;margin-top:0;}
-.footer-menu-header{font-size:1.5rem;color:#383838;font-family:'Roboto',sans-serif;font-weight:500;border-bottom:1px solid #c5c5c5;padding-bottom:9px;margin-bottom:5px;}
-.footer-menu-list{display:flex;flex-direction:row;justify-content:space-between;flex-wrap:wrap;padding-right:2.5rem;}
-.footer-menu-list li{padding-left:0;}
-.footer-menu-list li a{color:#383838;font-size:1.3rem;font-family:'Roboto',sans-serif;text-decoration:none;transition: all 0.2s ease 0s;display:block;padding-top:5px;padding-bottom:5px;}
-.footer-menu-list li a:hover,.footer-menu-list li a:focus{text-decoration:underline;color:#000;}
+
 .bottom-nav-container{padding-top:2.5rem;padding-bottom:2rem;}
 .top-sellers-block
 {

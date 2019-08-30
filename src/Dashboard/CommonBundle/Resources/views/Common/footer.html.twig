@@ -1,30 +1,31 @@
-<nav class="navbar navbar-default navbar-static-top hidden-sm hidden-xs" id="footer-block">
-    <div class="container bottom-nav-container">
+<footer>
+    <div class="container">
         <div class="row">
             <div class="col-md-3 footerLogoBlock" >
-                {% if settings.siteLogo %}
-                    {% if  app.request.locale == 'lv' %}
-                        <a href="{{ path('main') }}" class="footerLogo pull-left">
-                            <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
-                        </a>
-                    {% else %}
-                        <a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}" class="footerLogo pull-left">
-                            <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
-                        </a>
+                <div class="footerLogo">
+                    {% if settings.siteLogo %}
+                        {% if  app.request.locale == 'lv' %}
+                            <a href="{{ path('main') }}">
+                                <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                            </a>
+                        {% else %}
+                            <a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}" >
+                                <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                            </a>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-bottom" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                </div>
+                <div class="footerSiteDescription">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, totam, porro dolorum vitae ad quasi veniam iusto sed tempora cumque perferendis aspernatur. Laboriosam, animi, inventore, quia numquam optio libero enim ipsa in dolores quis iusto atque qui.
+                </div>
             </div>    
             <div class="col-md-9">
-                <div id="navbar-bottom" class="navbar-collapse collapse">
+                <div id="navbar-bottom">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="footer-menu-header">{% trans %}Informācija{% endtrans %}</div>
+                        <div class="col-md-4 col-md-offset-1">
+                            <div class="footer-menu-header">{% trans %}Информация{% endtrans %} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
+</svg></div>
                             <div class="footer-menu-list-block">
                                 <ul class="list-unstyled footer-menu-list list-inline">
                                     {% if footerPages %}
@@ -41,8 +42,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="footer-menu-header">{% trans %}Pakalpojumi{% endtrans %}</div>
+                        <div class="col-md-3 col-md-offset-1">
+                            <div class="footer-menu-header">{% trans %}Услуги{% endtrans %} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
+</svg></div>
                             <div class="footer-menu-list-block">
                                 <ul class="list-unstyled footer-menu-list">
                                     {% if footerPages %}
@@ -59,30 +62,34 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="footer-menu-header">{% trans %}Mans konts{% endtrans %}</div>
+                        <div class="col-md-2 col-md-offset-1">
+                            <div class="footer-menu-header">{% trans %}Аккаунт{% endtrans %} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
+</svg></div>
                             <div class="footer-menu-list-block">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                     <ul class="list-unstyled footer-menu-list">
                                         <li>
                                             {% if  app.request.locale == 'lv' %}
-                                                <a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a>
+                                                <a href="{{path('account')}}">{% trans %}Личный кабинет{% endtrans %}</a>
                                             {% else %}
-                                                <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a>
+                                                <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Личный кабинет{% endtrans %}</a>
                                             {% endif %}
                                         </li>
                                         <li>
-                                            <a href="{{path('logout')}}" class="top-info-logout">{% trans %}Izrakstīties{% endtrans %}</a>
+                                            <a href="{{path('logout')}}" class="top-info-logout">{% trans %}Выйти{% endtrans %}</a>
                                         </li>
                                     </ul>
                                 {% else %}
-                                <ul class="list-unstyled footer-menu-list">
+                                <ul class="list-unstyled footer-menu-list no-flex">
                                     {% if  app.request.locale == 'lv' %}   
-                                        <li><a href="{{path('login')}}">{% trans %}Pierakstieties{% endtrans %}</a></li>
-                                        <li><a href="{{path('register')}}">{% trans %}Reģistrācijas{% endtrans %}</a></li>
+                                        <li><a href="{{path('login')}}">{% trans %}Войти{% endtrans %}</a></li>
+                                        <li><a href="{{path('register')}}">{% trans %}Регистрация{% endtrans %}</a></li>
+                                        <li><a href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a></li>
                                     {% else %}
-                                        <li><a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Pierakstieties{% endtrans %}</a></li>
-                                        <li><a href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Reģistrācijas{% endtrans %}</a></li>
+                                        <li><a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Войти{% endtrans %}</a></li>
+                                        <li><a href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Регистрация{% endtrans %}</a></li>
+                                        <li><a href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a></li>
                                     {% endif %}
                                 </ul>    
                                 {% endif %}
@@ -92,14 +99,13 @@
                 </div>
             </div>
         </div>
+        <div class="row footerCopyrights">
+            <div class="col-lg-6 col-md-6 hidden-sm hidden-xs">{{ settings.copyright | raw }}</div>
+            <div class="col-lg-6 col-md-6 footer-developer">{% trans %}Разработка {% endtrans %} <a href="https://sunweb-it.com/" target=”_blank”>Sunweb-it.com</a></div> 
+        </div> 
     </div>
-    </nav>
-	<div class="container footer">
-            <div class="row">
-		<div class="col-lg-6 col-md-6">{{ settings.copyright | raw }}</div>
-		<div class="col-lg-6 col-md-6 footer-developer">{% trans %}Attīstība{% endtrans %} <a href="https://sunweb-it.com/" target=”_blank”>Sunweb-it.com</a></div> 
-            </div>
-	</div>
+</footer>
+                           
 	<div class="modal fade" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
 	  <div class="modal-dialog" role="document">
 		{{ form_start(regionForm,{'attr' : {'class' : 'form-horizontal siteRegionSelect'}}) }}

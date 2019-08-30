@@ -49,6 +49,11 @@ $(document).ready(function(){
       'albumLabel': ''
     });
     
+    $(".footer-menu-header").click(function(){
+        $(this).toggleClass("active");
+        $(".footer-menu-list-block").toggleClass("active");
+    });
+    
     $(".dz-hidden-input").attr("multiple", "multiple");
     $('.jcarousel').jcarousel({vertical: true});
     $('.jcarousel-control-prev')

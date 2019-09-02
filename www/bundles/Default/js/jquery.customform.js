@@ -4,6 +4,8 @@
 		var make = function(){
 		
 			var selectElement = $(this);
+                        var selected = 0;
+                        var multiple = (selectElement.attr("multiple")) ? 1 : 0;
 			var selectValue = selectElement.val();
 			var selectOptions = selectElement.find("option");
 			var selectOptionGroups = selectElement.find("optgroup");
@@ -12,11 +14,16 @@
 			var cover = selectElement.parent(".select-cover");
 			
 			selectOptions.each(function(){
-				if($(this).attr("value") == selectValue){
-                                    cover.append("<div class='select-value'>" + $(this).html() + "</div><div class='select-options'></div>");
-				}
+                            if($(this).attr("value") == selectValue){
+                                cover.append("<div class='select-value'>" + $(this).html() + "</div><div class='select-options'></div>");
+                                selected = 1;
+                            }
 			});
-			
+                        
+			if(selected === 0){
+                            cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div><div class='select-options'></div>");
+                        }
+                        
 			if(typeof(selectOptionGroups.html()) != 'undefined'){
 				selectOptionGroups.each(function(){
 					var groupOptions = $(this).find("option");
@@ -61,12 +68,29 @@
 			selectOptions.find(".select-option").each(function(){
 				$(this).click(function(e){
 					e.stopPropagation();
-					selectElement.val($(this).data("value"));
-                                        selectElement.trigger("change");
-					cover.find(".select-value").html($(this).html());
-					selectOptions.removeClass("opened");
-                                        $(this).parent().parent().toggleClass('active');
-					selectOptions.slideUp();
+                                        if(multiple === 1){
+                                            var value = $(this).data("value");
+                                            var active = ($(this).hasClass("active")) ? 1 : 0;
+                                            selectElement.find("option").each(function(){
+                                               if(value.toString() === $(this).attr("value")){
+                                                   if(active === 1){
+                                                       $(this).attr("selected",0);
+                                                   }else{
+                                                       $(this).attr("selected","selected");
+                                                   }
+                                               } 
+                                            });
+                                            $(this).toggleClass("active");
+                                        }else{
+                                            $(this).parent().find(".select-option").removeClass("active");
+                                            selectElement.val($(this).data("value"));
+                                            selectElement.trigger("change");
+                                            cover.find(".select-value").html($(this).html());
+                                            selectOptions.removeClass("opened");
+                                            $(this).parent().parent().toggleClass('active');
+                                            $(this).toggleClass("active");
+                                            selectOptions.slideUp();
+                                        }
 				});
 			});
 			

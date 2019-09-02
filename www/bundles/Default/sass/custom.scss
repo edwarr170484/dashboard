@@ -20,7 +20,7 @@ body{font-size:10px;background:$white-color;}
     line-height: 100%;
     background: $gray-color;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 999;
     padding: 0 12px;
     margin-left: -12px;
     position: relative;
@@ -181,7 +181,7 @@ body{font-size:10px;background:$white-color;}
 .footer-menu-header:hover svg path{fill:$black-text;}
 .footer-menu-header.active svg{@include transform(rotate(180deg));}
 .footer-menu-header svg{display: none;}
-footer{padding-top: 5.5rem;padding-bottom: 5rem;}
+footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;}
 .footer-menu-list{display:flex;flex-direction:row;justify-content:space-between;flex-wrap:wrap;margin-top: 2rem;}
 .footer-menu-list.no-flex{display: block;}
 .footer-menu-list li{padding:0;margin-bottom: 1.7rem;}
@@ -195,6 +195,87 @@ footer{padding-top: 5.5rem;padding-bottom: 5rem;}
 .footerLogo img{width:100%;max-width:142px;}
 .addAdvertButtonMobile a{display: block;position: fixed;bottom:20px;right:20px;width:56px;height:56px;z-index:100000;}
 .addAdvertButtonMobile a:hover svg path,.addAdvertButtonMobile a:focus svg path{fill:$yellow-color;}
+.breadscrumbsBlock{background: $gray-color;}
+.breadscrumbs li{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding: 0;padding-right: .5rem;}
+.breadscrumbs li a
+{
+   @include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);
+   display: block;
+   padding-top: 1.2rem;
+   padding-bottom: 1rem;
+}
+.login-blocks{@include flexBox(row,flex-start,center);padding-top: 10.8rem;padding-bottom: 10.8rem;@include flex-wrap(wrap);}
+.loginBlock{background: #fff;@include border-radius(12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
+.register-block{@include flexBox(column,space-between,center);padding-left: 14rem;padding-right: 14rem;padding-top: 6rem;padding-bottom: 6rem;}
+.register-block.result{@include flexBox(column,center,center);padding-top: 12rem;padding-bottom: 12rem;}
+.register-block-description.confirm-restore{text-align: center;}
+.resultEmail{@include fontView("GothamProBold",#71798A,1.6rem,2.2rem);padding-top: 3.5rem;padding-bottom: 6rem;}
+.resultNavigation{@include fontView("GothamProRegular",#71798A,1.6rem,2.2rem);}
+.resultNavigation a{@include fontView("GothamProRegular",$orange-color,1.6rem,2.2rem);text-decoration: underline;}
+
+.register-block-header{@include fontView("GothamProBold",$gray-color-1,1.6rem,2.2rem);padding-bottom: 3.6rem;}
+.register-block.result .register-block-header{color:$orange-color;}
+.register-block-header.social{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 2rem;}
+.register-block-header a{color:$orange-color;}
+.register-form-forms{width: 100%;}
+.register-form-forms input{
+    display: block;
+    border:none;
+    border-bottom: 1px solid #BBC8D2;
+    @include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);
+    padding: 0.6rem;padding-left: 3.7rem;width: 100%;
+}
+.register-form-forms input:focus{border-bottom: 1px solid $orange-color;}
+.register-form-forms input.email{background: url('../img/E-mail.svg') 0 50% no-repeat;}
+.register-form-forms input:focus.email{background: url('../img/E-mail-orange.svg') 0 50% no-repeat;}
+.register-form-forms input.password{background: url('../img/Lock.svg') 0 50% no-repeat;}
+.register-form-forms input:focus.password{background: url('../img/Lock-orange.svg') 0 50% no-repeat;}
+.register-form-forms input.user{background: url('../img/User.svg') 0 50% no-repeat;}
+.register-form-forms input:focus.user{background: url('../img/User-orange.svg') 0 50% no-repeat;}
+.register-form-forms button[type='submit']
+{
+    padding:14px 0;
+    border:none;
+    background: $yellow-color;
+    @include fontView("GothamProBold",#fff,1.8rem,1.7rem);display: block;width: 100%;text-align: center;
+    @include transition($aTransition);
+    @include border-radius(3px);
+}
+.register-form-forms button[type='submit']:hover,.register-form-forms button[type='submit']:focus{background:$orange-color;}
+.forgotPassword a{@include fontView("GothamProRegular",$yellow-color,1.6rem,2.2rem);display: block;width: 100%;text-align: center;}
+.forgotPassword a.fogotPaswordLink{margin-bottom: 2.9rem;}
+.forgotPassword{@include fontView("GothamProRegular",#71798A,1.6rem,2.2rem);padding-top: 4.4rem;text-align: center;}
+.register-block-description{@include fontView("GothamProRegular",#71798A,1.6rem,2.2rem);padding-bottom: 3rem;}
+.oauth-link:after{content:"";display:table;clear:both;}
+a.oauth{text-transform: uppercase;@include fontView("GothamProBold",#fff,1.3rem,1.2rem);display: block;@include border-radius(3px);padding: 15px 20px 14px 40px;float: left;}
+a.oauth:hover{text-decoration:none;}
+a.oauth.facebook{background:url("../img/facebook.png") 16px 50% no-repeat #344C8A;}
+a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.8);text-decoration: none;}
+.socialLoginBlock{padding-left: 12.4rem;}
+#loginCaptcha,#registerCaptcha{margin-bottom: 3.2rem;@include flexBox(row,center,center);}
+.registerDescription{@include fontView("GothamProRegular",#747474,1.2rem,1.4rem);padding-top: 2rem;text-align: center;padding-left: 15%;padding-right: 15%;}
+.registerDescription a{@include fontView("GothamProRegular",#747474,1.2rem,1.4rem);}
+.registerInputBlock{position: relative;margin-bottom: 3.2rem;}
+.inputMessage{@include fontView("GothamProRegular",$orange-color,1.1rem,1.1rem);text-align: right;padding-top: 0.4rem;}
+.modal{z-index:9999;}
+.searchBlock{background: #fff;padding-top: 3rem;padding-bottom: 3rem;}
+.searchBlockInner{@include flexBox(row,flex-start,center);position: relative;}
+.searchBlockInner input{display: block;@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);border:none;background: url('../img/search-left.svg') 0 50% no-repeat;padding-left: 3.8rem;margin-left: 5rem;width: 95%;border:1px solid transparent;}
+.searchBlockInner input:focus{border-bottom: 2px solid $black-text;}
+.searchBlockForm{border-left: 1px solid $gray-color;padding-top:1rem;padding-bottom:1rem;margin-left: 3rem;width: 100%;}
+.searchBlockInner button{width: 26px;height: 26px;display: block;position: absolute;top:50%;margin-top: -13px;right:30px;border:none;background: none;}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -323,20 +404,8 @@ footer{padding-top: 5.5rem;padding-bottom: 5rem;}
 .advert-add-info:after{content:" ";clear: both; display: table;}
 .advert-town{float:left}
 .advert-rating{float:right;}
-.breadscrumbs{margin-bottom: 0;}
-.breadscrumbs li.arrow{background:url(../img/arrow.png) 100% 50% no-repeat;}
-.breadscrumbs li.arrow:last-child{background: none;}
-.breadscrumbs li a
-{
-    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-    color: #6f6f6f;
-    font-family: "Roboto",sans-serif;
-    font-size: 1.2rem;
-    padding: 20px 15px 20px 0;
-    text-transform:uppercase;
-    color:#999999;
-    display:block;
-}
+
+
 .advert-category-adverts .premium-advert{width:195px;padding: 1rem 1.3rem 2rem 1.3rem}
 .advert-category-adverts .premium-advert .product-image {width:100%; height: 120px;overflow:hidden;}
 .advert-category-adverts .premium-advert .advert-name{font-size:1.5rem}
@@ -487,20 +556,7 @@ padding: 0.8rem 1.5rem;display:block;float:left;margin-bottom:2rem;}
 	.form-horizontal.region-select-form .control-label{padding-top:15px;}
 	.header-add-button-block:after{content:" ";display:block;clear:both;}
 	.footer-developer{text-align:right;}
-.register-login-page-cover{background:rgba(35,129,41,0.7);padding-top:75px;padding-bottom:155px;}
-.register-form-block{padding-left:45px;padding-right:45px;}
-.row-register-form-inner-block:after{content:"";display:table;clear:both;}
-.row-register-form-inner-block{background:#fff;padding:60px 37px;position:relative;}
-.register-block-header{margin-top:10px;margin-bottom:0;color:#3e3e3e;font-size:2.4rem;font-family:"Roboto", sans-serif;text-transform:uppercase; }
-.register-block-description{font-family:"Roboto", sans-serif;font-size:1.6rem;color:#6d6d6d;line-height:1.8rem;
-padding-top:13px;padding-bottom:20px;font-weight:300;}
-.register-block{padding-right:100px;}
-.register-form-forms input{display:block;width:100%;border:1px solid #aeaeae;padding:10px 28px;font-family:"Roboto", sans-serif;font-size:2rem;margin-bottom:15px;font-weight:300;}
-.register-form-forms button[type='submit']{background:#238129;color:#fff;text-transform:uppercase;border:none;width:100%;margin-top:30px;
-font-size:1.8rem;font-family:"Roboto", sans-serif;padding:14px 0;font-weight:500;}
-.register-form-forms button[type='submit']{background:#238129;color:#fff;text-transform:uppercase;border:none;width:100%;margin-top:30px;
-font-size:1.8rem;font-family:"Roboto", sans-serif;padding:14px 0;font-weight:500;}
-.register-form-forms button[type='submit']:hover,.register-form-forms button[type='submit']:focus{background:#437646;}
+
 .register-password-block:after{content:" "; display:table;clear:both;}
 .register-password-block{position:relative;}
 .register-password-block a{display:block;position:absolute;right:0;top:0;padding:14px;color:#1f1f1f;font-family:"Roboto", sans-serif;
@@ -521,17 +577,10 @@ a.register-new-user:hover,a.register-back:hover{text-decoration:underline;}
 a.register-back{color:#aeaeae;text-decoration:none;
     font-family:"GothamProRegular", sans-serif;
     font-size:1.6rem;display:block;}
-.oauth-link:after{content:"";display:table;clear:both;}
-a.oauth{display:block;float:left;padding:22px 27px;padding-left:82px;padding-top:19px;color:#fff;text-transform:uppercase;
-font-size:1.2rem;font-family:"Roboto", sans-serif;margin-bottom:45px;}
-a.oauth.vkontakte{background:url("../img/vk-login.png") 0 0 no-repeat;}
-a.oauth.vkontakte:hover{background:url("../img/vk-login-hover.png") 0 0 no-repeat;}
-a.oauth:hover{text-decoration:none;}
-a.oauth.facebook{background:url("../img/fb-login.png") 0 0 no-repeat;}
-a.oauth.facebook:hover{background:url("../img/fb-login-hover.png") 0 0 no-repeat;}
+
 .register-block-close{display:block;position:absolute;right:30px;top:24px;font-size:28px;width:19px;height:20px;
 background:url('../img/cross.png') 0 0 no-repeat;}
-.register-right-block{padding-left:50px;border-left:1px solid #aeaeae;}
+
 .alert{font-family:"Roboto", sans-serif;font-weight:300;font-size: 1.4rem;color:#666666;padding:7px;line-height:100%;padding-left:30px;position:relative;}
 .alert .close-alert{display:block;position:absolute;left:2px;top:8px;color:#fac3c7;font-weight:bold;background:none;border:none;font-size:2.4rem;}
 .register-form-checkbox-block:after{content:"";display:table;clear:both;}

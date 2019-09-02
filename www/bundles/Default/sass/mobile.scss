@@ -22,6 +22,8 @@
     .footer-menu-header svg{display: block;}
     .footer-menu-list-block{display: none;}
     .footer-menu-list-block.active{display: block;}
+    .login-blocks{display: block;padding-top: 5rem;padding-bottom: 5rem;}
+    .socialLoginBlock{padding-left: 0;padding-top: 3rem;}
     
 }
 @media (max-width: 768px) 
@@ -58,6 +60,8 @@
     .footerSiteDescription{padding-top: 1.8rem;padding-bottom: 1.7rem;}
     .footer-menu-header{padding-top: 1.4rem;}
     .footer-developer{text-align: left;}
+    .register-block,.register-block.result{padding:2.5rem;}
+    
 }
 @media (max-width: 650px) 
 {

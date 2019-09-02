@@ -281,7 +281,7 @@ class UserController extends Controller
         
         
         return $this->render('DashboardCommonBundle:User:register.html.twig', array('registerForm' => $registerForm->createView(),
-                                                                                    'success' => $success,"settings" => $settings, "locale" => $locale));
+                                                                                    'success' => $success,"settings" => $settings, "locale" => $locale,"email" => $user->getEmail()));
     }
     
     /**
@@ -408,13 +408,28 @@ class UserController extends Controller
         
         $user = new User();
         $restoreForm = $this->createFormBuilder($user)
-                ->add('email', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('e-pasts'), 'attr' => array('placeholder' => 'email')))
+                ->add('email', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('e-pasts'), 'attr' => array('class' => 'email','placeholder' => 'email')))
                 ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Atjaunot')))->getForm();
         
         $restoreForm->handleRequest($request);
         
         if ($restoreForm->isSubmitted() && $restoreForm->isValid())
         {
+            if($settings->getIsShowCaptcha())
+            {
+                if(!$this->get('app.helpers')->checkCaptcha($request->request->get('g-recaptcha-response')))
+                {
+                    $error = $this->get('translator')->trans('Неверно введена капча');
+
+                    return $this->render('DashboardCommonBundle:User:restore.html.twig', array("success" => $success,
+                                                                                                "error" => $error,
+                                                                                                "resotreForm" => $restoreForm->createView(),
+                                                                                                "settings" => $settings,
+                                                                                                "locale" => $locale,
+                                                                                                "email" => $restoreForm['email']->getData()));
+                }
+            }
+            
             $user = $manager->getRepository("DashboardCommonBundle:User")->findOneByEmail($restoreForm['email']->getData());
             
             if($user)
@@ -444,14 +459,15 @@ class UserController extends Controller
             }
             else 
             {
-                $error = 1;
+                $error = $this->get('translator')->trans('<strong>Ошибка!</strong> Такого email не существует в системе.');
             }
         }
         return $this->render('DashboardCommonBundle:User:restore.html.twig', array("success" => $success,
                                                                                    "error" => $error,
                                                                                    "resotreForm" => $restoreForm->createView(),
                                                                                    "settings" => $settings,
-                                                                                   "locale" => $locale));
+                                                                                   "locale" => $locale,
+                                                                                   "email" => $restoreForm['email']->getData()));
     }
     
     private function generateNewPassword($length)

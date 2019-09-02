@@ -30,17 +30,18 @@ class UserRegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
         $builder
-            ->add('email', EmailType::class, array('required' => true, 'label' => 'e-pasts', 'attr' => array('placeholder' => 'email')))
+            ->add('username', TextType::class, array('required' => true, 'label' => 'User', 'attr' => array('class' => 'user','placeholder' => 'Логин')))    
+            ->add('email', EmailType::class, array('required' => true, 'label' => 'E-mail', 'attr' => array('class' => 'email','placeholder' => 'E-mail')))
             ->add('link', HiddenType::class, array('required' => false,'data' => $this->link,'mapped' => false))
-            ->add('password', RepeatedType::class, array(
+            ->add('password', PasswordType::class, array(
                     'required' => true,
-                    'type' => PasswordType::class,
-                    'first_options'  => array('label' => 'Password', 'attr' => array('placeholder' => 'parole')),
-                    'second_options' => array('label' => 'Repeat Password', 'attr' => array('placeholder' => 'apstipriniet paroli')),
-                    'attr' => array('class' => 'form-control')
+                    /*'type' => PasswordType::class,*/
+                    /*'first_options'  => array('label' => 'Password', 'attr' => array('class' => 'password','placeholder' => 'parole')),
+                    'second_options' => array('label' => 'Repeat Password', 'attr' => array('class' => 'password','placeholder' => 'apstipriniet paroli')),*/
+                    'attr' => array('class' => 'password','placeholder' => 'Пароль')
                 )
             )
-            ->add('alerts', CheckboxType::class,  array('required' => false, 'label' => 'pieņemt paziņojumus no vietnes', 'attr' => array('class' => 'hidden-input', 'id' => 'alerts','text' => 'pieņemt paziņojumus no vietnes')))
+            /*->add('alerts', CheckboxType::class,  array('required' => false, 'label' => 'pieņemt paziņojumus no vietnes', 'attr' => array('class' => 'hidden-input', 'id' => 'alerts','text' => 'pieņemt paziņojumus no vietnes')))
             ->add('termsAccept', CheckboxType::class, array(
                 'mapped' => false,
                 'required' => false,
@@ -48,7 +49,7 @@ class UserRegisterType extends AbstractType
                 'label' => 'es piekrītu <a href="" data-toggle="modal" data-target="#userAgreementModal"> lietotāja līgumam </a>',
                 'attr' =>  array('class' => 'hidden-input', 'id' => 'termsAccept', 
                 'text' => 'es piekrītu <a href="" data-toggle="modal" data-target="#userAgreementModal"> lietotāja līgumam </a>')
-            ));
+            ))*/;
     }
     
     public function configureOptions(OptionsResolver $resolver)

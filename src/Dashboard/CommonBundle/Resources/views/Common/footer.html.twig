@@ -177,6 +177,33 @@
 		</form>
 	  </div>
         </div>
+        <div class="modal fade" id="desktopSearchModal" tabindex="-1" role="dialog">
+            <div class="searchBlock">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 searchBlockInner">
+                            {% if settings.siteLogo %}
+                                <div><img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" /></div>
+                            {% endif %}
+                            <div class="searchBlockForm">
+                                {% if  app.request.locale == 'lv' %}
+                                    <form action="{{ path('search') }}" method="post">
+                                {% else %}
+                                    <form action="{{ path('searchLocale',{'_locale' : app.request.locale}) }}" method="post">
+                                {% endif %}
+                                <input name="searchText" type="text" placeholder="{% trans %}SITE MEKLĒŠANA{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
+                                </form>
+                            </div>
+                            <button type="button" data-dismiss="modal" aria-label="Close">
+                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="#222B2A"/>
+</svg></button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
     <script src="{{ asset('bundles/Default/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('bundles/Default/js/ie10-viewport-bug-workaround.js') }}"></script>
     <script src="{{ asset('bundles/Default/js/jcarousel.js') }}"></script>

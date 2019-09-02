@@ -14,39 +14,33 @@
             };
 
 </script>
-<nav class="navbar navbar-default">
+<nav class="breadscrumbsBlock">
       <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
                     {% if  app.request.locale == 'lv' %}
-                        <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
-                        <li><a href="">{% trans %}Piesakieties savā kontā{% endtrans %}</a></li>
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                        <li><a href="">{% trans %}Вход в личный кабинет{% endtrans %}</a></li>
                     {% else %}
-                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mājas{% endtrans %}</a></li>
-                        <li><a href="">{% trans %}Piesakieties savā kontā{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                        <li><a href="">{% trans %}Вход в личный кабинет{% endtrans %}</a></li>
                     {% endif %}
                 </ul>
             </div>
         </div>
       </div>
 </nav>
-<div class="register-login-page-cover">
+<div class="">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12 register-form-block">
-                <div class="row-register-form-inner-block">
-                    <div class="col-lg-6 col-md-6">
-                        {% if  app.request.locale == 'lv' %}
+        <div class="row login-blocks">
+            <div class="col-lg-5 col-md-5 col-md-offset-1">
+                <div class="loginBlock">
+                    {% if  app.request.locale == 'lv' %}
                             <div class="register-block">
-                                <h1 class="register-block-header">{% trans %}Pierakstieties{% endtrans %}</h1>
-                                <div class="register-block-description">
-                                    {% if info %}
-                                        {{ info }}
-                                    {% else %}
-                                        {% trans %}Ievadiet savu e-pasta adresi un paroli, lai pieteiktos{% endtrans %}.
-                                    {% endif %}
-                                </div>
+                                <div class="register-block-header">{% trans %}Войти или{% endtrans %} <a href="{{path('register')}}">{% trans %}Зарегистрироваться{% endtrans %}</a></div>
                                 {% if error %}
                                     <div class="alert alert-danger">
                                         <button class="close-alert" data-dismiss="alert" type="button">
@@ -56,39 +50,33 @@
                                     </div>
                                 {% endif %}
                                 <div class="register-form-forms">
-
                                         <form action="{{path('login')}}" method="post">
-                                        <input name="_username" value="{{ last_username }}" placeholder="{% trans %}email{% endtrans %}" required />
-                                        <div class="register-password-block">
-                                            <input name="_password" type="password" value="" placeholder="{% trans %}parole{% endtrans %}" required />
-                                            <a href="{{path('restore')}}">{% trans %}aizmirsu paroli{% endtrans %}?</a>
-                                        </div>
-                                        <div class="register-form-checkbox-block">
-                                            <div class="register-form-checkbox active" data-checkbox="rememberme">
-                                                <div class="register-form-checkbox-area"></div>
+                                            <div class="registerInputBlock">
+                                                <input class="email" name="_username" value="{{ last_username }}" placeholder="{% trans %}E-mail{% endtrans %}" required />
+                                                <div class="inputMessage"></div>
                                             </div>
-                                            {% trans %}Atceries mani{% endtrans %}
-                                            <input id="rememberme" class="hidden-input" name="_remember_me" value="1" checked="checked" type="checkbox">
-                                        </div>
-                                        {% if app.session.get('loginerror') %}
-                                            <div class="g-recaptcha" id="loginCaptcha"></div>
-                                        {% endif %}
-                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-                                        <button type="submit">{% trans %}Ieiet vietnē{% endtrans %}</button>
-                                    </form>
+                                            <div class="registerInputBlock">
+                                                <input class="password" name="_password" type="password" value="" placeholder="{% trans %}Пароль{% endtrans %}" required />
+                                                <div class="inputMessage"></div>
+                                            </div>
+                                            {% if app.session.get('loginerror') %}
+                                                <div class="g-recaptcha" id="loginCaptcha"></div>
+                                            {% endif %}
+                                            <input type="hidden" name="_failure_path" value="{{path('login')}}" />
+                                            <input type="hidden" name="_target_path" value="{{ path('account') }}" />
+                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                                            <button type="submit">{% trans %}Войти{% endtrans %}</button>
+                                        </form>
                                 </div>
-                                <a href="{{path('register')}}" class="register-new-user">{% trans %}jauna lietotāja reģistrācija{% endtrans %}</a>
+                                <div class="forgotPassword">
+                                    <a class="fogotPaswordLink" href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a>
+                                    {% trans %}У вас нет аккаунта?{% endtrans %}
+                                    <a class="registerUserLink" href="{{path('register')}}">{% trans %}Зарегистрироваться{% endtrans %}</a>
+                                </div>
                             </div>
                         {% else %}
                             <div class="register-block">
-                                <h1 class="register-block-header">{% trans %}Pierakstieties{% endtrans %}</h1>
-                                <div class="register-block-description">
-                                    {% if info %}
-                                        {{ info }}
-                                    {% else %}
-                                        {% trans %}Ievadiet savu e-pasta adresi un paroli, lai pieteiktos{% endtrans %}.
-                                    {% endif %}
-                                </div>
+                                <div class="register-block-header">{% trans %}Войти или{% endtrans %} <a href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Зарегистрироваться{% endtrans %}</a></div>
                                 {% if error %}
                                     <div class="alert alert-danger">
                                         <button class="close-alert" data-dismiss="alert" type="button">
@@ -97,51 +85,42 @@
                                         {{ error.message | replace({"Bad credentials." : "<b>Ошибка!</b> Неверный логин или пароль", "User account is disabled." : "<b>Ошибка!</b> Ваш аккаунт заблокирован."}) | raw }}
                                     </div>
                                 {% endif %}
-                                <div class="register-form-forms">
+                                    <div class="register-form-forms">
                                         <form action="{{path('login')}}" method="post">
-                                        <input name="_username" value="{{ last_username }}" placeholder="{% trans %}email{% endtrans %}" required />
-                                        <div class="register-password-block">
-                                            <input name="_password" type="password" value="" placeholder="{% trans %}parole{% endtrans %}" required />
-                                            <a href="{{path('restoreLocale',{'_locale' : app.request.locale})}}">{% trans %}aizmirsu paroli{% endtrans %}?</a>
-                                        </div>
-                                        <div class="register-form-checkbox-block">
-                                            <div class="register-form-checkbox active" data-checkbox="rememberme">
-                                                <div class="register-form-checkbox-area"></div>
+                                            <div class="registerInputBlock">
+                                                <input class="email" name="_username" value="{{ last_username }}" placeholder="{% trans %}E-mail{% endtrans %}" required />
+                                                <div class="inputMessage"></div>
                                             </div>
-                                            {% trans %}Atceries mani{% endtrans %}
-                                            <input id="rememberme" class="hidden-input" name="_remember_me" value="1" checked="checked" type="checkbox">
-                                        </div>
-                                        {% if app.session.get('loginerror') %}
-                                            <div class="g-recaptcha" id="loginCaptcha"></div>
-                                        {% endif %}
-                                        <input type="hidden" name="_failure_path" value="{{path('loginLocale',{'_locale' : 'ru'})}}" />
-                                        <input type="hidden" name="_target_path" value="{{ path('accountLocale',{'_locale' : 'ru'}) }}" />
-                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-                                        <button type="submit">{% trans %}Ieiet vietnē{% endtrans %}</button>
-                                    </form>
-                                </div>
-                                <a href="{{path('registerLocale',{'_locale' : app.request.locale})}}" class="register-new-user">{% trans %}jauna lietotāja reģistrācija{% endtrans %}</a>
+                                            <div class="registerInputBlock">
+                                                <input class="password" name="_password" type="password" value="" placeholder="{% trans %}Пароль{% endtrans %}" required />
+                                                <div class="inputMessage"></div>
+                                            </div>
+                                            {% if app.session.get('loginerror') %}
+                                                <div class="g-recaptcha" id="loginCaptcha"></div>
+                                            {% endif %}
+                                            <input type="hidden" name="_failure_path" value="{{path('loginLocale',{'_locale' : 'ru'})}}" />
+                                            <input type="hidden" name="_target_path" value="{{ path('accountLocale',{'_locale' : 'ru'}) }}" />
+                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                                            <button type="submit">{% trans %}Войти{% endtrans %}</button>
+                                        </form>
+                                    </div>
+                                    <div class="forgotPassword">
+                                        <a class="fogotPaswordLink" href="{{path('restoreLocale',{'_locale' : app.request.locale})}}">{% trans %}Забыли пароль?{% endtrans %}</a>
+                                        {% trans %}У вас нет аккаунта?{% endtrans %}
+                                        <a class="registerUserLink" href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Зарегистрироваться{% endtrans %}</a>
+                                    </div>
                             </div>
                         {% endif %}
-                    </div>
-                    <div class="col-lg-6 col-md-6 register-right-block">
-                        <h1 class="register-block-header">{% trans %}Pierakstieties, izmantojot Vkontakte{% endtrans %}</h1>
-                        <div class="register-block-description">
-                            {% trans %}Ja jums ir profils sociālajā tīklā VKontakte, varat to izmantot, lai ievadītu{% endtrans %}
-                        </div> 
-                        <div class="oauth-link">
-                            <a href="/connect/vkontakte" class="oauth vkontakte">{% trans %}Pierakstieties ar Vkontakte{% endtrans %}</a>
-                        </div>
-                        <h1 class="register-block-header">{% trans %}Pierakstieties ar Facebook{% endtrans %}</h1>
-                        <div class="register-block-description">
-                            {% trans %}Ja jums ir profils pakalpojumā Facebook, varat to izmantot, lai pierakstītos{% endtrans %}
-                        </div> 
-                        <div class="oauth-link">
-                            <a href="/connect/facebook" class="oauth facebook">{% trans %}Pierakstieties ar Facebook{% endtrans %}</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 ssl-login-message">
-                        <i class="fa fa-lock" aria-hidden="true"></i> {% trans %}Droši savienojumi, izmantojot SSL tehnoloģiju{% endtrans %}
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5">
+                <div class="socialLoginBlock">
+                    <h1 class="register-block-header social">{% trans %}Войти через соц. сети{% endtrans %}</h1>
+                    <div class="register-block-description">
+                        {% trans %}Если у Вас есть профиль в социальной сети Facebook,<br/> можете использовать его для входа {% endtrans %}
+                    </div> 
+                    <div class="oauth-link">
+                        <a href="/connect/facebook" class="oauth facebook">{% trans %}Войти через Facebook{% endtrans %}</a>
                     </div>
                 </div>
             </div>

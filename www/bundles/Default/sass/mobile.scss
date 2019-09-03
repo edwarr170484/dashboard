@@ -24,7 +24,15 @@
     .footer-menu-list-block.active{display: block;}
     .login-blocks{display: block;padding-top: 5rem;padding-bottom: 5rem;}
     .socialLoginBlock{padding-left: 0;padding-top: 3rem;}
-    
+    .siteMenuGamburgerMenu{top:28px;right:0;left:auto;padding-left: 4rem;width: 100%;}
+    .siteMenuGamburgerMenu button{top:15px;right: 10px;left:auto;}
+    .searchBlockInner input{width: 80%;}
+    .categorySortParams{@include flex-wrap(wrap);}
+    .categorySortParams .select-cover{width: 250px;}
+    .categorySortParams .filter{width: 110px;}
+}
+@media(max-width:830px){
+    .siteMenuGamburgerMenu{@include column-count(3);}
 }
 @media (max-width: 768px) 
 {
@@ -61,16 +69,22 @@
     .footer-menu-header{padding-top: 1.4rem;}
     .footer-developer{text-align: left;}
     .register-block,.register-block.result{padding:2.5rem;}
-    
+    .categorySortFields{@include flex-wrap(wrap);}
 }
 @media (max-width: 650px) 
 {
     .mainPageAutoList ul li{width:50%}
     .mainPageContentText{columns:1}
+    .siteMenuGamburgerMenu{@include column-count(2);}
 }
 @media (max-width: 490px) 
 {
     .mainPageAutoList ul li{width:100%}
+    
+}
+@media (max-width: 475px) 
+{
+    .siteMenuGamburgerMenu{@include column-count(1);}
 }
 @media (max-width: 340px) 
 {

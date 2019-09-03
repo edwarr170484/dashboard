@@ -24,7 +24,9 @@
                             cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div><div class='select-options'></div>");
                         }
                         
-			if(typeof(selectOptionGroups.html()) != 'undefined'){
+                        cover.find(".select-options").append("<div class='clear-selects'>Сбросить</div>");
+			
+                        if(typeof(selectOptionGroups.html()) != 'undefined'){
 				selectOptionGroups.each(function(){
 					var groupOptions = $(this).find("option");
 					var groupOptionsList = '';
@@ -65,6 +67,13 @@
                             
 			});
 			
+                        selectOptions.find(".clear-selects").click(function(e){
+                            e.stopPropagation();
+                            $(this).parent().parent().find("select").find("option").each(function(){$(this).attr("selected",null);});
+                            $(this).parent().find(".select-option").each(function(){$(this).removeClass("active");});
+                            $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
+                        });
+                        
 			selectOptions.find(".select-option").each(function(){
 				$(this).click(function(e){
 					e.stopPropagation();
@@ -74,7 +83,7 @@
                                             selectElement.find("option").each(function(){
                                                if(value.toString() === $(this).attr("value")){
                                                    if(active === 1){
-                                                       $(this).attr("selected",0);
+                                                       $(this).attr("selected",null);
                                                    }else{
                                                        $(this).attr("selected","selected");
                                                    }
@@ -82,9 +91,14 @@
                                             });
                                             $(this).toggleClass("active");
                                         }else{
+                                            var value = $(this).data("value");
                                             $(this).parent().find(".select-option").removeClass("active");
-                                            selectElement.val($(this).data("value"));
-                                            selectElement.trigger("change");
+                                            selectElement.find("option").each(function(){
+                                                $(this).attr("selected",null);
+                                                if(value.toString() === $(this).attr("value")){
+                                                    $(this).attr("selected","selected");
+                                                } 
+                                            });
                                             cover.find(".select-value").html($(this).html());
                                             selectOptions.removeClass("opened");
                                             $(this).parent().parent().toggleClass('active');

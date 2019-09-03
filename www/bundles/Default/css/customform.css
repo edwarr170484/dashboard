@@ -10,6 +10,7 @@
 .select-option.active:hover,.select-option.active:focus{}
 .select-option-group{padding-left:10px;padding-right:10px;}
 .select-option-group-label{font-weight:bold;}
+.clear-selects{padding-top:7px;padding-bottom:7px;padding-left:35px;padding-right:15px;color:#ABABAB;background: url('../img/select-cross.png') 15px 50% no-repeat;}
 
 /* custom checkbox element styles */
 .checkbox-cover{margin-right:7px;float:left;border:1px solid #dfe1e5;position:relative;width:22px;height:22px;background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAANCAYAAACkTj4ZAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB7SURBVHgBpdHRDcAgCARQ6CSu0k10MzfpKHUTmyOxaS02iPeFAV5CZFpIjDEw84F6I2ceSMCbyZEOKbXWfRrSkJxzmYJGCHpm6A8RKKV0ougbMwjSfk0GseBBBEIDAxpmReS00YI0jcgNaVg72YK8IAUjK/KBOoysCHIB2yl511+Y6wYAAAAASUVORK5CYII=') 50% 50% no-repeat #fff;}

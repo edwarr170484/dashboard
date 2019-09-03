@@ -58,14 +58,26 @@ body{font-size:10px;background:$white-color;}
 .siteLogo{@include flexBox(row,flex-start,center);}
 .siteMenuSearch>button{border:none;background: none;width: 19px;height: 19px;@include border-radius(0);padding: 0;}
 .siteMenuSearch>button:hover svg g path,.siteMenuSearch>button:focus svg g path{stroke:$black-text;}
+.siteMenuGamburger{position: relative;}
 .siteMenuGamburger>button{border:none;width: 26px;height: 18px;@include border-radius(0);margin-right: 35px;margin-left: 27px;padding: 0;background: none;}
 .siteMenuGamburger>button:hover>svg path,.siteMenuGamburger>button:focus>svg path{fill:$black-text;}
+.siteMenuGamburgerMenu{position: absolute;top:28px;left: 155px;width:980px;background: #fff;z-index:9999;padding: 0rem 1rem 4rem 9rem;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));display: none;@include column-count(4);@include column-gap(0)}
+.siteMenuGamburgerMenu button{position: absolute;top:20px;left:20px;background: none;@include border-radius(0);border:none;}
+.siteMenuGamburgerMenu:after{content:"";display:table;clear:both;}
+.siteMenuGamburgerItem{width:200px;@include break-inside(avoid);}
+.siteMenuGamburgerHeader{@include fontView("GothamProBold", $black-text, 1.6rem, 2.2rem);padding-top: 2rem;}
+.siteMenuGamburgerItem ul{margin-right: 2rem;margin-bottom: 1rem;@include break-inside(avoid);}
+.siteMenuGamburgerItem ul li{display: block;padding-top: 1.4rem;}
+.siteMenuGamburgerItem ul li a{@include fontView("GothamProRegular", $black-text, 1.4rem, 1.8rem);@include transition($aTransition);}
+.siteMenuGamburgerItem ul li a:hover,.siteMenuGamburgerItem ul li a:focus{color:$yellow-color;}
+
 .siteMenuMobileLogin>a:hover svg path,.siteMenuMobileLogin>a:focus svg path{fill:$black-text;}
 .header-functions
 {
     @include flexBox(row,space-between,center);
     @include flex-wrap(wrap);
     padding:33px 0;
+    position: relative;
 }
 .headerFunctions{@include flexBox(row,flex-start,center);}
 .header-add-button
@@ -89,9 +101,10 @@ body{font-size:10px;background:$white-color;}
 }
 .header-add-button:hover i svg path,.header-add-button:focus i svg path{fill:$black-text;}
 .header-add-button i{margin-right:7px;}
+.siteMainMenu ul{@include flexBox(row,space-between,center);}
 .siteMainMenu ul li a{@include fontView("GothamProRegular", $black-text, 1.6rem, 100%);display: block;padding: 1.5rem;z-index:1000;position: relative;}
 .shadowBlock{position:absolute;top: 100%;left: 0;width:100%;height:15px;background: $white-color;}
-.siteMainMenu ul li{position: relative;padding: 0;margin-right: 3.5rem;}
+.siteMainMenu ul li{position: relative;padding: 0;}
 .siteMainMenu ul li.active .hover-border{display: block;}
 .siteMainMenu ul li:last-child{margin-right: 0;}
 .siteMainMenu ul li a:hover,.siteMainMenu ul li a:focus{text-decoration: none;}
@@ -109,13 +122,16 @@ body{font-size:10px;background:$white-color;}
 .mainPageFiltersBlock{background: url('../img/rings.png') 30% -210px no-repeat;padding-top: 9.9rem;padding-bottom: 20rem;}
 .mainPageFiltersHeader h1{color:#fff;}
 .mainPageFiltersTabs{padding-top: 5rem;}
+.mainPageFiltersTabs.category-filters{padding-top: 4rem;padding-bottom: 6rem;}
 .mainPageFiltersTabs ul li a{@include fontView("GothamProRegular",$black-text,1.4rem,100%);text-transform: uppercase;padding: 2rem 1.8rem 1.7rem 1.8rem;background: $gray-color;@include border-radius(12px 12px 0px 0px);@include flexBox(row,flex-start,center);}
+.mainPageFiltersTabs ul li a{@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));}
+.mainPageFiltersTabs ul li a .shadowBlock{background: #fdfdfd;}
 .mainPageFiltersTabs ul li a svg{margin-right: 1.6rem;}
-.mainPageFiltersTabs ul li.active a{color:$black-text;background: $gray-light-color;}
+.mainPageFiltersTabs ul li.active a{color:$black-text;background: $gray-light-color;z-index:999}
 .mainPageFiltersTabs ul li a:hover,.mainPageFiltersTabs ul li a:focus{color:$super-black-color;background:$white-color;}
 .mainPageFiltersTabs ul li a:hover svg path,.mainPageFiltersTabs ul li a:focus svg path{fill: $super-black-color;}
 .mainPageFiltersTabs ul li.active a:hover,.mainPageFiltersTabs ul li.active a:focus{color:$black-text;background: $gray-light-color;}
-.tab-content{background: $gray-light-color;@include border-radius(0px 12px 12px 12px);padding: 3rem 2rem;}
+.tab-content{background: $gray-light-color;@include border-radius(0px 12px 12px 12px);padding: 3rem 2rem;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;}
 .tab-pane{padding: 0;}
 .tab-pane .form-group{margin-bottom: 0;}
 .tab-pane .form-group .form-control{border-radius:0;margin-bottom:0.7rem;}
@@ -260,16 +276,26 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .modal{z-index:9999;}
 .searchBlock{background: #fff;padding-top: 3rem;padding-bottom: 3rem;}
 .searchBlockInner{@include flexBox(row,flex-start,center);position: relative;}
-.searchBlockInner input{display: block;@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);border:none;background: url('../img/search-left.svg') 0 50% no-repeat;padding-left: 3.8rem;margin-left: 5rem;width: 95%;border:1px solid transparent;}
+.searchBlockInner input{display: block;@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);border:none;background: url('../img/search-left.svg') 0 50% no-repeat;padding-left: 3.8rem;margin-left: 5rem;width: 50%;border:1px solid transparent;}
 .searchBlockInner input:focus{border-bottom: 2px solid $black-text;}
 .searchBlockForm{border-left: 1px solid $gray-color;padding-top:1rem;padding-bottom:1rem;margin-left: 3rem;width: 100%;}
 .searchBlockInner button{width: 26px;height: 26px;display: block;position: absolute;top:50%;margin-top: -13px;right:30px;border:none;background: none;}
-
-
-
-
-
-
+.content-block-header h1
+{
+    color:$black-text;
+}
+.content-row{margin-top: 4rem}
+.nav-tabs > li{margin-bottom: 0;}
+.categorySortFields{@include flexBox(row,space-between,center);}
+.categorySortParams{@include flexBox(row,flex-start,center);width: 100%;}
+.categorySortParams .select-cover{margin-bottom: 0;margin-right: 3rem;width: 250px;margin-top: 15px;margin-bottom: 15px;}
+.categorySortParams .filter{width: 110px;margin-top: 15px;margin-bottom: 15px;}
+.categorySorts{padding-top: 10px;padding-bottom: 10px;padding-left: 30px;padding-right: 30px;@include border-radius(12px);background: #fff;@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.05));margin-top: 6rem;}
+.categoryViewButtons a{display: block;}
+.categoryViewButtons a:first-child{margin-right: 25px;}
+.categoryViewButtons a:hover svg path,.categoryViewButtons a:focus svg path,{fill:$yellow-color;stroke:$yellow-color;}
+.categoryViewButtons{@include flexBox(row,flex-end,center);}
+.categoryViewButtons a.active svg path,.categoryViewButtons a.active svg path,{fill:$yellow-color;stroke:$yellow-color;}
 
 
 
@@ -319,20 +345,9 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 	height: 5px;
 	margin-bottom: 1.5rem;
 }
-.content-block-header
-{
-	color: #238129;
-	font-family: "Roboto", sans-serif;
-	font-weight: bold;
-	text-transform: uppercase;
-        padding-bottom: 15px;
-}
-.content-block-header h1
-{
-	font-size: 2.4rem;
-	margin: 0;
-}
-.content-row{margin-top: 3.2rem}
+
+
+
 
 
 .advertise-block{text-align: center;margin-bottom:25px;}

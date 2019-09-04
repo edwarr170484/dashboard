@@ -336,7 +336,7 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Route("/cahngeView/{view}", name="categoryChangeView", requirements={"view" : "list|table"})
+     * @Route("/cahngeView/{view}", name="categoryChangeView", requirements={"view" : "list|grid"})
      * 
      */
     public function categoryChangeView($view,Request $request)

@@ -1,4 +1,18 @@
 @import "compass/css3";
+@import "mixins";
+@media (max-width: 1335px) 
+{
+    .categoryAdvertPrice{padding: 6px 10px;font-size: 2.2rem;width: 100%;text-align: center;}
+    .categoryAdverts.grid .categoryAdvertPrice{width: auto;}
+}
+@media (max-width: 1260px){
+    .categoryAdvertInfo{@include justify-content(space-between);@include flex-wrap(wrap);}
+    .categoryAdvertMainInfo{width: 100%;}
+    .categoryAdvertInfoPrice{width: 33%;}
+    .categoryAdvertInfoYear{width: 33%;@include flexBox(row,center,center);}
+    .categoryAdvertInfoProbeg{width: 33%;@include flexBox(row,center,center);}
+    .categoryAdvertMainInfo{padding-bottom: 25px;}
+} 
 @media (max-width: 1200px) 
 {
     .mainPageAutoList ul li{width:25%}
@@ -70,12 +84,23 @@
     .footer-developer{text-align: left;}
     .register-block,.register-block.result{padding:2.5rem;}
     .categorySortFields{@include flex-wrap(wrap);}
+    
 }
 @media (max-width: 650px) 
 {
     .mainPageAutoList ul li{width:50%}
     .mainPageContentText{columns:1}
     .siteMenuGamburgerMenu{@include column-count(2);}
+    .categoryAdvert{display: block;}
+    .categoryAdvertImages{width: 100%;}
+    .categoryAdvertInfo{width: 100%;padding-left: 0;padding-top: 15px;}
+    .categoryAdvertInfoPrice{width: 100%;@include flexBox(row,space-between,center);@include flex-wrap(wrap);}
+    
+    .categoryAdvertInfoYear{width: 100%;@include flexBox(row,center,center);}
+    .categoryAdvertInfoProbeg{width: 100%;@include flexBox(row,center,center);}
+    .categoryAdvertPrice{width: auto;}
+    .categoryAdvertCredit{margin: 0;}
+    .categoryAdvertInfoYear{padding: 15px 0;}
 }
 @media (max-width: 490px) 
 {
@@ -85,6 +110,10 @@
 @media (max-width: 475px) 
 {
     .siteMenuGamburgerMenu{@include column-count(1);}
+    .categoryAdvertPrice{width: 100%;}
+    .categoryAdverts.grid .categoryAdvertPrice{width: auto;}
+    .categoryAdvertCredit{width: 100%;padding-top: 15px;text-align: center;}
+    .categoryAdverts.grid{width:auto;padding-top: 0;text-align: center;}
 }
 @media (max-width: 340px) 
 {
@@ -92,4 +121,8 @@
 	.premium-adverts.category-premium-adverts{padding-left:15px;padding-right:15px;}
 	.category-premium-adverts .premium-advert{margin-left:0;margin-right:0;}
         .message-message-text img{width:100%;}
+        
+}
+@media (max-width:310px){
+    .categoryAdverts.grid .categoryAdvert{width: 100%;}
 }

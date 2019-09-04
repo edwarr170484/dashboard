@@ -13,13 +13,10 @@ $(document).ready(function(){
         
         $(".template").removeClass("active");
         $(this).addClass("active");
-        $(".premium-adverts").removeClass("list");
-        $(".premium-adverts").removeClass("table");
-        $(".premium-adverts").addClass($(this).data("pattern"));
         
-        $(".category-list-headers").removeClass("list");
-        $(".category-list-headers").removeClass("table");
-        $(".category-list-headers").addClass($(this).data("pattern"));
+        $(".categoryAdverts").removeClass("list");
+        $(".categoryAdverts").removeClass("grid");
+        $(".categoryAdverts").addClass($(this).data("pattern"));
         
         $.ajax({
             url: '/cahngeView/' + $(this).data("pattern"),

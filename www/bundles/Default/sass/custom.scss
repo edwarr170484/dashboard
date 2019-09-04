@@ -286,17 +286,73 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 }
 .content-row{margin-top: 4rem}
 .nav-tabs > li{margin-bottom: 0;}
-.categorySortFields{@include flexBox(row,space-between,center);}
+.categorySortFields{@include flexBox(row,space-between,center);padding-top: 10px;padding-bottom: 10px;padding-left: 30px;padding-right: 30px;}
 .categorySortParams{@include flexBox(row,flex-start,center);width: 100%;}
 .categorySortParams .select-cover{margin-bottom: 0;margin-right: 3rem;width: 250px;margin-top: 15px;margin-bottom: 15px;}
 .categorySortParams .filter{width: 110px;margin-top: 15px;margin-bottom: 15px;}
-.categorySorts{padding-top: 10px;padding-bottom: 10px;padding-left: 30px;padding-right: 30px;@include border-radius(12px);background: #fff;@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.05));margin-top: 6rem;}
+.categorySorts{@include border-radius(12px);background: #fff;@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.05));margin-top: 6rem;}
 .categoryViewButtons a{display: block;}
 .categoryViewButtons a:first-child{margin-right: 25px;}
 .categoryViewButtons a:hover svg path,.categoryViewButtons a:focus svg path,{fill:$yellow-color;stroke:$yellow-color;}
 .categoryViewButtons{@include flexBox(row,flex-end,center);}
 .categoryViewButtons a.active svg path,.categoryViewButtons a.active svg path,{fill:$yellow-color;stroke:$yellow-color;}
 
+/*adverts list view*/
+.categoryAdvert{border: 3px solid transparent;@include border-radius(9px);padding: 2rem;width: 100%;@include flexBox(fow,flex-start,stretch);margin-bottom: 3.4rem;position: relative;}
+.categoryAdvert a.categoryAdvertLink{position: absolute;display: block;width: 0;height: 0;top: 0;left: 0;}
+.categoryAdvert:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;background: #FFFFFF;}
+.categoryAdvert:hover a.categoryAdvertLink{width: 100%;height: 100%;}
+.categoryAdvertTop{position: absolute;top:-3px;left: -3px;background: url(../img/top.png) 50% 50% no-repeat;width: 112px;height: 151px;}
+.categoryAdvert.premium{border: 3px solid #F5AA01;background: #FFFFFF;}
+.categoryAdvert.payed{border: 3px solid #F5AA01;background: #FFFFFF;}
+.categoryAdvertImages{width: 20%;}
+.categoryAdvertImages img{width: 100%;max-width:260px;}
+.categoryAdvertInfo{width: 80%;padding-left: 3rem;@include flexBox(row,flex-start,stretch);}
+.categoryAdvertMainInfo{width: 40%;}
+.categoryAdvertName{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem)}
+.categoryAdvertInfoPrice{width: 25%;@include flexBox(column,flex-start,center);}
+.categoryAdvertPrice{@include fontView("GothamProBold",$black-text,2.6rem,3.2rem);padding: 6px 20px;@include border-radius(9px);@include flexBox(row,center,center);}
+.categoryAdvertPrice svg{margin-right: 3px;}
+.categoryAdvert.premium .categoryAdvertPrice{background: $orange-color;color: #fff;}
+.categoryAdvert.premium .categoryAdvertPrice svg path{fill:#fff;}
+.categoryAdvertCredit{@include fontView("GothamProRegular",$light-black-color,1.6rem,1.5rem);margin-top:25px;}
+.categoryAdvertInfoYear{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;width: 15%;padding-top: 6px;}
+.categoryAdvertInfoProbeg{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;width: 15%;padding-top: 6px;}
+.categoryAdvertInfoProbeg.new{@include fontView("GothamProBold",$black-text,2.6rem,3.2rem);text-align: center;}
+.categoryAdvertTypes{@include flexBox(row,flex-start,center);padding-top: 15px;@include flex-wrap(wrap);}
+.categoryAdvertType{@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 5px 16px 6px;background: $gray-color;@include border-radius(5px);margin-right: 10px;border:2px solid transparent;margin-bottom: 10px;}
+.categoryAdvertType.garant{border:2px solid $yellow-color;background: none;position: relative;margin-left: 12px;@include fontView("GothamProBold",$light-black-color,1.2rem,1.4rem);padding-left: 23px;}
+.categoryAdvertGarantNum{position: absolute;top: -3px;left: -13px;text-align:center;background: url('../img/garant.png') 0 0 no-repeat;width: 26px;height: 32px;@include fontView("GothamProBold",$black-text,2.2rem,3.2rem);}
+.categoryAdvertInfoFeatures{@include flexBox(row,space-between,center);@include flex-wrap(wrap);padding-top: 10px;}
+.categoryAdvertInfoFeature{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);width: 50%;padding-bottom: 10px;}
+.categoryAdvertInfoRegion{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);}
+.categoryAdvertInfoRegion svg{margin-right: 9px;}
+
+/*adverts table view */
+.categoryAdverts.grid{margin-left: -7px;margin-right: -7px;width: auto;}
+.categoryAdverts.grid .categoryAdvert{width: 288px;display:block;margin-bottom: 25px;}
+.categoryAdverts.grid .categoryAdvertCover{float:left;padding-left: 7px;padding-right: 7px;}
+.categoryAdverts.grid:after{content:" ";display: block;clear: both;}
+.categoryAdverts.grid .categoryAdvertImages{width: 100%;}
+.categoryAdverts.grid .categoryAdvertInfo{width: 100%;padding-left: 0;display: block;}
+.categoryAdverts.grid .categoryAdvertMainInfo{width: 100%;}
+.categoryAdverts.grid .categoryAdvertName{@include fontView("GothamProBlack",$black-text,1.8rem,2.6rem);padding-top: 15px;}
+.categoryAdverts.grid .categoryAdvertTypes{@include flex-wrap(wrap);}
+.categoryAdverts.grid .categoryAdvertTypes .categoryAdvertType{margin-bottom: 10px;}
+.categoryAdverts.grid .categoryAdvertInfoFeature{width: 100%;}
+.categoryAdverts.grid .categoryAdvertInfoFeatures{padding-top: 22px;}
+.categoryAdverts.grid .categoryAdvertInfoYear,.categoryAdverts.grid .categoryAdvertInfoProbeg{display: none;}
+.categoryAdverts.grid .categoryAdvertInfoPrice{@include flexBox(row,space-between,center);width: 100%;padding-top: 15px;}
+.categoryAdverts.grid .categoryAdvertInfoPrice .categoryAdvertPrice{padding: 0;font-size: 1.8rem;@include flexBox(row,space-between,center);}
+.categoryAdverts.grid .categoryAdvertInfoPrice .categoryAdvertCredit{margin: 0;font-size: 1.4rem;}
+.categoryAdvertInfoFeature.grid{display: none;}
+.categoryAdverts.grid .categoryAdvertInfoFeature.grid{display: block;}
+.banner-link img{width: 100%;max-width:970px;}
+.categoryAdvertShareLinks{position: absolute;top:25px;right:25px;background:#fff;}
+.categoryAdvertShareLinks ul li button{background: none;border:none;display: block;@include flexBox(row,center,center);margin-bottom: 25px;}
+.categoryAdvertShareLinks ul li button svg:last-child{display: none;}
+.categoryAdvertShareLinks ul li button:hover svg:last-child,.categoryAdvertShareLinks ul li button:focus svg:last-child{display: block;}
+.categoryAdvertShareLinks ul li button:hover svg:first-child,.categoryAdvertShareLinks ul li button:focus svg:first-child{display: none;}
 
 
 

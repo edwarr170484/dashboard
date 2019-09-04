@@ -24,7 +24,9 @@
                             cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div><div class='select-options'></div>");
                         }
                         
-                        cover.find(".select-options").append("<div class='clear-selects'>Сбросить</div>");
+                        if(multiple === 1){
+                            cover.find(".select-options").append("<div class='clear-selects'>Сбросить</div>");
+                        }
 			
                         if(typeof(selectOptionGroups.html()) != 'undefined'){
 				selectOptionGroups.each(function(){
@@ -67,12 +69,14 @@
                             
 			});
 			
-                        selectOptions.find(".clear-selects").click(function(e){
-                            e.stopPropagation();
-                            $(this).parent().parent().find("select").find("option").each(function(){$(this).attr("selected",null);});
-                            $(this).parent().find(".select-option").each(function(){$(this).removeClass("active");});
-                            $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
-                        });
+                        if(multiple === 1){
+                            selectOptions.find(".clear-selects").click(function(e){
+                                e.stopPropagation();
+                                $(this).parent().parent().find("select").find("option").each(function(){$(this).attr("selected",null);});
+                                $(this).parent().find(".select-option").each(function(){$(this).removeClass("active");});
+                                $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
+                            });
+                        }
                         
 			selectOptions.find(".select-option").each(function(){
 				$(this).click(function(e){

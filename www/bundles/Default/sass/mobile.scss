@@ -44,6 +44,7 @@
     .categorySortParams{@include flex-wrap(wrap);}
     .categorySortParams .select-cover{width: 250px;}
     .categorySortParams .filter{width: 110px;}
+    .categoryAdvertShareLinks ul li button.share .shareLinks{left: auto;right: -12px;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
@@ -101,6 +102,8 @@
     .categoryAdvertPrice{width: auto;}
     .categoryAdvertCredit{margin: 0;}
     .categoryAdvertInfoYear{padding: 15px 0;}
+    .categorySpecialAdvertsHeader h3{font-size: 2.6rem;}
+    .categorySpecialAdvertsHeader{@include flex-wrap(wrap);}
 }
 @media (max-width: 490px) 
 {
@@ -114,6 +117,8 @@
     .categoryAdverts.grid .categoryAdvertPrice{width: auto;}
     .categoryAdvertCredit{width: 100%;padding-top: 15px;text-align: center;}
     .categoryAdverts.grid{width:auto;padding-top: 0;text-align: center;}
+    .categorySpecialAdvertsHeader h3{font-size: 1.8rem;}
+    .categoryAdvertShareLinks{padding-top: 10px;top:2rem;}
 }
 @media (max-width: 340px) 
 {
@@ -121,8 +126,13 @@
 	.premium-adverts.category-premium-adverts{padding-left:15px;padding-right:15px;}
 	.category-premium-adverts .premium-advert{margin-left:0;margin-right:0;}
         .message-message-text img{width:100%;}
+        .categorySpecialAdvertsHeader h3{font-size: 1.4rem;}
         
 }
 @media (max-width:310px){
     .categoryAdverts.grid .categoryAdvert{width: 100%;}
+    
+}
+@media (max-width: 270px){
+    .categorySpecialAdvert{width: 100%;}
 }

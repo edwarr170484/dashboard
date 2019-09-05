@@ -302,6 +302,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvert a.categoryAdvertLink{position: absolute;display: block;width: 0;height: 0;top: 0;left: 0;}
 .categoryAdvert:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;background: #FFFFFF;}
 .categoryAdvert:hover a.categoryAdvertLink{width: 100%;height: 100%;}
+.categoryAdvert:hover .categoryAdvertShareLinks{display: block;}
 .categoryAdvertTop{position: absolute;top:-3px;left: -3px;background: url(../img/top.png) 50% 50% no-repeat;width: 112px;height: 151px;}
 .categoryAdvert.premium{border: 3px solid #F5AA01;background: #FFFFFF;}
 .categoryAdvert.payed{border: 3px solid #F5AA01;background: #FFFFFF;}
@@ -348,11 +349,75 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvertInfoFeature.grid{display: none;}
 .categoryAdverts.grid .categoryAdvertInfoFeature.grid{display: block;}
 .banner-link img{width: 100%;max-width:970px;}
-.categoryAdvertShareLinks{position: absolute;top:25px;right:25px;background:#fff;}
-.categoryAdvertShareLinks ul li button{background: none;border:none;display: block;@include flexBox(row,center,center);margin-bottom: 25px;}
-.categoryAdvertShareLinks ul li button svg:last-child{display: none;}
-.categoryAdvertShareLinks ul li button:hover svg:last-child,.categoryAdvertShareLinks ul li button:focus svg:last-child{display: block;}
-.categoryAdvertShareLinks ul li button:hover svg:first-child,.categoryAdvertShareLinks ul li button:focus svg:first-child{display: none;}
+.categoryAdvertShareLinks{position: absolute;top:25px;right:25px;background:#fff;display: none;}
+.categoryAdverts.grid .categoryAdvertShareLinks{top: -18px;right: 0;@include border-radius(25px);padding: 5px 10px;border:2px solid $yellow-color;}
+.categoryAdverts.grid .categoryAdvertShareLinks ul{@include flexBox(row,flex-start,center);}
+.categoryAdvertShareLinks ul li button{background: none;border:none;display: block;@include flexBox(row,center,center);margin-bottom: 25px;position: relative;}
+.categoryAdverts.grid .categoryAdvertShareLinks ul li button{margin-bottom: 0;}
+.categoryAdvertShareLinks ul li button.share .shareLinks{
+    position: absolute;
+    top: -14px;left:-12px;
+    background: url(../img/Share.svg) 20px 50% #fff no-repeat;
+    z-index:2;
+    @include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(9px);padding:10px;
+    padding-left: 58px;
+    display: none;
+}
+.categoryAdvertShareLinks ul li button.share:hover .shareLinks,.categoryAdvertShareLinks ul li button.share:focus .shareLinks{display: block;}
+.at-share-btn-elements{@include flexBox(row,flex-start,center);}
+.at-resp-share-element a.at-share-btn{margin-bottom: 0;}
+.categoryAdvertShareLinks ul li button > svg:nth-child(2){display: none;}
+.categoryAdvertShareLinks ul li button:hover > svg:nth-child(2),.categoryAdvertShareLinks ul li button:focus > svg:nth-child(2){display: block;}
+.categoryAdvertShareLinks ul li button:hover > svg:first-child,.categoryAdvertShareLinks ul li button:focus > svg:first-child{display: none;}
+.categorySpecialAdverts{background:$black-text;@include border-radius(15px);padding: 3.5rem 2rem 0;@include box-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));margin-bottom: 3.4rem;}
+.categorySpecialAdverts.new{background: none;@include box-shadow(none);padding-left: 0;padding-right: 0;}
+.categorySpecialAdvertsHeader{padding-left: 3.2rem;background: url(../img/spec.png) 0 50% no-repeat;position: relative;@include flexBox(row,space-between,center)}
+.categorySpecialAdverts.new .categorySpecialAdvertsHeader{background: none;padding-left: 0;}
+.categorySpecialAdvertsSliderNav button{background: none;border:2px solid $gray-color;padding: 7px 10px;line-height: 0;}
+.categorySpecialAdvertsSliderNav button:hover,.categorySpecialAdvertsSliderNav button:focus{border:2px solid $super-white-color;}
+.categorySpecialAdvertsSliderNav button:hover svg path,.categorySpecialAdvertsSliderNav button:focus svg path{stroke: $yellow-color;}
+.categorySpecialAdverts.new .categorySpecialAdvertsSliderNav button:hover, .categorySpecialAdverts.new .categorySpecialAdvertsSliderNav button:focus{border:2px solid #AAAAAA;}
+.categorySpecialAdverts.new .categorySpecialAdvertsSliderNav button:hover svg path,.categorySpecialAdverts.new .categorySpecialAdvertsSliderNav button:focus svg path{stroke: $yellow-color;}
+.categorySpecialAdvertsSliderNav button.owl-prev{border-right:none;@include border-radius(3px 0px 0px 3px);}
+.categorySpecialAdvertsSliderNav button.owl-next{@include border-radius(0px 3px 3px 0px);}
+.categorySpecialAdvertsHeader h3{color:#E7E7E7;display: block;}
+.categorySpecialAdverts.new .categorySpecialAdvertsHeader h3{color:$black-text;}
+.categorySpecialAdvertsSlider{padding: 3rem 0 0;}
+.categorySpecialAdvert{width: 265px;padding-bottom: 3rem;}
+.categorySpecialAdvertImage{margin-bottom: 10px;}
+.categorySpecialAdvertImage img{width: 100%;@include border-radius(5px);}
+.categorySpecialAdvertName a{@include fontView("GothamProBlack",$yellow-color,2.2rem,3.2rem);}
+.categorySpecialAdverts.new .categorySpecialAdvertName a{color:#222B2A}
+.categorySpecialAdvertName a:hover,.categorySpecialAdvertName a:focus{text-decoration: none;}
+.categorySpecialAdvertFeatures{padding-top: 10px;}
+.categorySpecialAdvertFeature{@include fontView("GothamProRegular",$super-white-color,1.8rem,1.7rem);padding-bottom: 12px;}
+.categorySpecialAdverts.new .categorySpecialAdvertFeature{color:$input-black;}
+.categorySpecialAdvertPrice{@include fontView("GothamProBold",$super-white-color,1.8rem,1.7rem);}
+.categorySpecialAdverts.new .categorySpecialAdvertPrice{color:$input-black;}
+.padination{display:flex;flex-direction:row;justify-content:center}
+.padination ul{display:block;}
+.padination li.current a, .padination li.active a{background:$yellow-color;color:$black-text;border:1px solid $yellow-color;}
+.padination li.current a:hover, .padination li.active a:hover,.padination li.current a:focus, .padination li.active a:focus{text-decoration: none;}
+.padination li a{@include fontView("GothamProRegular",#747474,1.4rem,100%);display:block;padding: 8px 12px;border:1px solid #AAAAAA;@include border-radius(3px);box-sizing: border-box;background: $super-white-color;}
+.padination{padding-bottom:2.5rem;padding-top: 1.5rem;}
+.categorySpecialAdvertsHeaderNew{@include flexBox(row,flex-end,center);}
+.categorySpecialAdvertsHeaderNew a{display: block;@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);padding-bottom: 5px;border-bottom:2px solid $yellow-color;margin-right: 3rem;}
+.categorySpecialAdvertsHeaderNew a:hover,.categorySpecialAdvertsHeaderNew a:focus{text-decoration: none;}
+.categoryDescription{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.2rem);}
+.categoryDescription{padding-bottom: 4rem;}
+.advertise-block{margin-bottom:20px;}
+.advertise-block img{width: 100%;max-width:300px;}
+.advertise-block .siteInfoPane{padding: 0;max-width: 300px;}
+.advertise-block .siteInfoPaneInner{padding: 3rem;}
+.advertise-block .innerHeader h4{font-size: 3.2rem;line-height: 3.6rem;padding-bottom: 2rem;}
+.advertise-block .siteInfoPaneContentButton a{@include fontView("GothamProBlack",$yellow-color,1.5rem,1.4rem);width:100%;padding: 13px;text-align: center;}
+.advertise-block .siteInfoPaneContentButton a:hover,.advertise-block .siteInfoPaneContentButton a:focus{@include fontView("GothamProBlack",$black-text,1.8rem,1.7rem);}
+.advertise-block .siteInfoPaneContentButton{padding-top: 2rem;}
+
+
+
+
+
 
 
 
@@ -406,7 +471,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 
 
 
-.advertise-block{text-align: center;margin-bottom:25px;}
+
 .advert-categories{font-family: "Roboto", sans-serif; font-size: 1.6rem;text-transform: uppercase; font-weight: 500;padding-top:4rem;margin-bottom:1.8rem;display:flex;flex-direction:row;justify-content: flex-start;flex-wrap:wrap;align-items: stretch;}
 .advert-category{width: 33.333%;display: flex;padding-bottom:4.5rem;justify-content:flex-start;}
 .advert-category-subcategoryes li{display:block;margin-left:-7px;margin-right:-7px;}
@@ -510,11 +575,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .category-premium-adverts .premium-advert{width:225px;margin-bottom:0;margin-left:9px;margin-right:8px;margin-bottom:1.2rem;padding:1.5rem;}
 .category-premium-adverts .premium-advert .premium-product-image{width:195px;margin-bottom:0;}
 .category-premium-adverts-block{padding-top: 4rem;}
-.padination{display:flex;flex-direction:row;justify-content:center}
-.padination ul{display:block;}
-.padination li.current, .padination li.active{background:#ecf0f1;}
-.padination li a{font-family:"Roboto",sans-serif;font-size:1.2rem;color:#6f6f6f;line-height:100%;display:block;padding: 1rem 1rem}
-.padination{padding-bottom:5rem;padding-top: 2rem;}
+
 .right-column-text-block{font-family:"Roboto",sans-serif;font-size:1.3rem;color:#6f6f6f;text-align:justify;margin-bottom:2.3rem;font-weight:300;}
 .left-column{padding-right: 3.4rem}
 .site-banner{display: block;}

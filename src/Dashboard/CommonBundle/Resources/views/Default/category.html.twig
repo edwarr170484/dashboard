@@ -1,4 +1,5 @@
 {% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+{% use 'DashboardCommonBundle:Common:icons.html.twig' %}
 
 {% block title %}{{ category.metaTagTitle }}{% endblock %}
 {% block metatags %}
@@ -394,50 +395,7 @@
                                     <div class="categoryAdvert premium">
                                         <div class="categoryAdvertTop"></div>
                                         <a href="/" class="categoryAdvertLink"></a>
-                                        <div class="categoryAdvertShareLinks">
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <button>
-                                                        <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M20.3807 2.59133C19.8676 2.08683 19.2583 1.68663 18.5878 1.41358C17.9172 1.14054 17.1985 1 16.4727 1C15.7468 1 15.0281 1.14054 14.3576 1.41358C13.687 1.68663 13.0778 2.08683 12.5646 2.59133L11.4997 3.63785L10.4348 2.59133C9.39834 1.57276 7.99258 1.00053 6.52679 1.00053C5.06099 1.00053 3.65523 1.57276 2.61876 2.59133C1.58229 3.6099 1 4.99139 1 6.43187C1 7.87235 1.58229 9.25383 2.61876 10.2724L3.68367 11.3189L11.4997 19L19.3158 11.3189L20.3807 10.2724C20.8941 9.76814 21.3013 9.16942 21.5791 8.51045C21.857 7.85148 22 7.14517 22 6.43187C22 5.71857 21.857 5.01225 21.5791 4.35328C21.3013 3.69431 20.8941 3.09559 20.3807 2.59133V2.59133Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                        <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M20.3807 2.59133C19.8676 2.08683 19.2583 1.68663 18.5878 1.41358C17.9172 1.14054 17.1985 1 16.4727 1C15.7468 1 15.0281 1.14054 14.3576 1.41358C13.687 1.68663 13.0778 2.08683 12.5646 2.59133L11.4997 3.63785L10.4348 2.59133C9.39834 1.57276 7.99258 1.00053 6.52679 1.00053C5.06099 1.00053 3.65523 1.57276 2.61876 2.59133C1.58229 3.6099 1 4.99139 1 6.43187C1 7.87235 1.58229 9.25383 2.61876 10.2724L3.68367 11.3189L11.4997 19L19.3158 11.3189L20.3807 10.2724C20.8941 9.76814 21.3013 9.16942 21.5791 8.51045C21.857 7.85148 22 7.14517 22 6.43187C22 5.71857 21.857 5.01225 21.5791 4.35328C21.3013 3.69431 20.8941 3.09559 20.3807 2.59133Z" fill="#EB840B"/>
-                                                        <path d="M20.3807 2.59133C19.8676 2.08683 19.2583 1.68663 18.5878 1.41358C17.9172 1.14054 17.1985 1 16.4727 1C15.7468 1 15.0281 1.14054 14.3576 1.41358C13.687 1.68663 13.0778 2.08683 12.5646 2.59133L11.4997 3.63785L10.4348 2.59133C9.39834 1.57276 7.99258 1.00053 6.52679 1.00053C5.06099 1.00053 3.65523 1.57276 2.61876 2.59133C1.58229 3.6099 1 4.99139 1 6.43187C1 7.87235 1.58229 9.25383 2.61876 10.2724L3.68367 11.3189L11.4997 19L19.3158 11.3189L20.3807 10.2724C20.8941 9.76814 21.3013 9.16942 21.5791 8.51045C21.857 7.85148 22 7.14517 22 6.43187C22 5.71857 21.857 5.01225 21.5791 4.35328C21.3013 3.69431 20.8941 3.09559 20.3807 2.59133Z" fill="#EB840B"/>
-                                                        <path d="M20.3807 2.59133C19.8676 2.08683 19.2583 1.68663 18.5878 1.41358C17.9172 1.14054 17.1985 1 16.4727 1C15.7468 1 15.0281 1.14054 14.3576 1.41358C13.687 1.68663 13.0778 2.08683 12.5646 2.59133L11.4997 3.63785L10.4348 2.59133C9.39834 1.57276 7.99258 1.00053 6.52679 1.00053C5.06099 1.00053 3.65523 1.57276 2.61876 2.59133C1.58229 3.6099 1 4.99139 1 6.43187C1 7.87235 1.58229 9.25383 2.61876 10.2724L3.68367 11.3189L11.4997 19L19.3158 11.3189L20.3807 10.2724C20.8941 9.76814 21.3013 9.16942 21.5791 8.51045C21.857 7.85148 22 7.14517 22 6.43187C22 5.71857 21.857 5.01225 21.5791 4.35328C21.3013 3.69431 20.8941 3.09559 20.3807 2.59133Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        <path d="M20.3807 2.59133C19.8676 2.08683 19.2583 1.68663 18.5878 1.41358C17.9172 1.14054 17.1985 1 16.4727 1C15.7468 1 15.0281 1.14054 14.3576 1.41358C13.687 1.68663 13.0778 2.08683 12.5646 2.59133L11.4997 3.63785L10.4348 2.59133C9.39834 1.57276 7.99258 1.00053 6.52679 1.00053C5.06099 1.00053 3.65523 1.57276 2.61876 2.59133C1.58229 3.6099 1 4.99139 1 6.43187C1 7.87235 1.58229 9.25383 2.61876 10.2724L3.68367 11.3189L11.4997 19L19.3158 11.3189L20.3807 10.2724C20.8941 9.76814 21.3013 9.16942 21.5791 8.51045C21.857 7.85148 22 7.14517 22 6.43187C22 5.71857 21.857 5.01225 21.5791 4.35328C21.3013 3.69431 20.8941 3.09559 20.3807 2.59133Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button>
-                                                        <svg width="21" height="23" viewBox="0 0 21 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M7.04117 12.512L13.8712 16.492M13.8612 5.51195L7.04117 9.49195M19.4512 4.00195C19.4512 5.65881 18.108 7.00195 16.4512 7.00195C14.7943 7.00195 13.4512 5.65881 13.4512 4.00195C13.4512 2.3451 14.7943 1.00195 16.4512 1.00195C18.108 1.00195 19.4512 2.3451 19.4512 4.00195ZM7.45117 11.002C7.45117 12.6588 6.10803 14.002 4.45117 14.002C2.79432 14.002 1.45117 12.6588 1.45117 11.002C1.45117 9.3451 2.79432 8.00195 4.45117 8.00195C6.10803 8.00195 7.45117 9.3451 7.45117 11.002ZM19.4512 18.002C19.4512 19.6588 18.108 21.002 16.4512 21.002C14.7943 21.002 13.4512 19.6588 13.4512 18.002C13.4512 16.3451 14.7943 15.002 16.4512 15.002C18.108 15.002 19.4512 16.3451 19.4512 18.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                        <svg width="21" height="23" viewBox="0 0 21 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M16.4512 7.00195C18.108 7.00195 19.4512 5.65881 19.4512 4.00195C19.4512 2.3451 18.108 1.00195 16.4512 1.00195C14.7943 1.00195 13.4512 2.3451 13.4512 4.00195C13.4512 5.65881 14.7943 7.00195 16.4512 7.00195Z" fill="#F5AA01"/>
-                                                            <path d="M4.45117 14.002C5.55695 14.002 6.523 13.4037 7.04329 12.5132C7.30259 12.0694 7.45117 11.553 7.45117 11.002C7.45117 10.4509 7.30259 9.93451 7.04329 9.49072C6.523 8.60021 5.55695 8.00195 4.45117 8.00195C2.79432 8.00195 1.45117 9.3451 1.45117 11.002C1.45117 12.6588 2.79432 14.002 4.45117 14.002Z" fill="#F5AA01"/>
-                                                            <path d="M16.4512 21.002C18.108 21.002 19.4512 19.6588 19.4512 18.002C19.4512 16.3451 18.108 15.002 16.4512 15.002C14.7943 15.002 13.4512 16.3451 13.4512 18.002C13.4512 19.6588 14.7943 21.002 16.4512 21.002Z" fill="#F5AA01"/>
-                                                            <path d="M7.04329 12.5132C7.30259 12.0694 7.45117 11.553 7.45117 11.002C7.45117 10.4509 7.30259 9.93451 7.04329 9.49072C6.523 8.60021 5.55695 8.00195 4.45117 8.00195C2.79432 8.00195 1.45117 9.3451 1.45117 11.002C1.45117 12.6588 2.79432 14.002 4.45117 14.002C5.55695 14.002 6.523 13.4037 7.04329 12.5132Z" fill="#F5AA01"/>
-                                                            <path d="M7.04117 12.512L7.04329 12.5132M13.8712 16.492L7.04329 12.5132M13.8612 5.51195L7.04329 9.49072M7.04117 9.49195L7.04329 9.49072M7.04329 12.5132C7.30259 12.0694 7.45117 11.553 7.45117 11.002C7.45117 10.4509 7.30259 9.93451 7.04329 9.49072M7.04329 12.5132C6.523 13.4037 5.55695 14.002 4.45117 14.002C2.79432 14.002 1.45117 12.6588 1.45117 11.002C1.45117 9.3451 2.79432 8.00195 4.45117 8.00195C5.55695 8.00195 6.523 8.60021 7.04329 9.49072M19.4512 4.00195C19.4512 5.65881 18.108 7.00195 16.4512 7.00195C14.7943 7.00195 13.4512 5.65881 13.4512 4.00195C13.4512 2.3451 14.7943 1.00195 16.4512 1.00195C18.108 1.00195 19.4512 2.3451 19.4512 4.00195ZM19.4512 18.002C19.4512 19.6588 18.108 21.002 16.4512 21.002C14.7943 21.002 13.4512 19.6588 13.4512 18.002C13.4512 16.3451 14.7943 15.002 16.4512 15.002C18.108 15.002 19.4512 16.3451 19.4512 18.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button>
-                                                        <svg width="19" height="23" viewBox="0 0 19 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M11.4512 1.00195H3.45117C2.92074 1.00195 2.41203 1.21267 2.03696 1.58774C1.66189 1.96281 1.45117 2.47152 1.45117 3.00195V19.002C1.45117 19.5324 1.66189 20.0411 2.03696 20.4162C2.41203 20.7912 2.92074 21.002 3.45117 21.002H15.4512C15.9816 21.002 16.4903 20.7912 16.8654 20.4162C17.2405 20.0411 17.4512 19.5324 17.4512 19.002V7.00195M11.4512 1.00195L17.4512 7.00195M11.4512 1.00195V7.00195H17.4512M6.45117 14.002H12.4512" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                        <svg width="19" height="23" viewBox="0 0 19 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M11.4512 1.00195H3.45117C2.92074 1.00195 2.41203 1.21267 2.03696 1.58774C1.66189 1.96281 1.45117 2.47152 1.45117 3.00195V19.002C1.45117 19.5324 1.66189 20.0411 2.03696 20.4162C2.41203 20.7912 2.92074 21.002 3.45117 21.002H15.4512C15.9816 21.002 16.4903 20.7912 16.8654 20.4162C17.2405 20.0411 17.4512 19.5324 17.4512 19.002V7.00195L11.4512 1.00195Z" fill="#F5AA01"/>
-                                                            <path d="M11.4512 1.00195V7.00195H17.4512" fill="#F5AA01"/>
-                                                            <path d="M11.4512 1.00195H3.45117C2.92074 1.00195 2.41203 1.21267 2.03696 1.58774C1.66189 1.96281 1.45117 2.47152 1.45117 3.00195V19.002C1.45117 19.5324 1.66189 20.0411 2.03696 20.4162C2.41203 20.7912 2.92074 21.002 3.45117 21.002H15.4512C15.9816 21.002 16.4903 20.7912 16.8654 20.4162C17.2405 20.0411 17.4512 19.5324 17.4512 19.002V7.00195H11.4512V1.00195Z" fill="#F5AA01"/>
-                                                            <path d="M11.4512 1.00195H3.45117C2.92074 1.00195 2.41203 1.21267 2.03696 1.58774C1.66189 1.96281 1.45117 2.47152 1.45117 3.00195V19.002C1.45117 19.5324 1.66189 20.0411 2.03696 20.4162C2.41203 20.7912 2.92074 21.002 3.45117 21.002H15.4512C15.9816 21.002 16.4903 20.7912 16.8654 20.4162C17.2405 20.0411 17.4512 19.5324 17.4512 19.002V7.00195M11.4512 1.00195L17.4512 7.00195M11.4512 1.00195V7.00195H17.4512M6.45117 14.002H12.4512" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        </svg>
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        {{ block('categoryAdvertShare') }}
                                         <div class="categoryAdvertImages">
                                             <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
                                         </div>
@@ -477,10 +435,85 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="categorySpecialAdverts">
+                                    <div class="categorySpecialAdvertsHeader">
+                                        <h3>{% trans %}Спецпредложения{% endtrans %}</h3>
+                                        <div class="categorySpecialAdvertsSliderNav" id="specialDealerAdvertsNav"></div>
+                                    </div>
+                                    <div class="categorySpecialAdvertsSlider owl-carousel" id="specialDealerAdverts">
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="categoryAdverts {{ view }}">
                                     <div class="categoryAdvertCover">
                                         <div class="categoryAdvert payed">
                                             <a href="#" class="categoryAdvertLink"></a>
+                                            {{ block('categoryAdvertShare') }}
                                             <div class="categoryAdvertImages">
                                                 <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
                                             </div>
@@ -527,6 +560,7 @@
                                     <div class="categoryAdvertCover">
                                         <div class="categoryAdvert payed">
                                             <a href="#" class="categoryAdvertLink"></a>
+                                            {{ block('categoryAdvertShare') }}
                                             <div class="categoryAdvertImages">
                                                 <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
                                             </div>
@@ -573,6 +607,7 @@
                                     <div class="categoryAdvertCover">
                                         <div class="categoryAdvert">
                                             <a href="#" class="categoryAdvertLink"></a>
+                                            {{ block('categoryAdvertShare') }}
                                             <div class="categoryAdvertImages">
                                                 <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
                                             </div>
@@ -619,6 +654,7 @@
                                     <div class="categoryAdvertCover">
                                         <div class="categoryAdvert">
                                             <a href="#" class="categoryAdvertLink"></a>
+                                            {{ block('categoryAdvertShare') }}
                                             <div class="categoryAdvertImages">
                                                 <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
                                             </div>
@@ -665,6 +701,7 @@
                                     <div class="categoryAdvertCover">
                                         <div class="categoryAdvert payed">
                                             <a href="#" class="categoryAdvertLink"></a>
+                                            {{ block('categoryAdvertShare') }}
                                             <div class="categoryAdvertImages">
                                                 <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
                                             </div>
@@ -711,6 +748,7 @@
                                             <div class="categoryAdvertCover">
                                         <div class="categoryAdvert">
                                             <a href="#" class="categoryAdvertLink"></a>
+                                            {{ block('categoryAdvertShare') }}
                                             <div class="categoryAdvertImages">
                                                 <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
                                             </div>
@@ -755,261 +793,124 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="categorySpecialAdverts">
-                                    
-                                </div>
-                        {% if products | length > 0 %}  
-                            <div class="row advert-category-adverts">
-                                <div class="col-lg-12 col-md-12">
-                                        <div class="premium-adverts {{ view }}">
-                                            {% if products | length > 0 %}
-                                                {% include 'DashboardCommonBundle:Parts:productitem.html.twig' with {'products' : products, 'locale' : locale} %}
-                                            {% endif %}
-                                            <table cellpadding="7">
-                                                <thead>
-                                                    <tr>
-                                                        <th>{% trans %}Reklāma{% endtrans %}</th>
-                                                        {% if category.filters %}
-                                                            {% set i = 0 %}
-                                                            {% for filter in category.filters if i != 4 %}
-                                                                {% if filter.isShowCard %}
-                                                                    <th class="center"> 
-                                                                        {% if filter.translations | length > 0 %}
-                                                                                {% for translation in filter.translations %}
-                                                                                    {% if translation.locale.id == locale.id %}
-                                                                                        {{ translation.value }}
-                                                                                    {% endif %}
-                                                                                {% endfor %}
-                                                                        {% else %}        
-                                                                            {{ filter.name }}
-                                                                        {% endif %}
-                                                                    </th>
-                                                                    {% set i = i + 1 %}
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        {% endif %}
-                                                        <th class="center">{% trans %}Cena{% endtrans %}</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {% if products | length > 0 %}
-                                                        {% for product in products %}
-                                                            {% if locale.isDefault %}
-                                                                {% set href = path('product', {'productId' : product.id,'productName' : product.translit}) %}
-                                                            {% else %}
-                                                                {% set href = path('productLocale', {'_locale' : locale.code,'productId' : product.id,'productName' : product.translit})%}
-                                                            {% endif %}
-                                                            <tr class="premium-advert {% if product.viewselected or product.viewpremium %} active {% endif %}">
-                                                                <td>
-                                                                    <div class="product-image-block">
-                                                                    {% if product.filters %}
-                                                                        {% set selltype = 0 %}
-                                                                        {% for filter in product.filters %}
-                                                                            {% if filter.filter.isSelltype %}
-                                                                                {% set selltype = filter %}
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    {% else %}
-                                                                        {% set selltype = 0 %}
-                                                                    {% endif %}
-                                                                    {%if selltype %}
-                                                                        <div class="advert-type sell">
-                                                                            {% if selltype.translations | length > 0 %}
-                                                                                {% for translation in selltype.translations %}
-                                                                                    {% if translation.locale.id == locale.id %}
-                                                                                        {{ translation.value }}
-                                                                                    {% endif %}
-                                                                                {% endfor %}
-                                                                            {% else %}
-                                                                                {{ selltype.value}}
-                                                                            {% endif %}
-                                                                        </div>
-                                                                    {% endif %}
-                                                                    <div class="product-image">
-                                                                        <a href="{{ href }}">
-                                                                            {% if product.mainfoto %}
-                                                                                <img src="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                                                                            {% else %}
-                                                                                {% if product.fotos | length > 0 %}
-                                                                                    <img src="{{ asset('bundles/images/products/') }}{{ product.fotos[0].foto }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                                                                                {% else %}
-                                                                                    <img src="{{ asset('bundles/images/products/thumbs/bez-foto-thumb.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                                                                                {% endif %}
-                                                                            {% endif %}
-                                                                        </a>
-                                                                    </div>
-                                                                    <div class="product-image-list">
-                                                                        <div class="advert-add-info">
-                                                                            <div class="advert-name" style="padding-left:0;">
-                                                                                <a href="{{ href }}">
-                                                                                    {{ product.name | slice(0, 60)}}
-                                                                                    
-                                                                                </a>
-                                                                            </div>
-                                                                            <div class="advert-town">
-                                                                                {% if product.city %}
-                                                                                    <div class="advert-town">
-                                                                                        {% if product.city.translations | length > 0 %}
-                                                                                            {% for translation in product.city.translations %}
-                                                                                                {% if translation.locale.id == locale.id %}
-                                                                                                    {{ translation.value }}
-                                                                                                {% endif %}
-                                                                                            {% endfor %}
-                                                                                        {% else %}
-                                                                                            {{ product.city.name }}
-                                                                                        {% endif %}
-                                                                                    </div>
-                                                                                {% else %}
-                                                                                    <div class="advert-town">{% trans %}Visa Latvija{% endtrans %}</div>
-                                                                                {% endif %}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    </div>
-                                                                </td>
-                                                                {% if category.filters %}
-                                                                    {% set i = 0 %}
-                                                                    {% for filter in category.filters if i != 4 %}
-                                                                        {% if filter.isShowCard %}
-                                                                            {% if product.filters %}
-                                                                                {% set marker = 0 %}
-                                                                                {% for productFilter in product.filters %}
-                                                                                    {% if productFilter.filter.id == filter.id %}
-                                                                                        <td>
-                                                                                            <div class="product-additional-filter">
-                                                                                                {% if productFilter.translations | length > 0 %}
-                                                                                                    {% for translation in productFilter.translations %}
-                                                                                                        {% if translation.locale.id == locale.id %}
-                                                                                                            {{ translation.value | slice(0, 60)}}
-                                                                                                        {% endif %}
-                                                                                                    {% endfor %}
-                                                                                                {% else %}        
-                                                                                                    {{ productFilter.value | slice(0, 60)}}
-                                                                                                {% endif %}
-                                                                                            </div>
-                                                                                        </td>
-                                                                                        {% set marker = 1 %}
-                                                                                    {% endif %}
-                                                                                {% endfor %}
-                                                                            {% endif %}
-                                                                            {% if marker == 0 %}
-                                                                                <td>
-                                                                                    <div class="product-additional-filter">
-                                                                                        -
-                                                                                    </div>
-                                                                                </td>
-                                                                            {% endif %}
-                                                                            {% set i = i + 1 %}
-                                                                        {% endif %}
-                                                                    {% endfor %}
-                                                                {% endif %}
-                                                                <td>
-                                                                    {% if product.price %}
-                                                                        <div class="advert-price">
-                                                                            <span>{{ product.price }} {{ settings.currency.name }}</span>
-                                                                        </div>
-                                                                    {% else %}
-                                                                        <div class="advert-price">
-                                                                            <span>0 {{ settings.currency.name }}</span>
-                                                                        </div>
-                                                                    {% endif %}
-                                                                </td>
-                                                                <td>
-                                                                    {% if product.reviews | length > 0 %}
-                                                                            {{ product.reviews | length }} <img src="{{ asset('bundles/Default/img/cloud.png') }}" alt="" title="" />&nbsp
-                                                                        {% endif %}
-                                                                        {% if app.user %}
-                                                                            {% if app.user.favoriteProducts | length > 0 %}
-                                                                                {% set occupied = 0 %}
-                                                                                {% for fav in app.user.favoriteProducts %}
-                                                                                    {% if product.id == fav.productId  %}
-                                                                                        {% set occupied = 1 %}
-                                                                                    {% endif %}
-                                                                                {% endfor %}
-
-                                                                                {% if occupied %}
-                                                                                    <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart" aria-hidden="true"></i></a>
-                                                                                {% else %}
-                                                                                    <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                                                                                {% endif %}
-
-                                                                            {% else %}
-                                                                                {{ product.ratingLikes }} <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                                                                            {% endif %}
-                                                                        {% else %}
-                                                                            {{ product.ratingLikes }} <a href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                                                                        {% endif %}
-                                                                </td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                </tbody>
-                                            </table>
+                                {% if pagination and products | length > 0 %}
+                                    <div class="row">
+                                        <div class="col-lg-12 padination">
+                                            {{ pagination | raw }}
                                         </div>
+                                    </div>
+                                {% endif %}
+                                <div class="categorySpecialAdverts new">
+                                    <div class="categorySpecialAdvertsHeader">
+                                        <h3>{% trans %}Новые автомобили от дилеров{% endtrans %}</h3>
+                                        <div class="categorySpecialAdvertsHeaderNew">
+                                            <a href="">{% trans %}Все предложения{% endtrans %}</a>
+                                            <div class="categorySpecialAdvertsSliderNav" id="newDealerAdvertsNav"></div>
+                                        </div>
+                                    </div>
+                                    <div class="categorySpecialAdvertsSlider owl-carousel" id="newDealerAdverts">
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                        <div class="categorySpecialAdvert">
+                                            <div class="categorySpecialAdvertImage">
+                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
+                                            </div>
+                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
+                                            <div class="categorySpecialAdvertFeatures">
+                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
+                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
+                                            </div>
+                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        {% else %}
-                            <div class="page-no-data">{% trans %}Šajā kategorijā vēl nav nevienas reklāmas{% endtrans %}</div>
-                        {% endif %}
-                        {% if pagination and products | length > 0 %}
-                            <div class="row">
-                                <div class="col-lg-12 padination">
-                                    {{ pagination | raw }}
+                                <div class="categoryDescription">
+                                    {% if category.descriptions | length > 0 %}
+                                        {% for translation in category.descriptions %}
+                                            {% if translation.locale.id == locale.id %}
+                                                {{ translation.description | raw }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ category.description | raw}}
+                                    {% endif %}
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, esse maiores vitae nisi illum dolorum sequi assumenda aperiam ipsam dolorem quo aliquid numquam eligendi rerum reiciendis totam quos at et iste iure fugit laudantium sunt velit quidem consectetur nemo iusto ex atque ipsa adipisci repellat in nam quia maxime autem dignissimos accusantium. Dicta, assumenda, dolore, ipsam quia praesentium eius quisquam aut voluptatibus reiciendis quam cum hic. Cupiditate, earum, excepturi, beatae totam ut fugit aliquam dolore explicabo ad soluta quos temporibus dignissimos quae nemo animi dolorem cumque dolor enim aspernatur corporis deserunt delectus quod ratione! Inventore, corporis, sequi dicta veniam quo eaque repudiandae minus eius porro ratione eos similique aliquid consequatur quae molestiae ipsa nam perferendis quibusdam quam mollitia minima debitis magnam laborum quisquam est doloremque facere aspernatur nemo dolorem error adipisci iste nulla quaerat. Magni, maiores, voluptate sapiente voluptatem inventore laborum odit est perspiciatis non pariatur reprehenderit dolore iure in expedita quas similique possimus dicta.</p>
                                 </div>
-                            </div>
-                        {% endif %}
+                                            <div class="hidden-sm hidden-xs" style="text-align:center;padding-bottom: 5.8rem;">
+                                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
+                                </div>
 		</div>
 		<div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
-                    <script type="text/javascript">(function() {
-  if (window.pluso)if (typeof window.pluso.start == "function") return;
-  if (window.ifpluso==undefined) { window.ifpluso = 1;
-    var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
-    s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
-    s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
-    var h=d[g]('body')[0];
-    h.appendChild(s);
-  }})();</script>
-<div class="pluso" data-background="transparent" data-options="medium,round,line,horizontal,nocounter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email"></div>
                     <div class="advertise-block">
                         {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'rightcolumn'})) }}
                     </div>
-                    <div class="right-column-text-block">
-                        {% if category.descriptions | length > 0 %}
-                            {% for translation in category.descriptions %}
-                                {% if translation.locale.id == locale.id %}
-                                    {{ translation.description | raw }}
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            {{ category.description | raw}}
-                        {% endif %}
-                    </div>
-		</div>
-                <div class="col-lg-3 col-md-3 right-column hidden-lg hidden-md">
-                    <script type="text/javascript">(function() {
-  if (window.pluso)if (typeof window.pluso.start == "function") return;
-  if (window.ifpluso==undefined) { window.ifpluso = 1;
-    var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
-    s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
-    s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
-    var h=d[g]('body')[0];
-    h.appendChild(s);
-  }})();</script>
-<div class="pluso" data-background="transparent" data-options="medium,round,line,horizontal,nocounter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email"></div>
                     <div class="advertise-block">
-                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'rightcolumn'})) }}
-                    </div>
-                    <div class="right-column-text-block">
-                        {% if category.descriptions | length > 0 %}
-                            {% for translation in category.descriptions %}
-                                {% if translation.locale.id == locale.id %}
-                                    {{ translation.description | raw }}
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            {{ category.description | raw}}
-                        {% endif %}
+                        <div class="siteInfoPane">
+                            <div class="siteInfoPaneInner dilers">
+                                <div class="innerHeader">
+                                    <h4>БМВ X5. Скидка -10%</h4>
+                                </div>
+                                <div class="siteInfoPaneContent dilers">
+                                    <div class="description">Акция! От официального дилера БМВ в Малаге "Рога и копыта".<br/>Скидки на BMW X5 до 10%. Спешите! Предложений ограничено!</div>
+                                </div>
+                                <div class="siteInfoPaneContentButton">
+                                    <a href="">Смотреть подробнее</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 		</div>
 	</div>

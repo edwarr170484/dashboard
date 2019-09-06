@@ -70,65 +70,223 @@
 {% endblock %}
 
 {% block body %}
-<nav class="navbar navbar-default">
+<nav class="breadscrumbsBlock">
       <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if  app.request.locale == 'lv' %}
-                       <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
-                       {% if categoriesBread %}
-                           {% for cat in categoriesBread %}
-                               <li class="arrow">
-                                   <a href="{{ path('category', {'categoryName' : cat.name }) }}">
-                                       {% if cat.translations | length > 0 %}
-                                           {% for translation in cat.translations %}
-                                               {% if translation.locale.id == locale.id %}
-                                                   {{ translation.value }}
-                                               {% endif %}
-                                           {% endfor %}
-                                       {% else %}        
-                                           {{ cat.title}}
-                                       {% endif %}
-                                   </a>
-                               </li>
-                           {% endfor %}
-                       {% endif %}
-                       <li class="arrow"><a href="">{{ product.name | slice(0, 60) }}</a></li>
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
                     {% else %}
-                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mājas{% endtrans %}</a></li>
-                        {% if categoriesBread %}
-                            {% for cat in categoriesBread %}
-                                <li class="arrow">
-                                    <a href="{{ path('categoryLocale', {'_locale' : app.request.locale,'categoryName' : cat.name }) }}">
-                                        {% if cat.translations | length > 0 %}
-                                            {% for translation in cat.translations %}
-                                                {% if translation.locale.id == locale.id %}
-                                                    {{ translation.value }}
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% else %}        
-                                            {{ cat.title}}
-                                        {% endif %}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        {% endif %}
-                        <li class="arrow"><a href="">{{ product.name | slice(0, 60) }}</a></li>
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
                     {% endif %}
+                    {% if categoriesBread %}
+                        {% for cat in categoriesBread %}
+                            <li>
+                                {% if  locale.isDefault %}
+                                    <a href="{{ path('category', {'_locale' : locale.code,'categoryName' : cat.name }) }}">
+                                {% else %}
+                                    <a href="{{ path('categoryLocale', {'_locale' : locale.code,'categoryName' : cat.name }) }}">
+                                {% endif %}
+                                    {% if cat.translations | length > 0 %}
+                                        {% for translation in cat.translations %}
+                                            {% if translation.locale.id == locale.id %}
+                                                {{ translation.value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}        
+                                        {{ cat.title}}
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li>/</li>
+                        {% endfor %}
+                    {% endif %}
+                    <li class="arrow"><a href="">{{ product.name | slice(0, 60) }}</a></li>
                 </ul>
             </div>
         </div>
       </div>
-</nav>
+</nav>    
 <div class="container">
-	<div class="row content-row">
-		<div class="col-lg-9 col-md-9 left-column">
-                        {% for flashMessage in app.session.flashbag.get('notice') %}
-                            <div class="notice-message">
-                                {{ flashMessage | raw }}
-                            </div>                             
-                        {% endfor %}      
+    <div class="row content-row">
+        <div class="col-lg-9 col-md-9">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="notice-message">
+                    {{ flashMessage | raw }}
+                </div>                             
+            {% endfor %}      
+            <div class="row product-block">
+                <div class="col-lg-9 col-md-9">
+                    <div class="content-block-header"><h1>Mitsubishi Outlander III Рестайлинг 3</h1></div>
+                    <div class="advertInfo">
+                        <div class="advertInfoTypes">2019 г., 3.0 л., 250 л.с., бензин, автомат, Sevilla</div>
+                        <div class="advertInfoViews">Просмотров: 128, сегодня: 35</div>
+                        <div class="advertInfoDate">20.09.2019 #1394</div>
+                    </div>
+                </div>
+                <div class="col-md-3 price">
+                    <div class="content-block-header"><h1>33 776 &euro;</h1></div>
+                    <div class="creditRule">от 500 &euro;/мес.</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="row advertFotos">
+                        <div class="advertMainFoto">
+                            <a href=""><img src="{{ asset('bundles/Default/img/advert/main.jpg') }}" alt="" title="" /></a>
+                        </div>
+                        <div class="advertFotoIcons">
+                            <div class="advertIcons">
+                                <ul class="list-unstyled list-inline">
+                                    <li><a href=""><img src="{{ asset('bundles/Default/img/advert/icon-1.jpg') }}" alt="" title="" /></a></li>
+                                    <li><a href=""><img src="{{ asset('bundles/Default/img/advert/icon-2.jpg') }}" alt="" title="" /></a></li>
+                                    <li><a href=""><img src="{{ asset('bundles/Default/img/advert/icon-3.jpg') }}" alt="" title="" /></a></li>
+                                    <li><a href="">
+                                            <img src="{{ asset('bundles/Default/img/advert/icon-1.jpg') }}" alt="" title="" />
+                                            <div class="advertIconCover">{% trans %}Еще 6 фото{% endtrans %}</div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="advertParameters">
+                                <div class="advertFiltersValues">
+                                    <div class="advertFiltersHeader"><h3>{% trans %}Технические характеристики{% endtrans %}</h3></div>
+                                    <div class="advertFiltersTieser">
+                                        <div class="adverFiltersItem">
+                                            {% trans %}Год выпуска{% endtrans %} &nbsp;<b>3/2019</b>
+                                        </div>
+                                        <div class="adverFiltersItem">
+                                            {% trans %}Пробег{% endtrans %} &nbsp;<b>11 000 км</b>
+                                        </div>
+                                        <div class="categoryAdvertType garant">
+                                            Гарантия
+                                            <div class="categoryAdvertGarantNum">7</div>
+                                        </div>
+                                    </div>
+                                    <div class="advertFilersDescription">
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <div class="advertFilterName">Марка</div>
+                                                <div class="advertFilterValue">Mitsubishi</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Модель</div>
+                                                <div class="advertFilterValue">Outlander</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Поколение</div>
+                                                <div class="advertFilterValue">III Рестайлинг 3</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Кузов</div>
+                                                <div class="advertFilterValue">внедорожник 5 дв.</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Двигатель</div>
+                                                <div class="advertFilterValue">2.0 л. / 146 л.с. / Бенизин</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Коробка</div>
+                                                <div class="advertFilterValue">Автомат</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Привод</div>
+                                                <div class="advertFilterValue">полный</div>
+                                            </li>
+                                        </ul>
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <div class="advertFilterName">Цвет</div>
+                                                <div class="advertFilterValue">синий</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Руль</div>
+                                                <div class="advertFilterValue">левый</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Владельцы</div>
+                                                <div class="advertFilterValue">1 владелец</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Владение</div>
+                                                <div class="advertFilterValue">2 месяца</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Состояние</div>
+                                                <div class="advertFilterValue">Не требует ремонта</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Торг</div>
+                                                <div class="advertFilterValue">Нет</div>
+                                            </li>
+                                            <li>
+                                                <div class="advertFilterName">Обмен</div>
+                                                <div class="advertFilterValue">Нет</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="advertAdditionals">
+                                    <div class="advertAdditionalsHeader">{% trans %}Оборудование{% endtrans %}</div>
+                                    <div class="advertAdditionalsItems">
+                                        <ul class="list-unstyled">
+                                            <li>ABS</li>
+                                            <li>Подлокотник</li>
+                                            <li>Бортовой компьютер</li>
+                                            <li>CD плеер</li>
+                                            <li>Электрические окна</li>
+                                            <li>Электрическое боковое зеркало</li>
+                                            <li>Электрический иммобилайзер</li>
+                                            <li>Гарантия</li>
+                                            <li>Isofix</li>
+                                            <li>Руль с кожанной обивкой</li>
+                                            <li>Литые диски</li>
+                                            <li>Датчик света</li>
+                                            <li>Противотуманные фонари</li>
+                                            <li>Запасное колесо</li>
+                                            <li>Система контроля давления в шинах</li>
+                                            <li>Датчик дождя</li>
+                                            <li>Руководство по техническому обслуживанию</li>
+                                            <li>Усилитель руля</li>
+                                            <li>Звуковая система</li>
+                                            <li>Спортивная подвеска</li>
+                                            <li>Спортивный пакет</li>
+                                            <li>Спортивные сидения</li>
+                                            <li>Контроль тяги</li>
+                                            <li>Тюнер / Радио</li>
+                                            <li>Зимние шины</li>
+                                            <li>Центральный замок</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="advertText">
+                                    <div class="advertTextHeader"><h3>{% trans %}Комментарий продавца{% endtrans %}</h3></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    
+                </div>
+            </div>            
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         <div class="row product-block">
                             <div class="col-lg-12">
                                 <div class="content-block-header"><h1>{{ product.name }}</h1></div>

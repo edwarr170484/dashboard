@@ -348,6 +348,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdverts.grid .categoryAdvertInfoPrice .categoryAdvertCredit{margin: 0;font-size: 1.4rem;}
 .categoryAdvertInfoFeature.grid{display: none;}
 .categoryAdverts.grid .categoryAdvertInfoFeature.grid{display: block;}
+.banner-link{display: block;text-align: center;}
 .banner-link img{width: 100%;max-width:970px;}
 .categoryAdvertShareLinks{position: absolute;top:25px;right:25px;background:#fff;display: none;}
 .categoryAdverts.grid .categoryAdvertShareLinks{top: -18px;right: 0;@include border-radius(25px);padding: 5px 10px;border:2px solid $yellow-color;}
@@ -413,13 +414,42 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertise-block .siteInfoPaneContentButton a{@include fontView("GothamProBlack",$yellow-color,1.5rem,1.4rem);width:100%;padding: 13px;text-align: center;}
 .advertise-block .siteInfoPaneContentButton a:hover,.advertise-block .siteInfoPaneContentButton a:focus{@include fontView("GothamProBlack",$black-text,1.8rem,1.7rem);}
 .advertise-block .siteInfoPaneContentButton{padding-top: 2rem;}
-
-
-
-
-
-
-
+.right-column{@include flexBox(column,flex-start,flex-end);}
+.product-block .price{@include flexBox(column,flex-start,flex-end);}
+.product-block .advertInfo{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);@include flexBox(row, flex-start,center);@include flex-wrap(wrap);}
+.product-block .advertInfoViews, .product-block .advertInfoDate{color:#747474;}
+.product-block .advertInfoTypes{padding-right: 30px;padding-top: 15px;}
+.product-block .advertInfoViews{padding-right: 42px;padding-top: 15px;}
+.product-block .advertInfoDate{padding-top: 15px;}
+.creditRule{@include fontView("GothamProBlack",$gray-color-1,2.5rem,3.2rem);}
+.advertIcons ul li{padding-bottom: 12px;padding-left: 0;padding-right: 0;}
+.advertMainFoto{padding-left:15px;padding-right:15px;}
+.advertMainFoto img{width: 100%;@include border-radius(9px);max-width: 754px;}
+.advertFotos{@include flexBox(row,flex-start,stretch);padding-top: 2.7rem;}
+.advertFotoIcons{padding-left:15px;padding-right:15px;width: 198px;}
+.advertFotoIcons ul li a img{width: 100%;max-width:168px;@include border-radius(9px);}
+.advertIcons ul li a{display: block;position: relative;@include border-radius(9px);}
+.advertIconCover{position: absolute;top:0;left: 0;width: 100%;height: 100%;@include background-image(linear-gradient(0deg, rgba(245, 170, 1, 0.8), rgba(245, 170, 1, 0.8)));@include border-radius(9px);@include flexBox(row,center,center);padding: 5px;@include fontView("GothamProRegular",$super-white-color,1.8rem,1.7rem)}
+.advertFiltersHeader{padding-top:2.5rem;}
+.advertFiltersHeader h3{color:$black-text;}
+.advertFiltersTieser{@include flexBox(row,flex-start,center);@include flex-wrap(wrap);padding-bottom: 3rem;}
+.adverFiltersItem{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);padding-right: 4rem;margin-top: 2.4rem;}
+.adverFiltersItem b{font-family:"GothamProBold", sans-serif;}
+.advertFiltersTieser .categoryAdvertType{margin-bottom: 0;margin-top: 2.4rem;}
+.advertFilersDescription{@include flexBox(row,flex-start,stretch);}
+.advertFilersDescription ul{display: block;}
+.advertFilersDescription ul li{display: table-row;}
+.advertFilersDescription ul li div{display:table-cell;padding-bottom: 15px;padding-right: 40px;}
+.advertFilersDescription ul li div:first-child{@include fontView("GothamProRegular",#747474,1.6rem,2.2rem);}
+.advertFilersDescription ul li div:last-child{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.advertFilersDescription ul li div.advertFilterValue{padding-right: 50px;}
+.advertFiltersValues{padding-bottom: 5rem;}
+.advertAdditionalsHeader{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}
+.advertAdditionalsItems ul li{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);display: block;background: url(../img/galka.png) 0 50% no-repeat;padding-left: 2.5rem;}
+.advertAdditionalsItems{@include column-count(3);@include column-gap(40px);}
+.advertAdditionalsItems ul li{@include break-inside(avoid);display: block;margin-bottom: 10px;}
+.advertTextHeader h3{color:$black-text;}
+.advertAdditionals{padding-bottom: 5rem;}
 
 
 
@@ -577,7 +607,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .category-premium-adverts-block{padding-top: 4rem;}
 
 .right-column-text-block{font-family:"Roboto",sans-serif;font-size:1.3rem;color:#6f6f6f;text-align:justify;margin-bottom:2.3rem;font-weight:300;}
-.left-column{padding-right: 3.4rem}
+
 .site-banner{display: block;}
 .site-banner img{width:100%;}
 .product-search-form-block{margin-top:0;}
@@ -602,7 +632,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .product-description{font-family:"Roboto",sans-serif;font-size:1.6rem;color: #4f4f4f;font-weight:300;border:2px solid #238129;padding:12px 16px;background-color: #f6fff5;}
 .product-description p{margin-bottom: 0;}
 .product-advert-number{font-family:"Roboto",sans-serif;font-size:1.3rem;padding-top: 1.7rem;padding-bottom:2.7rem;color: #4f4f4f;}
-.product-block{padding-top:5.3rem;}
+
 .product-tabs-inner{ /* border: 2px solid #2980b9; */}
 .nav-tabs{border: none;}
 .nav-tabs > li > a{font-family:"Roboto", sans-serif;font-size:1.2rem;color:#999999;text-transform:uppercase;border: none;line-height:2.6rem;

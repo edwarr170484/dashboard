@@ -85,7 +85,9 @@
     .footer-developer{text-align: left;}
     .register-block,.register-block.result{padding:2.5rem;}
     .categorySortFields{@include flex-wrap(wrap);}
-    
+    .advertFilersDescription ul li div{padding-right: 30px;}
+    .advertFilersDescription ul li div.advertFilterValue{padding-right: 30px;}
+    .advertFilersDescription{@include flex-wrap(wrap);}
 }
 @media (max-width: 650px) 
 {
@@ -104,6 +106,9 @@
     .categoryAdvertInfoYear{padding: 15px 0;}
     .categorySpecialAdvertsHeader h3{font-size: 2.6rem;}
     .categorySpecialAdvertsHeader{@include flex-wrap(wrap);}
+    .advertFotos {@include flex-wrap(wrap);}
+    .advertFotoIcons{width: 100%;padding-top: 12px;}
+    .advertAdditionalsItems{@include column-count(2);}
 }
 @media (max-width: 490px) 
 {
@@ -119,6 +124,7 @@
     .categoryAdverts.grid{width:auto;padding-top: 0;text-align: center;}
     .categorySpecialAdvertsHeader h3{font-size: 1.8rem;}
     .categoryAdvertShareLinks{padding-top: 10px;top:2rem;}
+    .advertAdditionalsItems{@include column-count(1);}
 }
 @media (max-width: 340px) 
 {

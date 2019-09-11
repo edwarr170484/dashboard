@@ -415,6 +415,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertise-block .siteInfoPaneContentButton a:hover,.advertise-block .siteInfoPaneContentButton a:focus{@include fontView("GothamProBlack",$black-text,1.8rem,1.7rem);}
 .advertise-block .siteInfoPaneContentButton{padding-top: 2rem;}
 .right-column{@include flexBox(column,flex-start,flex-end);}
+.product-block{padding-bottom: 2.7rem;}
 .product-block .price{@include flexBox(column,flex-start,flex-end);}
 .product-block .advertInfo{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);@include flexBox(row, flex-start,center);@include flex-wrap(wrap);}
 .product-block .advertInfoViews, .product-block .advertInfoDate{color:#747474;}
@@ -425,7 +426,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertIcons ul li{padding-bottom: 12px;padding-left: 0;padding-right: 0;}
 .advertMainFoto{padding-left:15px;padding-right:15px;}
 .advertMainFoto img{width: 100%;@include border-radius(9px);max-width: 754px;}
-.advertFotos{@include flexBox(row,flex-start,stretch);padding-top: 2.7rem;}
+.advertFotos{@include flexBox(row,flex-start,stretch);}
 .advertFotoIcons{padding-left:15px;padding-right:15px;width: 198px;}
 .advertFotoIcons ul li a img{width: 100%;max-width:168px;@include border-radius(9px);}
 .advertIcons ul li a{display: block;position: relative;@include border-radius(9px);}
@@ -450,6 +451,85 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertAdditionalsItems ul li{@include break-inside(avoid);display: block;margin-bottom: 10px;}
 .advertTextHeader h3{color:$black-text;}
 .advertAdditionals{padding-bottom: 5rem;}
+.advertTextText{@include fontView("GothamProRegular",$super-black-color,1.4rem,1.8rem);padding-top: 2.4rem;}
+.no-padding{padding: 0;}
+.product-tabs{padding-top: 6.5rem;padding-bottom: 3.5rem;}
+.product-tabs-inner{@include border-radius(9px);@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));}
+.product-tabs-inner ul{background: $super-white-color;@include flexBox(row,space-between,center);@include flex-wrap(wrap);}
+.product-tabs-inner .nav-tabs > li > a{
+    @include fontView("GothamProRegular",$super-black-color,1.4rem,2.2rem);text-transform:uppercase;
+    @include flexBox(row,flex-start,center);
+    z-index:9;
+    @include border-radius(0);
+    border:none;
+}
+.product-tabs-inner .nav-tabs > li > a svg{margin-right: 16px;}
+.product-tabs-inner .nav-tabs > li > a svg:last-child{display: none;}
+.product-tabs-inner .nav-tabs > li > a:hover svg:last-child,.product-tabs-inner .nav-tabs > li > a:focus svg:last-child{display: block;}
+.product-tabs-inner .nav-tabs > li > a:hover svg:first-child,.product-tabs-inner .nav-tabs > li > a:focus svg:first-child{display: none;}
+.product-tabs-inner .tab-content .tab-pane{padding: 10px 15px;@include fontView("GothamProRegular",$super-black-color,1.4rem,2.2rem);}
+.product-tabs-inner .nav-tabs > li > a:hover,.product-tabs-inner .nav-tabs > li > a:focus{border:none;background: #fff;}
+.advertSellerInfo{}
+.advertSellerInfoHeader{background: $gray-color;padding: 12px;@include border-radius(6px 6px 0 0);@include flexBox(row,space-between,center);}
+.advertSellerInfoHeader button{background: $yellow-color;@include fontView("GothamProRegular",$super-white-color,1.4rem,1.3rem);padding: 12px;text-align: center;@include border-radius(3px);border:none;}
+.advertSellerInfoHeader button.headerButton:hover,.advertSellerInfoHeader button.headerButton:focus{background:$orange-color;}
+.advertSellerInfoHeader .categoryAdvertShareLinks{position: relative;display: block;top:0;right: 0;background: none;}
+.advertSellerInfoHeader .categoryAdvertShareLinks ul li button{margin: 0;}
+.advertSellerInfoHeader .categoryAdvertShareLinks ul{@include flexBox(row,flex-start,center);@include flex-wrap(wrap);}
+.advertSellerInfoHeader .categoryAdvertShareLinks ul li button{padding: 0;margin-right: 2rem;}
+.advertSellerInfoHeader .categoryAdvertShareLinks ul li:last-child button{margin-right: 0;}
+.advertSellerInfoHeader .categoryAdvertShareLinks ul li button.share .shareLinks{left: -20px;}
+.advertSellerInfoAdvertName{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);}
+.advertSellerInfoInner{@include border-radius(0px 0px 9px 9px);padding: 1.2rem;background: $super-white-color;}
+.advertSellerName{@include fontView("GothamProBold",$black-text,1.7rem,3.2rem);padding-top: 2rem;}
+.advertSellerStatus{@include fontView("GothamProRegular",#747474,1.4rem,1.8rem);}
+.advertSellerLink a{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);text-decoration: underline;}
+.advertSellerLink a:hover,.advertSellerLink a:focus{text-decoration:none;}
+.advertSellerLinks{padding-top: 19px;}
+.advertSellerContactsHeader{@include fontView("GothamProBlack",$black-text,1.6rem,3.2rem);}
+.advertSellerTime{@include fontView("GothamProRegular",#747474,1.4rem,1.8rem);}
+.advertSellerContacts{padding-top: 1.4rem;}
+.advertContact{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);padding-top: 10px;}
+.advertContact a{@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);}
+.advertContact svg{margin-right: 10px;}
+.advertSellerOrder button{@include fontView("GothamProBold",$super-black-color,1.8rem,1.7rem);background: $yellow-color;@include border-radius(3px);border:none;padding: 12px;text-align: center;width: 100%;margin-top: 2rem;}
+.advertSellerOrder button:focus,.advertSellerOrder button:hover{background:$orange-color;}
+.advertSellerRating{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);}
+.advertSellerRatingStar{background: url('../img/star.svg') 0 0 no-repeat;width: 20px;height: 20px;margin-right: 5px;}
+.advertSellerRating{padding-top: 6px;}
+.advertSellerRating .advertSellerRatingStar:last-child{margin-right: 7px;}
+.advertSellerRatingStar.empty{background: url('../img/star-empty.svg') 0 0 no-repeat;}
+.advertSellerRatingStar.half{background: url('../img/star-half.svg') 0 0 no-repeat;}
+
+/*modals style*/
+.modal-content{background: #fff;@include border-radius(12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;padding: 5% 15%;}
+.modal-header h3{@include fontView("GothamProBlack",$gray-color-1,3.6rem,4rem);text-align: center;}
+.modal-content button.close{position: absolute;top:-30px;right:-30px;z-index:999;@include opacity(1);}
+.modal-body label{@include fontView("GothamProRegular",$input-black,1.3rem,1.2rem);}
+.modal-footer button.btn{@include fontView("GothamProBlack",$super-black-color,1.8rem,1.7rem);background: $yellow-color;border:none;@include border-radius(3px);padding: 12px 18px;text-align: center;}
+.modal-footer button.btn:hover,.modal-footer button.btn:focus{background:$orange-color;}
+.modal-body,.modal-footer,.modal-header{padding: 0;}
+.modal-footer{padding-top: 15px;}
+.modal-header{padding-bottom: 30px;}
+.modal-body .form-group .select-cover{margin-bottom: 0;}
+.form-horizontal .control-label{text-align: left;}
+.modal-body .form-group .form-control{border:1px solid #DFE1E5;@include border-radius(2px);@include fontView("GothamProRegular",$input-black,1.3rem,1.2rem);display: block;padding: 20px 10px;}
+.productSliderInner .row{@include flexBox(row,flex-start,stretch);@include flex-wrap(wrap);background: #fff;}
+.productSliderInfo{background: #fff;}
+#productModalSlider .owl-item div{@include flexBox(row,center,center);}
+.productModalSliderIcons .advertIcons{@include flexBox(row,center,center);}
+.productSliderInfo{position: relative;}
+.productSliderInfo button.close{position: absolute;top: 30px;right: 30px;border:none;background: none;width: 26px;height: 26px;}
+.productSliderInfo{padding: 2.8rem;}
+.productSliderInfo .price{padding-top: 3rem;}
+.productSliderInfo .advertSellerInfoAdvertName{font-size: 2.4rem;line-height: 3.8rem;}
+.productSliderInfo .advertSellerInfoInner{padding-top: 0;}
+.productSliderInfo .advertSellerTime{padding-top: 10px;padding-bottom: 10px;}
+.productSliderInfo .advertSellerOrder button{margin-top: 3.2rem;}
+.productSliderInfo .advertSellerContacts{padding-top: 3rem;}
+.productModalSliderIcons .advertIcons img{max-width:160px;}
+.productModalSliderIcons .advertIcons a{@include border-radius(0);}
+
 
 
 
@@ -635,16 +715,6 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 
 .product-tabs-inner{ /* border: 2px solid #2980b9; */}
 .nav-tabs{border: none;}
-.nav-tabs > li > a{font-family:"Roboto", sans-serif;font-size:1.2rem;color:#999999;text-transform:uppercase;border: none;line-height:2.6rem;
-padding-bottom:0.5rem;padding-right:0; padding-left:1rem;font-weight:500;}
-.nav-tabs > li > a:after{content:"";display:block;clear:both;}
-.nav-tabs > li.active > a,
-.nav-tabs > li > a:hover,
-.nav-tabs > li > a:focus,
-.nav-tabs > li.active > a:focus,
-.nav-tabs > li.active > a:hover
-{border:none;color:#238129;background: none;}
-.nav-tabs > li > a span{display:block;float:left}
 .button-refresh{}
 .productpage-banner{padding:2.4rem 0}
 
@@ -710,8 +780,6 @@ padding: 0.8rem 1.5rem;display:block;float:left;margin-bottom:2rem;}
 .close-subcats{background:url(../img/close.png) 0 0 no-repeat;border:none;width:32px;height:32px;position:absolute;top:25px;right:15px;cursor:pointer}
 
 .modal-header button.close{background:url(../img/close-blue.png) 0 0 no-repeat;width:32px;height:32px;opacity:1;}
-.modal-footer button.btn{font-size:1.4rem;color:#238129;font-family:"Roboto", sans-serif;text-transform:uppercase;border:2px solid #238129;padding: 0.6rem 5.5rem;background:none;font-weight:500;}
-.modal-footer button.btn:hover{background:#238129;color:#fff;}
 	.modal-header,.modal-footer{border:none;text-align:center;}
 	.modal-title{color:#238129;font-family:"Roboto", sans-serif;font-size:1.8rem;text-transform:uppercase;font-weight:500;}
 	.modal-body{font-family:"Roboto", sans-serif;font-size:1.4rem;color:#848484;font-weight:300;}
@@ -965,16 +1033,7 @@ border-bottom-right-radius:4px;display:none;}
 .messages-table-block .tab-content .tab-pane{padding-left:0;padding-right:0;text-transform:none;padding-top:28px;padding-bottom:0;}
 .messages-table-block .nav-tabs > li{display:block;position:relative;padding-right:25px;}
 .messages-table-block .nav-tabs > li:after{content:"";display:table;clear:both;}
-.messages-table-block .nav-tabs > li > a{padding-left:0;font-size:1.3rem;color:#747474;font-family:"Roboto", sans-serif;font-weight:300;padding:0;line-height:100%;
-                  float:left;}
-.messages-table-block .nav-tabs > li.active > a, .nav-tabs > li > a:hover, .nav-tabs > li > a:focus, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover
-{
-    color:#238129;
-}
-.messages-table-block .nav-tabs > li.active > .message-navtab-label
-{
-    color:#fd696c;
-}
+
 .message-navtab-label{color:#ababab;font-family:"Roboto", sans-serif;font-weight:300;font-size:1.2rem;margin-top:-7px;display:block;}
 .message-table-menu{font-size:1.3rem;color:#747474;font-family:"Roboto", sans-serif;font-weight:300;padding-top:26px;}
 .message-table-menu a{font-size:1.3rem;color:#747474;text-decoration:underline;}

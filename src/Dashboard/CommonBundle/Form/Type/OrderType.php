@@ -29,20 +29,19 @@ use Dashboard\CommonBundle\Entity\Category;
 
 class OrderType extends AbstractType
 {
-    public function __construct($em, $currentuser, $productuser) {
+    public function __construct($em, $productuser) {
         $this->em = $em;
-        $this->currentuser = $currentuser;
         $this->productuser = $productuser;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
         $builder
-            ->add('name', TextType::class, array('required' => true, 'data' => $this->currentuser->getFirstname(),'label' => 'Jūsu vārds: *', 'attr' => array('class' => 'form-control')))
-            ->add('email', EmailType::class, array('required' => true, 'data' => $this->currentuser->getUser()->getEmail() ,'label' => 'Jūsu e-pasts: *', 'attr' => array('class' => 'form-control')))
-            ->add('phone', TextType::class, array('required' => true, 'data' => $this->currentuser->getPhone() ,'label' => 'Kontakt tālrunis: *', 'attr' => array('class' => 'form-control')))
-            ->add('comment', TextareaType::class, array('required' => false, 'label' => 'Komentēt pasūtījumu', 'attr' => array('class' => 'form-control')))
-            ->add('save', ButtonType::class, array('label' => 'Sūtīt pasūtījumu', 'attr' => array('class' => 'btn')));
+            ->add('name', TextType::class, array('required' => true, 'label' => 'Имя: *', 'attr' => array('class' => 'form-control')))
+            ->add('email', EmailType::class, array('required' => true, 'label' => 'Email: *', 'attr' => array('class' => 'form-control')))
+            ->add('phone', TextType::class, array('required' => true, 'label' => 'Телефон: *', 'attr' => array('class' => 'form-control')))
+            ->add('comment', TextareaType::class, array('required' => false, 'label' => 'Комментарий', 'attr' => array('class' => 'form-control')))
+            ->add('save', ButtonType::class, array('label' => 'Оставить заявку', 'attr' => array('class' => 'btn')));
     }
     
     

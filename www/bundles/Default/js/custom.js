@@ -34,6 +34,29 @@ $(document).ready(function(){
         }
     });
     
+    $("#sameDealerAdverts").owlCarousel({
+        margin : 25,
+        loop : true,
+        items : 4,
+        dots : false,
+        navContainer : '#sameDealerAdvertsNav',
+        navText : ['<svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 13L1 7L7 1" stroke="#AAAAAA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','<svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 13L7 7L1 1" stroke="#AAAAAA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
+        responsive:{
+            0:{items:1},
+            650:{items:2},
+            1200:{items:3},
+            1560:{items:4}
+        }
+    });
+    
+    $("#productModalSlider").owlCarousel({
+        items:1,
+        center:true,
+        callbacks: true,
+        URLhashListener: true,
+        startPosition: 'URLHash'
+    });
+    
     $("img").on("contextmenu", false);
     
     $(".custom-select").customSelect();

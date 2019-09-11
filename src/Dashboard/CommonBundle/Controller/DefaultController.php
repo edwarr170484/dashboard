@@ -912,33 +912,13 @@ class DefaultController extends Controller
         else
             $sameProducts = $allproducts;
         
-        if($this->getUser())
-        {
-            $order = new ProductOrder();
-            $orderForm = $this->createForm(new OrderType($manager, $sessionUser->getUserInfo(), $product->getUser()), $order);
-            
-            $message = new Message();
-            $productMessageForm = $this->createForm(new ProductMessageType($manager, $sessionUser), $message);
-            
-            $profileMessage = new Message();
-            $profileMessageForm = $this->createForm(new ProfileMessageType($manager), $profileMessage);
-            
-            $friendMessageForm = $this->get('form.factory')->createNamedBuilder('friendmessage', 'form')
-                ->add('friendemail', EmailType::class, array('required' => true, 'label' => $this->get('translator')->trans('Drauga e-pasts: *'), 'attr' => array('class' => 'form-control')))
-                ->add('friendname', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('Drauga vārds: *'), 'attr' => array('class' => 'form-control')))
-                ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('SŪTĪT'), 'attr' => array('class' => 'send-tab-form')))->getForm();
-            
-            $complaint = new Complaint();
-            $complaintMessageForm = $this->get('form.factory')->createNamedBuilder('complaint', 'form', $complaint)
-                 ->add('username', TextType::class, array('required' => true, 'mapped' => false, 'data' => $sessionUser->getUserinfo()->getFirstname() . " " . $sessionUser->getUserinfo()->getLastname(),'label' => $this->get('translator')->trans('Jūsu vārds: *'), 'attr' => array('class' => 'form-control')))
-                 ->add('reason', TextareaType::class, array('required' => true,'label' => $this->get('translator')->trans('Pamatojums: *'), 'attr' => array('class' => 'form-control')))
-                 ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('SŪTĪT'), 'attr' => array('class' => 'send-tab-form')))->getForm();
-                    
-                    
-            $orderForm->handleRequest($request);
+        $order = new ProductOrder();
+        $orderForm = $this->createForm(new OrderType($manager, $product->getUser()), $order);
+        
+        $orderForm->handleRequest($request);
 
-            if ($orderForm->isSubmitted() && $orderForm->isValid())
-            {
+        if ($orderForm->isSubmitted() && $orderForm->isValid())
+        {
                 if($product->getUser()->getId() != $sessionUser->getId())
                 {
                     $order->setDateAdded(new \DateTime("now"));
@@ -994,10 +974,160 @@ class DefaultController extends Controller
                 {
                     return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
                 }
-                
-                
-            }
+        }
+        
+        $friendMessageForm = $this->get('form.factory')->createNamedBuilder('friendmessage', 'form')
+                ->add('friendemail', EmailType::class, array('required' => true, 'label' => $this->get('translator')->trans('Drauga e-pasts: *'), 'attr' => array('class' => 'form-control')))
+                ->add('friendname', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('Drauga vārds: *'), 'attr' => array('class' => 'form-control')))
+                ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
+        
+        $friendMessageForm->handleRequest($request);
+            
+        if($friendMessageForm->isSubmitted() && $friendMessageForm->isValid())
+        {
+                $message = \Swift_Message::newInstance()
+                ->setSubject('Ссылка на объявление на сайте gribupardot.sunweb.by')
+                ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                ->setTo(array($friendMessageForm['friendemail']->getData() => $friendMessageForm['friendname']->getData()))
+                ->setBody(
+                    $this->renderView(
+                        'Emails/friendmessage.html.twig',
+                        array('product' => $product,
+                              'user' => $sessionUser)
+                    ),
+                    'text/html'
+                );
 
+                $this->get('mailer')->send($message);
+                
+                $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
+                        $this->get('translator')->trans('<strong>Veiksmīga!</strong> Ziņojums tika nosūtīts draugam norādītajā e-pasta adresē.') . '</div>'
+                );
+                
+                if($locale->getIsDefault())
+                {
+                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
+                }
+                else
+                {
+                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
+                }
+        }
+        
+        $complaint = new Complaint();
+        $complaintMessageForm = $this->get('form.factory')->createNamedBuilder('complaint', 'form', $complaint)
+                 ->add('username', TextType::class, array('required' => true, 'mapped' => false, 'label' => $this->get('translator')->trans('Jūsu vārds: *'), 'attr' => array('class' => 'form-control')))
+                 ->add('reason', TextareaType::class, array('required' => true,'label' => $this->get('translator')->trans('Pamatojums: *'), 'attr' => array('class' => 'form-control')))
+                 ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
+        
+        $complaintMessageForm->handleRequest($request);
+            
+        if($complaintMessageForm->isSubmitted() && $complaintMessageForm->isValid())
+        {
+                if($product->getUser()->getId() != $sessionUser->getId())
+                {   
+                    $complaint->setUser($sessionUser);
+                    $complaint->setProduct($product);
+                    $complaint->setDateAdded(new \DateTime("now"));
+                    $complaint->setStatus(0);
+                    
+                    $manager->persist($complaint);
+                    $manager->flush();
+                    
+                    $message = \Swift_Message::newInstance()
+                    ->setSubject('Жалоба на объявление на сайте gribupardot.sunweb.by')
+                    ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                    ->setTo($settings->getAdminEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'Emails/complaint.html.twig',
+                            array('product' => $product,
+                                  'user' => $sessionUser)
+                        ),
+                        'text/html'
+                    );
+
+                    $this->get('mailer')->send($message);
+                    
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Veiksmīgi!</strong> Jūsu sūdzība ir reģistrēta un drīz tiks pārskatīta.') . '</div>'
+                    );
+                    
+                    $productComplaints = $manager->getRepository("DashboardCommonBundle:Complaint")->findByProduct($product);
+                    
+                    if(count($productComplaints) >= 10)
+                    {
+                        $product->setIsActive(false);
+                        $product->setIsConfirm(false);
+                        $product->setIsCorrect(true);
+                        $product->setCorrectReason($this->get('translator')->trans("Sūdzību skaits par reklāmu ir vairāk nekā 10"));
+                        
+                        $manager->persist($product);
+                        $manager->flush();
+                        
+                        if($product->getUser()->getAlerts())
+                        {
+                            $messageCorrect = \Swift_Message::newInstance()
+                            ->setSubject('Ваше объявление отправлено на коррекцию.')
+                            ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                            ->setTo($product->getUser()->getEmail())
+                            ->setBody(
+                                $this->renderView(
+                                    'Emails/correct.html.twig',
+                                    array('product' => $product,
+                                          'reason' => 'На Ваше объявление подано более 10 жалоб, поэтому его действие было приостановлено.')
+                                ),
+                                'text/html'
+                            );
+
+                            $this->get('mailer')->send($messageCorrect);
+                        }
+                        
+                        if($locale->getIsDefault())
+                        {
+                            return $this->redirectToRoute("main");
+                        }
+                        else
+                        {
+                            return $this->redirectToRoute("mainLocale", array("_locale" => $locale->getCode()));
+                        }
+                    }
+                    
+                }
+                else 
+                {
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs nevarat sūdzēties par savu reklāmu.') . '</div>'
+                    );
+                }
+                
+                if($locale->getIsDefault())
+                {
+                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
+                }
+                else
+                {
+                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
+                }
+        }
+        
+        if($this->getUser())
+        {
+            $message = new Message();
+            $productMessageForm = $this->createForm(new ProductMessageType($manager, $sessionUser), $message);
+            
+            $profileMessage = new Message();
+            $profileMessageForm = $this->createForm(new ProfileMessageType($manager), $profileMessage);
+            
             $productMessageForm->handleRequest($request);
             
             if($productMessageForm->isSubmitted() && $productMessageForm->isValid())
@@ -1111,139 +1241,6 @@ class DefaultController extends Controller
                         '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
                         $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs nevarat nosūtīt ziņu sev.') . '</div>'
-                    );
-                }
-                
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-                else
-                {
-                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-            }
-            
-            $friendMessageForm->handleRequest($request);
-            
-            if($friendMessageForm->isSubmitted() && $friendMessageForm->isValid())
-            {
-                $message = \Swift_Message::newInstance()
-                ->setSubject('Ссылка на объявление на сайте gribupardot.sunweb.by')
-                ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-                ->setTo(array($friendMessageForm['friendemail']->getData() => $friendMessageForm['friendname']->getData()))
-                ->setBody(
-                    $this->renderView(
-                        'Emails/friendmessage.html.twig',
-                        array('product' => $product,
-                              'user' => $sessionUser)
-                    ),
-                    'text/html'
-                );
-
-                $this->get('mailer')->send($message);
-                
-                $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                        $this->get('translator')->trans('<strong>Veiksmīga!</strong> Ziņojums tika nosūtīts draugam norādītajā e-pasta adresē.') . '</div>'
-                );
-                
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-                else
-                {
-                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-            }
-            
-            $complaintMessageForm->handleRequest($request);
-            
-            if($complaintMessageForm->isSubmitted() && $complaintMessageForm->isValid())
-            {
-                if($product->getUser()->getId() != $sessionUser->getId())
-                {   
-                    $complaint->setUser($sessionUser);
-                    $complaint->setProduct($product);
-                    $complaint->setDateAdded(new \DateTime("now"));
-                    $complaint->setStatus(0);
-                    
-                    $manager->persist($complaint);
-                    $manager->flush();
-                    
-                    $message = \Swift_Message::newInstance()
-                    ->setSubject('Жалоба на объявление на сайте gribupardot.sunweb.by')
-                    ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-                    ->setTo($settings->getAdminEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'Emails/complaint.html.twig',
-                            array('product' => $product,
-                                  'user' => $sessionUser)
-                        ),
-                        'text/html'
-                    );
-
-                    $this->get('mailer')->send($message);
-                    
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Veiksmīgi!</strong> Jūsu sūdzība ir reģistrēta un drīz tiks pārskatīta.') . '</div>'
-                    );
-                    
-                    $productComplaints = $manager->getRepository("DashboardCommonBundle:Complaint")->findByProduct($product);
-                    
-                    if(count($productComplaints) >= 10)
-                    {
-                        $product->setIsActive(false);
-                        $product->setIsConfirm(false);
-                        $product->setIsCorrect(true);
-                        $product->setCorrectReason($this->get('translator')->trans("Sūdzību skaits par reklāmu ir vairāk nekā 10"));
-                        
-                        $manager->persist($product);
-                        $manager->flush();
-                        
-                        if($product->getUser()->getAlerts())
-                        {
-                            $messageCorrect = \Swift_Message::newInstance()
-                            ->setSubject('Ваше объявление отправлено на коррекцию.')
-                            ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-                            ->setTo($product->getUser()->getEmail())
-                            ->setBody(
-                                $this->renderView(
-                                    'Emails/correct.html.twig',
-                                    array('product' => $product,
-                                          'reason' => 'На Ваше объявление подано более 10 жалоб, поэтому его действие было приостановлено.')
-                                ),
-                                'text/html'
-                            );
-
-                            $this->get('mailer')->send($messageCorrect);
-                        }
-                        
-                        if($locale->getIsDefault())
-                        {
-                            return $this->redirectToRoute("main");
-                        }
-                        else
-                        {
-                            return $this->redirectToRoute("mainLocale", array("_locale" => $locale->getCode()));
-                        }
-                    }
-                    
-                }
-                else 
-                {
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs nevarat sūdzēties par savu reklāmu.') . '</div>'
                     );
                 }
                 
@@ -1378,6 +1375,9 @@ class DefaultController extends Controller
                                                                                           "categories" => $categories,
                                                                                           "allcities" => $allcities,
                                                                                           "allcategories" => $allcategories,
+                                                                                          "orderForm" => $orderForm->createView(),
+                                                                                          "friendMessageForm" => $friendMessageForm->createView(),
+                                                                                          "complaintMessageForm" => $complaintMessageForm->createView(),
                                                                                           "favoriteProductIs" => 0,
                                                                                           "services" => $services,
                                                                                           "sameProducts" => $sameProducts,

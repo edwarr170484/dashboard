@@ -45,6 +45,7 @@
     .categorySortParams .select-cover{width: 250px;}
     .categorySortParams .filter{width: 110px;}
     .categoryAdvertShareLinks ul li button.share .shareLinks{left: auto;right: -12px;}
+    .productSliderInner .row{display: block;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}

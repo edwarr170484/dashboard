@@ -108,17 +108,21 @@
                            
 	<div class="modal fade" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
 	  <div class="modal-dialog" role="document">
-		{{ form_start(regionForm,{'attr' : {'class' : 'form-horizontal siteRegionSelect'}}) }}
+		{{ form_start(regionForm,{'attr' : {'class' : 'form-horizontal'}}) }}
                     <input name="selectFilterRegionCity" type="hidden" value="1" />
 			<div class="modal-content">
-			  <div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-				<h4 class="modal-title" id="regionModalLabel">{% trans %}Izvēlies savu atrašanās vietu{% endtrans %}</h4>
-			  </div>
-			  <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                                </svg>
+                            </button>
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="regionModalLabel">{% trans %}Выберите Ваше местоположение{% endtrans %}</h3>
+                            </div>
+                            <div class="modal-body">
 				<div class="form-group">
-                                    <label class="col-sm-4 control-label">{% trans %}Izvēlieties reģionu{% endtrans %}: </label>
-                                    <div class="col-sm-8">
+                                    <label class="col-md-4 control-label">{% trans %}Izvēlieties reģionu{% endtrans %}: </label>
+                                    <div class="col-md-8">
                                         {{ form_widget(regionForm.region, {'id' : 'siteRegion'})}}
                                     </div>
                                     <script>
@@ -139,37 +143,35 @@
                                     </script>
 				</div>
 				<div class="form-group">
-                                    <label class="col-sm-4 control-label">{% trans %}Pilsēta/volost{% endtrans %}:</label>
-                                    <div class="col-sm-8" id="siteRegionCities">
+                                    <label class="col-md-4 control-label">{% trans %}Pilsēta/volost{% endtrans %}:</label>
+                                    <div class="col-md-8" id="siteRegionCities">
                                         {{ form_widget(regionForm.city,{'id' : 'siteCity'})}}
                                     </div>
 				</div>
-			  </div>
-			  <div class="modal-footer">
-                            <div class="col-sm-5"></div>
-				<div class="col-sm-6"><button type="submit" class="btn">{% trans %}Izvēlieties reģionu{% endtrans %}</button></div>
-                            <div class="col-sm-1"></div>
-			  </div>
-                          {{ form_end(regionForm) }}
+                            </div>
+                            <div class="modal-footer">
+                                <div class="col-lg-12"><button type="submit" class="btn">{% trans %}Выбрать регион{% endtrans %}</button></div>
+                            </div>
+                            {{ form_end(regionForm) }}
 			</div>
-		</form>
-	  </div>
-	</div>
+                    </form>
+                </div>
+            </div>
         <div class="modal fade" id="userAgreementModal" tabindex="-1" role="dialog" aria-labelledby="howToBuyModalLabel">
 	  <div class="modal-dialog" role="document">
 		<form class="form-horizontal region-select-form" action="" method="post">
 			<div class="modal-content">
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-				<h4 class="modal-title" id="regionModalLabel">{% trans %}Lietotāja līgums{% endtrans %}</h4>
+				<h4 class="modal-title" id="regionModalLabel">{% trans %}Пользовательское соглашение{% endtrans %}</h4>
 			  </div>
 			  <div class="modal-body">
-				{{ textblock.userAgreement | raw}}
+                                {{ textblock.userAgreement | raw}}
 			  </div>
 			  <div class="modal-footer">
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
-                                    <button type="submit" class="btn" data-dismiss="modal" aria-label="Close">{% trans %}Aizvērt{% endtrans %}</button>
+                                    <button type="submit" class="btn" data-dismiss="modal" aria-label="Close">{% trans %}Закрыть{% endtrans %}</button>
                                 </div>
 				<div class="col-sm-4"></div>
 			  </div>

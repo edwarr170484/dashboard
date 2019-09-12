@@ -182,6 +182,12 @@
                                                 <option value="4">Toyota</option>
                                             </select>
                                         </div>
+                                        <div class="col-lg-3 col-md-3">
+                                            <div class="filtersFromTo">
+                                                <input name="" value="" placeholder="Цена от" />
+                                                <input name="" value="" placeholder="до" />
+                                            </div>
+                                        </div>  
                                         <div class="col-lg-3 col-md-3 additionalFiltersBlock">
                                             <select name="" id="" class="custom-select">
                                                 <option value="0">Марка авто</option>
@@ -277,12 +283,127 @@
             </div>
         </div>
     </div>
+    <div class="cookieAlertBlock">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 cookieAlerts">
+                    <div class="cookieAlertMessage">
+                        Información importante sobre cookies: El sitio web de la auto28.es utiliza cookies propias para mejorar la navegación. Las cookies utilizadas no contienen ningún tipo de información de carácter personal. Si continua navegando entendemos acepta su uso.
+                    </div>
+                    <div class="cookieAlertLink">
+                        <a href="">Más información</a>
+                    </div>
+                    <div class="cookieAlertButton">
+                        <button>Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-lg-5 col-md-5">
                 <div class="mainPageSitHeader"><h2>{% trans %}Доска бесплатных объявлений в Испании{% endtrans %}</h2></div>
+                <div class="mainPageSiteSubheader">{% trans %}С нами Вы сможете{% endtrans %}:</div>
             </div>
-            <div class="col-lg-12 owlMainSlider">
+            <div class="col-lg-12 owl-carousel" id="owlMainSlider">
+                <div class="row">
+                    <div class="col-lg-6 col-mg-6">
+                        <div class="siteInfoPane">
+                            <div class="siteInfoPaneInner">
+                                <div class="innerHeader">
+                                    <h4>{% trans %}Найти<br/>транспорт{% endtrans %}</h4>
+                                </div>
+                                <div class="siteInfoPaneFloat">
+                                    {% if  app.request.locale == 'lv' %}
+                                        <form action="{{ path('search') }}" method="post">
+                                    {% else %}
+                                        <form action="{{ path('searchLocale',{'_locale' : app.request.locale}) }}" method="post">
+                                    {% endif %}
+                                        <div class="header-search-box">
+                                            <input name="searchText" type="text" placeholder="{% trans %}SITE MEKLĒŠANA{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
+                                            <a data-toggle="modal" data-target="#regionModal" class="top-select-region">
+                                                {% if sessionCity %}
+                                                    {{ sessionCity.name }}
+                                                {% else %}
+                                                    {% if sessionRegion %}
+                                                        {{ sessionRegion.name }}
+                                                    {% else %}
+                                                        {% trans %}Вся Испания{% endtrans %}
+                                                    {% endif %}
+                                                {% endif %}
+                                            </a>
+                                            <input type="submit" class="header-search-button" value="" />
+                                        </div>
+                                        <div class="infoPaneCheckbox">
+                                            <div class="blackCheckbox">
+                                                <div class="blackCheckboxInput">
+                                                    <input type="checkbox" />
+                                                </div>
+                                                Искать в названиях
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>  
+                                <div class="siteInfoPaneContent">
+                                    <div class="description">
+                                        {% trans %}Напишите интересующую Вас модель или воспользуйтесь <a href="">расширенным поиском</a>{% endtrans %}
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-mg-6">
+                        <div class="siteInfoPane">
+                            <div class="siteInfoPaneInner">
+                                <div class="innerHeader">
+                                    <h4>{% trans %}Продать<br/>свой транспорт{% endtrans %}</h4>
+                                </div>
+                                <div class="siteInfoPaneFloat">
+                                    <a href="" class="siteInfoPaneAddadvert">Отправить заявку</a>
+                                </div>
+                                <div class="siteInfoPaneContent">
+                                    <div class="description">
+                                        {% trans %}<a href="">Зарегистрируйтесь</a> и добавляйте объявления{% endtrans %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-mg-6">
+                        <div class="siteInfoPane">
+                            <div class="siteInfoPaneInner">
+                                <div class="innerHeader">
+                                    <h4>{% trans %}Услуги{% endtrans %}</h4>
+                                </div>
+                                <div class="siteInfoPaneContent">
+                                    <ul class="list-unstyled list-inline">
+                                        <li><a href="">Сервисы</a></li>
+                                        <li><a href="">Кредиты</a></li>
+                                        <li><a href="">Страхование</a></li>
+                                        <li><a href="">Диллеры</a></li>
+                                    </ul>
+                                    <div class="description">Узнайте где можно воспользоваться сервисами, взять или застраховать авто</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-mg-6">
+                        <div class="siteInfoPane">
+                            <div class="siteInfoPaneInner dilers">
+                                <div class="innerHeader">
+                                    <h4>БМВ X5. Скидка -10%</h4>
+                                </div>
+                                <div class="siteInfoPaneContent dilers">
+                                    <div class="description">Акция! От официального дилера БМВ в Малаге "Рога и копыта".<br/>Скидки на BMW X5 до 10%. Спешите! Предложений ограничено!</div>
+                                </div>
+                                <div class="siteInfoPaneContentButton">
+                                    <a href="">Смотреть подробнее</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-lg-6 col-mg-6">
                         <div class="siteInfoPane">

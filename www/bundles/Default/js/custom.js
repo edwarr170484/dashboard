@@ -54,7 +54,18 @@ $(document).ready(function(){
         center:true,
         callbacks: true,
         URLhashListener: true,
-        startPosition: 'URLHash'
+        startPosition: 'URLHash',
+        navContainer : '#productModalSlider',
+        navText : ['<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.5 43L1.5 22L22.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 43L22.5 22L1.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
+    });
+    
+    $("#owlMainSlider").owlCarousel({
+        items:1,
+        loop : true,
+    });
+    
+    $(".clearFilters").click(function(){
+        $(".clear-selects").trigger('click');
     });
     
     $("img").on("contextmenu", false);
@@ -102,7 +113,7 @@ $(document).ready(function(){
     
     $(".footer-menu-header").click(function(){
         $(this).toggleClass("active");
-        $(".footer-menu-list-block").toggleClass("active");
+        $(this).next(".footer-menu-list-block").toggleClass("active");
     });
     
     $(".dz-hidden-input").attr("multiple", "multiple");

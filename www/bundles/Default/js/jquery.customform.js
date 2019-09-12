@@ -14,7 +14,7 @@
 			var cover = selectElement.parent(".select-cover");
 			
 			selectOptions.each(function(){
-                            if($(this).attr("value") == selectValue){
+                            if($(this).attr("value") === selectValue){
                                 cover.append("<div class='select-value'>" + $(this).html() + "</div><div class='select-options'></div>");
                                 selected = 1;
                             }
@@ -34,7 +34,8 @@
 					var groupOptionsList = '';
 					
 					groupOptions.each(function(){
-						groupOptionsList += "<div class='select-option' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>";
+                                                groupOptionsList += "<div class='select-option' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>";
+					
 					});
 					cover.find(".select-options").append("<div class='select-option-group'><div class='select-option-group-label'>" + $(this).attr("label") + "</div>" + groupOptionsList + "</div>");
 				});

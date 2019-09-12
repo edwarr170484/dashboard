@@ -147,9 +147,10 @@ body{font-size:10px;background:$white-color;}
 .mainPageFiltersSettings button svg{margin-left: 10px;}
 .additionalFiltersBlock{display:none;}
 .mainPageFiltersSettings button.showAllParameters.active svg{@include transform(rotate(180deg));}
-.mainPageSitHeader{padding-top: 9rem;padding-bottom: 12rem;}
+.mainPageSitHeader{padding-top: 9rem;padding-bottom: 3.3rem;}
 .mainPageSitHeader h2{color:$black-text;}
 .siteInfoPane{background: $yellow-color;@include border-radius(9px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding-left: 2.4rem;margin-bottom: 5rem;min-height:240px;}
+.siteInfoPane:hover{background: $orange-color;}
 .siteInfoPaneInner{background: #fff;padding: 3.5rem 4.6rem;@include border-radius(0 9px 9px 0);position: relative;min-height:240px;}
 .innerHeader h4{color:$black-text;}
 .siteInfoPaneContent ul{display: block;padding-top: 8px;}
@@ -169,7 +170,7 @@ body{font-size:10px;background:$white-color;}
 .header-search-box input[name="searchText"]{display: block;border:2px solid $black-text;@include fontView("GothamProRegular",$black-text,1.4rem,1.3rem);padding: 0;padding-left: 12px;width: 270px;}
 .header-search-box a.top-select-region{display: block;border:2px solid $black-text;border-right: none;border-left: none;margin: 0;padding-left: 36px;@include fontView("GothamProRegular",$black-text,1.4rem,1.3rem);@include flexBox(row,flex-start,center);background: url('../img/geotag.png') 6px 50% no-repeat;width: 164px;}
 .header-search-box input[type="submit"]{background: url('../img/search-white.png') 50% 50% no-repeat $black-text;@include border-radius(0);width: 40px;height: 40px;border:none;}
-.header-search-box input[type="submit"]:hover,.header-search-box input[type="submit"]:focus{background-color: $yellow-color;border:2px solid $black-text;}
+.header-search-box input[type="submit"]:hover,.header-search-box input[type="submit"]:focus{background-color: $yellow-color;border:2px solid $black-text;border-left:none;}
 .blackCheckbox{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.4rem,1.3rem);}
 .blackCheckboxInput input[type="checkbox"]{@include opacity(0);display: block;width:100%;height:100%;margin: 0;}
 .blackCheckboxInput{border: 2px solid #222B2A;background: none;width: 22px;height: 22px;margin-right: 12px;}
@@ -274,7 +275,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .registerInputBlock{position: relative;margin-bottom: 3.2rem;}
 .inputMessage{@include fontView("GothamProRegular",$orange-color,1.1rem,1.1rem);text-align: right;padding-top: 0.4rem;}
 .modal{z-index:9999;}
-.searchBlock{background: #fff;padding-top: 3rem;padding-bottom: 3rem;}
+.searchBlock{background: #fff;padding-top: 3rem;padding-bottom: 3rem;width: 100%;position: absolute;top:0;}
 .searchBlockInner{@include flexBox(row,flex-start,center);position: relative;}
 .searchBlockInner input{display: block;@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);border:none;background: url('../img/search-left.svg') 0 50% no-repeat;padding-left: 3.8rem;margin-left: 5rem;width: 50%;border:1px solid transparent;}
 .searchBlockInner input:focus{border-bottom: 2px solid $black-text;}
@@ -403,7 +404,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .padination{padding-bottom:2.5rem;padding-top: 1.5rem;}
 .categorySpecialAdvertsHeaderNew{@include flexBox(row,flex-end,center);}
 .categorySpecialAdvertsHeaderNew a{display: block;@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);padding-bottom: 5px;border-bottom:2px solid $yellow-color;margin-right: 3rem;}
-.categorySpecialAdvertsHeaderNew a:hover,.categorySpecialAdvertsHeaderNew a:focus{text-decoration: none;}
+.categorySpecialAdvertsHeaderNew a:hover,.categorySpecialAdvertsHeaderNew a:focus{text-decoration: none;border-bottom:2px solid $orange-color;}
 .categoryDescription{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.2rem);}
 .categoryDescription{padding-bottom: 4rem;}
 .advertise-block{margin-bottom:20px;}
@@ -514,7 +515,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .modal-body .form-group .select-cover{margin-bottom: 0;}
 .form-horizontal .control-label{text-align: left;}
 .modal-body .form-group .form-control{border:1px solid #DFE1E5;@include border-radius(2px);@include fontView("GothamProRegular",$input-black,1.3rem,1.2rem);display: block;padding: 20px 10px;}
-.productSliderInner .row{@include flexBox(row,flex-start,stretch);@include flex-wrap(wrap);background: #fff;}
+.productSliderInner .row{@include flexBox(row,flex-start,stretch);@include flex-wrap(wrap);}
 .productSliderInfo{background: #fff;}
 #productModalSlider .owl-item div{@include flexBox(row,center,center);}
 .productModalSliderIcons .advertIcons{@include flexBox(row,center,center);}
@@ -529,6 +530,55 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .productSliderInfo .advertSellerContacts{padding-top: 3rem;}
 .productModalSliderIcons .advertIcons img{max-width:160px;}
 .productModalSliderIcons .advertIcons a{@include border-radius(0);}
+.advertSliderMainFoto{position: relative;}
+.advertSliderMainFoto button{background: none;border: none;position: absolute;height: 100%;width: 84px;z-index:9999;}
+.advertSliderMainFoto button:hover svg,.advertSliderMainFoto button:focus svg{stroke:$yellow-color;}
+.advertSliderMainFoto button.owl-prev{left: 0;top: 0;}
+.advertSliderMainFoto button.owl-next{right: 0;top: 0;}
+.modal.fade.in{@include flexBox(row,center,center);@include flex-wrap(wrap);}
+.page-content{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 3.6rem;padding-bottom: 2.7rem;}
+.page-content a{color:$yellow-color;text-decoration: none;}
+.page-banner{padding-bottom: 5.8rem;}
+.header-search-box input[name="searchText"]:focus{border-color: $orange-color;}
+.filtersFromTo{@include flexBox(row,space-between,center);}
+.filtersFromTo input{border: 1px solid #dfe1e5;font-family: "GothamProRegular", sans-serif;color: #494949;margin-bottom: 10px;padding: 8px 15px;background: #fff;font-size: 1.3rem;width: 50%;}
+.filtersFromTo .select-cover{width: 50%;}
+.filtersFromTo .select-cover:nth-child(2n){border-left:none;}
+.filtersFromTo input:nth-child(2n){border-left:none;}
+.filtersFromTo input:focus{border: 1px solid $yellow-color;}
+#owlMainSlider button.owl-dot{background: $gray-color;@include border-radius(2px);width: 12px;height: 12px;margin-right: 8px;}
+#owlMainSlider button.owl-dot.active{background: $yellow-color;width: 18px;height: 18px;}
+#owlMainSlider button.owl-dot:hover{background: $black-text;}
+#owlMainSlider button.owl-dot.active:hover{background: $yellow-color;}
+#owlMainSlider .owl-dots{width: 50%;margin-left: auto;@include flexBox(row,center,center);}
+.mainPageSiteSubheader{@include fontView("GothamProRegular",$black-text,3.2rem,100%);padding-bottom: 6rem;}
+.cookieAlerts{@include flexBox(row,space-between,center);}
+.cookieAlertBlock{background: $super-white-color;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 3rem 0;}
+.cookieAlertButton button{border:none;background:$yellow-color;@include fontView("GothamProBlack",$super-black-color,1.8rem,100%);text-align: center;padding: 1.3rem 1.5rem;width: 270px;@include border-radius(3px);}
+.cookieAlertButton button:hover,.cookieAlertButton button:focus{background: $orange-color;}
+.cookieAlertMessage{@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);width: 65%;}
+.cookieAlertLink a{@include fontView("GothamProBlack",$gray-color-1,1.8rem,1.7rem);display: block;padding: 1.3rem 1.5rem;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1211,7 +1261,7 @@ a.send-message-smile{color:#6d6d6d;font-size:22px;line-height:100%;cursor:pointe
 .tabs-social:after{content:" ";display:block;clear:both;}
 .seller-block-phone-number i.seller-number-spinner, .user-block-phone-number i.seller-number-spinner{font-size:1.3rem;float:none;margin-left:10px;display:none;}
 .list-inline{margin-left:0;}
-.page-content{font-size:1.4rem;margin-top:15px;}
+
 .city-load-spinner{display:none;}
 .search-box{margin-bottom: 15px;}
 .filter-box-title{font-weight: 500; font-size: 1.4rem;margin-bottom: 8px;}

@@ -1447,7 +1447,7 @@ class DefaultController extends Controller
             $page = $manager->getRepository("DashboardCommonBundle:Page")->findOneBy(array("route" => $route, "locale" => $locale));
             
             if($page)
-                return $this->render('DashboardCommonBundle:Default:page.html.twig', array("page" => $page)); 
+                return $this->render('DashboardCommonBundle:Default:page.html.twig', array("page" => $page,"locale" => $locale)); 
             else
                throw $this->createNotFoundException(); 
         }

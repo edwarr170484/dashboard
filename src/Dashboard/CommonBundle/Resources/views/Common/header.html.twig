@@ -151,7 +151,7 @@
             <div class="col-lg-3 col-md-3 siteLogo">
                 <div class="siteLogoImage">
                     {% if settings.siteLogo %}
-                        {% if  app.request.locale == 'lv' %}
+                        {% if  locale.isDefault %}
                             <a href="{{ path('main') }}">
                                 <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
                             </a>
@@ -164,7 +164,7 @@
                 </div>
                 <div class="headerFunctions">
                     <div class="siteMenuMobileLogin hidden-lg hidden-md">
-                        {% if  app.request.locale == 'lv' %}   
+                        {% if  locale.isDefault %}   
                             <a href="{{path('login')}}"><svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M4.90742 8.27197C4.90742 10.8382 6.18012 13.0968 8.101 14.4171C3.88142 15.4709 0.9 18.2092 0.9 21.5483C0.9 22.2787 1.36511 22.8617 2.09073 23.3216C2.81668 23.7817 3.82129 24.1311 4.94531 24.3933C7.19494 24.918 9.95332 25.1 12 25.1C14.0467 25.1 16.8051 24.918 19.0547 24.3933C20.1787 24.1311 21.1833 23.7817 21.9093 23.3216C22.6349 22.8617 23.1 22.2787 23.1 21.5483C23.1 18.2092 20.1186 15.4709 15.899 14.4171C17.8199 13.0968 19.0926 10.8382 19.0926 8.27197C19.0926 4.21071 15.9144 0.9 12 0.9C8.08563 0.9 4.90742 4.21071 4.90742 8.27197ZM6.54795 8.27197C6.54795 5.14089 8.99772 2.6 12 2.6C15.0023 2.6 17.4521 5.14089 17.4521 8.27197C17.4521 11.403 15.0023 13.9435 12 13.9435C8.99771 13.9435 6.54795 11.403 6.54795 8.27197ZM12 23.4C9.07063 23.4 6.73188 23.0782 5.10657 22.6746C4.29353 22.4727 3.66159 22.251 3.22437 22.0402C3.00554 21.9347 2.83844 21.8334 2.72241 21.7407C2.6112 21.6518 2.55825 21.5798 2.54099 21.5291C2.54933 19.927 3.59103 18.4599 5.29983 17.3873C7.01231 16.3124 9.38193 15.6435 12 15.6435C14.6178 15.6435 16.9872 16.3122 18.6996 17.387C20.4085 18.4595 21.4503 19.9265 21.459 21.5284C21.4422 21.5788 21.3898 21.6507 21.2788 21.7397C21.1632 21.8324 20.9965 21.9337 20.7779 22.0392C20.3412 22.25 19.7095 22.4719 18.8964 22.6739C17.2711 23.0779 14.9313 23.4 12 23.4Z" fill="#747474" stroke="#747474" stroke-width="0.2"/>
 </svg></a>
@@ -184,10 +184,30 @@
             </div>
             <div class="col-lg-6 col-md-6 siteMainMenu hidden-sm hidden-xs">
                 <ul class="list-unstyled">
-                    <li class="active"><a href="">Легковые</a><div class="hover-border"></div></li>
-                    <li><a href="">Мотоциклы</a><div class="hover-border"></div></li>
+                    <li class="active submenu">
+                        <a href="">Легковые<div class="shadowBlock"></div></a>
+                        <div class="hover-border"></div>
+                        <div class="siteMainSubmenu">
+                            <ul class="list-unstyled">
+                                <li><a href="">С&nbsp;пробегом</a></li>
+                                <li><a href="">Новые</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="submenu">
+                        <a href="">Мотоциклы<div class="shadowBlock"></div></a>
+                        <div class="hover-border"></div>
+                        <div class="siteMainSubmenu">
+                            <ul class="list-unstyled">
+                                <li><a href="">Мотоциклы</a></li>
+                                <li><a href="">Скутеры</a></li>
+                                <li><a href="">Мотовездеходы</a></li>
+                            </ul>
+                        </div>
+                    </li>
                     <li><a href="">Автодома</a><div class="hover-border"></div></li>
-                    <li class="submenu"><a href="">Коммерческие
+                    <li class="submenu">
+                        <a href="">Коммерческие
                             <div class="shadowBlock"></div>
                         </a>
                         <div class="hover-border"></div>
@@ -196,9 +216,9 @@
                                 <li><a href="">Автобусы</a></li>
                                 <li><a href="">Грузовики</a></li>
                                 <li><a href="">Тягачи</a></li>
-                                <li><a href="">Прицепы и полуприцепы</a></li>
+                                <li><a href="">Прицепы&nbsp;и&nbsp;полуприцепы</a></li>
                                 <li><a href="">Сельскохозяйственная</a></li>
-                                <li><a href="">Строительная и дорожная</a></li>
+                                <li><a href="">Строительная&nbsp;и&nbsp;дорожная</a></li>
                             </ul>
                             <ul class="list-unstyled">
                                 <li><a href="">Погрузчики</a></li>
@@ -210,11 +230,22 @@
                             </ul>
                         </div>
                     </li>
-                    <li><a href="">Услуги</a><div class="hover-border"></div></li>
+                    <li class="submenu">
+                        <a href="">Услуги<div class="shadowBlock"></div></a>
+                        <div class="hover-border"></div>
+                        <div class="siteMainSubmenu">
+                            <ul class="list-unstyled">
+                                <li><a href="">Дилеры</a></li>
+                                <li><a href="">Страхование</a></li>
+                                <li><a href="">Кредитование</a></li>
+                                <li><a href="">Сервисные&nbsp;центры</a></li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
             <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
-                            {% if  app.request.locale == 'lv' %}
+                            {% if locale.isDefault %}
                                 {% if app.user %}
                                     <a href="{{path('addproduct')}}" class="header-add-button pull-right">
                                         {{ block('svgAddAdvert') }}
@@ -306,7 +337,7 @@
         {% endfor %}
     </div>
     <div class="addAdvertButtonMobile hidden-lg hidden-md">
-        {% if  app.request.locale == 'lv' %}
+        {% if  locale.isDefault %}
             {% if app.user %}
                 <a href="{{path('addproduct')}}">
                     {{ block('svgAddAdvertMobile') }}

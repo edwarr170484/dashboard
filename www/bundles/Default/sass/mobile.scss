@@ -49,6 +49,10 @@
     #owlMainSlider .owl-dots{width: 100%;}
     .cookieAlerts{@include flex-wrap(wrap);}
     .cookieAlertMessage{width: 100%;padding-bottom: 15px;}
+    #navbar-bottom{padding-top: 20px;}
+    #navbar-bottom .footer-menu{padding-bottom: 20px;}
+    .categorySpecialAdvertsHeader{@include flex-wrap(wrap);}
+    .categoryAdvertCommonInfo{@include flex-wrap(wrap);}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
@@ -109,7 +113,7 @@
     .categoryAdvertCredit{margin: 0;}
     .categoryAdvertInfoYear{padding: 15px 0;}
     .categorySpecialAdvertsHeader h3{font-size: 2.6rem;}
-    .categorySpecialAdvertsHeader{@include flex-wrap(wrap);}
+    
     .advertFotos {@include flex-wrap(wrap);}
     .advertFotoIcons{width: 100%;padding-top: 12px;}
     .advertAdditionalsItems{@include column-count(2);}
@@ -125,7 +129,7 @@
     .categoryAdvertPrice{width: 100%;}
     .categoryAdverts.grid .categoryAdvertPrice{width: auto;}
     .categoryAdvertCredit{width: 100%;padding-top: 15px;text-align: center;}
-    .categoryAdverts.grid{width:auto;padding-top: 0;text-align: center;}
+    .categoryAdverts.grid{width:auto;padding-top: 0;}
     .categorySpecialAdvertsHeader h3{font-size: 1.8rem;}
     .categoryAdvertShareLinks{padding-top: 10px;top:2rem;}
     .advertAdditionalsItems{@include column-count(1);}

@@ -309,7 +309,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvert.payed{border: 3px solid #F5AA01;background: #FFFFFF;}
 .categoryAdvertImages{width: 20%;}
 .categoryAdvertImages img{width: 100%;max-width:260px;}
-.categoryAdvertInfo{width: 80%;padding-left: 3rem;@include flexBox(row,flex-start,stretch);}
+.categoryAdvertInfo{width: 80%;padding-left: 3rem;}
+.categoryAdvertCommonInfo{@include flexBox(row,flex-start,stretch);}
 .categoryAdvertMainInfo{width: 40%;}
 .categoryAdvertName{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem)}
 .categoryAdvertInfoPrice{width: 25%;@include flexBox(column,flex-start,center);}
@@ -407,7 +408,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categorySpecialAdvertsHeaderNew a:hover,.categorySpecialAdvertsHeaderNew a:focus{text-decoration: none;border-bottom:2px solid $orange-color;}
 .categoryDescription{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.2rem);}
 .categoryDescription{padding-bottom: 4rem;}
-.advertise-block{margin-bottom:20px;}
+.advertise-block{margin-bottom:20px;@include flexBox(row,center,center);}
 .advertise-block img{width: 100%;max-width:300px;}
 .advertise-block .siteInfoPane{padding: 0;max-width: 300px;}
 .advertise-block .siteInfoPaneInner{padding: 3rem;}
@@ -558,14 +559,19 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .cookieAlertButton button:hover,.cookieAlertButton button:focus{background: $orange-color;}
 .cookieAlertMessage{@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);width: 65%;}
 .cookieAlertLink a{@include fontView("GothamProBlack",$gray-color-1,1.8rem,1.7rem);display: block;padding: 1.3rem 1.5rem;}
-
-
-
-
-
-
-
-
+.categoryAdvertDealerInfo{width: 100%;padding-top: 30px;}
+.categoryAdvertDealerInfo{@include flexBox(row,space-between,center);width: 100%;@include flex-wrap(wrap);}
+.categoryAdvertDealerContact a{@include fontView("GothamProBold",$super-white-color,1.4rem,100%);background: $yellow-color;display: block;padding: 8px 45px;@include border-radius(3px);position: relative;z-index:9;text-align: center;}
+.categoryAdvertDealerContact a:hover,.categoryAdvertDealerContact a:focus{background: $orange-color;text-decoration: none;}
+.categoryAdvertDealerAll{@include flexBox(row,flex-start,center);position: relative;z-index:9}
+.categoryAdvertDealerAll a{@include fontView("GothamProRegular",$orange-color,1.4rem,100%);text-decoration: underline;}
+.categoryAdvertDealerAll a:hover,.categoryAdvertDealerAll a:focus{text-decoration: none;}
+.categoryAdvertDealerAll span{@include fontView("GothamProRegular",$gray-color-1,1.4rem,100%);padding-left: 11px;}
+.categoryAdvertDealerLogo{padding-right: 3rem;padding-bottom: 13px;}
+.categoryAdverDealerTitle{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);padding-right: 3rem;padding-bottom: 13px;}
+.categoryAdvertDealerNameInfo{@include flexBox(row,flex-start,center);@include flex-wrap(wrap);}
+.advertSellerRating.category{padding-top: 0;padding-bottom: 13px;}
+.categoryAdvertDealerName{padding-bottom: 15px;}
 
 
 

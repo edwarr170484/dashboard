@@ -34,8 +34,8 @@ CREATE TABLE `banner` (
   `date_added` datetime NOT NULL,
   `position` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `code` longtext COLLATE utf8_unicode_ci,
-  `date_from` datetime DEFAULT CURRENT_TIMESTAMP,
-  `date_to` datetime DEFAULT CURRENT_TIMESTAMP,
+  `date_from` datetime DEFAULT NULL,
+  `date_to` datetime DEFAULT NULL,
   `clicks` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

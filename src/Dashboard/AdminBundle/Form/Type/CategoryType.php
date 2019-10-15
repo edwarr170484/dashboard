@@ -13,15 +13,14 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 use Dashboard\AdminBundle\Form\Type\TranslationType;
+use Dashboard\AdminBundle\Form\Type\GenerationType;
 
 class CategoryType extends AbstractType
 {
     private $em;
-    private $parent;
     
-    public function __construct($em, $parent) {
+    public function __construct($em) {
        $this->em = $em;
-       $this->parent = $parent;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -42,6 +41,8 @@ class CategoryType extends AbstractType
                                             'group_by' => 'parent.title',
                                             'required' => false,
                                             'attr' => array('class' => 'form-control')))
+            ->add('yearFrom', TextType::class, array('required' => true,'label' => 'Год начала выпуска', 'attr' => array('class' => 'form-control')))
+            ->add('yearTo', TextType::class, array('required' => true,'label' => 'Год окончания выпуска', 'attr' => array('class' => 'form-control')))
             ->add('metaTagTitle', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Title', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Title')))
             ->add('metaTagDescription', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Description', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Description')))
             ->add('metaTagAuthor', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Author', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Author')))
@@ -49,6 +50,7 @@ class CategoryType extends AbstractType
             ->add('metaTagKeywords', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Keywords', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Keywords')))
             /*->add('filters', 'entity', array( 'class' => 'DashboardCommonBundle:Filter','choice_label' => 'name','label' => 'Привязанные фильтры','expanded' => true, "multiple" => true))*/
             ->add('translations', 'collection', array('type' => new TranslationType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
+            ->add('generations', 'collection', array('type' => new GenerationType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('descriptions', 'collection', array('type' => new DescriptionType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')));
     }

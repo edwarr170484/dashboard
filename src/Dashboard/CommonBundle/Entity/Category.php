@@ -51,6 +51,16 @@ class Category
     private $image;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     */
+    private $yearFrom;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     */
+    private $yearTo;
+    
+    /**
      * @ORM\Column(type="integer", length=15)
      */
     private $sortorder;
@@ -124,6 +134,11 @@ class Category
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="category", cascade={"persist"})
      */
     private $translations;
+        
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Generation", mappedBy="category")
+     */
+    private $generations;
     
     /**
      * Constructor
@@ -132,8 +147,11 @@ class Category
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->product = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->descriptions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->filters = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->banners = new \Doctrine\Common\Collections\ArrayCollection();
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->generations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -155,7 +173,7 @@ class Category
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -178,7 +196,7 @@ class Category
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
@@ -201,7 +219,7 @@ class Category
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -224,7 +242,7 @@ class Category
     public function setImage($image)
     {
         $this->image = $image;
-    
+
         return $this;
     }
 
@@ -247,7 +265,7 @@ class Category
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-    
+
         return $this;
     }
 
@@ -270,7 +288,7 @@ class Category
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
@@ -293,7 +311,7 @@ class Category
     public function setIsShowFilters($isShowFilters)
     {
         $this->isShowFilters = $isShowFilters;
-    
+
         return $this;
     }
 
@@ -308,6 +326,52 @@ class Category
     }
 
     /**
+     * Set isShowBu
+     *
+     * @param boolean $isShowBu
+     * @return Category
+     */
+    public function setIsShowBu($isShowBu)
+    {
+        $this->isShowBu = $isShowBu;
+
+        return $this;
+    }
+
+    /**
+     * Get isShowBu
+     *
+     * @return boolean 
+     */
+    public function getIsShowBu()
+    {
+        return $this->isShowBu;
+    }
+
+    /**
+     * Set isShowPriceFilter
+     *
+     * @param boolean $isShowPriceFilter
+     * @return Category
+     */
+    public function setIsShowPriceFilter($isShowPriceFilter)
+    {
+        $this->isShowPriceFilter = $isShowPriceFilter;
+
+        return $this;
+    }
+
+    /**
+     * Get isShowPriceFilter
+     *
+     * @return boolean 
+     */
+    public function getIsShowPriceFilter()
+    {
+        return $this->isShowPriceFilter;
+    }
+
+    /**
      * Set metaTagTitle
      *
      * @param string $metaTagTitle
@@ -316,7 +380,7 @@ class Category
     public function setMetaTagTitle($metaTagTitle)
     {
         $this->metaTagTitle = $metaTagTitle;
-    
+
         return $this;
     }
 
@@ -339,7 +403,7 @@ class Category
     public function setMetaTagDescription($metaTagDescription)
     {
         $this->metaTagDescription = $metaTagDescription;
-    
+
         return $this;
     }
 
@@ -362,7 +426,7 @@ class Category
     public function setMetaTagAuthor($metaTagAuthor)
     {
         $this->metaTagAuthor = $metaTagAuthor;
-    
+
         return $this;
     }
 
@@ -385,7 +449,7 @@ class Category
     public function setMetaTagRobots($metaTagRobots)
     {
         $this->metaTagRobots = $metaTagRobots;
-    
+
         return $this;
     }
 
@@ -408,7 +472,7 @@ class Category
     public function setMetaTagKeywords($metaTagKeywords)
     {
         $this->metaTagKeywords = $metaTagKeywords;
-    
+
         return $this;
     }
 
@@ -431,7 +495,7 @@ class Category
     public function addChild(\Dashboard\CommonBundle\Entity\Category $children)
     {
         $this->children[] = $children;
-    
+
         return $this;
     }
 
@@ -464,7 +528,7 @@ class Category
     public function setParent(\Dashboard\CommonBundle\Entity\Category $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
@@ -487,7 +551,7 @@ class Category
     public function addProduct(\Dashboard\CommonBundle\Entity\Product $product)
     {
         $this->product[] = $product;
-    
+
         return $this;
     }
 
@@ -512,128 +576,6 @@ class Category
     }
 
     /**
-     * Add filters
-     *
-     * @param \Dashboard\CommonBundle\Entity\Filter $filters
-     * @return Category
-     */
-    public function addFilter(\Dashboard\CommonBundle\Entity\Filter $filters)
-    {
-        $this->filters[] = $filters;
-    
-        return $this;
-    }
-
-    /**
-     * Remove filters
-     *
-     * @param \Dashboard\CommonBundle\Entity\Filter $filters
-     */
-    public function removeFilter(\Dashboard\CommonBundle\Entity\Filter $filters)
-    {
-        $this->filters->removeElement($filters);
-    }
-
-    /**
-     * Get filters
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getFilters()
-    {
-        return $this->filters;
-    }
-
-    /**
-     * Add translations
-     *
-     * @param \Dashboard\CommonBundle\Entity\Translation $translations
-     * @return Category
-     */
-    public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
-    {
-        $this->translations[] = $translations;
-    
-        return $this;
-    }
-
-    /**
-     * Remove translations
-     *
-     * @param \Dashboard\CommonBundle\Entity\Translation $translations
-     */
-    public function removeTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
-    {
-        $this->translations->removeElement($translations);
-    }
-
-    /**
-     * Get translations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    /**
-     * Add banners
-     *
-     * @param \Dashboard\CommonBundle\Entity\Banner $banners
-     * @return Category
-     */
-    public function addBanner(\Dashboard\CommonBundle\Entity\Banner $banners)
-    {
-        $this->banners[] = $banners;
-    
-        return $this;
-    }
-
-    /**
-     * Remove banners
-     *
-     * @param \Dashboard\CommonBundle\Entity\Banner $banners
-     */
-    public function removeBanner(\Dashboard\CommonBundle\Entity\Banner $banners)
-    {
-        $this->banners->removeElement($banners);
-    }
-
-    /**
-     * Get banners
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getBanners()
-    {
-        return $this->banners;
-    }
-
-    /**
-     * Set isShowBu
-     *
-     * @param boolean $isShowBu
-     * @return Category
-     */
-    public function setIsShowBu($isShowBu)
-    {
-        $this->isShowBu = $isShowBu;
-    
-        return $this;
-    }
-
-    /**
-     * Get isShowBu
-     *
-     * @return boolean 
-     */
-    public function getIsShowBu()
-    {
-        return $this->isShowBu;
-    }
-
-    /**
      * Add descriptions
      *
      * @param \Dashboard\CommonBundle\Entity\CategoryDescription $descriptions
@@ -642,7 +584,7 @@ class Category
     public function addDescription(\Dashboard\CommonBundle\Entity\CategoryDescription $descriptions)
     {
         $this->descriptions[] = $descriptions;
-    
+
         return $this;
     }
 
@@ -667,25 +609,180 @@ class Category
     }
 
     /**
-     * Set isShowPriceFilter
+     * Add filters
      *
-     * @param boolean $isShowPriceFilter
+     * @param \Dashboard\CommonBundle\Entity\Filter $filters
      * @return Category
      */
-    public function setIsShowPriceFilter($isShowPriceFilter)
+    public function addFilter(\Dashboard\CommonBundle\Entity\Filter $filters)
     {
-        $this->isShowPriceFilter = $isShowPriceFilter;
-    
+        $this->filters[] = $filters;
+
         return $this;
     }
 
     /**
-     * Get isShowPriceFilter
+     * Remove filters
      *
-     * @return boolean 
+     * @param \Dashboard\CommonBundle\Entity\Filter $filters
      */
-    public function getIsShowPriceFilter()
+    public function removeFilter(\Dashboard\CommonBundle\Entity\Filter $filters)
     {
-        return $this->isShowPriceFilter;
+        $this->filters->removeElement($filters);
+    }
+
+    /**
+     * Get filters
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFilters()
+    {
+        return $this->filters;
+    }
+
+    /**
+     * Add banners
+     *
+     * @param \Dashboard\CommonBundle\Entity\Banner $banners
+     * @return Category
+     */
+    public function addBanner(\Dashboard\CommonBundle\Entity\Banner $banners)
+    {
+        $this->banners[] = $banners;
+
+        return $this;
+    }
+
+    /**
+     * Remove banners
+     *
+     * @param \Dashboard\CommonBundle\Entity\Banner $banners
+     */
+    public function removeBanner(\Dashboard\CommonBundle\Entity\Banner $banners)
+    {
+        $this->banners->removeElement($banners);
+    }
+
+    /**
+     * Get banners
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBanners()
+    {
+        return $this->banners;
+    }
+
+    /**
+     * Add translations
+     *
+     * @param \Dashboard\CommonBundle\Entity\Translation $translations
+     * @return Category
+     */
+    public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
+    {
+        $this->translations[] = $translations;
+
+        return $this;
+    }
+
+    /**
+     * Remove translations
+     *
+     * @param \Dashboard\CommonBundle\Entity\Translation $translations
+     */
+    public function removeTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
+    {
+        $this->translations->removeElement($translations);
+    }
+
+    /**
+     * Get translations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * Add generations
+     *
+     * @param \Dashboard\CommonBundle\Entity\Generation $generations
+     * @return Category
+     */
+    public function addGeneration(\Dashboard\CommonBundle\Entity\Generation $generations)
+    {
+        $this->generations[] = $generations;
+
+        return $this;
+    }
+
+    /**
+     * Remove generations
+     *
+     * @param \Dashboard\CommonBundle\Entity\Generation $generations
+     */
+    public function removeGeneration(\Dashboard\CommonBundle\Entity\Generation $generations)
+    {
+        $this->generations->removeElement($generations);
+    }
+
+    /**
+     * Get generations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGenerations()
+    {
+        return $this->generations;
+    }
+
+    /**
+     * Set yearFrom
+     *
+     * @param string $yearFrom
+     * @return Category
+     */
+    public function setYearFrom($yearFrom)
+    {
+        $this->yearFrom = $yearFrom;
+
+        return $this;
+    }
+
+    /**
+     * Get yearFrom
+     *
+     * @return string 
+     */
+    public function getYearFrom()
+    {
+        return $this->yearFrom;
+    }
+
+    /**
+     * Set yearTo
+     *
+     * @param string $yearTo
+     * @return Category
+     */
+    public function setYearTo($yearTo)
+    {
+        $this->yearTo = $yearTo;
+
+        return $this;
+    }
+
+    /**
+     * Get yearTo
+     *
+     * @return string 
+     */
+    public function getYearTo()
+    {
+        return $this->yearTo;
     }
 }

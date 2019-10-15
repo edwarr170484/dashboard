@@ -16,6 +16,7 @@ use Dashboard\AdminBundle\Form\DataTransformer\FilterValueToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\RegionToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\CityToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\ServiceToNumberTransformer;
+use Dashboard\AdminBundle\Form\DataTransformer\GenerationToNumberTransformer;
 
 class TranslationType extends AbstractType
 {
@@ -42,7 +43,8 @@ class TranslationType extends AbstractType
             ->add($builder->create('filterValue', 'hidden')->addModelTransformer(new FilterValueToNumberTransformer($this->em)))
             ->add($builder->create('region', 'hidden')->addModelTransformer(new RegionToNumberTransformer($this->em)))                        
             ->add($builder->create('city', 'hidden')->addModelTransformer(new CityToNumberTransformer($this->em)))
-            ->add($builder->create('service', 'hidden')->addModelTransformer(new ServiceToNumberTransformer($this->em)));
+            ->add($builder->create('service', 'hidden')->addModelTransformer(new ServiceToNumberTransformer($this->em)))
+            ->add($builder->create('generation', 'hidden')->addModelTransformer(new GenerationToNumberTransformer($this->em)));
     }
     
     public function configureOptions(OptionsResolver $resolver)

@@ -78,6 +78,18 @@ class Translation
     private $service;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Modification", inversedBy="translations")
+     * @ORM\JoinColumn(name="modification_id", referencedColumnName="id")
+     */
+    private $modification;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Generation", inversedBy="translations")
+     * @ORM\JoinColumn(name="generation_id", referencedColumnName="id")
+     */
+    private $generation;
+    
+    /**
      * @ORM\Column(type="text",nullable=true, options={"default":"0"})
      */
     private $value;
@@ -343,5 +355,52 @@ class Translation
     public function getService()
     {
         return $this->service;
+    }
+
+
+    /**
+     * Set modification
+     *
+     * @param \Dashboard\CommonBundle\Entity\Modification $modification
+     * @return Translation
+     */
+    public function setModification(\Dashboard\CommonBundle\Entity\Modification $modification = null)
+    {
+        $this->modification = $modification;
+
+        return $this;
+    }
+
+    /**
+     * Get modification
+     *
+     * @return \Dashboard\CommonBundle\Entity\Modification 
+     */
+    public function getModification()
+    {
+        return $this->modification;
+    }
+
+    /**
+     * Set generation
+     *
+     * @param \Dashboard\CommonBundle\Entity\Generation $generation
+     * @return Translation
+     */
+    public function setGeneration(\Dashboard\CommonBundle\Entity\Generation $generation = null)
+    {
+        $this->generation = $generation;
+
+        return $this;
+    }
+
+    /**
+     * Get generation
+     *
+     * @return \Dashboard\CommonBundle\Entity\Generation 
+     */
+    public function getGeneration()
+    {
+        return $this->generation;
     }
 }

@@ -34,6 +34,23 @@ class FilterValue
     private $products;
     
     /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="linkedValues", cascade={"persist"})
+     */
+    private $linkToValues;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", inversedBy="linkToValues")
+     * @ORM\JoinTable(name="filter_linked_values")
+     */
+    private $linkedValues;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Filter", inversedBy="linkToValues")
+     * @ORM\JoinTable(name="value_linked_filters")
+     */
+    private $linkedFilters;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="filterValue", cascade={"persist"})
      */
     private $translations;
@@ -167,4 +184,5 @@ class FilterValue
     {
         return $this->translations;
     }
+    
 }

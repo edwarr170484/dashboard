@@ -43,8 +43,7 @@ class FilterType extends AbstractType
                                                                       "input" => "Ввод от руки"), 
                                                                       'required' => true, 
                                                                       'label' => 'Тип фильтра', 'attr' => array('class' => 'form-control', 'placeholder' => 'Тип фильтра')))
-            ->add('values', CollectionType::class, array('type' => new FilterValueType($this->manager), 'label' => ' ','allow_add' => true, 'allow_delete' => true, 'by_reference' => false,
-                                               'attr' => array('class' => 'filter_values')))
+            ->add('values', CollectionType::class, array('type' => new FilterValueType($this->manager), 'label' => ' ','allow_add' => true, 'allow_delete' => true, 'by_reference' => false,'attr' => array('class' => 'filter_values')))
             ->add('categories', 'entity', array( 'class' => 'DashboardCommonBundle:Category',
                                                  'choice_label' => 'title',
                                                  'required' => false,

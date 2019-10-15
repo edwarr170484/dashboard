@@ -1,5 +1,5 @@
 {% for child in category.children %}
-    <tr class="subcat-{{ category.id }}">
+    <tr class="subcat-{{ category.id }}" id="categoryRow{{ child.id }}">
         <td><input name="category[]" value="{{ child.id }}" type="checkbox" class="checkbox-item" /></td>
         <td>
             {% for i in 0..spaces %}&nbsp;{% endfor %}
@@ -9,6 +9,7 @@
             {% else %}
                 {{ child.title }}
             {% endif %}
+            <button style="background:none;border:none" type="button" onclick="addSubcategory({{ child.id }})" title="Добавить подкатегорию"><i class="fa fa-plus"></i></button>
         </td>
         <td>
             {{ child.name }}

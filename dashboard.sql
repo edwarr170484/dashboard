@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Сен 05 2019 г., 16:13
--- Версия сервера: 10.1.9-MariaDB
--- Версия PHP: 5.6.15
+-- Время создания: Окт 15 2019 г., 19:50
+-- Версия сервера: 10.4.6-MariaDB
+-- Версия PHP: 7.1.32
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -33,10 +35,10 @@ CREATE TABLE `banner` (
   `link` varchar(512) COLLATE utf8_unicode_ci DEFAULT '0',
   `date_added` datetime NOT NULL,
   `position` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `code` longtext COLLATE utf8_unicode_ci,
-  `date_from` datetime DEFAULT NULL,
-  `date_to` datetime DEFAULT NULL,
-  `clicks` int(11) DEFAULT '0'
+  `code` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `date_from` datetime DEFAULT current_timestamp(),
+  `date_to` datetime DEFAULT current_timestamp(),
+  `clicks` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -71,7 +73,7 @@ CREATE TABLE `category` (
   `parent_id` int(11) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` longtext COLLATE utf8_unicode_ci,
+  `description` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `sortorder` int(11) NOT NULL,
   `meta_tag_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
@@ -79,78 +81,102 @@ CREATE TABLE `category` (
   `meta_tag_author` varchar(512) COLLATE utf8_unicode_ci DEFAULT 'null',
   `meta_tag_robots` varchar(512) COLLATE utf8_unicode_ci DEFAULT 'null',
   `meta_tag_keywords` varchar(512) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `is_active` tinyint(1) DEFAULT '1',
-  `is_show_filters` tinyint(1) DEFAULT '1',
-  `is_show_bu` tinyint(1) DEFAULT '0',
-  `is_show_price_filter` tinyint(1) DEFAULT '1'
+  `is_active` tinyint(1) DEFAULT 1,
+  `is_show_filters` tinyint(1) DEFAULT 1,
+  `is_show_bu` tinyint(1) DEFAULT 0,
+  `is_show_price_filter` tinyint(1) DEFAULT 1,
+  `year_from` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
+  `year_to` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `category`
 --
 
-INSERT INTO `category` (`id`, `parent_id`, `name`, `title`, `description`, `image`, `sortorder`, `meta_tag_title`, `meta_tag_description`, `meta_tag_author`, `meta_tag_robots`, `meta_tag_keywords`, `is_active`, `is_show_filters`, `is_show_bu`, `is_show_price_filter`) VALUES
-(10, NULL, 'trudoustroystvo', 'Трудоустройство', NULL, '84115.png', 3, 'Трудоустройство', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(11, 10, 'Vakansii', 'Свободные вакансии', NULL, NULL, 3, 'Вакансии', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(12, 10, 'Ischut-rabotu', 'В поиске работы', NULL, NULL, 2, 'Ищу работу', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(27, NULL, 'Nedvizhimost', 'Недвижимость', '12312312312', '78238.png', 1, 'Недвижимость', 'Недвижимость', NULL, NULL, NULL, 1, 1, 1, 1),
-(28, 27, 'doma', 'Дома', NULL, NULL, 1, 'Дома', NULL, NULL, NULL, NULL, 1, 1, 1, 1),
-(29, 27, 'zemelniye-ucastki', 'Земельные участки', NULL, NULL, 3, 'Земельные участки', 'null', 'null', 'null', 'null', 1, 1, 0, 1),
-(30, 27, 'les', 'Лес', NULL, NULL, 2, 'Лес', 'null', 'null', 'null', 'null', 1, 1, 0, 1),
-(31, 27, 'uslugi1', 'Услуги', NULL, NULL, 4, 'Услуги', 'null', 'null', 'null', 'null', 1, 1, 0, 1),
-(32, NULL, 'Stroitelstvo', 'Строительство', NULL, '26587.png', 4, 'Для женщин', 'null', 'null', 'null', 'null', 1, 1, 0, 1),
-(34, 32, 'Stroitelnie-materialy', 'Строительные материалы', NULL, NULL, 5, 'Строительные материалы', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(35, 32, 'Santehnika', 'Сантехника', NULL, NULL, 6, 'Сантехника', 'null', 'null', 'null', 'null', 1, 1, 0, 1),
-(36, 32, 'Stroitelnie-raboty', 'Строительные работы', NULL, NULL, 7, 'Строительные работы', 'null', 'null', 'null', 'null', 1, 1, 0, 1),
-(37, 32, 'Oborudovanie-i-instrumenty', 'Оборудование и инструменты', NULL, NULL, 8, 'Оборудование и инструменты', 'null', 'null', 'null', 'null', 1, 1, 0, 1),
-(38, 32, 'Uslugi_transportirovki', 'Услуги транспортировки', NULL, NULL, 9, 'Услуги транспортировки', 'null', 'null', 'null', 'null', 1, 1, 0, 1),
-(51, NULL, 'Elektrotekhnika', 'Электротехника', NULL, '53278.png', 5, 'Для мужчин', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(52, 51, 'Bytovaya-tehnika', 'Бытовая техника', NULL, NULL, 6, 'Бытовая техника', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(53, 51, 'Komjutery-ofisnaja-tehnika', 'Компьютеры, офисная техника', NULL, NULL, 7, 'Компьютеры, офисная техника', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(54, 51, 'Telefony-1', 'Телефоны', NULL, NULL, 8, 'Телефоны', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(55, 51, 'Audio-i-video-tekhnika', 'Аудио и видео техника', NULL, NULL, 9, 'Аудио и видео техника', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(56, 27, 'pomesceniya', 'Помещения', NULL, NULL, 5, 'Помещения', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(57, 51, 'Televizory', 'Телевизоры', NULL, NULL, 10, 'Телевизоры', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(58, 51, 'Drugoe', 'Другое', NULL, NULL, 11, 'Другое', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(64, NULL, 'Odezhda-obuv', 'Одежда, обувь', NULL, '4911.png', 6, 'Красота и уход', 'Красота и уход', NULL, NULL, NULL, 1, 0, 0, 1),
-(65, 64, 'Muzhskaya-odezhda', 'Мужская одежда', NULL, NULL, 7, 'Мужская одежда', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(66, 64, 'Zhenskaya-odezhda', 'Женская одежда', NULL, NULL, 8, 'Женская одежда', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(67, 64, 'Detskaya-odezhda-i-obuv', 'Детская одежда и обувь', NULL, NULL, 9, 'Детская одежда', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(68, 64, 'Spetsodezhda', 'Спецодежда', NULL, NULL, 10, 'Спецодежда', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(69, 64, 'Obuv-1', 'Обувь', NULL, NULL, 11, 'Обувь', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(70, NULL, 'Tovary-dlya-doma', 'Товары для дома', NULL, '21332.png', 7, 'Товары для дома', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(71, 70, 'Mebel-1', 'Мебель', NULL, NULL, 8, 'Мебель', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(72, 70, 'Kukhonnye-prinadlezhnosti', 'Кухонные принадлежности', NULL, NULL, 9, 'Кухонные принадлежности', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(73, 70, 'Bytovaya-tekhnika', 'Бытовая техника', NULL, NULL, 10, 'Бытовая техника', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(74, 70, 'Santekhnika-1', 'Сантехника', NULL, NULL, 11, 'Сантехника', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(75, 70, 'Suveniry', 'Сувениры, подарки', NULL, NULL, 12, 'Сувениры, подарки', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(87, NULL, 'Proizvodstvo', 'Производство', NULL, '15964.png', 8, 'Канцтовары, книги, арт', 'Канцтовары, книги, арт', NULL, NULL, NULL, 1, 0, 0, 1),
-(89, 87, 'Filmy', 'Фильмы', NULL, NULL, 10, 'Фильмы', 'Фильмы', NULL, NULL, NULL, 1, 0, 0, 1),
-(90, 87, 'Kartiny-ikony', 'Картины, иконы', NULL, NULL, 11, 'Картины, иконы', 'Картины, иконы', NULL, NULL, NULL, 1, 0, 0, 1),
-(91, 87, 'Kantstovary', 'Канцтовары', NULL, NULL, 9, 'Канцтовары', 'Канцтовары', NULL, NULL, NULL, 1, 0, 0, 1),
-(94, 87, 'Antikvariat', 'Антиквариат', NULL, NULL, 15, 'Антиквариат', 'Антиквариат', NULL, NULL, NULL, 1, 0, 0, 1),
-(95, 87, 'Nastol-nye-igry', 'Настольные игры', NULL, NULL, 16, 'Настольные игры', 'Настольные игры', NULL, NULL, NULL, 1, 0, 0, 1),
-(98, 87, 'Drugoe-kanc', 'Другое', NULL, NULL, 19, 'Другое', 'Другое', NULL, NULL, NULL, 1, 0, 0, 1),
-(99, NULL, 'Vse-dlya-detey', 'Все для детей', NULL, '2671.png', 9, 'Все для детей', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(100, 99, 'Detskaya-odezhda-i-obuv-1', 'Детская одежда и обувь', NULL, NULL, 10, 'Детская одежда и обувь', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(101, 99, 'Kolyaski', 'Коляски', NULL, NULL, 11, 'Коляски', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(102, 99, 'Tovary-dlya-shkoly', 'Товары для школы', NULL, NULL, 12, 'Товары для школы', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(103, 99, 'Aksessuary-i-pitanie', 'Аксессуары и питание', NULL, NULL, 13, 'Аксессуары и питание', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(104, 99, 'Igrushki', 'Игрушки', NULL, NULL, 14, 'Игрушки', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(105, 99, 'Drugoe-1', 'Другое', NULL, NULL, 15, 'Другое', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(111, NULL, 'Zhivotnye-1', 'Животные', NULL, '12137.png', 11, 'Животные и Растения', 'Животные и Растения', NULL, NULL, NULL, 1, 0, 0, 1),
-(114, 111, 'Koshki', 'Кошки', NULL, NULL, 13, 'Кошки', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(115, 111, 'Selkhoz-zhivotnye-1', 'Сельхоз животные', NULL, NULL, 14, 'Сельхоз животные', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(116, NULL, 'Selskoe-khozyaystvo', 'Сельское хозяйство', NULL, '49048.png', 10, 'Другое', 'Другое', NULL, NULL, NULL, 1, 0, 0, 1),
-(120, 116, 'Selkhoztekhnika', 'Сельхозтехника', NULL, NULL, 12, 'Сельхозтехника', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(155, 10, 'Kursy-obrazovanie', 'Курсы, образование', NULL, NULL, 4, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(157, 10, 'uslugi', 'Услуги', NULL, NULL, 5, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(162, 27, 'kvartiry', 'Квартиры', NULL, NULL, 6, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(163, 64, 'Uslugi-1', 'Услуги', NULL, NULL, 119, 'Услуги', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(164, 64, 'Aksessuary', 'Аксессуары', NULL, NULL, 111, 'Аксессуары', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(165, 70, 'Drugoe-1', 'Другое', NULL, NULL, 109, 'Другое', NULL, NULL, NULL, NULL, 1, 1, 0, 1),
-(166, 111, 'Drugie-zhivotnye', 'Другие животные', NULL, NULL, 98, 'Животные', NULL, NULL, NULL, NULL, 1, 0, 0, 1),
-(167, 111, 'Drugoe-1', 'Другое', NULL, NULL, 99, 'Другое', NULL, NULL, NULL, NULL, 1, 0, 0, 1);
+INSERT INTO `category` (`id`, `parent_id`, `name`, `title`, `description`, `image`, `sortorder`, `meta_tag_title`, `meta_tag_description`, `meta_tag_author`, `meta_tag_robots`, `meta_tag_keywords`, `is_active`, `is_show_filters`, `is_show_bu`, `is_show_price_filter`, `year_from`, `year_to`) VALUES
+(27, NULL, 'legkovye-avtomobili', 'Легковые автомобили', 'Легковые автомобили', '78238.png', 1, 'Легковые автомобили', 'Легковые автомобили', NULL, NULL, 'Легковые автомобили', 1, 1, 1, 1, 'null', 'null'),
+(28, 27, 'audi', 'Audi', NULL, NULL, 1, 'Audi', 'Audi', NULL, NULL, 'Audi', 1, 1, 1, 1, 'null', 'null'),
+(170, 27, 'Chrisler', 'Chrisler', NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(171, 27, 'Ford', 'Ford', NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(172, 27, 'Jeep', 'Jeep', NULL, NULL, 4, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(173, 27, 'Mercedes_Benz', 'Mercedes Benz', NULL, NULL, 5, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(174, 27, 'Peugeot', 'Peugeot', NULL, NULL, 6, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(175, 27, 'Seat', 'Seat', NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(176, 27, 'Suzuki', 'Suzuki', NULL, NULL, 8, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(177, 27, 'Alfa_Romeo', 'Alfa Romeo', NULL, NULL, 9, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(178, 27, 'BMW', 'BMW', NULL, NULL, 10, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(179, 27, 'Cadillac', 'Cadillac', NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(180, 27, 'Chevrolet', 'Chevrolet', NULL, NULL, 12, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(181, 27, 'Citroen', 'Citroen', NULL, NULL, 13, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(182, 27, 'Dacia', 'Dacia', NULL, NULL, 14, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(183, 27, 'Dodge', 'Dodge', NULL, NULL, 15, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(184, 27, 'Fiat', 'Fiat', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(185, 27, 'Honda', 'Honda', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(186, 27, 'Hyndai', 'Hyndai', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(187, 27, 'Infinity', 'Infinity', NULL, NULL, 19, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(188, 27, 'Jaguar', 'Jaguar', NULL, NULL, 20, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(189, 27, 'Kia', 'Kia', NULL, NULL, 21, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(190, 27, 'Land_Rover', 'Land Rover', NULL, NULL, 22, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(191, 27, 'Lexus', 'Lexus', NULL, NULL, 23, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(192, 27, 'Mazda', 'Mazda', NULL, NULL, 24, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(193, 27, 'Mini', 'Mini', NULL, NULL, 25, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(194, 27, 'Mitsubishi', 'Mitsubishi', NULL, NULL, 26, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(195, 27, 'Nissan', 'Nissan', NULL, NULL, 27, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(196, 27, 'Opel', 'Opel', NULL, NULL, 28, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(197, 27, 'Porsche', 'Porsche', NULL, NULL, 29, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(198, 27, 'Renault', 'Renault', NULL, NULL, 30, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(199, 27, 'Rover', 'Rover', NULL, NULL, 31, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(200, 27, 'Saab', 'Saab', NULL, NULL, 32, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(201, 27, 'Skoda', 'Skoda', NULL, NULL, 33, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(202, 27, 'Smart', 'Smart', NULL, NULL, 34, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(203, 27, 'Ssangyong', 'Ssangyong', NULL, NULL, 35, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(204, 27, 'Subaru', 'Subaru', NULL, NULL, 36, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(205, 27, 'Toyota', 'Toyota', NULL, NULL, 37, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(206, 27, 'Volkswagen', 'Volkswagen', NULL, NULL, 38, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(207, 27, 'Volvo', 'Volvo', NULL, NULL, 39, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(208, 27, 'Subaru', 'Subaru', NULL, NULL, 40, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(209, 195, 'AD', 'AD', NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(210, 195, 'AD_Wagon', 'AD Wagon', NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(211, 195, 'Almera', 'Almera', NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(212, 195, 'Almera_Classic', 'Almera Classic', NULL, NULL, 4, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(213, 195, 'Almera_Tino', 'Almera Tino', NULL, NULL, 5, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(214, 195, 'Avenir', 'Avenir', NULL, NULL, 6, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(215, 195, 'Bluebird', 'Bluebird', NULL, NULL, 7, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(216, 195, 'Cedric', 'Cedric', NULL, NULL, 8, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(217, 195, 'Cefiro', 'Cefiro', NULL, NULL, 9, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(218, 195, 'Cube', 'Cube', NULL, NULL, 10, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(219, 195, 'Elgrand', 'Elgrand', NULL, NULL, 11, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(220, 195, 'Frontier', 'Frontier', NULL, NULL, 12, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(221, 195, 'GT-R', 'GT-R', NULL, NULL, 13, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(222, 195, 'Juke', 'Juke', NULL, NULL, 14, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(223, 195, 'Juke_Nismo', 'Juke Nismo', NULL, NULL, 15, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(224, 195, 'Kubistar', 'Kubistar', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(225, 195, 'Laurel', 'Laurel', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(226, 195, 'Leaf', 'Leaf', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(227, 195, 'Liberty', 'Liberty', NULL, NULL, 19, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(228, 195, 'March', 'March', NULL, NULL, 20, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(229, 195, 'Maxima', 'Maxima', NULL, NULL, 21, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(230, 195, 'Micra', 'Micra', NULL, NULL, 22, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(231, 195, 'Murano', 'Murano', NULL, NULL, 23, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(232, 195, 'Navara', 'Navara', NULL, NULL, 24, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(233, 195, 'Note', 'Note', NULL, NULL, 25, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(234, 195, 'NP_300', 'NP 300', NULL, NULL, 26, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(235, 195, 'Pathfinder', 'Pathfinder', NULL, NULL, 27, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(236, 195, 'Patrol', 'Patrol', NULL, NULL, 28, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(237, 195, 'Qashqai', 'Qashqai', NULL, NULL, 29, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, 1, 'null', 'null'),
+(238, 195, 'Quest', 'Quest', NULL, NULL, 30, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(239, 195, 'Quashquai+2', 'Quashquai+2', NULL, NULL, 31, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(240, 195, 'Rnessa', 'Rnessa', NULL, NULL, 32, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(241, 195, 'Sentra', 'Sentra', NULL, NULL, 33, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(242, 195, 'Serena', 'Serena', NULL, NULL, 34, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(243, 195, 'SkyLine', 'SkyLine', NULL, NULL, 35, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(244, 195, 'Sunny', 'Sunny', NULL, NULL, 36, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(245, 195, 'Teana', 'Teana', NULL, NULL, 37, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(246, 195, 'Terrano', 'Terrano', NULL, NULL, 38, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(247, 195, 'Tiida', 'Tiida', NULL, NULL, 39, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(248, NULL, 'Mototsikly', 'Мотоциклы', NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, 1, 'null', 'null'),
+(249, NULL, 'Avtodoma', 'Автодома', NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
+(250, NULL, 'Kommercheskie', 'Коммерческие', NULL, NULL, 4, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null');
 
 -- --------------------------------------------------------
 
@@ -173,16 +199,8 @@ CREATE TABLE `category_description` (
   `id` int(11) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
   `locale_id` int(11) DEFAULT NULL,
-  `description` longtext COLLATE utf8_unicode_ci
+  `description` longtext COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Дамп данных таблицы `category_description`
---
-
-INSERT INTO `category_description` (`id`, `category_id`, `locale_id`, `description`) VALUES
-(1, 27, 1, '12312312312'),
-(3, 27, 2, 'asdfasdfasdfasd');
 
 -- --------------------------------------------------------
 
@@ -195,6 +213,14 @@ CREATE TABLE `category_filters` (
   `category_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Дамп данных таблицы `category_filters`
+--
+
+INSERT INTO `category_filters` (`filter_id`, `category_id`) VALUES
+(16, 237),
+(17, 237);
+
 -- --------------------------------------------------------
 
 --
@@ -205,7 +231,7 @@ CREATE TABLE `city` (
   `id` int(11) NOT NULL,
   `region_id` int(11) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `sortorder` int(11) DEFAULT '0'
+  `sortorder` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -306,7 +332,7 @@ CREATE TABLE `complaint` (
   `product_id` int(11) DEFAULT NULL,
   `reason` longtext COLLATE utf8_unicode_ci NOT NULL,
   `date_added` datetime NOT NULL,
-  `status` tinyint(1) DEFAULT '0'
+  `status` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -317,7 +343,7 @@ CREATE TABLE `complaint` (
 
 CREATE TABLE `conversation` (
   `id` int(11) NOT NULL,
-  `user_deleted` int(11) DEFAULT '0',
+  `user_deleted` int(11) DEFAULT 0,
   `conversation_userone_id` int(11) DEFAULT NULL,
   `conversation_usertwo_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -340,8 +366,8 @@ CREATE TABLE `currency` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `code` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `kurs` double NOT NULL,
-  `is_default` tinyint(1) DEFAULT '0',
-  `sortorder` int(11) DEFAULT '0'
+  `is_default` tinyint(1) DEFAULT 0,
+  `sortorder` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -382,12 +408,33 @@ CREATE TABLE `filter` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `is_show` tinyint(1) NOT NULL DEFAULT '1',
+  `is_show` tinyint(1) NOT NULL DEFAULT 1,
   `sortorder` int(11) NOT NULL,
-  `is_required` tinyint(1) NOT NULL DEFAULT '0',
-  `is_search` tinyint(1) NOT NULL DEFAULT '0',
-  `is_selltype` tinyint(1) NOT NULL DEFAULT '0',
-  `is_show_card` tinyint(1) NOT NULL DEFAULT '0'
+  `is_required` tinyint(1) NOT NULL DEFAULT 0,
+  `is_search` tinyint(1) NOT NULL DEFAULT 0,
+  `is_selltype` tinyint(1) NOT NULL DEFAULT 0,
+  `is_show_card` tinyint(1) NOT NULL DEFAULT 0,
+  `parent_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `filter`
+--
+
+INSERT INTO `filter` (`id`, `name`, `type`, `is_show`, `sortorder`, `is_required`, `is_search`, `is_selltype`, `is_show_card`, `parent_id`) VALUES
+(16, 'Двигатель', 'radio', 1, 1, 0, 0, 0, 0, NULL),
+(17, 'Привод', 'radio', 1, 2, 0, 0, 0, 0, NULL),
+(18, 'Коробка передач', 'radio', 1, 3, 0, 0, 0, 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `filter_linked_values`
+--
+
+CREATE TABLE `filter_linked_values` (
+  `filter_value_source` int(11) NOT NULL,
+  `filter_value_target` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -402,6 +449,21 @@ CREATE TABLE `filter_value` (
   `value` varchar(512) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Дамп данных таблицы `filter_value`
+--
+
+INSERT INTO `filter_value` (`id`, `filter_id`, `value`) VALUES
+(58, 16, 'Бензин'),
+(59, 16, 'Дизель'),
+(60, 17, 'Передний'),
+(61, 17, 'Задний'),
+(62, 17, 'Полный'),
+(63, 18, 'Механическая'),
+(64, 18, 'Автоматическая'),
+(65, 18, 'Роботизированная'),
+(66, 18, 'Вариатор');
+
 -- --------------------------------------------------------
 
 --
@@ -415,8 +477,8 @@ CREATE TABLE `form_message` (
   `message_subject` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
   `message_text` longtext COLLATE utf8_unicode_ci NOT NULL,
   `date_added` datetime NOT NULL,
-  `is_new` tinyint(1) NOT NULL DEFAULT '1',
-  `answer` text COLLATE utf8_unicode_ci
+  `is_new` tinyint(1) NOT NULL DEFAULT 1,
+  `answer` text COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -441,7 +503,7 @@ CREATE TABLE `gallery` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `translit` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `description` longtext COLLATE utf8_unicode_ci,
+  `description` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `sort` int(11) NOT NULL,
   `is_show` tinyint(1) NOT NULL,
   `locale_id` int(11) DEFAULT NULL
@@ -463,7 +525,7 @@ INSERT INTO `gallery` (`id`, `name`, `translit`, `description`, `sort`, `is_show
 CREATE TABLE `gallery_items` (
   `id` int(11) NOT NULL,
   `gallery_id` int(11) DEFAULT NULL,
-  `description` longtext COLLATE utf8_unicode_ci,
+  `description` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `thumb` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `alt` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
@@ -478,9 +540,26 @@ CREATE TABLE `gallery_items` (
 --
 
 INSERT INTO `gallery_items` (`id`, `gallery_id`, `description`, `thumb`, `image`, `alt`, `title`, `sort`, `is_main`, `status`) VALUES
-(2, 1, '<div class="slide-header">\r\n<h1>Хотите быстро продать?...</h1>\r\n</div>\r\n<div class="slide-subtext">Просто разместите объявление.</div>\r\n<div class="slide-link"><a href="../../../account/addproduct">Добавить объявление</a></div>', '25449.png', '25449.png', 'Слайд 1', 'Слайд 1', 1, 0, 1),
-(3, 1, '<div class="slide-header">\r\n<h1>Мы объединяем интересы...</h1>\r\n</div>\r\n<div class="slide-subtext">Наш сайт поможет Вам максимально быстро добавить объвление и найти интересующихся в Вашем продукте.</div>\r\n<div class="slide-link"><a href="../../../account/addproduct">Добавить объявление</a></div>', '75613.png', '75613.png', 'Слайд 2', 'Слайд 2', 3, 0, 1),
-(5, 1, '<div class="slide-header">\r\n<h1>Мы объединяем интересы...</h1>\r\n</div>\r\n<div class="slide-subtext">Просто разместите объявление!</div>\r\n<div class="slide-link"><a href="../../../account/addproduct">Добавить объявление</a></div>', '69385.png', '69385.png', 'Слайд 3', 'Слайд 3', 2, 0, 1);
+(2, 1, '<div class=\"slide-header\">\r\n<h1>Хотите быстро продать?...</h1>\r\n</div>\r\n<div class=\"slide-subtext\">Просто разместите объявление.</div>\r\n<div class=\"slide-link\"><a href=\"../../../account/addproduct\">Добавить объявление</a></div>', '25449.png', '25449.png', 'Слайд 1', 'Слайд 1', 1, 0, 1),
+(3, 1, '<div class=\"slide-header\">\r\n<h1>Мы объединяем интересы...</h1>\r\n</div>\r\n<div class=\"slide-subtext\">Наш сайт поможет Вам максимально быстро добавить объвление и найти интересующихся в Вашем продукте.</div>\r\n<div class=\"slide-link\"><a href=\"../../../account/addproduct\">Добавить объявление</a></div>', '75613.png', '75613.png', 'Слайд 2', 'Слайд 2', 3, 0, 1),
+(5, 1, '<div class=\"slide-header\">\r\n<h1>Мы объединяем интересы...</h1>\r\n</div>\r\n<div class=\"slide-subtext\">Просто разместите объявление!</div>\r\n<div class=\"slide-link\"><a href=\"../../../account/addproduct\">Добавить объявление</a></div>', '69385.png', '69385.png', 'Слайд 3', 'Слайд 3', 2, 0, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `generation`
+--
+
+CREATE TABLE `generation` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
+  `year_from` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
+  `year_to` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
+  `is_right_wheel` tinyint(1) DEFAULT 0,
+  `is_gas` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -536,8 +615,8 @@ CREATE TABLE `locale` (
   `code` varchar(10) COLLATE utf8_unicode_ci DEFAULT 'null',
   `country` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `sortorder` int(11) DEFAULT NULL,
-  `is_active` tinyint(1) DEFAULT '0',
-  `is_default` tinyint(1) DEFAULT '0'
+  `is_active` tinyint(1) DEFAULT 0,
+  `is_default` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -603,6 +682,21 @@ INSERT INTO `message` (`id`, `user_from_id`, `user_to_id`, `subject`, `message`,
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `modification`
+--
+
+CREATE TABLE `modification` (
+  `id` int(11) NOT NULL,
+  `power` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `size` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `label` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
+  `sortorder` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
+  `generation_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `order_status`
 --
 
@@ -631,7 +725,7 @@ CREATE TABLE `page` (
   `id` int(11) NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
   `route` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
-  `text` longtext COLLATE utf8_unicode_ci,
+  `text` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `is_userpage` tinyint(1) NOT NULL,
   `meta_tag_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `meta_tag_description` varchar(512) COLLATE utf8_unicode_ci DEFAULT 'null',
@@ -639,8 +733,8 @@ CREATE TABLE `page` (
   `meta_tag_robots` varchar(512) COLLATE utf8_unicode_ci DEFAULT 'null',
   `meta_tag_keywords` varchar(512) COLLATE utf8_unicode_ci DEFAULT 'null',
   `is_footer_menu` tinyint(1) NOT NULL,
-  `sortorder` int(15) DEFAULT '0',
-  `footer_menu_section` int(11) DEFAULT '0',
+  `sortorder` int(15) DEFAULT 0,
+  `footer_menu_section` int(11) DEFAULT 0,
   `locale_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -651,36 +745,36 @@ CREATE TABLE `page` (
 INSERT INTO `page` (`id`, `title`, `route`, `text`, `is_userpage`, `meta_tag_title`, `meta_tag_description`, `meta_tag_author`, `meta_tag_robots`, `meta_tag_keywords`, `is_footer_menu`, `sortorder`, `footer_menu_section`, `locale_id`) VALUES
 (1, 'Kategorija', 'category', 'Страница категории товара', 0, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1),
 (2, 'Produkts', 'product', 'Страница продукта', 0, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1),
-(3, 'Mājas', 'main', '<h1>Доска объявлений в Латвии</h1>\r\n<p>Бесплатные объявления в Латвии&nbsp; - здесь вы найдете то, что искали! Нажав на кнопку "Подать объявление", вы перейдете на форму, заполнив которую сможете разместить объявление на любую необходимую тематику легко и абсолютно бесплатно. С помощью сайта объявлений ОЛХ Беларусь вы сможете купить или продать из рук в руки практически все, что угодно.</p>', 0, 'Доска объявлений', 'Доска объявлений', NULL, NULL, NULL, 0, 0, 1, 1),
-(4, '404 kļūda', 'notfound', '<h1 class="error-message">Ошибка 404...</h1>\r\n<div class="error-desc m-b-20">Извините, но по вашему запросу ничего не найдено. Вернитесь на <a href="../../">главную страницу</a> или воспользуйтесь поиском по сайту.</div>', 0, 'Ошибка 404.', 'null', NULL, NULL, NULL, 0, 0, 0, 1),
+(3, 'Mājas', 'main', '<h1>Доска объявлений в Латвии</h1>\r\n<p>Бесплатные объявления в Латвии&nbsp; - здесь вы найдете то, что искали! Нажав на кнопку \"Подать объявление\", вы перейдете на форму, заполнив которую сможете разместить объявление на любую необходимую тематику легко и абсолютно бесплатно. С помощью сайта объявлений ОЛХ Беларусь вы сможете купить или продать из рук в руки практически все, что угодно.</p>', 0, 'Доска объявлений', 'Доска объявлений', NULL, NULL, NULL, 0, 0, 1, 1),
+(4, '404 kļūda', 'notfound', '<h1 class=\"error-message\">Ошибка 404...</h1>\r\n<div class=\"error-desc m-b-20\">Извините, но по вашему запросу ничего не найдено. Вернитесь на <a href=\"../../\">главную страницу</a> или воспользуйтесь поиском по сайту.</div>', 0, 'Ошибка 404.', 'null', NULL, NULL, NULL, 0, 0, 0, 1),
 (5, 'Pielāgota lapa', 'pages', 'Пользовательская страница', 0, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 1),
-(7, 'Как покупать/продавать', 'Kak-pokupat-prodavat', '<strong>Как сделать заказ покупателю на gribupardot.sunweb.by</strong><br /><br />На странице, понравившегося объявления необходимо нажать кнопку "Заказать". <br /><img src="http://data3.floomby.com/files/share/14_9_2016/21/ag5ygYBNbEGD5anHFrdjw.jpg" alt="" height="267" width="518" /><br />После нажатия появляется форма, которую необходимо заполнить. <br />Контактные данные необходимы продавцу для связи с вами и для отправки понравившегося товара. Всегда проверяйте все указанные цифры, ФИО, способ доставки во избежание конфликтных ситуаций (в комментариях к заказу).<br />А также обязательно указывайте желаемый цвет, размер и стоимость. <br /><img src="http://data3.floomby.com/files/share/14_9_2016/21/lKqEj71qdkOo3koKO8Hcg.jpg" alt="" height="346" width="668" /><br /><br />После заполнения всех необходимых данных нажмите кнопку "Отправить заказ". Заказ сохранится, и продавец будет о нем оповещен.<br />После отправки заказа, внести изменения или отменить его уже будет невозможно.<br /><br />По завершению сделки и после получения товара вы можете оценить качество обслуживания, качество товара, выставив продавцу оценку.<br />Чтобы покупатель смог оставить отзыв - продавец должен поставить заказ в статус Одобрен. Отзывы видно в личном кабинете на вкладке Мои Отзывы.<br /><img src="http://data3.floomby.com/files/share/14_9_2016/21/5qF5JCezl0y3LngIj3sT9w.jpg" alt="" height="276" width="619" />\r\n<div><strong><img src="http://data3.floomby.com/files/share/14_9_2016/21/TcIZ9rsvLUC2DcVvytiJOg.jpg" alt="" height="337" width="469" /><br />Как обработать заказ продавцу на gribupardot.sunweb.by</strong><br /><br />После того как покупатель сделал заказ происходит активация значка "Заявки".<br /><br /></div>\r\n<div><img src="http://data3.floomby.com/files/share/14_9_2016/21/1yYMLuvm0CyXjgD7c4RQ.jpg" alt="" height="204" width="640" /><br />При нажатии вы увидите заказанные позиции и вы можете перейти к обработке заказа. В полях заполненных покупателем продавец увидит всю необходимую информацию: контактные данные, цвет, размер и т.д. После этого отправляем заказ в работу, устанавливая статус заказа "Одобрен". По завершению сделки, устанавливаем статус "Завершен".<br /><img src="http://data3.floomby.com/files/share/14_9_2016/21/sG4dxOKgA0OLpryJHoiLQ.jpg" alt="" height="286" width="651" /></div>\r\n<div>После завершения сделки покупатель может выставить оценку, формируя при этом рейтинг продавца. <br /><br />Рейтинг определяется так: кол-во положительных отзывов умножается на 100 и делится на общее кол-во отзывов.</div>', 1, 'Как покупать и продавать', 'Как покупать и продавать на gribupardot.sunweb.by', NULL, NULL, NULL, 1, 1, 0, 1),
+(7, 'Как покупать/продавать', 'Kak-pokupat-prodavat', '<strong>Как сделать заказ покупателю на gribupardot.sunweb.by</strong><br /><br />На странице, понравившегося объявления необходимо нажать кнопку \"Заказать\". <br /><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/ag5ygYBNbEGD5anHFrdjw.jpg\" alt=\"\" height=\"267\" width=\"518\" /><br />После нажатия появляется форма, которую необходимо заполнить. <br />Контактные данные необходимы продавцу для связи с вами и для отправки понравившегося товара. Всегда проверяйте все указанные цифры, ФИО, способ доставки во избежание конфликтных ситуаций (в комментариях к заказу).<br />А также обязательно указывайте желаемый цвет, размер и стоимость. <br /><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/lKqEj71qdkOo3koKO8Hcg.jpg\" alt=\"\" height=\"346\" width=\"668\" /><br /><br />После заполнения всех необходимых данных нажмите кнопку \"Отправить заказ\". Заказ сохранится, и продавец будет о нем оповещен.<br />После отправки заказа, внести изменения или отменить его уже будет невозможно.<br /><br />По завершению сделки и после получения товара вы можете оценить качество обслуживания, качество товара, выставив продавцу оценку.<br />Чтобы покупатель смог оставить отзыв - продавец должен поставить заказ в статус Одобрен. Отзывы видно в личном кабинете на вкладке Мои Отзывы.<br /><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/5qF5JCezl0y3LngIj3sT9w.jpg\" alt=\"\" height=\"276\" width=\"619\" />\r\n<div><strong><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/TcIZ9rsvLUC2DcVvytiJOg.jpg\" alt=\"\" height=\"337\" width=\"469\" /><br />Как обработать заказ продавцу на gribupardot.sunweb.by</strong><br /><br />После того как покупатель сделал заказ происходит активация значка \"Заявки\".<br /><br /></div>\r\n<div><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/1yYMLuvm0CyXjgD7c4RQ.jpg\" alt=\"\" height=\"204\" width=\"640\" /><br />При нажатии вы увидите заказанные позиции и вы можете перейти к обработке заказа. В полях заполненных покупателем продавец увидит всю необходимую информацию: контактные данные, цвет, размер и т.д. После этого отправляем заказ в работу, устанавливая статус заказа \"Одобрен\". По завершению сделки, устанавливаем статус \"Завершен\".<br /><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/sG4dxOKgA0OLpryJHoiLQ.jpg\" alt=\"\" height=\"286\" width=\"651\" /></div>\r\n<div>После завершения сделки покупатель может выставить оценку, формируя при этом рейтинг продавца. <br /><br />Рейтинг определяется так: кол-во положительных отзывов умножается на 100 и делится на общее кол-во отзывов.</div>', 1, 'Как покупать и продавать', 'Как покупать и продавать на gribupardot.sunweb.by', NULL, NULL, NULL, 1, 1, 0, 1),
 (8, 'Условия использования', 'Usloviya-ispol-zovaniya', 'Условия использования', 1, 'Условия использования', 'Условия использования', NULL, NULL, NULL, 0, 2, 0, 1),
-(9, 'Помощь/Контакты', 'Pomosch', 'Если у вас возникли вопросы - пишите пожалуйста на на почту:<span style="color: #222222; font-size: 12.8px; font-family: arial, sans-serif;"> info@gribpardot.lv<br /><a href="https://vk.com/public128843952"><br /></a></span>', 1, 'Помощь', 'Помощь', NULL, NULL, NULL, 1, 3, 0, 1),
-(10, 'Sludinājums uz vietas', 'Reklama_na_sayte', 'Реклама на сайте. <br /><br /><br /><strong>Премиум объявления:</strong><br />Показываются в отдельном блоке на главной странице сайта и во всех категорях в которых находится товар, например, если это детская шапка то объявление будет выделено и в категории Детская одежда&nbsp;и Головные уборы.&nbsp;<br />Цена Премиум объявления 50 грн/сутки.<br /><br /><strong>Выделенное объявление:</strong><br />Ваше объявление будет показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой, в отличие от стандартного желтого фона. <br />BONUS: при этом оно поднимется на первое место в результатах поиска бесплатно. Стоимость услуги&nbsp; 5 евро/сутки<br /><br /><br />Не забывайте что для рекламы вы можете использовать деньги, накопленные по реферальной системе, мы дарим вам 10 грн на счет за каждого нового приведенного вами пользователя.<br /><br />Кроме того к размещению рекламы доступны два баннера на главной странице и сквозное размещение баннеров.<span style="color: #222222; font-size: 12.8px; font-family: arial, sans-serif;"><a href="mailto:shumok.shu@gmail.com"><br /><br /></a></span>', 1, 'Реклама на сайте', 'Реклама на сайте', NULL, NULL, NULL, 1, 4, 2, 1),
+(9, 'Помощь/Контакты', 'Pomosch', 'Если у вас возникли вопросы - пишите пожалуйста на на почту:<span style=\"color: #222222; font-size: 12.8px; font-family: arial, sans-serif;\"> info@gribpardot.lv<br /><a href=\"https://vk.com/public128843952\"><br /></a></span>', 1, 'Помощь', 'Помощь', NULL, NULL, NULL, 1, 3, 0, 1),
+(10, 'Sludinājums uz vietas', 'Reklama_na_sayte', 'Реклама на сайте. <br /><br /><br /><strong>Премиум объявления:</strong><br />Показываются в отдельном блоке на главной странице сайта и во всех категорях в которых находится товар, например, если это детская шапка то объявление будет выделено и в категории Детская одежда&nbsp;и Головные уборы.&nbsp;<br />Цена Премиум объявления 50 грн/сутки.<br /><br /><strong>Выделенное объявление:</strong><br />Ваше объявление будет показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой, в отличие от стандартного желтого фона. <br />BONUS: при этом оно поднимется на первое место в результатах поиска бесплатно. Стоимость услуги&nbsp; 5 евро/сутки<br /><br /><br />Не забывайте что для рекламы вы можете использовать деньги, накопленные по реферальной системе, мы дарим вам 10 грн на счет за каждого нового приведенного вами пользователя.<br /><br />Кроме того к размещению рекламы доступны два баннера на главной странице и сквозное размещение баннеров.<span style=\"color: #222222; font-size: 12.8px; font-family: arial, sans-serif;\"><a href=\"mailto:shumok.shu@gmail.com\"><br /><br /></a></span>', 1, 'Реклама на сайте', 'Реклама на сайте', NULL, NULL, NULL, 1, 4, 2, 1),
 (13, 'Referral sistēma', 'Referal_naya_sistema', 'Реферальная система<br /><br />\r\n<p>Расскажите своим друзьям и клиентам о сайте&nbsp; и получите по 5 евро за каждого приведенного пользователя! Накопленные деньги можно потратить на любой вид рекламы на сайте.</p>\r\n<span><br /></span>Для приглашения используйте страничку Реферальная Система в своем профиле.', 1, 'Реферальная система', 'Реферальная система', NULL, NULL, NULL, 1, 5, 1, 1),
 (14, 'Drošības noteikumi', 'Pravila-bezopasnosti', 'Правила безопасности совершения сделок на gribupardot.sunweb.by', 1, 'Правила безопасности', 'Правила безопасности', NULL, NULL, NULL, 1, 11, 1, 1),
-(16, 'Pievienot reklāmu', 'addproduct', '<div class="block-rules-faster first">\r\n<div class="block-rules-faster-header rules">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>1. Не подавайте одно и то же объявление повторно.&nbsp;</li>\r\n<li>2. Не пишите телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class="rules-link"><a href="../../pages/Pravila-razmescheniya">Подробнее о правилах</a></div>\r\n</div>\r\n<div class="block-rules-faster">\r\n<div class="block-rules-faster-header faster">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет "премиум размещение" или "выделить объявление".</li>\r\n</ul>\r\n</div>\r\n</div>', 0, 'Добавить объявление', 'Добавить объявление', NULL, NULL, NULL, 0, 0, 0, 1),
+(16, 'Pievienot reklāmu', 'addproduct', '<div class=\"block-rules-faster first\">\r\n<div class=\"block-rules-faster-header rules\">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class=\"block-rules-faster-list\">\r\n<ul class=\"list-unstyled\">\r\n<li>1. Не подавайте одно и то же объявление повторно.&nbsp;</li>\r\n<li>2. Не пишите телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class=\"rules-link\"><a href=\"../../pages/Pravila-razmescheniya\">Подробнее о правилах</a></div>\r\n</div>\r\n<div class=\"block-rules-faster\">\r\n<div class=\"block-rules-faster-header faster\">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class=\"block-rules-faster-list\">\r\n<ul class=\"list-unstyled\">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет \"премиум размещение\" или \"выделить объявление\".</li>\r\n</ul>\r\n</div>\r\n</div>', 0, 'Добавить объявление', 'Добавить объявление', NULL, NULL, NULL, 0, 0, 0, 1),
 (18, 'Referral sistēma', 'account_friends', 'Расскажите своим друзьям и клиентам о сайте и получите по 5 евро за каждого приведенного пользователя! Накопленные деньги можно потратить на любой вид рекламы на сайте.<br /><br />Вы можете приглашать друзей стать пользователями сайта gribupardot.sunweb.by и получать за это награды!<br /><br />Для этого в форму ниже введите электронный адрес друга, которого хотите пригласить и система вышлет ему специально сформированную ссылку, по который надо будет зарегистрироваться на нашем сайте. Или воспользуйтесь готовой ссылкой, можете размещать ее в своем профиле, в социальных сетях, на форумах, нет никаких ограничений.', 0, 'Реферальная система', 'Реферальная система', NULL, NULL, NULL, 0, 0, 0, 1),
-(19, 'Sazinieties ar mums', 'contact', '<span style="color: #333333; font-size: 14px; font-family: ''Helvetica Neue'', Helvetica, Arial, sans-serif;">Если у вас возникли вопросы - пишите пожалуйста на на почту:&nbsp;</span><span style="color: #222222; font-size: 12.8px; font-family: arial, sans-serif;">&lt;info@gribpardot.lv&gt;<br /></span>', 0, 'Связаться с нами', 'Связаться с нами', NULL, NULL, NULL, 0, 0, 0, 1),
-(20, 'Izmitināšanas noteikumi', 'Pravila-razmescheniya', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил. <br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления. <br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества; <br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих "лёгкий заработок" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br /> Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', 1, 'Правила размещения', 'Правила размещения', NULL, NULL, NULL, 1, 16, 1, 1),
-(21, 'Платные услуги доски объявлений', 'Platnye-uslugi-doski-obyavleniy', '<span style="font-weight: 400;"><strong>Премиум объявления:</strong><br />Показываются в отдельном блоке на главной странице сайта и во всех категорях в которых находится товар, например, если это детская шапка то объявление будет выделено и в категории Детсая одежда&nbsp;и Головные уборы.&nbsp;<br />Цена Премиум объявления 5 евро/сутки.<br /><br /><strong>Выделенное объявление:</strong><br />Ваше объявление будет показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой, в отличие от стандартного желтого фона.&nbsp;<br />BONUS: при этом оно поднимется на первое место в результатах поиска бесплатно. Стоимость услуги&nbsp; 5 увро/сутки<br /><br /><br />Не забывайте что для рекламы вы можете использовать деньги, накопленные по реферальной системе, мы дарим вам 2 евро на счет за каждого нового приведенного вами пользователя.<br /><br />Кроме того к размещению рекламы доступны два баннера на главной странице и сквозное размещение баннеров.<br />По вопросам размещения баннера - пишите пожалуйста на почту<span style="color: #222222; font-size: 12.8px; font-family: arial, sans-serif;"><a href="mailto:shumok.shu@gmail.com"><br /><br /></a></span></span>', 1, 'Платные услуги доски объявлений', 'Платные услуги доски объявлений', NULL, NULL, NULL, 0, 16, 2, 1),
+(19, 'Sazinieties ar mums', 'contact', '<span style=\"color: #333333; font-size: 14px; font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\">Если у вас возникли вопросы - пишите пожалуйста на на почту:&nbsp;</span><span style=\"color: #222222; font-size: 12.8px; font-family: arial, sans-serif;\">&lt;info@gribpardot.lv&gt;<br /></span>', 0, 'Связаться с нами', 'Связаться с нами', NULL, NULL, NULL, 0, 0, 0, 1),
+(20, 'Izmitināšanas noteikumi', 'Pravila-razmescheniya', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил. <br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления. <br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества; <br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих \"лёгкий заработок\" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br /> Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', 1, 'Правила размещения', 'Правила размещения', NULL, NULL, NULL, 1, 16, 1, 1),
+(21, 'Платные услуги доски объявлений', 'Platnye-uslugi-doski-obyavleniy', '<span style=\"font-weight: 400;\"><strong>Премиум объявления:</strong><br />Показываются в отдельном блоке на главной странице сайта и во всех категорях в которых находится товар, например, если это детская шапка то объявление будет выделено и в категории Детсая одежда&nbsp;и Головные уборы.&nbsp;<br />Цена Премиум объявления 5 евро/сутки.<br /><br /><strong>Выделенное объявление:</strong><br />Ваше объявление будет показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой, в отличие от стандартного желтого фона.&nbsp;<br />BONUS: при этом оно поднимется на первое место в результатах поиска бесплатно. Стоимость услуги&nbsp; 5 увро/сутки<br /><br /><br />Не забывайте что для рекламы вы можете использовать деньги, накопленные по реферальной системе, мы дарим вам 2 евро на счет за каждого нового приведенного вами пользователя.<br /><br />Кроме того к размещению рекламы доступны два баннера на главной странице и сквозное размещение баннеров.<br />По вопросам размещения баннера - пишите пожалуйста на почту<span style=\"color: #222222; font-size: 12.8px; font-family: arial, sans-serif;\"><a href=\"mailto:shumok.shu@gmail.com\"><br /><br /></a></span></span>', 1, 'Платные услуги доски объявлений', 'Платные услуги доски объявлений', NULL, NULL, NULL, 0, 16, 2, 1),
 (22, 'Категория', 'category', 'Страница категории товара', 0, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 2),
 (23, 'Продукт', 'product', 'Страница продукта', 0, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 2),
-(24, 'Главная', 'main', '<h1>Доска объявлений в Латвии</h1>\r\n<p>Бесплатные объявления в Латвии&nbsp; - здесь вы найдете то, что искали! Нажав на кнопку "Подать объявление", вы перейдете на форму, заполнив которую сможете разместить объявление на любую необходимую тематику легко и абсолютно бесплатно. С помощью сайта объявлений ОЛХ Беларусь вы сможете купить или продать из рук в руки практически все, что угодно.</p>', 0, 'Доска объявлений', 'Доска объявлений', NULL, NULL, NULL, 0, 0, 1, 2),
-(25, 'Ошибка 404', 'notfound', '<h1 class="error-message">Ошибка 404...</h1>\r\n<div class="error-desc m-b-20">Извините, но по вашему запросу ничего не найдено. Вернитесь на <a href="../../">главную страницу</a> или воспользуйтесь поиском по сайту.</div>', 0, 'Ошибка 404.', 'null', NULL, NULL, NULL, 0, 0, 0, 2),
+(24, 'Главная', 'main', '<h1>Доска объявлений в Латвии</h1>\r\n<p>Бесплатные объявления в Латвии&nbsp; - здесь вы найдете то, что искали! Нажав на кнопку \"Подать объявление\", вы перейдете на форму, заполнив которую сможете разместить объявление на любую необходимую тематику легко и абсолютно бесплатно. С помощью сайта объявлений ОЛХ Беларусь вы сможете купить или продать из рук в руки практически все, что угодно.</p>', 0, 'Доска объявлений', 'Доска объявлений', NULL, NULL, NULL, 0, 0, 1, 2),
+(25, 'Ошибка 404', 'notfound', '<h1 class=\"error-message\">Ошибка 404...</h1>\r\n<div class=\"error-desc m-b-20\">Извините, но по вашему запросу ничего не найдено. Вернитесь на <a href=\"../../\">главную страницу</a> или воспользуйтесь поиском по сайту.</div>', 0, 'Ошибка 404.', 'null', NULL, NULL, NULL, 0, 0, 0, 2),
 (26, 'Пользовательская старница', 'pages', 'Пользовательская страница', 0, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 2),
-(27, 'Как покупать/продавать', 'Kak-pokupat-prodavat', '<strong>Как сделать заказ покупателю на gribupardot.sunweb.by</strong><br /><br />На странице, понравившегося объявления необходимо нажать кнопку "Заказать". <br /><img src="http://data3.floomby.com/files/share/14_9_2016/21/ag5ygYBNbEGD5anHFrdjw.jpg" alt="" height="267" width="518" /><br />После нажатия появляется форма, которую необходимо заполнить. <br />Контактные данные необходимы продавцу для связи с вами и для отправки понравившегося товара. Всегда проверяйте все указанные цифры, ФИО, способ доставки во избежание конфликтных ситуаций (в комментариях к заказу).<br />А также обязательно указывайте желаемый цвет, размер и стоимость. <br /><img src="http://data3.floomby.com/files/share/14_9_2016/21/lKqEj71qdkOo3koKO8Hcg.jpg" alt="" height="346" width="668" /><br /><br />После заполнения всех необходимых данных нажмите кнопку "Отправить заказ". Заказ сохранится, и продавец будет о нем оповещен.<br />После отправки заказа, внести изменения или отменить его уже будет невозможно.<br /><br />По завершению сделки и после получения товара вы можете оценить качество обслуживания, качество товара, выставив продавцу оценку.<br />Чтобы покупатель смог оставить отзыв - продавец должен поставить заказ в статус Одобрен. Отзывы видно в личном кабинете на вкладке Мои Отзывы.<br /><img src="http://data3.floomby.com/files/share/14_9_2016/21/5qF5JCezl0y3LngIj3sT9w.jpg" alt="" height="276" width="619" />\r\n<div><strong><img src="http://data3.floomby.com/files/share/14_9_2016/21/TcIZ9rsvLUC2DcVvytiJOg.jpg" alt="" height="337" width="469" /><br />Как обработать заказ продавцу на gribupardot.sunweb.by</strong><br /><br />После того как покупатель сделал заказ происходит активация значка "Заявки".<br /><br /></div>\r\n<div><img src="http://data3.floomby.com/files/share/14_9_2016/21/1yYMLuvm0CyXjgD7c4RQ.jpg" alt="" height="204" width="640" /><br />При нажатии вы увидите заказанные позиции и вы можете перейти к обработке заказа. В полях заполненных покупателем продавец увидит всю необходимую информацию: контактные данные, цвет, размер и т.д. После этого отправляем заказ в работу, устанавливая статус заказа "Одобрен". По завершению сделки, устанавливаем статус "Завершен".<br /><img src="http://data3.floomby.com/files/share/14_9_2016/21/sG4dxOKgA0OLpryJHoiLQ.jpg" alt="" height="286" width="651" /></div>\r\n<div>После завершения сделки покупатель может выставить оценку, формируя при этом рейтинг продавца. <br /><br />Рейтинг определяется так: кол-во положительных отзывов умножается на 100 и делится на общее кол-во отзывов.</div>', 1, 'Как покупать и продавать', 'Как покупать и продавать на gribupardot.sunweb.by', NULL, NULL, NULL, 1, 1, 0, 2),
+(27, 'Как покупать/продавать', 'Kak-pokupat-prodavat', '<strong>Как сделать заказ покупателю на gribupardot.sunweb.by</strong><br /><br />На странице, понравившегося объявления необходимо нажать кнопку \"Заказать\". <br /><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/ag5ygYBNbEGD5anHFrdjw.jpg\" alt=\"\" height=\"267\" width=\"518\" /><br />После нажатия появляется форма, которую необходимо заполнить. <br />Контактные данные необходимы продавцу для связи с вами и для отправки понравившегося товара. Всегда проверяйте все указанные цифры, ФИО, способ доставки во избежание конфликтных ситуаций (в комментариях к заказу).<br />А также обязательно указывайте желаемый цвет, размер и стоимость. <br /><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/lKqEj71qdkOo3koKO8Hcg.jpg\" alt=\"\" height=\"346\" width=\"668\" /><br /><br />После заполнения всех необходимых данных нажмите кнопку \"Отправить заказ\". Заказ сохранится, и продавец будет о нем оповещен.<br />После отправки заказа, внести изменения или отменить его уже будет невозможно.<br /><br />По завершению сделки и после получения товара вы можете оценить качество обслуживания, качество товара, выставив продавцу оценку.<br />Чтобы покупатель смог оставить отзыв - продавец должен поставить заказ в статус Одобрен. Отзывы видно в личном кабинете на вкладке Мои Отзывы.<br /><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/5qF5JCezl0y3LngIj3sT9w.jpg\" alt=\"\" height=\"276\" width=\"619\" />\r\n<div><strong><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/TcIZ9rsvLUC2DcVvytiJOg.jpg\" alt=\"\" height=\"337\" width=\"469\" /><br />Как обработать заказ продавцу на gribupardot.sunweb.by</strong><br /><br />После того как покупатель сделал заказ происходит активация значка \"Заявки\".<br /><br /></div>\r\n<div><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/1yYMLuvm0CyXjgD7c4RQ.jpg\" alt=\"\" height=\"204\" width=\"640\" /><br />При нажатии вы увидите заказанные позиции и вы можете перейти к обработке заказа. В полях заполненных покупателем продавец увидит всю необходимую информацию: контактные данные, цвет, размер и т.д. После этого отправляем заказ в работу, устанавливая статус заказа \"Одобрен\". По завершению сделки, устанавливаем статус \"Завершен\".<br /><img src=\"http://data3.floomby.com/files/share/14_9_2016/21/sG4dxOKgA0OLpryJHoiLQ.jpg\" alt=\"\" height=\"286\" width=\"651\" /></div>\r\n<div>После завершения сделки покупатель может выставить оценку, формируя при этом рейтинг продавца. <br /><br />Рейтинг определяется так: кол-во положительных отзывов умножается на 100 и делится на общее кол-во отзывов.</div>', 1, 'Как покупать и продавать', 'Как покупать и продавать на gribupardot.sunweb.by', NULL, NULL, NULL, 1, 1, 0, 2),
 (28, 'Условия использования', 'Usloviya-ispol-zovaniya', 'Условия использования', 1, 'Условия использования', 'Условия использования', NULL, NULL, NULL, 0, 2, 0, 2),
-(29, 'Помощь/Контакты', 'Pomosch', 'Если у вас возникли вопросы - пишите пожалуйста на на почту:<span style="color: #222222; font-size: 12.8px; font-family: arial, sans-serif;"> info@gribpardot.lv<br /><a href="https://vk.com/public128843952"><br /></a></span>', 1, 'Помощь', 'Помощь', NULL, NULL, NULL, 1, 3, 0, 2),
-(30, 'Реклама на сайте', 'Reklama_na_sayte', 'Реклама на сайте. <br /><br /><br /><strong>Премиум объявления:</strong><br />Показываются в отдельном блоке на главной странице сайта и во всех категорях в которых находится товар, например, если это детская шапка то объявление будет выделено и в категории Детская одежда&nbsp;и Головные уборы.&nbsp;<br />Цена Премиум объявления 50 грн/сутки.<br /><br /><strong>Выделенное объявление:</strong><br />Ваше объявление будет показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой, в отличие от стандартного желтого фона. <br />BONUS: при этом оно поднимется на первое место в результатах поиска бесплатно. Стоимость услуги&nbsp; 5 евро/сутки<br /><br /><br />Не забывайте что для рекламы вы можете использовать деньги, накопленные по реферальной системе, мы дарим вам 10 грн на счет за каждого нового приведенного вами пользователя.<br /><br />Кроме того к размещению рекламы доступны два баннера на главной странице и сквозное размещение баннеров.<span style="color: #222222; font-size: 12.8px; font-family: arial, sans-serif;"><a href="mailto:shumok.shu@gmail.com"><br /><br /></a></span>', 1, 'Реклама на сайте', 'Реклама на сайте', NULL, NULL, NULL, 1, 4, 2, 2),
+(29, 'Помощь/Контакты', 'Pomosch', 'Если у вас возникли вопросы - пишите пожалуйста на на почту:<span style=\"color: #222222; font-size: 12.8px; font-family: arial, sans-serif;\"> info@gribpardot.lv<br /><a href=\"https://vk.com/public128843952\"><br /></a></span>', 1, 'Помощь', 'Помощь', NULL, NULL, NULL, 1, 3, 0, 2),
+(30, 'Реклама на сайте', 'Reklama_na_sayte', 'Реклама на сайте. <br /><br /><br /><strong>Премиум объявления:</strong><br />Показываются в отдельном блоке на главной странице сайта и во всех категорях в которых находится товар, например, если это детская шапка то объявление будет выделено и в категории Детская одежда&nbsp;и Головные уборы.&nbsp;<br />Цена Премиум объявления 50 грн/сутки.<br /><br /><strong>Выделенное объявление:</strong><br />Ваше объявление будет показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой, в отличие от стандартного желтого фона. <br />BONUS: при этом оно поднимется на первое место в результатах поиска бесплатно. Стоимость услуги&nbsp; 5 евро/сутки<br /><br /><br />Не забывайте что для рекламы вы можете использовать деньги, накопленные по реферальной системе, мы дарим вам 10 грн на счет за каждого нового приведенного вами пользователя.<br /><br />Кроме того к размещению рекламы доступны два баннера на главной странице и сквозное размещение баннеров.<span style=\"color: #222222; font-size: 12.8px; font-family: arial, sans-serif;\"><a href=\"mailto:shumok.shu@gmail.com\"><br /><br /></a></span>', 1, 'Реклама на сайте', 'Реклама на сайте', NULL, NULL, NULL, 1, 4, 2, 2),
 (31, 'Реферальная система', 'Referal_naya_sistema', 'Реферальная система<br /><br />\r\n<p>Расскажите своим друзьям и клиентам о сайте&nbsp; и получите по 5 евро за каждого приведенного пользователя! Накопленные деньги можно потратить на любой вид рекламы на сайте.</p>\r\n<span><br /></span>Для приглашения используйте страничку Реферальная Система в своем профиле.', 1, 'Реферальная система', 'Реферальная система', NULL, NULL, NULL, 1, 5, 1, 2),
 (32, 'Правила безопасности', 'Pravila-bezopasnosti', 'Правила безопасности совершения сделок на gribupardot.sunweb.by<br />', 1, 'Правила безопасности', 'Правила безопасности', NULL, NULL, NULL, 1, 11, 1, 2),
-(33, 'Добавить объявление', 'addproduct', '<div class="block-rules-faster first">\r\n<div class="block-rules-faster-header rules">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>1. Не подавайте одно и то же объявление повторно.&nbsp;</li>\r\n<li>2. Не пишите телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class="rules-link"><a href="../../pages/Pravila-razmescheniya">Подробнее о правилах</a></div>\r\n</div>\r\n<div class="block-rules-faster">\r\n<div class="block-rules-faster-header faster">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет "премиум размещение" или "выделить объявление".</li>\r\n</ul>\r\n</div>\r\n</div>', 0, 'Добавить объявление', 'Добавить объявление', NULL, NULL, NULL, 0, 0, 0, 2),
+(33, 'Добавить объявление', 'addproduct', '<div class=\"block-rules-faster first\">\r\n<div class=\"block-rules-faster-header rules\">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class=\"block-rules-faster-list\">\r\n<ul class=\"list-unstyled\">\r\n<li>1. Не подавайте одно и то же объявление повторно.&nbsp;</li>\r\n<li>2. Не пишите телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class=\"rules-link\"><a href=\"../../pages/Pravila-razmescheniya\">Подробнее о правилах</a></div>\r\n</div>\r\n<div class=\"block-rules-faster\">\r\n<div class=\"block-rules-faster-header faster\">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class=\"block-rules-faster-list\">\r\n<ul class=\"list-unstyled\">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет \"премиум размещение\" или \"выделить объявление\".</li>\r\n</ul>\r\n</div>\r\n</div>', 0, 'Добавить объявление', 'Добавить объявление', NULL, NULL, NULL, 0, 0, 0, 2),
 (34, 'Реферальная система', 'account_friends', 'Расскажите своим друзьям и клиентам о сайте и получите по 5 евро за каждого приведенного пользователя! Накопленные деньги можно потратить на любой вид рекламы на сайте.<br /><br />Вы можете приглашать друзей стать пользователями сайта gribupardot.sunweb.by и получать за это награды!<br /><br />Для этого в форму ниже введите электронный адрес друга, которого хотите пригласить и система вышлет ему специально сформированную ссылку, по который надо будет зарегистрироваться на нашем сайте. Или воспользуйтесь готовой ссылкой, можете размещать ее в своем профиле, в социальных сетях, на форумах, нет никаких ограничений.', 0, 'Реферальная система', 'Реферальная система', NULL, NULL, NULL, 0, 0, 0, 2),
-(35, 'Связаться с нами', 'contact', '<span style="color: #333333; font-size: 14px; font-family: ''Helvetica Neue'', Helvetica, Arial, sans-serif;">Если у вас возникли вопросы - пишите пожалуйста на на почту:&nbsp;</span><span style="color: #222222; font-size: 12.8px; font-family: arial, sans-serif;">&lt;info@gribpardot.lv&gt;<br /></span>', 0, 'Связаться с нами', 'Связаться с нами', NULL, NULL, NULL, 0, 0, 0, 2),
-(36, 'Правила размещения', 'Pravila-razmescheniya', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил. <br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления. <br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества; <br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих "лёгкий заработок" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br /> Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', 1, 'Правила размещения', 'Правила размещения', NULL, NULL, NULL, 1, 16, 1, 2),
-(37, 'Платные услуги доски объявлений', 'Platnye-uslugi-doski-obyavleniy', '<span style="font-weight: 400;"><strong>Премиум объявления:</strong><br />Показываются в отдельном блоке на главной странице сайта и во всех категорях в которых находится товар, например, если это детская шапка то объявление будет выделено и в категории Детсая одежда&nbsp;и Головные уборы.&nbsp;<br />Цена Премиум объявления 5 евро/сутки.<br /><br /><strong>Выделенное объявление:</strong><br />Ваше объявление будет показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой, в отличие от стандартного желтого фона.&nbsp;<br />BONUS: при этом оно поднимется на первое место в результатах поиска бесплатно. Стоимость услуги&nbsp; 5 увро/сутки<br /><br /><br />Не забывайте что для рекламы вы можете использовать деньги, накопленные по реферальной системе, мы дарим вам 2 евро на счет за каждого нового приведенного вами пользователя.<br /><br />Кроме того к размещению рекламы доступны два баннера на главной странице и сквозное размещение баннеров.<br />По вопросам размещения баннера - пишите пожалуйста на почту<span style="color: #222222; font-size: 12.8px; font-family: arial, sans-serif;"><a href="mailto:shumok.shu@gmail.com"><br /><br /></a></span></span>', 1, 'Платные услуги доски объявлений', 'Платные услуги доски объявлений', NULL, NULL, NULL, 0, 16, 2, 2),
+(35, 'Связаться с нами', 'contact', '<span style=\"color: #333333; font-size: 14px; font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;\">Если у вас возникли вопросы - пишите пожалуйста на на почту:&nbsp;</span><span style=\"color: #222222; font-size: 12.8px; font-family: arial, sans-serif;\">&lt;info@gribpardot.lv&gt;<br /></span>', 0, 'Связаться с нами', 'Связаться с нами', NULL, NULL, NULL, 0, 0, 0, 2),
+(36, 'Правила размещения', 'Pravila-razmescheniya', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил. <br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления. <br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества; <br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих \"лёгкий заработок\" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br /> Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', 1, 'Правила размещения', 'Правила размещения', NULL, NULL, NULL, 1, 16, 1, 2),
+(37, 'Платные услуги доски объявлений', 'Platnye-uslugi-doski-obyavleniy', '<span style=\"font-weight: 400;\"><strong>Премиум объявления:</strong><br />Показываются в отдельном блоке на главной странице сайта и во всех категорях в которых находится товар, например, если это детская шапка то объявление будет выделено и в категории Детсая одежда&nbsp;и Головные уборы.&nbsp;<br />Цена Премиум объявления 5 евро/сутки.<br /><br /><strong>Выделенное объявление:</strong><br />Ваше объявление будет показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой, в отличие от стандартного желтого фона.&nbsp;<br />BONUS: при этом оно поднимется на первое место в результатах поиска бесплатно. Стоимость услуги&nbsp; 5 увро/сутки<br /><br /><br />Не забывайте что для рекламы вы можете использовать деньги, накопленные по реферальной системе, мы дарим вам 2 евро на счет за каждого нового приведенного вами пользователя.<br /><br />Кроме того к размещению рекламы доступны два баннера на главной странице и сквозное размещение баннеров.<br />По вопросам размещения баннера - пишите пожалуйста на почту<span style=\"color: #222222; font-size: 12.8px; font-family: arial, sans-serif;\"><a href=\"mailto:shumok.shu@gmail.com\"><br /><br /></a></span></span>', 1, 'Платные услуги доски объявлений', 'Платные услуги доски объявлений', NULL, NULL, NULL, 0, 16, 2, 2),
 (38, 'Результаты поиска', 'search', NULL, 0, 'Результаты поиска', 'null', 'null', 'null', 'null', 0, 0, 0, 2),
 (39, 'Meklēšanas rezultāti', 'search', NULL, 0, 'Meklēšanas rezultāti', 'null', 'null', 'null', 'null', 0, 0, 0, 1),
 (40, 'Reklāma ir pievienota', 'addproductSuccess', NULL, 0, 'null', 'null', 'null', 'null', 'null', 0, 10, 0, 1),
@@ -724,19 +818,19 @@ CREATE TABLE `product` (
   `viewpremium` tinyint(1) NOT NULL,
   `viewselected` tinyint(1) NOT NULL,
   `sortorder` int(11) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `date_added` datetime NOT NULL,
   `date_edited` datetime NOT NULL,
   `rating_likes` int(11) DEFAULT NULL,
   `rating_dislikes` int(11) DEFAULT NULL,
   `views` int(11) DEFAULT NULL,
   `views_per_date` int(11) DEFAULT NULL,
-  `is_blocked` tinyint(1) DEFAULT '0',
-  `is_confirm` tinyint(1) NOT NULL DEFAULT '0',
+  `is_blocked` tinyint(1) DEFAULT 0,
+  `is_confirm` tinyint(1) NOT NULL DEFAULT 0,
   `meta_tag_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `meta_tag_description` varchar(512) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `is_correct` tinyint(1) DEFAULT '0',
-  `correct_reason` longtext COLLATE utf8_unicode_ci,
+  `is_correct` tinyint(1) DEFAULT 0,
+  `correct_reason` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `translit` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
   `term` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -746,7 +840,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `category_id`, `user_id`, `region_id`, `city_id`, `selltype_id`, `author_name`, `author_email`, `author_phone`, `typeno`, `typebu`, `typenew`, `name`, `description`, `price`, `mainfoto`, `viewcommon`, `viewpremium`, `viewselected`, `sortorder`, `is_active`, `date_added`, `date_edited`, `rating_likes`, `rating_dislikes`, `views`, `views_per_date`, `is_blocked`, `is_confirm`, `meta_tag_title`, `meta_tag_description`, `is_correct`, `correct_reason`, `translit`, `term`) VALUES
-(1, NULL, 1, 1, 1, 4, 'Sunweb', 'sales@sunweb.by', '2003823', 0, 1, 0, 'Продам авто VW golf 1.9 tdi', '<span>Полная комплектация. Авто в отличном состоянии. 255000км. Рассмотрю все варианты обмена.</span><br /><ins class="copy_element"><br /></ins>', 2500, '26759744.jpg', 1, 0, 0, NULL, 0, '2018-03-01 19:37:08', '2018-09-12 13:10:43', NULL, NULL, 10, 10, 0, 0, 'Продам авто VW golf 1.9 tdi', NULL, 1, NULL, 'Prodam_avto_VW_golf_1.9_tdi', NULL),
+(1, NULL, 1, 1, 1, 4, 'Sunweb', 'sales@sunweb.by', '2003823', 0, 1, 0, 'Продам авто VW golf 1.9 tdi', '<span>Полная комплектация. Авто в отличном состоянии. 255000км. Рассмотрю все варианты обмена.</span><br /><ins class=\"copy_element\"><br /></ins>', 2500, '26759744.jpg', 1, 0, 0, NULL, 0, '2018-03-01 19:37:08', '2018-09-12 13:10:43', NULL, NULL, 10, 10, 0, 0, 'Продам авто VW golf 1.9 tdi', NULL, 1, NULL, 'Prodam_avto_VW_golf_1.9_tdi', NULL),
 (3, 28, 1, 29, 63, 4, 'Sunweb', 'sales@sunweb.by', '12345678', 1, 0, 0, 'Дом на даче', 'Дом на даче', 12000, '45785523.jpg', 1, 1, 0, NULL, 1, '2018-08-16 16:14:21', '2018-09-18 14:51:01', NULL, NULL, 13, 13, 0, 1, 'Дом на даче', NULL, 0, NULL, 'Dom_na_dache', 7);
 
 -- --------------------------------------------------------
@@ -811,10 +905,10 @@ CREATE TABLE `product_order` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `phone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `comment` longtext COLLATE utf8_unicode_ci,
+  `comment` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `date_added` datetime NOT NULL,
   `status` int(11) NOT NULL,
-  `is_new` tinyint(1) DEFAULT '1',
+  `is_new` tinyint(1) DEFAULT 1,
   `status_comment` varchar(512) COLLATE utf8_unicode_ci DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -852,7 +946,7 @@ CREATE TABLE `product_service` (
   `product_id` int(11) DEFAULT NULL,
   `service_id` int(11) DEFAULT NULL,
   `date_added` datetime NOT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT 0,
   `date_end` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -872,7 +966,7 @@ INSERT INTO `product_service` (`id`, `product_id`, `service_id`, `date_added`, `
 CREATE TABLE `region` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `sortorder` int(11) DEFAULT '0'
+  `sortorder` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -920,7 +1014,7 @@ CREATE TABLE `register` (
   `user_id` int(11) NOT NULL,
   `confirm_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
-  `invite_code` longtext COLLATE utf8_unicode_ci
+  `invite_code` longtext COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -944,7 +1038,7 @@ CREATE TABLE `review` (
   `answer_id` int(11) DEFAULT NULL,
   `review_text` longtext COLLATE utf8_unicode_ci NOT NULL,
   `date_added` datetime NOT NULL,
-  `status` int(11) DEFAULT '0',
+  `status` int(11) DEFAULT 0,
   `product_mark` varchar(512) COLLATE utf8_unicode_ci DEFAULT '0',
   `answer_to_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1005,9 +1099,9 @@ INSERT INTO `selltype` (`id`, `title`) VALUES
 CREATE TABLE `service` (
   `id` int(11) NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
-  `description` longtext COLLATE utf8_unicode_ci,
-  `price` int(11) DEFAULT '0',
-  `days` int(11) DEFAULT '0',
+  `description` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `price` int(11) DEFAULT 0,
+  `days` int(11) DEFAULT 0,
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -1016,9 +1110,9 @@ CREATE TABLE `service` (
 --
 
 INSERT INTO `service` (`id`, `title`, `description`, `price`, `days`, `icon`) VALUES
-(1, 'Премиум-размещение', 'Ваше объявление будет показываться на самом заметном месте сайта &mdash; на главной странице, в категориях над обычными объявлениями и на страницах результатов поиска.<br /> Стоимость услуги &mdash; 5 евро в сутки.', 50, 1, '<i class="fa fa-diamond" aria-hidden="true"></i>'),
-(2, 'Выделить', 'Ваше объявление будет показываться на странице результатов поиска и в своей категории, оно отмечатся особой иконкой и отображаются другой цветовой гаммой. BONUS При этом оно поднимется на первое место в результатах поиска бесплатно. Цена - 3 евро/сутки.', 30, 1, '<i class="fa fa-pencil" aria-hidden="true"></i>'),
-(3, 'Поднять', 'Ваше объявление поднимется на первое место в результатах поиска, как если бы оно было только что подано на сайт. BONUS На следующий день, в это же время, оно будет поднято ещё раз бесплатно. <br /> Стоимость услуги&nbsp;20 грн/сутки.', 20, 1, '<i class="fa fa-arrow-up" aria-hidden="true"></i>');
+(1, 'Премиум-размещение', 'Ваше объявление будет показываться на самом заметном месте сайта &mdash; на главной странице, в категориях над обычными объявлениями и на страницах результатов поиска.<br /> Стоимость услуги &mdash; 5 евро в сутки.', 50, 1, '<i class=\"fa fa-diamond\" aria-hidden=\"true\"></i>'),
+(2, 'Выделить', 'Ваше объявление будет показываться на странице результатов поиска и в своей категории, оно отмечатся особой иконкой и отображаются другой цветовой гаммой. BONUS При этом оно поднимется на первое место в результатах поиска бесплатно. Цена - 3 евро/сутки.', 30, 1, '<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>'),
+(3, 'Поднять', 'Ваше объявление поднимется на первое место в результатах поиска, как если бы оно было только что подано на сайт. BONUS На следующий день, в это же время, оно будет поднято ещё раз бесплатно. <br /> Стоимость услуги&nbsp;20 грн/сутки.', 20, 1, '<i class=\"fa fa-arrow-up\" aria-hidden=\"true\"></i>');
 
 -- --------------------------------------------------------
 
@@ -1028,34 +1122,34 @@ INSERT INTO `service` (`id`, `title`, `description`, `price`, `days`, `icon`) VA
 
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
-  `user_default_group` int(11) DEFAULT '0',
-  `user_advert_limit_text` longtext COLLATE utf8_unicode_ci,
+  `user_default_group` int(11) DEFAULT 0,
+  `user_advert_limit_text` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `site_name` varchar(512) COLLATE utf8_unicode_ci DEFAULT '0',
-  `site_description` longtext COLLATE utf8_unicode_ci,
+  `site_description` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `admin_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
-  `category_product_number` int(11) DEFAULT '0',
-  `topseller_block_number` int(11) DEFAULT '0',
-  `mainpage_adverts_number` int(11) DEFAULT '0',
+  `category_product_number` int(11) DEFAULT 0,
+  `topseller_block_number` int(11) DEFAULT 0,
+  `mainpage_adverts_number` int(11) DEFAULT 0,
   `site_logo` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
-  `catpage_premium_number` int(11) DEFAULT '0',
-  `selected_adv_price` int(11) DEFAULT '0',
-  `premium_adv_price` int(11) DEFAULT '0',
-  `conversation_index` int(11) DEFAULT '0',
-  `advert_days_show_number` int(11) DEFAULT '0',
-  `up_adv_price` int(11) DEFAULT '0',
+  `catpage_premium_number` int(11) DEFAULT 0,
+  `selected_adv_price` int(11) DEFAULT 0,
+  `premium_adv_price` int(11) DEFAULT 0,
+  `conversation_index` int(11) DEFAULT 0,
+  `advert_days_show_number` int(11) DEFAULT 0,
+  `up_adv_price` int(11) DEFAULT 0,
   `dafault_order_status` int(11) NOT NULL,
-  `success_add_advert_text` longtext COLLATE utf8_unicode_ci,
+  `success_add_advert_text` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `watermark` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
-  `aditional_advert_price` int(11) DEFAULT '0',
-  `is_moderate` tinyint(1) NOT NULL DEFAULT '0',
+  `aditional_advert_price` int(11) DEFAULT 0,
+  `is_moderate` tinyint(1) NOT NULL DEFAULT 0,
   `locale_id` int(11) DEFAULT NULL,
   `currency_id` int(11) DEFAULT NULL,
-  `copyright` longtext COLLATE utf8_unicode_ci,
-  `textblock_how_to_price` longtext COLLATE utf8_unicode_ci,
-  `textblock_user_agreement` longtext COLLATE utf8_unicode_ci,
-  `user_advert_work_right` longtext COLLATE utf8_unicode_ci,
-  `is_show_captcha` tinyint(1) NOT NULL DEFAULT '0',
-  `is_show_type` tinyint(1) NOT NULL DEFAULT '0'
+  `copyright` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `textblock_how_to_price` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `textblock_user_agreement` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_advert_work_right` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `is_show_captcha` tinyint(1) NOT NULL DEFAULT 0,
+  `is_show_type` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -1063,8 +1157,8 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `user_default_group`, `user_advert_limit_text`, `site_name`, `site_description`, `admin_email`, `category_product_number`, `topseller_block_number`, `mainpage_adverts_number`, `site_logo`, `catpage_premium_number`, `selected_adv_price`, `premium_adv_price`, `conversation_index`, `advert_days_show_number`, `up_adv_price`, `dafault_order_status`, `success_add_advert_text`, `watermark`, `aditional_advert_price`, `is_moderate`, `locale_id`, `currency_id`, `copyright`, `textblock_how_to_price`, `textblock_user_agreement`, `user_advert_work_right`, `is_show_captcha`, `is_show_type`) VALUES
-(1, 2, 'Вы исчерпали доступный Вам лимит бесплатных объявлений. В данном случае Вы можете <a href="../account/buyslots">купить дополнительные слоты</a> для объявлений, либо удалить старые объявления для освобождения места для новых.', 'Доска Объявлений', NULL, 'admin@gribupardot.sunweb.by', NULL, 3, 100, '30569458.png', 9, 30, 50, 1, 30, 20, 1, '<strong>Выполнено!</strong> Ваше объявление успешно добавлено и опубликовано.', '17220519.png', 10, 0, 1, 1, '&copy; Gribupardot.lv - bezmaksas sludinājumu klāja', 'Как правильно указать цену?', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил.&nbsp;<br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления.&nbsp;<br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества;&nbsp;<br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих "лёгкий заработок" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br />Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', '<div class="block-rules-faster first">\r\n<div class="block-rules-faster-header rules">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>1. Не подавайте одно и то же объявление повторно. Почему?</li>\r\n<li>2. Не телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class="rules-link"><a href="../pages/Pravila-razmescheniya">Подробнее о правилах</a></div>\r\n</div>\r\n<div class="block-rules-faster">\r\n<div class="block-rules-faster-header faster">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет "премиум размещение" или "выделить объявление".</li>\r\n</ul>\r\n</div>\r\n</div>', 1, 0),
-(2, 2, 'Вы исчерпали доступный Вам лимит бесплатных объявлений. В данном случае Вы можете <a href="../account/buyslots">купить дополнительные слоты</a> для объявлений, либо удалить старые объявления для освобождения места для новых.', 'Доска Объявлений', NULL, 'admin@gribupardot.sunweb.by', NULL, 3, 100, '6289673.png', 9, 30, 50, 1, 30, 20, 1, '<strong>Выполнено!</strong> Ваше объявление успешно добавлено и опубликовано.', '17220519.png', 10, 0, 2, 1, '&copy; Gribupardot.lv - доска бесплатных объявлений', 'Как правильно указать цену?', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил.&nbsp;<br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления.&nbsp;<br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества;&nbsp;<br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих "лёгкий заработок" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br />Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', '<div class="block-rules-faster first">\r\n<div class="block-rules-faster-header rules">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>1. Не подавайте одно и то же объявление повторно. Почему?</li>\r\n<li>2. Не телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class="rules-link"><a href="../pages/Pravila-razmescheniya">Подробнее о правилах</a></div>\r\n</div>\r\n<div class="block-rules-faster">\r\n<div class="block-rules-faster-header faster">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет "премиум размещение" или "выделить объявление".</li>\r\n</ul>\r\n</div>\r\n</div>', 1, 0);
+(1, 2, 'Вы исчерпали доступный Вам лимит бесплатных объявлений. В данном случае Вы можете <a href=\"../account/buyslots\">купить дополнительные слоты</a> для объявлений, либо удалить старые объявления для освобождения места для новых.', 'Доска Объявлений', NULL, 'admin@gribupardot.sunweb.by', NULL, 3, 100, '30569458.png', 9, 30, 50, 1, 30, 20, 1, '<strong>Выполнено!</strong> Ваше объявление успешно добавлено и опубликовано.', '17220519.png', 10, 0, 1, 1, '&copy; Gribupardot.lv - bezmaksas sludinājumu klāja', 'Как правильно указать цену?', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил.&nbsp;<br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления.&nbsp;<br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества;&nbsp;<br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих \"лёгкий заработок\" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br />Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', '<div class=\"block-rules-faster first\">\r\n<div class=\"block-rules-faster-header rules\">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class=\"block-rules-faster-list\">\r\n<ul class=\"list-unstyled\">\r\n<li>1. Не подавайте одно и то же объявление повторно. Почему?</li>\r\n<li>2. Не телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class=\"rules-link\"><a href=\"../pages/Pravila-razmescheniya\">Подробнее о правилах</a></div>\r\n</div>\r\n<div class=\"block-rules-faster\">\r\n<div class=\"block-rules-faster-header faster\">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class=\"block-rules-faster-list\">\r\n<ul class=\"list-unstyled\">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет \"премиум размещение\" или \"выделить объявление\".</li>\r\n</ul>\r\n</div>\r\n</div>', 1, 0),
+(2, 2, 'Вы исчерпали доступный Вам лимит бесплатных объявлений. В данном случае Вы можете <a href=\"../account/buyslots\">купить дополнительные слоты</a> для объявлений, либо удалить старые объявления для освобождения места для новых.', 'Доска Объявлений', NULL, 'admin@gribupardot.sunweb.by', NULL, 3, 100, '6289673.png', 9, 30, 50, 1, 30, 20, 1, '<strong>Выполнено!</strong> Ваше объявление успешно добавлено и опубликовано.', '17220519.png', 10, 0, 2, 1, '&copy; Gribupardot.lv - доска бесплатных объявлений', 'Как правильно указать цену?', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил.&nbsp;<br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления.&nbsp;<br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества;&nbsp;<br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих \"лёгкий заработок\" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br />Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', '<div class=\"block-rules-faster first\">\r\n<div class=\"block-rules-faster-header rules\">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class=\"block-rules-faster-list\">\r\n<ul class=\"list-unstyled\">\r\n<li>1. Не подавайте одно и то же объявление повторно. Почему?</li>\r\n<li>2. Не телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class=\"rules-link\"><a href=\"../pages/Pravila-razmescheniya\">Подробнее о правилах</a></div>\r\n</div>\r\n<div class=\"block-rules-faster\">\r\n<div class=\"block-rules-faster-header faster\">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class=\"block-rules-faster-list\">\r\n<ul class=\"list-unstyled\">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет \"премиум размещение\" или \"выделить объявление\".</li>\r\n</ul>\r\n</div>\r\n</div>', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -1074,8 +1168,8 @@ INSERT INTO `settings` (`id`, `user_default_group`, `user_advert_limit_text`, `s
 
 CREATE TABLE `textblock` (
   `id` int(11) NOT NULL,
-  `how_to_set_price` longtext COLLATE utf8_unicode_ci,
-  `user_agreement` longtext COLLATE utf8_unicode_ci
+  `how_to_set_price` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_agreement` longtext COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -1083,7 +1177,7 @@ CREATE TABLE `textblock` (
 --
 
 INSERT INTO `textblock` (`id`, `how_to_set_price`, `user_agreement`) VALUES
-(1, 'Как правильно указать цену?', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил.&nbsp;<br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления.&nbsp;<br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества;&nbsp;<br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих "лёгкий заработок" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br />Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by');
+(1, 'Как правильно указать цену?', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил.&nbsp;<br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления.&nbsp;<br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества;&nbsp;<br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих \"лёгкий заработок\" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br />Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by');
 
 -- --------------------------------------------------------
 
@@ -1095,7 +1189,7 @@ CREATE TABLE `translation` (
   `id` int(11) NOT NULL,
   `locale_id` int(11) DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
-  `value` longtext COLLATE utf8_unicode_ci,
+  `value` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `selltype_id` int(11) DEFAULT NULL,
   `mark_id` int(11) DEFAULT NULL,
   `filter_id` int(11) DEFAULT NULL,
@@ -1103,82 +1197,92 @@ CREATE TABLE `translation` (
   `order_status_id` int(11) DEFAULT NULL,
   `region_id` int(11) DEFAULT NULL,
   `city_id` int(11) DEFAULT NULL,
-  `service_id` int(11) DEFAULT NULL
+  `service_id` int(11) DEFAULT NULL,
+  `modification_id` int(11) DEFAULT NULL,
+  `generation_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `translation`
 --
 
-INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `value`, `selltype_id`, `mark_id`, `filter_id`, `filter_value_id`, `order_status_id`, `region_id`, `city_id`, `service_id`) VALUES
-(26, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(27, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(28, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL),
-(29, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL),
-(30, 1, NULL, 'Centrs', NULL, NULL, NULL, NULL, NULL, NULL, 28, NULL),
-(31, 2, NULL, 'Центр', NULL, NULL, NULL, NULL, NULL, NULL, 28, NULL),
-(32, 1, 27, 'Nekustamais īpašums', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(33, 2, 27, 'Недвижимость', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(36, 1, 10, 'Nodarbinātība', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(37, 2, 10, 'Трудоустройство', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(38, 1, 32, 'Būvniecība', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(39, 2, 32, 'Строительство', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(40, 1, 51, 'Elektrotehnika', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(41, 2, 51, 'Электротехника', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(42, 1, 64, 'Apģērbi, apavi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(43, 2, 64, 'Одежда, обувь', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(44, 1, 70, 'Mājas piederumi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(45, 2, 70, 'Товары для дома', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(46, 1, 87, 'Ražošana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(47, 2, 87, 'Производство', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(48, 1, 99, 'Viss bērniem', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(49, 2, 99, 'Все для детей', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(50, 1, 111, 'Dzīvnieki', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(51, 2, 111, 'Животные', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(52, 1, 116, 'Lauksaimniecība', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(53, 2, 116, 'Сельское хозяйство', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(56, 1, NULL, 'Pārdošana', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(57, 2, NULL, 'Продам', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(58, 1, NULL, 'Pērciet', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(59, 2, NULL, 'Куплю', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(60, 1, NULL, 'Īre', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(61, 2, NULL, 'Аренда', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(62, 1, NULL, 'Apmaiņa', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(63, 2, NULL, 'Обмен', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(64, 1, NULL, 'Pieprasījums/meklēšana', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(65, 2, NULL, 'Спрос/Ищу', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(66, 1, NULL, 'Es pieņemšu dāvanu', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(67, 2, NULL, 'Приму в дар', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(68, 1, NULL, 'Es atdošu par neko', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(69, 2, NULL, 'Отдам даром', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, 1, NULL, 'Pakalpojumi', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(71, 2, NULL, 'Услуги', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(72, 1, NULL, 'Baldone', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
-(73, 2, NULL, 'Балдоне', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL),
-(78, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(79, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(80, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1),
-(81, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1),
-(82, 1, NULL, 'Izcelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2),
-(83, 2, NULL, 'Выделить', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2),
-(84, 1, NULL, 'Pacelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3),
-(85, 2, NULL, 'Поднять', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3),
-(94, 1, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL),
-(95, 2, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL),
-(96, 1, NULL, 'Айзкраукле', NULL, NULL, NULL, NULL, NULL, NULL, 78, NULL),
-(97, 2, NULL, 'Айзкраукле', NULL, NULL, NULL, NULL, NULL, NULL, 78, NULL),
-(98, 1, NULL, 'Таурлканс', NULL, NULL, NULL, NULL, NULL, NULL, 79, NULL),
-(99, 2, NULL, 'Таурлканс', NULL, NULL, NULL, NULL, NULL, NULL, 79, NULL),
-(100, 1, NULL, 'Город', NULL, NULL, NULL, NULL, NULL, NULL, 80, NULL),
-(102, 2, NULL, 'Город', NULL, NULL, NULL, NULL, NULL, NULL, 80, NULL),
-(105, 1, NULL, 'Лиепая', NULL, NULL, NULL, NULL, NULL, NULL, 81, NULL),
-(107, 2, NULL, 'Лиепая', NULL, NULL, NULL, NULL, NULL, NULL, 81, NULL),
-(108, 1, NULL, 'Aizik', NULL, NULL, NULL, NULL, NULL, NULL, 82, NULL),
-(109, 2, NULL, 'Айзик', NULL, NULL, NULL, NULL, NULL, NULL, 82, NULL),
-(110, 1, NULL, 'Apstrādē', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
-(111, 2, NULL, 'В обработке', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
-(112, 1, NULL, 'Fine, es iesaku', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(113, 2, NULL, 'Отлично, рекомендую', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `value`, `selltype_id`, `mark_id`, `filter_id`, `filter_value_id`, `order_status_id`, `region_id`, `city_id`, `service_id`, `modification_id`, `generation_id`) VALUES
+(26, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(27, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(28, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL, NULL, NULL),
+(29, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL, NULL, NULL),
+(30, 1, NULL, 'Centrs', NULL, NULL, NULL, NULL, NULL, NULL, 28, NULL, NULL, NULL),
+(31, 2, NULL, 'Центр', NULL, NULL, NULL, NULL, NULL, NULL, 28, NULL, NULL, NULL),
+(32, 1, 27, 'Легковые автомобили', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(33, 2, 27, 'Легковые автомобили', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(56, 1, NULL, 'Pārdošana', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(57, 2, NULL, 'Продам', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(58, 1, NULL, 'Pērciet', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, 2, NULL, 'Куплю', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, 1, NULL, 'Īre', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, 2, NULL, 'Аренда', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, 1, NULL, 'Apmaiņa', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, 2, NULL, 'Обмен', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 1, NULL, 'Pieprasījums/meklēšana', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 2, NULL, 'Спрос/Ищу', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(66, 1, NULL, 'Es pieņemšu dāvanu', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(67, 2, NULL, 'Приму в дар', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(68, 1, NULL, 'Es atdošu par neko', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(69, 2, NULL, 'Отдам даром', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(70, 1, NULL, 'Pakalpojumi', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(71, 2, NULL, 'Услуги', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(72, 1, NULL, 'Baldone', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(73, 2, NULL, 'Балдоне', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(78, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(79, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(80, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
+(81, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
+(82, 1, NULL, 'Izcelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL),
+(83, 2, NULL, 'Выделить', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL),
+(84, 1, NULL, 'Pacelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL),
+(85, 2, NULL, 'Поднять', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL),
+(94, 1, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL),
+(95, 2, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL),
+(96, 1, NULL, 'Айзкраукле', NULL, NULL, NULL, NULL, NULL, NULL, 78, NULL, NULL, NULL),
+(97, 2, NULL, 'Айзкраукле', NULL, NULL, NULL, NULL, NULL, NULL, 78, NULL, NULL, NULL),
+(98, 1, NULL, 'Таурлканс', NULL, NULL, NULL, NULL, NULL, NULL, 79, NULL, NULL, NULL),
+(99, 2, NULL, 'Таурлканс', NULL, NULL, NULL, NULL, NULL, NULL, 79, NULL, NULL, NULL),
+(100, 1, NULL, 'Город', NULL, NULL, NULL, NULL, NULL, NULL, 80, NULL, NULL, NULL),
+(102, 2, NULL, 'Город', NULL, NULL, NULL, NULL, NULL, NULL, 80, NULL, NULL, NULL),
+(105, 1, NULL, 'Лиепая', NULL, NULL, NULL, NULL, NULL, NULL, 81, NULL, NULL, NULL),
+(107, 2, NULL, 'Лиепая', NULL, NULL, NULL, NULL, NULL, NULL, 81, NULL, NULL, NULL),
+(108, 1, NULL, 'Aizik', NULL, NULL, NULL, NULL, NULL, NULL, 82, NULL, NULL, NULL),
+(109, 2, NULL, 'Айзик', NULL, NULL, NULL, NULL, NULL, NULL, 82, NULL, NULL, NULL),
+(110, 1, NULL, 'Apstrādē', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL),
+(111, 2, NULL, 'В обработке', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL),
+(112, 1, NULL, 'Fine, es iesaku', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(113, 2, NULL, 'Отлично, рекомендую', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(114, 1, 28, 'Audi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(115, 2, 28, 'Audi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(118, 1, NULL, 'Двигатель', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(119, 2, NULL, 'Двигатель', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(120, 1, NULL, 'Бензин', NULL, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL),
+(121, 2, NULL, 'Бензин', NULL, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL),
+(122, 1, NULL, 'Дизель', NULL, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL),
+(123, 2, NULL, 'Дизель', NULL, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL),
+(124, 1, NULL, 'Привод', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(125, 2, NULL, 'Привод', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(126, 1, NULL, 'Передний', NULL, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL),
+(127, 2, NULL, 'Передний', NULL, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL),
+(128, 1, NULL, 'Задний', NULL, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL),
+(129, 2, NULL, 'Задний', NULL, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL),
+(130, 1, NULL, 'Полный', NULL, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL),
+(131, 2, NULL, 'Полный', NULL, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL),
+(132, 1, NULL, 'Коробка передач', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(133, 2, NULL, 'Коробка передач', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(134, 1, NULL, 'Механическая', NULL, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL),
+(135, 2, NULL, 'Механическая', NULL, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL),
+(136, 1, NULL, 'Автоматическая', NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL),
+(137, 2, NULL, 'Автоматическая', NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL),
+(138, 1, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL),
+(139, 2, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL),
+(140, 1, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL),
+(141, 2, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1193,7 +1297,7 @@ CREATE TABLE `users` (
   `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
   `is_active` tinyint(1) NOT NULL,
   `alerts` tinyint(1) NOT NULL,
-  `is_confirm` tinyint(1) DEFAULT '0',
+  `is_confirm` tinyint(1) DEFAULT 0,
   `advert_number` int(11) NOT NULL,
   `vk_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
   `fb_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0'
@@ -1216,7 +1320,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_active`, `alerts
 CREATE TABLE `user_activity` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `enter_count` int(11) NOT NULL DEFAULT '0',
+  `enter_count` int(11) NOT NULL DEFAULT 0,
   `last_activity` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -1244,11 +1348,11 @@ CREATE TABLE `user_info` (
   `birthdayday` int(11) DEFAULT NULL,
   `birthdaymonth` varchar(30) COLLATE utf8_unicode_ci DEFAULT 'null',
   `birthdayyear` varchar(5) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `emailmessagesalerts` tinyint(1) DEFAULT '0',
-  `emailmessagesreminders` tinyint(1) DEFAULT '0',
+  `emailmessagesalerts` tinyint(1) DEFAULT 0,
+  `emailmessagesreminders` tinyint(1) DEFAULT 0,
   `region_id` int(11) DEFAULT NULL,
   `city_id` int(11) DEFAULT NULL,
-  `rating` int(11) DEFAULT '0',
+  `rating` int(11) DEFAULT 0,
   `sex` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -1291,8 +1395,8 @@ CREATE TABLE `user_purse_history` (
   `id` int(11) NOT NULL,
   `purse_id` int(11) DEFAULT NULL,
   `action_date` datetime NOT NULL,
-  `action` longtext COLLATE utf8_unicode_ci,
-  `current_balanse` int(11) DEFAULT '0'
+  `action` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `current_balanse` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1313,6 +1417,17 @@ CREATE TABLE `user_role` (
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 (1, 1),
 (2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `value_linked_filters`
+--
+
+CREATE TABLE `value_linked_filters` (
+  `filter_value_id` int(11) NOT NULL,
+  `filter_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Индексы сохранённых таблиц
@@ -1400,7 +1515,16 @@ ALTER TABLE `favorite_products`
 -- Индексы таблицы `filter`
 --
 ALTER TABLE `filter`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_7FC45F1D727ACA70` (`parent_id`);
+
+--
+-- Индексы таблицы `filter_linked_values`
+--
+ALTER TABLE `filter_linked_values`
+  ADD PRIMARY KEY (`filter_value_source`,`filter_value_target`),
+  ADD KEY `IDX_775484B1264C021` (`filter_value_source`),
+  ADD KEY `IDX_775484B11B8190AE` (`filter_value_target`);
 
 --
 -- Индексы таблицы `filter_value`
@@ -1438,6 +1562,13 @@ ALTER TABLE `gallery_items`
   ADD KEY `IDX_583396E4E7AF8F` (`gallery_id`);
 
 --
+-- Индексы таблицы `generation`
+--
+ALTER TABLE `generation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_D3266C3B12469DE2` (`category_id`);
+
+--
 -- Индексы таблицы `invite`
 --
 ALTER TABLE `invite`
@@ -1473,6 +1604,13 @@ ALTER TABLE `message`
   ADD KEY `IDX_B6BD307F4584665A` (`product_id`),
   ADD KEY `IDX_B6BD307F9EB185F9` (`user_owner_id`),
   ADD KEY `IDX_B6BD307F9AC0396` (`conversation_id`);
+
+--
+-- Индексы таблицы `modification`
+--
+ALTER TABLE `modification`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_EF6425D2553A6EC4` (`generation_id`);
 
 --
 -- Индексы таблицы `order_status`
@@ -1624,7 +1762,9 @@ ALTER TABLE `translation`
   ADD KEY `IDX_B469456FD7707B45` (`order_status_id`),
   ADD KEY `IDX_B469456F98260155` (`region_id`),
   ADD KEY `IDX_B469456F8BAC62AF` (`city_id`),
-  ADD KEY `IDX_B469456FED5CA9E6` (`service_id`);
+  ADD KEY `IDX_B469456FED5CA9E6` (`service_id`),
+  ADD KEY `IDX_B469456F4A605127` (`modification_id`),
+  ADD KEY `IDX_B469456F553A6EC4` (`generation_id`);
 
 --
 -- Индексы таблицы `users`
@@ -1671,6 +1811,14 @@ ALTER TABLE `user_role`
   ADD KEY `IDX_2DE8C6A3D60322AC` (`role_id`);
 
 --
+-- Индексы таблицы `value_linked_filters`
+--
+ALTER TABLE `value_linked_filters`
+  ADD PRIMARY KEY (`filter_value_id`,`filter_id`),
+  ADD KEY `IDX_C8FF8542C44FBE02` (`filter_value_id`),
+  ADD KEY `IDX_C8FF8542D395B25E` (`filter_id`);
+
+--
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
@@ -1679,211 +1827,265 @@ ALTER TABLE `user_role`
 --
 ALTER TABLE `banner`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 --
 -- AUTO_INCREMENT для таблицы `blacklist`
 --
 ALTER TABLE `blacklist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
+
 --
 -- AUTO_INCREMENT для таблицы `category_description`
 --
 ALTER TABLE `category_description`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT для таблицы `city`
 --
 ALTER TABLE `city`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+
 --
 -- AUTO_INCREMENT для таблицы `complaint`
 --
 ALTER TABLE `complaint`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `conversation`
 --
 ALTER TABLE `conversation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `currency`
 --
 ALTER TABLE `currency`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT для таблицы `favorite_products`
 --
 ALTER TABLE `favorite_products`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
 --
 -- AUTO_INCREMENT для таблицы `filter`
 --
 ALTER TABLE `filter`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
 --
 -- AUTO_INCREMENT для таблицы `filter_value`
 --
 ALTER TABLE `filter_value`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+
 --
 -- AUTO_INCREMENT для таблицы `form_message`
 --
 ALTER TABLE `form_message`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `friend`
 --
 ALTER TABLE `friend`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `gallery`
 --
 ALTER TABLE `gallery`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `gallery_items`
 --
 ALTER TABLE `gallery_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT для таблицы `generation`
+--
+ALTER TABLE `generation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `invite`
 --
 ALTER TABLE `invite`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `liqpay`
 --
 ALTER TABLE `liqpay`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `locale`
 --
 ALTER TABLE `locale`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT для таблицы `mark`
 --
 ALTER TABLE `mark`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT для таблицы `message`
 --
 ALTER TABLE `message`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `modification`
+--
+ALTER TABLE `modification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT для таблицы `order_status`
 --
 ALTER TABLE `order_status`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 --
 -- AUTO_INCREMENT для таблицы `page`
 --
 ALTER TABLE `page`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
 --
 -- AUTO_INCREMENT для таблицы `product`
 --
 ALTER TABLE `product`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
 --
 -- AUTO_INCREMENT для таблицы `product_fotos`
 --
 ALTER TABLE `product_fotos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
 --
 -- AUTO_INCREMENT для таблицы `product_options`
 --
 ALTER TABLE `product_options`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `product_order`
 --
 ALTER TABLE `product_order`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `product_reviews`
 --
 ALTER TABLE `product_reviews`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `product_service`
 --
 ALTER TABLE `product_service`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `region`
 --
 ALTER TABLE `region`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
 --
 -- AUTO_INCREMENT для таблицы `register`
 --
 ALTER TABLE `register`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `review`
 --
 ALTER TABLE `review`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT для таблицы `role`
 --
 ALTER TABLE `role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT для таблицы `selltype`
 --
 ALTER TABLE `selltype`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
 --
 -- AUTO_INCREMENT для таблицы `service`
 --
 ALTER TABLE `service`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT для таблицы `settings`
 --
 ALTER TABLE `settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT для таблицы `textblock`
 --
 ALTER TABLE `textblock`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `translation`
 --
 ALTER TABLE `translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
+
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT для таблицы `user_activity`
 --
 ALTER TABLE `user_activity`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT для таблицы `user_info`
 --
 ALTER TABLE `user_info`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2734;
+
 --
 -- AUTO_INCREMENT для таблицы `user_purse`
 --
 ALTER TABLE `user_purse`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2736;
+
 --
 -- AUTO_INCREMENT для таблицы `user_purse_history`
 --
 ALTER TABLE `user_purse_history`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
@@ -1936,6 +2138,19 @@ ALTER TABLE `conversation`
   ADD CONSTRAINT `FK_8A8E26E9E920621A` FOREIGN KEY (`conversation_usertwo_id`) REFERENCES `users` (`id`);
 
 --
+-- Ограничения внешнего ключа таблицы `filter`
+--
+ALTER TABLE `filter`
+  ADD CONSTRAINT `FK_7FC45F1D727ACA70` FOREIGN KEY (`parent_id`) REFERENCES `filter` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `filter_linked_values`
+--
+ALTER TABLE `filter_linked_values`
+  ADD CONSTRAINT `FK_775484B11B8190AE` FOREIGN KEY (`filter_value_target`) REFERENCES `filter_value` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_775484B1264C021` FOREIGN KEY (`filter_value_source`) REFERENCES `filter_value` (`id`) ON DELETE CASCADE;
+
+--
 -- Ограничения внешнего ключа таблицы `filter_value`
 --
 ALTER TABLE `filter_value`
@@ -1961,6 +2176,12 @@ ALTER TABLE `gallery_items`
   ADD CONSTRAINT `FK_583396E4E7AF8F` FOREIGN KEY (`gallery_id`) REFERENCES `gallery` (`id`);
 
 --
+-- Ограничения внешнего ключа таблицы `generation`
+--
+ALTER TABLE `generation`
+  ADD CONSTRAINT `FK_D3266C3B12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+
+--
 -- Ограничения внешнего ключа таблицы `invite`
 --
 ALTER TABLE `invite`
@@ -1981,6 +2202,12 @@ ALTER TABLE `message`
   ADD CONSTRAINT `FK_B6BD307F9AC0396` FOREIGN KEY (`conversation_id`) REFERENCES `conversation` (`id`),
   ADD CONSTRAINT `FK_B6BD307F9EB185F9` FOREIGN KEY (`user_owner_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `FK_B6BD307FD2F7B13D` FOREIGN KEY (`user_to_id`) REFERENCES `users` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `modification`
+--
+ALTER TABLE `modification`
+  ADD CONSTRAINT `FK_EF6425D2553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `page`
@@ -2069,6 +2296,8 @@ ALTER TABLE `settings`
 ALTER TABLE `translation`
   ADD CONSTRAINT `FK_B469456F12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
   ADD CONSTRAINT `FK_B469456F4290F12B` FOREIGN KEY (`mark_id`) REFERENCES `mark` (`id`),
+  ADD CONSTRAINT `FK_B469456F4A605127` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`),
+  ADD CONSTRAINT `FK_B469456F553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
   ADD CONSTRAINT `FK_B469456F5EBADE83` FOREIGN KEY (`selltype_id`) REFERENCES `selltype` (`id`),
   ADD CONSTRAINT `FK_B469456F8BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
   ADD CONSTRAINT `FK_B469456F98260155` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
@@ -2110,6 +2339,14 @@ ALTER TABLE `user_purse_history`
 ALTER TABLE `user_role`
   ADD CONSTRAINT `FK_2DE8C6A3A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_2DE8C6A3D60322AC` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `value_linked_filters`
+--
+ALTER TABLE `value_linked_filters`
+  ADD CONSTRAINT `FK_C8FF8542C44FBE02` FOREIGN KEY (`filter_value_id`) REFERENCES `filter_value` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_C8FF8542D395B25E` FOREIGN KEY (`filter_id`) REFERENCES `filter` (`id`) ON DELETE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

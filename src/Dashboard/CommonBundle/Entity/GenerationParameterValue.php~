@@ -1,0 +1,32 @@
+<?php
+namespace Dashboard\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Table()
+ * @ORM\Entity()
+ */
+class GenerationParameterValue 
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\GenerationParameter", inversedBy="values")
+     * @ORM\JoinColumn(name="parameter_id", referencedColumnName="id")
+     */
+    private $parameter;
+
+}
+

@@ -34,6 +34,23 @@ class FilterValue
     private $products;
     
     /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="linkedValues", cascade={"persist"})
+     */
+    private $linkToValues;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", inversedBy="linkToValues")
+     * @ORM\JoinTable(name="filter_linked_values")
+     */
+    private $linkedValues;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Filter", inversedBy="linkToValues")
+     * @ORM\JoinTable(name="value_linked_filters")
+     */
+    private $linkedFilters;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="filterValue", cascade={"persist"})
      */
     private $translations;
@@ -166,5 +183,105 @@ class FilterValue
     public function getTranslations()
     {
         return $this->translations;
+    }
+    
+
+    /**
+     * Add linkToValues
+     *
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $linkToValues
+     * @return FilterValue
+     */
+    public function addLinkToValue(\Dashboard\CommonBundle\Entity\FilterValue $linkToValues)
+    {
+        $this->linkToValues[] = $linkToValues;
+
+        return $this;
+    }
+
+    /**
+     * Remove linkToValues
+     *
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $linkToValues
+     */
+    public function removeLinkToValue(\Dashboard\CommonBundle\Entity\FilterValue $linkToValues)
+    {
+        $this->linkToValues->removeElement($linkToValues);
+    }
+
+    /**
+     * Get linkToValues
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLinkToValues()
+    {
+        return $this->linkToValues;
+    }
+
+    /**
+     * Add linkedValues
+     *
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $linkedValues
+     * @return FilterValue
+     */
+    public function addLinkedValue(\Dashboard\CommonBundle\Entity\FilterValue $linkedValues)
+    {
+        $this->linkedValues[] = $linkedValues;
+
+        return $this;
+    }
+
+    /**
+     * Remove linkedValues
+     *
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $linkedValues
+     */
+    public function removeLinkedValue(\Dashboard\CommonBundle\Entity\FilterValue $linkedValues)
+    {
+        $this->linkedValues->removeElement($linkedValues);
+    }
+
+    /**
+     * Get linkedValues
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLinkedValues()
+    {
+        return $this->linkedValues;
+    }
+
+    /**
+     * Add linkedFilters
+     *
+     * @param \Dashboard\CommonBundle\Entity\Filter $linkedFilters
+     * @return FilterValue
+     */
+    public function addLinkedFilter(\Dashboard\CommonBundle\Entity\Filter $linkedFilters)
+    {
+        $this->linkedFilters[] = $linkedFilters;
+
+        return $this;
+    }
+
+    /**
+     * Remove linkedFilters
+     *
+     * @param \Dashboard\CommonBundle\Entity\Filter $linkedFilters
+     */
+    public function removeLinkedFilter(\Dashboard\CommonBundle\Entity\Filter $linkedFilters)
+    {
+        $this->linkedFilters->removeElement($linkedFilters);
+    }
+
+    /**
+     * Get linkedFilters
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLinkedFilters()
+    {
+        return $this->linkedFilters;
     }
 }

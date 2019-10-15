@@ -1,5 +1,7 @@
 {% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
 
+{% form_theme categoryForm _self %}
+
 {% block title %}{% trans %} Панель управления - Категории объявлений{% endtrans %}{% endblock %}
 
 {% block body %}
@@ -24,7 +26,7 @@
                             <span class="caret"></span>
                         </button>
                         <ul role="menu" class="dropdown-menu">
-                            <li><a href="{{ path('admin_product_category_edit') }}">Добавить категорию</a></li>
+                            <li><a href="#" onclick="addSubcategory(0)">Добавить категорию</a></li>
                             <li><a href="#" onclick="if(confirm('Вы действительно хотите удалить отмеченные категории?'))document.deleteSelected.submit(); else return false;">Удалить отмеченные</a></li>
                             <li><a href="#" onclick="document.deleteSelected.submit();">Сохранить</a></li>
                         </ul>
@@ -34,7 +36,7 @@
                 <div class="panel-body">
                     <div class="table-responsive">
                         {% if categories %}
-                            <form action="{{ path('admin_product_category')}}" method="POST" name="deleteSelected" id="deleteSelected">
+                            <form action="" method="POST" name="deleteSelected" id="deleteSelected">
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -46,10 +48,9 @@
                                             <th>Действия</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-
+                                    <tbody id="categoriesTableList">
                                             {% for category in categories %}
-                                                <tr>
+                                                <tr id="categoryRow{{ category.id }}">
                                                     <td><input name="category[]" value="{{ category.id }}" type="checkbox" class="checkbox-item" /></td>
                                                     <td>
                                                         <input style="width:30px;border:1px solid #e2e7eb" name="sortorder[{{ category.id }}]" value="{{ category.sortorder }}" />&nbsp;
@@ -58,6 +59,7 @@
                                                         {% else %}
                                                             {{ category.title }}
                                                         {% endif %}
+                                                        <button style="background:none;border:none" type="button" onclick="addSubcategory({{ category.id }})" title="Добавить подкатегорию"><i class="fa fa-plus"></i></button>
                                                     </td>
                                                     <td>
                                                         {{ category.name }}
@@ -87,6 +89,28 @@
             </div>
         </div>
     </div>
+</div>
+<div class="modal fade" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" id="categoryFormModal">
+        {{ form_start(categoryForm) }}
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Добавить</h5>
+        </div>
+        <div class="modal-body">
+            <div class="form_group">
+                <label>{{ form_label(categoryForm.title) }}</label>
+                {{ form_widget(categoryForm.title) }}
+            </div>
+            {{ form_widget(categoryForm.parent) }}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="button" class="btn btn-primary" onclick="saveCategory('categoryFormModal', $(this))">Добавить</button>
+        </div>
+        {{ form_end(categoryForm) }}
+    </div>
+  </div>
 </div>
 {% endblock %}
 

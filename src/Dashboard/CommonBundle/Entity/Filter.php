@@ -18,6 +18,19 @@ class Filter
     private $id;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Filter", mappedBy="parent")
+     * @ORM\OrderBy({"sortorder" = "ASC"})
+     */
+    private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Filter", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\OrderBy({"sortorder" = "ASC"})
+     */
+    private $parent;
+    
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
@@ -61,6 +74,11 @@ class Filter
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="filter", cascade={"persist"})
      */
     private $values;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="linkedFilters", cascade={"persist"})
+     */
+    private $linkToValues;
     
     /**
      * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Category", inversedBy="filters")
@@ -373,5 +391,94 @@ class Filter
     public function getIsShowCard()
     {
         return $this->isShowCard;
+    }
+
+    /**
+     * Add children
+     *
+     * @param \Dashboard\CommonBundle\Entity\Filter $children
+     * @return Filter
+     */
+    public function addChild(\Dashboard\CommonBundle\Entity\Filter $children)
+    {
+        $this->children[] = $children;
+
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param \Dashboard\CommonBundle\Entity\Filter $children
+     */
+    public function removeChild(\Dashboard\CommonBundle\Entity\Filter $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Dashboard\CommonBundle\Entity\Filter $parent
+     * @return Filter
+     */
+    public function setParent(\Dashboard\CommonBundle\Entity\Filter $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Dashboard\CommonBundle\Entity\Filter 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add linkToValues
+     *
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $linkToValues
+     * @return Filter
+     */
+    public function addLinkToValue(\Dashboard\CommonBundle\Entity\FilterValue $linkToValues)
+    {
+        $this->linkToValues[] = $linkToValues;
+
+        return $this;
+    }
+
+    /**
+     * Remove linkToValues
+     *
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $linkToValues
+     */
+    public function removeLinkToValue(\Dashboard\CommonBundle\Entity\FilterValue $linkToValues)
+    {
+        $this->linkToValues->removeElement($linkToValues);
+    }
+
+    /**
+     * Get linkToValues
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLinkToValues()
+    {
+        return $this->linkToValues;
     }
 }

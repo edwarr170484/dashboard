@@ -155,6 +155,50 @@ $(document).ready(function(){
         $(".table-descriptions > tbody").append(newForm);
     });
     
+    $("#add-generation").click(function(){ 
+        var prototype = $("#category_generations").data("prototype");
+        var l = $(".table-generations > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, l);
+        
+        $(".table-generations > tbody").append(newForm);
+
+        $(".table-generations > tbody > tr").eq(l).find(".add-generation-translation").click(function(){
+            var prototype = $(this).next("#generation_translations_sub").data("prototype");
+            var count = $(this).parent().find(".table-generation-translations-sub > tbody > tr").length;
+            var newForm = prototype.replace('translations][' + l + '][locale','translations][' + count + '][locale');
+            newForm = newForm.replace('translations][' + l + '][value','translations][' + count + '][value');
+            newForm = newForm.replace(/__name__/g, count);
+            $(this).parent().find(".table-generation-translations-sub > tbody").append(newForm);
+        });
+        
+        $(".table-generations > tbody > tr").eq(l).find(".add-generation-modification").click(function(){
+            var prototype = $(this).next("#generation_modifications").data("prototype");
+            var count = $(this).parent().find(".table-generation-modifications > tbody > tr").length;
+            var newForm = prototype.replace('modifications][' + l + '][power','modifications][' + count + '][power');
+            newForm = newForm.replace('modifications][' + l + '][size','modifications][' + count + '][size');
+            newForm = newForm.replace('modifications][' + l + '][label','modifications][' + count + '][label');
+            newForm = newForm.replace('modifications][' + l + '][sortorder','modifications][' + count + '][sortorder');
+            newForm = newForm.replace(/__name__/g, count);
+            $(this).parent().find(".table-generation-modifications > tbody").append(newForm);
+        });
+        
+    });
+    
+    $(".add-generation-translation").click(function(){
+        var prototype = $(this).next("#generation_translations_sub").data("prototype");
+        var count = $(this).parent().find(".table-generation-translations-sub > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        $(this).parent().find(".table-generation-translations-sub > tbody").append(newForm);
+    });
+    
+    $(".add-generation-modification").click(function(){
+        var prototype = $(this).next("#generation_modifications").data("prototype");
+        var count = $(this).parent().find(".table-generation-modifications > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+
+        $(this).parent().find(".table-generation-modifications > tbody").append(newForm);
+    });
+    
     $("#add-region-city").click(function(){
         
         var prototype = $("#region_city").data("prototype");
@@ -191,6 +235,30 @@ $(document).ready(function(){
     
     
 });
+
+function addSubcategory(parentId){
+    $("#category_parent").val(parentId);
+    $("#categoryModal").modal();
+}
+
+function saveCategory(id, element){
+    $.ajax({
+        url: '/admin/category/add',
+        type:'post',
+        data:$("#" + id + " input[type='text'], #" + id + " input[type='hidden']"),
+        dataType: 'json',
+        beforeSend: function(){element.append('<i class="fa fa-spinner fa-spin"></i>')},
+        success: function(data)
+        {
+            element.find("i").remove();
+            $("#categoriesTableList").html(data.view);
+            alert(data.message);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            err=xhr.responseText;
+        }
+    });
+}
 
 function getChildCategories(categoryId, element, spaces)
 {

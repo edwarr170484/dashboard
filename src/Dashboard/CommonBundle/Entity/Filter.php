@@ -76,7 +76,7 @@ class Filter
     private $values;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="linkedFilters", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="linkedFilters")
      */
     private $linkToValues;
     
@@ -96,8 +96,11 @@ class Filter
      */
     public function __construct()
     {
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->values = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->linkToValues = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -119,7 +122,7 @@ class Filter
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -142,7 +145,7 @@ class Filter
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
@@ -165,7 +168,7 @@ class Filter
     public function setIsShow($isShow)
     {
         $this->isShow = $isShow;
-    
+
         return $this;
     }
 
@@ -180,128 +183,6 @@ class Filter
     }
 
     /**
-     * Set sortorder
-     *
-     * @param integer $sortorder
-     * @return Filter
-     */
-    public function setSortorder($sortorder)
-    {
-        $this->sortorder = $sortorder;
-    
-        return $this;
-    }
-
-    /**
-     * Get sortorder
-     *
-     * @return integer 
-     */
-    public function getSortorder()
-    {
-        return $this->sortorder;
-    }
-
-    /**
-     * Add values
-     *
-     * @param \Dashboard\CommonBundle\Entity\FilterValue $values
-     * @return Filter
-     */
-    public function addValue(\Dashboard\CommonBundle\Entity\FilterValue $values)
-    {
-        $this->values[] = $values;
-    
-        return $this;
-    }
-
-    /**
-     * Remove values
-     *
-     * @param \Dashboard\CommonBundle\Entity\FilterValue $values
-     */
-    public function removeValue(\Dashboard\CommonBundle\Entity\FilterValue $values)
-    {
-        $this->values->removeElement($values);
-    }
-
-    /**
-     * Get values
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getValues()
-    {
-        return $this->values;
-    }
-
-    /**
-     * Add categories
-     *
-     * @param \Dashboard\CommonBundle\Entity\Category $categories
-     * @return Filter
-     */
-    public function addCategory(\Dashboard\CommonBundle\Entity\Category $categories)
-    {
-        $this->categories[] = $categories;
-    
-        return $this;
-    }
-
-    /**
-     * Remove categories
-     *
-     * @param \Dashboard\CommonBundle\Entity\Category $categories
-     */
-    public function removeCategory(\Dashboard\CommonBundle\Entity\Category $categories)
-    {
-        $this->categories->removeElement($categories);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
-    /**
-     * Add translations
-     *
-     * @param \Dashboard\CommonBundle\Entity\Translation $translations
-     * @return Filter
-     */
-    public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
-    {
-        $this->translations[] = $translations;
-    
-        return $this;
-    }
-
-    /**
-     * Remove translations
-     *
-     * @param \Dashboard\CommonBundle\Entity\Translation $translations
-     */
-    public function removeTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
-    {
-        $this->translations->removeElement($translations);
-    }
-
-    /**
-     * Get translations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    /**
      * Set isRequired
      *
      * @param boolean $isRequired
@@ -310,7 +191,7 @@ class Filter
     public function setIsRequired($isRequired)
     {
         $this->isRequired = $isRequired;
-    
+
         return $this;
     }
 
@@ -333,7 +214,7 @@ class Filter
     public function setIsSearch($isSearch)
     {
         $this->isSearch = $isSearch;
-    
+
         return $this;
     }
 
@@ -356,7 +237,7 @@ class Filter
     public function setIsSelltype($isSelltype)
     {
         $this->isSelltype = $isSelltype;
-    
+
         return $this;
     }
 
@@ -379,7 +260,7 @@ class Filter
     public function setIsShowCard($isShowCard)
     {
         $this->isShowCard = $isShowCard;
-    
+
         return $this;
     }
 
@@ -391,6 +272,29 @@ class Filter
     public function getIsShowCard()
     {
         return $this->isShowCard;
+    }
+
+    /**
+     * Set sortorder
+     *
+     * @param integer $sortorder
+     * @return Filter
+     */
+    public function setSortorder($sortorder)
+    {
+        $this->sortorder = $sortorder;
+
+        return $this;
+    }
+
+    /**
+     * Get sortorder
+     *
+     * @return integer 
+     */
+    public function getSortorder()
+    {
+        return $this->sortorder;
     }
 
     /**
@@ -450,6 +354,39 @@ class Filter
     }
 
     /**
+     * Add values
+     *
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $values
+     * @return Filter
+     */
+    public function addValue(\Dashboard\CommonBundle\Entity\FilterValue $values)
+    {
+        $this->values[] = $values;
+
+        return $this;
+    }
+
+    /**
+     * Remove values
+     *
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $values
+     */
+    public function removeValue(\Dashboard\CommonBundle\Entity\FilterValue $values)
+    {
+        $this->values->removeElement($values);
+    }
+
+    /**
+     * Get values
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
+
+    /**
      * Add linkToValues
      *
      * @param \Dashboard\CommonBundle\Entity\FilterValue $linkToValues
@@ -480,5 +417,71 @@ class Filter
     public function getLinkToValues()
     {
         return $this->linkToValues;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $categories
+     * @return Filter
+     */
+    public function addCategory(\Dashboard\CommonBundle\Entity\Category $categories)
+    {
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $categories
+     */
+    public function removeCategory(\Dashboard\CommonBundle\Entity\Category $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Add translations
+     *
+     * @param \Dashboard\CommonBundle\Entity\Translation $translations
+     * @return Filter
+     */
+    public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
+    {
+        $this->translations[] = $translations;
+
+        return $this;
+    }
+
+    /**
+     * Remove translations
+     *
+     * @param \Dashboard\CommonBundle\Entity\Translation $translations
+     */
+    public function removeTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
+    {
+        $this->translations->removeElement($translations);
+    }
+
+    /**
+     * Get translations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 }

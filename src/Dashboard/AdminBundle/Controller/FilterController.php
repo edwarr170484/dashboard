@@ -245,7 +245,7 @@ class FilterController extends Controller
             
             if($filter->getValues())
             {
-                foreach($filter->getValues() as $value)
+                foreach($filter->getValues() as $key => $value)
                 {
                     if($value->getTranslations())
                     {
@@ -255,6 +255,7 @@ class FilterController extends Controller
                             $manager->persist($translation);
                         }
                     }
+                    
                     $value->setFilter($filter);
                     $manager->persist($value);
                 }

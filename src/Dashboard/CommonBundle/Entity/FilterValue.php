@@ -55,12 +55,17 @@ class FilterValue
      */
     private $translations;
     
+    
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->linkToValues = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->linkedValues = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->linkedFilters = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -151,40 +156,6 @@ class FilterValue
     {
         return $this->products;
     }
-
-    /**
-     * Add translations
-     *
-     * @param \Dashboard\CommonBundle\Entity\Translation $translations
-     * @return FilterValue
-     */
-    public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
-    {
-        $this->translations[] = $translations;
-    
-        return $this;
-    }
-
-    /**
-     * Remove translations
-     *
-     * @param \Dashboard\CommonBundle\Entity\Translation $translations
-     */
-    public function removeTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
-    {
-        $this->translations->removeElement($translations);
-    }
-
-    /**
-     * Get translations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-    
 
     /**
      * Add linkToValues
@@ -283,5 +254,38 @@ class FilterValue
     public function getLinkedFilters()
     {
         return $this->linkedFilters;
+    }
+
+    /**
+     * Add translations
+     *
+     * @param \Dashboard\CommonBundle\Entity\Translation $translations
+     * @return FilterValue
+     */
+    public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
+    {
+        $this->translations[] = $translations;
+
+        return $this;
+    }
+
+    /**
+     * Remove translations
+     *
+     * @param \Dashboard\CommonBundle\Entity\Translation $translations
+     */
+    public function removeTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
+    {
+        $this->translations->removeElement($translations);
+    }
+
+    /**
+     * Get translations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Окт 15 2019 г., 19:50
+-- Время создания: Окт 17 2019 г., 18:42
 -- Версия сервера: 10.4.6-MariaDB
 -- Версия PHP: 7.1.32
 
@@ -436,6 +436,16 @@ CREATE TABLE `filter_linked_values` (
   `filter_value_source` int(11) NOT NULL,
   `filter_value_target` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `filter_linked_values`
+--
+
+INSERT INTO `filter_linked_values` (`filter_value_source`, `filter_value_target`) VALUES
+(59, 63),
+(59, 64),
+(59, 65),
+(59, 66);
 
 -- --------------------------------------------------------
 
@@ -1428,6 +1438,14 @@ CREATE TABLE `value_linked_filters` (
   `filter_value_id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `value_linked_filters`
+--
+
+INSERT INTO `value_linked_filters` (`filter_value_id`, `filter_id`) VALUES
+(58, 17),
+(59, 18);
 
 --
 -- Индексы сохранённых таблиц

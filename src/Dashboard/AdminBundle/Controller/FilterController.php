@@ -159,7 +159,6 @@ class FilterController extends Controller
         {
             foreach ($filter->getValues() as $value) {
                 $values->add($value);
-                
                 if($value->getTranslations())
                 {
                     foreach($value->getTranslations() as $translation)

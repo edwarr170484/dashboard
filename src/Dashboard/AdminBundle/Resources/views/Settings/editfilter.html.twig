@@ -180,7 +180,6 @@
                         data : data,
                         success: function(html) {
                             $('#{{ form.linkedValues.vars.id }}').html($(html).find('#{{ form.linkedValues.vars.id }}').html());
-                            $('#filterCity').customSelect();
                         }
                     });
                 });

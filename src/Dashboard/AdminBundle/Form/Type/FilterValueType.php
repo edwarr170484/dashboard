@@ -64,7 +64,7 @@ class FilterValueType extends AbstractType
             function (FormEvent $event) use ($formModifier) {
                 $data = $event->getData();
                 if($data){
-                    $formModifier($event->getForm(), $data->getFilter());
+                    $formModifier($event->getForm(), $data->getLinkedFilters()[0]);
                 }else{
                     $formModifier($event->getForm(), null);
                 }

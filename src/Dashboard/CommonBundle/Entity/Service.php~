@@ -54,6 +54,11 @@ class Service
     private $translations;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\PackService", mappedBy="service", cascade={"persist"})
+     */
+    private $packServices;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -250,5 +255,38 @@ class Service
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Add packServices
+     *
+     * @param \Dashboard\CommonBundle\Entity\PackService $packServices
+     * @return Service
+     */
+    public function addPackService(\Dashboard\CommonBundle\Entity\PackService $packServices)
+    {
+        $this->packServices[] = $packServices;
+
+        return $this;
+    }
+
+    /**
+     * Remove packServices
+     *
+     * @param \Dashboard\CommonBundle\Entity\PackService $packServices
+     */
+    public function removePackService(\Dashboard\CommonBundle\Entity\PackService $packServices)
+    {
+        $this->packServices->removeElement($packServices);
+    }
+
+    /**
+     * Get packServices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPackServices()
+    {
+        return $this->packServices;
     }
 }

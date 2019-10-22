@@ -90,6 +90,12 @@ class Translation
     private $generation;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Pack", inversedBy="translations")
+     * @ORM\JoinColumn(name="pack_id", referencedColumnName="id")
+     */
+    private $pack;
+    
+    /**
      * @ORM\Column(type="text",nullable=true, options={"default":"0"})
      */
     private $value;
@@ -402,5 +408,28 @@ class Translation
     public function getGeneration()
     {
         return $this->generation;
+    }
+
+    /**
+     * Set pack
+     *
+     * @param \Dashboard\CommonBundle\Entity\Pack $pack
+     * @return Translation
+     */
+    public function setPack(\Dashboard\CommonBundle\Entity\Pack $pack = null)
+    {
+        $this->pack = $pack;
+
+        return $this;
+    }
+
+    /**
+     * Get pack
+     *
+     * @return \Dashboard\CommonBundle\Entity\Pack 
+     */
+    public function getPack()
+    {
+        return $this->pack;
     }
 }

@@ -1,0 +1,181 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme packForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block _pack_translations_widget %}
+    <table class="table table-bordered table-translations">
+        <thead>
+            <tr>
+                <th>{% trans %}Локализация{% endtrans %}</th>
+                <th>{% trans %}Перевод{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _pack_translations_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.locale)}}</td>
+        <td>{{ form_widget(form.value)}}{{ form_widget(form.mark)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить перевод для языка"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block _pack_services_widget %}
+    <table class="table table-bordered table-services">
+        <thead>
+            <tr>
+                <th>{% trans %}Услуга{% endtrans %}</th>
+                <th>{% trans %}Количество единиц услуги для пакета{% endtrans %}</th>
+                <th>{% trans %}Текст для надписи{% endtrans %}</th>
+                <th>{% trans %}Порядок{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _pack_services_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.service)}}{{ form_widget(form.pack)}}</td>
+        <td>{{ form_widget(form.value)}}</td>
+        <td>{{ form_widget(form.label)}}</td>
+        <td>{{ form_widget(form.sortorder)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить услугу?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить услугу"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block title %}{% trans %} Панель управления - Редактировать пакет услуг{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_service_pack') }}">Пакеты услуг</a></li>
+            <li class="active">Редактировать пакет услуг</li>
+        </ol>
+        <h1 class="page-header">Услуги <small>Редактировать пакет услуг</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация о пакете услуг</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(packForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#translations">Переводы</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#services">Включенные услуги</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(packForm.name)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(packForm.name)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(packForm.price)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(packForm.price)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(packForm.description)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(packForm.description)}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="translations" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-translation" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить перевод</button>
+                                        {{ form_widget(packForm.translations,{'id' : 'object_translations'})}}
+                                        {% if packForm.translations | length <= 0 %}
+                                            Переводы не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="services" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-pack-service" type="button">
+                                             <i class="fa fa-plus" aria-hidden="true"></i> Добавить услугу в пакет</button>
+                                        {{ form_widget(packForm.services)}}
+                                        {% if packForm.services | length <= 0 %}
+                                            Услуги не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3">{{ form_label(packForm.save)}}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(packForm.save,{'type' : 'submit'})}}
+                                </div>
+                            </div>        
+                        </div>
+                        {{ form_end(packForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

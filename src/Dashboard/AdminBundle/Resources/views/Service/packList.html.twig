@@ -1,0 +1,76 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Пакеты услуг{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Услуги</li>
+    </ol>
+    <h1 class="page-header">Услуги <small>Добавление и удаление пакетов услуг</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('admin_edit_service_pack') }}">Добавить пакет услуг</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Пакеты услуги</h4>
+                </div>
+                <div class="panel-body">
+                    {%if packs %}
+                        <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Название</th>
+                                            <th>Цена</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form action="{{ path('admin_service_pack')}}" method="POST" name="deleteSelected" id="deleteSelected">
+                                            {% for pack in packs %}
+                                                <tr>
+                                                    <td>
+                                                        {{ pack.name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ pack.price }}
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-success" href="{{ path('admin_edit_service_pack',{ 'packId' : pack.id }) }}">
+                                                            <i class="fa fa-pencil" title="Редактировать пакет услуг"></i>
+                                                        </a>
+                                                        <a class="btn btn-danger" href="{{ path('admin_service_pack',{ 'packId' : pack.id }) }}" 
+                                                                                  onclick="if(!confirm('Вы уверены, что хотите удалить пакет услуг?'))return false;">
+                                                            <i class="fa fa-times" title="Удалить услугу"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </form>
+                                    </tbody>
+                        </table>
+                    {% else %}
+                        Пакетов услуг пока не добавлено
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

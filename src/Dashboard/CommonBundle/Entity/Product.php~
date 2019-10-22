@@ -216,6 +216,12 @@ class Product
      */
     private $service;
     
+    /**
+     * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Pack", inversedBy="product")
+     * @ORM\JoinColumn(name="pack_id", referencedColumnName="id")
+     */
+    private $servicePack;
+    
     
     private $daysLeft;
     

@@ -117,15 +117,20 @@
                 </ul>
             </li>
             <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-money"></i>
+                    <span>Услуги и пакеты</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_service_pack') }}">Пакеты услуг</a></li>
+                    <li><a href="{{ path('admin_service') }}">Услуги</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
                 <a href="{{ path('admin_complaint') }}">
                     <i class="fa fa-file-text-o"></i>
                     <span>Жалобы</span>
-                </a>
-            </li>
-            <li class="has-sub">
-                <a href="{{ path('admin_service') }}">
-                    <i class="fa fa-money"></i>
-                    <span>Услуги</span>
                 </a>
             </li>
             <li class="has-sub">

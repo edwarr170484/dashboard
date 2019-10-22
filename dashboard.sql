@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Окт 17 2019 г., 18:42
+-- Время создания: Окт 22 2019 г., 21:12
 -- Версия сервера: 10.4.6-MariaDB
 -- Версия PHP: 7.1.32
 
@@ -442,10 +442,12 @@ CREATE TABLE `filter_linked_values` (
 --
 
 INSERT INTO `filter_linked_values` (`filter_value_source`, `filter_value_target`) VALUES
-(59, 63),
-(59, 64),
-(59, 65),
-(59, 66);
+(58, 60),
+(58, 61),
+(58, 62),
+(59, 60),
+(59, 61),
+(59, 62);
 
 -- --------------------------------------------------------
 
@@ -728,6 +730,34 @@ INSERT INTO `order_status` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `pack`
+--
+
+CREATE TABLE `pack` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
+  `description` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `price` double DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `pack_service`
+--
+
+CREATE TABLE `pack_service` (
+  `id` int(11) NOT NULL,
+  `pack_id` int(11) DEFAULT NULL,
+  `service_id` int(11) DEFAULT NULL,
+  `value` int(11) DEFAULT 0,
+  `label` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
+  `sortorder` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `page`
 --
 
@@ -842,16 +872,17 @@ CREATE TABLE `product` (
   `is_correct` tinyint(1) DEFAULT 0,
   `correct_reason` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `translit` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `term` int(11) DEFAULT NULL
+  `term` int(11) DEFAULT NULL,
+  `pack_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `product`
 --
 
-INSERT INTO `product` (`id`, `category_id`, `user_id`, `region_id`, `city_id`, `selltype_id`, `author_name`, `author_email`, `author_phone`, `typeno`, `typebu`, `typenew`, `name`, `description`, `price`, `mainfoto`, `viewcommon`, `viewpremium`, `viewselected`, `sortorder`, `is_active`, `date_added`, `date_edited`, `rating_likes`, `rating_dislikes`, `views`, `views_per_date`, `is_blocked`, `is_confirm`, `meta_tag_title`, `meta_tag_description`, `is_correct`, `correct_reason`, `translit`, `term`) VALUES
-(1, NULL, 1, 1, 1, 4, 'Sunweb', 'sales@sunweb.by', '2003823', 0, 1, 0, 'Продам авто VW golf 1.9 tdi', '<span>Полная комплектация. Авто в отличном состоянии. 255000км. Рассмотрю все варианты обмена.</span><br /><ins class=\"copy_element\"><br /></ins>', 2500, '26759744.jpg', 1, 0, 0, NULL, 0, '2018-03-01 19:37:08', '2018-09-12 13:10:43', NULL, NULL, 10, 10, 0, 0, 'Продам авто VW golf 1.9 tdi', NULL, 1, NULL, 'Prodam_avto_VW_golf_1.9_tdi', NULL),
-(3, 28, 1, 29, 63, 4, 'Sunweb', 'sales@sunweb.by', '12345678', 1, 0, 0, 'Дом на даче', 'Дом на даче', 12000, '45785523.jpg', 1, 1, 0, NULL, 1, '2018-08-16 16:14:21', '2018-09-18 14:51:01', NULL, NULL, 13, 13, 0, 1, 'Дом на даче', NULL, 0, NULL, 'Dom_na_dache', 7);
+INSERT INTO `product` (`id`, `category_id`, `user_id`, `region_id`, `city_id`, `selltype_id`, `author_name`, `author_email`, `author_phone`, `typeno`, `typebu`, `typenew`, `name`, `description`, `price`, `mainfoto`, `viewcommon`, `viewpremium`, `viewselected`, `sortorder`, `is_active`, `date_added`, `date_edited`, `rating_likes`, `rating_dislikes`, `views`, `views_per_date`, `is_blocked`, `is_confirm`, `meta_tag_title`, `meta_tag_description`, `is_correct`, `correct_reason`, `translit`, `term`, `pack_id`) VALUES
+(1, NULL, 1, 1, 1, 4, 'Sunweb', 'sales@sunweb.by', '2003823', 0, 1, 0, 'Продам авто VW golf 1.9 tdi', '<span>Полная комплектация. Авто в отличном состоянии. 255000км. Рассмотрю все варианты обмена.</span><br /><ins class=\"copy_element\"><br /></ins>', 2500, '26759744.jpg', 1, 0, 0, NULL, 0, '2018-03-01 19:37:08', '2018-09-12 13:10:43', NULL, NULL, 10, 10, 0, 0, 'Продам авто VW golf 1.9 tdi', NULL, 1, NULL, 'Prodam_avto_VW_golf_1.9_tdi', NULL, NULL),
+(3, 28, 1, 29, 63, 4, 'Sunweb', 'sales@sunweb.by', '12345678', 1, 0, 0, 'Дом на даче', 'Дом на даче', 12000, '45785523.jpg', 1, 1, 0, NULL, 1, '2018-08-16 16:14:21', '2018-09-18 14:51:01', NULL, NULL, 13, 13, 0, 1, 'Дом на даче', NULL, 0, NULL, 'Dom_na_dache', 7, NULL);
 
 -- --------------------------------------------------------
 
@@ -1209,90 +1240,91 @@ CREATE TABLE `translation` (
   `city_id` int(11) DEFAULT NULL,
   `service_id` int(11) DEFAULT NULL,
   `modification_id` int(11) DEFAULT NULL,
-  `generation_id` int(11) DEFAULT NULL
+  `generation_id` int(11) DEFAULT NULL,
+  `pack_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `translation`
 --
 
-INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `value`, `selltype_id`, `mark_id`, `filter_id`, `filter_value_id`, `order_status_id`, `region_id`, `city_id`, `service_id`, `modification_id`, `generation_id`) VALUES
-(26, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(27, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(28, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL, NULL, NULL),
-(29, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL, NULL, NULL),
-(30, 1, NULL, 'Centrs', NULL, NULL, NULL, NULL, NULL, NULL, 28, NULL, NULL, NULL),
-(31, 2, NULL, 'Центр', NULL, NULL, NULL, NULL, NULL, NULL, 28, NULL, NULL, NULL),
-(32, 1, 27, 'Легковые автомобили', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(33, 2, 27, 'Легковые автомобили', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(56, 1, NULL, 'Pārdošana', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(57, 2, NULL, 'Продам', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(58, 1, NULL, 'Pērciet', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(59, 2, NULL, 'Куплю', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(60, 1, NULL, 'Īre', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(61, 2, NULL, 'Аренда', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(62, 1, NULL, 'Apmaiņa', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(63, 2, NULL, 'Обмен', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(64, 1, NULL, 'Pieprasījums/meklēšana', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(65, 2, NULL, 'Спрос/Ищу', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(66, 1, NULL, 'Es pieņemšu dāvanu', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(67, 2, NULL, 'Приму в дар', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(68, 1, NULL, 'Es atdošu par neko', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(69, 2, NULL, 'Отдам даром', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, 1, NULL, 'Pakalpojumi', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(71, 2, NULL, 'Услуги', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(72, 1, NULL, 'Baldone', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
-(73, 2, NULL, 'Балдоне', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
-(78, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(79, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(80, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
-(81, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
-(82, 1, NULL, 'Izcelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL),
-(83, 2, NULL, 'Выделить', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL),
-(84, 1, NULL, 'Pacelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL),
-(85, 2, NULL, 'Поднять', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL),
-(94, 1, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL),
-(95, 2, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL),
-(96, 1, NULL, 'Айзкраукле', NULL, NULL, NULL, NULL, NULL, NULL, 78, NULL, NULL, NULL),
-(97, 2, NULL, 'Айзкраукле', NULL, NULL, NULL, NULL, NULL, NULL, 78, NULL, NULL, NULL),
-(98, 1, NULL, 'Таурлканс', NULL, NULL, NULL, NULL, NULL, NULL, 79, NULL, NULL, NULL),
-(99, 2, NULL, 'Таурлканс', NULL, NULL, NULL, NULL, NULL, NULL, 79, NULL, NULL, NULL),
-(100, 1, NULL, 'Город', NULL, NULL, NULL, NULL, NULL, NULL, 80, NULL, NULL, NULL),
-(102, 2, NULL, 'Город', NULL, NULL, NULL, NULL, NULL, NULL, 80, NULL, NULL, NULL),
-(105, 1, NULL, 'Лиепая', NULL, NULL, NULL, NULL, NULL, NULL, 81, NULL, NULL, NULL),
-(107, 2, NULL, 'Лиепая', NULL, NULL, NULL, NULL, NULL, NULL, 81, NULL, NULL, NULL),
-(108, 1, NULL, 'Aizik', NULL, NULL, NULL, NULL, NULL, NULL, 82, NULL, NULL, NULL),
-(109, 2, NULL, 'Айзик', NULL, NULL, NULL, NULL, NULL, NULL, 82, NULL, NULL, NULL),
-(110, 1, NULL, 'Apstrādē', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL),
-(111, 2, NULL, 'В обработке', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL),
-(112, 1, NULL, 'Fine, es iesaku', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(113, 2, NULL, 'Отлично, рекомендую', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(114, 1, 28, 'Audi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(115, 2, 28, 'Audi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(118, 1, NULL, 'Двигатель', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(119, 2, NULL, 'Двигатель', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(120, 1, NULL, 'Бензин', NULL, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL),
-(121, 2, NULL, 'Бензин', NULL, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL),
-(122, 1, NULL, 'Дизель', NULL, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL),
-(123, 2, NULL, 'Дизель', NULL, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL),
-(124, 1, NULL, 'Привод', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(125, 2, NULL, 'Привод', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(126, 1, NULL, 'Передний', NULL, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL),
-(127, 2, NULL, 'Передний', NULL, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL),
-(128, 1, NULL, 'Задний', NULL, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL),
-(129, 2, NULL, 'Задний', NULL, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL),
-(130, 1, NULL, 'Полный', NULL, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL),
-(131, 2, NULL, 'Полный', NULL, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL),
-(132, 1, NULL, 'Коробка передач', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(133, 2, NULL, 'Коробка передач', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(134, 1, NULL, 'Механическая', NULL, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL),
-(135, 2, NULL, 'Механическая', NULL, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL),
-(136, 1, NULL, 'Автоматическая', NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL),
-(137, 2, NULL, 'Автоматическая', NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL),
-(138, 1, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL),
-(139, 2, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL),
-(140, 1, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL),
-(141, 2, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `value`, `selltype_id`, `mark_id`, `filter_id`, `filter_value_id`, `order_status_id`, `region_id`, `city_id`, `service_id`, `modification_id`, `generation_id`, `pack_id`) VALUES
+(26, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(27, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(28, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL, NULL, NULL, NULL),
+(29, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL, NULL, NULL, NULL),
+(30, 1, NULL, 'Centrs', NULL, NULL, NULL, NULL, NULL, NULL, 28, NULL, NULL, NULL, NULL),
+(31, 2, NULL, 'Центр', NULL, NULL, NULL, NULL, NULL, NULL, 28, NULL, NULL, NULL, NULL),
+(32, 1, 27, 'Легковые автомобили', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(33, 2, 27, 'Легковые автомобили', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(56, 1, NULL, 'Pārdošana', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(57, 2, NULL, 'Продам', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(58, 1, NULL, 'Pērciet', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, 2, NULL, 'Куплю', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, 1, NULL, 'Īre', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, 2, NULL, 'Аренда', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, 1, NULL, 'Apmaiņa', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, 2, NULL, 'Обмен', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 1, NULL, 'Pieprasījums/meklēšana', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 2, NULL, 'Спрос/Ищу', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(66, 1, NULL, 'Es pieņemšu dāvanu', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(67, 2, NULL, 'Приму в дар', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(68, 1, NULL, 'Es atdošu par neko', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(69, 2, NULL, 'Отдам даром', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(70, 1, NULL, 'Pakalpojumi', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(71, 2, NULL, 'Услуги', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(72, 1, NULL, 'Baldone', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
+(73, 2, NULL, 'Балдоне', NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
+(78, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(79, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(80, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(81, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL),
+(82, 1, NULL, 'Izcelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL),
+(83, 2, NULL, 'Выделить', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL),
+(84, 1, NULL, 'Pacelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL),
+(85, 2, NULL, 'Поднять', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL),
+(94, 1, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL),
+(95, 2, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL),
+(96, 1, NULL, 'Айзкраукле', NULL, NULL, NULL, NULL, NULL, NULL, 78, NULL, NULL, NULL, NULL),
+(97, 2, NULL, 'Айзкраукле', NULL, NULL, NULL, NULL, NULL, NULL, 78, NULL, NULL, NULL, NULL),
+(98, 1, NULL, 'Таурлканс', NULL, NULL, NULL, NULL, NULL, NULL, 79, NULL, NULL, NULL, NULL),
+(99, 2, NULL, 'Таурлканс', NULL, NULL, NULL, NULL, NULL, NULL, 79, NULL, NULL, NULL, NULL),
+(100, 1, NULL, 'Город', NULL, NULL, NULL, NULL, NULL, NULL, 80, NULL, NULL, NULL, NULL),
+(102, 2, NULL, 'Город', NULL, NULL, NULL, NULL, NULL, NULL, 80, NULL, NULL, NULL, NULL),
+(105, 1, NULL, 'Лиепая', NULL, NULL, NULL, NULL, NULL, NULL, 81, NULL, NULL, NULL, NULL),
+(107, 2, NULL, 'Лиепая', NULL, NULL, NULL, NULL, NULL, NULL, 81, NULL, NULL, NULL, NULL),
+(108, 1, NULL, 'Aizik', NULL, NULL, NULL, NULL, NULL, NULL, 82, NULL, NULL, NULL, NULL),
+(109, 2, NULL, 'Айзик', NULL, NULL, NULL, NULL, NULL, NULL, 82, NULL, NULL, NULL, NULL),
+(110, 1, NULL, 'Apstrādē', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(111, 2, NULL, 'В обработке', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
+(112, 1, NULL, 'Fine, es iesaku', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(113, 2, NULL, 'Отлично, рекомендую', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(114, 1, 28, 'Audi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(115, 2, 28, 'Audi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(118, 1, NULL, 'Двигатель', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(119, 2, NULL, 'Двигатель', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(120, 1, NULL, 'Бензин', NULL, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(121, 2, NULL, 'Бензин', NULL, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(122, 1, NULL, 'Дизель', NULL, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(123, 2, NULL, 'Дизель', NULL, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(124, 1, NULL, 'Привод', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(125, 2, NULL, 'Привод', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(126, 1, NULL, 'Передний', NULL, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(127, 2, NULL, 'Передний', NULL, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(128, 1, NULL, 'Задний', NULL, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(129, 2, NULL, 'Задний', NULL, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(130, 1, NULL, 'Полный', NULL, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(131, 2, NULL, 'Полный', NULL, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(132, 1, NULL, 'Коробка передач', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(133, 2, NULL, 'Коробка передач', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(134, 1, NULL, 'Механическая', NULL, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(135, 2, NULL, 'Механическая', NULL, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(136, 1, NULL, 'Автоматическая', NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(137, 2, NULL, 'Автоматическая', NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(138, 1, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(139, 2, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(140, 1, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(141, 2, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1445,7 +1477,7 @@ CREATE TABLE `value_linked_filters` (
 
 INSERT INTO `value_linked_filters` (`filter_value_id`, `filter_id`) VALUES
 (58, 17),
-(59, 18);
+(59, 17);
 
 --
 -- Индексы сохранённых таблиц
@@ -1637,6 +1669,20 @@ ALTER TABLE `order_status`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `pack`
+--
+ALTER TABLE `pack`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `pack_service`
+--
+ALTER TABLE `pack_service`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_DAD40AAF1919B217` (`pack_id`),
+  ADD KEY `IDX_DAD40AAFED5CA9E6` (`service_id`);
+
+--
 -- Индексы таблицы `page`
 --
 ALTER TABLE `page`
@@ -1656,6 +1702,7 @@ ALTER TABLE `pages_banners`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_D34A04AD1919B217` (`pack_id`),
   ADD KEY `IDX_D34A04AD12469DE2` (`category_id`),
   ADD KEY `IDX_D34A04ADA76ED395` (`user_id`),
   ADD KEY `IDX_D34A04AD98260155` (`region_id`),
@@ -1782,7 +1829,8 @@ ALTER TABLE `translation`
   ADD KEY `IDX_B469456F8BAC62AF` (`city_id`),
   ADD KEY `IDX_B469456FED5CA9E6` (`service_id`),
   ADD KEY `IDX_B469456F4A605127` (`modification_id`),
-  ADD KEY `IDX_B469456F553A6EC4` (`generation_id`);
+  ADD KEY `IDX_B469456F553A6EC4` (`generation_id`),
+  ADD KEY `IDX_B469456F1919B217` (`pack_id`);
 
 --
 -- Индексы таблицы `users`
@@ -1979,6 +2027,18 @@ ALTER TABLE `order_status`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT для таблицы `pack`
+--
+ALTER TABLE `pack`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT для таблицы `pack_service`
+--
+ALTER TABLE `pack_service`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT для таблицы `page`
 --
 ALTER TABLE `page`
@@ -2072,7 +2132,7 @@ ALTER TABLE `textblock`
 -- AUTO_INCREMENT для таблицы `translation`
 --
 ALTER TABLE `translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
@@ -2228,6 +2288,13 @@ ALTER TABLE `modification`
   ADD CONSTRAINT `FK_EF6425D2553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`);
 
 --
+-- Ограничения внешнего ключа таблицы `pack_service`
+--
+ALTER TABLE `pack_service`
+  ADD CONSTRAINT `FK_DAD40AAF1919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`),
+  ADD CONSTRAINT `FK_DAD40AAFED5CA9E6` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+
+--
 -- Ограничения внешнего ключа таблицы `page`
 --
 ALTER TABLE `page`
@@ -2245,6 +2312,7 @@ ALTER TABLE `pages_banners`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `FK_D34A04AD12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_D34A04AD1919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`),
   ADD CONSTRAINT `FK_D34A04AD5EBADE83` FOREIGN KEY (`selltype_id`) REFERENCES `selltype` (`id`),
   ADD CONSTRAINT `FK_D34A04AD8BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
   ADD CONSTRAINT `FK_D34A04AD98260155` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
@@ -2313,6 +2381,7 @@ ALTER TABLE `settings`
 --
 ALTER TABLE `translation`
   ADD CONSTRAINT `FK_B469456F12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_B469456F1919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`),
   ADD CONSTRAINT `FK_B469456F4290F12B` FOREIGN KEY (`mark_id`) REFERENCES `mark` (`id`),
   ADD CONSTRAINT `FK_B469456F4A605127` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`),
   ADD CONSTRAINT `FK_B469456F553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),

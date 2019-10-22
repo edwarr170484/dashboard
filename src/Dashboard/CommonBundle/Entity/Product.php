@@ -216,6 +216,12 @@ class Product
      */
     private $service;
     
+    /**
+     * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Pack", inversedBy="product")
+     * @ORM\JoinColumn(name="pack_id", referencedColumnName="id")
+     */
+    private $servicePack;
+    
     
     private $daysLeft;
     
@@ -1264,5 +1270,28 @@ class Product
     public function getTerm()
     {
         return $this->term;
+    }
+
+    /**
+     * Set servicePack
+     *
+     * @param \Dashboard\CommonBundle\Entity\Pack $servicePack
+     * @return Product
+     */
+    public function setServicePack(\Dashboard\CommonBundle\Entity\Pack $servicePack = null)
+    {
+        $this->servicePack = $servicePack;
+
+        return $this;
+    }
+
+    /**
+     * Get servicePack
+     *
+     * @return \Dashboard\CommonBundle\Entity\Pack 
+     */
+    public function getServicePack()
+    {
+        return $this->servicePack;
     }
 }

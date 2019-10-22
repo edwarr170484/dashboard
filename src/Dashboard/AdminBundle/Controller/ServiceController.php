@@ -12,8 +12,9 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Dashboard\CommonBundle\Entity\Service;
-use Dashboard\CommonBundle\Entity\Product;
 use Dashboard\AdminBundle\Form\Type\ServiceType;
+use Dashboard\CommonBundle\Entity\Pack;
+use Dashboard\AdminBundle\Form\Type\PackType;
 
 class ServiceController extends Controller
 {
@@ -55,7 +56,7 @@ class ServiceController extends Controller
             return $this->redirectToRoute("admin_service");
         }
         
-        return $this->render('DashboardAdminBundle:Default:service.html.twig', array("services" => $services));
+        return $this->render('DashboardAdminBundle:Service:list.html.twig', array("services" => $services));
     }
     
      /**
@@ -122,7 +123,152 @@ class ServiceController extends Controller
             
             return $this->redirectToRoute("admin_service_edit", array("serviceId" => $service->getId()));
         }
-        return $this->render('DashboardAdminBundle:Default:editservice.html.twig', array("serviceForm" => $serviceForm->createView()));
+        return $this->render('DashboardAdminBundle:Service:edit.html.twig', array("serviceForm" => $serviceForm->createView()));
+    }
+    
+    /**
+     * @Route("/admin/pack/{packId}", name="admin_service_pack",defaults={"packId": 0})
+     */
+    public function packAction($packId)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $packs = $manager->getRepository("DashboardCommonBundle:Pack")->findAll();
+        
+        if($packId)
+        {
+            $pack = $manager->getRepository("DashboardCommonBundle:Pack")->find($packId);
+            
+            if($pack)
+            {
+                if($pack->getTranslations()){
+                    foreach($pack->getTranslations() as $translation){
+                        $translation->setPack(null);
+                        $manager->remove($translation);
+                    }
+                }
+                if($pack->getServices()){
+                    foreach($pack->getServices() as $service){
+                        $service->setPack(null);
+                        $manager->remove($service);
+                    }
+                }
+                if($pack->getProduct()){
+                    $product = $pack->getProduct();
+                    $product->getServicePack(null);
+                    $manager->persist($product);
+                }
+                
+                $manager->remove($pack);
+                $manager->flush();
+                
+                $this->addFlash(
+                        'notice',
+                        $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>Успешно!</strong> Пакет услуг удален.</div>')
+                    );
+            }
+            
+            return $this->redirectToRoute("admin_service_pack");
+        }
+        
+        return $this->render('DashboardAdminBundle:Service:packList.html.twig', array("packs" => $packs));
+    }
+    
+    /**
+     * @Route("/admin/editpack/{packId}", name="admin_edit_service_pack",defaults={"packId": 0})
+     */
+    public function packEditAction($packId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $originalTranslations = new ArrayCollection();
+        $originalServices = new ArrayCollection();
+        
+        if($packId){
+            $pack = $manager->getRepository("DashboardCommonBundle:Pack")->find($packId);
+            
+            if(!$pack){
+                return $this->createNotFoundException();
+            }
+        }
+        else{
+           $pack = new Pack(); 
+        }
+        
+        if($pack->getTranslations()){
+            foreach ($pack->getTranslations() as $item) {
+                $originalTranslations->add($item);
+            }
+        }
+        
+        if($pack->getServices()){
+            foreach ($pack->getServices() as $item) {
+                $originalServices->add($item);
+            }
+        }
+        
+        $packForm = $this->createForm(new PackType($manager), $pack);
+        
+        $packForm->handleRequest($request);
+        
+        if($packForm->isValid())
+        {
+            if($originalTranslations)
+            {
+                foreach ($originalTranslations as $item) 
+                {
+                    if (false === $pack->getTranslations()->contains($item)) 
+                    {
+                        $item->setPack(null);
+                        $manager->remove($item);
+                    }
+                }
+            }
+            
+            if($pack->getTranslations())
+            {
+                foreach($pack->getTranslations() as $item)
+                {
+                    $item->setPack($pack);
+                    $manager->persist($item);
+                }
+            }
+            
+            if($originalServices)
+            {
+                foreach ($originalServices as $item) 
+                {
+                    if (false === $pack->getServices()->contains($item)) 
+                    {
+                        $item->setPack(null);
+                        $manager->remove($item);
+                    }
+                }
+            }
+            
+            if($pack->getServices())
+            {
+                foreach($pack->getServices() as $item)
+                {
+                    $item->setPack($pack);
+                    $manager->persist($item);
+                }
+            }
+            
+            $manager->persist($pack);
+            $manager->flush();
+            
+            $this->addFlash(
+                'notice',
+                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Успешно!</strong> Информация сохранена.</div>')
+            );
+            
+            return $this->redirectToRoute("admin_edit_service_pack", array("packId" => $pack->getId()));
+        }
+        
+        return $this->render('DashboardAdminBundle:Service:packEdit.html.twig', array("packForm" => $packForm->createView()));
     }
 }
 

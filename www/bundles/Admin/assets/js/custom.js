@@ -217,6 +217,15 @@ $(document).ready(function(){
         });
     });
     
+    $("#add-pack-service").click(function(){
+        
+        var prototype = $("#pack_services").data("prototype");
+        var count = $(".table-services tbody tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        
+        $(".table-services tbody").append(newForm);
+    });
+    
     $("#adminRegion").change(function(){
         
         $.ajax({

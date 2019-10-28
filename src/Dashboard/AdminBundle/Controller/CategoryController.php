@@ -77,13 +77,6 @@ class CategoryController extends Controller
                             $manager->remove($translation);
                         }
                     }
-                    if($category->getImage())
-                    {
-                        if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/' . $category->getImage() ))
-                        {
-                            $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/' . $category->getImage());
-                        }
-                    }
                     
                     $manager->remove($category);
                     $manager->flush();
@@ -182,14 +175,6 @@ class CategoryController extends Controller
                     {
                         $translation->setCategory(null);
                         $manager->remove($translation);
-                    }
-                }
-                
-                if($category->getImage())
-                {
-                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/' . $category->getImage() ))
-                    {
-                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/' . $category->getImage());
                     }
                 }
                 
@@ -519,25 +504,6 @@ class CategoryController extends Controller
             {
                 $helpers = $this->get('app.helpers');
                 $category->setName($helpers->translit($category->getTitle()));
-            }
-            
-            $image = $categoryForm['imageNew']->getData();
-            $oldImage = $categoryForm['image']->getData();
-
-            if($image)
-            {
-                if($oldImage)
-                {
-                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/' . $oldImage ))
-                    {
-                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/' . $oldImage );
-                    }
-                }
-
-                $extention = $image->getClientOriginalExtension();
-                $localImageName = rand(1, 99999) . rand(1, 99999) . '.'.$extention;
-                $image->move('bundles/images/category',$localImageName);
-                $category->setImage($localImageName);
             }
 
             $manager->persist($category);

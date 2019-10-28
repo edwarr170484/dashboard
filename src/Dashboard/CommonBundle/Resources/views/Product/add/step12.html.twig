@@ -1,0 +1,97 @@
+{% if category %}
+<div class="row content-row">
+    <div class="col-lg-9 col-md-9 left-column">
+        <div class="content-block-header">
+            <h3>
+                {% if category.parent.translations | length > 0 %}
+                    {% for translation in category.parent.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}        
+                    {{ category.parent.title}}
+                {% endif %}
+                 / 
+                {% if category.translations | length > 0 %}
+                    {% for translation in category.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}        
+                    {{ category.title}}
+                {% endif %} 
+            </h3>
+        </div>
+        <div class="addAdvertStepNavigation">
+            {% if locale.isDefault %}
+                <a href="javascript:void(0)" onclick="getStep11({{ category.parent.id }}, '{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
+                <a href="{{ path('addAdvert') }}" class="clear">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
+                    <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
+                </svg>{% trans %}Очистить{% endtrans %}</a>
+            {% else %}
+                <a href="javascript:void(0)" onclick="getStep11({{ category.parent.id }}, '{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
+                <a href="{{ path('addAdvertLocale', {'_locale' : locale.code}) }}" class="clear">
+                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
+                        <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
+                    </svg>{% trans %}Очистить{% endtrans %}</a>
+            {% endif %}
+        </div>
+        <div class="advertFiltersTable">
+            <div class="advertFiltersTableHeader">{% trans %}Выбор автомобиля{% endtrans %}</div>
+            <div class="advertFiltersItems">
+                <div class="advertFiltersItem">
+                    <div class="advertFiltersItemName">{% trans %}Год{% endtrans %}</div>
+                    <div class="advertFiltersItemValue"></div>
+                </div>
+            </div>
+        </div>            
+    </div>
+        <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
+            <div class="addAdvertStepsBlock">
+                <div class="addAdvertStepsBlockHeader">{% trans %}Шаги{% endtrans %} 1/5</div>
+                <div class="addAdvertStepsBlockInner">
+                    <ul class="list-unstyled addAdvertSteps">
+                        <li class="active">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Выбор автомобиля{% endtrans %}</a>
+                        </li>
+                        <li>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Внешний вид{% endtrans %}</a>
+                        </li>
+                        <li>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Комплектация{% endtrans %}</a>
+                        </li>
+                        <li>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Состояние и цена{% endtrans %}</a>
+                        </li>
+                        <li>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Контактные данные{% endtrans %}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

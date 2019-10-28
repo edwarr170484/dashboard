@@ -842,3 +842,39 @@ function showFilters(element, category_id, locale_code)
                 }
     });
 }
+
+function getStep11(categoryId, locale_code){
+    $.ajax({
+        url: '/' + locale_code + '/account/addadvert/step11/' + categoryId,
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){$(".modal-body-cover").show();},
+        success: function(html)
+        {
+            $(".modal-body-cover").hide();
+            $("#addAdvertStep").html(html);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
+}
+
+function getStep12(categoryId, locale_code){
+    $.ajax({
+        url: '/' + locale_code + '/account/addadvert/step12/' + categoryId,
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){$(".modal-body-cover").show();},
+        success: function(html)
+        {
+            $(".modal-body-cover").hide();
+            $("#addAdvertStep").html(html);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
+}

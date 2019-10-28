@@ -572,7 +572,38 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvertDealerNameInfo{@include flexBox(row,flex-start,center);@include flex-wrap(wrap);}
 .advertSellerRating.category{padding-top: 0;padding-bottom: 13px;}
 .categoryAdvertDealerName{padding-bottom: 15px;}
-
+.mainPageFiltersTabs ul.justLinks li a{background: none;padding: 0;@include box-shadow(none);}
+.mainPageFiltersTabs ul.justLinks{padding-top: 0;}
+.addAdvertFiltersButtons{@include flexBox(row,flex-end,center);}
+.addAdvertFiltersButtons .mainPageFiltersShowResults button{max-width: 250px;padding: 1.4rem 4.5rem;}
+.mainPageFiltersTabs ul li a.block{@include flexBox(column, flex-start, center);}
+.mainPageFiltersTabs ul li a.block svg{margin: 0;}
+.mainPageFiltersTabs ul li a.block span{display: block;@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);margin-top: 1rem;text-transform: none;border-bottom:2px solid transparent;padding-bottom: 2px;}
+.mainPageFiltersTabs ul li.active a svg path{fill:$black-text;}
+.mainPageFiltersTabs ul li.active a span{border-bottom:2px solid $yellow-color;}
+.addAdvertStepsBlock{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(9px);width: 100%;}
+.addAdvertStepsBlockHeader{@include fontView("GothamProBlack",$black-text,3.2rem,3.6rem);background: $yellow-color;padding: 3rem;padding-bottom: 2.6rem;@include border-radius(9px 9px 0 0);}
+.addAdvertSteps li{@include flexBox(row,flex-start,center);margin-bottom: 1.2rem;}
+.addAdvertSteps li a{@include fontView("GothamProRegular",$light-black-color,1.4rem,1.8rem);}
+.addAdvertSteps li a:hover,.addAdvertSteps li a:focus{color:$black-text;text-decoration:none;}
+.addAdvertSteps li:hover svg path{stroke:$black-text;}
+.addAdvertSteps li.active a{color:$black-text;font-weight: bold;}
+.addAdvertSteps li svg{margin-right: 17px;}
+.addAdvertSteps li.active svg path{stroke:$black-text;}
+.addAdvertStepsBlockInner{padding-top: 3.8rem;padding-left: 3rem;padding-bottom: 4.2rem;padding-right: 3rem;}
+.searchCategoryFiled input{width: 100%;max-width: 290px;background: url(../img/add-search.png) 0 50% no-repeat;border:none;border-bottom: 2px solid #DFE1E5;padding:1.5rem;padding-left: 33px;@include fontView("GothamProRegular",#747474,1.8rem,100%);}
+.searchCategoryFiled {padding-bottom: 4.4rem;}
+.mainPageFiltersTabs.category-filters.addAdvert{padding-top: 8.6rem;}
+.content-block-header h3{color:$black-text;}
+.tab-content.justTab{@include border-radius(12px);}
+.no-result{@include fontView("GothamProRegular",$light-black-color,1.8rem,100%);}
+.addAdvertStepNavigation{@include flexBox(row,space-between,center);padding-top: 3rem;}
+.addAdvertStepNavigation a.back{@include fontView("GothamProBold",#747474,2.2rem,3.2rem);background: url('../img/back.png') 0 50% no-repeat;padding-left: 3rem;}
+.addAdvertStepNavigation a.clear{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.advertFiltersTableHeader{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 0.7rem;}
+.advertFiltersTable{padding-top: 6rem;}
+.advertFiltersItem{width: 100%;padding: 1.3rem 2rem; background: #fff;padding-bottom: 1.1rem;}
+.advertFiltersItemName{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);display: table-cell;}
 
 
 

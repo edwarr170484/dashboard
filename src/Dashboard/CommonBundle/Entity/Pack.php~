@@ -201,4 +201,27 @@ class Pack
     {
         return $this->services;
     }
+
+    /**
+     * Set product
+     *
+     * @param \Dashboard\CommonBundle\Entity\Product $product
+     * @return Pack
+     */
+    public function setProduct(\Dashboard\CommonBundle\Entity\Product $product = null)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * Get product
+     *
+     * @return \Dashboard\CommonBundle\Entity\Product 
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
 }

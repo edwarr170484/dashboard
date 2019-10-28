@@ -33,6 +33,39 @@ use Dashboard\CommonBundle\Form\Type\EditProductType;
 class AdvertController extends Controller
 {
     /**
+     * @Route("/account/addadvert/{step}/{data}", name="addAdvert", defaults={"step" : "0", "data" : 0})
+     * @Route("/{_locale}/account/addadvert/{step}/{data}", name="addAdvertLocale", defaults={"_locale" : "lv", "step" : "0", "data" : 0}, requirements={"_locale" : "lv|ru"})
+     */
+    public function addAdvertAction($step, $data,Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL' );
+        $categories = $query->getResult();
+        
+        if($step){
+            switch($step){
+                case "step11":
+                    
+                    $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/step11.html.twig', array("category" => $category, "settings" => $settings, "locale" => $locale));
+                    
+                break;
+            
+                case "step12":
+                    $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/step12.html.twig', array("category" => $category, "settings" => $settings, "locale" => $locale));
+                break;
+            }
+        }
+        
+        return $this->render('DashboardCommonBundle:Product:add/add.html.twig', array("categories" => $categories, "settings" => $settings, "locale" => $locale));
+    }
+    
+    /**
      * @Route("/account/addproduct", name="addproduct")
      * @Route("/{_locale}/account/addproduct", name="addproductLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
      */
@@ -55,6 +88,7 @@ class AdvertController extends Controller
             $page = 0;
         }
         $roles = $user->getRoles();
+        
         //проверить превышено ли количество разрешенных для этого пользователя объявлений
         if($user->getProducts()->count() == ($user->getAdvertNumber() + $roles[0]->getAdvertNumber()))
         {

@@ -46,7 +46,7 @@ class Category
     private $description;
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="text", nullable=true, options={"default":"null"})
      */
     private $image;
     
@@ -231,29 +231,6 @@ class Category
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set image
-     *
-     * @param string $image
-     * @return Category
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return string 
-     */
-    public function getImage()
-    {
-        return $this->image;
     }
 
     /**

@@ -242,21 +242,6 @@
                         <div class="tab-content">
                             <div id="maininfo" class="tab-pane fade active in">
                                 <div class="form-group">
-                                    <label class="col-md-3 ">{{ form_label(categoryForm.imageNew)}}</label>
-                                    <div class="col-md-9">
-                                    {% if categoryForm.vars.value.image is not null %}
-                                        <img class="m-b-15" src="{{ asset('bundles/images/category/' ~ categoryForm.vars.value.image) }}" alt="" title="" />
-                                    {% endif %}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 "></label>
-                                    <div class="col-md-9">
-                                        {{ form_widget(categoryForm.imageNew) }}
-                                        {{ form_widget(categoryForm.image) }}
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="col-md-3 ">{{ form_label(categoryForm.title)}}</label>
                                     <div class="col-md-9">
                                         {{ form_widget(categoryForm.title,{'id' : 'forTranslit'})}}
@@ -271,6 +256,12 @@
                                             </div>
                                             {{ form_widget(categoryForm.name, {'attr' : {'class' : 'form-control categoryTranslit'}})}}
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(categoryForm.image)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(categoryForm.image)}}
                                     </div>
                                 </div>
                                 <div class="form-group">

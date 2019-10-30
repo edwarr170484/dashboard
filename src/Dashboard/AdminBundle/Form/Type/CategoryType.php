@@ -18,9 +18,11 @@ use Dashboard\AdminBundle\Form\Type\GenerationType;
 class CategoryType extends AbstractType
 {
     private $em;
+    private $category;
     
-    public function __construct($em) {
+    public function __construct($em, $category) {
        $this->em = $em;
+       $this->category = $category;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -49,7 +51,7 @@ class CategoryType extends AbstractType
             ->add('metaTagKeywords', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Keywords', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Keywords')))
             /*->add('filters', 'entity', array( 'class' => 'DashboardCommonBundle:Filter','choice_label' => 'name','label' => 'Привязанные фильтры','expanded' => true, "multiple" => true))*/
             ->add('translations', 'collection', array('type' => new TranslationType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
-            ->add('generations', 'collection', array('type' => new GenerationType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
+            ->add('generations', 'collection', array('type' => new GenerationType($this->em, $this->category->getGenerations()), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('descriptions', 'collection', array('type' => new DescriptionType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')));
     }

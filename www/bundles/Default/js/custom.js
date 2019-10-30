@@ -3,7 +3,7 @@ var productMainFoto;
 var myDropzone;
 
 $(document).ready(function(){
-    
+    $("body").click(function(){$(".yearsOlderItems").slideUp();});
     $("#specialDealerAdverts").owlCarousel({
         margin : 25,
         loop : true,
@@ -530,6 +530,11 @@ $(document).ready(function(){
     });
     
 });
+
+function showYearsOlder(event){
+    event.stopPropagation();
+    $(".yearsOlderItems").slideToggle();
+}
 
 function generatePaymentForm(locale)
 {

@@ -46,10 +46,9 @@
     <table class="table table-bordered table-generations">
         <thead>
             <tr>
-                <th>{% trans %}Изображение{% endtrans %}</th>
                 <th>{% trans %}Название{% endtrans %}</th>
                 <th>{% trans %}Годы выпуска{% endtrans %}</th>
-                <th>{% trans %}Модификации{% endtrans %}</th>
+                <th>{% trans %}Характеристики{% endtrans %}</th>
                 <th>{% trans %}Действия{% endtrans %}</th>
             </tr>
         </thead>
@@ -62,22 +61,36 @@
 {% block _category_generations_entry_row %}
     <tr>
         <td>
-            {% if form.image.vars.value %}
-                <img src="{{ asset('bundles/images/category/generation/') }}{{ form.image.vars.value }}" alt="" title="" width="200px" />
-            {%endif %}
-            {{ form_widget(form.imageNew)}}
-            {{ form_widget(form.image)}}
-            {{ form_widget(form.category)}}
-        </td>
-        <td>
             {{ form_widget(form.name)}}
             {{ form_widget(form.translations,{'id' : 'generation_translations_sub'})}}
         </td>
         <td>
             Начало: {{ form_widget(form.yearFrom)}}
-            Окончание: {{ form_widget(form.yearTo)}}</td>
+            Окончание: {{ form_widget(form.yearTo)}}
+        </td>
         <td>  
-            {{ form_widget(form.modifications,{'id' : 'generation_modifications'})}}
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#modification{{ form.vars.id }}" aria-expanded="false">Модификации</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#board{{ form.vars.id }}">Типы кузовов</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#items{{ form.vars.id }}">Комбинации</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="modification{{ form.vars.id }}" class="tab-pane fade active in">
+                    {{ form_widget(form.modifications,{'id' : 'generation_modifications'})}}
+                </div>
+                <div id="board{{ form.vars.id }}" class="tab-pane fade">
+                    {{ form_widget(form.boards,{'id' : 'generation_boards'})}}
+                </div>
+                <div id="items{{ form.vars.id }}" class="tab-pane fade">
+                    {{ form_widget(form.items,{'id' : 'generation_items'})}}
+                </div>
+            </div>
         </td>
         <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить поколение?'))return false;else $(this).parent().parent().remove()">
                 <i class="fa fa-times" title="Удалить поколение"></i>
@@ -85,6 +98,39 @@
         </td>
     </tr>
 {% endblock %}   
+
+{% block _category_generations_entry_items_widget %}
+    <button class="btn btn-sm btn-success m-b-15 add-generation-item" type="button"><i class="fa fa-plus" aria-hidden="true"></i>Добавить</button>
+    <table class="table table-bordered table-generation-items">
+        <thead>
+            <tr>
+                <th>{% trans %}Тип кузова{% endtrans %}</th>
+                <th>{% trans %}Двигатель{% endtrans %}</th>
+                <th>{% trans %}Коробка передач{% endtrans %}</th>
+                <th>{% trans %}Привод{% endtrans %}</th>
+                <th>{% trans %}Модификации{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _category_generations_entry_items_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.board)}}</td>
+        <td>{{ form_widget(form.gasType)}}</td>
+        <td>{{ form_widget(form.gearType)}}</td>
+        <td>{{ form_widget(form.transmissionType)}}{{ form_widget(form.generation)}}</td>
+        <td>{{ form_widget(form.itemModifications)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить пункт?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
 
 {% block _category_generations_entry_modifications_widget %}
     <button class="btn btn-sm btn-success m-b-15 add-generation-modification" type="button"><i class="fa fa-plus" aria-hidden="true"></i>Добавить</button>
@@ -112,6 +158,40 @@
         <td>{{ form_widget(form.sortorder)}}{{ form_widget(form.generation)}}</td>
         <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
                 <i class="fa fa-times" title="Удалить перевод для языка"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block _category_generations_entry_boards_widget %}
+    <button class="btn btn-sm btn-success m-b-15 add-generation-board" type="button">
+        <i class="fa fa-plus" aria-hidden="true"></i>Добавить</button>
+    <table class="table table-bordered table-generation-boards">
+        <thead>
+            <tr>
+                <th>{% trans %}Изображение{% endtrans %}</th>
+                <th>{% trans %}Тип кузова{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _category_generations_entry_boards_entry_row %}
+    <tr>
+        <td>
+            {% if form.image.vars.value %}
+                <img src="{{ asset('bundles/images/category/generation/') }}{{ form.image.vars.value }}" alt="" title="" width="200px" />
+            {%endif %}
+            {{ form_widget(form.imageNew)}}
+            {{ form_widget(form.image)}}
+        </td>
+        <td>{{ form_widget(form.board)}}{{ form_widget(form.generation)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить пункт?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить"></i>
             </button> 
         </td>
     </tr>

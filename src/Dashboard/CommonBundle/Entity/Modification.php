@@ -38,15 +38,20 @@ class Modification
     private $sortorder;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="modification", cascade={"persist"})
+     */
+    private $translations;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Generation", inversedBy="modifications")
      * @ORM\JoinColumn(name="generation_id", referencedColumnName="id")
      */
     private $generation;
     
     /**
-     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="modification", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\GenerationItem", mappedBy="itemModifications")
      */
-    private $translations;
+    private $generationItem;
     
     /**
      * Constructor
@@ -54,6 +59,7 @@ class Modification
     public function __construct()
     {
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->generationItem = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -75,7 +81,7 @@ class Modification
     public function setPower($power)
     {
         $this->power = $power;
-
+    
         return $this;
     }
 
@@ -98,7 +104,7 @@ class Modification
     public function setSize($size)
     {
         $this->size = $size;
-
+    
         return $this;
     }
 
@@ -121,7 +127,7 @@ class Modification
     public function setLabel($label)
     {
         $this->label = $label;
-
+    
         return $this;
     }
 
@@ -144,7 +150,7 @@ class Modification
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-
+    
         return $this;
     }
 
@@ -159,29 +165,6 @@ class Modification
     }
 
     /**
-     * Set generation
-     *
-     * @param \Dashboard\CommonBundle\Entity\Generation $generation
-     * @return Modification
-     */
-    public function setGeneration(\Dashboard\CommonBundle\Entity\Generation $generation = null)
-    {
-        $this->generation = $generation;
-
-        return $this;
-    }
-
-    /**
-     * Get generation
-     *
-     * @return \Dashboard\CommonBundle\Entity\Generation 
-     */
-    public function getGeneration()
-    {
-        return $this->generation;
-    }
-
-    /**
      * Add translations
      *
      * @param \Dashboard\CommonBundle\Entity\Translation $translations
@@ -190,7 +173,7 @@ class Modification
     public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
     {
         $this->translations[] = $translations;
-
+    
         return $this;
     }
 
@@ -212,5 +195,61 @@ class Modification
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Set generation
+     *
+     * @param \Dashboard\CommonBundle\Entity\Generation $generation
+     * @return Modification
+     */
+    public function setGeneration(\Dashboard\CommonBundle\Entity\Generation $generation = null)
+    {
+        $this->generation = $generation;
+    
+        return $this;
+    }
+
+    /**
+     * Get generation
+     *
+     * @return \Dashboard\CommonBundle\Entity\Generation 
+     */
+    public function getGeneration()
+    {
+        return $this->generation;
+    }
+
+    /**
+     * Add generationItem
+     *
+     * @param \Dashboard\CommonBundle\Entity\GenerationItem $generationItem
+     * @return Modification
+     */
+    public function addGenerationItem(\Dashboard\CommonBundle\Entity\GenerationItem $generationItem)
+    {
+        $this->generationItem[] = $generationItem;
+    
+        return $this;
+    }
+
+    /**
+     * Remove generationItem
+     *
+     * @param \Dashboard\CommonBundle\Entity\GenerationItem $generationItem
+     */
+    public function removeGenerationItem(\Dashboard\CommonBundle\Entity\GenerationItem $generationItem)
+    {
+        $this->generationItem->removeElement($generationItem);
+    }
+
+    /**
+     * Get generationItem
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGenerationItem()
+    {
+        return $this->generationItem;
     }
 }

@@ -1,0 +1,55 @@
+<?php
+namespace Dashboard\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * @ORM\Table()
+ * @ORM\Entity()
+ */
+class GenerationItem
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Generation", inversedBy="items")
+     * @ORM\JoinColumn(name="generation_id", referencedColumnName="id")
+     */
+    private $generation;
+        
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\GenerationBoard")
+     * @ORM\JoinColumn(name="board_id", referencedColumnName="id")
+     */
+    private $board;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\FilterValue")
+     * @ORM\JoinColumn(name="gas_type_id", referencedColumnName="id")
+     */
+    private $gasType;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\FilterValue")
+     * @ORM\JoinColumn(name="gas_transmission_id", referencedColumnName="id")
+     */
+    private $transmissionType;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\FilterValue")
+     * @ORM\JoinColumn(name="gear_type_id", referencedColumnName="id")
+     */
+    private $gearType;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Modification", inversedBy="generationItem")
+     */
+    private $itemModifications;
+    
+}

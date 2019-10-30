@@ -42,10 +42,34 @@
         <div class="advertFiltersTable">
             <div class="advertFiltersTableHeader">{% trans %}Выбор автомобиля{% endtrans %}</div>
             <div class="advertFiltersItems">
-                <div class="advertFiltersItem">
-                    <div class="advertFiltersItemName">{% trans %}Год{% endtrans %}</div>
-                    <div class="advertFiltersItemValue"></div>
-                </div>
+                <table class="table table-striped" id="advertFiltersItemsTable">
+                    <tr>
+                        <td><div class="advertFiltersItemName">{% trans %}Год{% endtrans %}</div></td>
+                        <td>
+                            <div class="advertFiltersItemValue">
+                                {% if (category.yearTo - category.yearFrom) <= 10 %}
+                                    <ul class="list-unstyled list-inline years">
+                                        {% for i in category.yearTo .. category.yearFrom %}
+                                            <li><a href="javascript:void(0">{{ i }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <ul class="list-unstyled list-inline years">
+                                        {% for i in category.yearTo .. category.yearTo - 10 %}<li><a href="javascript:void(0">{{ i }}</a></li>{% endfor %}
+                                        <li class="yearsOlder">
+                                            <a href="javascript:void(0)" onclick="showYearsOlder(event)">Старше</a>
+                                            <div class="yearsOlderItems">
+                                                {% for i in category.yearTo - 11 .. category.yearFrom %}
+                                                    <div class="yearsOlderItem"><a href="javascript:void(0">{{ i }}</a></div>
+                                                {% endfor %}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>            
     </div>

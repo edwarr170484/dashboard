@@ -313,6 +313,8 @@ class CategoryController extends Controller
         $originalGenerations = new ArrayCollection();
         $originalGenerationTranslations = new ArrayCollection();
         $originalGenerationModifications = new ArrayCollection();
+        $originalGenerationBoards = new ArrayCollection();
+        $originalGenerationItems = new ArrayCollection();
         
         $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
         
@@ -337,10 +339,20 @@ class CategoryController extends Controller
                         $originalGenerationModifications->add($modification);
                     }
                 }
+                if($item->getBoards()){
+                    foreach($item->getBoards() as $board){
+                        $originalGenerationBoards->add($board);
+                    }
+                }
+                if($item->getItems()){
+                    foreach($item->getItems() as $generationItem){
+                        $originalGenerationItems->add($generationItem);
+                    }
+                }
             }
         }
         
-        $categoryForm = $this->createForm(new CategoryType($manager), $category);
+        $categoryForm = $this->createForm(new CategoryType($manager, $category), $category);
 
         $categoryForm->handleRequest($request);      
        
@@ -348,14 +360,7 @@ class CategoryController extends Controller
         {
             if($originalGenerations){
                 foreach($originalGenerations as $generation){
-                    if (false === $category->getGenerations()->contains($generation)){
-                        if($generation->getImage()){
-                            if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $generation->getImage() ))
-                            {
-                                $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $generation->getImage() );
-                            }
-                        }
-                        
+                    if (false === $category->getGenerations()->contains($generation)){                        
                         if($generation->getTranslations()){
                             foreach($generation->getTranslations() as $translation){
                                 $translation->setGeneration(null);
@@ -367,6 +372,25 @@ class CategoryController extends Controller
                             foreach($generation->getModifications() as $modification){
                                 $modification->setGeneration(null);
                                 $manager->remove($modification);
+                            }
+                        }
+                        
+                        if($generation->getBoards()){
+                            foreach($generation->getBoards() as $board){
+                                if($board->getImage()){
+                                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $board->getImage())){
+                                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $board->getImage());
+                                    }
+                                }
+                                $board->setGeneration(null);
+                                $manager->remove($board);
+                            }
+                        }
+                        
+                        if($generation->getItems()){
+                            foreach($generation->getItems() as $item){
+                                $item->setGeneration(null);
+                                $manager->remove($item);
                             }
                         }
                         
@@ -391,6 +415,29 @@ class CategoryController extends Controller
                             }
                         }
                     }
+                    
+                    if($originalGenerationBoards){
+                        foreach($originalGenerationBoards as $board){
+                            if(false === $generation->getBoards()->contains($board)){
+                                if($board->getImage()){
+                                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $board->getImage())){
+                                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $board->getImage());
+                                    }
+                                }
+                                $board->setGeneration(null);
+                                $manager->remove($board);
+                            }
+                        }
+                    }
+                    
+                    if($originalGenerationItems){
+                        foreach($originalGenerationItems as $item){
+                            if(false === $generation->getItems()->contains($item)){
+                                $item->setGeneration(null);
+                                $manager->remove($item);
+                            }
+                        }
+                    } 
                 }
             }
             if($originalTranslations)
@@ -431,24 +478,38 @@ class CategoryController extends Controller
                             $manager->persist($modification);
                         }
                     }
-                    
-                    $image = $categoryForm['generations'][$key]['imageNew']->getData();
-                    $oldImage = $categoryForm['generations'][$key]['image']->getData();
-                    
-                    if($image)
-                    {
-                        if($oldImage)
-                        {
-                            if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $oldImage ))
+                    if($generation->getBoards()){
+                        foreach($generation->getBoards() as $boardKey => $board){
+                            
+                            $image = $categoryForm['generations'][$key]['boards'][$boardKey]['imageNew']->getData();
+                            $oldImage = $categoryForm['generations'][$key]['boards'][$boardKey]['image']->getData();
+
+                            if($image)
                             {
-                                $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $oldImage );
+                                if($oldImage)
+                                {
+                                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $oldImage ))
+                                    {
+                                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/category/generation/' . $oldImage );
+                                    }
+                                }
+
+                                $extention = $image->getClientOriginalExtension();
+                                $localImageName = rand(1, 99999) . rand(1, 99999) . rand(1, 99999) . '.' . $extention;
+                                $image->move('bundles/images/category/generation',$localImageName);
+                                $board->setImage($localImageName);
                             }
+                            
+                            $board->setGeneration($generation);
+                            $manager->persist($board);
                         }
+                    }
                     
-                        $extention = $image->getClientOriginalExtension();
-                        $localImageName = rand(1, 99999) . rand(1, 99999) . '.' . $extention;
-                        $image->move('bundles/images/category/generation',$localImageName);
-                        $generation->setImage($localImageName);
+                    if($generation->getItems()){
+                        foreach($generation->getItems() as $item){
+                            $item->setGeneration($generation);
+                            $manager->persist($item);
+                        }
                     }
                     
                     $generation->setCategory($category);

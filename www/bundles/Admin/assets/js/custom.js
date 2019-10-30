@@ -182,6 +182,28 @@ $(document).ready(function(){
             $(this).parent().find(".table-generation-modifications > tbody").append(newForm);
         });
         
+        $(".table-generations > tbody > tr").eq(l).find(".add-generation-board").click(function(){
+            var prototype = $(this).next("#generation_boards").data("prototype");
+            var count = $(this).parent().find(".table-generation-boards > tbody > tr").length;
+            var newForm = prototype.replace('boards][' + l + '][image','boards][' + count + '][image');
+            newForm = newForm.replace('boards][' + l + '][imageNew','boards][' + count + '][imageNew');
+            newForm = newForm.replace('boards][' + l + '][board','boards][' + count + '][board');
+            newForm = newForm.replace(/__name__/g, count);
+            $(this).parent().find(".table-generation-boards > tbody").append(newForm);
+        });
+        
+        $(".table-generations > tbody > tr").eq(l).find(".add-generation-item").click(function(){
+            var prototype = $(this).next("#generation_items").data("prototype");
+            var count = $(this).parent().find(".table-generation-items > tbody > tr").length;
+            var newForm = prototype.replace('items][' + l + '][board','items][' + count + '][board');
+            newForm = newForm.replace('items][' + l + '][gasType','items][' + count + '][gasType');
+            newForm = newForm.replace('items][' + l + '][transmissionType','items][' + count + '][transmissionType');
+            newForm = newForm.replace('items][' + l + '][gearType','items][' + count + '][gearType');
+            newForm = newForm.replace('items][' + l + '][itemModifications','items][' + count + '][itemModifications');
+            newForm = newForm.replace(/__name__/g, count);
+            $(this).parent().find(".table-generation-items > tbody").append(newForm);
+        });
+        
     });
     
     $(".add-generation-translation").click(function(){
@@ -197,6 +219,22 @@ $(document).ready(function(){
         var newForm = prototype.replace(/__name__/g, count);
 
         $(this).parent().find(".table-generation-modifications > tbody").append(newForm);
+    });
+    
+    $(".add-generation-item").click(function(){
+        var prototype = $(this).next("#generation_items").data("prototype");
+        var count = $(this).parent().find(".table-generation-items > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+
+        $(this).parent().find(".table-generation-items > tbody").append('<tr>' + newForm + '</tr>');
+    });
+    
+    $(".add-generation-board").click(function(){
+        var prototype = $(this).next("#generation_boards").data("prototype");
+        var count = $(this).parent().find(".table-generation-boards > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+
+        $(this).parent().find(".table-generation-boards > tbody").append(newForm);
     });
     
     $("#add-region-city").click(function(){

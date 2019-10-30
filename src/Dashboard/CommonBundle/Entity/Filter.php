@@ -76,11 +76,6 @@ class Filter
     private $values;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="linkedFilters")
-     */
-    private $linkToValues;
-    
-    /**
      * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Category", inversedBy="filters")
      * @ORM\JoinTable(name="category_filters")
      */
@@ -90,7 +85,7 @@ class Filter
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="filter", cascade={"persist"})
      */
     private $translations;
-
+    
     /**
      * Constructor
      */
@@ -98,7 +93,6 @@ class Filter
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->values = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->linkToValues = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -122,7 +116,7 @@ class Filter
     public function setName($name)
     {
         $this->name = $name;
-
+    
         return $this;
     }
 
@@ -145,7 +139,7 @@ class Filter
     public function setType($type)
     {
         $this->type = $type;
-
+    
         return $this;
     }
 
@@ -168,7 +162,7 @@ class Filter
     public function setIsShow($isShow)
     {
         $this->isShow = $isShow;
-
+    
         return $this;
     }
 
@@ -191,7 +185,7 @@ class Filter
     public function setIsRequired($isRequired)
     {
         $this->isRequired = $isRequired;
-
+    
         return $this;
     }
 
@@ -214,7 +208,7 @@ class Filter
     public function setIsSearch($isSearch)
     {
         $this->isSearch = $isSearch;
-
+    
         return $this;
     }
 
@@ -237,7 +231,7 @@ class Filter
     public function setIsSelltype($isSelltype)
     {
         $this->isSelltype = $isSelltype;
-
+    
         return $this;
     }
 
@@ -260,7 +254,7 @@ class Filter
     public function setIsShowCard($isShowCard)
     {
         $this->isShowCard = $isShowCard;
-
+    
         return $this;
     }
 
@@ -283,7 +277,7 @@ class Filter
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-
+    
         return $this;
     }
 
@@ -306,7 +300,7 @@ class Filter
     public function addChild(\Dashboard\CommonBundle\Entity\Filter $children)
     {
         $this->children[] = $children;
-
+    
         return $this;
     }
 
@@ -339,7 +333,7 @@ class Filter
     public function setParent(\Dashboard\CommonBundle\Entity\Filter $parent = null)
     {
         $this->parent = $parent;
-
+    
         return $this;
     }
 
@@ -362,7 +356,7 @@ class Filter
     public function addValue(\Dashboard\CommonBundle\Entity\FilterValue $values)
     {
         $this->values[] = $values;
-
+    
         return $this;
     }
 
@@ -387,39 +381,6 @@ class Filter
     }
 
     /**
-     * Add linkToValues
-     *
-     * @param \Dashboard\CommonBundle\Entity\FilterValue $linkToValues
-     * @return Filter
-     */
-    public function addLinkToValue(\Dashboard\CommonBundle\Entity\FilterValue $linkToValues)
-    {
-        $this->linkToValues[] = $linkToValues;
-
-        return $this;
-    }
-
-    /**
-     * Remove linkToValues
-     *
-     * @param \Dashboard\CommonBundle\Entity\FilterValue $linkToValues
-     */
-    public function removeLinkToValue(\Dashboard\CommonBundle\Entity\FilterValue $linkToValues)
-    {
-        $this->linkToValues->removeElement($linkToValues);
-    }
-
-    /**
-     * Get linkToValues
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getLinkToValues()
-    {
-        return $this->linkToValues;
-    }
-
-    /**
      * Add categories
      *
      * @param \Dashboard\CommonBundle\Entity\Category $categories
@@ -428,7 +389,7 @@ class Filter
     public function addCategory(\Dashboard\CommonBundle\Entity\Category $categories)
     {
         $this->categories[] = $categories;
-
+    
         return $this;
     }
 
@@ -461,7 +422,7 @@ class Filter
     public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
     {
         $this->translations[] = $translations;
-
+    
         return $this;
     }
 

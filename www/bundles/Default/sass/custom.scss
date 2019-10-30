@@ -603,7 +603,21 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertFiltersTableHeader{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 0.7rem;}
 .advertFiltersTable{padding-top: 6rem;}
 .advertFiltersItem{width: 100%;padding: 1.3rem 2rem; background: #fff;padding-bottom: 1.1rem;}
-.advertFiltersItemName{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);display: table-cell;}
+.advertFiltersItemName{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-left: 2rem;}
+.advertFiltersItemValue ul.years li a{@include fontView("GothamProRegular",$black-text,2.2rem,3.2rem);padding: 1px 8px;@include border-radius(5px);display: block;}
+.advertFiltersItemValue ul.years li a.active, .advertFiltersItemValue ul.years li a:focus{background: $yellow-color;text-decoration: none;}
+.advertFiltersItemValue ul.years li.yearsOlder a{@include fontView("GothamProRegular",$input-black,1.6rem,2.2rem);}
+.advertFiltersItemValue ul.years li.yearsOlder a:hover,.advertFiltersItemValue ul.years li.yearsOlder a:focus{text-decoration: none;background: none;}
+#advertFiltersItemsTable > tbody > tr:nth-of-type(2n+1){background-color: #fff;}
+#advertFiltersItemsTable > tbody > tr > td{vertical-align:middle;border: none;}
+.advertFiltersItemValue{@include flexBox(row,flex-start,center);}
+.advertFiltersItemValue ul.years{@include flexBox(row,flex-start,center);}
+.advertFiltersItemValue ul.years li{display: block;}
+.advertFiltersItemValue ul.years li.yearsOlder{position: relative;}
+.yearsOlderItems{position: absolute;top:100%;left: 8px;background: #fff;z-index:9;}
+.advertFiltersItemValue ul.years li .yearsOlderItem a{@include fontView("GothamProRegular",$black-text,1.6rem,3.2rem);display: block;text-align: center;padding: 3px 16px;@include border-radius(0);}
+.advertFiltersItemValue ul.years li .yearsOlderItem a:hover,.advertFiltersItemValue ul.years li .yearsOlderItem a:focus{text-decoration: none;background: $yellow-color;}
+.yearsOlderItems{display: none;height:290px;overflow-y:scroll;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
 
 
 

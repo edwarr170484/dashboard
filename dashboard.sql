@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Окт 28 2019 г., 15:45
+-- Время создания: Окт 30 2019 г., 15:57
 -- Версия сервера: 10.1.9-MariaDB
 -- Версия PHP: 5.6.15
 
@@ -174,7 +174,8 @@ INSERT INTO `category` (`id`, `parent_id`, `name`, `title`, `description`, `imag
 (247, 195, 'Tiida', 'Tiida', NULL, NULL, 39, NULL, NULL, NULL, NULL, NULL, 1, NULL, 1, 1, 'null', 'null'),
 (248, NULL, 'Mototsikly', 'Мотоциклы', NULL, '<svg width="41" height="22" viewBox="0 0 41 26" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M5.98563 13.936C2.71617 13.936 0 16.484 0 19.864C0 23.244 2.66587 26 5.93533 26C9.20479 26 11.8707 23.244 11.8707 19.864C11.8707 19.604 11.8707 19.344 11.8204 19.084L13.3293 18.408L15.8946 21.06C16.0455 21.216 16.1964 21.268 16.3976 21.268C16.5485 21.268 16.6994 21.216 16.8 21.164L23.2383 16.692C23.2383 16.692 23.2383 16.692 23.2886 16.64C25.2 14.924 27.9162 14.56 29.8779 14.56C30.1797 14.56 30.4815 14.612 30.7329 14.612C28.3689 17.316 24.9485 17.004 24.9485 17.004L22.0814 19.24H29.3246C29.2743 19.5 29.2743 19.708 29.2743 19.968C29.2743 23.348 31.7892 26 35.0587 26C38.3282 26 40.994 23.244 40.994 19.864C40.994 18.928 40.7425 17.94 40.3401 17.108C40.994 17.42 41.1952 16.848 40.7928 16.328C40.7928 16.328 38.9318 12.844 33.8012 13.572L35.3605 12.116C35.4611 12.012 35.5114 11.856 35.5617 11.7C35.6623 11.284 35.6623 10.92 35.7126 10.556H34.4551C33.3988 8.684 35.3102 7.384 35.3102 7.384C35.4611 7.592 35.5617 7.748 35.6623 7.956C35.3102 5.512 34.1533 3.744 33.097 2.6C31.4371 0.78 29.5761 0.104 29.5258 0.0519997C29.4755 -2.98321e-07 29.3246 0 29.2743 0C29.0228 0 28.8719 0.104 28.721 0.26C28.5701 0.468 28.5198 0.832 28.6707 1.092C29.4252 2.392 29.7773 3.328 29.9282 4.004L28.8719 3.796C28.5198 3.744 28.1677 4.004 28.1174 4.368C28.0671 4.732 28.3186 5.096 28.6707 5.148L29.9785 5.356C29.9785 5.46 29.9785 5.46 29.9282 5.512C29.6264 6.084 28.8719 6.136 28.5701 6.136C28.5198 6.136 28.5198 6.136 28.4695 6.136C25.7533 5.304 23.7916 4.992 23.7413 4.992C23.3892 4.992 22.9868 4.94 22.685 4.94C21.0252 4.94 19.5162 5.616 18.4096 6.864C17.9569 7.384 17.6551 7.904 17.4539 8.268C14.5868 7.904 12.9773 6.188 12.9773 6.188C12.8264 6.032 12.6755 5.98 12.4743 5.98L4.72815 6.032C4.47665 6.032 4.22515 6.188 4.17485 6.448L3.72216 7.384C3.52096 7.696 3.67186 8.112 4.02395 8.32L4.72815 8.684H3.92336C3.62156 8.684 3.37006 8.944 3.37006 9.256C3.37006 9.568 3.62156 9.828 3.92336 9.828H4.27545L2.01198 12.636C1.81078 12.896 1.86108 13.26 2.06228 13.468C2.16288 13.572 2.31377 13.624 2.41437 13.624C2.61557 13.624 2.76647 13.572 2.86707 13.416L5.73413 9.88H6.33773L7.59521 12.844L12.424 14.924V15.912L10.8647 16.588C9.80839 14.976 7.99761 13.936 5.98563 13.936ZM12.424 13.312L8.6515 11.7L8.04791 10.296L12.424 12.428V13.312ZM35.2096 23.296C33.4994 23.296 32.091 21.84 32.091 20.02C32.091 19.396 32.2922 18.772 32.594 18.252L33.8012 20.8L36.3162 19.5L35.0084 16.744C35.0587 16.744 35.1593 16.744 35.2096 16.744C36.9701 16.744 38.3785 18.2 38.3785 20.02C38.3785 21.84 36.9701 23.296 35.2096 23.296ZM5.98563 23.296C4.22515 23.296 2.86707 21.84 2.86707 20.072C2.86707 18.252 4.27545 16.796 6.03593 16.796C6.89102 16.796 7.64551 17.16 8.24911 17.732L5.63353 18.876L6.74012 21.528L9.1042 20.488C8.903 22.048 7.59521 23.296 5.98563 23.296Z" fill="#616161"/>\r\n</svg>', 2, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, 1, 'null', 'null'),
 (249, NULL, 'Avtodoma', 'Автодома', NULL, '<svg width="42" height="22" viewBox="0 0 42 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M18.3468 17.7109C17.3445 17.7109 16.5427 18.0703 15.8411 18.7376C15.1897 19.405 14.8389 20.329 14.8389 21.3557C14.8389 22.3824 15.1395 23.2551 15.8411 23.9738C16.5427 24.6411 17.3445 25.0005 18.3468 25.0005C19.349 25.0005 20.1508 24.6925 20.8524 23.9738C21.5039 23.3064 21.8547 22.3824 21.8547 21.3557C21.8547 20.329 21.554 19.4563 20.8524 18.7376C20.1508 18.0703 19.349 17.7109 18.3468 17.7109ZM16.9937 22.7417C16.6429 22.3824 16.4425 21.9204 16.4425 21.407C16.4425 20.8937 16.6429 20.4317 16.9937 20.0723C17.3445 19.713 17.7955 19.5077 18.3468 19.5077C18.8479 19.5077 19.349 19.713 19.6998 20.0723C20.0506 20.4317 20.2511 20.8937 20.2511 21.407C20.2511 21.9204 20.0506 22.3824 19.6998 22.7417C19.349 23.1011 18.898 23.3064 18.3468 23.3064C17.8456 23.3064 17.3445 23.1011 16.9937 22.7417Z" fill="#616161"/>\r\n<path d="M0.907403 3.23409C0.255934 4.10678 -0.0447437 5.0308 0.00536923 6.05749V17.9158C0.00536923 18.8398 0.35616 19.6612 1.00763 20.3799C1.6591 21.0472 2.41079 21.4066 3.26271 21.4066H13.9368C13.9368 20.1232 14.3377 19.0452 15.1896 18.1725C16.0415 17.2998 17.0939 16.8891 18.3467 16.8891C19.5995 16.8891 20.6519 17.2998 21.5038 18.1725C22.3557 19.0452 22.7566 20.1232 22.7566 21.4066H42V19.6612H36.8384C37.3395 19.6612 37.5901 19.0965 37.5901 17.9158V6.62218C37.5901 5.80082 37.4898 5.0308 37.1892 4.36345C36.8885 3.6961 36.5878 3.18275 36.237 2.82341C35.8862 2.46407 35.4853 2.15606 35.0343 1.84805C34.5833 1.54004 34.2325 1.38604 34.0822 1.3347L33.581 1.1807C32.9296 1.02669 30.8248 0.770021 27.3169 0.462013C23.809 0.154005 20.8523 0 18.3968 0C15.8411 0 12.8844 0.154005 9.57694 0.462013C6.3196 0.770021 4.31508 1.07803 3.6135 1.28337C2.4609 1.69405 1.55887 2.3614 0.907403 3.23409ZM25.4126 10.1643V6.10883C25.4126 5.59548 25.6131 5.39014 26.014 5.39014H31.7269C31.8772 5.39014 32.0275 5.44148 32.1779 5.59548C32.2781 5.69815 32.3783 5.90349 32.3783 6.05749V10.2669C32.3783 10.6263 32.1278 10.7803 31.6767 10.7803H25.9138C25.5128 10.7803 25.3124 10.5749 25.3124 10.1643H25.4126ZM4.31508 6.05749C4.31508 5.54415 4.56565 5.33881 5.01666 5.33881H17.7453C18.1462 5.33881 18.3467 5.59548 18.3467 6.05749V10.2669C18.3467 10.6263 18.1462 10.7803 17.7453 10.7803H5.01666C4.51553 10.7803 4.31508 10.6263 4.31508 10.2669V6.05749Z" fill="#616161"/>\r\n</svg>', 3, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, 1, 'null', 'null'),
-(250, NULL, 'Kommercheskie', 'Коммерческие', NULL, '<svg width="42" height="22" viewBox="0 0 42 24" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M30.1408 16.8494C28.1435 16.8494 26.5249 18.4535 26.5249 20.4246C26.5249 22.4 28.1435 23.9999 30.1408 23.9999C32.1386 23.9999 33.7546 22.3997 33.7546 20.4246C33.7546 18.4536 32.1387 16.8494 30.1408 16.8494ZM30.1408 22.08C29.218 22.08 28.4717 21.341 28.4717 20.4247C28.4717 19.512 29.218 18.7735 30.1408 18.7735C31.0635 18.7735 31.8106 19.512 31.8106 20.4247C31.8108 21.341 31.0635 22.08 30.1408 22.08Z" fill="#616161"/>\r\n<path d="M6.032 16.8494C4.03455 16.8494 2.41748 18.4535 2.41748 20.4246C2.41748 22.4 4.03455 23.9999 6.032 23.9999C8.02543 23.9999 9.64652 22.3997 9.64652 20.4246C9.64652 18.4536 8.02543 16.8494 6.032 16.8494ZM6.032 22.08C5.10727 22.08 4.35841 21.341 4.35841 20.4247C4.35841 19.512 5.10727 18.7735 6.032 18.7735C6.95263 18.7735 7.7019 19.512 7.7019 20.4247C7.7019 21.341 6.95263 22.08 6.032 22.08Z" fill="#616161"/>\r\n<path d="M41.309 0H11.0808C10.7017 0 10.3935 0.304092 10.3935 0.679987V4.58685C10.3935 4.95001 10.6807 5.16729 10.8646 5.16729H17.1935C17.437 5.16729 17.6428 5.30181 17.765 5.49499L16.7646 6.46714C16.6401 6.28094 16.441 6.15072 16.1994 6.15072H10.3935V6.22634H9.79652C9.41459 6.22634 9.10919 6.53026 9.10919 6.90932L6.69871 9.42165L2.06603 9.98732C1.68212 9.98732 1.37615 10.2876 1.37615 10.6673L0.917268 13.1045V15.5847C0.917268 15.8855 0.715882 16.1425 0.435173 16.229L0 19.0893C0 19.4647 0.308272 19.7726 0.687172 19.7726H1.08535V19.832H1.54259C1.59788 19.3931 1.71067 18.9704 1.87202 18.58C2.58495 17.011 4.17463 15.9131 6.03172 15.9131C6.64277 15.9131 7.22642 16.0358 7.75789 16.2528L7.80129 16.2096C9.15767 16.8691 10.1433 18.216 10.3415 19.8319H25.4846C25.7819 17.5483 27.7529 15.7785 30.1411 15.7785C32.5296 15.7785 34.4987 17.5483 34.7939 19.8319H41.3093C41.6931 19.8319 42 19.5275 42 19.1477V0.679744C41.9998 0.304092 41.6929 0 41.309 0ZM15.3986 9.41037C15.3986 9.78927 15.1066 10.0982 14.749 10.0982H9.33871C8.95563 10.0982 8.64785 9.79357 8.64785 9.41833L10.0259 7.93665C10.0259 7.55743 10.3335 7.25747 10.7137 7.25747H14.749C15.1066 7.25747 15.3986 7.56189 15.3986 7.94062V9.41037Z" fill="#616161"/>\r\n</svg>', 4, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, 1, 'null', 'null');
+(250, NULL, 'Kommercheskie', 'Коммерческие', NULL, '<svg width="42" height="22" viewBox="0 0 42 24" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M30.1408 16.8494C28.1435 16.8494 26.5249 18.4535 26.5249 20.4246C26.5249 22.4 28.1435 23.9999 30.1408 23.9999C32.1386 23.9999 33.7546 22.3997 33.7546 20.4246C33.7546 18.4536 32.1387 16.8494 30.1408 16.8494ZM30.1408 22.08C29.218 22.08 28.4717 21.341 28.4717 20.4247C28.4717 19.512 29.218 18.7735 30.1408 18.7735C31.0635 18.7735 31.8106 19.512 31.8106 20.4247C31.8108 21.341 31.0635 22.08 30.1408 22.08Z" fill="#616161"/>\r\n<path d="M6.032 16.8494C4.03455 16.8494 2.41748 18.4535 2.41748 20.4246C2.41748 22.4 4.03455 23.9999 6.032 23.9999C8.02543 23.9999 9.64652 22.3997 9.64652 20.4246C9.64652 18.4536 8.02543 16.8494 6.032 16.8494ZM6.032 22.08C5.10727 22.08 4.35841 21.341 4.35841 20.4247C4.35841 19.512 5.10727 18.7735 6.032 18.7735C6.95263 18.7735 7.7019 19.512 7.7019 20.4247C7.7019 21.341 6.95263 22.08 6.032 22.08Z" fill="#616161"/>\r\n<path d="M41.309 0H11.0808C10.7017 0 10.3935 0.304092 10.3935 0.679987V4.58685C10.3935 4.95001 10.6807 5.16729 10.8646 5.16729H17.1935C17.437 5.16729 17.6428 5.30181 17.765 5.49499L16.7646 6.46714C16.6401 6.28094 16.441 6.15072 16.1994 6.15072H10.3935V6.22634H9.79652C9.41459 6.22634 9.10919 6.53026 9.10919 6.90932L6.69871 9.42165L2.06603 9.98732C1.68212 9.98732 1.37615 10.2876 1.37615 10.6673L0.917268 13.1045V15.5847C0.917268 15.8855 0.715882 16.1425 0.435173 16.229L0 19.0893C0 19.4647 0.308272 19.7726 0.687172 19.7726H1.08535V19.832H1.54259C1.59788 19.3931 1.71067 18.9704 1.87202 18.58C2.58495 17.011 4.17463 15.9131 6.03172 15.9131C6.64277 15.9131 7.22642 16.0358 7.75789 16.2528L7.80129 16.2096C9.15767 16.8691 10.1433 18.216 10.3415 19.8319H25.4846C25.7819 17.5483 27.7529 15.7785 30.1411 15.7785C32.5296 15.7785 34.4987 17.5483 34.7939 19.8319H41.3093C41.6931 19.8319 42 19.5275 42 19.1477V0.679744C41.9998 0.304092 41.6929 0 41.309 0ZM15.3986 9.41037C15.3986 9.78927 15.1066 10.0982 14.749 10.0982H9.33871C8.95563 10.0982 8.64785 9.79357 8.64785 9.41833L10.0259 7.93665C10.0259 7.55743 10.3335 7.25747 10.7137 7.25747H14.749C15.1066 7.25747 15.3986 7.56189 15.3986 7.94062V9.41037Z" fill="#616161"/>\r\n</svg>', 4, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, 1, 'null', 'null'),
+(251, 171, 'Focus', 'Focus', NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, 1, 0, 1, 1, '1998', '2019');
 
 -- --------------------------------------------------------
 
@@ -217,7 +218,8 @@ CREATE TABLE `category_filters` (
 
 INSERT INTO `category_filters` (`filter_id`, `category_id`) VALUES
 (16, 237),
-(17, 237);
+(17, 237),
+(19, 171);
 
 -- --------------------------------------------------------
 
@@ -422,30 +424,8 @@ CREATE TABLE `filter` (
 INSERT INTO `filter` (`id`, `name`, `type`, `is_show`, `sortorder`, `is_required`, `is_search`, `is_selltype`, `is_show_card`, `parent_id`) VALUES
 (16, 'Двигатель', 'radio', 1, 1, 0, 0, 0, 0, NULL),
 (17, 'Привод', 'radio', 1, 2, 0, 0, 0, 0, NULL),
-(18, 'Коробка передач', 'radio', 1, 3, 0, 0, 0, 0, NULL);
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `filter_linked_values`
---
-
-CREATE TABLE `filter_linked_values` (
-  `filter_value_source` int(11) NOT NULL,
-  `filter_value_target` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Дамп данных таблицы `filter_linked_values`
---
-
-INSERT INTO `filter_linked_values` (`filter_value_source`, `filter_value_target`) VALUES
-(58, 60),
-(58, 61),
-(58, 62),
-(59, 60),
-(59, 61),
-(59, 62);
+(18, 'Коробка передач', 'radio', 1, 3, 0, 0, 0, 0, NULL),
+(19, 'Тип кузова', 'select', 1, 4, 0, 0, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -472,7 +452,12 @@ INSERT INTO `filter_value` (`id`, `filter_id`, `value`) VALUES
 (63, 18, 'Механическая'),
 (64, 18, 'Автоматическая'),
 (65, 18, 'Роботизированная'),
-(66, 18, 'Вариатор');
+(66, 18, 'Вариатор'),
+(67, 19, 'Седан'),
+(68, 19, 'Хэчбек 3 дв.'),
+(69, 19, 'Хэчбек 5 дв.'),
+(70, 19, 'Универсал 5 дв.'),
+(71, 19, 'Кабриолет');
 
 -- --------------------------------------------------------
 
@@ -564,12 +549,88 @@ CREATE TABLE `generation` (
   `id` int(11) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `year_from` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `year_to` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `is_right_wheel` tinyint(1) DEFAULT '0',
   `is_gas` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `generation`
+--
+
+INSERT INTO `generation` (`id`, `category_id`, `name`, `year_from`, `year_to`, `is_right_wheel`, `is_gas`) VALUES
+(1, 251, 'I', '1998', '2001', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `generation_board`
+--
+
+CREATE TABLE `generation_board` (
+  `id` int(11) NOT NULL,
+  `board_id` int(11) DEFAULT NULL,
+  `generation_id` int(11) DEFAULT NULL,
+  `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `generation_board`
+--
+
+INSERT INTO `generation_board` (`id`, `board_id`, `generation_id`, `image`) VALUES
+(1, 67, 1, '77380338586261.jpg'),
+(2, 68, 1, '994962810113138.jpg'),
+(3, 69, 1, '5634423555970.jpg'),
+(4, 70, 1, '820717559299081.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `generation_item`
+--
+
+CREATE TABLE `generation_item` (
+  `id` int(11) NOT NULL,
+  `generation_id` int(11) DEFAULT NULL,
+  `board_id` int(11) DEFAULT NULL,
+  `gas_type_id` int(11) DEFAULT NULL,
+  `gas_transmission_id` int(11) DEFAULT NULL,
+  `gear_type_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `generation_item`
+--
+
+INSERT INTO `generation_item` (`id`, `generation_id`, `board_id`, `gas_type_id`, `gas_transmission_id`, `gear_type_id`) VALUES
+(2, 1, 1, 58, 60, 63),
+(3, 1, 1, 58, 60, 64);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `generation_item_modification`
+--
+
+CREATE TABLE `generation_item_modification` (
+  `generation_item_id` int(11) NOT NULL,
+  `modification_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `generation_item_modification`
+--
+
+INSERT INTO `generation_item_modification` (`generation_item_id`, `modification_id`) VALUES
+(2, 1),
+(2, 2),
+(2, 3),
+(2, 4),
+(3, 1),
+(3, 2),
+(3, 3);
 
 -- --------------------------------------------------------
 
@@ -703,6 +764,16 @@ CREATE TABLE `modification` (
   `sortorder` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `generation_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `modification`
+--
+
+INSERT INTO `modification` (`id`, `power`, `size`, `label`, `sortorder`, `generation_id`) VALUES
+(1, '75', '1.4MT', '1998 - 2001', '1', 1),
+(2, '100', '1.6MT', '1998 - 2001', '2', 1),
+(3, '115', '1.8MT', '1998 - 2001', '3', 1),
+(4, '131', '2.0MT', '1998 - 2001', '4', 1);
 
 -- --------------------------------------------------------
 
@@ -1322,7 +1393,21 @@ INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `value`, `selltype_
 (138, 1, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (139, 2, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (140, 1, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(141, 2, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(141, 2, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(144, 1, NULL, 'Тип кузова', NULL, NULL, 19, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(145, 2, NULL, 'Тип кузова', NULL, NULL, 19, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(146, 1, NULL, 'Седан', NULL, NULL, NULL, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(147, 2, NULL, 'Седан', NULL, NULL, NULL, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(148, 1, NULL, 'Хэчбек 3 дв.', NULL, NULL, NULL, 68, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(149, 2, NULL, 'Хэчбек 3 дв.', NULL, NULL, NULL, 68, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(150, 1, NULL, 'Хэчбек 5 дв.', NULL, NULL, NULL, 69, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(151, 2, NULL, 'Хэчбек 5 дв.', NULL, NULL, NULL, 69, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(152, 1, NULL, 'Универсал 5 дв.', NULL, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(153, 2, NULL, 'Универсал 5 дв.', NULL, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(154, 1, NULL, 'Кабриолет', NULL, NULL, NULL, 71, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(155, 2, NULL, 'Кабриолет', NULL, NULL, NULL, 71, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(156, 1, 251, 'Focus', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(157, 2, 251, 'Focus', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1458,25 +1543,6 @@ INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 (1, 1),
 (2, 2);
 
--- --------------------------------------------------------
-
---
--- Структура таблицы `value_linked_filters`
---
-
-CREATE TABLE `value_linked_filters` (
-  `filter_value_id` int(11) NOT NULL,
-  `filter_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Дамп данных таблицы `value_linked_filters`
---
-
-INSERT INTO `value_linked_filters` (`filter_value_id`, `filter_id`) VALUES
-(58, 17),
-(59, 17);
-
 --
 -- Индексы сохранённых таблиц
 --
@@ -1567,14 +1633,6 @@ ALTER TABLE `filter`
   ADD KEY `IDX_7FC45F1D727ACA70` (`parent_id`);
 
 --
--- Индексы таблицы `filter_linked_values`
---
-ALTER TABLE `filter_linked_values`
-  ADD PRIMARY KEY (`filter_value_source`,`filter_value_target`),
-  ADD KEY `IDX_775484B1264C021` (`filter_value_source`),
-  ADD KEY `IDX_775484B11B8190AE` (`filter_value_target`);
-
---
 -- Индексы таблицы `filter_value`
 --
 ALTER TABLE `filter_value`
@@ -1615,6 +1673,33 @@ ALTER TABLE `gallery_items`
 ALTER TABLE `generation`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_D3266C3B12469DE2` (`category_id`);
+
+--
+-- Индексы таблицы `generation_board`
+--
+ALTER TABLE `generation_board`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_EA87D172E7EC5785` (`board_id`),
+  ADD KEY `IDX_EA87D172553A6EC4` (`generation_id`);
+
+--
+-- Индексы таблицы `generation_item`
+--
+ALTER TABLE `generation_item`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_73EA38A7553A6EC4` (`generation_id`),
+  ADD KEY `IDX_73EA38A7E7EC5785` (`board_id`),
+  ADD KEY `IDX_73EA38A73145108E` (`gas_type_id`),
+  ADD KEY `IDX_73EA38A72DBF1AFE` (`gas_transmission_id`),
+  ADD KEY `IDX_73EA38A732CA4F08` (`gear_type_id`);
+
+--
+-- Индексы таблицы `generation_item_modification`
+--
+ALTER TABLE `generation_item_modification`
+  ADD PRIMARY KEY (`generation_item_id`,`modification_id`),
+  ADD KEY `IDX_1199AA83ED36393B` (`generation_item_id`),
+  ADD KEY `IDX_1199AA834A605127` (`modification_id`);
 
 --
 -- Индексы таблицы `invite`
@@ -1875,14 +1960,6 @@ ALTER TABLE `user_role`
   ADD KEY `IDX_2DE8C6A3D60322AC` (`role_id`);
 
 --
--- Индексы таблицы `value_linked_filters`
---
-ALTER TABLE `value_linked_filters`
-  ADD PRIMARY KEY (`filter_value_id`,`filter_id`),
-  ADD KEY `IDX_C8FF8542C44FBE02` (`filter_value_id`),
-  ADD KEY `IDX_C8FF8542D395B25E` (`filter_id`);
-
---
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
@@ -1900,7 +1977,7 @@ ALTER TABLE `blacklist`
 -- AUTO_INCREMENT для таблицы `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=252;
 --
 -- AUTO_INCREMENT для таблицы `category_description`
 --
@@ -1935,12 +2012,12 @@ ALTER TABLE `favorite_products`
 -- AUTO_INCREMENT для таблицы `filter`
 --
 ALTER TABLE `filter`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT для таблицы `filter_value`
 --
 ALTER TABLE `filter_value`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 --
 -- AUTO_INCREMENT для таблицы `form_message`
 --
@@ -1966,6 +2043,16 @@ ALTER TABLE `gallery_items`
 --
 ALTER TABLE `generation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `generation_board`
+--
+ALTER TABLE `generation_board`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT для таблицы `generation_item`
+--
+ALTER TABLE `generation_item`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `invite`
 --
@@ -1995,7 +2082,7 @@ ALTER TABLE `message`
 -- AUTO_INCREMENT для таблицы `modification`
 --
 ALTER TABLE `modification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `order_status`
 --
@@ -2090,7 +2177,7 @@ ALTER TABLE `textblock`
 -- AUTO_INCREMENT для таблицы `translation`
 --
 ALTER TABLE `translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
@@ -2174,13 +2261,6 @@ ALTER TABLE `filter`
   ADD CONSTRAINT `FK_7FC45F1D727ACA70` FOREIGN KEY (`parent_id`) REFERENCES `filter` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `filter_linked_values`
---
-ALTER TABLE `filter_linked_values`
-  ADD CONSTRAINT `FK_775484B11B8190AE` FOREIGN KEY (`filter_value_target`) REFERENCES `filter_value` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_775484B1264C021` FOREIGN KEY (`filter_value_source`) REFERENCES `filter_value` (`id`) ON DELETE CASCADE;
-
---
 -- Ограничения внешнего ключа таблицы `filter_value`
 --
 ALTER TABLE `filter_value`
@@ -2210,6 +2290,30 @@ ALTER TABLE `gallery_items`
 --
 ALTER TABLE `generation`
   ADD CONSTRAINT `FK_D3266C3B12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `generation_board`
+--
+ALTER TABLE `generation_board`
+  ADD CONSTRAINT `FK_EA87D172553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
+  ADD CONSTRAINT `FK_EA87D172E7EC5785` FOREIGN KEY (`board_id`) REFERENCES `filter_value` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `generation_item`
+--
+ALTER TABLE `generation_item`
+  ADD CONSTRAINT `FK_73EA38A72DBF1AFE` FOREIGN KEY (`gas_transmission_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_73EA38A73145108E` FOREIGN KEY (`gas_type_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_73EA38A732CA4F08` FOREIGN KEY (`gear_type_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_73EA38A7553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
+  ADD CONSTRAINT `FK_73EA38A7E7EC5785` FOREIGN KEY (`board_id`) REFERENCES `generation_board` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `generation_item_modification`
+--
+ALTER TABLE `generation_item_modification`
+  ADD CONSTRAINT `FK_1199AA834A605127` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_1199AA83ED36393B` FOREIGN KEY (`generation_item_id`) REFERENCES `generation_item` (`id`) ON DELETE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `invite`
@@ -2378,13 +2482,6 @@ ALTER TABLE `user_purse_history`
 ALTER TABLE `user_role`
   ADD CONSTRAINT `FK_2DE8C6A3A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `FK_2DE8C6A3D60322AC` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `value_linked_filters`
---
-ALTER TABLE `value_linked_filters`
-  ADD CONSTRAINT `FK_C8FF8542C44FBE02` FOREIGN KEY (`filter_value_id`) REFERENCES `filter_value` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_C8FF8542D395B25E` FOREIGN KEY (`filter_id`) REFERENCES `filter` (`id`) ON DELETE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

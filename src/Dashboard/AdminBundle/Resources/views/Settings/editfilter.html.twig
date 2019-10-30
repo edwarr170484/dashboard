@@ -143,7 +143,6 @@
             <tr>
                 <th>{% trans %}Значение{% endtrans %}</th>
                 <th>{% trans %}Переводы{% endtrans %}</th>
-                <th>{% trans %}Привязанные фильтры{% endtrans %}</th>
                 <th>{% trans %}Действия{% endtrans %}</th>
             </tr>
         </thead>
@@ -164,26 +163,6 @@
         </td>
         <td>
             {{ form_widget(form.translations,{'id' : 'object_translations_sub'})}}
-        </td>
-        <td>
-            {{ form_widget(form.linkedFilters)}}
-            {{ form_widget(form.linkedValues)}}
-            <script>
-                $('#{{ form.linkedFilters.vars.id }}').change(function() {
-                    var $form = $('#filterForm');
-                    var data = {};
-                    data[$('#{{ form.linkedFilters.vars.id }}').attr('name')] = $('#{{ form.linkedFilters.vars.id }}').val();
-                                          
-                    $.ajax({
-                        url : $form.attr('action'),
-                        type: $form.attr('method'),
-                        data : data,
-                        success: function(html) {
-                            $('#{{ form.linkedValues.vars.id }}').html($(html).find('#{{ form.linkedValues.vars.id }}').html());
-                        }
-                    });
-                });
-            </script>
         </td>
         <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить значение?'))return false;else $(this).parent().parent().remove()">
                 <i class="fa fa-times" title="Удалить значение"></i>

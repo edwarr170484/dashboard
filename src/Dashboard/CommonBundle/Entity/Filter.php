@@ -16,7 +16,7 @@ class Filter
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Filter", mappedBy="parent")
      * @ORM\OrderBy({"sortorder" = "ASC"})
@@ -29,63 +29,68 @@ class Filter
      * @ORM\OrderBy({"sortorder" = "ASC"})
      */
     private $parent;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $type;
-    
+
+    /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"0"})
+     */
+    private $step;
+
     /**
      * @ORM\Column(type="boolean", options={"default":"1"})
      */
     private $isShow;
-    
+
     /**
      * @ORM\Column(type="boolean", options={"default":"0"})
      */
     private $isRequired;
-    
+
     /**
      * @ORM\Column(type="boolean", options={"default":"0"})
      */
     private $isSearch;
-    
+
     /**
      * @ORM\Column(type="boolean", options={"default":"0"})
      */
     private $isSelltype;
-    
+
     /**
      * @ORM\Column(type="boolean", options={"default":"0"})
      */
     private $isShowCard;
-    
+
     /**
      * @ORM\Column(type="integer", length=15)
      */
     private $sortorder;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="filter", cascade={"persist"})
      */
     private $values;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Category", inversedBy="filters")
      * @ORM\JoinTable(name="category_filters")
      */
     private $categories;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="filter", cascade={"persist"})
      */
     private $translations;
-    
+
     /**
      * Constructor
      */
@@ -100,7 +105,7 @@ class Filter
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -116,14 +121,14 @@ class Filter
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -139,14 +144,14 @@ class Filter
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -162,14 +167,14 @@ class Filter
     public function setIsShow($isShow)
     {
         $this->isShow = $isShow;
-    
+
         return $this;
     }
 
     /**
      * Get isShow
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsShow()
     {
@@ -185,14 +190,14 @@ class Filter
     public function setIsRequired($isRequired)
     {
         $this->isRequired = $isRequired;
-    
+
         return $this;
     }
 
     /**
      * Get isRequired
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsRequired()
     {
@@ -208,14 +213,14 @@ class Filter
     public function setIsSearch($isSearch)
     {
         $this->isSearch = $isSearch;
-    
+
         return $this;
     }
 
     /**
      * Get isSearch
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSearch()
     {
@@ -231,14 +236,14 @@ class Filter
     public function setIsSelltype($isSelltype)
     {
         $this->isSelltype = $isSelltype;
-    
+
         return $this;
     }
 
     /**
      * Get isSelltype
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSelltype()
     {
@@ -254,14 +259,14 @@ class Filter
     public function setIsShowCard($isShowCard)
     {
         $this->isShowCard = $isShowCard;
-    
+
         return $this;
     }
 
     /**
      * Get isShowCard
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsShowCard()
     {
@@ -277,14 +282,14 @@ class Filter
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-    
+
         return $this;
     }
 
     /**
      * Get sortorder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortorder()
     {
@@ -300,7 +305,7 @@ class Filter
     public function addChild(\Dashboard\CommonBundle\Entity\Filter $children)
     {
         $this->children[] = $children;
-    
+
         return $this;
     }
 
@@ -317,7 +322,7 @@ class Filter
     /**
      * Get children
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getChildren()
     {
@@ -333,14 +338,14 @@ class Filter
     public function setParent(\Dashboard\CommonBundle\Entity\Filter $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
     /**
      * Get parent
      *
-     * @return \Dashboard\CommonBundle\Entity\Filter 
+     * @return \Dashboard\CommonBundle\Entity\Filter
      */
     public function getParent()
     {
@@ -356,7 +361,7 @@ class Filter
     public function addValue(\Dashboard\CommonBundle\Entity\FilterValue $values)
     {
         $this->values[] = $values;
-    
+
         return $this;
     }
 
@@ -373,7 +378,7 @@ class Filter
     /**
      * Get values
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getValues()
     {
@@ -389,7 +394,7 @@ class Filter
     public function addCategory(\Dashboard\CommonBundle\Entity\Category $categories)
     {
         $this->categories[] = $categories;
-    
+
         return $this;
     }
 
@@ -406,7 +411,7 @@ class Filter
     /**
      * Get categories
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategories()
     {
@@ -422,7 +427,7 @@ class Filter
     public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
     {
         $this->translations[] = $translations;
-    
+
         return $this;
     }
 
@@ -439,10 +444,33 @@ class Filter
     /**
      * Get translations
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Set step
+     *
+     * @param integer $step
+     * @return Filter
+     */
+    public function setStep($step)
+    {
+        $this->step = $step;
+
+        return $this;
+    }
+
+    /**
+     * Get step
+     *
+     * @return integer 
+     */
+    public function getStep()
+    {
+        return $this->step;
     }
 }

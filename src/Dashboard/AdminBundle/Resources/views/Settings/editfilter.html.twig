@@ -141,7 +141,7 @@
     <table class="table table-bordered table-filter-values">
         <thead>
             <tr>
-                <th>{% trans %}Значение{% endtrans %}</th>
+                <th>{% trans %}Значения{% endtrans %}</th>
                 <th>{% trans %}Переводы{% endtrans %}</th>
                 <th>{% trans %}Действия{% endtrans %}</th>
             </tr>
@@ -158,6 +158,10 @@
             <div class="form-group">
                 <div class="col-md-12">
                     {{ form_widget(form.value)}}
+                </div>
+                <div class="col-md-12">
+                    <label>Дополнительное значение (если нужно)</label>
+                    {{ form_widget(form.additionalValue)}}
                 </div>
             </div> 
         </td>
@@ -220,6 +224,12 @@
                                     <label class="col-md-3 ">{{ form_label(filterForm.type)}}</label>
                                     <div class="col-md-9">
                                         {{ form_widget(filterForm.type)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(filterForm.step)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(filterForm.step)}}
                                     </div>
                                 </div>
                                 <div class="form-group">

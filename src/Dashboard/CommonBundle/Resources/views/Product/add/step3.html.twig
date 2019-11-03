@@ -1,5 +1,5 @@
 {% if category %}
-<div class="row content-row">
+    <div class="row content-row">
     <div class="col-lg-9 col-md-9 left-column">
         <div class="content-block-header">
             <h3>
@@ -22,79 +22,81 @@
                 {% else %}        
                     {{ category.title}}
                 {% endif %} 
+                {% if generation.translations | length > 0 %}
+                    {% for translation in generation.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}        
+                    {{ generation.name }}
+                {% endif %} 
             </h3>
         </div>
         <div class="addAdvertStepNavigation">
             {% if locale.isDefault %}
-                <a href="javascript:void(0)" onclick="getStep11({{ category.parent.id }}, '{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
+                <a href="javascript:void(0)" onclick="getStep2('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
                 <a href="{{ path('addAdvert') }}" class="clear">
                 <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
                     <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
                 </svg>{% trans %}Очистить{% endtrans %}</a>
             {% else %}
-                <a href="javascript:void(0)" onclick="getStep11({{ category.parent.id }}, '{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
+                <a href="javascript:void(0)" onclick="getStep2('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
                 <a href="{{ path('addAdvertLocale', {'_locale' : locale.code}) }}" class="clear">
                     <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
                         <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
                     </svg>{% trans %}Очистить{% endtrans %}</a>
             {% endif %}
         </div>
-        <div class="advertFiltersTable">
-            <div class="advertFiltersTableHeader">{% trans %}Выбор автомобиля{% endtrans %}</div>
-            <div class="advertFiltersItems">
-                <table class="table table-striped" id="advertFiltersItemsTable">
-                    <tbody>
-                    <tr>
-                        <td><div class="advertFiltersItemName">{% trans %}Год{% endtrans %}</div></td>
-                        <td>
-                            <div class="advertFiltersItemValue">
-                                {% if (category.yearTo - category.yearFrom) <= 10 %}
-                                    <ul class="list-unstyled list-inline years">
-                                        {% for i in category.yearTo .. category.yearFrom %}
-                                            <li><a href="javascript:void(0" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')">{{ i }}</a></li>
-                                        {% endfor %}
-                                    </ul>
+            {% if category.filters | length > 0 %}
+                <div class="advertFiltersItems justFilter">
+                {% for filter in  category.filters %}
+                    {% if filter.step == '3' and filter.isRequired %}
+                        <div class="advertFiltersItem justFilter">
+                            <div class="advertFiltersItemName">
+                                {% if filter.translations | length > 0 %}
+                                    {% for translation in filter.translations %}
+                                        {% if translation.locale.id == locale.id %}
+                                            {{ translation.value }}
+                                        {% endif %}
+                                    {% endfor %}
                                 {% else %}
-                                    <ul class="list-unstyled list-inline years">
-                                        {% for i in category.yearTo .. category.yearTo - 10 %}<li><a href="javascript:void(0)" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')">{{ i }}</a></li>{% endfor %}
-                                        <li class="yearsOlder">
-                                            <a href="javascript:void(0)" onclick="showYearsOlder(event)" class="olderBloakcTrigger">
-                                                <span>Старше</span>
-                                                <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 1.4rem;">
-                                                    <path d="M11.2583 0.105469L11.9839 0.837385L5.99984 6.89426L0.0158004 0.837385L0.737626 0.105468L5.99984 5.42689L11.2583 0.105469Z" fill="#616161"/>
-                                                </svg>
-                                            </a>
-                                            <div class="yearsOlderItems">
-                                                {% for i in category.yearTo - 11 .. category.yearFrom %}
-                                                    <div class="yearsOlderItem"><a href="javascript:void(0" onclick="getBoardTypesByOldYear({{ i }},'{{ locale.code }}', $(this))">{{ i }}</a></div>
-                                                {% endfor %}
-                                            </div>
-                                        </li>
-                                    </ul>
+                                    {{ filter.name }}
                                 {% endif %}
                             </div>
-                        </td>
-                    </tr>
-                    <tr id="addAdvertCarBoards"></tr>
-                    <tr id="addAdvertCarGenerations"></tr>
-                    <tr id="addAdvertCarEngines"></tr>
-                    <tr id="addAdvertCarGears"></tr>
-                    <tr id="addAdvertCarTransmittions"></tr>
-                    <tr id="addAdvertCarModifications"></tr>
-                    </tbody>
-                </table>
-            </div>
+                            <div class="advertFiltersItemValue static-filters">
+                                {% if filter.values | length > 0 %}
+                                    {% for value in filter.values %}
+                                    <div class="filter">
+                                        <input name="filter[]" type="checkbox" value="{{ value.id }}" class="custom-checkbox" />
+                                        {% if value.translations | length > 0 %}
+                                            {% for translation in value.translations %}
+                                                {% if translation.locale.id == locale.id %}
+                                                    {{ translation.value }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            {{ value.value }}
+                                        {% endif %}
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            {% endif %}
             <div class="cookieAlertButton nextStep">
-                <button onclick="getStep2('{{ locale.code }}')">{% trans %}Следующий шаг{% endtrans %}</button>
-            </div>
-        </div>            
+                <button onclick="getStep4('{{ locale.code }}')">{% trans %}Следующий шаг{% endtrans %}</button>
+            </div>           
     </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
             <div class="addAdvertStepsBlock">
-                <div class="addAdvertStepsBlockHeader">{% trans %}Шаги{% endtrans %} 1/5</div>
+                <div class="addAdvertStepsBlockHeader">{% trans %}Шаги{% endtrans %} 3/5</div>
                 <div class="addAdvertStepsBlockInner">
                     <ul class="list-unstyled addAdvertSteps">
-                        <li class="active">
+                        <li>
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
                                 <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
@@ -108,7 +110,7 @@
                             </svg>
                             <a href="javascript:void(0)">{% trans %}Внешний вид{% endtrans %}</a>
                         </li>
-                        <li>
+                        <li class="active">
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
                                 <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>

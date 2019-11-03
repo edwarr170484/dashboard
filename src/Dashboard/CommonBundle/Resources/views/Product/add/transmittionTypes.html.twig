@@ -1,0 +1,12 @@
+{% if transmittionTypes %}
+    <td><div class="advertFiltersItemName">{% trans %}Привод{% endtrans %}</div></td>
+    <td>
+        <div class="advertFiltersItemValue">
+            <ul class="list-unstyled list-inline addProductFilterRadios">
+                {% for transmittionType in transmittionTypes %}
+                    <li><a href="javascript:voit(0)" onclick="getModifications({{ transmittionType.id }},'{{ locale.code}}')">{{ transmittionType.value }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </td>
+{% endif %}

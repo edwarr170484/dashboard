@@ -39,6 +39,7 @@ class FilterValueType extends AbstractType
     {    
         $builder
             ->add('value', TextType::class, array('required' => true,'label' => 'Значение для фильтра', 'attr' => array('class' => 'form-control', 'placeholder' => 'Значение для фильтра')))
+            ->add('additionalValue', TextType::class, array('required' => false,'label' => 'Дополнительное значение (если нужно)', 'attr' => array('class' => 'form-control')))
             ->add('translations', 'collection', array('type' => new TranslationType($this->manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add($builder->create('filter', 'hidden')->addModelTransformer(new FilterToNumberTransformer($this->manager)));    
     }

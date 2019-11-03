@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Dashboard\AdminBundle\Form\Type\TranslationType;
 use Dashboard\AdminBundle\Form\Type\ModificationType;
 use Dashboard\AdminBundle\Form\Type\GenerationBoardType;
@@ -30,6 +31,8 @@ class GenerationType extends AbstractType
             ->add('name', TextType::class, array('required' => true,'label' => 'Название', 'attr' => array('class' => 'form-control')))
             ->add('yearFrom', TextType::class, array('required' => true,'label' => 'Год начала выпуска', 'attr' => array('class' => 'form-control')))
             ->add('yearTo', TextType::class, array('required' => true,'label' => 'Год окончания выпуска', 'attr' => array('class' => 'form-control')))
+            ->add('isRightWheel', CheckboxType::class, array('required' => false,'label' => 'Правый руль'))    
+            ->add('isGas', CheckboxType::class, array('required' => false,'label' => 'Газобалонное оборудование'))    
             ->add('translations', 'collection', array('type' => new TranslationType($this->manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('modifications', 'collection', array('type' => new ModificationType($this->manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
            ->add('boards', 'collection', array('type' => new GenerationBoardType($this->manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))

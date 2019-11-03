@@ -69,6 +69,10 @@
             Окончание: {{ form_widget(form.yearTo)}}
         </td>
         <td>  
+            <div style="padding-bottom: 15px;">
+                <div>{{ form_widget(form.isRightWheel) }} Правый руль</div>
+                <div>{{ form_widget(form.isGas) }} Газобалонное оборудование</div>
+            </div>
             <ul class="nav nav-tabs">
                 <li class="active">
                     <a data-toggle="tab" href="#modification{{ form.vars.id }}" aria-expanded="false">Модификации</a>

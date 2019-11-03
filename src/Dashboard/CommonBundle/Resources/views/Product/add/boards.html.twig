@@ -1,0 +1,13 @@
+{% if boards %}
+    <td><div class="advertFiltersItemName">{% trans %}Тип кузова{% endtrans %}</div></td>
+    <td>
+            <div class="advertFiltersItemValue">
+                <ul class="list-unstyled list-inline addProductFilterRadios">
+                    {% for board in boards %}
+                         <li><a href="javascript:voit(0)" onclick="getGenerationsByBoard({{ board.board.id }},'{{ locale.code }}')">{{ board.board.value }}</a></li>
+                    {% endfor %}
+                    <li class="static-filters"><div class="filter"><input name="searchWithFoto" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}Правый руль{% endtrans %}</div></li>
+                </ul>
+            </div>
+    </td>
+{% endif %}

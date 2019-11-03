@@ -1,5 +1,5 @@
 {% if category %}
-<div class="row content-row">
+    <div class="row content-row">
     <div class="col-lg-9 col-md-9 left-column">
         <div class="content-block-header">
             <h3>
@@ -22,17 +22,26 @@
                 {% else %}        
                     {{ category.title}}
                 {% endif %} 
+                {% if generation.translations | length > 0 %}
+                    {% for translation in generation.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}        
+                    {{ generation.name }}
+                {% endif %} 
             </h3>
         </div>
         <div class="addAdvertStepNavigation">
             {% if locale.isDefault %}
-                <a href="javascript:void(0)" onclick="getStep11({{ category.parent.id }}, '{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
+                <a href="javascript:void(0)" onclick="getStep12({{ category.id }}, '{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
                 <a href="{{ path('addAdvert') }}" class="clear">
                 <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
                     <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
                 </svg>{% trans %}Очистить{% endtrans %}</a>
             {% else %}
-                <a href="javascript:void(0)" onclick="getStep11({{ category.parent.id }}, '{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
+                <a href="javascript:void(0)" onclick="getStep12({{ category.id }}, '{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
                 <a href="{{ path('addAdvertLocale', {'_locale' : locale.code}) }}" class="clear">
                     <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
                         <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
@@ -40,68 +49,76 @@
             {% endif %}
         </div>
         <div class="advertFiltersTable">
-            <div class="advertFiltersTableHeader">{% trans %}Выбор автомобиля{% endtrans %}</div>
+            <div class="advertFiltersTableHeader">{% trans %}Внешний вид{% endtrans %}</div>
             <div class="advertFiltersItems">
                 <table class="table table-striped" id="advertFiltersItemsTable">
                     <tbody>
-                    <tr>
-                        <td><div class="advertFiltersItemName">{% trans %}Год{% endtrans %}</div></td>
-                        <td>
-                            <div class="advertFiltersItemValue">
-                                {% if (category.yearTo - category.yearFrom) <= 10 %}
-                                    <ul class="list-unstyled list-inline years">
-                                        {% for i in category.yearTo .. category.yearFrom %}
-                                            <li><a href="javascript:void(0" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')">{{ i }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                {% else %}
-                                    <ul class="list-unstyled list-inline years">
-                                        {% for i in category.yearTo .. category.yearTo - 10 %}<li><a href="javascript:void(0)" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')">{{ i }}</a></li>{% endfor %}
-                                        <li class="yearsOlder">
-                                            <a href="javascript:void(0)" onclick="showYearsOlder(event)" class="olderBloakcTrigger">
-                                                <span>Старше</span>
-                                                <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 1.4rem;">
-                                                    <path d="M11.2583 0.105469L11.9839 0.837385L5.99984 6.89426L0.0158004 0.837385L0.737626 0.105468L5.99984 5.42689L11.2583 0.105469Z" fill="#616161"/>
-                                                </svg>
-                                            </a>
-                                            <div class="yearsOlderItems">
-                                                {% for i in category.yearTo - 11 .. category.yearFrom %}
-                                                    <div class="yearsOlderItem"><a href="javascript:void(0" onclick="getBoardTypesByOldYear({{ i }},'{{ locale.code }}', $(this))">{{ i }}</a></div>
+                        {% if category.filters %}
+                            {% for filter in category.filters %}
+                                {% if filter.isRequired and filter.type == 'color' and filter.step == '2'%}
+                                <tr>
+                                    <td>
+                                        <div class="advertFiltersItemName">
+                                            {% if filter.translations | length > 0 %}
+                                                {% for translation in filter.translations %}
+                                                    {% if translation.locale.id == locale.id %}
+                                                        {{ translation.value }}
+                                                    {% endif %}
                                                 {% endfor %}
-                                            </div>
-                                        </li>
-                                    </ul>
+                                            {% else %}
+                                                {{ filter.name }}
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="advertFiltersItemValue">
+                                            <ul class="list-unstyled list-inline color">
+                                                {% if filter.values | length > 0 %}
+                                                    {% for color in filter.values %}
+                                                        <li><a href="javascript:void(0)" style="background-color: {{ color.additionalValue }}" title="{{ color.value }}" onclick="setColor({{ color.id }},'{{ locale.code }}',$(this))"></a></li>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
                                 {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                    <tr id="addAdvertCarBoards"></tr>
-                    <tr id="addAdvertCarGenerations"></tr>
-                    <tr id="addAdvertCarEngines"></tr>
-                    <tr id="addAdvertCarGears"></tr>
-                    <tr id="addAdvertCarTransmittions"></tr>
-                    <tr id="addAdvertCarModifications"></tr>
+                            {% endfor %}
+                        {% endif %}
+                        <tr class="addAdvertFotoBlock">
+                            <td><div class="advertFiltersItemName">{% trans %}Фотографии{% endtrans %}</div></td>
+                            <td>
+                                <div class="advertFiltersItemValue fotos" id="advertFotos">
+                                    <div class="addFotoIcon">
+                                        <div class="addFotoIconInner"></div>
+                                    </div>
+                                    <div class="addFotoDescription">
+                                        {% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <div class="cookieAlertButton nextStep">
-                <button onclick="getStep2('{{ locale.code }}')">{% trans %}Следующий шаг{% endtrans %}</button>
+                <button onclick="getStep3('{{ locale.code }}')">{% trans %}Следующий шаг{% endtrans %}</button>
             </div>
         </div>            
     </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
             <div class="addAdvertStepsBlock">
-                <div class="addAdvertStepsBlockHeader">{% trans %}Шаги{% endtrans %} 1/5</div>
+                <div class="addAdvertStepsBlockHeader">{% trans %}Шаги{% endtrans %} 2/5</div>
                 <div class="addAdvertStepsBlockInner">
                     <ul class="list-unstyled addAdvertSteps">
-                        <li class="active">
+                        <li>
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
                                 <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
                             </svg>
                             <a href="javascript:void(0)">{% trans %}Выбор автомобиля{% endtrans %}</a>
                         </li>
-                        <li>
+                        <li class="active">
                             <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
                                 <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
@@ -134,4 +151,30 @@
             </div>
         </div>
     </div>
+    <script>
+        myDropzone = new Dropzone("div#advertFotos", {
+            url: "/account/ajaxloadfotos",
+            maxFiles : 30,
+            maxFilesize: 256,
+            filesizeBase: 1024,
+            previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  \n\
+                                                                <div class=\"dz-image\">\n\
+                                                                    <img data-dz-thumbnail />\n\
+                                                                </div>\n  \n\
+                                                                \n\
+                                                                <div class=\"dz-progress\">\n\
+                                                                    <span class=\"dz-upload\" data-dz-uploadprogress></span>\n\
+                                                                </div>\n  \n\
+                                                                <div class=\"dz-error-message\">\n\
+                                                                    <span data-dz-errormessage></span>\n\
+                                                                </div>\n  \n\
+                                                            </div>",
+            acceptedFiles: 'image/*',
+            success: function(file, response){
+                $(".addFotoDescription").remove();
+            }
+            });
+        $(".addFotoIconInner").click(function(){$("#advertFotos").trigger('click');});
+        $(".addFotoDescription").click(function(){$("#advertFotos").trigger('click');});
+    </script>
 {% endif %}

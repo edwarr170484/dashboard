@@ -1,0 +1,12 @@
+{% if gearTypes %}
+    <td><div class="advertFiltersItemName">{% trans %}Коробка{% endtrans %}</div></td>
+    <td>
+        <div class="advertFiltersItemValue">
+            <ul class="list-unstyled list-inline addProductFilterRadios">
+                {% for gearType in gearTypes %}
+                    <li><a href="javascript:voit(0)" onclick="getTransmissionType({{ gearType.id }},'{{ locale.code}}')">{{ gearType.value }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </td>
+{% endif %}

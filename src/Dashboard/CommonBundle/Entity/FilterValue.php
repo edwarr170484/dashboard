@@ -29,6 +29,11 @@ class FilterValue
     private $value;
     
     /**
+     * @ORM\Column(type="string", length=512, nullable=true, options={"default":"0"})
+     */
+    private $additionalValue;
+    
+    /**
      * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Product", mappedBy="filters", cascade={"persist"})
      */
     private $products;
@@ -167,5 +172,28 @@ class FilterValue
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Set additionalValue
+     *
+     * @param string $additionalValue
+     * @return FilterValue
+     */
+    public function setAdditionalValue($additionalValue)
+    {
+        $this->additionalValue = $additionalValue;
+
+        return $this;
+    }
+
+    /**
+     * Get additionalValue
+     *
+     * @return string 
+     */
+    public function getAdditionalValue()
+    {
+        return $this->additionalValue;
     }
 }

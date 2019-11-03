@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\Session\Session;
+
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -26,6 +31,8 @@ use Dashboard\CommonBundle\Entity\FilterValue;
 use Dashboard\CommonBundle\Entity\UserPurseHistory;
 use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\UserInfo;
+use Dashboard\CommonBundle\Model\AdvertInfo;
+use Dashboard\CommonBundle\Model\AdvertImage;
 
 use Dashboard\CommonBundle\Form\Type\UserAddAdvertType;
 use Dashboard\CommonBundle\Form\Type\EditProductType;
@@ -44,20 +51,254 @@ class AdvertController extends Controller
         $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL' );
         $categories = $query->getResult();
         
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        
+        $session = new Session();
+        $advertInfo = ($session->get('advertInfo')) ? $serializer->deserialize($session->get('advertInfo'), AdvertInfo::class, 'json') : new AdvertInfo();
+        
         if($step){
             switch($step){
                 case "step11":
                     
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
-                    
                     return $this->render('DashboardCommonBundle:Product:add/step11.html.twig', array("category" => $category, "settings" => $settings, "locale" => $locale));
                     
                 break;
             
                 case "step12":
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
-                    
+                    if($category){
+                        $advertInfo->setCategory($category->getId());
+                        $advertData = $serializer->serialize($advertInfo, 'json');
+                        $session->set('advertInfo', $advertData);
+                    }
                     return $this->render('DashboardCommonBundle:Product:add/step12.html.twig', array("category" => $category, "settings" => $settings, "locale" => $locale));
+                break;
+                
+                case "boards":
+                    $advertInfo->setYear($data);
+                    
+                    $advertInfo->setBoard(0);
+                    $advertInfo->setGeneration(0);
+                    $advertInfo->setGasType(0);
+                    $advertInfo->setGearType(0);
+                    $advertInfo->setTransmissionType(0);
+                    $advertInfo->setModification(0);
+                    
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
+                    
+                    $generations = $query->getResult();
+                    $boards = new ArrayCollection();
+                    
+                    if($generations){
+                        foreach($generations as $generation){
+                            if($generation->getBoards()){
+                                foreach($generation->getBoards() as $generationBoard){
+                                    if(false === $boards->contains($generationBoard->getBoard())){
+                                        $boards->add($generationBoard);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/boards.html.twig', array("boards" => $boards, "locale" => $locale));
+                    
+                break;
+                
+                case "generations":
+                    $advertInfo->setBoard($data);
+                    $advertInfo->setGeneration(0);
+                    $advertInfo->setGasType(0);
+                    $advertInfo->setGearType(0);
+                    $advertInfo->setTransmissionType(0);
+                    $advertInfo->setModification(0);
+                    
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $advertInfo->getBoard());
+                    
+                    $boards = $query->getResult();
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/generations.html.twig', array("boards" => $boards, "locale" => $locale));
+                break;
+            
+                case "engines":
+                    $advertInfo->setGeneration($data);
+
+                    $advertInfo->setGasType(0);
+                    $advertInfo->setGearType(0);
+                    $advertInfo->setTransmissionType(0);
+                    $advertInfo->setModification(0);
+                    
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+
+                    $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                    
+                    $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId());
+                    
+                    $items = $query->getResult();
+                    $gasTypes = new ArrayCollection();
+                    
+                    if($items){
+                        foreach($items as $item){
+                            if(false === $gasTypes->contains($item->getGasType())){
+                                $gasTypes->add($item->getGasType());
+                            }
+                        }
+                    }
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/gasTypes.html.twig', array("gasTypes" => $gasTypes, "locale" => $locale));
+                    
+                break;
+                
+                case "gears":
+                    $advertInfo->setGasType($data);
+ 
+                    $advertInfo->setGearType(0);
+                    $advertInfo->setTransmissionType(0);
+                    $advertInfo->setModification(0);
+                    
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                    
+                    $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType());
+                    
+                    $items = $query->getResult();
+                    $gearTypes = new ArrayCollection();
+                    
+                    if($items){
+                        foreach($items as $item){
+                            if(false === $gearTypes->contains($item->getGearType())){
+                                $gearTypes->add($item->getGearType());
+                            }
+                        }
+                    }
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/gearTypes.html.twig', array("gearTypes" => $gearTypes, "locale" => $locale));
+                    
+                break;
+                
+                case "transmission":
+                    $advertInfo->setGearType($data);
+                    
+                    $advertInfo->setTransmissionType(0);
+                    $advertInfo->setModification(0);
+                    
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                    
+                    $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType());
+                    
+                    $items = $query->getResult();
+                    $transmittionTypes = new ArrayCollection();
+                    
+                    if($items){
+                        foreach($items as $item){
+                            if(false === $transmittionTypes->contains($item->getTransmissionType())){
+                                $transmittionTypes->add($item->getTransmissionType());
+                            }
+                        }
+                    }
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/transmittionTypes.html.twig', array("transmittionTypes" => $transmittionTypes, "locale" => $locale));
+                break;    
+                
+                case 'modification':
+                    $advertInfo->setTransmissionType($data);
+ 
+                    $advertInfo->setModification(0);
+                    
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                    
+                    $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType() . ' AND gi.transmissionType = ' . $advertInfo->getTransmissionType());
+                    
+                    $items = $query->getResult();
+                    $modifications = new ArrayCollection();
+                    
+                    if($items){
+                        foreach($items as $item){
+                            if($item->getItemModifications()){
+                                foreach($item->getItemModifications() as $modification){
+                                    if(false === $modifications->contains($modification)){
+                                        $modifications->add($modification);
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/modifications.html.twig', array("modifications" => $modifications, "locale" => $locale));
+                    
+                break;    
+                
+                case 'setmodification':
+                    $advertInfo->setModification($data);
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    return new Response("OK");
+                break;
+                
+                case "step2":
+                    $categoryId = $advertInfo->getCategory();
+                    $generationId = $advertInfo->getGeneration();
+                    
+                    $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/step2.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
+                break;
+            
+                case 'setcolor':
+                    $advertInfo->setColor($data);
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    return new Response("OK");
+                break;
+                
+                case 'addimage':
+                    
+                break;
+            
+                case "step3":
+                    $categoryId = $advertInfo->getCategory();
+                    $generationId = $advertInfo->getGeneration();
+                    
+                    $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/step3.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
+                break;
+            
+                case "step4":
+                    $categoryId = $advertInfo->getCategory();
+                    $generationId = $advertInfo->getGeneration();
+                    
+                    $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/step4.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
                 break;
             }
         }
@@ -1077,53 +1318,11 @@ class AdvertController extends Controller
                 try
                 {
                     $image->move('bundles/images/products',$localImageName);
-
-                    if($settings->getWatermark())
-                    {
-                        $watermark = imagecreatefrompng('bundles/images/site/' . $settings->getWatermark());
-
-                        $marge_right = 10;
-                        $marge_bottom = 10;
-                        $sx = imagesx($watermark);
-                        $sy = imagesy($watermark);
-
-                        switch($extention)
-                        {
-                            case 'png':
-                                $markImage = imagecreatefrompng('bundles/images/products/' . $localImageName);
-                                imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
-                                imagepng($markImage, 'bundles/images/products/' . $localImageName);
-                                imagedestroy($markImage);
-                            break;
-
-                            case 'jpg':
-                                $markImage = imagecreatefromjpeg('bundles/images/products/' . $localImageName);
-                                imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
-                                imagejpeg($markImage, 'bundles/images/products/' . $localImageName);
-                                imagedestroy($markImage);
-                            break;
-
-                            case 'jpeg':
-                                $markImage = imagecreatefromjpeg('bundles/images/products/' . $localImageName);
-                                imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
-                                imagejpeg($markImage, 'bundles/images/products/' . $localImageName);
-                                imagedestroy($markImage);
-                            break;
-
-                            case 'gif':
-                                $markImage = imagecreatefromgif('bundles/images/products/' . $localImageName);
-                                imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
-                                imagegif($markImage, 'bundles/images/products/' . $localImageName);
-                                imagedestroy($markImage);
-                            break;
-                        }
-                    }
                     
                     $simpleImage = $this->get('app.simpleimage');
                     $simpleImage->load('bundles/images/products/' . $localImageName);
                     $simpleImage->resizeToWidth(1024);
                     $simpleImage->save('bundles/images/products/' . $localImageName);
-                    
                 }
                 catch (Symfony\Component\HttpFoundation\File\Exception\FileException $e)
                 {

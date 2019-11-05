@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -33,6 +35,7 @@ use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\UserInfo;
 use Dashboard\CommonBundle\Model\AdvertInfo;
 use Dashboard\CommonBundle\Model\AdvertImage;
+use Dashboard\CommonBundle\Model\AdvertFilter;
 
 use Dashboard\CommonBundle\Form\Type\UserAddAdvertType;
 use Dashboard\CommonBundle\Form\Type\EditProductType;
@@ -52,19 +55,21 @@ class AdvertController extends Controller
         $categories = $query->getResult();
         
         $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
+        $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
-        
+
         $session = new Session();
-        $advertInfo = ($session->get('advertInfo')) ? $serializer->deserialize($session->get('advertInfo'), AdvertInfo::class, 'json') : new AdvertInfo();
+        $advertInfo = ($session->get('advertInfo')) ? $serializer->deserialize($session->get('advertInfo'), 'Dashboard\CommonBundle\Model\AdvertInfo', 'json') : new AdvertInfo();
+        $advertImages = ($session->get('advertImages')) ? $serializer->deserialize($session->get('advertImages'), 'Dashboard\CommonBundle\Model\AdvertImage[]', 'json') : array();
+        $advertFilters = ($session->get('advertFilters')) ? $serializer->deserialize($session->get('advertFilters'), 'Dashboard\CommonBundle\Model\AdvertFilter[]', 'json') : array();
+        
+        dump($advertInfo);
         
         if($step){
             switch($step){
                 case "step11":
-                    
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
                     return $this->render('DashboardCommonBundle:Product:add/step11.html.twig', array("category" => $category, "settings" => $settings, "locale" => $locale));
-                    
                 break;
             
                 case "step12":
@@ -78,8 +83,7 @@ class AdvertController extends Controller
                 break;
                 
                 case "boards":
-                    $advertInfo->setYear($data);
-                    
+                    $advertInfo->setYear($data); 
                     $advertInfo->setBoard(0);
                     $advertInfo->setGeneration(0);
                     $advertInfo->setGasType(0);
@@ -89,6 +93,7 @@ class AdvertController extends Controller
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
+                    $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                     $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
                     
@@ -121,6 +126,7 @@ class AdvertController extends Controller
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
+                    $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                     $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $advertInfo->getBoard());
                     
@@ -131,7 +137,6 @@ class AdvertController extends Controller
             
                 case "engines":
                     $advertInfo->setGeneration($data);
-
                     $advertInfo->setGasType(0);
                     $advertInfo->setGearType(0);
                     $advertInfo->setTransmissionType(0);
@@ -139,6 +144,7 @@ class AdvertController extends Controller
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
+                    $session->set('advertImages', $serializer->serialize(array(), 'json'));
 
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
                     $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
@@ -162,13 +168,13 @@ class AdvertController extends Controller
                 
                 case "gears":
                     $advertInfo->setGasType($data);
- 
                     $advertInfo->setGearType(0);
                     $advertInfo->setTransmissionType(0);
                     $advertInfo->setModification(0);
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
+                    $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
                     $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
@@ -192,12 +198,12 @@ class AdvertController extends Controller
                 
                 case "transmission":
                     $advertInfo->setGearType($data);
-                    
                     $advertInfo->setTransmissionType(0);
                     $advertInfo->setModification(0);
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
+                    $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
                     $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
@@ -220,11 +226,11 @@ class AdvertController extends Controller
                 
                 case 'modification':
                     $advertInfo->setTransmissionType($data);
- 
                     $advertInfo->setModification(0);
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
+                    $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
                     $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
@@ -292,6 +298,18 @@ class AdvertController extends Controller
                 break;
             
                 case "step4":
+                    $advertFilters = array();
+                    if($request->request->get('filter')){
+                        foreach($request->request->get('filter') as $filterId){
+                            $filter = new AdvertFilter();
+                            $filter->setId($filterId);
+                            array_push($advertFilters, $filter);
+                        }
+                    }
+                    
+                    $advertData = $serializer->serialize($advertFilters, 'json');
+                    $session->set('advertFilters', $advertData);
+                    
                     $categoryId = $advertInfo->getCategory();
                     $generationId = $advertInfo->getGeneration();
                     
@@ -299,6 +317,37 @@ class AdvertController extends Controller
                     $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
                     
                     return $this->render('DashboardCommonBundle:Product:add/step4.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
+                break;
+            
+                case "step5":
+                    $advertInfo->setProbeg($request->request->get('probeg'));
+                    $advertInfo->setCondition($request->request->get('condition'));
+                    $advertInfo->setOwners($request->request->get('owners'));
+                    $advertInfo->setVin($request->request->get('vin'));
+                    $advertInfo->setDescription($request->request->get('description'));
+                    $advertInfo->setPrice($request->request->get('price'));
+                    $advertInfo->setNds(0);
+                    $advertInfo->setNds($request->request->get('NDS'));
+                    $advertInfo->setTorg(0);
+                    $advertInfo->setTorg($request->request->get('torg'));
+                    $advertInfo->setGarant(0);
+                    $advertInfo->setGarant($request->request->get('garant'));
+                    
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    $categoryId = $advertInfo->getCategory();
+                    $generationId = $advertInfo->getGeneration();
+                    
+                    $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/step5.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
+                break;
+                
+                case "finalAdd":
+                    //return $this->render('DashboardCommonBundle:Product:add/register.html.twig', array("locale" => $locale, "settings" => $settings));
+                    return $this->render('DashboardCommonBundle:Product:add/result.html.twig', array("locale" => $locale, "settings" => $settings));
                 break;
             }
         }
@@ -1305,8 +1354,15 @@ class AdvertController extends Controller
         $error = 0;
         $settings = $this->getDoctrine()->getRepository("DashboardCommonBundle:Settings")->find(1);
         $extentions = array("jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
-        
         $image = $request->files->all()["file"];
+        
+        $serializer = new Serializer(
+            [new GetSetMethodNormalizer(), new ArrayDenormalizer()],
+            [new JsonEncoder()]
+        );    
+
+        $session = new Session();
+        $advertImages = ($session->get('advertImages')) ? $serializer->deserialize($session->get('advertImages'), 'Dashboard\CommonBundle\Model\AdvertImage[]', 'json') : array();
 
         if($image)
         {           
@@ -1323,6 +1379,13 @@ class AdvertController extends Controller
                     $simpleImage->load('bundles/images/products/' . $localImageName);
                     $simpleImage->resizeToWidth(1024);
                     $simpleImage->save('bundles/images/products/' . $localImageName);
+                    
+                    $newImage = new AdvertImage();
+                    $newImage->setName($localImageName);
+                    array_push($advertImages, $newImage);
+                    $advertData = $serializer->serialize($advertImages, 'json');
+                    $session->set('advertImages', $advertData);
+                    
                 }
                 catch (Symfony\Component\HttpFoundation\File\Exception\FileException $e)
                 {

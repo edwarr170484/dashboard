@@ -1,0 +1,69 @@
+    <div class="row content-row">
+    <div class="col-lg-9 col-md-9 left-column">
+        <div class="advertFiltersItems" style="padding-bottom: 0rem;">
+                <div class="advertFiltersItem justFilter">
+                    <div class="advertFiltersItemName">{% trans %}Ранее Вы не были зарегистрированы{% endtrans %}</div>
+                    <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
+                        <div class="loginBlock addAdvert">
+                            <div class="register-block">
+                                <div class="registerBlockAnnotaion">
+                                    Если Вы ранее не были зарегистрированы в системе,  то необходимо следовать инструкциям процесса регистрации. Для этого необходимо нажать кнопку “зарегистрироваться”
+                                </div>
+                                <form action="{{path('login')}}" method="post" style="width:100%">
+                                    <div class="register-form-forms">
+                                        <div class="registerInputBlock">
+                                            <input class="email" name="_username" value="" placeholder="{% trans %}E-mail{% endtrans %}" required />
+                                            <div class="inputMessage"></div>
+                                        </div>
+                                        <div class="registerInputBlock">
+                                            <input class="password" name="_password" type="password" value="" placeholder="{% trans %}Пароль{% endtrans %}" required />
+                                            <div class="inputMessage"></div>
+                                        </div>
+                                        <div class="registerInputBlock">
+                                            <input class="password" name="_password" type="password" value="" placeholder="{% trans %}Повторите пароль{% endtrans %}" required />
+                                            <div class="inputMessage"></div>
+                                        </div>
+                                    </div>
+                                    <div class="cookieAlertButton nextStep center" style="padding-bottom: 0rem;">
+                                        <button onclick="" id="addAdvertFinalButton">{% trans %}Опубликовать объявление{% endtrans %}</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="advertFiltersItem justFilter">
+                    <div class="advertFiltersItemName">{% trans %}Уже зарегистрированы?{% endtrans %}</div>
+                    <div class="advertFiltersItemValue static-filters" style="padding-right: 0;padding-bottom:0;">
+                        <div class="loginBlock addAdvert empty">
+                            <div class="register-block" style="padding:0;display: block;">
+                                <div class="registerBlockAnnotaion" style="padding-bottom:10px">
+                                    Войдите в свой аккаунт
+                                </div>
+                                <form action="{{path('login')}}" method="post" style="width:100%">
+                                    <div class="register-form-forms" style="align-items: flex-end">
+                                        <div class="registerInputBlock">
+                                            <input class="email" name="_username" value="" placeholder="{% trans %}E-mail{% endtrans %}" required />
+                                            <div class="inputMessage"></div>
+                                        </div>
+                                        <div class="registerInputBlock">
+                                            <input class="password" name="_password" type="password" value="" placeholder="{% trans %}Пароль{% endtrans %}" required />
+                                            <div class="inputMessage"></div>
+                                        </div>
+                                        <div class="registerInputBlock">    
+                                            <div class="cookieAlertButton nextStep" style="padding-bottom: 0rem;">
+                                                <button onclick="" id="addAdvertFinalButton">{% trans %}Войти и опубликовать{% endtrans %}</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+        <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
+            
+        </div>
+    </div>

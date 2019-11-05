@@ -55,7 +55,7 @@
                         <table class="table table-striped" id="advertFiltersItemsTable">
                             <tr>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %}</span></td>
-                                <td><input name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" /></td>
+                                <td><input type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" /></td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %}</span></td>
                                 <td>
                                     <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}">
@@ -77,7 +77,7 @@
                                 </td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}VIN Номер{% endtrans %}</span></td>
                                 <td>
-                                    <input name="vin" placeholder="{% trans %}17 знаков{% endtrans %}" class="parameterValue" />
+                                    <input type="text" name="vin" placeholder="{% trans %}17 знаков{% endtrans %}" class="parameterValue" />
                                 </td>
                                 <td>
                                     <span class="addAdvertSubParameterLabel">{% trans %}- Номер VIN на сайте не показывается{% endtrans %}</span>
@@ -123,7 +123,7 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %}</span></td>
                                 <td>
                                     <div class="addAdvertPriceParameters">
-                                        <input name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue" style="max-width:41rem;margin-right: 7rem;"/>
+                                        <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue" style="max-width:41rem;margin-right: 7rem;"/>
                                         <div class="filter">
                                             <input name="NDS" type="checkbox" value="1" class="custom-checkbox" />
                                             {% trans %}НДС включен{% endtrans %}
@@ -142,17 +142,17 @@
                                         <div class="categoryAdvertType garant" onclick="selectGarant($(this))">
                                             {% trans %}Гарантия{% endtrans %}
                                             <div class="categoryAdvertGarantNum">1</div>
-                                            <input name="garant[]" value="1" type="radio" />
+                                            <input name="garant" value="1" type="radio" />
                                         </div>
                                         <div class="categoryAdvertType garant" onclick="selectGarant($(this))">
                                             {% trans %}Гарантия{% endtrans %}
                                             <div class="categoryAdvertGarantNum">3</div>
-                                            <input name="garant[]" value="3" type="radio" />
+                                            <input name="garant" value="3" type="radio" />
                                         </div>
                                         <div class="categoryAdvertType garant" onclick="selectGarant($(this))">
                                             {% trans %}Гарантия{% endtrans %}
                                             <div class="categoryAdvertGarantNum">7</div>
-                                            <input name="garant[]" value="7" type="radio" />
+                                            <input name="garant" value="7" type="radio" />
                                         </div>
                                     </div>
                                 </td>

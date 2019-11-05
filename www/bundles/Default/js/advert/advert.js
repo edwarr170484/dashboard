@@ -74,7 +74,8 @@ function getStep3(locale_code){
 function getStep4(locale_code){
     $.ajax({
         url: '/' + locale_code + '/account/addadvert/step4',
-        type:'get',
+        type:'post',
+        data: $(".advertFiltersItems input[type='checkbox']:checked"),
         dataType: 'html',
         beforeSend: function(){$(".modal-body-cover").show();},
         success: function(html)
@@ -83,6 +84,43 @@ function getStep4(locale_code){
             $("#addAdvertStep").html(html);
             $(".custom-checkbox").customCheckbox();
             $(".custom-select").customSelect();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
+}
+
+function getStep5(locale_code){
+    $.ajax({
+        url: '/' + locale_code + '/account/addadvert/step5',
+        type:'post',
+        data: $(".advertFiltersItems input[type='checkbox']:checked, .advertFiltersItems input[type='radio']:checked,.advertFiltersItems input[type='text'], .advertFiltersItems textarea, .advertFiltersItems select"),
+        dataType: 'html',
+        beforeSend: function(){$(".modal-body-cover").show();},
+        success: function(html)
+        {
+            $(".modal-body-cover").hide();
+            $("#addAdvertStep").html(html);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
+}
+
+function addAdvert(locale_code){
+    $.ajax({
+        url: '/' + locale_code + '/account/addadvert/finalAdd',
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){$(".modal-body-cover").show();},
+        success: function(html)
+        {
+            $(".modal-body-cover").hide();
+            $("#addAdvertStep").html(html);
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();

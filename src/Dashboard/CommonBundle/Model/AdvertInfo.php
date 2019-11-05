@@ -12,6 +12,105 @@ class AdvertInfo
     private $transmissionType;
     private $modification;
     private $color;
+    private $probeg;
+    private $condition;
+    private $owners;
+    private $vin;
+    private $description;
+    private $price;
+    private $nds;
+    private $torg;
+    private $garant;
+    
+    public function getGarant()
+    {
+        return $this->garant;
+    }
+
+    public function setGarant($garant)
+    {
+        $this->garant = $garant;
+    }
+    
+    public function getTorg()
+    {
+        return $this->torg;
+    }
+
+    public function setTorg($torg)
+    {
+        $this->torg = $torg;
+    }
+    
+    public function getNds()
+    {
+        return $this->nds;
+    }
+
+    public function setNds($nds)
+    {
+        $this->nds = $nds;
+    }
+    
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+    
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+    
+    public function getVin()
+    {
+        return $this->vin;
+    }
+
+    public function setVin($vin)
+    {
+        $this->vin = $vin;
+    }
+    
+    public function getOwners()
+    {
+        return $this->owners;
+    }
+
+    public function setOwners($owners)
+    {
+        $this->owners = $owners;
+    }
+    
+    public function getCondition()
+    {
+        return $this->condition;
+    }
+
+    public function setCondition($condition)
+    {
+        $this->condition = $condition;
+    }
+    
+    public function getProbeg()
+    {
+        return $this->probeg;
+    }
+
+    public function setProbeg($probeg)
+    {
+        $this->probeg = $probeg;
+    }
     
     public function getCategory()
     {

@@ -1,0 +1,394 @@
+{% if category %}
+    <div class="row content-row">
+    <div class="col-lg-9 col-md-9 left-column">
+        <div class="content-block-header">
+            <h3>
+                {% if category.parent.translations | length > 0 %}
+                    {% for translation in category.parent.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}        
+                    {{ category.parent.title}}
+                {% endif %}
+                 / 
+                {% if category.translations | length > 0 %}
+                    {% for translation in category.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}        
+                    {{ category.title}}
+                {% endif %} 
+                {% if generation.translations | length > 0 %}
+                    {% for translation in generation.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}        
+                    {{ generation.name }}
+                {% endif %} 
+            </h3>
+        </div>
+        <div class="addAdvertStepNavigation">
+            {% if locale.isDefault %}
+                <a href="javascript:void(0)" onclick="getStep4('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
+                <a href="{{ path('addAdvert') }}" class="clear">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
+                    <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
+                </svg>{% trans %}Очистить{% endtrans %}</a>
+            {% else %}
+                <a href="javascript:void(0)" onclick="getStep4('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
+                <a href="{{ path('addAdvertLocale', {'_locale' : locale.code}) }}" class="clear">
+                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
+                        <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
+                    </svg>{% trans %}Очистить{% endtrans %}</a>
+            {% endif %}
+        </div>
+            <div class="advertFiltersItems justFilter">
+                <div class="advertFiltersItem justFilter">
+                    <div class="advertFiltersItemName">{% trans %}Контакты{% endtrans %}</div>
+                    <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
+                        <table class="table table-striped" id="advertFiltersItemsTable">
+                            <tr>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Имя{% endtrans %}</span></td>
+                                <td><input name="name" placeholder="{% trans %}Иван Иванов{% endtrans %}" class="parameterValue" /></td>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Индекс города{% endtrans %}</span></td>
+                                <td><input name="citycode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" /></td>
+                            </tr>
+                            <tr>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Телефон{% endtrans %}</span></td>
+                                <td><input name="phone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue" /></td>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Область{% endtrans %}</span></td>
+                                <td><input name="region" placeholder="{% trans %}Область{% endtrans %}" class="parameterValue" /></td>
+                            </tr>
+                            <tr>
+                                <td><span class="addAdvertParameterLabel">{% trans %}E-mail{% endtrans %}</span></td>
+                                <td><input name="email" placeholder="{% trans %}E-mail{% endtrans %}" class="parameterValue" /></td>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}</span></td>
+                                <td><input name="city" placeholder="{% trans %}Город{% endtrans %}" class="parameterValue" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="advertFiltersItem justFilter">
+                    <div class="advertFiltersItemName">{% trans %}Ваше объявление{% endtrans %}</div>
+                    <div class="advertFiltersItemValue" style="padding-right: 0;">
+                        <div class="categoryAdverts list">
+                            <div class="categoryAdvertCover">
+                                        <div class="categoryAdvert addAdvert">
+                                            <div class="categoryAdvertImages">
+                                                <img src="/bundles/Default/img/auto.png" alt="" title="">
+                                            </div>
+                                            <div class="categoryAdvertInfo">
+                                                <div class="categoryAdvertCommonInfo">
+                                                    <div class="categoryAdvertMainInfo">
+                                                        <div class="categoryAdvertName">Mersedes Benz S-klasse VI (W222, C217) Рестайлинг </div>
+                                                        <div class="categoryAdvertTypes">
+                                                            <div class="categoryAdvertType">Кабриолет</div>
+                                                            <div class="categoryAdvertType">Новый</div>
+                                                            <div class="categoryAdvertType garant">
+                                                                Гарантия
+                                                                <div class="categoryAdvertGarantNum">7</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="categoryAdvertInfoFeatures">
+                                                            <div class="categoryAdvertInfoFeature grid">2019, 1000 км</div>
+                                                            <div class="categoryAdvertInfoFeature">3.0 л/245 л.с./Дизель</div>
+                                                            <div class="categoryAdvertInfoFeature">Передний привод</div>
+                                                            <div class="categoryAdvertInfoFeature">Механика</div>
+                                                            <div class="categoryAdvertInfoFeature">Белый</div>
+                                                        </div>
+                                                        <div class="categoryAdvertInfoRegion">
+                                                            <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5.5 3.37939C5.10444 3.37939 4.71776 3.49265 4.38886 3.70483C4.05996 3.91702 3.80362 4.2186 3.65224 4.57145C3.50087 4.9243 3.46126 5.31257 3.53843 5.68716C3.6156 6.06174 3.80608 6.40582 4.08579 6.67588C4.36549 6.94594 4.72186 7.12985 5.10982 7.20436C5.49778 7.27887 5.89992 7.24063 6.26537 7.09447C6.63082 6.94832 6.94318 6.70081 7.16294 6.38325C7.3827 6.0657 7.5 5.69235 7.5 5.31043C7.5 4.79829 7.28929 4.30712 6.91422 3.94498C6.53914 3.58284 6.03043 3.37939 5.5 3.37939V3.37939ZM5.5 6.27595C5.30222 6.27595 5.10888 6.21932 4.94443 6.11323C4.77998 6.00714 4.65181 5.85634 4.57612 5.67992C4.50043 5.50349 4.48063 5.30936 4.51922 5.12207C4.5578 4.93477 4.65304 4.76274 4.79289 4.62771C4.93275 4.49268 5.11093 4.40072 5.30491 4.36346C5.49889 4.32621 5.69996 4.34533 5.88269 4.41841C6.06541 4.49149 6.22159 4.61524 6.33147 4.77402C6.44135 4.9328 6.5 5.11947 6.5 5.31043C6.5 5.5665 6.39464 5.81208 6.20711 5.99315C6.01957 6.17422 5.76522 6.27595 5.5 6.27595V6.27595Z" fill="#616161"></path>
+        <path d="M5.5 0C4.04131 0 2.64236 0.559481 1.61091 1.55536C0.579463 2.55125 0 3.90195 0 5.31034C0 9.8531 5 13.2855 5.215 13.4303L5.5 13.6234L5.785 13.4303C6 13.2855 11 9.8531 11 5.31034C11 3.90195 10.4205 2.55125 9.38909 1.55536C8.35764 0.559481 6.95869 0 5.5 0ZM5.5 12.431C4.465 11.649 1 8.76207 1 5.31034C1 4.15802 1.47411 3.0529 2.31802 2.23809C3.16193 1.42327 4.30653 0.965517 5.5 0.965517C6.69347 0.965517 7.83807 1.42327 8.68198 2.23809C9.52589 3.0529 10 4.15802 10 5.31034C10 8.76207 6.535 11.649 5.5 12.431Z" fill="#616161"></path>
+        </svg>
+                                                            Seville
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryAdvertInfoPrice">
+                                                        <div class="categoryAdvertPrice">
+                                                            195 000 €
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryAdvertInfoYear">2019</div>
+                                                    <div class="categoryAdvertInfoProbeg">1.000 км</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="advertFiltersItem justFilter">
+                    <div class="advertFiltersItemValue" style="padding-right: 0;">
+                        <div class="advertFiltersServicesTabs">
+                            <ul class="nav nav-tabs addAdvertServicesTabs" id="myTab" role="tablist">
+                                <li class="nav-item active">
+                                    <a class="nav-link" id="home-tab" data-toggle="tab" href="#servicePack1" role="tab" aria-controls="home" aria-selected="true">
+                                        <span class="tabMulNumber">x20</span>
+                                        <span class="tabTitle">Увеличение<br/>звонков</span>
+                                        <span class="tabServicePrice">6,99 &euro;</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#servicePack2" role="tab" aria-controls="profile" aria-selected="false">
+                                        <span class="tabMulNumber">x10</span>
+                                        <span class="tabTitle">Увеличение<br/>звонков</span>
+                                        <span class="tabServicePrice">4,99 &euro;</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#services" role="tab" aria-controls="contact" aria-selected="false">
+                                        Estándar<br/>venta
+                                    </a>
+                                </li>
+                            </ul>
+                                <div class="tab-content addAdvertServiceTabsBlock" id="myTabContent">
+                                    <div class="tab-pane fade active in" id="servicePack1" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="servicePremium service20">
+                                            <div class="addAdvertServiceDescriptionBg"></div>
+                                            <div class="addAdvertServiceDescription">
+                                                <div class="addAdvertServiceDescriptionTitle">VENTA RÁPIDA</div>
+                                                <div class="addAdvertServiceDescriptionText">Ваше предложение увидит максимум посетителей — это увеличит шансы на быструю и выгодную продажу. Объявление будет выделено цветом, поднято в топ, размещено в специальном блоке на главной странице, на странице марки и в выдаче объявлений.</div>
+                                            </div>
+                                            <div class="addAdvertServiceItems">
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">премиум размещение</div>
+                                                        <div class="addAdvertServiceItemSubtitle">7 дней</div>
+                                                    </div>
+                                                </div>
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">выделение цветом</div>
+                                                        <div class="addAdvertServiceItemSubtitle">30 дней</div>
+                                                    </div>
+                                                </div>
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">спецпредложение</div>
+                                                        <div class="addAdvertServiceItemSubtitle">7 дней</div>
+                                                    </div>
+                                                </div>
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">поднятие в топ</div>
+                                                        <div class="addAdvertServiceItemSubtitle">3 поднятия</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="servicePack2" role="tabpanel" aria-labelledby="profile-tab">
+                                        <div class="servicePremium service10">
+                                            <div class="addAdvertServiceDescriptionBg"></div>
+                                            <div class="addAdvertServiceDescription">
+                                                <div class="addAdvertServiceDescriptionTitle">VENTA EXPRESS</div>
+                                                <div class="addAdvertServiceDescriptionText">Ваше предложение увидит максимум посетителей — это увеличит шансы на быструю и выгодную продажу. Объявление будет выделено цветом, поднято в топ, размещено в специальном блоке на главной странице, на странице марки и в выдаче объявлений.</div>
+                                            </div>
+                                            <div class="addAdvertServiceItems">
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">премиум размещение</div>
+                                                        <div class="addAdvertServiceItemSubtitle">7 дней</div>
+                                                    </div>
+                                                </div>
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">выделение цветом</div>
+                                                        <div class="addAdvertServiceItemSubtitle">30 дней</div>
+                                                    </div>
+                                                </div>
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">спецпредложение</div>
+                                                        <div class="addAdvertServiceItemSubtitle">7 дней</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="services" role="tabpanel" aria-labelledby="contact-tab">
+                                        <div class="service">
+                                            <div class="addAdvertServiceDescriptionBgGray"></div>
+                                            <div class="addAdvertServiceDescription">
+                                                <div class="addAdvertServiceDescriptionTitle">VENTA ESTÁNDAR</div>
+                                                <div class="addAdvertServiceDescriptionText">Вы можете разместить объявление на Авто.ру бесплатно, но дополнительные способы продвижения помогут продать автомобиль быстрее.</div>
+                                            </div>
+                                            <div class="addAdvertServiceItems">
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">премиум размещение</div>
+                                                        <div class="addAdvertServiceItemSubtitle">7 дней</div>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemCheckbox">
+                                                        <div class="addAdvertServiceItemCheck" onclick="$(this).toggleClass('active');">
+                                                            <input name="service[]" value="1" /> 
+                                                        </div>
+                                                        5,99 &euro;
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">выделение цветом</div>
+                                                        <div class="addAdvertServiceItemSubtitle">30 дней</div>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemCheckbox">
+                                                        <div class="addAdvertServiceItemCheck" onclick="$(this).toggleClass('active');">
+                                                            <input name="service[]" value="1" /> 
+                                                        </div>
+                                                        3,99 &euro;
+                                                    </div>
+                                                </div>
+                                                <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItemIcon">
+                                                        <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>
+<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemName">
+                                                        <div class="addAdvertServiceItemTitle">спецпредложение</div>
+                                                        <div class="addAdvertServiceItemSubtitle">7 дней</div>
+                                                    </div>
+                                                    <div class="addAdvertServiceItemCheckbox">
+                                                        <div class="addAdvertServiceItemCheck" onclick="$(this).toggleClass('active');">
+                                                            <input name="service[]" value="1" /> 
+                                                        </div>
+                                                        2,99 &euro;
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cookieAlertButton nextStep" style="padding-bottom: 3rem;">
+                <div class="addAdvertUserAgreement">
+                    Нажимая на кнопку «Опубликовать объявление», вы принимаете условия <a href="">Пользовательского соглашения</a>
+                </div>
+                <button onclick="addAdvert('{{ locale.code }}')" id="addAdvertFinalButton">{% trans %}Разместить и оплатить <span>6,99</span> &euro;{% endtrans %}</button>
+            </div> 
+            <div class="cookieAlertButton nextStep gray">
+                <button onclick="">{% trans %}Сохранить как черновик{% endtrans %}</button>
+            </div>
+    </div>
+        <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
+            <div class="addAdvertStepsBlock">
+                <div class="addAdvertStepsBlockHeader">{% trans %}Шаги{% endtrans %} 4/5</div>
+                <div class="addAdvertStepsBlockInner">
+                    <ul class="list-unstyled addAdvertSteps">
+                        <li>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Выбор автомобиля{% endtrans %}</a>
+                        </li>
+                        <li>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Внешний вид{% endtrans %}</a>
+                        </li>
+                        <li>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Комплектация{% endtrans %}</a>
+                        </li>
+                        <li>
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Состояние и цена{% endtrans %}</a>
+                        </li>
+                        <li class="active">
+                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
+                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
+                            </svg>
+                            <a href="javascript:void(0)">{% trans %}Контактные данные{% endtrans %}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

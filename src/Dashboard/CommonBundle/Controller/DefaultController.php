@@ -41,54 +41,14 @@ class DefaultController extends Controller
     public function getHeaderAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
-        if($this->get('security.context')->getToken())
+        $securityContext = $this->container->get('security.authorization_checker');
+        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
             $user = $this->get('security.context')->getToken()->getUser();
         else
             $user = 0;
-        $messagesNew = 0;
+        
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        if($this->getUser())
-        {
-            $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isDeleted <> 1 AND m.userTo = ' . $user->getId() . ' AND m.isNew = 1 AND m.userOwner = ' . $user->getId());
-            $messagesNew = $query->getResult();
-            
-            if(!$user->getIsConfirm())
-            {
-                $this->addFlash(
-                    'notice_header',
-                    '<div class="alert alert-warning alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Informācija!</strong> Jūsu konts nav verificēts. Pārejiet uz saiti e-pasta ziņojumā, kas jums tika nosūtīts reģistrācijas citā kontātiks dzēsta 2 dienu laikā. Ja jūs neesat saņēmis vēstuli, lūdzu, rakstiet mums pa pastu <a href="mailto:%mess%">% mess% </a>.',array("%mess%" => $settings->getAdminEmail())) . '</div>'
-                );
-            }
-            
-            if(!$user->getUserinfo()->getFirstname() || !$user->getEmail())
-            {
-                if($locale->getIsDefault())
-                {
-                    $this->addFlash(
-                        'notice_header',
-                        '<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                         <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' . 
-                         $this->get('translator')->trans('<strong>Kļūda!</strong> Pilnībā aizpildiet savu profilu <a href="/account/settings"> personīgā konta iestatījumos</a>.') . '</div>'
-                    );
-                }
-                else
-                {
-                    $this->addFlash(
-                        'notice_header',
-                        '<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                         <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' . 
-                         $this->get('translator')->trans('<strong>Kļūda!</strong> Pilnībā aizpildiet savu profilu <a href="/%locale%/account/settings"> personīgā konta iestatījumos</a>.', array("%locale%" => $locale->getCode())) . '</div>'
-                    );
-                }
-            }
-        
-            $user->setFavoriteProducts($manager->createQuery("SELECT p FROM DashboardCommonBundle:FavoriteProducts p WHERE p.userId = " . $user->getId())->getResult());
-        }
-        
         
         /*if(!$this->get('session')->has('sessionRegion'))
         {
@@ -125,7 +85,6 @@ class DefaultController extends Controller
         
         
         return $this->render('DashboardCommonBundle:Common:header.html.twig', array("user" => $user,
-                                                                                    "messagesNew" => $messagesNew,
                                                                                     "settings" => $settings,
                                                                                     "sessionRegion" => $sessionRegion,
                                                                                     "sessionCity" => $sessionCity,

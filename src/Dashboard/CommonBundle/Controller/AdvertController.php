@@ -63,8 +63,6 @@ class AdvertController extends Controller
         $advertImages = ($session->get('advertImages')) ? $serializer->deserialize($session->get('advertImages'), 'Dashboard\CommonBundle\Model\AdvertImage[]', 'json') : array();
         $advertFilters = ($session->get('advertFilters')) ? $serializer->deserialize($session->get('advertFilters'), 'Dashboard\CommonBundle\Model\AdvertFilter[]', 'json') : array();
         
-        dump($advertInfo);
-        
         if($step){
             switch($step){
                 case "step11":

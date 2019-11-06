@@ -47,7 +47,7 @@ class Settings
     /**
      * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"0"})
      */
-    private $topsellerBlockNumber;
+    private $categoryPanelItemsNumber;
     /**
      * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"0"})
      */
@@ -299,26 +299,26 @@ class Settings
     }
 
     /**
-     * Set topsellerBlockNumber
+     * Set categoryPanelItemsNumber
      *
-     * @param integer $topsellerBlockNumber
+     * @param integer $categoryPanelItemsNumber
      * @return Settings
      */
-    public function setTopsellerBlockNumber($topsellerBlockNumber)
+    public function setCategoryPanelItemsNumber($categoryPanelItemsNumber)
     {
-        $this->topsellerBlockNumber = $topsellerBlockNumber;
+        $this->categoryPanelItemsNumber = $categoryPanelItemsNumber;
     
         return $this;
     }
 
     /**
-     * Get topsellerBlockNumber
+     * Get categoryPanelItemsNumber
      *
      * @return integer 
      */
-    public function getTopsellerBlockNumber()
+    public function getCategoryPanelItemsNumber()
     {
-        return $this->topsellerBlockNumber;
+        return $this->categoryPanelItemsNumber;
     }
 
     /**
@@ -598,6 +598,29 @@ class Settings
     }
 
     /**
+     * Set copyright
+     *
+     * @param string $copyright
+     * @return Settings
+     */
+    public function setCopyright($copyright)
+    {
+        $this->copyright = $copyright;
+    
+        return $this;
+    }
+
+    /**
+     * Get copyright
+     *
+     * @return string 
+     */
+    public function getCopyright()
+    {
+        return $this->copyright;
+    }
+
+    /**
      * Set isModerate
      *
      * @param boolean $isModerate
@@ -621,72 +644,49 @@ class Settings
     }
 
     /**
-     * Set locale
+     * Set isShowCaptcha
      *
-     * @param \Dashboard\CommonBundle\Entity\Locale $locale
+     * @param boolean $isShowCaptcha
      * @return Settings
      */
-    public function setLocale(\Dashboard\CommonBundle\Entity\Locale $locale = null)
+    public function setIsShowCaptcha($isShowCaptcha)
     {
-        $this->locale = $locale;
+        $this->isShowCaptcha = $isShowCaptcha;
     
         return $this;
     }
 
     /**
-     * Get locale
+     * Get isShowCaptcha
      *
-     * @return \Dashboard\CommonBundle\Entity\Locale 
+     * @return boolean 
      */
-    public function getLocale()
+    public function getIsShowCaptcha()
     {
-        return $this->locale;
+        return $this->isShowCaptcha;
     }
 
     /**
-     * Set currency
+     * Set isShowType
      *
-     * @param \Dashboard\CommonBundle\Entity\Currency $currency
+     * @param boolean $isShowType
      * @return Settings
      */
-    public function setCurrency(\Dashboard\CommonBundle\Entity\Currency $currency = null)
+    public function setIsShowType($isShowType)
     {
-        $this->currency = $currency;
+        $this->isShowType = $isShowType;
     
         return $this;
     }
 
     /**
-     * Get currency
+     * Get isShowType
      *
-     * @return \Dashboard\CommonBundle\Entity\Currency 
+     * @return boolean 
      */
-    public function getCurrency()
+    public function getIsShowType()
     {
-        return $this->currency;
-    }
-
-    /**
-     * Set copyright
-     *
-     * @param string $copyright
-     * @return Settings
-     */
-    public function setCopyright($copyright)
-    {
-        $this->copyright = $copyright;
-    
-        return $this;
-    }
-
-    /**
-     * Get copyright
-     *
-     * @return string 
-     */
-    public function getCopyright()
-    {
-        return $this->copyright;
+        return $this->isShowType;
     }
 
     /**
@@ -759,48 +759,48 @@ class Settings
     }
 
     /**
-     * Set isShowCaptcha
+     * Set currency
      *
-     * @param boolean $isShowCaptcha
+     * @param \Dashboard\CommonBundle\Entity\Currency $currency
      * @return Settings
      */
-    public function setIsShowCaptcha($isShowCaptcha)
+    public function setCurrency(\Dashboard\CommonBundle\Entity\Currency $currency = null)
     {
-        $this->isShowCaptcha = $isShowCaptcha;
+        $this->currency = $currency;
     
         return $this;
     }
 
     /**
-     * Get isShowCaptcha
+     * Get currency
      *
-     * @return boolean 
+     * @return \Dashboard\CommonBundle\Entity\Currency 
      */
-    public function getIsShowCaptcha()
+    public function getCurrency()
     {
-        return $this->isShowCaptcha;
+        return $this->currency;
     }
 
     /**
-     * Set isShowType
+     * Set locale
      *
-     * @param boolean $isShowType
+     * @param \Dashboard\CommonBundle\Entity\Locale $locale
      * @return Settings
      */
-    public function setIsShowType($isShowType)
+    public function setLocale(\Dashboard\CommonBundle\Entity\Locale $locale = null)
     {
-        $this->isShowType = $isShowType;
+        $this->locale = $locale;
     
         return $this;
     }
 
     /**
-     * Get isShowType
+     * Get locale
      *
-     * @return boolean 
+     * @return \Dashboard\CommonBundle\Entity\Locale 
      */
-    public function getIsShowType()
+    public function getLocale()
     {
-        return $this->isShowType;
+        return $this->locale;
     }
 }

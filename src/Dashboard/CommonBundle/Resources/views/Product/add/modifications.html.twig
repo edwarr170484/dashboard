@@ -4,7 +4,7 @@
         <div class="advertFiltersItemValue">
             <div class="addAdvertModifications">
                 {% for modification in modifications %}
-                    <div class="addAdvertModification" onclick="setModification({{ modification.id }},'{{ locale.code}}')">
+                    <div class="addAdvertModification" onclick="setModification({{ modification.id }},'{{ locale.code}}', $(this))">
                         <div class="addAdvertModificationParam power">{{ modification.power }} {% trans %}л.с.{% endtrans %}</div>
                         <div class="addAdvertModificationParam size">{{ modification.size }}</div>
                         <div class="addAdvertModificationParam label">{{ modification.label }}</div>

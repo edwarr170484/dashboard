@@ -129,7 +129,10 @@ function addAdvert(locale_code){
     });
 }
 
-function getBoardTypesByYear(year, locale_code){
+function getBoardTypesByYear(year, locale_code, text){
+    $(".olderBloakcTrigger").removeClass('active');
+    $(".olderBloakcTrigger span").html(text);
+    
     $.ajax({
         url: '/' + locale_code + '/account/addadvert/boards/' + year,
         type:'get',
@@ -140,6 +143,7 @@ function getBoardTypesByYear(year, locale_code){
             $("#addAdvertCarGears").html('');
             $("#addAdvertCarTransmittions").html('');
             $("#addAdvertCarModifications").html('');
+            $(".cookieAlertButton.nextStep").addClass("hide");
         },
         success: function(html)
         {
@@ -157,6 +161,9 @@ function getBoardTypesByYear(year, locale_code){
 function getBoardTypesByOldYear(year, locale_code, element){
     
     $(".olderBloakcTrigger span").html(element.html());
+    $(".years").find('li').each(function(){$(this).find('a').removeClass('active');});
+    $(".olderBloakcTrigger").addClass('active');
+    
     $.ajax({
         url: '/' + locale_code + '/account/addadvert/boards/' + year,
         type:'get',
@@ -167,6 +174,7 @@ function getBoardTypesByOldYear(year, locale_code, element){
             $("#addAdvertCarGears").html('');
             $("#addAdvertCarTransmittions").html('');
             $("#addAdvertCarModifications").html('');
+            $(".cookieAlertButton.nextStep").addClass("hide");
         },
         success: function(html)
         {
@@ -187,10 +195,12 @@ function getGenerationsByBoard(boardId,locale_code){
         type:'get',
         dataType: 'html',
         beforeSend: function(){
+            $("#addAdvertCarGenerations").html('');
             $("#addAdvertCarEngines").html('');
             $("#addAdvertCarGears").html('');
             $("#addAdvertCarTransmittions").html('');
             $("#addAdvertCarModifications").html('');
+            $(".cookieAlertButton.nextStep").addClass("hide");
         },
         success: function(html)
         {
@@ -204,15 +214,20 @@ function getGenerationsByBoard(boardId,locale_code){
     });
 }
 
-function getGenerationEngine(generationId, locale_code){
+function getGenerationEngine(generationId, locale_code, element){
+    element.parent().find('.addAdvertGeneration').each(function(){$(this).removeClass('active');});
+    element.addClass('active');
+    
     $.ajax({
         url: '/' + locale_code + '/account/addadvert/engines/' + generationId,
         type:'get',
         dataType: 'html',
         beforeSend: function(){
+            $("#addAdvertCarEngines").html('');
             $("#addAdvertCarGears").html('');
             $("#addAdvertCarTransmittions").html('');
             $("#addAdvertCarModifications").html('');
+            $(".cookieAlertButton.nextStep").addClass("hide");
         },
         success: function(html)
         {
@@ -233,8 +248,10 @@ function getGearType(gasTypeId, locale_code){
         type:'get',
         dataType: 'html',
         beforeSend: function(){
+            $("#addAdvertCarGears").html('');
             $("#addAdvertCarTransmittions").html('');
             $("#addAdvertCarModifications").html('');
+            $(".cookieAlertButton.nextStep").addClass("hide");
         },
         success: function(html)
         {
@@ -254,7 +271,9 @@ function getTransmissionType(gearType, locale_code){
         type:'get',
         dataType: 'html',
         beforeSend: function(){
+            $("#addAdvertCarTransmittions").html('');
             $("#addAdvertCarModifications").html('');
+            $(".cookieAlertButton.nextStep").addClass("hide");
         },
         success: function(html)
         {
@@ -273,7 +292,7 @@ function getModifications(transmissionId, locale_code){
         url: '/' + locale_code + '/account/addadvert/modification/' + transmissionId,
         type:'get',
         dataType: 'html',
-        beforeSend: function(){$(".modal-body-cover").show();},
+        beforeSend: function(){$("#addAdvertCarModifications").html('');$(".cookieAlertButton.nextStep").addClass("hide");},
         success: function(html)
         {
             $(".modal-body-cover").hide();
@@ -286,7 +305,11 @@ function getModifications(transmissionId, locale_code){
     });
 }
 
-function setModification(modificationId, locale_code){
+function setModification(modificationId, locale_code, element){
+    
+    element.parent().find('.addAdvertModification').each(function(){$(this).removeClass('active');});
+    element.addClass('active');
+    
     $.ajax({
         url: '/' + locale_code + '/account/addadvert/setmodification/' + modificationId,
         type:'get',
@@ -294,6 +317,7 @@ function setModification(modificationId, locale_code){
         beforeSend: function(){},
         success: function()
         {
+            $(".cookieAlertButton.nextStep").removeClass("hide");
             return true;
         },
         error: function(xhr, ajaxOptions, thrownError) {

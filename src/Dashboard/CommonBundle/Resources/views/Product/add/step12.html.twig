@@ -51,12 +51,12 @@
                                 {% if (category.yearTo - category.yearFrom) <= 10 %}
                                     <ul class="list-unstyled list-inline years">
                                         {% for i in category.yearTo .. category.yearFrom %}
-                                            <li><a href="javascript:void(0" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')">{{ i }}</a></li>
+                                            <li onclick="radioSetActive($(this))"><a href="javascript:void(0" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')">{{ i }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 {% else %}
                                     <ul class="list-unstyled list-inline years">
-                                        {% for i in category.yearTo .. category.yearTo - 10 %}<li><a href="javascript:void(0)" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')">{{ i }}</a></li>{% endfor %}
+                                        {% for i in category.yearTo .. category.yearTo - 10 %}<li onclick="radioSetActive($(this))"><a href="javascript:void(0)" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}', '{% trans %}Старше{% endtrans %}')">{{ i }}</a></li>{% endfor %}
                                         <li class="yearsOlder">
                                             <a href="javascript:void(0)" onclick="showYearsOlder(event)" class="olderBloakcTrigger">
                                                 <span>Старше</span>
@@ -84,7 +84,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="cookieAlertButton nextStep">
+            <div class="cookieAlertButton nextStep hide">
                 <button onclick="getStep2('{{ locale.code }}')">{% trans %}Следующий шаг{% endtrans %}</button>
             </div>
         </div>            

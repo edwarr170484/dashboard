@@ -38,7 +38,7 @@ class EventListener
                 }
                 else 
                 {
-                    $request->setLocale("lv");
+                    $request->setLocale("es");
                 }
             }   
         }
@@ -51,7 +51,7 @@ class EventListener
             }
             else 
             {
-                $request->setLocale("lv");
+                $request->setLocale("es");
             }
         }
         

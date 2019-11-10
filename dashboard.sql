@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Ноя 10 2019 г., 15:35
+-- Время создания: Ноя 10 2019 г., 16:03
 -- Версия сервера: 10.4.6-MariaDB
 -- Версия PHP: 7.1.32
 
@@ -16101,8 +16101,6 @@ CREATE TABLE `translation` (
 INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `value`, `selltype_id`, `mark_id`, `filter_id`, `filter_value_id`, `order_status_id`, `region_id`, `city_id`, `service_id`, `modification_id`, `generation_id`, `pack_id`) VALUES
 (26, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (27, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(28, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL, NULL, NULL, NULL),
-(29, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, 29, NULL, NULL, NULL, NULL, NULL),
 (32, 1, 27, 'Легковые', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (33, 2, 27, 'Легковые', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (56, 1, NULL, 'Pārdošana', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -16129,8 +16127,6 @@ INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `value`, `selltype_
 (83, 2, NULL, 'Выделить', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL),
 (84, 1, NULL, 'Pacelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL),
 (85, 2, NULL, 'Поднять', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL),
-(94, 1, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL),
-(95, 2, NULL, 'Айзкраукле и р-он', NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL),
 (110, 1, NULL, 'Apstrādē', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
 (111, 2, NULL, 'В обработке', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
 (112, 1, NULL, 'Fine, es iesaku', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),

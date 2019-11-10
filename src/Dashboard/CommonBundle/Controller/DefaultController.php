@@ -83,7 +83,7 @@ class DefaultController extends Controller
             $uri = '/' . substr($request->server->get("REQUEST_URI"),4,strlen($request->server->get("REQUEST_URI")));
         
         
-        
+        dump($user);
         return $this->render('DashboardCommonBundle:Common:header.html.twig', array("user" => $user,
                                                                                     "settings" => $settings,
                                                                                     "sessionRegion" => $sessionRegion,

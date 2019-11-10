@@ -1,10 +1,10 @@
-{% if modifications %}
+{% if modifications | length > 0 %}
     <td><div class="advertFiltersItemName">{% trans %}Модификация{% endtrans %}</div></td>
     <td>
         <div class="advertFiltersItemValue">
             <div class="addAdvertModifications">
                 {% for modification in modifications %}
-                    <div class="addAdvertModification" onclick="setModification({{ modification.id }},'{{ locale.code}}', $(this))">
+                    <div class="addAdvertModification {% if modification.id == advertInfo.modification %}active{% endif %}" onclick="setModification({{ modification.id }},'{{ locale.code}}', $(this))">
                         <div class="addAdvertModificationParam power">{{ modification.power }} {% trans %}л.с.{% endtrans %}</div>
                         <div class="addAdvertModificationParam size">{{ modification.size }}</div>
                         <div class="addAdvertModificationParam label">{{ modification.label }}</div>

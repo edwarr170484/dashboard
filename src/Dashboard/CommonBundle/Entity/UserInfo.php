@@ -27,36 +27,12 @@ class UserInfo
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
      */
-    private $midname;
-    
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
-     */
     private $lastname;
     
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
-     */
-    private $sex;
     /**
      * @ORM\Column(type="string", length=50, nullable=true, options={"default":"null"})
      */
     private $phone;
-    
-    /**
-     * @ORM\Column(type="integer", length=3, nullable=true, options={"default":"null"})
-     */
-    private $birthdayday;
-    
-    /**
-     * @ORM\Column(type="string", length=30, nullable=true, options={"default":"null"})
-     */
-    private $birthdaymonth;
-    
-    /**
-     * @ORM\Column(type="string", length=5, nullable=true, options={"default":"null"})
-     */
-    private $birthdayyear;
     
     /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Region", inversedBy="user")
@@ -69,6 +45,12 @@ class UserInfo
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
      */
     private $city;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\CityCode", inversedBy="users")
+     * @ORM\JoinColumn(name="city_code_id", referencedColumnName="id")
+     */
+    private $cityCode;
     
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
@@ -95,6 +77,7 @@ class UserInfo
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
+
 
     /**
      * Get id
@@ -127,29 +110,6 @@ class UserInfo
     public function getFirstname()
     {
         return $this->firstname;
-    }
-
-    /**
-     * Set midname
-     *
-     * @param string $midname
-     * @return UserInfo
-     */
-    public function setMidname($midname)
-    {
-        $this->midname = $midname;
-
-        return $this;
-    }
-
-    /**
-     * Get midname
-     *
-     * @return string 
-     */
-    public function getMidname()
-    {
-        return $this->midname;
     }
 
     /**
@@ -196,75 +156,6 @@ class UserInfo
     public function getPhone()
     {
         return $this->phone;
-    }
-
-    /**
-     * Set birthdayday
-     *
-     * @param integer $birthdayday
-     * @return UserInfo
-     */
-    public function setBirthdayday($birthdayday)
-    {
-        $this->birthdayday = $birthdayday;
-
-        return $this;
-    }
-
-    /**
-     * Get birthdayday
-     *
-     * @return integer 
-     */
-    public function getBirthdayday()
-    {
-        return $this->birthdayday;
-    }
-
-    /**
-     * Set birthdaymonth
-     *
-     * @param string $birthdaymonth
-     * @return UserInfo
-     */
-    public function setBirthdaymonth($birthdaymonth)
-    {
-        $this->birthdaymonth = $birthdaymonth;
-
-        return $this;
-    }
-
-    /**
-     * Get birthdaymonth
-     *
-     * @return string 
-     */
-    public function getBirthdaymonth()
-    {
-        return $this->birthdaymonth;
-    }
-
-    /**
-     * Set birthdayyear
-     *
-     * @param string $birthdayyear
-     * @return UserInfo
-     */
-    public function setBirthdayyear($birthdayyear)
-    {
-        $this->birthdayyear = $birthdayyear;
-
-        return $this;
-    }
-
-    /**
-     * Get birthdayyear
-     *
-     * @return string 
-     */
-    public function getBirthdayyear()
-    {
-        return $this->birthdayyear;
     }
 
     /**
@@ -406,6 +297,29 @@ class UserInfo
     }
 
     /**
+     * Set cityCode
+     *
+     * @param \Dashboard\CommonBundle\Entity\CityCode $cityCode
+     * @return UserInfo
+     */
+    public function setCityCode(\Dashboard\CommonBundle\Entity\CityCode $cityCode = null)
+    {
+        $this->cityCode = $cityCode;
+
+        return $this;
+    }
+
+    /**
+     * Get cityCode
+     *
+     * @return \Dashboard\CommonBundle\Entity\CityCode 
+     */
+    public function getCityCode()
+    {
+        return $this->cityCode;
+    }
+
+    /**
      * Set user
      *
      * @param \Dashboard\CommonBundle\Entity\User $user
@@ -426,28 +340,5 @@ class UserInfo
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * Set sex
-     *
-     * @param string $sex
-     * @return UserInfo
-     */
-    public function setSex($sex)
-    {
-        $this->sex = $sex;
-
-        return $this;
-    }
-
-    /**
-     * Get sex
-     *
-     * @return string 
-     */
-    public function getSex()
-    {
-        return $this->sex;
     }
 }

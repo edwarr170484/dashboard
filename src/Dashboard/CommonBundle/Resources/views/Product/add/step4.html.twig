@@ -55,12 +55,13 @@
                         <table class="table table-striped" id="advertFiltersItemsTable">
                             <tr>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %}</span></td>
-                                <td><input type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" /></td>
+                                <td><input type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" {% if advertInfo.probeg %}value="{{ advertInfo.probeg }}"{% endif %}/></td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %}</span></td>
                                 <td>
                                     <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}">
-                                        <option value="Новый">Новый</option>
-                                        <option value="Подержанный">Подержанный</option>
+                                        <option value="Новый" {% if advertInfo.condition == 'Новый' %}selected="selected"{% endif %}>Новый</option>
+                                        <option value="Подержанный" {% if advertInfo.condition == 'Подержанный' %}selected="selected"{% endif %}>Подержанный</option>
+                                        <option value="Битый" {% if advertInfo.condition == 'Битый' %}selected="selected"{% endif %}>Битый</option>
                                     </select>
                                 </td>
                                 <td></td>
@@ -69,15 +70,15 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %}</span></td>
                                 <td>
                                     <select name="owners" class="custom-select" placeholder="{% trans %}Количество владельцев{% endtrans %}">
-                                        <option value="Один">Один</option>
-                                        <option value="Два">Два</option>
-                                        <option value="Три">Три</option>
-                                        <option value="Больше трех">Больше трех</option>
+                                        <option value="Один" {% if advertInfo.owners == 'Один' %}selected="selected"{% endif %}>Один</option>
+                                        <option value="Два" {% if advertInfo.owners == 'Два' %}selected="selected"{% endif %}>Два</option>
+                                        <option value="Три" {% if advertInfo.owners == 'Три' %}selected="selected"{% endif %}>Три</option>
+                                        <option value="Больше трех" {% if advertInfo.owners == 'Больше трех' %}selected="selected"{% endif %}>Больше трех</option>
                                     </select>
                                 </td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}VIN Номер{% endtrans %}</span></td>
                                 <td>
-                                    <input type="text" name="vin" placeholder="{% trans %}17 знаков{% endtrans %}" class="parameterValue" />
+                                    <input type="text" name="vin" placeholder="{% trans %}17 знаков{% endtrans %}" class="parameterValue" {% if advertInfo.vin %}value="{{ advertInfo.vin }}"{% endif %} />
                                 </td>
                                 <td>
                                     <span class="addAdvertSubParameterLabel">{% trans %}- Номер VIN на сайте не показывается{% endtrans %}</span>
@@ -91,7 +92,7 @@
                                     </span>
                                 </td>
                                 <td colspan="3">
-                                    <textarea name="description" placeholder="{% trans %}Введите описание автомобиля{% endtrans %}" class="parameterValue"></textarea>
+                                    <textarea name="description" placeholder="{% trans %}Введите описание автомобиля{% endtrans %}" class="parameterValue">{% if advertInfo.description %}{{ advertInfo.description }}{% endif %}</textarea>
                                 </td>
                                 <td></td>
                             </tr>
@@ -123,13 +124,13 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %}</span></td>
                                 <td>
                                     <div class="addAdvertPriceParameters">
-                                        <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue" style="max-width:41rem;margin-right: 7rem;"/>
+                                        <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue"  {% if advertInfo.price %}value="{{ advertInfo.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
                                         <div class="filter">
-                                            <input name="NDS" type="checkbox" value="1" class="custom-checkbox" />
+                                            <input name="NDS" type="checkbox" value="1" class="custom-checkbox"  {% if advertInfo.nds %}checked="checked"{% endif %} />
                                             {% trans %}НДС включен{% endtrans %}
                                         </div>
                                         <div class="filter">
-                                            <input name="torg" type="checkbox" value="1" class="custom-checkbox" />
+                                            <input name="torg" type="checkbox" value="1" class="custom-checkbox" {% if advertInfo.torg %}checked="checked"{% endif %} />
                                             {% trans %}Торг{% endtrans %}
                                         </div>
                                     </div>
@@ -139,20 +140,20 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Гарантия{% endtrans %}</span></td>
                                 <td>
                                     <div class="addAdvertPriceGarant">
-                                        <div class="categoryAdvertType garant" onclick="selectGarant($(this))">
+                                        <div class="categoryAdvertType garant {% if advertInfo.garant == 1 %}active{% endif %}" onclick="selectGarant($(this))">
                                             {% trans %}Гарантия{% endtrans %}
                                             <div class="categoryAdvertGarantNum">1</div>
-                                            <input name="garant" value="1" type="radio" />
+                                            <input name="garant" value="1" type="radio" {% if advertInfo.garant == 1 %}checked="checked"{% endif %} />
                                         </div>
-                                        <div class="categoryAdvertType garant" onclick="selectGarant($(this))">
+                                        <div class="categoryAdvertType garant {% if advertInfo.garant == 3 %}active{% endif %}" onclick="selectGarant($(this))">
                                             {% trans %}Гарантия{% endtrans %}
                                             <div class="categoryAdvertGarantNum">3</div>
-                                            <input name="garant" value="3" type="radio" />
+                                            <input name="garant" value="3" type="radio" {% if advertInfo.garant == 3 %}checked="checked"{% endif %} />
                                         </div>
-                                        <div class="categoryAdvertType garant" onclick="selectGarant($(this))">
+                                        <div class="categoryAdvertType garant {% if advertInfo.garant == 7 %}active{% endif %}" onclick="selectGarant($(this))">
                                             {% trans %}Гарантия{% endtrans %}
                                             <div class="categoryAdvertGarantNum">7</div>
-                                            <input name="garant" value="7" type="radio" />
+                                            <input name="garant" value="7" type="radio" {% if advertInfo.garant == 7 %}checked="checked"{% endif %} />
                                         </div>
                                     </div>
                                 </td>

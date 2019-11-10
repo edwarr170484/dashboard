@@ -49,6 +49,11 @@ class City
     private $sortorder;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\CityCode", mappedBy="city")
+     **/
+    private $codes;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -233,5 +238,38 @@ class City
     public function getSortorder()
     {
         return $this->sortorder;
+    }
+
+    /**
+     * Add codes
+     *
+     * @param \Dashboard\CommonBundle\Entity\CityCode $codes
+     * @return City
+     */
+    public function addCode(\Dashboard\CommonBundle\Entity\CityCode $codes)
+    {
+        $this->codes[] = $codes;
+
+        return $this;
+    }
+
+    /**
+     * Remove codes
+     *
+     * @param \Dashboard\CommonBundle\Entity\CityCode $codes
+     */
+    public function removeCode(\Dashboard\CommonBundle\Entity\CityCode $codes)
+    {
+        $this->codes->removeElement($codes);
+    }
+
+    /**
+     * Get codes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCodes()
+    {
+        return $this->codes;
     }
 }

@@ -110,6 +110,8 @@
                                             $(this).toggleClass("active");
                                             selectOptions.slideUp();
                                         }
+                                        
+                                        selectElement.trigger("change");
 				});
 			});
 			

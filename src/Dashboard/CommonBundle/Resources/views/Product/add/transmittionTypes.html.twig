@@ -4,7 +4,8 @@
         <div class="advertFiltersItemValue">
             <ul class="list-unstyled list-inline addProductFilterRadios">
                 {% for transmittionType in transmittionTypes %}
-                    <li onclick="radioSetActive($(this))"><a href="javascript:voit(0)" onclick="getModifications({{ transmittionType.id }},'{{ locale.code}}')">{{ transmittionType.value }}</a></li>
+                    <li onclick="radioSetActive($(this))">
+                        <a href="javascript:voit(0)" onclick="getModifications({{ transmittionType.id }},'{{ locale.code}}')" {% if transmittionType.id == advertInfo.transmissionType %}class="active"{% endif %}>{{ transmittionType.value }}</a></li>
                 {% endfor %}
             </ul>
         </div>

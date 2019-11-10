@@ -10,7 +10,11 @@
                     </div>
                     <div class="addAdvertResultButtons">
                         <div class="cookieAlertButton nextStep">
-                            <button onclick="addAdvert('{{ locale.code }}')" id="addAdvertFinalButton">{% trans %}Разместить еще одно объявление{% endtrans %}</button>
+                            {% if locale.isDefault %}
+                                <button onclick="window.location.href='{{ path('addAdvert') }}'" id="addAdvertFinalButton">{% trans %}Разместить еще одно объявление{% endtrans %}</button>
+                            {% else %}
+                                <button onclick="window.location.href='{{ path('addAdvertLocale',{'_locale' : locale.code}) }}'" id="addAdvertFinalButton">{% trans %}Разместить еще одно объявление{% endtrans %}</button>
+                            {% endif %}
                         </div> 
                         <div class="cookieAlertButton nextStep gray" style="display: block;">
                             <button onclick="">{% trans %}Перейти к моим объявлениям{% endtrans %}</button>

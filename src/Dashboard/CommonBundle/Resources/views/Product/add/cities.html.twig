@@ -1,0 +1,5 @@
+{% if cities %}
+    {% for city in cities %}
+        <div class="addAdvertContextParamenterValue" onclick="selectCity('{{ city.name }}', $(this))">{{ city.name }}</div>
+    {% endfor %}
+{% endif %}

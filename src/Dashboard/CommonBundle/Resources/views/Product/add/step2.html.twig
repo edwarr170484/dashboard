@@ -75,7 +75,7 @@
                                             <ul class="list-unstyled list-inline color">
                                                 {% if filter.values | length > 0 %}
                                                     {% for color in filter.values %}
-                                                        <li><a href="javascript:void(0)" style="background-color: {{ color.additionalValue }}" title="{{ color.value }}" onclick="setColor({{ color.id }},'{{ locale.code }}',$(this))"></a></li>
+                                                        <li><a href="javascript:void(0)" style="background-color: {{ color.additionalValue }}" title="{{ color.value }}" onclick="setColor({{ color.id }},'{{ locale.code }}',$(this))" {% if advertInfo.color == color.id %}class="active"{% endif %}></a></li>
                                                     {% endfor %}
                                                 {% endif %}
                                             </ul>
@@ -89,11 +89,8 @@
                             <td><div class="advertFiltersItemName">{% trans %}Фотографии{% endtrans %}</div></td>
                             <td>
                                 <div class="advertFiltersItemValue fotos" id="advertFotos">
-                                    <div class="addFotoIcon">
-                                        <div class="addFotoIconInner"></div>
-                                    </div>
-                                    <div class="addFotoDescription">
-                                        {% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}
+                                    <div class="advertFotosStartBg">
+                                        <div class="addFotoIcon"><div class="addFotoIconInner"></div></div><div class="addFotoDescription">{% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}</div>
                                     </div>
                                 </div>
                             </td>
@@ -154,6 +151,7 @@
     <script>
         myDropzone = new Dropzone("div#advertFotos", {
             url: "/account/ajaxloadfotos",
+            dictDefaultMessage : '<div class="advertFotosStartBg"><div class="addFotoIcon"><div class="addFotoIconInner"></div></div><div class="addFotoDescription">{% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}</div></div>',
             maxFiles : 30,
             maxFilesize: 256,
             filesizeBase: 1024,
@@ -167,16 +165,89 @@
                                                                 </div>\n  \n\
                                                                 <div class=\"dz-error-message\">\n\
                                                                     <span data-dz-errormessage></span>\n\
-                                                                </div>\n  \n\
-                                                            </div>",
+                                                                </div>\n  \n\</div>",
             acceptedFiles: 'image/*',
             thumbnailWidth: 260,
             thumbnailHeight: 150,
+            addRemoveLinks:true,
+            dictRemoveFile: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff"/><path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            dictCancelUploadConfirmation : ' ',
+            init:function() {
+                {% if advertImages | length > 0 %}
+                    $(".advertFotosStartBg").remove();
+                {% endif%}
+                var myDropzone = this;
+                var existingFiles = [
+                    {% if advertImages | length > 0 %}
+                        {% for image in advertImages %}
+                            { name: "{{ image.name }}", size: 12345678,imageUrl:'/bundles/images/products/{{ image.name }}' },
+                        {% endfor%}
+                    {% endif %}
+                ];
+                for (i = 0; i < existingFiles.length; i++) {
+                    myDropzone.emit("addedfile",existingFiles[i]);
+                    myDropzone.files.push(existingFiles[i]);
+                    var imageName = document.createAttribute("imageName");
+                    imageName.value = existingFiles[i].name;
+                    myDropzone.files[i].previewElement.attributes.setNamedItem(imageName);
+                    myDropzone.createThumbnailFromUrl(existingFiles[i], existingFiles[i].imageUrl);
+                    myDropzone.emit("complete", existingFiles[i]);
+                }
+                myDropzone.options.dictCancelUploadConfirmation = '';
+                var existingFileCount = existingFiles.length; 
+                myDropzone.options.maxFiles = myDropzone.options.maxFiles - existingFileCount;
+                if(myDropzone.options.maxFiles != 0){
+                    $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + myDropzone.options.maxFiles + '</div></div>');
+                    $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+                }
+            },
+            complete: function complete(file) {
+                if (file._removeLink) {
+                    file._removeLink.innerHTML = this.options.dictRemoveFile;
+                }
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-complete");
+                }
+            },
             success: function(file, response){
-                $(".addFotoDescription").remove();
+                var answer = JSON.parse(response);
+                $(".advertFotosStartBg").remove();
+                $(".addFotoIcon").remove();
+                
+                if(answer.imageName){
+                    var imageName = document.createAttribute("imageName");
+                    imageName.value = answer.imageName;
+                    file.previewElement.attributes.setNamedItem(imageName);
+                }
+                
+                $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + (30 - $(".dz-preview").length) + '</div></div>');
+                $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+            },
+            error: function(file){
+                myDropzone.removeFile(file);
+            },
+            removedfile: function(file){
+                $(".addFotoIcon").remove();
+                var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
+                $.ajax({
+                    url: '/' + '{{ locale.code }}' + '/account/addadvert/deleteimage/' + imageName,
+                    type:'get',
+                    dataType: 'html'
+                });
+                var _ref;
+                var ret = (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                
+                $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + (30 - $(".dz-preview").length) + '</div></div>');
+                $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+                
+                if($(".dz-preview").length === 0){
+                    $("div#advertFotos").html(this.options.dictDefaultMessage);
+                    $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
+                }
+                
+                return ret;
             }
             });
-        $(".addFotoIconInner").click(function(){$("#advertFotos").trigger('click');});
-        $(".addFotoDescription").click(function(){$("#advertFotos").trigger('click');});
+        $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
     </script>
 {% endif %}

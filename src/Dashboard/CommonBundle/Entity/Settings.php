@@ -138,6 +138,11 @@ class Settings
     private $userAdvertWorkRight;
     
     /**
+     * @ORM\Column(type="text", nullable=true, options={"default":"0"})
+     */
+    private $serviceTabText;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Currency", inversedBy="settings")
      * @ORM\JoinColumn(name="currency_id", referencedColumnName="id")
      */
@@ -802,5 +807,28 @@ class Settings
     public function getLocale()
     {
         return $this->locale;
+    }
+
+    /**
+     * Set serviceTabText
+     *
+     * @param string $serviceTabText
+     * @return Settings
+     */
+    public function setServiceTabText($serviceTabText)
+    {
+        $this->serviceTabText = $serviceTabText;
+
+        return $this;
+    }
+
+    /**
+     * Get serviceTabText
+     *
+     * @return string 
+     */
+    public function getServiceTabText()
+    {
+        return $this->serviceTabText;
     }
 }

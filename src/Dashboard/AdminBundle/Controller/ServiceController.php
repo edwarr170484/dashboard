@@ -66,6 +66,7 @@ class ServiceController extends Controller
     {
         $manager = $this->getDoctrine()->getManager();
         $originalTranslations = new ArrayCollection();
+        $originalPrices = new ArrayCollection();
         
         if($serviceId)
         {
@@ -81,6 +82,9 @@ class ServiceController extends Controller
         {
             foreach ($service->getTranslations() as $item) {
                 $originalTranslations->add($item);
+            }
+            foreach ($service->getPrices() as $item) {
+                $originalPrices->add($item);
             }
         }
         
@@ -102,9 +106,30 @@ class ServiceController extends Controller
                 }
             }
             
+            if($originalPrices)
+            {
+                foreach ($originalPrices as $item) 
+                {
+                    if (false === $service->getPrices()->contains($item)) 
+                    {
+                        $item->setService(null);
+                        $manager->remove($item);
+                    }
+                }
+            }
+            
             if($service->getTranslations())
             {
                 foreach($service->getTranslations() as $item)
+                {
+                    $item->setService($service);
+                    $manager->persist($item);
+                }
+            }
+            
+            if($service->getPrices())
+            {
+                foreach($service->getPrices() as $item)
                 {
                     $item->setService($service);
                     $manager->persist($item);
@@ -183,6 +208,7 @@ class ServiceController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $originalTranslations = new ArrayCollection();
         $originalServices = new ArrayCollection();
+        $originalPrices = new ArrayCollection();
         
         if($packId){
             $pack = $manager->getRepository("DashboardCommonBundle:Pack")->find($packId);
@@ -204,6 +230,12 @@ class ServiceController extends Controller
         if($pack->getServices()){
             foreach ($pack->getServices() as $item) {
                 $originalServices->add($item);
+            }
+        }
+        
+        if($pack->getPrices()){
+            foreach ($pack->getPrices() as $item) {
+                $originalPrices->add($item);
             }
         }
         
@@ -249,6 +281,27 @@ class ServiceController extends Controller
             if($pack->getServices())
             {
                 foreach($pack->getServices() as $item)
+                {
+                    $item->setPack($pack);
+                    $manager->persist($item);
+                }
+            }
+            
+            if($originalPrices)
+            {
+                foreach ($originalPrices as $item) 
+                {
+                    if (false === $pack->getPrices()->contains($item)) 
+                    {
+                        $item->setPack(null);
+                        $manager->remove($item);
+                    }
+                }
+            }
+            
+            if($pack->getPrices())
+            {
+                foreach($pack->getPrices() as $item)
                 {
                     $item->setPack($pack);
                     $manager->persist($item);

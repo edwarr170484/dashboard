@@ -85,6 +85,34 @@
     </tr>
 {% endblock %}
 
+{% block _pack_prices_widget %}
+    <table class="table table-bordered table-service-prices">
+        <thead>
+            <tr>
+                <th>{% trans %}ID для счет-фактур{% endtrans %}</th>
+                <th>{% trans %}Категория{% endtrans %}</th>
+                <th>{% trans %}Цена{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _pack_prices_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.billId)}}</td>
+        <td>{{ form_widget(form.category)}}</td>
+        <td>{{ form_widget(form.price)}}{{ form_widget(form.pack)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить перевод для языка"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
 {% block title %}{% trans %} Панель управления - Редактировать пакет услуг{% endtrans %}{% endblock %}
 
 {% block body %}
@@ -118,6 +146,9 @@
                             <li>
                                 <a data-toggle="tab" href="#services">Включенные услуги</a>
                             </li>
+                            <li>
+                                <a data-toggle="tab" href="#prices">Цены</a>
+                            </li>
                         </ul>
                         <div class="tab-content">
                             <div id="maininfo" class="tab-pane fade active in">
@@ -125,6 +156,18 @@
                                     <label class="col-md-3 control-label">{{ form_label(packForm.name)}}</label>
                                     <div class="col-md-9">
                                         {{ form_widget(packForm.name)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(packForm.label)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(packForm.label)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(packForm.bgClass)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(packForm.bgClass)}}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -160,6 +203,18 @@
                                         {{ form_widget(packForm.services)}}
                                         {% if packForm.services | length <= 0 %}
                                             Услуги не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="prices" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-pack-price" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить цену</button>
+                                        {{ form_widget(packForm.prices)}}
+                                        {% if packForm.prices | length <= 0 %}
+                                            Цены не добавлены
                                         {% endif %}
                                     </div>
                                 </div>

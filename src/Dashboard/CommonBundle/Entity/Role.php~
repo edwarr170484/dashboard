@@ -17,6 +17,11 @@ class Role implements RoleInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @ORM\Column(name="title", type="string", length=255, nullable=true, options={"default":"null"})
+     */
+    private $title;
 
     /**
      * @ORM\Column(name="name", type="string", length=255)
@@ -42,6 +47,19 @@ class Role implements RoleInterface
      * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
      */
     private $users;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Service", inversedBy="userRoles")
+     * 
+     */
+    private $services;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Pack", inversedBy="userRoles")
+     * 
+     */
+    private $servicePacks;
+    
 
     public function __construct()
     {
@@ -183,5 +201,94 @@ class Role implements RoleInterface
     public function getAdvertFotoNumber()
     {
         return $this->advertFotoNumber;
+    }
+
+    /**
+     * Add services
+     *
+     * @param \Dashboard\CommonBundle\Entity\Service $services
+     * @return Role
+     */
+    public function addService(\Dashboard\CommonBundle\Entity\Service $services)
+    {
+        $this->services[] = $services;
+
+        return $this;
+    }
+
+    /**
+     * Remove services
+     *
+     * @param \Dashboard\CommonBundle\Entity\Service $services
+     */
+    public function removeService(\Dashboard\CommonBundle\Entity\Service $services)
+    {
+        $this->services->removeElement($services);
+    }
+
+    /**
+     * Get services
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
+     * Add servicePacks
+     *
+     * @param \Dashboard\CommonBundle\Entity\Pack $servicePacks
+     * @return Role
+     */
+    public function addServicePack(\Dashboard\CommonBundle\Entity\Pack $servicePacks)
+    {
+        $this->servicePacks[] = $servicePacks;
+
+        return $this;
+    }
+
+    /**
+     * Remove servicePacks
+     *
+     * @param \Dashboard\CommonBundle\Entity\Pack $servicePacks
+     */
+    public function removeServicePack(\Dashboard\CommonBundle\Entity\Pack $servicePacks)
+    {
+        $this->servicePacks->removeElement($servicePacks);
+    }
+
+    /**
+     * Get servicePacks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServicePacks()
+    {
+        return $this->servicePacks;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Role
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

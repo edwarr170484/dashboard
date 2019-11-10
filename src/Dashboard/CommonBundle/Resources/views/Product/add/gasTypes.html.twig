@@ -4,10 +4,13 @@
         <div class="advertFiltersItemValue">
             <ul class="list-unstyled list-inline addProductFilterRadios">
                 {% for gasType in gasTypes %}
-                    <li onclick="radioSetActive($(this))"><a href="javascript:voit(0)" onclick="getGearType({{ gasType.id }},'{{ locale.code}}')">{{ gasType.value }}</a></li>
+                    <li onclick="radioSetActive($(this))">
+                        <a href="javascript:voit(0)" onclick="getGearType({{ gasType.id }},'{{ locale.code}}')" {% if gasType.id == advertInfo.gasType %}class="active"{% endif %}>{{ gasType.value }}</a>
+                    </li>
                 {% endfor %}
-                <li class="static-filters"><div class="filter"><input name="searchWithFoto" type="checkbox" value="1" class="gas-checkbox" /> {% trans %}Газобалонное оборудование{% endtrans %}</div></li>
+                <li class="static-filters"><div class="filter"><input name="isGas" type="checkbox" value="1" class="gas-checkbox" /> {% trans %}Газобалонное оборудование{% endtrans %}</div></li>
             </ul>
+            <script>$(".gas-checkbox").customCheckbox();</script>
         </div>
     </td>
 {% endif %}

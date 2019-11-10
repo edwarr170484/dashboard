@@ -29,6 +29,11 @@ class Currency
     private $code;
     
     /**
+     * @ORM\Column(type="string", length = 255, nullable=true, options={"default":"0"})
+     */
+    private $label;
+    
+    /**
      * @ORM\Column(type="float", length = 255)
      */
     private $kurs;
@@ -240,5 +245,28 @@ class Currency
     public function getSettings()
     {
         return $this->settings;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return Currency
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string 
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 }

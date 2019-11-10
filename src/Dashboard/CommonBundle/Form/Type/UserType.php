@@ -27,10 +27,10 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class, array('required' => false, 'label' => 'e-pasts', 'attr' => array('class' => 'form-control')))   
-            ->add('alerts', CheckboxType::class, array('required' => false, 'label' => 'saņemt e-pasta paziņojumus', 'attr' => array('class' => 'custom-checkbox')))
+            ->add('email', EmailType::class, array('required' => false, 'label' => 'e-pasts', 'attr' => array('class' => 'form-control')))  
+            ->add('isHideEmail', CheckboxType::class, array('required' => false, 'label' => 'Запретить показ на сайте', 'attr' => array('class' => 'custom-checkbox')))
             ->add('userinfo', new UserInfoType($this->em, $this->user, $this->locale), array('data_class' => 'Dashboard\CommonBundle\Entity\UserInfo'))
-            ->add('save', ButtonType::class, array('label' => 'Saglabājiet', 'attr' => array('class' => 'message-button-answer')));
+            ->add('save', ButtonType::class, array('label' => 'Сохранить'));
     }
     
     public function configureOptions(OptionsResolver $resolver)

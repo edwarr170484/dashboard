@@ -55,6 +55,34 @@
     </tr>
 {% endblock %}
 
+{% block _service_prices_widget %}
+    <table class="table table-bordered table-service-prices">
+        <thead>
+            <tr>
+                <th>{% trans %}ID для счет-фактур{% endtrans %}</th>
+                <th>{% trans %}Категория{% endtrans %}</th>
+                <th>{% trans %}Цена{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _service_prices_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.billId)}}</td>
+        <td>{{ form_widget(form.category)}}</td>
+        <td>{{ form_widget(form.price)}}{{ form_widget(form.service)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить перевод для языка"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
 {% block title %}{% trans %} Панель управления - Редактировать услугу{% endtrans %}{% endblock %}
 
 {% block body %}
@@ -85,6 +113,9 @@
                             <li>
                                 <a data-toggle="tab" href="#translations">Переводы</a>
                             </li>
+                            <li>
+                                <a data-toggle="tab" href="#prices">Цены</a>
+                            </li>
                         </ul>
                         <div class="tab-content">
                             <div id="maininfo" class="tab-pane fade active in">
@@ -98,12 +129,6 @@
                                     <label class="col-md-3 control-label">{{ form_label(serviceForm.icon)}}</label>
                                     <div class="col-md-9">
                                         {{ form_widget(serviceForm.icon)}}
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">{{ form_label(serviceForm.price)}}</label>
-                                    <div class="col-md-9">
-                                        {{ form_widget(serviceForm.price)}}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -127,6 +152,18 @@
                                         {{ form_widget(serviceForm.translations,{'id' : 'object_translations'})}}
                                         {% if serviceForm.translations | length <= 0 %}
                                             Переводы не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="prices" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-service-price" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить цену</button>
+                                        {{ form_widget(serviceForm.prices)}}
+                                        {% if serviceForm.prices | length <= 0 %}
+                                            Цены не добавлены
                                         {% endif %}
                                     </div>
                                 </div>

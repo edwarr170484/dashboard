@@ -1,0 +1,1867 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="lv" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source><![CDATA[<h1>Наш <b>автопарк</b></h1>]]></source>
+                <target><![CDATA[<h1>Наш <b>автопарк</b></h1>]]></target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Uz kontu</source>
+                <target>Uz kontu</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>Pierakstieties</source>
+                <target>Pierakstīties</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>Reģistrācijas</source>
+                <target>Reģistrācija</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Visa Latvija</source>
+                <target>Visa Latvija</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>Pievienot reklāmu</source>
+                <target>Pievienot sludinājumu</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>SITE MEKLĒŠANA</source>
+                <target>MEKLĒŠANA</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>Reklāmu kategorijas</source>
+                <target>Sludinājumu kategorijas</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>Nav atrasta neviena kategorija</source>
+                <target>Nav atrasta neviena kategorija</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>Premium reklāmas</source>
+                <target>Premium sludinājumi</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>Informācija</source>
+                <target>Informācija</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>Pakalpojumi</source>
+                <target>Pakalpojumi</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>Mans konts</source>
+                <target>Mans konts</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>Attīstība</source>
+                <target>Attīstība</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>Izvēlies savu atrašanās vietu</source>
+                <target>Izvēlies savu atrašanās vietu</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>Izvēlieties reģionu</source>
+                <target>Izvēlies reģionu</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>Pilsēta/volost</source>
+                <target>Pilsēta/Rajons</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>Lietotāja līgums</source>
+                <target>Lietotāja līgums</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>Aizvērt</source>
+                <target>Aizvērt</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>Viss</source>
+                <target>Visi</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>Mājas</source>
+                <target>Mājās</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>Filtru ielāde</source>
+                <target>Filtru ielāde</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>Nē</source>
+                <target>Nē</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>C FOTO</source>
+                <target>C FOTO</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>Б/У</source>
+                <target>Б/У</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>MEKLĒT</source>
+                <target>MEKLĒT</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>Privāts</source>
+                <target>Privāts</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>Uzņēmuma profils</source>
+                <target>Uzņēmuma profils</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>Pēc datuma</source>
+                <target>Pēc datuma</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>Pēc cenas</source>
+                <target>Pēc cenas</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>Šajā kategorijā vēl nav nevienas reklāmas</source>
+                <target>Šajā kategorijā vēl nav nevienas reklāmas</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>Sūtiet man vēstules kopiju</source>
+                <target>Atsūtīt man vēstules kopiju</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>Hosted by</source>
+                <target>Hosted by</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>Skatījumi</source>
+                <target>Skatījumi</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>kopā</source>
+                <target>kopā</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>šodien</source>
+                <target>šodien</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>Nosacījums</source>
+                <target>Nosacījums</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>Jauns</source>
+                <target>Jauns</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>Reklāmas numurs</source>
+                <target>Reklāmas numurs</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>Sazinieties ar īpašnieku</source>
+                <target>Sazināties ar īpašnieku</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>Pastāsti draugam</source>
+                <target>Pastāstīt draugam</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>Sūdzas</source>
+                <target>Sūdzības</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>Pievienot favorītiem</source>
+                <target>Pievienot favorītiem</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>Jūs esat šīs reklāmas īpašnieks un jūs nevarat nosūtīt ziņu sev</source>
+                <target>Jūs esat šīs reklāmas īpašnieks un jūs nevarat nosūtīt ziņu sev</target>
+            </trans-unit>
+            <trans-unit id="45">
+                <source>Jūsu vārds</source>
+                <target>Jūsu vārds</target>
+            </trans-unit>
+            <trans-unit id="46">
+                <source>Jūsu e-pasts</source>
+                <target>Jūsu e-pasts</target>
+            </trans-unit>
+            <trans-unit id="47">
+                <source>Jūsu tālrunis</source>
+                <target>Jūsu tālrunis</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>Lai nosūtītu ziņas, jums ir</source>
+                <target>Lai nosūtītu ziņu, jums ir</target>
+            </trans-unit>
+            <trans-unit id="49">
+                <source>piesakieties</source>
+                <target>pieteikties</target>
+            </trans-unit>
+            <trans-unit id="50">
+                <source>vai</source>
+                <target>vai</target>
+            </trans-unit>
+            <trans-unit id="51">
+                <source>reģistrēties</source>
+                <target>reģistrēties</target>
+            </trans-unit>
+            <trans-unit id="52">
+                <source>Jūs esat šīs reklāmas īpašnieks un jūs nevarat viņam iesniegt sūdzību</source>
+                <target>Jūs esat šīs reklāmas īpašnieks un jūs nevarat pats sev iesniegt sūdzību</target>
+            </trans-unit>
+            <trans-unit id="53">
+                <source>Līdzīgas reklāmas</source>
+                <target>Līdzīgi sludinājumi</target>
+            </trans-unit>
+            <trans-unit id="54">
+                <source>Cena</source>
+                <target>Cena</target>
+            </trans-unit>
+            <trans-unit id="55">
+                <source>PASŪTĪT</source>
+                <target>PASŪTĪT</target>
+            </trans-unit>
+            <trans-unit id="56">
+                <source>KONTAKT PERSONA</source>
+                <target>KONTAKT PERSONA</target>
+            </trans-unit>
+            <trans-unit id="57">
+                <source>Vērtējums</source>
+                <target>Vērtējums</target>
+            </trans-unit>
+            <trans-unit id="58">
+                <source>Pārdevēja atsauksmes</source>
+                <target>Pārdevēja atsauksmes</target>
+            </trans-unit>
+            <trans-unit id="59">
+                <source>Visas reklāmas</source>
+                <target>Visi sludinājumi</target>
+            </trans-unit>
+            <trans-unit id="60">
+                <source>Rādīt istabu</source>
+                <target>Rādīt istabu</target>
+            </trans-unit>
+            <trans-unit id="61">
+                <source>Uzrakstiet ziņu</source>
+                <target>Uzrakstīt ziņu</target>
+            </trans-unit>
+            <trans-unit id="62">
+                <source>pilsēta</source>
+                <target>pilsēta</target>
+            </trans-unit>
+            <trans-unit id="63">
+                <source>SELL ĀTRI</source>
+                <target>PĀRDOT ĀTRI</target>
+            </trans-unit>
+            <trans-unit id="64">
+                <source>Preču pasūtīšana</source>
+                <target>Preču pasūtīšana</target>
+            </trans-unit>
+            <trans-unit id="65">
+                <source>Nosūtīt ziņu</source>
+                <target>Nosūtīt ziņu</target>
+            </trans-unit>
+            <trans-unit id="66">
+                <source>Nekas netika atrasts pēc jūsu pieprasījuma</source>
+                <target>Nekas netika atrasts pēc jūsu pieprasījuma</target>
+            </trans-unit>
+            <trans-unit id="67">
+                <source>Kategorija</source>
+                <target>Kategorija</target>
+            </trans-unit>
+            <trans-unit id="68">
+                <source>Rediģēt</source>
+                <target>Rediģēt</target>
+            </trans-unit>
+            <trans-unit id="69">
+                <source>Izvēlieties kategoriju</source>
+                <target>Izvēlēties kategoriju</target>
+            </trans-unit>
+            <trans-unit id="70">
+                <source>Izvēlieties</source>
+                <target>Izvēlēties</target>
+            </trans-unit>
+            <trans-unit id="71">
+                <source>NĒ</source>
+                <target>NĒ</target>
+            </trans-unit>
+            <trans-unit id="72">
+                <source>JAUNS</source>
+                <target>JAUNS</target>
+            </trans-unit>
+            <trans-unit id="73">
+                <source>Atrašanās vieta</source>
+                <target>Atrašanās vieta</target>
+            </trans-unit>
+            <trans-unit id="74">
+                <source>Tips</source>
+                <target>Tips</target>
+            </trans-unit>
+            <trans-unit id="75">
+                <source>Pārdošana</source>
+                <target>Pārdošana</target>
+            </trans-unit>
+            <trans-unit id="76">
+                <source>Reklāmas ielādes iespējas</source>
+                <target>Sludinājuma ielādes iespējas</target>
+            </trans-unit>
+            <trans-unit id="77">
+                <source>Reklāmas nosaukums</source>
+                <target>Sludinājuma nosaukums</target>
+            </trans-unit>
+            <trans-unit id="78">
+                <source>Apraksts</source>
+                <target>Apraksts</target>
+            </trans-unit>
+            <trans-unit id="79">
+                <source>Bildes</source>
+                <target>Bildes</target>
+            </trans-unit>
+            <trans-unit id="80">
+                <source>Dzēst attēlu</source>
+                <target>Dzēst attēlu</target>
+            </trans-unit>
+            <trans-unit id="81">
+                <source>Header photo</source>
+                <target>Header photo</target>
+            </trans-unit>
+            <trans-unit id="82">
+                <source>Uzziniet vairāk</source>
+                <target>Uzzināt vairāk</target>
+            </trans-unit>
+            <trans-unit id="83">
+                <source>Kā pareizi norādīt cenu</source>
+                <target>Kā pareizi norādīt cenu</target>
+            </trans-unit>
+            <trans-unit id="84">
+                <source>Aizvērt</source>
+                <target>Aizvērt</target>
+            </trans-unit>
+            <trans-unit id="85">
+                <source>Publicēt</source>
+                <target>Publicēt</target>
+            </trans-unit>
+            <trans-unit id="86">
+                <source><![CDATA[<span>Regulāra tirdzniecība</span>]]></source>
+                <target><![CDATA[<span>Regulāra tirdzniecība</span>]]></target>
+            </trans-unit>
+            <trans-unit id="87">
+                <source><![CDATA[<span>Augstākā izmitināšana - %price% &euro;</span>]]></source>
+                <target><![CDATA[<span>Augstākā izmitināšana - %price% &euro;</span>]]></target>
+            </trans-unit>
+            <trans-unit id="88">
+                <source><![CDATA[<span>Iezīmējiet reklāmu - %price% &euro;</span>]]></source>
+                <target><![CDATA[<span>Iezīmējiet reklāmu - %price% &euro;</span>]]></target>
+            </trans-unit>
+            <trans-unit id="89">
+                <source><![CDATA[<div class="agreement-text">*Es piekrītu pakalpojuma <a href="" data-toggle="modal" data-target="#userAgreementModal"> lietošanas noteikumiem </a>, kā arī manu datu pārsūtīšanai un apstrādei uz gribupardot.sunweb.by. Es apstiprinu savu vairākumu un atbildību par reklāmas izvietošanu.</div>]]></source>
+                <target><![CDATA[<div class="agreement-text">*Es piekrītu pakalpojuma <a href="" data-toggle="modal" data-target="#userAgreementModal"> lietošanas noteikumiem </a>, kā arī manu datu pārsūtīšanai un apstrādei uz gribupardot.sunweb.by. Es apstiprinu savu vairākumu un atbildību par reklāmas izvietošanu.</div>]]></target>
+            </trans-unit>
+            <trans-unit id="90">
+                <source>Noklikšķiniet, lai ielādētu attēlus, jūs varat izvēlēties vairākus. Kopējais attēlu skaits nedrīkst pārsniegt</source>
+                <target>Noklikšķiniet, lai ielādētu attēlus, jūs varat izvēlēties vairākus. Kopējais attēlu skaits nedrīkst pārsniegt</target>
+            </trans-unit>
+            <trans-unit id="91">
+                <source>Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.</source>
+                <target>Ielādēšanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi attēla paplašinājumi: jpg, jpeg, png, gif.</target>
+            </trans-unit>
+            <trans-unit id="92">
+                <source>Jūs nevarat augšupielādēt vairāk kā</source>
+                <target>Jūs nevarat augšupielādēt vairāk kā</target>
+            </trans-unit>
+            <trans-unit id="93">
+                <source>attēli</source>
+                <target>attēli</target>
+            </trans-unit>
+            <trans-unit id="94">
+                <source>Reklāmas iespējas</source>
+                <target>Reklāmas iespējas</target>
+            </trans-unit>
+            <trans-unit id="95">
+                <source>Rediģēt reklāmu</source>
+                <target>Rediģēt sludinājumu</target>
+            </trans-unit>
+            <trans-unit id="96">
+                <source>Saglabājiet</source>
+                <target>Saglabāt</target>
+            </trans-unit>
+            <trans-unit id="97">
+                <source>Lietotāja konts</source>
+                <target>Lietotāja konts</target>
+            </trans-unit>
+            <trans-unit id="98">
+                <source>Pievienot naudu savam seifam</source>
+                <target>Pievienot naudu savam seifam</target>
+            </trans-unit>
+            <trans-unit id="99">
+                <source>Maksas pakalpojumi</source>
+                <target>Maksas pakalpojumi</target>
+            </trans-unit>
+            <trans-unit id="100">
+                <source>Operāciju vēsture</source>
+                <target>Operāciju vēsture</target>
+            </trans-unit>
+            <trans-unit id="101">
+                <source>Uz kontu</source>
+                <target>Uz kontu</target>
+            </trans-unit>
+            <trans-unit id="102">
+                <source>Manas reklāmas</source>
+                <target>Mani sludinājumi</target>
+            </trans-unit>
+            <trans-unit id="103">
+                <source>parādīt visu</source>
+                <target>parādīt visu</target>
+            </trans-unit>
+            <trans-unit id="104">
+                <source>Tas paliek</source>
+                <target>Tas paliek</target>
+            </trans-unit>
+            <trans-unit id="105">
+                <source>dienas</source>
+                <target>dienas</target>
+            </trans-unit>
+            <trans-unit id="106">
+                <source>Pagarināt</source>
+                <target>Pagarināt</target>
+            </trans-unit>
+            <trans-unit id="107">
+                <source>Rediģēt</source>
+                <target>Rediģēt</target>
+            </trans-unit>
+            <trans-unit id="108">
+                <source>STILL</source>
+                <target>Līdz</target>
+            </trans-unit>
+            <trans-unit id="109">
+                <source>Izņem no pārdošanas</source>
+                <target>Izņemt no pārdošanas</target>
+            </trans-unit>
+            <trans-unit id="110">
+                <source>Noņemt</source>
+                <target>Noņemt</target>
+            </trans-unit>
+            <trans-unit id="111">
+                <source>Jūs vēl neesat pievienojis nevienu reklāmu</source>
+                <target>Jūs vēl neesat pievienojis nevienu sludinājumu</target>
+            </trans-unit>
+            <trans-unit id="112">
+                <source>Piedāvātās reklāmas</source>
+                <target>Piedāvātās reklāmas</target>
+            </trans-unit>
+            <trans-unit id="113">
+                <source>Vai tiešām vēlaties noņemt šo reklāmu no izlases</source>
+                <target>Vai tiešām vēlaties noņemt šo sludinājumu no izlases</target>
+            </trans-unit>
+            <trans-unit id="114">
+                <source>Noņemt no izlases</source>
+                <target>Noņemt no izlases</target>
+            </trans-unit>
+            <trans-unit id="115">
+                <source>Amati</source>
+                <target>Amati</target>
+            </trans-unit>
+            <trans-unit id="116">
+                <source>Lietotājs ir dzēsts</source>
+                <target>Lietotājs ir dzēsts</target>
+            </trans-unit>
+            <trans-unit id="117">
+                <source>nosūtīts</source>
+                <target>nosūtīts</target>
+            </trans-unit>
+            <trans-unit id="118">
+                <source>Nav jaunu ziņojumu</source>
+                <target>Nav jaunu ziņojumu</target>
+            </trans-unit>
+            <trans-unit id="119">
+                <source>Manas reklāmas</source>
+                <target>Mani sludinājumi</target>
+            </trans-unit>
+            <trans-unit id="120">
+                <source>Par moderāciju</source>
+                <target>Par moderāciju</target>
+            </trans-unit>
+            <trans-unit id="121">
+                <source>Par korekciju</source>
+                <target>Par korekciju</target>
+            </trans-unit>
+            <trans-unit id="122">
+                <source>Pašreizējais</source>
+                <target>Pašreizējais</target>
+            </trans-unit>
+            <trans-unit id="123">
+                <source>Pabeigts</source>
+                <target>Pabeigts</target>
+            </trans-unit>
+            <trans-unit id="124">
+                <source>Slēdzenē</source>
+                <target>Slēdzenē</target>
+            </trans-unit>
+            <trans-unit id="125">
+                <source>no jaunajiem</source>
+                <target>no jaunajiem</target>
+            </trans-unit>
+            <trans-unit id="126">
+                <source>Pieprasījumi</source>
+                <target>Pieprasījumi</target>
+            </trans-unit>
+            <trans-unit id="127">
+                <source>Mana rezervācija</source>
+                <target>Mana rezervācija</target>
+            </trans-unit>
+            <trans-unit id="128">
+                <source>Atsauksmes</source>
+                <target>Atsauksmes</target>
+            </trans-unit>
+            <trans-unit id="129">
+                <source>Mana atsauksme</source>
+                <target>Mana atsauksme</target>
+            </trans-unit>
+            <trans-unit id="130">
+                <source>Atsauksmes par mani</source>
+                <target>Atsauksmes par mani</target>
+            </trans-unit>
+            <trans-unit id="131">
+                <source>Seifs</source>
+                <target>Seifs</target>
+            </trans-unit>
+            <trans-unit id="132">
+                <source>Papildināšana</source>
+                <target>Papildināšana</target>
+            </trans-unit>
+            <trans-unit id="133">
+                <source>Maksas pakalpojumi</source>
+                <target>Maksas pakalpojumi</target>
+            </trans-unit>
+            <trans-unit id="134">
+                <source>Pirkt papildu slotus</source>
+                <target>Pirkt papildu slotus</target>
+            </trans-unit>
+            <trans-unit id="135">
+                <source>Konta vēsture</source>
+                <target>Konta vēsture</target>
+            </trans-unit>
+            <trans-unit id="136">
+                <source>Melnais saraksts</source>
+                <target>Melnais saraksts</target>
+            </trans-unit>
+            <trans-unit id="137">
+                <source>Iestatījumi</source>
+                <target>Iestatījumi</target>
+            </trans-unit>
+            <trans-unit id="138">
+                <source>Izrakstīties</source>
+                <target>Izrakstīties</target>
+            </trans-unit>
+            <trans-unit id="139">
+                <source>Referral sistēma</source>
+                <target>Referral sistēma</target>
+            </trans-unit>
+            <trans-unit id="140">
+                <source>Reklāmas par korekciju</source>
+                <target>Reklāmas par korekciju</target>
+            </trans-unit>
+            <trans-unit id="141">
+                <source>Vai tiešām vēlaties dzēst šo reklāmu</source>
+                <target>Vai tiešām vēlaties dzēst šo sludinājumu</target>
+            </trans-unit>
+            <trans-unit id="142">
+                <source>Iemesls</source>
+                <target>Iemesls</target>
+            </trans-unit>
+            <trans-unit id="143">
+                <source>Nav reklāmu par pielāgojumu</source>
+                <target>Nav reklāmu par pielāgojumu</target>
+            </trans-unit>
+            <trans-unit id="144">
+                <source>Pašreizējās reklāmas</source>
+                <target>Pašreizējās reklāmas</target>
+            </trans-unit>
+            <trans-unit id="145">
+                <source>Pabeigtas reklāmas</source>
+                <target>Pabeigtas reklāmas</target>
+            </trans-unit>
+            <trans-unit id="146">
+                <source>Nav pabeigtu reklāmu</source>
+                <target>Nav pabeigtu reklāmu</target>
+            </trans-unit>
+            <trans-unit id="147">
+                <source>Bloķētās reklāmas</source>
+                <target>Bloķētie sludinājumi</target>
+            </trans-unit>
+            <trans-unit id="148">
+                <source>Iesniegt par moderāciju</source>
+                <target>Iesniegt uz moderāciju</target>
+            </trans-unit>
+            <trans-unit id="149">
+                <source>Nav bloķētu reklāmu</source>
+                <target>Nav bloķētu sludinājumu</target>
+            </trans-unit>
+            <trans-unit id="150">
+                <source>Mani sludinājumi</source>
+                <target>Mani sludinājumi</target>
+            </trans-unit>
+            <trans-unit id="151">
+                <source>Dialogu saraksts</source>
+                <target>Dialogu saraksts</target>
+            </trans-unit>
+            <trans-unit id="152">
+                <source>Vai tiešām vēlaties dzēst korespondenci</source>
+                <target>Vai tiešām vēlaties dzēst korespondenci</target>
+            </trans-unit>
+            <trans-unit id="153">
+                <source>Jūs vēl neesat sācis sarunu</source>
+                <target>Jūs vēl neesat sācis sarunu</target>
+            </trans-unit>
+            <trans-unit id="154">
+                <source>Saņemtie pasūtījumi</source>
+                <target>Saņemtie pasūtījumi</target>
+            </trans-unit>
+            <trans-unit id="155">
+                <source>Sīkāka informācija</source>
+                <target>Sīkāka informācija</target>
+            </trans-unit>
+            <trans-unit id="156">
+                <source>Pievienošanas datums</source>
+                <target>Pievienošanas datums</target>
+            </trans-unit>
+            <trans-unit id="157">
+                <source>Statuss</source>
+                <target>Statuss</target>
+            </trans-unit>
+            <trans-unit id="158">
+                <source>Darbības</source>
+                <target>Darbības</target>
+            </trans-unit>
+            <trans-unit id="159">
+                <source>Istaba</source>
+                <target>Istaba</target>
+            </trans-unit>
+            <trans-unit id="160">
+                <source>Reklāma</source>
+                <target>Reklāma</target>
+            </trans-unit>
+            <trans-unit id="161">
+                <source>Noņemts</source>
+                <target>Noņemts</target>
+            </trans-unit>
+            <trans-unit id="162">
+                <source>Lietotājs</source>
+                <target>Lietotājs</target>
+            </trans-unit>
+            <trans-unit id="163">
+                <source>Lietotājs ir dzēsts</source>
+                <target>Lietotājs ir dzēsts</target>
+            </trans-unit>
+            <trans-unit id="164">
+                <source>Tālruņa numurs</source>
+                <target>Tālruņa numurs</target>
+            </trans-unit>
+            <trans-unit id="165">
+                <source>Komentārs</source>
+                <target>Komentārs</target>
+            </trans-unit>
+            <trans-unit id="166">
+                <source>Pabeigts</source>
+                <target>Pabeigts</target>
+            </trans-unit>
+            <trans-unit id="167">
+                <source>Vai tiešām vēlaties dzēst pasūtījumu</source>
+                <target>Vai tiešām vēlaties dzēst pasūtījumu</target>
+            </trans-unit>
+            <trans-unit id="168">
+                <source>Jūs vēl neesat saņēmis pasūtījumus</source>
+                <target>Jūs vēl neesat saņēmis pasūtījumus</target>
+            </trans-unit>
+            <trans-unit id="169">
+                <source>Rīkojumi veikti</source>
+                <target>Rīkojumi veikti</target>
+            </trans-unit>
+            <trans-unit id="170">
+                <source>Atstājiet atbildi</source>
+                <target>Atstājiet atbildi</target>
+            </trans-unit>
+            <trans-unit id="171">
+                <source>Atstājiet atsauksmi par</source>
+                <target>Atstājiet atsauksmi par</target>
+            </trans-unit>
+            <trans-unit id="172">
+                <source>Neitrāls</source>
+                <target>Neitrāls</target>
+            </trans-unit>
+            <trans-unit id="173">
+                <source>Izvēlieties opciju</source>
+                <target>Izvēlieties opciju</target>
+            </trans-unit>
+            <trans-unit id="174">
+                <source>Izvēlieties</source>
+                <target>Izvēlieties</target>
+            </trans-unit>
+            <trans-unit id="175">
+                <source>viss</source>
+                <target>viss</target>
+            </trans-unit>
+            <trans-unit id="176">
+                <source>pozitīvs</source>
+                <target>pozitīvs</target>
+            </trans-unit>
+            <trans-unit id="177">
+                <source>negatīvs</source>
+                <target>negatīvs</target>
+            </trans-unit>
+            <trans-unit id="178">
+                <source>neitrāla</source>
+                <target>neitrāla</target>
+            </trans-unit>
+            <trans-unit id="179">
+                <source>Atsauksmes man</source>
+                <target>Atsauksmes man</target>
+            </trans-unit>
+            <trans-unit id="180">
+                <source>Reklāma ir noņemta</source>
+                <target>Reklāma ir noņemta</target>
+            </trans-unit>
+            <trans-unit id="181">
+                <source>Šī ir atbilde uz atsauksmi</source>
+                <target>Šī ir atbilde uz atsauksmi</target>
+            </trans-unit>
+            <trans-unit id="182">
+                <source>Vai tiešām vēlaties izdzēst atsauksmi</source>
+                <target>Vai tiešām vēlaties izdzēst atsauksmi</target>
+            </trans-unit>
+            <trans-unit id="183">
+                <source>Parādīts ar</source>
+                <target>Parādīts ar</target>
+            </trans-unit>
+            <trans-unit id="184">
+                <source>atbilde</source>
+                <target>atbilde</target>
+            </trans-unit>
+            <trans-unit id="185">
+                <source>Mēnesis</source>
+                <target>Mēnesis</target>
+            </trans-unit>
+            <trans-unit id="186">
+                <source>Neviens komentārs vēl nav pievienots</source>
+                <target>Neviens komentārs vēl nav pievienots</target>
+            </trans-unit>
+            <trans-unit id="187">
+                <source>Atbildiet uz lietotāju atsauksmēm</source>
+                <target>Atbildiet uz lietotāju atsauksmēm</target>
+            </trans-unit>
+            <trans-unit id="188">
+                <source>Atbildes novērtējums</source>
+                <target>Atbildes novērtējums</target>
+            </trans-unit>
+            <trans-unit id="189">
+                <source>Ievadiet summu</source>
+                <target>Ievadiet summu</target>
+            </trans-unit>
+            <trans-unit id="190">
+                <source>Izvēlieties maksājuma veidu</source>
+                <target>Izvēlieties maksājuma veidu</target>
+            </trans-unit>
+            <trans-unit id="191">
+                <source>PILNĪGA</source>
+                <target>PILNĪGA</target>
+            </trans-unit>
+            <trans-unit id="192">
+                <source>Es ģenerē maksājuma veidlapu</source>
+                <target>Es ģenerē maksājuma veidlapu</target>
+            </trans-unit>
+            <trans-unit id="193">
+                <source>Maksas pakalpojumi</source>
+                <target>Maksas pakalpojumi</target>
+            </trans-unit>
+            <trans-unit id="194">
+                <source>Pakalpojums</source>
+                <target>Pakalpojums</target>
+            </trans-unit>
+            <trans-unit id="195">
+                <source>Aktivizēšanas datums</source>
+                <target>Aktivizēšanas datums</target>
+            </trans-unit>
+            <trans-unit id="196">
+                <source>Beigu datums</source>
+                <target>Beigu datums</target>
+            </trans-unit>
+            <trans-unit id="197">
+                <source>Summa</source>
+                <target>Summa</target>
+            </trans-unit>
+            <trans-unit id="198">
+                <source>Nav maksas pakalpojumu</source>
+                <target>Nav maksas pakalpojumu</target>
+            </trans-unit>
+            <trans-unit id="199">
+                <source>Pirkt papildu slotus</source>
+                <target>Pirkt papildu slotus</target>
+            </trans-unit>
+            <trans-unit id="200">
+                <source>Pašlaik jūsu reklāmu skaits ir</source>
+                <target>Pašlaik jūsu reklāmu skaits ir</target>
+            </trans-unit>
+            <trans-unit id="201">
+                <source>Jums ir ierobežots bezmaksas reklāmu skaits, kas ir vienāds ar</source>
+                <target>Jums ir ierobežots bezmaksas reklāmu skaits, kas ir vienāds ar</target>
+            </trans-unit>
+            <trans-unit id="202">
+                <source>Jums jau ir papildu slots daudzumā</source>
+                <target>Jums jau ir papildu slots daudzumā</target>
+            </trans-unit>
+            <trans-unit id="203">
+                <source>Izmantojot zemāk esošo veidlapu, varat iegādāties papildu reklāmas laika nišas savām reklāmām</source>
+                <target>Izmantojot zemāk esošo veidlapu, varat iegādāties papildu reklāmas laika nišas savām reklāmām</target>
+            </trans-unit>
+            <trans-unit id="204">
+                <source>Viena laika niša</source>
+                <target>Viena laika niša</target>
+            </trans-unit>
+            <trans-unit id="205">
+                <source>Datums</source>
+                <target>Datums</target>
+            </trans-unit>
+            <trans-unit id="206">
+                <source>Darbība</source>
+                <target>Darbība</target>
+            </trans-unit>
+            <trans-unit id="207">
+                <source>Konta atlikums</source>
+                <target>Konta atlikums</target>
+            </trans-unit>
+            <trans-unit id="208">
+                <source>Nav uzskaitīti darījumi</source>
+                <target>Nav uzskaitīti darījumi</target>
+            </trans-unit>
+            <trans-unit id="209">
+                <source>Jūs varat arī nosūtīt atsauksmju saiti uz savu draugu</source>
+                <target>Jūs varat arī nosūtīt atsauksmju saiti savam draugam</target>
+            </trans-unit>
+            <trans-unit id="210">
+                <source>kopēt starpliktuvē</source>
+                <target>kopēt starpliktuvē</target>
+            </trans-unit>
+            <trans-unit id="211">
+                <source>Jūsu draugi</source>
+                <target>Jūsu draugi</target>
+            </trans-unit>
+            <trans-unit id="212">
+                <source>Noņemt no draugiem</source>
+                <target>Noņemt no draugiem</target>
+            </trans-unit>
+            <trans-unit id="213">
+                <source>Vai tiešām vēlaties noņemt lietotāju no saviem draugiem</source>
+                <target>Vai tiešām vēlaties noņemt lietotāju no saviem draugiem</target>
+            </trans-unit>
+            <trans-unit id="214">
+                <source>Jūs vēl neesat uzaicinājis draugus</source>
+                <target>Jūs vēl neesat uzaicinājis draugus</target>
+            </trans-unit>
+            <trans-unit id="215">
+                <source>Noņemt no melnā saraksta</source>
+                <target>Noņemt no melnā saraksta</target>
+            </trans-unit>
+            <trans-unit id="216">
+                <source>Vai tiešām vēlaties noņemt lietotāju no melnā saraksta</source>
+                <target>Vai tiešām vēlaties noņemt lietotāju no melnā saraksta</target>
+            </trans-unit>
+            <trans-unit id="217">
+                <source>Melnais saraksts ir tukšs</source>
+                <target>Melnais saraksts ir tukšs</target>
+            </trans-unit>
+            <trans-unit id="218">
+                <source>Mani dati</source>
+                <target>Mani dati</target>
+            </trans-unit>
+            <trans-unit id="219">
+                <source>fio</source>
+                <target>fio</target>
+            </trans-unit>
+            <trans-unit id="220">
+                <source>Sekss</source>
+                <target>Sekss</target>
+            </trans-unit>
+            <trans-unit id="221">
+                <source>mob. tālrunis</source>
+                <target>mob. tālrunis</target>
+            </trans-unit>
+            <trans-unit id="222">
+                <source>e-pasts</source>
+                <target>e-pasts</target>
+            </trans-unit>
+            <trans-unit id="223">
+                <source>saņemt e-pasta paziņojumus</source>
+                <target>saņemt e-pasta paziņojumus</target>
+            </trans-unit>
+            <trans-unit id="224">
+                <source>dzimšanas diena</source>
+                <target>dzimšanas diena</target>
+            </trans-unit>
+            <trans-unit id="225">
+                <source>Diena</source>
+                <target>Diena</target>
+            </trans-unit>
+            <trans-unit id="226">
+                <source>Gads</source>
+                <target>Gads</target>
+            </trans-unit>
+            <trans-unit id="227">
+                <source>iemiesojums</source>
+                <target>iemiesojums</target>
+            </trans-unit>
+            <trans-unit id="228">
+                <source>mainīt</source>
+                <target>mainīt</target>
+            </trans-unit>
+            <trans-unit id="229">
+                <source>nomainīt paroli</source>
+                <target>nomainīt paroli</target>
+            </trans-unit>
+            <trans-unit id="230">
+                <source>Jauna parole</source>
+                <target>Jauna parole</target>
+            </trans-unit>
+            <trans-unit id="231">
+                <source>Apstipriniet paroli</source>
+                <target>Apstipriniet paroli</target>
+            </trans-unit>
+            <trans-unit id="232">
+                <source>Piesakieties savā kontā</source>
+                <target>Piesakieties savā kontā</target>
+            </trans-unit>
+            <trans-unit id="233">
+                <source>Ievadiet savu e-pasta adresi un paroli, lai pieteiktos</source>
+                <target>Ievadiet savu e-pasta adresi un paroli, lai pieteiktos</target>
+            </trans-unit>
+            <trans-unit id="234">
+                <source>aizmirsu paroli</source>
+                <target>aizmirsu paroli</target>
+            </trans-unit>
+            <trans-unit id="235">
+                <source>parole</source>
+                <target>parole</target>
+            </trans-unit>
+            <trans-unit id="236">
+                <source>Atceries mani</source>
+                <target>Atcerēties mani</target>
+            </trans-unit>
+            <trans-unit id="237">
+                <source>Ieiet vietnē</source>
+                <target>Ieiet vietnē</target>
+            </trans-unit>
+            <trans-unit id="238">
+                <source>jauna lietotāja reģistrācija</source>
+                <target>jauna lietotāja reģistrācija</target>
+            </trans-unit>
+            <trans-unit id="239">
+                <source>Pierakstīties, izmantojot Vkontakte</source>
+                <target>Pierakstieties, izmantojot Vkontakte</target>
+            </trans-unit>
+            <trans-unit id="240">
+                <source>Ja jums ir profils sociālajā tīklā VKontakte, varat to izmantot, lai ievadītu</source>
+                <target>Ja jums ir profils sociālajā tīklā VKontakte, varat to izmantot, lai pierakstītos</target>
+            </trans-unit>
+            <trans-unit id="241">
+                <source>Pierakstieties ar Vkontakte</source>
+                <target>Pierakstīties ar Vkontakte</target>
+            </trans-unit>
+            <trans-unit id="242">
+                <source>Pierakstieties ar Facebook</source>
+                <target>Pierakstieties ar Facebook</target>
+            </trans-unit>
+            <trans-unit id="243">
+                <source>Ja jums ir profils pakalpojumā Facebook, varat to izmantot, lai pierakstītos</source>
+                <target>Ja jums ir profils vietnē Facebook, varat to izmantot, lai pierakstītos</target>
+            </trans-unit>
+            <trans-unit id="244">
+                <source>Droši savienojumi, izmantojot SSL tehnoloģiju</source>
+                <target>Droši savienojumi, izmantojot SSL tehnoloģiju</target>
+            </trans-unit>
+            <trans-unit id="245">
+                <source>Jauna lietotāja reģistrācija</source>
+                <target>Jauna lietotāja reģistrācija</target>
+            </trans-unit>
+            <trans-unit id="246">
+                <source>Reģistrācijas forma</source>
+                <target>Reģistrācijas forma</target>
+            </trans-unit>
+            <trans-unit id="247">
+                <source>Jūs paātrinājāt reģistrēties. Saite uz reģistrācijas apstiprinājumu tiek nosūtīta uz norādīto adresi. Pārbaudiet pastu. Ja jūs nesaņemat vēstuli, lūdzu rakstiet mums pie</source>
+                <target>Jūs paātrinājāt reģistrēties. Saite uz reģistrācijas apstiprinājumu tiek nosūtīta uz norādīto adresi. Pārbaudiet pastu. Ja jūs nesaņemat vēstuli, lūdzu rakstiet mums pie</target>
+            </trans-unit>
+            <trans-unit id="248">
+                <source>Lai reģistrētos sistēmā, aizpildiet norādītos laukus</source>
+                <target>Lai reģistrētos sistēmā, aizpildiet norādītos laukus</target>
+            </trans-unit>
+            <trans-unit id="249">
+                <source>Reģistrējies</source>
+                <target>Reģistrēties</target>
+            </trans-unit>
+            <trans-unit id="251">
+                <source>Atjaunot piekļuvi</source>
+                <target>Atjaunot piekļuvi</target>
+            </trans-unit>
+            <trans-unit id="252">
+                <source>Paroles atjaunošanas norādījumi tiek nosūtīti uz norādīto e-pastu. Pārbaudiet pastu.</source>
+                <target>Paroles atjaunošanas norādījumi tiek nosūtīti uz norādīto e-pastu. Pārbaudiet e-pastu.</target>
+            </trans-unit>
+            <trans-unit id="253">
+                <source>Ievadiet e-pasta adresi, kuru izmantojāt, lai reģistrētos sistēmā. Mēs nosūtīsim norādījumus, kā atjaunot piekļuvi šai adresei</source>
+                <target>Ievadiet e-pasta adresi, kuru izmantojāt, lai reģistrētos sistēmā. Mēs nosūtīsim norādījumus, kā atjaunot piekļuvi šai vietnei</target>
+            </trans-unit>
+            <trans-unit id="254">
+                <source><![CDATA[<strong> Kļūda! </ strong> Šis e-pasts nav reģistrēts sistēmā.]]></source>
+                <target><![CDATA[<strong> Kļūda! </ strong> Šis e-pasts nav reģistrēts sistēmā.]]></target>
+            </trans-unit>
+            <trans-unit id="255">
+                <source>Pievienojiet attēlu</source>
+                <target>Pievienojiet attēlu</target>
+            </trans-unit>
+            <trans-unit id="256">
+                <source>Ienākošie zvani</source>
+                <target>Ienākošie zvani</target>
+            </trans-unit>
+            <trans-unit id="257">
+                <source>Atzīmēt kā</source>
+                <target>Atzīmēt kā</target>
+            </trans-unit>
+            <trans-unit id="258">
+                <source>lasīt</source>
+                <target>lasīt</target>
+            </trans-unit>
+            <trans-unit id="259">
+                <source>noņemt</source>
+                <target>noņemt</target>
+            </trans-unit>
+            <trans-unit id="260">
+                <source>Vai tiešām vēlaties dzēst šo ziņojumu</source>
+                <target>Vai tiešām vēlaties dzēst šo ziņojumu</target>
+            </trans-unit>
+            <trans-unit id="261">
+                <source>Izejošais</source>
+                <target>Izejošais</target>
+            </trans-unit>
+            <trans-unit id="262">
+                <source>Atlasiet visu</source>
+                <target>Atlasīt visu</target>
+            </trans-unit>
+            <trans-unit id="263">
+                <source>Atlasīts</source>
+                <target>Atlasīts</target>
+            </trans-unit>
+            <trans-unit id="264">
+                <source>Netika atrasts izejošais ziņojums</source>
+                <target>Netika atrasts izejošais ziņojums</target>
+            </trans-unit>
+            <trans-unit id="265">
+                <source>Grozs</source>
+                <target>Grozs</target>
+            </trans-unit>
+            <trans-unit id="266">
+                <source>Grozs ir tukšs</source>
+                <target>Grozs ir tukšs</target>
+            </trans-unit>
+            <trans-unit id="267">
+                <source>Pieejamo bezmaksas reklāmu limits ir izsmelts</source>
+                <target>Pieejamo bezmaksas reklāmu limits ir izsmelts</target>
+            </trans-unit>
+            <trans-unit id="268">
+                <source>Reklāmas par moderāciju</source>
+                <target>Reklāmas par moderāciju</target>
+            </trans-unit>
+            <trans-unit id="269">
+                <source>Nav moderēšanas reklāmu</source>
+                <target>Nav moderēšanas reklāmu</target>
+            </trans-unit>
+            <trans-unit id="270">
+                <source>Lietotāja profils</source>
+                <target>Lietotāja profils</target>
+            </trans-unit>
+            <trans-unit id="271">
+                <source>Lietotāju reklāmas</source>
+                <target>Lietotāju reklāmas</target>
+            </trans-unit>
+            <trans-unit id="272">
+                <source>Pievienot bloku sarakstam</source>
+                <target>Pievienot bloku sarakstam</target>
+            </trans-unit>
+            <trans-unit id="273">
+                <source>Lietotāju pārskati</source>
+                <target>Lietotāju pārskati</target>
+            </trans-unit>
+            <trans-unit id="274">
+                <source>Parādīt visas atsauksmes</source>
+                <target>Parādīt visas atsauksmes</target>
+            </trans-unit>
+            <trans-unit id="275">
+                <source>Šis lietotājs nav atbildējis nevienai atsauksmei</source>
+                <target>Šis lietotājs nav atbildējis nevienai atsauksmei</target>
+            </trans-unit>
+            <trans-unit id="276">
+                <source>Lietotāju reklāmas</source>
+                <target>Lietotāju reklāmas</target>
+            </trans-unit>
+            <trans-unit id="277">
+                <source>Šim lietotājam nav nevienas reklāmas</source>
+                <target>Šim lietotājam nav nevienas reklāmas</target>
+            </trans-unit>
+            <trans-unit id="278">
+                <source>Lietotāju atsauksmes</source>
+                <target>Lietotāju atsauksmes</target>
+            </trans-unit>
+            <trans-unit id="279">
+                <source>Nav atsauksmju</source>
+                <target>Nav atsauksmju</target>
+            </trans-unit>
+            <trans-unit id="280">
+                <source>Augstākā izmitināšana</source>
+                <target>Augstākā izmitināšana</target>
+            </trans-unit>
+            <trans-unit id="281">
+                <source>Jūsu reklāma tiks rādīta visredzamākajā vietā vietnē - virs parastajām reklāmām meklēšanas rezultātu lapās, norādot veidlapā norādīto dienu skaitu (bet ne vairāk kā</source>
+                <target>Jūsu reklāma tiks rādīta visredzamākajā vietā vietnē - virs parastajām reklāmām meklēšanas rezultātu lapās, norādot veidlapā norādīto dienu skaitu (bet ne vairāk kā</target>
+            </trans-unit>
+            <trans-unit id="282">
+                <source>Pakalpojuma izmaksas</source>
+                <target>Pakalpojuma izmaksas</target>
+            </trans-unit>
+            <trans-unit id="283">
+                <source>dienā</source>
+                <target>dienā</target>
+            </trans-unit>
+            <trans-unit id="284">
+                <source>Jūsu pašreizējam kontam nav pietiekami daudz līdzekļu pakalpojuma piemērošanai</source>
+                <target>Jūsu pašreizējam kontam nav pietiekami daudz līdzekļu pakalpojuma piemērošanai</target>
+            </trans-unit>
+            <trans-unit id="285">
+                <source><![CDATA[Varat <a href=""> papildināt savu kuponu </a> un pēc tam mēģināt vēlreiz]]></source>
+                <target><![CDATA[Varat <a href=""> papildināt savu kontu </a> un pēc tam mēģināt vēlreiz]]></target>
+            </trans-unit>
+            <trans-unit id="286">
+                <source>Dienu skaits</source>
+                <target>Dienu skaits</target>
+            </trans-unit>
+            <trans-unit id="287">
+                <source>Pieteikties pakalpojumam</source>
+                <target>Pieteikties pakalpojumam</target>
+            </trans-unit>
+            <trans-unit id="288">
+                <source>Iezīmējiet reklāmu</source>
+                <target>Iezīmējiet reklāmu</target>
+            </trans-unit>
+            <trans-unit id="289">
+                <source>meklēšanas rezultātu lapā tiek atzīmēta ar īpašu ikonu un parādīta ar atšķirīgu reklāmas dice krāsu skalu, atšķirībā no standarta fona</source>
+                <target>meklēšanas rezultātu lapā tiek atzīmēta ar īpašu ikonu un parādīta ar atšķirīgu reklāmas kauliņu krāsu skalu, atšķirībā no standarta fona</target>
+            </trans-unit>
+            <trans-unit id="290">
+                <source>BONUS Šajā gadījumā tas meklēšanas rezultātos pieaugs uz pirmo vietu par brīvu</source>
+                <target>BONUS Šajā gadījumā tas meklēšanas rezultātos pieaugs uz pirmo vietu par brīvu</target>
+            </trans-unit>
+            <trans-unit id="291">
+                <source>Paaugstināt un paplašināt reklāmu</source>
+                <target>Paaugstināt un paplašināt reklāmu</target>
+            </trans-unit>
+            <trans-unit id="292">
+                <source>Paaugstināt reklāmu</source>
+                <target>Paaugstināt reklāmu</target>
+            </trans-unit>
+            <trans-unit id="293">
+                <source>Jūsu reklāma paaugstināsies meklēšanas rezultātu augšdaļā, it kā tā tikko tiktu iesniegta vietnei</source>
+                <target>Jūsu reklāma paaugstināsies meklēšanas rezultātu augšdaļā, it kā tā tikko tiktu iesniegta vietnei</target>
+            </trans-unit>
+            <trans-unit id="294">
+                <source>BONUS Nākamajā dienā tajā pašā laikā tas atkal tiks pacelts bez maksas</source>
+                <target>BONUS Nākamajā dienā tajā pašā laikā tas atkal tiks pacelts bez maksas</target>
+            </trans-unit>
+            <trans-unit id="295">
+                <source>Atjaunot reklāmu</source>
+                <target>Atjaunot reklāmu</target>
+            </trans-unit>
+            <trans-unit id="296">
+                <source>Maksimālais katras reklāmas izvietošanas laiks uz kuģa</source>
+                <target>Maksimālais katras reklāmas izvietošanas laiks uz kuģa</target>
+            </trans-unit>
+            <trans-unit id="297">
+                <source>Ja jūsu reklāmas termiņš beigsies (mazāk nekā 3 dienas pirms beigām), tad ar šī pakalpojuma palīdzību jūs varat pagarināt paziņojumu, bet uz laiku, kas nepārsniedz</source>
+                <target>Ja jūsu reklāmas termiņš beigsies (mazāk nekā 3 dienas pirms beigām), tad ar šī pakalpojuma palīdzību jūs varat pagarināt paziņojumu, bet uz laiku, kas nepārsniedz</target>
+            </trans-unit>
+            <trans-unit id="298">
+                <source>Jūsu reklāma pašlaik ir aktīva, tādēļ to nevar izmantot</source>
+                <target>Jūsu reklāma pašlaik ir aktīva, tādēļ to nevar izmantot</target>
+            </trans-unit>
+            <trans-unit id="299">
+                <source>Maksājumu iespējas</source>
+                <target>Maksājumu iespējas</target>
+            </trans-unit>
+            <trans-unit id="300">
+                <source>Maksājuma summa</source>
+                <target>Maksājuma summa</target>
+            </trans-unit>
+            <trans-unit id="301">
+                <source>Maksājuma veids</source>
+                <target>Maksājuma veids</target>
+            </trans-unit>
+            <trans-unit id="302">
+                <source><![CDATA[<strong>Kļūda!</strong>%message%.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong>%message%.]]></target>
+            </trans-unit>
+            <trans-unit id="303">
+                <source><![CDATA[<strong>Kļūda!</strong> Pilnībā aizpildiet savu profilu <a href="/account/settings"> personīgā konta iestatījumos</a>.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Pilnībā aizpildiet savu profilu <a href="/account/settings"> personīgā konta iestatījumos</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="304">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs neesat izvēlējies savu reklāmu kategoriju.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs neesat izvēlējies savu reklāmu kategoriju.]]></target>
+            </trans-unit>
+            <trans-unit id="305">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs neesat izvēlējies reklāmas tipu.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs neesat izvēlējies reklāmas tipu.]]></target>
+            </trans-unit>
+            <trans-unit id="306">
+                <source><![CDATA[<strong>Kļūda!</strong> Reklāmas apraksts nedrīkst būt tukšs.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Reklāmas apraksts nedrīkst būt tukšs.]]></target>
+            </trans-unit>
+            <trans-unit id="307">
+                <source><![CDATA[<strong>Kļūda!</strong> Pakalpojumam ir jāpieņem <a href="" data-toggle="modal" data-target="#userAgreementModal"> pakalpojumu sniegšanas noteikumi</a>.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Pakalpojumam ir jāpieņem <a href="" data-toggle="modal" data-target="#userAgreementModal"> pakalpojumu sniegšanas noteikumi</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="308">
+                <source><![CDATA[<strong>Kļūda!</strong> Jums ir jāizvēlas reklāmas izvietojuma veids (Normāls, Premium, Dedicated).]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jums ir jāizvēlas reklāmas izvietojuma veids (Normāls, Premium, Dedicated).]]></target>
+            </trans-unit>
+            <trans-unit id="309">
+                <source><![CDATA[<strong>Informācija:</strong> jūsu kontam nav pietiekami daudz naudas prēmiju izvietošanai. Reklāmu pievienoja kā parasti.]]></source>
+                <target><![CDATA[<strong>Informācija:</strong> jūsu kontam nav pietiekami daudz naudas prēmiju izvietošanai. Reklāmu pievienoja kā parasti.]]></target>
+            </trans-unit>
+            <trans-unit id="310">
+                <source><![CDATA[<strong>Kļūda!</strong> Šī nav jūsu reklāma un jūs to nevarat rediģēt.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Šī nav jūsu reklāma un jūs to nevarat rediģēt.]]></target>
+            </trans-unit>
+            <trans-unit id="311">
+                <source><![CDATA[<strong>Informācija!</strong> Pakalpojums %mess1% jau ir saistīts ar šo reklāmu,%mess2% derīguma termiņš. Jaunu pakalpojumu var aktivizēt tikai pēc pašreizējā pakalpojuma beigām.]]></source>
+                <target><![CDATA[<strong>Informācija!</strong> Pakalpojums %mess1% jau ir saistīts ar šo reklāmu,%mess2% derīguma termiņš. Jaunu pakalpojumu var aktivizēt tikai pēc pašreizējā pakalpojuma beigām.]]></target>
+            </trans-unit>
+            <trans-unit id="312">
+                <source><![CDATA[<strong>Gatavs!</strong> Izmaiņas ir saglabātas.]]></source>
+                <target><![CDATA[<strong>Gatavs!</strong> Izmaiņas ir saglabātas.]]></target>
+            </trans-unit>
+            <trans-unit id="313">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Jūsu reklāma ir atjaunota.]]></source>
+                <target><![CDATA[<strong>Veiksmīgi!</strong> Jūsu reklāma ir atjaunota.]]></target>
+            </trans-unit>
+            <trans-unit id="314">
+                <source><![CDATA[<strong>Kļūda!</strong> Šo reklāmu nevar nodot tālāk. Varbūt tas nepastāv vai tas jums nepieder.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Šo reklāmu nevar nodot tālāk. Varbūt tas nepastāv vai tas jums nepieder.]]></target>
+            </trans-unit>
+            <trans-unit id="315">
+                <source><![CDATA[<strong>Informācija!</strong> Jūsu konts nav verificēts. Pārejiet uz saiti e-pasta ziņojumā, kas jums tika nosūtīts reģistrācijas citā kontātiks dzēsta 2 dienu laikā. Ja jūs neesat saņēmis vēstuli, lūdzu, rakstiet mums pa pastu <a href="mailto:%mess%">% mess% </a>.]]></source>
+                <target><![CDATA[<strong>Informācija!</strong> Jūsu konts nav verificēts. Pārejiet uz saiti e-pasta ziņojumā, kas jums tika nosūtīts reģistrācijas citā kontātiks dzēsta 2 dienu laikā. Ja jūs neesat saņēmis vēstuli, lūdzu, rakstiet mums pa pastu <a href="mailto:%mess%">% mess% </a>.]]></target>
+            </trans-unit>
+            <trans-unit id="316">
+                <source><![CDATA[<strong>Panākumi!</strong> Jūsu pasūtījums ir nosūtīts reklāmas īpašniekam. Viņš sazināsies ar tevi cik drīz vien iespējams.]]></source>
+                <target><![CDATA[<strong>Panākumi!</strong> Jūsu pasūtījums ir nosūtīts reklāmas īpašniekam. Viņš sazināsies ar tevi cik drīz vien iespējams.]]></target>
+            </trans-unit>
+            <trans-unit id="317">
+                <source><![CDATA[<strong>Kļūda! </strong> Šī reklāma pieder jums. Jūs nevarat pasūtīt sevi.]]></source>
+                <target><![CDATA[<strong>Kļūda! </strong> Šī reklāma pieder jums. Jūs nevarat pasūtīt sevi.]]></target>
+            </trans-unit>
+            <trans-unit id="318">
+                <source><![CDATA[<strong>Kļūda!</strong> Šis lietotājs ir pievienojis jūs melnajam sarakstam.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Šis lietotājs ir pievienojis jūs melnajam sarakstam.]]></target>
+            </trans-unit>
+            <trans-unit id="319">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Augstāk minēto ziņojumu nosūtīja reklāmas īpašniekam.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Augstāk minēto ziņojumu nosūtīja reklāmas īpašniekam.]]></target>
+            </trans-unit>
+            <trans-unit id="320">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat nosūtīt ziņu sev.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs nevarat nosūtīt ziņu sev.]]></target>
+            </trans-unit>
+            <trans-unit id="321">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Ziņojums tika nosūtīts draugam norādītajā e-pasta adresē.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Ziņojums tika nosūtīts draugam norādītajā e-pasta adresē.]]></target>
+            </trans-unit>
+            <trans-unit id="322">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Jūsu sūdzība ir reģistrēta un drīz tiks pārskatīta.]]></source>
+                <target><![CDATA[<strong>Veiksmīgi!</strong> Jūsu sūdzība ir reģistrēta un drīz tiks pārskatīta.]]></target>
+            </trans-unit>
+            <trans-unit id="323">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat sūdzēties par savu reklāmu.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs nevarat sūdzēties par savu reklāmu.]]></target>
+            </trans-unit>
+            <trans-unit id="324">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Jūsu ziņa ir nosūtīta.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Jūsu ziņa ir nosūtīta.]]></target>
+            </trans-unit>
+            <trans-unit id="325">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat ziņot sev.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs nevarat ziņot sev.]]></target>
+            </trans-unit>
+            <trans-unit id="326">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Jūsu ziņa ir nosūtīta vietnes administrācijai un drīz tiks pārskatīta.]]></source>
+                <target><![CDATA[<strong>Veiksmīgi!</strong> Jūsu ziņa ir nosūtīta vietnes administrācijai un drīz tiks pārskatīta.]]></target>
+            </trans-unit>
+            <trans-unit id="327">
+                <source><![CDATA[<strong>Kļūda!</strong> Nederīgi formas dati. Iespējams, ka jūs nepareizi norādījāt captcha.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Nederīgi formas dati. Iespējams, ka jūs nepareizi norādījāt captcha.]]></target>
+            </trans-unit>
+            <trans-unit id="328">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūsu pašreizējā kontā nav pietiekami daudz naudas, lai iegādātos pieprasīto vietu skaitu.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūsu pašreizējā kontā nav pietiekami daudz naudas, lai iegādātos pieprasīto vietu skaitu.]]></target>
+            </trans-unit>
+            <trans-unit id="329">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Tagad jūs varat ievietot %mess% papildu reklāmas.]]></source>
+                <target><![CDATA[<strong>Veiksmīgi!</strong> Tagad jūs varat ievietot %mess% papildu reklāmas.]]></target>
+            </trans-unit>
+            <trans-unit id="330">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs jau esat iesniedzis atsauksmi par šo atsauksmi.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs jau esat iesniedzis atsauksmi par šo atsauksmi.]]></target>
+            </trans-unit>
+            <trans-unit id="331">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Atbilde tika nosūtīta.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Atbilde tika nosūtīta.]]></target>
+            </trans-unit>
+            <trans-unit id="332">
+                <source><![CDATA[<strong>Kļūda!</strong> Šī ir jūsu atsauksme. Jūs to nevarat dzēst.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Šī ir jūsu atsauksme. Jūs to nevarat dzēst.]]></target>
+            </trans-unit>
+            <trans-unit id="333">
+                <source><![CDATA[<strong>Gatavs!</strong> Atsauksme ir dzēsta veiksmīgi.]]></source>
+                <target><![CDATA[<strong>Gatavs!</strong> Atsauksme ir dzēsta veiksmīgi.]]></target>
+            </trans-unit>
+            <trans-unit id="334">
+                <source><![CDATA[<strong>Kļūda!</strong> Nevar izdzēst atsauksmi.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Nevar izdzēst atsauksmi.]]></target>
+            </trans-unit>
+            <trans-unit id="335">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūsu kontā nav pietiekami daudz līdzekļu, lai aktivizētu pakalpojumu.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūsu kontā nav pietiekami daudz līdzekļu, lai aktivizētu pakalpojumu.]]></target>
+            </trans-unit>
+            <trans-unit id="336">
+                <source><![CDATA[<strong>Kļūda!</strong> Pakalpojuma %message% jau ir saistīts ar šo reklāmu. Jūs varat pagarināt pašreizējo pakalpojumu vai piemērot citu pēc pašreizējās darbības beigām.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Pakalpojuma %message% jau ir saistīts ar šo reklāmu. Jūs varat pagarināt pašreizējo pakalpojumu vai piemērot citu pēc pašreizējās darbības beigām.]]></target>
+            </trans-unit>
+            <trans-unit id="337">
+                <source><![CDATA[<strong>Gatavs!</strong> Pakalpojums ir veiksmīgi paplašināts.]]></source>
+                <target><![CDATA[<strong>Gatavs!</strong> Pakalpojums ir veiksmīgi paplašināts.]]></target>
+            </trans-unit>
+            <trans-unit id="338">
+                <source><![CDATA[<strong>Gatavs!</strong> Pakalpojums ir veiksmīgi aktivizēts.]]></source>
+                <target><![CDATA[<strong>Gatavs!</strong> Pakalpojums ir veiksmīgi aktivizēts.]]></target>
+            </trans-unit>
+            <trans-unit id="339">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs neesat apstiprinājis captcha.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs neesat apstiprinājis captcha.]]></target>
+            </trans-unit>
+            <trans-unit id="340">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs neesat aizpildījis e-pasta adresi.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs neesat aizpildījis e-pasta adresi.]]></target>
+            </trans-unit>
+            <trans-unit id="341">
+                <source><![CDATA[<strong>Kļūda!</strong> Jums ir jāpiekrīt lietotāja līguma noteikumiem.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jums ir jāpiekrīt lietotāja līguma noteikumiem.]]></target>
+            </trans-unit>
+            <trans-unit id="342">
+                <source><![CDATA[<strong>Kļūda!</strong> E-pasts %message% jau ir reģistrēts sistēmā. Ja aizmirsāt savu paroli, varat to <a href="/restore">atjaunot</a>.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> E-pasts %message% jau ir reģistrēts sistēmā. Ja aizmirsāt savu paroli, varat to <a href="/restore">atjaunot</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="343">
+                <source><![CDATA[<strong>Informācija!</strong> Lai pievienotu reklāmas, aizpildiet savu profilu.]]></source>
+                <target><![CDATA[<strong>Informācija!</strong> Lai pievienotu reklāmas, aizpildiet savu profilu.]]></target>
+            </trans-unit>
+            <trans-unit id="344">
+                <source><![CDATA[<strong>Kļūda!</strong> Attēls neatbilst prasībām. Derīgi paplašinājumi: jpg, jpeg, png, gif. Maksimālais izmērs ir 2 MB. Ziņojums tika nosūtīts bez attēla.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Attēls neatbilst prasībām. Derīgi paplašinājumi: jpg, jpeg, png, gif. Maksimālais izmērs ir 2 MB. Ziņojums tika nosūtīts bez attēla.]]></target>
+            </trans-unit>
+            <trans-unit id="345">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Saruna tika dzēsta.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Saruna tika dzēsta.]]></target>
+            </trans-unit>
+            <trans-unit id="346">
+                <source><![CDATA[<strong>Gatavs!</strong> Lietotāja dati tika veiksmīgi saglabāti.]]></source>
+                <target><![CDATA[<strong>Gatavs!</strong> Lietotāja dati tika veiksmīgi saglabāti.]]></target>
+            </trans-unit>
+            <trans-unit id="347">
+                <source><![CDATA[<strong>Gatavs!</strong> Parole ir veiksmīgi atjaunināta.]]></source>
+                <target><![CDATA[<strong>Gatavs!</strong> Parole ir veiksmīgi atjaunināta.]]></target>
+            </trans-unit>
+            <trans-unit id="348">
+                <source><![CDATA[<strong>Nav ieviests!</strong> Neizdevās atjaunināt paroli.]]></source>
+                <target><![CDATA[<strong>Nav ieviests!</strong> Neizdevās atjaunināt paroli.]]></target>
+            </trans-unit>
+            <trans-unit id="349">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Šī reklāma ir pārvietota uz Izpildīto sadaļu.]]></source>
+                <target><![CDATA[<strong>Veiksmīgi!</strong> Šī reklāma ir pārvietota uz Izpildīto sadaļu.]]></target>
+            </trans-unit>
+            <trans-unit id="350">
+                <source><![CDATA[<strong>Gatavs!</strong> Šī reklāma ir noņemta no sadaļas Izlase.]]></source>
+                <target><![CDATA[<strong>Gatavs!</strong> Šī reklāma ir noņemta no sadaļas Izlase.]]></target>
+            </trans-unit>
+            <trans-unit id="351">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs jau esat nosūtījis atsauksmi šim reklāmdevējam par šo reklāmu.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs jau esat nosūtījis atsauksmi šim reklāmdevējam par šo reklāmu.]]></target>
+            </trans-unit>
+            <trans-unit id="352">
+                <source><![CDATA[<strong>Panākumi!</strong> Jūsu atsauksmes nosūtīta pārdevējam.]]></source>
+                <target><![CDATA[<strong>Panākumi!</strong> Jūsu atsauksmes nosūtīta pārdevējam.]]></target>
+            </trans-unit>
+            <trans-unit id="353">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat atstāt atsauksmes par sevi.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs nevarat atstāt atsauksmes par sevi.]]></target>
+            </trans-unit>
+            <trans-unit id="354">
+                <source><![CDATA[<strong>Kļūda!</strong> Atbildes nav nosūtītas. Jūs vēlaties atstāt atsauksmi par esošu reklāmu.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Atbildes nav nosūtītas. Jūs vēlaties atstāt atsauksmi par esošu reklāmu.]]></target>
+            </trans-unit>
+            <trans-unit id="355">
+                <source><![CDATA[<strong>Gatavs!</strong> Pasūtījums ir veiksmīgi izdzēsts.]]></source>
+                <target><![CDATA[<strong>Gatavs!</strong> Pasūtījums ir veiksmīgi izdzēsts.]]></target>
+            </trans-unit>
+            <trans-unit id="356">
+                <source><![CDATA[<strong>Kļūda!</strong> Lietotājs jums ir iekļauts melnajā sarakstā. Jūs nevarat nosūtīt ziņojumu.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Lietotājs jums ir iekļauts melnajā sarakstā. Jūs nevarat nosūtīt ziņojumu.]]></target>
+            </trans-unit>
+            <trans-unit id="357">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat rakstīt ziņojumus sev.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs nevarat rakstīt ziņojumus sev.]]></target>
+            </trans-unit>
+            <trans-unit id="358">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Lietotājs ir noņemts no saviem draugiem.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Lietotājs ir noņemts no saviem draugiem.]]></target>
+            </trans-unit>
+            <trans-unit id="359">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat izdzēst draugu no saviem draugiem.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs nevarat izdzēst draugu no saviem draugiem.]]></target>
+            </trans-unit>
+            <trans-unit id="360">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Uzaicinājums tika veiksmīgi nosūtīts uz norādīto pastkasti.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Uzaicinājums tika veiksmīgi nosūtīts uz norādīto pastkasti.]]></target>
+            </trans-unit>
+            <trans-unit id="361">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Šī reklāma ir noņemta.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Šī reklāma ir noņemta.]]></target>
+            </trans-unit>
+            <trans-unit id="362">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat izdzēst savu reklāmu.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs nevarat izdzēst savu reklāmu.]]></target>
+            </trans-unit>
+            <trans-unit id="363">
+                <source><![CDATA[<strong>Kļūda!</strong> Šo reklāmu nepastāv.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Šo reklāmu nepastāv.]]></target>
+            </trans-unit>
+            <trans-unit id="364">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat pievienot sevi melnajam sarakstam.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Jūs nevarat pievienot sevi melnajam sarakstam.]]></target>
+            </trans-unit>
+            <trans-unit id="365">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Lietotājs ir noņemts no jūsu melnā saraksta.]]></source>
+                <target><![CDATA[<strong>Veiksmīga!</strong> Lietotājs ir noņemts no jūsu melnā saraksta.]]></target>
+            </trans-unit>
+            <trans-unit id="366">
+                <source><![CDATA[<strong>Panākumi!</strong> Lietotājs ir pievienots jūsu melnajam sarakstam.]]></source>
+                <target><![CDATA[<strong>Panākumi!</strong> Lietotājs ir pievienots jūsu melnajam sarakstam.]]></target>
+            </trans-unit>
+            <trans-unit id="367">
+                <source><![CDATA[<strong>Kļūda!</strong> Šajā datubāzē nav šāda lietotāja.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Šajā datubāzē nav šāda lietotāja.]]></target>
+            </trans-unit>
+            <trans-unit id="368">
+                <source>Maksa par pakalpojuma aktivizēšanu</source>
+                <target>Maksa par pakalpojuma aktivizēšanu</target>
+            </trans-unit>
+            <trans-unit id="369">
+                <source>Izrakstīts</source>
+                <target>Izrakstīts</target>
+            </trans-unit>
+            <trans-unit id="370">
+                <source>Sūdzību skaits par reklāmu ir vairāk nekā 10</source>
+                <target>Sūdzību skaits par reklāmu ir vairāk nekā 10</target>
+            </trans-unit>
+            <trans-unit id="371">
+                <source>Iegādāties %message% no reklāmas papildu vietām</source>
+                <target>Iegādāties %message% no reklāmas papildu vietām</target>
+            </trans-unit>
+            <trans-unit id="372">
+                <source>Naudas līdzekļu uzskaite reģistrācijai. Kredīts 10</source>
+                <target>Naudas līdzekļu uzskaite reģistrācijai. Kredīts 10</target>
+            </trans-unit>
+            <trans-unit id="373">
+                <source>Kredītiestādes, lai piesaistītu jaunu lietotāju. Kredīts 10</source>
+                <target>Kredītiestādes, lai piesaistītu jaunu lietotāju. Kredīts 10</target>
+            </trans-unit>
+            <trans-unit id="374">
+                <source>Jūs esat veiksmīgi apstiprinājis reģistrāciju. Tagad jūs varat pieteikties, izmantojot zemāk esošo veidlapu.</source>
+                <target>Jūs esat veiksmīgi apstiprinājis reģistrāciju. Tagad jūs varat pieteikties, izmantojot zemāk esošo veidlapu.</target>
+            </trans-unit>
+            <trans-unit id="375">
+                <source>Apstiprinājuma atslēga ir beidzies. Jums ir jāaizpilda reģistrācijas procedūra vēlreiz.</source>
+                <target>Apstiprinājuma atslēga ir beidzies. Jums ir jāaizpilda reģistrācijas procedūra vēlreiz.</target>
+            </trans-unit>
+            <trans-unit id="376">
+                <source>Apstiprinājuma atslēga nav derīga. Varbūt tas beidzās vai neeksistē. Mēģiniet reģistrēties vēlreiz.</source>
+                <target>Apstiprinājuma atslēga nav derīga. Varbūt tas beidzās vai neeksistē. Mēģiniet reģistrēties vēlreiz.</target>
+            </trans-unit>
+            <trans-unit id="377">
+                <source>Pabeigts</source>
+                <target>Pabeigts</target>
+            </trans-unit>
+            <trans-unit id="378">
+                <source>Pasūtījuma statuss ir mainīts. Iemesls</source>
+                <target>Pasūtījuma statuss ir mainīts. Iemesls</target>
+            </trans-unit>
+            <trans-unit id="379">
+                <source>Pasūtījuma statuss ir mainīts</source>
+                <target>Pasūtījuma statuss ir mainīts</target>
+            </trans-unit>
+            <trans-unit id="380">
+                <source>Nederīgs pasūtījuma statuss</source>
+                <target>Nederīgs pasūtījuma statuss</target>
+            </trans-unit>
+            <trans-unit id="381">
+                <source>Nederīgs pasūtījuma ID</source>
+                <target>Nederīgs pasūtījuma ID</target>
+            </trans-unit>
+            <trans-unit id="382">
+                <source>Šī reklāma jau ir pievienota jūsu favorites</source>
+                <target>Šī reklāma jau ir pievienota jūsu favorites</target>
+            </trans-unit>
+            <trans-unit id="383">
+                <source>Drauga e-pasts: *</source>
+                <target>Drauga e-pasts: *</target>
+            </trans-unit>
+            <trans-unit id="384">
+                <source>Drauga vārds: *</source>
+                <target>Drauga vārds: *</target>
+            </trans-unit>
+            <trans-unit id="385">
+                <source>SŪTĪT</source>
+                <target>SŪTĪT</target>
+            </trans-unit>
+            <trans-unit id="386">
+                <source>Jūsu vārds: *</source>
+                <target>Jūsu vārds: *</target>
+            </trans-unit>
+            <trans-unit id="387">
+                <source>Pamatojums: *</source>
+                <target>Pamatojums: *</target>
+            </trans-unit>
+            <trans-unit id="388">
+                <source>Jūsu e-pasts: *</source>
+                <target>Jūsu e-pasts: *</target>
+            </trans-unit>
+            <trans-unit id="389">
+                <source>Ziņojuma priekšmets: *</source>
+                <target>Ziņojuma priekšmets: *</target>
+            </trans-unit>
+            <trans-unit id="390">
+                <source>Sludinājuma teksts: *</source>
+                <target>Sludinājuma teksts: *</target>
+            </trans-unit>
+            <trans-unit id="391">
+                <source>Vietnes lietotāja konta papildināšana</source>
+                <target>Vietnes lietotāja konta papildināšana</target>
+            </trans-unit>
+            <trans-unit id="392">
+                <source>Naudas līdzekļu ieskaitīšana kontā. Kredīts</source>
+                <target>Naudas līdzekļu ieskaitīšana kontā. Kredīts</target>
+            </trans-unit>
+            <trans-unit id="393">
+                <source>Slotu skaits: *</source>
+                <target>Slotu skaits: *</target>
+            </trans-unit>
+            <trans-unit id="394">
+                <source>e-pasts</source>
+                <target>e-pasts</target>
+            </trans-unit>
+            <trans-unit id="395">
+                <source>Atjaunot</source>
+                <target>Atjaunot</target>
+            </trans-unit>
+            <trans-unit id="396">
+                <source>Sūtīt</source>
+                <target>Sūtīt</target>
+            </trans-unit>
+            <trans-unit id="397">
+                <source><![CDATA[<strong>Kļūda!</strong> Email %mess% pieder citam lietotājam.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Email %mess% pieder citam lietotājam.]]></target>
+            </trans-unit>
+            <trans-unit id="398">
+                <source>Jūsu e-pasts</source>
+                <target>Jūsu e-pasts</target>
+            </trans-unit>
+            <trans-unit id="399">
+                <source>ziņa</source>
+                <target>ziņa</target>
+            </trans-unit>
+            <trans-unit id="400">
+                <source>Kontakt tālrunis: *</source>
+                <target>Kontakt tālrunis: *</target>
+            </trans-unit>
+            <trans-unit id="401">
+                <source>Komentēt pasūtījumu</source>
+                <target>Komentēt pasūtījumu</target>
+            </trans-unit>
+            <trans-unit id="402">
+                <source>Sūtīt pasūtījumu</source>
+                <target>Sūtīt pasūtījumu</target>
+            </trans-unit>
+            <trans-unit id="403">
+                <source>Sūtiet man vēstules kopiju</source>
+                <target>Sūtiet man vēstules kopiju</target>
+            </trans-unit>
+            <trans-unit id="404">
+                <source>Pasūtīt pakalpojumu</source>
+                <target>Pasūtīt pakalpojumu</target>
+            </trans-unit>
+            <trans-unit id="405">
+                <source>Jūsu atbilde:</source>
+                <target>Jūsu atbilde:</target>
+            </trans-unit>
+            <trans-unit id="406">
+                <source>Neitrāls</source>
+                <target>Neitrāls</target>
+            </trans-unit>
+            <trans-unit id="407">
+                <source>Pozitīvs</source>
+                <target>Pozitīvs</target>
+            </trans-unit>
+            <trans-unit id="408">
+                <source>Negatīvs</source>
+                <target>Negatīvs</target>
+            </trans-unit>
+            <trans-unit id="409">
+                <source>Jūsu atsauksmes:</source>
+                <target>Jūsu atsauksmes:</target>
+            </trans-unit>
+            <trans-unit id="410">
+                <source>Preču novērtējums:</source>
+                <target>Preču novērtējums:</target>
+            </trans-unit>
+            <trans-unit id="411">
+                <source>Pārdevēja reitings:</source>
+                <target>Pārdevēja reitings:</target>
+            </trans-unit>
+            <trans-unit id="412">
+                <source>paziņojums</source>
+                <target>paziņojums</target>
+            </trans-unit>
+            <trans-unit id="413">
+                <source>vārds</source>
+                <target>vārds</target>
+            </trans-unit>
+            <trans-unit id="414">
+                <source>uzvārds</source>
+                <target>uzvārds</target>
+            </trans-unit>
+            <trans-unit id="415">
+                <source>patronimisks</source>
+                <target>patronimisks</target>
+            </trans-unit>
+            <trans-unit id="416">
+                <source>Vīrietis sieviete</source>
+                <target>Vīrietis sieviete</target>
+            </trans-unit>
+            <trans-unit id="417">
+                <source>Sieviešu</source>
+                <target>Sieviešu</target>
+            </trans-unit>
+            <trans-unit id="418">
+                <source>dzimums</source>
+                <target>dzimums</target>
+            </trans-unit>
+            <trans-unit id="419">
+                <source>Valsts</source>
+                <target>Valsts</target>
+            </trans-unit>
+            <trans-unit id="420">
+                <source>Janvāris</source>
+                <target>Janvāris</target>
+            </trans-unit>
+            <trans-unit id="421">
+                <source>Februāris</source>
+                <target>Februāris</target>
+            </trans-unit>
+            <trans-unit id="422">
+                <source>Marts</source>
+                <target>Marts</target>
+            </trans-unit>
+            <trans-unit id="423">
+                <source>Aprīlis</source>
+                <target>Aprīlis</target>
+            </trans-unit>
+            <trans-unit id="424">
+                <source>Maijs</source>
+                <target>Maijs</target>
+            </trans-unit>
+            <trans-unit id="425">
+                <source>Jūnijs</source>
+                <target>Jūnijs</target>
+            </trans-unit>
+            <trans-unit id="426">
+                <source>Jūlijs</source>
+                <target>Jūlijs</target>
+            </trans-unit>
+            <trans-unit id="427">
+                <source>Augusts</source>
+                <target>Augusts</target>
+            </trans-unit>
+            <trans-unit id="428">
+                <source>Septembris</source>
+                <target>Septembris</target>
+            </trans-unit>
+            <trans-unit id="429">
+                <source>Oktobris</source>
+                <target>Oktobris</target>
+            </trans-unit>
+            <trans-unit id="430">
+                <source>Novembris</source>
+                <target>Novembris</target>
+            </trans-unit>
+            <trans-unit id="431">
+                <source>Decembris</source>
+                <target>Decembris</target>
+            </trans-unit>
+            <trans-unit id="432">
+                <source>apstipriniet paroli</source>
+                <target>apstipriniet paroli</target>
+            </trans-unit>
+            <trans-unit id="433">
+                <source>pieņemt paziņojumus no vietnes</source>
+                <target>pieņemt paziņojumus no vietnes</target>
+            </trans-unit>
+            <trans-unit id="434">
+                <source><![CDATA[es piekrītu <a href="" data-toggle="modal" data-target="#userAgreementModal"> lietotāja līgumam </a>]]></source>
+                <target><![CDATA[es piekrītu <a href="" data-toggle="modal" data-target="#userAgreementModal"> lietotāja līgumam </a>]]></target>
+            </trans-unit>
+            <trans-unit id="435">
+                <source>PIRKTIESIESIES</source>
+                <target>PIRKTIESIESIES</target>
+            </trans-unit>
+            <trans-unit id="436">
+                <source>Teksta meklēšana</source>
+                <target>Teksta meklēšana</target>
+            </trans-unit>
+            <trans-unit id="437">
+                <source>Izvēlieties kategoriju</source>
+                <target>Izvēlieties kategoriju</target>
+            </trans-unit>
+            <trans-unit id="438">
+                <source>Draugi</source>
+                <target>Draugi</target>
+            </trans-unit>
+            <trans-unit id="439">
+                <source><![CDATA[<strong>Kļūda!</strong> Tālruņa numuram ir jābūt tikai 8 cipariem.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Tālruņa numuram ir jābūt tikai 8 cipariem.]]></target>
+            </trans-unit>
+            <trans-unit id="440">
+                <source>Pievienot fotoattēlu</source>
+                <target>Pievienot fotoattēlu</target>
+            </trans-unit>
+            <trans-unit id="441">
+                <source>no</source>
+                <target>no</target>
+            </trans-unit>
+            <trans-unit id="442">
+                <source>līdz pat</source>
+                <target>līdz pat</target>
+            </trans-unit>
+            <trans-unit id="443">
+                <source>Foto nosaukums</source>
+                <target>Foto nosaukums</target>
+            </trans-unit>
+            <trans-unit id="444">
+                <source>Termiņš</source>
+                <target>Termiņš</target>
+            </trans-unit>
+            <trans-unit id="445">
+                <source>Nedēļa</source>
+                <target>Nedēļa</target>
+            </trans-unit>
+            <trans-unit id="446">
+                <source>2 nedēļas</source>
+                <target>2 nedēļas</target>
+            </trans-unit>
+            <trans-unit id="447">
+                <source>Mēnesis</source>
+                <target>Mēnesis</target>
+            </trans-unit>
+            <trans-unit id="448">
+                <source>3 mēneši</source>
+                <target>3 mēneši</target>
+            </trans-unit>
+            <trans-unit id="449">
+                <source>Vai tiešām vēlaties noņemt šo reklāmu</source>
+                <target>Vai tiešām vēlaties noņemt šo reklāmu</target>
+            </trans-unit>
+            <trans-unit id="450">
+                <source><![CDATA[<strong>Kļūda!</strong> Aizpildiet visus laukus, kas atzīmēti ar *.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Aizpildiet visus laukus, kas atzīmēti ar *.]]></target>
+            </trans-unit>
+            <trans-unit id="451">
+                <source>Lai pievienotu reklāmu saviem favorītiem, jums jāievada jūsu personiskais kabinets.</source>
+                <target>Lai pievienotu reklāmu saviem favorītiem, jums jāievada jūsu personiskais kabinets.</target>
+            </trans-unit>
+            <trans-unit id="452">
+                <source>Reklāma ir pievienota favorītiem</source>
+                <target>Reklāma ir pievienota favorītiem</target>
+            </trans-unit>
+            <trans-unit id="453">
+                <source><![CDATA[<strong>Kļūda!</strong> Pilnībā aizpildiet savu profilu <a href="/%locale%/account/settings"> personīgā konta iestatījumos</a>.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Pilnībā aizpildiet savu profilu <a href="/%locale%/account/settings"> personīgā konta iestatījumos</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="454">
+                <source>Reklāma</source>
+                <target>Reklāma</target>
+            </trans-unit>
+            <trans-unit id="455">
+                <source><![CDATA[<div class='review-ocenka select review-ocenka0'></div><div>Neitrāls</div>]]></source>
+                <target><![CDATA[<div class='review-ocenka select review-ocenka0'></div><div>Neitrāls</div>]]></target>
+            </trans-unit>
+            <trans-unit id="456">
+                <source><![CDATA[<div class='review-ocenka select review-ocenka1'></div><div>Pozitīvs</div>]]></source>
+                <target><![CDATA[<div class='review-ocenka select review-ocenka1'></div><div>Pozitīvs</div>]]></target>
+            </trans-unit>
+            <trans-unit id="457">
+                <source><![CDATA[<div class='review-ocenka select review-ocenka-1'></div><div>Negatīvs</div>]]></source>
+                <target><![CDATA[<div class='review-ocenka select review-ocenka-1'></div><div>Negatīvs</div>]]></target>
+            </trans-unit>
+            <trans-unit id="458">
+                <source>Sludinājuma novērtējums:</source>
+                <target>Sludinājuma novērtējums:</target>
+            </trans-unit>
+            <trans-unit id="459">
+                <source>Pozitīvs</source>
+                <target>Pozitīvs</target>
+            </trans-unit>
+            <trans-unit id="460">
+                <source>Negatīvs</source>
+                <target>Negatīvs</target>
+            </trans-unit>
+            <trans-unit id="461">
+                <source>Lietotāja vērtējums:</source>
+                <target>Lietotāja vērtējums:</target>
+            </trans-unit>
+            <trans-unit id="462">
+                <source>Lasīt</source>
+                <target>Lasīt</target>
+            </trans-unit>
+            <trans-unit id="463">
+                <source>ne vairāk kā 3000 simboli</source>
+                <target>ne vairāk kā 3000 simboli</target>
+            </trans-unit>
+            <trans-unit id="464">
+                <source>Aizpildiet obligātos laukus. Tie ir norādīti ar simbolu *</source>
+                <target>Aizpildiet obligātos laukus. Tie ir norādīti ar simbolu *</target>
+            </trans-unit>
+            <trans-unit id="465">
+                <source>Apraksts nedrīkst pārsniegt 3000 rakstzīmes</source>
+                <target>Apraksts nedrīkst pārsniegt 3000 rakstzīmes</target>
+            </trans-unit>
+            <trans-unit id="466">
+                <source><![CDATA[<strong>Kļūda!</strong> Apraksts nedrīkst pārsniegt 3000 rakstzīmes.]]></source>
+                <target><![CDATA[<strong>Kļūda!</strong> Apraksts nedrīkst pārsniegt 3000 rakstzīmes.]]></target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

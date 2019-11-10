@@ -264,6 +264,22 @@ $(document).ready(function(){
         $(".table-services tbody").append(newForm);
     });
     
+    $("#add-service-price").click(function(){ 
+        var prototype = $("#service_prices").data("prototype");
+        var count = $(".table-service-prices > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        
+        $(".table-service-prices > tbody").append(newForm);
+    });
+    
+    $("#add-pack-price").click(function(){ 
+        var prototype = $("#pack_prices").data("prototype");
+        var count = $(".table-service-prices > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        
+        $(".table-service-prices > tbody").append(newForm);
+    });
+    
     $("#adminRegion").change(function(){
         
         $.ajax({

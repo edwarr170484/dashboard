@@ -111,22 +111,37 @@ function getStep5(locale_code){
     });
 }
 
-function addAdvert(locale_code){
-    $.ajax({
-        url: '/' + locale_code + '/account/addadvert/finalAdd',
-        type:'get',
-        dataType: 'html',
-        beforeSend: function(){$(".modal-body-cover").show();},
-        success: function(html)
-        {
-            $(".modal-body-cover").hide();
-            $("#addAdvertStep").html(html);
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            $(".modal-body-cover").hide();
-            err=xhr.responseText;
-        }
+function addAdvert(locale_code,text){
+    var error = 0;
+    $(".advertFiltersItems input[type='text']").each(function(){
+       if($(this).attr('required') == 'required'){
+           if($(this).val() == 'null' || $(this).val() == '' || $(this).val() == 'NULL' || $(this).val() == '0' || $(this).val() === undefined || $(this).val() == 0){
+               $(this).addClass("error");
+               error = 1;
+               $(document).scrollTop(0);
+               return;
+           }
+       } 
     });
+    
+    if(!error){
+        $.ajax({
+            url: '/' + locale_code + '/account/addadvert/finalAdd',
+            type:'post',
+            data: $(".advertFiltersItems input[type='text'], .advertFiltersItems input[type='checkbox']:checked, .advertFiltersItems input[type='hidden']"),
+            dataType: 'html',
+            beforeSend: function(){$(".modal-body-cover").show();},
+            success: function(html)
+            {
+                $(".modal-body-cover").hide();
+                $("#addAdvertStep").html(html);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                $(".modal-body-cover").hide();
+                err=xhr.responseText;
+            }
+        });
+    }
 }
 
 function getBoardTypesByYear(year, locale_code, text){
@@ -149,7 +164,7 @@ function getBoardTypesByYear(year, locale_code, text){
         {
             $(".modal-body-cover").hide();
             $("#addAdvertCarBoards").html(html);
-            $(".custom-checkbox").customCheckbox();
+            $(".rightWeel-checkbox").customCheckbox();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -160,7 +175,7 @@ function getBoardTypesByYear(year, locale_code, text){
 
 function getBoardTypesByOldYear(year, locale_code, element){
     
-    $(".olderBloakcTrigger span").html(element.html());
+    if(element){$(".olderBloakcTrigger span").html(element.html());}
     $(".years").find('li').each(function(){$(this).find('a').removeClass('active');});
     $(".olderBloakcTrigger").addClass('active');
     
@@ -180,7 +195,7 @@ function getBoardTypesByOldYear(year, locale_code, element){
         {
             $(".modal-body-cover").hide();
             $("#addAdvertCarBoards").html(html);
-            $(".custom-checkbox").customCheckbox();
+            $(".rightWeel-checkbox").customCheckbox();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -233,7 +248,6 @@ function getGenerationEngine(generationId, locale_code, element){
         {
             $(".modal-body-cover").hide();
             $("#addAdvertCarEngines").html(html);
-            $(".gas-checkbox").customCheckbox();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -351,4 +365,80 @@ function setColor(colorId, locale_code, element){
 function selectGarant(element){
     element.parent().find('.categoryAdvertType.garant').each(function(){$(this).removeClass('active')});
     element.addClass('active');
+}
+
+function getCityCodesByValue(element, locale_code){
+    var searchText = element.val();
+    
+    $.ajax({
+        url: '/' + locale_code + '/account/addadvert/getcitycodes/' + searchText,
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(data)
+        {
+            element.parent().find(".addAdvertContextParamenterValues").html(data).addClass("active");
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
+}
+
+function getCitiesByValue(element, locale_code){
+    var searchText = element.val();
+    
+    $.ajax({
+        url: '/' + locale_code + '/account/addadvert/getcities/' + searchText,
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(data)
+        {
+            element.parent().find(".addAdvertContextParamenterValues").html(data).addClass("active");
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
+}
+
+function selectCityCode(code, element){
+    element.parent().parent().find("input").val(code);
+    element.parent().removeClass('active');
+    element.parent().html('');
+}
+
+function selectCity(city, element){
+    element.parent().parent().find("input").val(city);
+    element.parent().removeClass('active');
+    element.parent().html('');
+}
+
+function selectServicePack(servicePackId, price, text){
+    $("input[name='servicePack']").val(servicePackId);
+    $("#addAdvertFinalButton").html(text + ' ' + price);
+}
+
+function selectService(element, text){
+    $("input[name='servicePack']").val(null);
+    $("#addAdvertFinalButton").html(text);
+}
+
+function addService(element, textEmpty, textFull, currencyCode){
+    element.toggleClass('active');
+    var price = 0;
+    $(".addAdvertServiceItemCheck").each(function(){
+        if($(this).hasClass('active')){
+            price += $(this).data('price');
+        }
+    });
+    
+    if(price >0){
+        $("#addAdvertFinalButton").html(textFull + ' ' + price + ' ' + currencyCode);
+    }else{
+        $("#addAdvertFinalButton").html(textEmpty);
+    }
 }

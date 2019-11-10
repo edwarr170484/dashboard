@@ -34,6 +34,11 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
      */
     private $email;
+    
+    /**
+     * @ORM\Column(type="boolean" , nullable=true, options={"default":"0"})
+     */
+    private $isHideEmail;
 
     /**
      * @ORM\Column(name="is_active", type="boolean")
@@ -953,5 +958,28 @@ class User implements AdvancedUserInterface, \Serializable
     public function setFavoriteProducts(array $favoriteProducts)
     {
         $this->favoriteProducts = $favoriteProducts;
+    }
+
+    /**
+     * Set isHideEmail
+     *
+     * @param boolean $isHideEmail
+     * @return User
+     */
+    public function setIsHideEmail($isHideEmail)
+    {
+        $this->isHideEmail = $isHideEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get isHideEmail
+     *
+     * @return boolean 
+     */
+    public function getIsHideEmail()
+    {
+        return $this->isHideEmail;
     }
 }

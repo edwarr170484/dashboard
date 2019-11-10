@@ -1,0 +1,5 @@
+{% if codes %}
+    {% for code in codes %}
+        <div class="addAdvertContextParamenterValue" onclick="selectCityCode('{{ code.code }}', $(this))">{{ code.code }}</div>
+    {% endfor %}
+{% endif %}

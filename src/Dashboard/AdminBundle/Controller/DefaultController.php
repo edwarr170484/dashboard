@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 
@@ -21,6 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 use Dashboard\CommonBundle\Entity\Region;
+use Dashboard\CommonBundle\Entity\City;
+use Dashboard\CommonBundle\Entity\CityCode;
 use Dashboard\CommonBundle\Entity\Banner;
 use Dashboard\CommonBundle\Entity\Page;
 use Dashboard\CommonBundle\Entity\Role;
@@ -193,9 +196,22 @@ class DefaultController extends Controller
         $role = ($roleId) ? $manager->getRepository("DashboardCommonBundle:Role")->find($roleId) : new Role();
         
         $roleForm = $this->get('form.factory')->createNamedBuilder('role', 'form', $role)
+                ->add('title', TextType::class, array('required' => true, 'label' => 'Заголовок группы', 'attr' => array('class' => 'form-control','placeholder' => 'Название группы пользователей')))
                 ->add('name', TextType::class, array('required' => true, 'label' => 'Название группы пользователей', 'attr' => array('class' => 'form-control','placeholder' => 'Название группы пользователей')))
                 ->add('advertNumber', TextType::class, array('required' => false, 'label' => 'Максимальное количество объявлений', 'attr' => array('class' => 'form-control','placeholder' => 'Максимальное количество объявлений')))
                 ->add('advertFotoNumber', TextType::class, array('required' => false, 'label' => 'Максимальное количество фото для одного объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Максимальное количество фото для одного объявления')))
+                ->add('services', 'entity', array('class' => 'DashboardCommonBundle:Service',
+                            'choice_label' => 'title',
+                            'required' => false, 
+                            'multiple' => true,
+                            'expanded' => true,
+                            'label' => 'Услуги для пользователей группы:', 'attr' => array('class' => 'form-control')))
+                ->add('servicePacks', 'entity', array('class' => 'DashboardCommonBundle:Pack',
+                            'choice_label' => 'label',
+                            'required' => false, 
+                            'multiple' => true,
+                            'expanded' => true,
+                            'label' => 'Пакеты услуг для пользователей группы:', 'attr' => array('class' => 'form-control')))
                 ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success')))->getForm();
         
         $roleForm->handleRequest($request);
@@ -386,7 +402,7 @@ class DefaultController extends Controller
             ->add('userinfo', new UserInfoType($manager, $userinfo), array('data_class' => 'Dashboard\CommonBundle\Entity\UserInfo'))
             ->add('userpurse', new UserPurseType($manager, $userpurse), array('data_class' => 'Dashboard\CommonBundle\Entity\UserPurse'))
             ->add('roles', 'entity', array('class' => 'DashboardCommonBundle:Role', 
-                  'choice_label' => 'name', 'label' => 'Группа пользователей', 'data' => ($roles) ? $roles[0] : 0,'mapped' => false,'attr' => array('class' => 'form-control')))
+                  'choice_label' => 'title', 'label' => 'Группа пользователей', 'data' => ($roles) ? $roles[0] : 0,'mapped' => false,'attr' => array('class' => 'form-control')))
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')))->getForm();
         
         $userForm->handleRequest($request);
@@ -1066,6 +1082,51 @@ class DefaultController extends Controller
         
         return $this->render('DashboardAdminBundle:Settings:regionedit.html.twig', array("regionForm" => $regionForm->createView()));
     }
+    
+    /**
+     * @Route("/admin/cityimport", name="admin_city_import")
+     */
+    public function cityImportAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $finder = new Finder();
+        
+        $region = $manager->getRepository("DashboardCommonBundle:Region")->find(1);
+        
+        $finder->files()->name('*.csv')->in('bundles');
+        
+        foreach ($finder as $file) {
+            $absoluteFilePath = $file->getRealPath();
+            $fileNameWithExtension = $file->getRelativePathname();
+            
+            $lines = file($absoluteFilePath);//$file->getContents();
+            if(count($lines) > 0){
+                foreach($lines as $cityInfo){
+                    $info = explode(',',$cityInfo);
+                    $city = $manager->getRepository("DashboardCommonBundle:City")->findOneByName($info[0]);
+                    
+                    /*if(!$city){
+                        $city = new City();
+                        $city->setName($info[0]);
+                        $city->setRegion($region);
+                        $manager->persist($city);
+                        $manager->flush();
+                    }*/
+
+                    if($city){
+                        $code = new CityCode();
+                        $code->setCity($city);
+                        $code->setCode($info[1]);
+                        $manager->persist($code);
+                        $manager->flush();
+                    }
+                }
+            }
+        }
+        
+        return new Response('OK');
+    }
 
     /**
      * @Route("/admin/banner/{bannerId}", name="admin_settings_banners", defaults={"bannerId" : 0})
@@ -1279,6 +1340,7 @@ class DefaultController extends Controller
             ->add('watermark', HiddenType::class, array('required' => false))
             ->add('dafaultOrderStatus', ChoiceType::class, array('choices' => $statuses, 'data' => $locale->getSettings()->getDafaultOrderStatus(),'required' => false, 'label' => 'Статус заказов при добавлении', 'attr' => array('class' => 'form-control','placeholder' => 'Статус заказов при добавлении')))
             ->add('copyright', TextType::class, array('required' => false, 'label' => 'Копирайт', 'attr' => array('class' => 'form-control','placeholder' => 'Копирайт'))) 
+            ->add('serviceTabText', TextareaType::class, array('required' => false, 'label' => 'Описание для вкладки услуг', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('textblockHowToPrice', TextareaType::class, array('required' => false, 'label' => 'Как правильно устанавливать цену', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('textblockUserAgreement', TextareaType::class, array('required' => false, 'label' => 'Пользовательское соглашение', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('userAdvertWorkRight', TextareaType::class, array('required' => false, 'label' => 'Правила размещения и как продавать быстрее', 'attr' => array('class' => 'form-control tinyeditor'))) 

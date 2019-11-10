@@ -225,6 +225,12 @@
                                                     </div>
                                                     <div id="settingtextblocks{{ locale.code }}" class="tab-pane fade">
                                                         <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].serviceTabText) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].serviceTabText) }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].textblockHowToPrice) }}</label>
                                                             <div class="col-md-9">
                                                                 {{ form_widget(settingsForms[locale.code].textblockHowToPrice) }}

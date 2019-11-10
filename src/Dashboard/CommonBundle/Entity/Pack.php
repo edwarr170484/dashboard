@@ -24,6 +24,16 @@ class Pack
     private $name;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
+     */
+    private $label;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
+     */
+    private $bgClass;
+    
+    /**
      * @ORM\Column(type="text", nullable=true, options={"default":"0"})
      */
     private $description;
@@ -47,6 +57,16 @@ class Pack
      * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Product", mappedBy="servicePack")
      */
     private $product;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\PackPrice", mappedBy="pack", cascade={"persist"})
+     */
+    private $prices;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Role", mappedBy="servicePacks")
+     */
+    private $userRoles;
     
     /**
      * Constructor
@@ -223,5 +243,117 @@ class Pack
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * Add prices
+     *
+     * @param \Dashboard\CommonBundle\Entity\PackPrice $prices
+     * @return Pack
+     */
+    public function addPrice(\Dashboard\CommonBundle\Entity\PackPrice $prices)
+    {
+        $this->prices[] = $prices;
+
+        return $this;
+    }
+
+    /**
+     * Remove prices
+     *
+     * @param \Dashboard\CommonBundle\Entity\PackPrice $prices
+     */
+    public function removePrice(\Dashboard\CommonBundle\Entity\PackPrice $prices)
+    {
+        $this->prices->removeElement($prices);
+    }
+
+    /**
+     * Get prices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPrices()
+    {
+        return $this->prices;
+    }
+
+    /**
+     * Add userRoles
+     *
+     * @param \Dashboard\CommonBundle\Entity\Role $userRoles
+     * @return Pack
+     */
+    public function addUserRole(\Dashboard\CommonBundle\Entity\Role $userRoles)
+    {
+        $this->userRoles[] = $userRoles;
+
+        return $this;
+    }
+
+    /**
+     * Remove userRoles
+     *
+     * @param \Dashboard\CommonBundle\Entity\Role $userRoles
+     */
+    public function removeUserRole(\Dashboard\CommonBundle\Entity\Role $userRoles)
+    {
+        $this->userRoles->removeElement($userRoles);
+    }
+
+    /**
+     * Get userRoles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserRoles()
+    {
+        return $this->userRoles;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return Pack
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string 
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set bgClass
+     *
+     * @param string $bgClass
+     * @return Pack
+     */
+    public function setBgClass($bgClass)
+    {
+        $this->bgClass = $bgClass;
+
+        return $this;
+    }
+
+    /**
+     * Get bgClass
+     *
+     * @return string 
+     */
+    public function getBgClass()
+    {
+        return $this->bgClass;
     }
 }

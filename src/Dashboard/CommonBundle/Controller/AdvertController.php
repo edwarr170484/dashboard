@@ -44,11 +44,13 @@ class AdvertController extends Controller
 {
     /**
      * @Route("/account/addadvert/{step}/{data}", name="addAdvert", defaults={"step" : "0", "data" : 0})
-     * @Route("/{_locale}/account/addadvert/{step}/{data}", name="addAdvertLocale", defaults={"_locale" : "lv", "step" : "0", "data" : 0}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/account/addadvert/{step}/{data}", name="addAdvertLocale", defaults={"_locale" : "es", "step" : "0", "data" : 0}, requirements={"_locale" : "es|ru"})
      */
     public function addAdvertAction($step, $data,Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $user = $this->get('security.context')->getToken()->getUser();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL' );
@@ -67,17 +69,134 @@ class AdvertController extends Controller
             switch($step){
                 case "step11":
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
+                    if($category){
+                        $advertInfo->setBaseCategory($category->getParent()->getId());
+                        $advertData = $serializer->serialize($advertInfo, 'json');
+                        $session->set('advertInfo', $advertData);
+                    }
                     return $this->render('DashboardCommonBundle:Product:add/step11.html.twig', array("category" => $category, "settings" => $settings, "locale" => $locale));
                 break;
             
                 case "step12":
+                    $boards = new ArrayCollection();
+                    $boardGenerations = new ArrayCollection();
+                    $gasTypes = new ArrayCollection();
+                    $gearTypes = new ArrayCollection();
+                    $transmittionTypes = new ArrayCollection();
+                    $modifications = new ArrayCollection();
+                    
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
                     if($category){
                         $advertInfo->setCategory($category->getId());
                         $advertData = $serializer->serialize($advertInfo, 'json');
                         $session->set('advertInfo', $advertData);
                     }
-                    return $this->render('DashboardCommonBundle:Product:add/step12.html.twig', array("category" => $category, "settings" => $settings, "locale" => $locale));
+                    
+                    //select all parameters if they are
+                    if($advertInfo->getYear()){
+                        $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
+                    
+                        $generations = $query->getResult();
+                        
+                        if($generations){
+                            foreach($generations as $generation){
+                                if($generation->getBoards()){
+                                    foreach($generation->getBoards() as $generationBoard){
+                                        if(false === $boards->contains($generationBoard->getBoard())){
+                                            $boards->add($generationBoard);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if($advertInfo->getBoard()){
+                        $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $advertInfo->getBoard());
+                        $boardGenerations = $query->getResult();
+                    }
+                    
+                    if($advertInfo->getGeneration()){
+                        $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+
+                        $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId());
+
+                        $items = $query->getResult();
+
+                        if($items){
+                            foreach($items as $item){
+                                if(false === $gasTypes->contains($item->getGasType())){
+                                    $gasTypes->add($item->getGasType());
+                                }
+                            }
+                        }
+                    }
+                    
+                    if($advertInfo->getGasType()){
+                        $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+
+                        $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType());
+
+                        $items = $query->getResult();
+ 
+                        if($items){
+                            foreach($items as $item){
+                                if(false === $gearTypes->contains($item->getGearType())){
+                                    $gearTypes->add($item->getGearType());
+                                }
+                            }
+                        }
+                    }
+                    
+                    if($advertInfo->getGearType()){
+                        $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+
+                        $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType());
+
+                        $items = $query->getResult();
+
+                        if($items){
+                            foreach($items as $item){
+                                if(false === $transmittionTypes->contains($item->getTransmissionType())){
+                                    $transmittionTypes->add($item->getTransmissionType());
+                                }
+                            }
+                        }
+                     }
+                     
+                    if($advertInfo->getTransmissionType()){
+                        $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+
+                        $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType() . ' AND gi.transmissionType = ' . $advertInfo->getTransmissionType());
+
+                        $items = $query->getResult();
+
+                        if($items){
+                            foreach($items as $item){
+                                if($item->getItemModifications()){
+                                    foreach($item->getItemModifications() as $modification){
+                                        if(false === $modifications->contains($modification)){
+                                            $modifications->add($modification);
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/step12.html.twig', array("category" => $category, "settings" => $settings, "locale" => $locale,
+                                                                                                     "advertInfo" => $advertInfo,
+                                                                                                     "boards" => $boards,
+                                                                                                     "boardGenerations" => $boardGenerations,
+                                                                                                     "gasTypes" => $gasTypes,
+                                                                                                     "gearTypes" => $gearTypes,
+                                                                                                     "transmittionTypes" => $transmittionTypes,
+                                                                                                     "modifications" => $modifications));
                 break;
                 
                 case "boards":
@@ -110,7 +229,7 @@ class AdvertController extends Controller
                         }
                     }
                     
-                    return $this->render('DashboardCommonBundle:Product:add/boards.html.twig', array("boards" => $boards, "locale" => $locale));
+                    return $this->render('DashboardCommonBundle:Product:add/boards.html.twig', array("boards" => $boards, "locale" => $locale, "advertInfo" => $advertInfo));
                     
                 break;
                 
@@ -130,7 +249,7 @@ class AdvertController extends Controller
                     
                     $boards = $query->getResult();
                     
-                    return $this->render('DashboardCommonBundle:Product:add/generations.html.twig', array("boards" => $boards, "locale" => $locale));
+                    return $this->render('DashboardCommonBundle:Product:add/generations.html.twig', array("boards" => $boards, "locale" => $locale, "advertInfo" => $advertInfo));
                 break;
             
                 case "engines":
@@ -160,7 +279,7 @@ class AdvertController extends Controller
                         }
                     }
                     
-                    return $this->render('DashboardCommonBundle:Product:add/gasTypes.html.twig', array("gasTypes" => $gasTypes, "locale" => $locale));
+                    return $this->render('DashboardCommonBundle:Product:add/gasTypes.html.twig', array("gasTypes" => $gasTypes, "locale" => $locale, "advertInfo" => $advertInfo));
                     
                 break;
                 
@@ -190,7 +309,7 @@ class AdvertController extends Controller
                         }
                     }
                     
-                    return $this->render('DashboardCommonBundle:Product:add/gearTypes.html.twig', array("gearTypes" => $gearTypes, "locale" => $locale));
+                    return $this->render('DashboardCommonBundle:Product:add/gearTypes.html.twig', array("gearTypes" => $gearTypes, "locale" => $locale, "advertInfo" => $advertInfo));
                     
                 break;
                 
@@ -219,7 +338,7 @@ class AdvertController extends Controller
                         }
                     }
                     
-                    return $this->render('DashboardCommonBundle:Product:add/transmittionTypes.html.twig', array("transmittionTypes" => $transmittionTypes, "locale" => $locale));
+                    return $this->render('DashboardCommonBundle:Product:add/transmittionTypes.html.twig', array("transmittionTypes" => $transmittionTypes, "locale" => $locale,"advertInfo" => $advertInfo));
                 break;    
                 
                 case 'modification':
@@ -251,7 +370,7 @@ class AdvertController extends Controller
                         }
                     }
                     
-                    return $this->render('DashboardCommonBundle:Product:add/modifications.html.twig', array("modifications" => $modifications, "locale" => $locale));
+                    return $this->render('DashboardCommonBundle:Product:add/modifications.html.twig', array("modifications" => $modifications, "locale" => $locale, "advertInfo" => $advertInfo));
                     
                 break;    
                 
@@ -270,7 +389,7 @@ class AdvertController extends Controller
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
                     $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
                     
-                    return $this->render('DashboardCommonBundle:Product:add/step2.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
+                    return $this->render('DashboardCommonBundle:Product:add/step2.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "advertInfo" => $advertInfo, "advertImages" => $advertImages));
                 break;
             
                 case 'setcolor':
@@ -280,10 +399,24 @@ class AdvertController extends Controller
                     
                     return new Response("OK");
                 break;
-                
-                case 'addimage':
-                    
-                break;
+            
+                case 'deleteimage':
+                    if(count($advertImages) > 0){
+                        $tempAdvertImages = new ArrayCollection($advertImages);
+                        foreach($advertImages as $image){
+                            if($image->getName() == $data){
+                                if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $image->getName())){
+                                    $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $image->getName());
+                                }
+                                $tempAdvertImages->removeElement($image);
+                            }
+                        }
+                        $advertImages = $tempAdvertImages->toArray();
+                        $advertData = $serializer->serialize($advertImages, 'json');
+                        $session->set('advertImages', $advertData);
+                    }
+                    return new Response("OK");
+                break;    
             
                 case "step3":
                     $categoryId = $advertInfo->getCategory();
@@ -292,12 +425,19 @@ class AdvertController extends Controller
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
                     $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
                     
-                    return $this->render('DashboardCommonBundle:Product:add/step3.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
+                    $filters = array();
+                    
+                    foreach($advertFilters as $advertFilter){
+                        $filters[$advertFilter->getId()] = 1;
+                    }
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/step3.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "filters" => $filters));
                 break;
             
                 case "step4":
-                    $advertFilters = array();
+                    
                     if($request->request->get('filter')){
+                        $advertFilters = array();
                         foreach($request->request->get('filter') as $filterId){
                             $filter = new AdvertFilter();
                             $filter->setId($filterId);
@@ -314,7 +454,7 @@ class AdvertController extends Controller
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
                     $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
                     
-                    return $this->render('DashboardCommonBundle:Product:add/step4.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
+                    return $this->render('DashboardCommonBundle:Product:add/step4.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "advertInfo" => $advertInfo));
                 break;
             
                 case "step5":
@@ -334,1013 +474,58 @@ class AdvertController extends Controller
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
-                    $categoryId = $advertInfo->getCategory();
-                    $generationId = $advertInfo->getGeneration();
+                    $baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($advertInfo->getBaseCategory());
+                    $category = $manager->getRepository("DashboardCommonBundle:Category")->find($advertInfo->getCategory());
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                    $board = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
+                    $color = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getColor());
+                    $gas = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getGasType());
+                    $gear = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getGearType());
+                    $transmission = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getTransmissionType());
+                    $modification = $manager->getRepository("DashboardCommonBundle:Modification")->find($advertInfo->getModification());
                     
-                    $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
-                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
+                    return $this->render('DashboardCommonBundle:Product:add/step5.html.twig', array("baseCategory" => $baseCategory,"category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "advertImages" => $advertImages, "advertInfo" => $advertInfo,"color" => $color, "board" => $board,"gas" => $gas,"gear" => $gear, "transmission" => $transmission,"modification" => $modification, "user" => $user,"role" => $user->getRoles()[0]));
                     
-                    return $this->render('DashboardCommonBundle:Product:add/step5.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings));
                 break;
                 
                 case "finalAdd":
-                    //return $this->render('DashboardCommonBundle:Product:add/register.html.twig', array("locale" => $locale, "settings" => $settings));
+                    $advertInfo->setContactName($request->request->get('contactName'));
+                    $advertInfo->setContactPhone($request->request->get('contactPhone'));
+                    $advertInfo->setContactEmail($request->request->get('contactEmail'));
+                    $advertInfo->setContactCity($request->request->get('contactCity'));
+                    $advertInfo->setContactCityCode($request->request->get('contactCityCode'));
+                    
+                    if($request->request->get('servicePack') && $request->request->get('servicePack') != 0){
+                        $advertInfo->setServicePack($request->request->get('servicePack'));
+                        $advertInfo->setServices(array());
+                    }elseif($request->request->get('service')){
+                        $advertInfo->setServicePack(0);
+                        $advertInfo->setServices($request->request->get('service'));
+                    }
+                    
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
                     return $this->render('DashboardCommonBundle:Product:add/result.html.twig', array("locale" => $locale, "settings" => $settings));
                 break;
+                
+                case 'getcitycodes':
+                    $query = $manager->createQuery('SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE \'' . $data . '%\'');
+                    $codes = $query->getResult();
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/citycodes.html.twig', array("codes" => $codes, "locale" => $locale));
+                break;
+            
+                case 'getcities':
+                    $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\City c WHERE c.name LIKE \'' . $data . '%\'');
+                    $cities = $query->getResult();
+                    
+                    return $this->render('DashboardCommonBundle:Product:add/cities.html.twig', array("cities" => $cities, "locale" => $locale));
+                break;    
             }
         }
         
         return $this->render('DashboardCommonBundle:Product:add/add.html.twig', array("categories" => $categories, "settings" => $settings, "locale" => $locale));
-    }
-    
-    /**
-     * @Route("/account/addproduct", name="addproduct")
-     * @Route("/{_locale}/account/addproduct", name="addproductLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
-     */
-    public function addProductAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        $textblock = $manager->getRepository("DashboardCommonBundle:Textblock")->find(1);
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        $errors = 0;
-        $allservices = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
-        
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Page p WHERE p.isUserpage = 0 AND p.locale=" . $locale->getId() . " AND p.route = 'addproduct'" );
-
-        try{
-            $page = $query->getSingleResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $page = 0;
-        }
-        $roles = $user->getRoles();
-        
-        //проверить превышено ли количество разрешенных для этого пользователя объявлений
-        if($user->getProducts()->count() == ($user->getAdvertNumber() + $roles[0]->getAdvertNumber()))
-        {
-            return $this->render('DashboardCommonBundle:User:outlimitadvert.html.twig', array("settings" => $settings));
-        }
-        
-        $product = new Product();
-        
-        $addAdvertForm = $this->createForm(new UserAddAdvertType($manager, $user->getUserinfo(), $allservices,$this->get('translator'),$locale), $product);
-        
-        //get all categories from database  
-        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL' );
-        $categories = $query->getResult();
-        
-        $addAdvertForm->handleRequest($request);
-        
-        $filters = ($request->request->get('filter')) ? $this->renderFiltersView($addAdvertForm['category']->getData(), $request->request->get('filter'), $request) : 0;
-        
-        $validator = $this->get('validator');
-        $errorsValid = $validator->validate($product);
-            
-        if (count($errorsValid) > 0) 
-        {
-            
-            foreach($errorsValid as $error)
-                $this->addFlash(
-                    'notice',
-                    '<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true">x</span></button>' . 
-                    $this->get('translator')->trans('<strong>Kļūda!</strong>%message%.', array("%message%" => $error->getMessage())) . '</div>'
-                );
-                 
-            return $this->render('DashboardCommonBundle:Product:addproduct.html.twig', array("addAdvertForm" => $addAdvertForm->createView(),
-                                                                                         "categories" => $categories,
-                                                                                         "textblock" => $textblock,
-                                                                                         "page" => $page,
-                                                                                         "filters" => $filters,
-                                                                                         "role" => $roles[0],
-                                                                                         "locale" => $locale,
-                                                                                         "settings" => $settings));
-        }
-
-        if($addAdvertForm->isValid())
-        {            
-            if(!$addAdvertForm['authorName']->getData() || !$addAdvertForm['authorEmail']->getData() || !$addAdvertForm['authorPhone']->getData() || !$addAdvertForm['region']->getData() || !$addAdvertForm['city']->getData() || !$addAdvertForm['name']->getData() || !$addAdvertForm['term']->getData() || !$addAdvertForm['description']->getData() || !$addAdvertForm['price']->getData())
-            {
-                $this->addFlash(
-                    'notice_errors',
-                    '<div class = "alert alert-danger alert-dismissible fade in">
-                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' .
-                     $this->get('translator')->trans('<strong>Kļūda!</strong> Aizpildiet visus laukus, kas atzīmēti ar *.') . '</div>'
-                );
-                
-                $errors = 1;
-            }
-            
-            if(strlen(strip_tags($addAdvertForm['description']->getData())) > 3000)
-            {
-                $this->addFlash(
-                    'notice_errors',
-                    '<div class = "alert alert-danger alert-dismissible fade in">
-                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' .
-                     $this->get('translator')->trans('<strong>Kļūda!</strong> Apraksts nedrīkst pārsniegt 3000 rakstzīmes.') . '</div>'
-                );
-                
-                $errors = 1;
-            }
-            
-            if(!$addAdvertForm['category']->getData())
-            {
-                $this->addFlash(
-                    'notice_errors',
-                    '<div class = "alert alert-danger alert-dismissible fade in">
-                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' .
-                     $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs neesat izvēlējies savu reklāmu kategoriju.') . '</div>'
-                );
-                
-                $errors = 1;
-            }
-            
-            if(!$addAdvertForm['termsAccept']->getData())
-            {
-                $this->addFlash(
-                    'notice_errors',
-                    '<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' .
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> Pakalpojumam ir jāpieņem <a href="" data-toggle="modal" data-target="#userAgreementModal"> pakalpojumu sniegšanas noteikumi</a>.') .'</div>'
-                );
-                
-                $errors = 1;
-            }
-            
-            if(preg_match("/[^0-9]/",$addAdvertForm['authorPhone']->getData()) || strlen($addAdvertForm['authorPhone']->getData()) != 8)
-            {
-                $this->addFlash(
-                    'notice_errors',
-                    '<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' . 
-                     $this->get('translator')->trans('<strong>Kļūda!</strong> Tālruņa numuram ir jābūt tikai 8 cipariem.') . '</div>'
-                );
-                
-                $errors = 1;
-            }
-
-            if(!$addAdvertForm['viewcommon']->getData() && !$addAdvertForm['viewpremium']->getData() && !$addAdvertForm['viewselected']->getData())
-            {
-                $this->addFlash(
-                    'notice_errors',
-                    '<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' .
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> Jums ir jāizvēlas reklāmas izvietojuma veids (Normāls, Premium, Dedicated).') .'</div>'
-                );
-                
-                $errors = 1;
-            }
-            
-            if($errors)
-            {
-                
-                return $this->render('DashboardCommonBundle:Product:addproduct.html.twig', array("addAdvertForm" => $addAdvertForm->createView(),
-                                                                                                 "categories" => $categories,
-                                                                                                 "textblock" => $textblock,
-                                                                                                 "page" => $page,
-                                                                                                 "filters" => $filters,
-                                                                                                 "role" => $roles[0],
-                                                                                                 "locale" => $locale,
-                                                                                                 "settings" => $settings));
-            }
-            
-            $product->setUser($user);
-            
-            $i = 0;
-            $fotos = $product->getFotos();
-            foreach($fotos as $foto)
-            {
-                $foto->setProduct($product);
-                $foto->setTitle($product->getName());
-                $foto->setSortorder($i + 1);
-                $i++;
-            }
-            
-            $product->setDateAdded(new \DateTime("now"));
-            $product->setDateEdited(new \DateTime("now"));
-            $product->setMetaTagTitle($product->getName());
-            if($settings->getIsModerate())
-            {
-                $product->setIsActive(0);
-                $product->setIsConfirm(0);
-            }
-            else
-            {
-                $product->setIsActive(1);
-                $product->setIsConfirm(1);
-            }
-            $product->setIsCorrect(0);
-            $product->setIsBlocked(0);
-            
-            //set filters values
-            if($request->request->get('filter'))
-            {
-                foreach($request->request->get('filter') as $key => $value)
-                {
-                    if(is_array($value))
-                    {
-                        foreach($value as $key => $val)
-                        {
-                            $filterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($val);
-                    
-                            if($filterValue)
-                                $product->addFilter($filterValue);
-                        }
-                    }
-                    else
-                    {
-                        $filter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
-                        
-                        if($filter)
-                        {
-                            if($filter->getType() == 'selectable' || $filter->getType() == 'input')
-                            {
-                                $filterValue = new FilterValue();
-                                $filterValue->setFilter($filter);
-                                $filterValue->setValue($value);
-                                $manager->persist($filterValue);
-                                $product->addFilter($filterValue);
-                            }
-                            else
-                            {
-                                $filterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($value);
-
-                                if($filterValue)
-                                    $product->addFilter($filterValue);
-                            }
-                        }    
-                    }
-                }
-            }
-            
-            $helpers = $this->get('app.helpers');
-            $product->setTranslit($helpers->translit($product->getName()));
-            
-            $manager->persist($product);
-            $manager->flush();
-            
-            if($addAdvertForm['viewpremium']->getData())
-            {
-                $service = $manager->getRepository("DashboardCommonBundle:Service")->find(1);
-                
-                if($service)
-                {
-                    if($user->getUserpurse()->getBalanse() >= $service->getPrice())
-                    {
-                        $premiumService = new ProductService();
-                        $premiumService->setProduct($product);
-                        $premiumService->setService($service);
-                        
-                        $date = new \DateTime("now");
-                        $premiumService->setDateAdded($date);
-                        $dateEnd = clone $date;
-                        $dateEnd->add(new \DateInterval('P' . $service->getDays() . 'D'));
-                        $premiumService->setDateEnd($dateEnd);
-                        
-                        $premiumService->setIsActive(true);
-
-                        $manager->persist($premiumService);
-                        
-                        $product->setViewpremium(true);
-                        $product->setViewcommon(false);
-                        $product->setViewselected(false);
-                        
-                        $userPurseHistory = new UserPurseHistory();
-                        $userPurseHistory->setActionDate(new \DateTime("now"));
-                        $userPurseHistory->setAction($this->get('translator')->trans("Maksa par pakalpojuma aktivizēšanu") ." " . $service->getTitle() . ". " . $this->get('translator')->trans("Izrakstīts") . " " . $service->getPrice() . $settings->getCurrency()->getName() . ".");
-                        $userPurseHistory->setCurrentBalanse($user->getUserpurse()->getBalanse() - $service->getPrice());
-                        $userPurseHistory->setUserpurse($user->getUserpurse());
-                        
-                        $user->getUserpurse()->setBalanse($user->getUserpurse()->getBalanse() - $service->getPrice());
-                        $manager->persist($user);
-                    }
-                    else
-                    {
-                        $this->addFlash(
-                            'notice',
-                            '<div class = "alert alert-warning alert-dismissible fade in" role = "alert">
-                             <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' . 
-                             $this->get('translator')->trans('<strong>Informācija:</strong> jūsu kontam nav pietiekami daudz naudas prēmiju izvietošanai. Reklāmu pievienoja kā parasti.') . '</div>'
-                        );
-                        
-                        $product->setViewpremium(false);
-                        $product->setViewcommon(true);
-                        $product->setViewselected(false);
-                    }
-                }
-            }
-            elseif($addAdvertForm['viewselected']->getData())
-            {
-                $service = $manager->getRepository("DashboardCommonBundle:Service")->find(2);
-                
-                if($service)
-                {
-                    if($user->getUserpurse()->getBalanse() >= $service->getPrice())
-                    {
-                        $selectedService = new ProductService();
-                        $selectedService->setProduct($product);
-                        $selectedService->setService($service);
-                        $date = new \DateTime("now");
-                        $selectedService->setDateAdded($date);
-                        $dateEnd = clone $date;
-                        $dateEnd->add(new \DateInterval('P' . $service->getDays() . 'D'));
-                        $selectedService->setDateEnd($dateEnd);
-                        
-                        $selectedService->setIsActive(true);
-
-                        $manager->persist($selectedService);
-                        
-                        $product->setViewpremium(false);
-                        $product->setViewcommon(false);
-                        $product->setViewselected(true);
-                        
-                        $userPurseHistory = new UserPurseHistory();
-                        $userPurseHistory->setActionDate(new \DateTime("now"));
-                        $userPurseHistory->setAction($this->get('translator')->trans("Maksa par pakalpojuma aktivizēšanu") ." " . $service->getTitle() . ". " . $this->get('translator')->trans("Izrakstīts") . " " . $service->getPrice() . $settings->getCurrency()->getName() . ".");
-                        $userPurseHistory->setCurrentBalanse($user->getUserpurse()->getBalanse() - $service->getPrice());
-                        $userPurseHistory->setUserpurse($user->getUserpurse());
-                        
-                        $user->getUserpurse()->setBalanse($user->getUserpurse()->getBalanse() - $service->getPrice());
-                        $manager->persist($user);
-                    }
-                    else
-                    {
-                        $this->addFlash(
-                            'notice',
-                            '<div class = "alert alert-warning alert-dismissible fade in" role = "alert">
-                             <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' . 
-                             $this->get('translator')->trans('<strong>Informācija:</strong> jūsu kontam nav pietiekami daudz naudas prēmiju izvietošanai. Reklāmu pievienoja kā parasti.').'</div>'
-                        );
-                        
-                        $product->setViewpremium(false);
-                        $product->setViewcommon(true);
-                        $product->setViewselected(false);
-                    }
-                }
-            }
-            else
-            {
-                $product->setViewpremium(false);
-                $product->setViewcommon(true);
-                $product->setViewselected(false);
-            }
-            
-            $manager->persist($product);
-            $manager->flush();
-            
-            if($settings->getIsModerate())
-            {
-                //send an email
-                $message = \Swift_Message::newInstance()
-                ->setSubject('Добавлено новое объявление на модерацию на сайте gribupardot.sunweb.by')
-                ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-                ->setTo($settings->getAdminEmail())
-                ->setBody(
-                    $this->renderView(
-                        'Emails/newproduct.html.twig',
-                        array("product" => $product)
-                    ),
-                    'text/html'
-                );
-
-                $this->get('mailer')->send($message);
-            }
-            
-            $this->addFlash(
-                'notice',
-                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                ' . $settings->getSuccessAddAdvertText() . '</div>')
-            );
-            
-            if($locale->getIsDefault())
-            {
-                return $this->redirectToRoute("addproductSuccess");
-            }
-            else
-            {
-                return $this->redirectToRoute("addproductSuccessLocale", array("_locale" => $locale->getCode()));
-            }
-            
-        }
-        
-        return $this->render('DashboardCommonBundle:Product:addproduct.html.twig', array("addAdvertForm" => $addAdvertForm->createView(),
-                                                                                         "categories" => $categories,
-                                                                                         "textblock" => $textblock,
-                                                                                         "page" => $page,
-                                                                                         "filters" => $filters,
-                                                                                         "role" => $roles[0],
-                                                                                         "locale" => $locale,
-                                                                                         "settings" => $settings));
-    }
-    
-    /**
-     * @Route("/account/success/addproduct", name="addproductSuccess")
-     * @Route("/{_locale}/account/success/addproduct", name="addproductSuccessLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
-     */
-    public function addProductSuccessAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Page p WHERE p.locale=" . $locale->getId() . " AND p.isUserpage = 0 AND p.route = 'addproductSuccess'" );
-        
-        try{
-            $page = $query->getSingleResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            throw $this->createNotFoundException(); 
-        }
-        
-        return $this->render('DashboardCommonBundle:Product:success.html.twig', array("page" => $page,"locale" => $locale,"settings" => $settings));
-    }
-    
-    /**
-     * @Route("/account/product/edit/{productId}", name="editproduct")
-     * @Route("/{_locale}/account/product/edit/{productId}", name="editproductLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
-     */
-    public function editProductAction($productId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $fm = new Filesystem();
-        $textblock = $manager->getRepository("DashboardCommonBundle:Textblock")->find(1);
-        $user = $this->get('security.context')->getToken()->getUser();
-        $originalFotos = new ArrayCollection();
-        $originalFilters = new ArrayCollection();
-        $receivedFilters = new ArrayCollection();
-        $originalMainFoto = 0;
-        $roles = $user->getRoles();
-        $allservices = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId);
-        
-        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL' );
-        $categories = $query->getResult();
-        
-        if($product)
-        {
-            $productCurrentService = $product->getService();
-            
-            if($product->getUser()->getId() != $user->getId())
-            {
-                $this->addFlash(
-                    'notice',
-                    '<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' .
-                     $this->get('translator')->trans('<strong>Kļūda!</strong> Šī nav jūsu reklāma un jūs to nevarat rediģēt.') . '</div>'
-                );
-                
-                return $this->redirectToRoute("account_products");
-            }
-            
-            $originalMainFoto = $product->getMainfoto();
-            
-            foreach ($product->getFotos() as $foto) {
-                $originalFotos->add($foto);
-            }
-            
-            foreach ($product->getFilters() as $filter) {
-                $originalFilters->add($filter);
-            }
-            
-            $productForm = $this->createForm(new EditProductType($manager, $user->getUserinfo(), $allservices, $this->get('translator'), $locale), $product);
-            
-            $fitersTmp = array();
-            $filters = '';
-            
-            $i = 0;
-            if($product->getFilters())
-            {
-                foreach($product->getFilters() as $filter)
-                {
-                    if($filter->getFilter()->getType() == 'checkbox')
-                    {
-                        $fitersTmp[$filter->getFilter()->getId()] = array();
-                    }
-                }
-                
-                foreach($product->getFilters() as $filter)
-                {
-                    if($filter->getFilter()->getType() == 'checkbox')
-                    {
-                        array_push($fitersTmp[$filter->getFilter()->getId()], $filter->getId());
-                    }
-                    else
-                        $fitersTmp[$filter->getFilter()->getId()] = $filter->getId();
-                }
-                
-                $filters = $this->renderFiltersView($product->getCategory(), $fitersTmp, $request);
-            }
-
-            $productForm->handleRequest($request);
-            
-            $validator = $this->get('validator');
-            $errorsValid = $validator->validate($product);
-
-            if (count($errorsValid) > 0) 
-            {
-                foreach($errorsValid as $error)
-                        $this->addFlash(
-                               'notice',
-                               $this->get('translator')->trans('<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                            <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>
-                            <strong>Kļūda!</strong>%message%. </div>', array("%message%" => $error->getMessage()))
-                       );
-
-                return $this->render('DashboardCommonBundle:Product:editproduct.html.twig', array("productForm" => $productForm->createView(),
-                                                                                                  "categories" => $categories,
-                                                                                                  "product" => $product,
-                                                                                                  "textblock" => $textblock,
-                                                                                                  "filters" => $filters,
-                                                                                                  "isBlocked" => $product->getIsBlocked(),
-                                                                                                  "isCorrect" => $product->getIsCorrect(),
-                                                                                                  "role" => $roles[0],
-                                                                                                  "productId" => $product->getId(),
-                                                                                                  "locale" => $locale,
-                                                                                                  "settings" => $settings));
-            }
-            
-            if($productForm->isValid()&& $productForm->isSubmitted())       
-            {
-                $errors = 0;
-                if(preg_match("/[^0-9]/",$productForm['authorPhone']->getData()) || strlen($productForm['authorPhone']->getData()) != 8)
-                {
-                    $this->addFlash(
-                        'notice_errors',
-                        '<div class = "alert alert-danger alert-dismissible fade in" role="alert">
-                         <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' . 
-                         $this->get('translator')->trans('<strong>Kļūda!</strong> Tālruņa numuram ir jābūt tikai 8 cipariem.') . '</div>'
-                    );
-
-                    $errors = 1;
-                }
-                
-                if(!$productForm['authorName']->getData() || !$productForm['authorEmail']->getData() || !$productForm['authorPhone']->getData() || !$productForm['region']->getData() || !$productForm['city']->getData() || !$productForm['name']->getData() || !$productForm['term']->getData() || !$productForm['description']->getData() || !$productForm['price']->getData())
-                {
-                    $this->addFlash(
-                        'notice_errors',
-                        '<div class = "alert alert-danger alert-dismissible fade in">
-                         <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' .
-                         $this->get('translator')->trans('<strong>Kļūda!</strong> Aizpildiet visus laukus, kas atzīmēti ar *.') . '</div>'
-                    );
-
-                    $errors = 1;
-                }
-                
-                if(strlen(strip_tags($addAdvertForm['description']->getData())) > 3000)
-                {
-                    $this->addFlash(
-                        'notice_errors',
-                        '<div class = "alert alert-danger alert-dismissible fade in">
-                         <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' .
-                         $this->get('translator')->trans('<strong>Kļūda!</strong> Apraksts nedrīkst pārsniegt 3000 rakstzīmes.') . '</div>'
-                    );
-
-                    $errors = 1;
-                }
-
-                if(!$productForm['category']->getData())
-                {
-                    $this->addFlash(
-                        'notice_errors',
-                        '<div class = "alert alert-danger alert-dismissible fade in">
-                         <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true">x</span></button>' .
-                         $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs neesat izvēlējies savu reklāmu kategoriju.') . '</div>'
-                    );
-
-                    $errors = 1;
-                }
-                
-                if($errors)
-                {                    
-                    return $this->render('DashboardCommonBundle:Product:editproduct.html.twig', array("productForm" => $productForm->createView(),
-                                                                                          "categories" => $categories,
-                                                                                            "product" => $product,
-                                                                                       "textblock" => $textblock,
-                                                                                       "filters" => $filters,
-                                                                                       "isBlocked" => $product->getIsBlocked(),
-                                                                                       "isCorrect" => $product->getIsCorrect(),
-                                                                                       "role" => $roles[0],
-                                                                                       "productId" => $product->getId(),
-                                                                                       "locale" => $locale,
-                                                                                       "settings" => $settings));
-                }
-                
-                $category = $manager->getRepository("DashboardCommonBundle:Category")->findOneById($productForm['category']->getData());
-            
-                if($category)
-                {
-                    $product->setCategory($category);
-                }
-                
-                if($originalMainFoto != $product->getMainfoto())
-                {
-                    if($originalMainFoto)
-                    {
-                        if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $originalMainFoto))
-                        {
-                            $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $originalMainFoto);
-                        }
-                    }
-                }
-                
-                if($originalFotos)
-                {
-                    foreach ($originalFotos as $foto) 
-                    {       
-                        if (false === $product->getFotos()->contains($foto)) 
-                        {
-                            if($foto->getFoto())
-                            {
-                                if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto()))
-                                {
-                                    $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto());
-                                }
-                            }
-                            $foto->setProduct(null);
-                            $manager->remove($foto);
-                        }
-                    }
-                } 
-
-                if($product->getFotos())
-                {
-                    foreach($product->getFotos() as $key => $item)
-                    {
-                        $item->setProduct($product);
-                        $item->setTitle($product->getName());
-                        
-                        $manager->persist($item);
-                    }
-                }
-                
-                if($originalFilters)
-                {
-                    foreach($originalFilters as $filter)
-                        $product->removeFilter($filter);
-                }
-                
-                if($request->request->get('filter'))
-                { 
-                    foreach($request->request->get('filter') as $key => $value)
-                    {
-                        if($value)
-                        {
-                            if(is_array($value))
-                            {
-                                foreach($value as $key => $val)
-                                {
-                                    $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($val);
-                                    $receivedFilters->add($filter);
-                                }
-                            }
-                            else {
-                                
-                                $filter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
-                        
-                                if($filter)
-                                {
-                                    if($filter->getType() == 'selectable' || $filter->getType() == 'input')
-                                    {
-                                        if($product->getFilters())
-                                        {
-                                            $marker = 0;
-                                            foreach($product->getFilters() as $productFilter)
-                                            {
-                                                if($filter->getId() == $productFilter->getFilter()->getId())
-                                                {
-                                                    $productFilter->setValue($value);
-                                                    $manager->persist($productFilter);
-                                                    $receivedFilters->add($productFilter);
-                                                    $marker == 1;
-                                                    break;
-                                                }
-                                            }
-                                            if(!$marker)
-                                            {
-                                                $filterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneByValue($value);
-                                                
-                                                if(!$filterValue)
-                                                {
-                                                    $filterValue = new FilterValue();
-                                                    $filterValue->setFilter($filter);
-                                                    $filterValue->setValue($value);
-                                                    $manager->persist($filterValue);
-                                                }
-                                                
-                                                $receivedFilters->add($filterValue);
-                                            }
-                                        }   
-                                    }
-                                    else
-                                    {
-                                        $filterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($value);
-                                        
-                                        if($filterValue)
-                                            $receivedFilters->add($filterValue);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                if($receivedFilters)
-                {
-                    foreach($receivedFilters as $filter)
-                        $product->addFilter($filter);
-                }
-                
-                $helpers = $this->get('app.helpers');
-                $product->setTranslit($helpers->translit($product->getName()));
-                
-                $product->setDateEdited(new \DateTime("now"));
-                
-                $manager->persist($product);
-                $manager->flush();
-                
-                if($productForm['viewpremium']->getData())
-                {
-                    $service = $manager->getRepository("DashboardCommonBundle:Service")->find(1);
-                    
-                    if($service && ($product->getIsBlocked() == 0))
-                    {
-                        if($productCurrentService)
-                        {
-                            if($productCurrentService->getService()->getId() != $service->getId())
-                            {
-                                $this->addFlash(
-                                    'notice',
-                                    '<div class = "alert alert-warning alert-dismissible fade in" role = "alert">
-                                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt">
-                                     <span aria-hidden = "true"> x </span></button>' .
-                                     $this->get('translator')->trans('<strong>Informācija!</strong> Pakalpojums %mess1% jau ir saistīts ar šo reklāmu,%mess2% derīguma termiņš. Jaunu pakalpojumu var aktivizēt tikai pēc pašreizējā pakalpojuma beigām.', array("mess1" => $productCurrentService->getService()->getTitle(), "mess2" => $productCurrentService->getDateEnd()->format("Y-m-d H:i:s"))) . '</div>'
-                                );
-                                
-                                if($productCurrentService->getService()->getId() == 1)
-                                {
-                                    $product->setViewpremium(true);
-                                    $product->setViewcommon(false);
-                                    $product->setViewselected(false);
-                                }
-                                if($productCurrentService->getService()->getId() == 2)
-                                {
-                                    $product->setViewpremium(false);
-                                    $product->setViewcommon(false);
-                                    $product->setViewselected(true);
-                                }
-                                
-                            }
-                        }
-                        else
-                        {
-                            if($user->getUserpurse()->getBalanse() >= $service->getPrice())
-                            {
-                                    $premiumService = new ProductService();
-                                    $premiumService->setProduct($product);
-                                    $premiumService->setService($service);
-                                    $date = new \DateTime("now");
-                                    $premiumService->setDateAdded($date);
-                                    $dateEnd = clone $date;
-                                    $dateEnd->add(new \DateInterval('P' . $service->getDays() . 'D'));
-                                    $premiumService->setDateEnd($dateEnd);
-                                    $premiumService->setIsActive(true);
-
-                                    $manager->persist($premiumService);
-
-                                    $product->setViewpremium(true);
-                                    $product->setViewcommon(false);
-                                    $product->setViewselected(false);
-
-                                    $userPurseHistory = new UserPurseHistory();
-                                    $userPurseHistory->setActionDate(new \DateTime("now"));
-                                    $userPurseHistory->setAction($this->get('translator')->trans("Maksa par pakalpojuma aktivizēšanu") ." " . $service->getTitle() . ". " . $this->get('translator')->trans("Izrakstīts") . " " . $service->getPrice() . $settings->getCurrency()->getName() . ".");
-                                    $userPurseHistory->setCurrentBalanse($user->getUserpurse()->getBalanse() - $service->getPrice());
-                                    $userPurseHistory->setUserpurse($user->getUserpurse());
-
-                                    $user->getUserpurse()->setBalanse($user->getUserpurse()->getBalanse() - $service->getPrice());
-                                    $manager->persist($user);
-                            }
-                            else
-                            {
-                                $this->addFlash(
-                                    'notice',
-                                    '<div class = "alert alert-warning alert-dismissible fade in" role = "alert">
-                             <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true"> x </span> </button>' . 
-                             $this->get('translator')->trans('<strong>Informācija:</strong> jūsu kontam nav pietiekami daudz naudas prēmiju izvietošanai. Reklāmu pievienoja kā parasti.') . '</div>'
-                                );
-                                
-                                $product->setViewpremium(false);
-                                $product->setViewcommon(true);
-                                $product->setViewselected(false);
-                            }
-                        }
-                    }
-                }
-                elseif($productForm['viewselected']->getData())
-                {
-                    $service = $manager->getRepository("DashboardCommonBundle:Service")->find(2);
-
-                    if($service && ($product->getIsBlocked() == 0))
-                    {
-                        if($productCurrentService)
-                        {
-                            if($productCurrentService->getService()->getId() != $service->getId())
-                            {
-                                $this->addFlash(
-                                    'notice',
-                                    '<div class = "alert alert-warning alert-dismissible fade in" role = "alert">
-                                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"><span aria-hidden = "true"> x </span> </button>' . 
-                                     $this->get('translator')->trans('<strong>Informācija!</strong> Pakalpojums %mess1% jau ir saistīts ar šo reklāmu,%mess2% derīguma termiņš. Jaunu pakalpojumu var aktivizēt tikai pēc pašreizējā pakalpojuma beigām.', array("mess1" => $productCurrentService->getService()->getTitle(), "mess2" => $productCurrentService->getDateEnd()->format("Y-m-d H:i:s"))) . '</div>'
-                                );
-                                
-                                if($productCurrentService->getService()->getId() == 1)
-                                {
-                                    $product->setViewpremium(true);
-                                    $product->setViewcommon(false);
-                                    $product->setViewselected(false);
-                                }
-                                if($productCurrentService->getService()->getId() == 2)
-                                {
-                                    $product->setViewpremium(false);
-                                    $product->setViewcommon(false);
-                                    $product->setViewselected(true);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if($user->getUserpurse()->getBalanse() >= $service->getPrice())
-                            {
-                                $selectedService = new ProductService();
-
-                                $selectedService->setProduct($product);
-                                $selectedService->setService($service);
-                                $date = new \DateTime("now");
-                                $selectedService->setDateAdded($date);
-                                $dateEnd = clone $date;
-                                $dateEnd->add(new \DateInterval('P' . $service->getDays() . 'D'));
-                                $selectedService->setDateEnd($dateEnd);
-                                $selectedService->setIsActive(true);
-
-                                $manager->persist($selectedService);
-
-                                $product->setViewpremium(false);
-                                $product->setViewcommon(false);
-                                $product->setViewselected(true);
-
-                                $userPurseHistory = new UserPurseHistory();
-                                $userPurseHistory->setActionDate(new \DateTime("now"));
-                                $userPurseHistory->setAction($this->get('translator')->trans("Maksa par pakalpojuma aktivizēšanu") ." " . $service->getTitle() . ". " . $this->get('translator')->trans("Izrakstīts") . " " . $service->getPrice() . $settings->getCurrency()->getName() . ".");
-                                $userPurseHistory->setCurrentBalanse($user->getUserpurse()->getBalanse() - $service->getPrice());
-                                $userPurseHistory->setUserpurse($user->getUserpurse());
-
-                                $user->getUserpurse()->setBalanse($user->getUserpurse()->getBalanse() - $service->getPrice());
-                                $manager->persist($user);
-                            }
-                            else
-                            {
-                                $this->addFlash(
-                                    'notice',
-                                    '<div class = "alert alert-warning alert-dismissible fade in" role = "alert">
-                             <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' .
-                             $this->get('translator')->trans('<strong>Informācija:</strong> jūsu kontam nav pietiekami daudz naudas prēmiju izvietošanai. Reklāmu pievienoja kā parasti.') . '</div>'
-                                );
-                                
-                                $product->setViewpremium(false);
-                                $product->setViewcommon(true);
-                                $product->setViewselected(false);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if($productCurrentService)
-                    {
-                        if($productCurrentService->getService()->getId() == 1 || $productCurrentService->getService()->getId() == 2)
-                        {
-                            $this->addFlash(
-                                    'notice',
-                                    '<div class = "alert alert-warning alert-dismissible fade in" role = "alert">
-                                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' . 
-                                     $this->get('translator')->trans('<strong>Informācija!</strong> Pakalpojums %mess1% jau ir saistīts ar šo reklāmu,%mess2% derīguma termiņš. Jaunu pakalpojumu var aktivizēt tikai pēc pašreizējā pakalpojuma beigām.', array("mess1" => $productCurrentService->getService()->getTitle(), "mess2" => $productCurrentService->getDateEnd()->format("Y-m-d H:i:s"))) . '</div>'
-                                );
-                            
-                            if($productCurrentService->getService()->getId() == 1)
-                            {
-                                $product->setViewpremium(true);
-                                $product->setViewcommon(false);
-                                $product->setViewselected(false);
-                            }
-                            if($productCurrentService->getService()->getId() == 2)
-                            {
-                                $product->setViewpremium(false);
-                                $product->setViewcommon(false);
-                                $product->setViewselected(true);
-                            }
-                            
-                        }
-                        else
-                        {
-                            $product->setViewpremium(false);
-                            $product->setViewcommon(true);
-                            $product->setViewselected(false);
-
-                            if($productCurrentService->getService()->getId() != 3)
-                            {
-                                $isService->setProduct(null);
-                                $isService->setService(null);
-                                $product->setService(null);
-                                $manager->remove($isService);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        $product->setViewpremium(false);
-                        $product->setViewcommon(true);
-                        $product->setViewselected(false);
-
-                        $isService = $manager->getRepository("DashboardCommonBundle:ProductService")->findOneBy(array("product" => $product));
-
-                        if($isService)
-                        {
-                            if($isService->getService()->getId() != 3)
-                            {
-                                $isService->setProduct(null);
-                                $isService->setService(null);
-                                $product->setService(null);
-                                $manager->remove($isService);
-                            }
-                        }
-                    }
-                }
-                
-                if($product->getIsBlocked())
-                {
-                    $product->setIsBlocked(0);
-                    $product->setIsConfirm(0);
-                    $product->setIsActive(0);
-                    $product->setIsCorrect(0);
-                }
-                if($product->getIsCorrect())
-                {
-                    $product->setIsCorrect(0);
-                    $product->setIsConfirm(0);
-                    $product->setIsActive(0);
-                    $product->setIsBlocked(0);
-                }
-                
-                $manager->persist($product);
-                $manager->flush();
-                
-                $this->addFlash(
-                    'notice',
-                   '<div class = "alert alert-success alert-dismissible fade in" role="alert">
-                     <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Aizvērt"> <span aria-hidden = "true"> x </span> </button>' .
-                      $this->get('translator')->trans('<strong>Gatavs!</strong> Izmaiņas ir saglabātas.') . '</div>'
-                );
-                
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("editproduct", array("productId" => $product->getId()));
-                }
-                else
-                {
-                    return $this->redirectToRoute("editproductLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId()));
-                }
-                
-            }
-        }
-        else
-            
-            if($locale->getIsDefault())
-            {
-                return $this->redirectToRoute("notfound");
-            }
-            else
-            {
-                return $this->redirectToRoute("notfoundLocale", array("_locale" => $locale->getCode()));
-            }
-        
-        return $this->render('DashboardCommonBundle:Product:editproduct.html.twig', array("productForm" => $productForm->createView(),
-                                                                                          "categories" => $categories,
-                                                                                       "product" => $product,
-                                                                                       "textblock" => $textblock,
-                                                                                       "filters" => $filters,
-                                                                                       "isBlocked" => $product->getIsBlocked(),
-                                                                                       "isCorrect" => $product->getIsCorrect(),
-                                                                                       "role" => $roles[0],
-                                                                                       "productId" => $product->getId(),
-                                                                                       "locale" => $locale,
-                                                                                       "settings" => $settings));
-        
     }
  
     /**
@@ -1395,7 +580,7 @@ class AdvertController extends Controller
                 $error = $this->get('translator')->trans("Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.");
             }
 
-            $data = $error ? array('error' => $error) : array('imageName' => $localImageName );
+            $data = $error ? array('error' => $error) : array('imageName' => $localImageName);
             
             return new Response(json_encode( $data ));
         }

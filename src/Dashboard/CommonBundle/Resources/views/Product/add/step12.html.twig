@@ -51,14 +51,16 @@
                                 {% if (category.yearTo - category.yearFrom) <= 10 %}
                                     <ul class="list-unstyled list-inline years">
                                         {% for i in category.yearTo .. category.yearFrom %}
-                                            <li onclick="radioSetActive($(this))"><a href="javascript:void(0" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')">{{ i }}</a></li>
+                                            <li onclick="radioSetActive($(this))">
+                                                <a href="javascript:void(0" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}')"  {% if i == advertInfo.year %}class="active"{% endif %}>{{ i }}</a>
+                                            </li>
                                         {% endfor %}
                                     </ul>
                                 {% else %}
                                     <ul class="list-unstyled list-inline years">
-                                        {% for i in category.yearTo .. category.yearTo - 10 %}<li onclick="radioSetActive($(this))"><a href="javascript:void(0)" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}', '{% trans %}Старше{% endtrans %}')">{{ i }}</a></li>{% endfor %}
+                                        {% for i in category.yearTo .. category.yearTo - 10 %}<li onclick="radioSetActive($(this))"><a href="javascript:void(0)" onclick="getBoardTypesByYear({{ i }},'{{ locale.code }}', '{% trans %}Старше{% endtrans %}')"  {% if i == advertInfo.year %}class="active"{% endif %}>{{ i }}</a></li>{% endfor %}
                                         <li class="yearsOlder">
-                                            <a href="javascript:void(0)" onclick="showYearsOlder(event)" class="olderBloakcTrigger">
+                                            <a href="javascript:void(0)" onclick="showYearsOlder(event)" class="olderBloakcTrigger" >
                                                 <span>Старше</span>
                                                 <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 1.4rem;">
                                                     <path d="M11.2583 0.105469L11.9839 0.837385L5.99984 6.89426L0.0158004 0.837385L0.737626 0.105468L5.99984 5.42689L11.2583 0.105469Z" fill="#616161"/>
@@ -66,7 +68,14 @@
                                             </a>
                                             <div class="yearsOlderItems">
                                                 {% for i in category.yearTo - 11 .. category.yearFrom %}
-                                                    <div class="yearsOlderItem"><a href="javascript:void(0" onclick="getBoardTypesByOldYear({{ i }},'{{ locale.code }}', $(this))">{{ i }}</a></div>
+                                                    <div class="yearsOlderItem"><a href="javascript:void(0)" onclick="getBoardTypesByOldYear({{ i }},'{{ locale.code }}', $(this))">{{ i }}</a></div>
+                                                    {% if i == advertInfo.year %}
+                                                    <script>
+                                                        $(".olderBloakcTrigger span").html({{i}});
+                                                        $(".years").find('li').each(function(){$(this).find('a').removeClass('active');});
+                                                        $(".olderBloakcTrigger").addClass('active');
+                                                    </script>
+                                                    {% endif %}
                                                 {% endfor %}
                                             </div>
                                         </li>
@@ -75,16 +84,28 @@
                             </div>
                         </td>
                     </tr>
-                    <tr id="addAdvertCarBoards"></tr>
-                    <tr id="addAdvertCarGenerations"></tr>
-                    <tr id="addAdvertCarEngines"></tr>
-                    <tr id="addAdvertCarGears"></tr>
-                    <tr id="addAdvertCarTransmittions"></tr>
-                    <tr id="addAdvertCarModifications"></tr>
+                    <tr id="addAdvertCarBoards">
+                        {% include 'DashboardCommonBundle:Product:add/boards.html.twig' with {'boards' : boards, 'locale' : locale,'advertInfo' : advertInfo} %}
+                    </tr>
+                    <tr id="addAdvertCarGenerations">
+                        {% include 'DashboardCommonBundle:Product:add/generations.html.twig' with {'boards' : boardGenerations, 'locale' : locale,'advertInfo' : advertInfo} %}
+                    </tr>
+                    <tr id="addAdvertCarEngines">
+                        {% include 'DashboardCommonBundle:Product:add/gasTypes.html.twig' with {'gasTypes' : gasTypes, 'locale' : locale,'advertInfo' : advertInfo} %}
+                    </tr>
+                    <tr id="addAdvertCarGears">
+                        {% include 'DashboardCommonBundle:Product:add/gearTypes.html.twig' with {'gearTypes' : gearTypes, 'locale' : locale,'advertInfo' : advertInfo} %}
+                    </tr>
+                    <tr id="addAdvertCarTransmittions">
+                        {% include 'DashboardCommonBundle:Product:add/transmittionTypes.html.twig' with {'transmittionTypes' : transmittionTypes, 'locale' : locale,'advertInfo' : advertInfo} %}
+                    </tr>
+                    <tr id="addAdvertCarModifications">
+                        {% include 'DashboardCommonBundle:Product:add/modifications.html.twig' with {'modifications' : modifications, 'locale' : locale,'advertInfo' : advertInfo} %}
+                    </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="cookieAlertButton nextStep hide">
+            <div class="cookieAlertButton nextStep {% if not advertInfo.modification %}hide{% endif %}">
                 <button onclick="getStep2('{{ locale.code }}')">{% trans %}Следующий шаг{% endtrans %}</button>
             </div>
         </div>            

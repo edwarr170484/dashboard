@@ -4,6 +4,7 @@ namespace Dashboard\CommonBundle\Model;
 class AdvertInfo
 {
     private $category;
+    private $baseCategory;
     private $year;
     private $board;
     private $generation;
@@ -21,6 +22,93 @@ class AdvertInfo
     private $nds;
     private $torg;
     private $garant;
+    private $contactName;
+    private $contactPhone;
+    private $contactEmail;
+    private $contactCity;
+    private $contactCityCode;
+    private $servicePack;
+    private $services;
+    
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    public function setServices($services)
+    {
+        $this->services = $services;
+    }
+    
+    public function getServicePack()
+    {
+        return $this->servicePack;
+    }
+
+    public function setServicePack($servicePack)
+    {
+        $this->servicePack = $servicePack;
+    }
+    
+    public function getBaseCategory()
+    {
+        return $this->baseCategory;
+    }
+
+    public function setBaseCategory($baseCategory)
+    {
+        $this->baseCategory = $baseCategory;
+    }
+    
+    public function getContactCityCode()
+    {
+        return $this->contactCityCode;
+    }
+
+    public function setContactCityCode($contactCityCode)
+    {
+        $this->contactCityCode = $contactCityCode;
+    }
+    
+    public function getContactCity()
+    {
+        return $this->contactCity;
+    }
+
+    public function setContactCity($contactCity)
+    {
+        $this->contactCity = $contactCity;
+    }
+    
+    public function getContactEmail()
+    {
+        return $this->contactEmail;
+    }
+
+    public function setContactEmail($contactEmail)
+    {
+        $this->contactEmail = $contactEmail;
+    }
+    
+    public function getContactPhone()
+    {
+        return $this->contactPhone;
+    }
+
+    public function setContactPhone($contactPhone)
+    {
+        $this->contactPhone = $contactPhone;
+    }
+    
+    public function getContactName()
+    {
+        return $this->contactName;
+    }
+
+    public function setContactName($contactName)
+    {
+        $this->contactName = $contactName;
+    }
     
     public function getGarant()
     {

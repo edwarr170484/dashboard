@@ -68,7 +68,7 @@
                                 {% if filter.values | length > 0 %}
                                     {% for value in filter.values %}
                                     <div class="filter">
-                                        <input name="filter[]" type="checkbox" value="{{ value.id }}" class="custom-checkbox" />
+                                        <input name="filter[]" type="checkbox" value="{{ value.id }}" class="custom-checkbox" {% if value.id in filters | keys %}checked="checked"{% endif %}/>
                                         {% if value.translations | length > 0 %}
                                             {% for translation in value.translations %}
                                                 {% if translation.locale.id == locale.id %}

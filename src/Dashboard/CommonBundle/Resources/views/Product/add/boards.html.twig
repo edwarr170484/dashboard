@@ -1,13 +1,16 @@
 {% if boards %}
-    <td><div class="advertFiltersItemName">{% trans %}Тип кузова{% endtrans %}</div></td>
     <td>
-            <div class="advertFiltersItemValue">
-                <ul class="list-unstyled list-inline addProductFilterRadios">
-                    {% for board in boards %}
-                         <li onclick="radioSetActive($(this))"><a href="javascript:voit(0)" onclick="getGenerationsByBoard({{ board.board.id }},'{{ locale.code }}')">{{ board.board.value }}</a></li>
-                    {% endfor %}
-                    <li class="static-filters"><div class="filter"><input name="searchWithFoto" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}Правый руль{% endtrans %}</div></li>
-                </ul>
-            </div>
+        <div class="advertFiltersItemName">{% trans %}Тип кузова{% endtrans %}</div>
+    </td>
+    <td>
+        <div class="advertFiltersItemValue">
+            <ul class="list-unstyled list-inline addProductFilterRadios">
+                {% for board in boards %}
+                    <li onclick="radioSetActive($(this))"><a href="javascript:voit(0)" onclick="getGenerationsByBoard({{ board.board.id }},'{{ locale.code }}')" {% if board.board.id == advertInfo.board %}class="active"{% endif %}>{{ board.board.value }}</a></li>
+                {% endfor %}
+                    <li class="static-filters"><div class="filter"><input name="rightWeel" type="checkbox" value="1" class="rightWeel-checkbox" /> {% trans %}Правый руль{% endtrans %}</div></li>
+            </ul>
+            <script>$(".rightWeel-checkbox").customCheckbox();</script>
+        </div>
     </td>
 {% endif %}

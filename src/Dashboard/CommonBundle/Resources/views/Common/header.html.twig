@@ -247,7 +247,7 @@
             <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
                             {% if locale.isDefault %}
                                 {% if app.user %}
-                                    <a href="{{path('addproduct')}}" class="header-add-button pull-right">
+                                    <a href="{{path('addAdvert')}}" class="header-add-button pull-right">
                                         {{ block('svgAddAdvert') }}
                                     </a>
                                 {% else %}
@@ -256,7 +256,7 @@
                                 {% endif %}
                             {% else %}
                                 {% if app.user %}
-                                    <a href="{{path('addproductLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
+                                    <a href="{{path('addAdvertLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
                                 {% else %}
                                     <a href="{{path('loginLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
                                 {% endif %}
@@ -339,7 +339,7 @@
     <div class="addAdvertButtonMobile hidden-lg hidden-md">
         {% if  locale.isDefault %}
             {% if app.user %}
-                <a href="{{path('addproduct')}}">
+                <a href="{{path('addAdvert')}}">
                     {{ block('svgAddAdvertMobile') }}
                 </a>
             {% else %}
@@ -348,7 +348,7 @@
              {% endif %}
         {% else %}
             {% if app.user %}
-                <a href="{{path('addproductLocale',{'_locale' : app.request.locale})}}">{{ block('svgAddAdvertMobile') }}</a>
+                <a href="{{path('addAdvertLocale',{'_locale' : app.request.locale})}}">{{ block('svgAddAdvertMobile') }}</a>
             {% else %}
                 <a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{{ block('svgAddAdvertMobile') }}</a>
             {% endif %}

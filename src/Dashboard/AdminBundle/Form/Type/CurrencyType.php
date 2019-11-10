@@ -18,6 +18,7 @@ class CurrencyType extends AbstractType
         $builder
             ->add('name', TextType::class, array('required' => true, 'label' => 'Название:', 'attr' => array('class' => 'form-control')))
             ->add('code', TextType::class, array('required' => true, 'label' => 'Код:', 'attr' => array('class' => 'form-control')))
+            ->add('label', TextType::class, array('required' => false, 'label' => 'Значек:', 'attr' => array('class' => 'form-control')))
             ->add('kurs', TextType::class, array('required' => true, 'label' => 'Коэфициент пересчета:', 'attr' => array('class' => 'form-control')))
             ->add('sortorder', TextType::class, array('required' => true, 'label' => 'Порядок:', 'attr' => array('class' => 'form-control')))
             ->add('exit', HiddenType::class, array('required' => false, 'data' => '0', 'mapped' => false));

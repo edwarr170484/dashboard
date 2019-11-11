@@ -59,18 +59,18 @@
 </nav> 
 <div class="container">
     <div class="row content-row aligned">
-        <div class="col-lg-3 col-md-3">
+        <div class="col-lg-2 col-md-2">
             <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
         </div>
-        <div class="col-lg-9 col-md-9">
+        <div class="col-lg-10 col-md-10">
             <div class="accountBlockHeader">
                 <div class="account-block-header"><h1>{% trans %}<b>Мои настройки</b>{% endtrans %}</h1></div>
             </div>
         </div>
     </div>
     <div class="row content-row">
-        {{ render(controller('DashboardCommonBundle:Account:getSidebar')) }}
-        <div class="col-ld-9 col-md-9 account-block-content">
+        {{ render(controller('DashboardCommonBundle:Account:getSidebar', {'routeName' : routeName})) }}
+        <div class="col-ld-10 col-md-10">
             <div class="accountSettingsTabs">
                 <ul class="nav nav-tabs settingsTabs" id="myTab" role="tablist">
                     <li class="nav-item active">

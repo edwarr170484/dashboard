@@ -78,6 +78,6 @@ security:
         - { path: ^/restore, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/check-vkontakte, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/check-facebook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/account, roles: ROLE_SELLER }
+        - { path: ^/account, roles: ROLE_DEALER }
         
         

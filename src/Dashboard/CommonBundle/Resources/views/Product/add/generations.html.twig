@@ -5,7 +5,7 @@
     <td>
         <div class="advertFiltersItemValue">
             <div class="addAdvertGenerations">
-                {% for board in boardGenerations %}
+                {% for board in boards %}
                     <div class="addAdvertGeneration {% if board.generation.id == advertInfo.generation %}active{% endif %}" onclick="getGenerationEngine({{board.generation.id }},'{{ locale.code }}', $(this))">
                         <img src="{{ asset('bundles/images/category/generation/' ~ board.image) }}" alt="" title="" />
                         <div class="addAdvertGenerationName">{{ board.generation.name }}</div>

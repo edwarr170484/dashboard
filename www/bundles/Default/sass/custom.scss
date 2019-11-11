@@ -769,8 +769,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .formParameterField button{width: 22rem;margin-top: 2.4rem;}
 .accountSettingsFormBlock{padding-bottom: 5rem;padding-left: 2rem;}
 .accountSettingsFormDescription{@include fontView("GothamProRegular",$input-black,1.6rem,2.2rem);padding-bottom: 2.5rem;}
-.accountAdvert{position: relative;background: #fff;border: 1px solid #DFE1E5;@include border-radius(9px);padding:5rem 3rem 3rem;@include flexBox(row,flex-start,stretch);}
-.accountAdvertInfoLeft{@include flexBox(row,flex-start,flex-start);width: 60%;}
+.accountAdvert{position: relative;background: #fff;border: 1px solid #DFE1E5;@include border-radius(9px);padding:5rem 3rem 1rem;@include flexBox(row,flex-start,stretch);margin-bottom: 5rem;}
+.accountAdvertInfoLeft{@include flexBox(row,flex-start,flex-start);width: 50%;}
 .accountAdvertImage{width: 100%;max-width: 26rem;overflow:hidden;margin-right: 3rem;}
 .accountAdvertImage img{width: 100%;@include border-radius(5px);}
 .accountAdvertInfoName{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);}
@@ -780,19 +780,50 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertInfoModificationItem{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);width: 50%;padding-bottom: 1rem;}
 .accountAdvertInfoModification{@include flexBox(row,flex-start,center);flex-wrap:wrap;}
 .accountAdvertInfoCity{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);@include flexBox(row,flex-start,center);}
-.accountAdvertInfoRight{width: 40%;@include flexBox(row,flex-start,flex-start);}
-.accountAdvertInfoNumbers{width: 40%;}
+.accountAdvertInfoRight{width: 50%;@include flexBox(row,flex-start,flex-start);}
+.accountAdvertInfoNumbers{width: 50%;}
 .accountAdvertInfoPrice{@include fontView("GothamProBold",$black-text,2.6rem,3.2rem);text-align: center;padding-bottom: 2rem;}
 .accountAdvertInfoYear{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;padding-bottom: 2rem;}
 .accountAdvertInfoProbeg{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;padding-bottom: 2rem;}
-
-
-
-
-
-
-
-
+.accountAdvertServiceButtons{width: 50%;padding-left: 3rem;}
+.accountAdvertServiceButton button{background: #fff;border:1px solid #AAAAAA;@include border-radius(9px);display: block;padding: 0.7rem 1rem;@include flexBox(row,flex-start,center);width: 100%;margin-bottom: 1rem;}
+.accountAdvertServiceButton button.active{background: $yellow-color;}
+.buttonServiceNameTitle{display: block;width: 100%;@include fontView("GothamProMedium",$super-black-color,1.4rem,1.8rem);}
+.buttonServiceRule{display: block;width: 100%;@include fontView("GothamProRegular",#747474,1.4rem,1.8rem);text-align: left;}
+.buttonServiceName{display: block;text-align: left;flex-grow: 1;}
+.accountAdvertServiceButton button svg{margin-right: 1.6rem;}
+.buttonServicePrice{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.accountAdvertFunctions{@include flexBox(row,flex-start,center);@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));@include border-radius(9px);position: absolute;background: #fff;}
+.accountAdvertFunctions.right{right:3rem;top:-2rem;}
+.accountAdvertFunctions.left{left:3rem;top:-2rem;}
+.accountAdvertFunction button{background: none;border:none;@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);padding: 0.9rem 2.4rem;@include flexBox(row,flex-start,center);}
+.accountAdvertFunction div.button{background: none;border:none;@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);padding: 0.9rem 2.4rem;@include flexBox(row,flex-start,center);}
+.accountAdvertFunction button svg,.accountAdvertFunction div.button svg{margin-right: 1rem;}
+.accountAdvertFunction:first-child div.button{@include border-radius(9px 0 0 9px);}
+.accountAdvertFunction:last-child button{@include border-radius(0 9px 9px 0);}
+.accountAdvertFunction button:hover,.accountAdvertRightFunction button:focus{background: #FDEECC;}
+.accountAdvertFunctions.left .accountAdvertFunction button,.accountAdvertFunctions.left .accountAdvertFunction div.button{padding: 0.9rem 1.5rem;}
+.accountAdvert.cube{position: relative;background: #fff;border: 1px solid #DFE1E5;@include border-radius(9px);padding:5rem 3rem 1rem;@include flexBox(row,flex-start,stretch);margin-bottom: 5rem;}
+.accountAdverts.line{@include flexBox(row, space-between,center);flex-wrap:wrap;}
+.accountAdvert.cube{width: 100%;max-width: 30.8rem;padding: 0;background: none;border:none;display: block;position: relative;}
+.accountAdvert.cube .inner{border: 2px solid #DFE1E5;@include border-radius(9px 9px 0px 9px);background: #fff;display: block;padding: 2rem;}
+.accountAdvert.cube .accountAdvertInfoName{font-size: 1.7rem; line-height: 2.6rem;font-weight: normal;padding-top: 1.5rem;}
+.accountAdvert.cube .accountAdvertInfoBoard{padding-top: 1rem;padding-bottom: 3rem;}
+.accountAdvert.cube .inner a:hover,.accountAdvert.cube .inner a:focus{text-decoration: none;}
+.accountAdvert.cube .accountAdvertInfoModification{display: block;}
+.accountAdvert.cube .accountAdvertInfoModificationItem{width: 100%;}
+.accountAdvert.cube .accountAdvertInfoPrice{@include flexBox(row, space-between, center);}
+.accountAdvertInfoPriceValue{@include fontView("GothamProBold",$black-text,1.8rem,3.2rem);}
+.accountAdvertInfoPriceCredit{@include fontView("GothamProRegular",$light-black-color,1.4rem,1.3rem);}
+.accountAdvert.cube .accountAdvertInfoPrice{padding-bottom: 0;}
+.accountAdverts.line{padding-top: 4rem;}
+.accountAdvertBottomFunctions{@include flexBox(row,flex-end,center);}
+.accountAdvertBottomFunction button{@include border-radius(0px 0px 15px 15px);border: 2px solid #DFE1E5;box-sizing: border-box;background: #fff;@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);padding: 1.2rem;border-top:none;@include flexBox(row,flex-end,center);}
+.accountAdvert.cube:hover .inner{border-color:$yellow-color;}
+.accountAdvert.cube:hover .accountAdvertBottomFunction button{border-color:$yellow-color;}
+.accountAdvertLikeButton button{border:2px solid $yellow-color;@include border-radius(25px);background:#fff;padding: 0.8rem 1.7rem 0.3rem;}
+.accountAdvertLikeButton{position: absolute;top:-18px;right:-2px;}
+.accountNocontent{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.4rem);}
 
 
 

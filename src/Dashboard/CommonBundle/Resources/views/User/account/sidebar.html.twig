@@ -1,22 +1,23 @@
 {% use 'DashboardCommonBundle:Common:icons.html.twig' %}
 
 {% if  locale.isDefault %}
-<div class="col-ld-3 col-md-3">
-    <ul class="list-unstyled account-menu-list">
+<div class="col-ld-2 col-md-2 account-menu-list">
+    <ul class="list-unstyled">
         <li>
             <div class="accountMenuItem">
                 {{ block('accountAdverts') }}
-                <a href="{{ path('account_products') }}">{% trans %}Manas reklāmas{% endtrans %} ({{ allProducts | length }})</a>
+                <a href="{{ path('account_products') }}" {% if routeName == 'account_products' %}class="active"{% endif %}>
+                    {% trans %}Manas reklāmas{% endtrans %} ({{ allProducts | length }})
+                </a>
             </div>
-            
             <ul>
                 {% if settings.isModerate %}
-                    <li><a href="{{ path('account_products_confirm') }}">- {% trans %}Par moderāciju{% endtrans %} ({{ confirmProducts | length }})</a></li>
+                    <li><a href="{{ path('account_products_confirm') }}"  {% if routeName == 'account_products_confirm' %}class="active"{% endif %}>- {% trans %}Par moderāciju{% endtrans %} ({{ confirmProducts | length }})</a></li>
                 {% endif %}
-                <li><a href="{{ path('account_products_correct') }}">- {% trans %}Par korekciju{% endtrans %} ({{ correctProducts | length }})</a></li>
-                <li><a href="{{ path('account_products_current') }}">- {% trans %}Pašreizējais{% endtrans %} ({{ currentProducts | length}})</a></li>
-                <li><a href="{{ path('account_products_stopped') }}">- {% trans %}Pabeigts{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
-                <li><a href="{{ path('account_products_blocked') }}">- {% trans %}Slēdzenē{% endtrans %}  ({{ blockedProducts | length }})</a></li>
+                <li><a href="{{ path('account_products_correct') }}"  {% if routeName == 'account_products_correct' %}class="active"{% endif %}>- {% trans %}Par korekciju{% endtrans %} ({{ correctProducts | length }})</a></li>
+                <li><a href="{{ path('account_products_current') }}"  {% if routeName == 'account_products_current' %}class="active"{% endif %}>- {% trans %}Pašreizējais{% endtrans %} ({{ currentProducts | length}})</a></li>
+                <li><a href="{{ path('account_products_stopped') }}"  {% if routeName == 'account_products_stopped' %}class="active"{% endif %}>- {% trans %}Pabeigts{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
+                <li><a href="{{ path('account_products_blocked') }}"  {% if routeName == 'account_products_blocked' %}class="active"{% endif %}>- {% trans %}Slēdzenē{% endtrans %}  ({{ blockedProducts | length }})</a></li>
             </ul>
         </li>
         <li>
@@ -24,7 +25,7 @@
                 <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15.7663 2.3245C15.3753 1.9046 14.9111 1.5715 14.4002 1.34423C13.8893 1.11697 13.3417 1 12.7887 1C12.2357 1 11.6881 1.11697 11.1772 1.34423C10.6663 1.5715 10.2021 1.9046 9.81116 2.3245L8.9998 3.19554L8.18843 2.3245C7.39874 1.47672 6.32768 1.00044 5.21089 1.00044C4.09409 1.00044 3.02303 1.47672 2.23334 2.3245C1.44365 3.17228 1 4.32212 1 5.52107C1 6.72001 1.44365 7.86985 2.23334 8.71763L3.0447 9.58868L8.9998 15.9818L14.9549 9.58868L15.7663 8.71763C16.1574 8.29793 16.4677 7.7996 16.6794 7.25112C16.891 6.70264 17 6.11476 17 5.52107C17 4.92737 16.891 4.33949 16.6794 3.79101C16.4677 3.24254 16.1574 2.74421 15.7663 2.3245V2.3245Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_favproducts') }}">{% trans %}Piedāvātās reklāmas{% endtrans %}</a>
+                <a href="{{ path('account_favproducts') }}" {% if routeName == 'account_favproducts' %}class="active"{% endif %}>{% trans %}Piedāvātās reklāmas{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -33,7 +34,7 @@
                     <path d="M2.6 1H15.4C16.28 1 17 1.72 17 2.6V12.2C17 13.08 16.28 13.8 15.4 13.8H2.6C1.72 13.8 1 13.08 1 12.2V2.6C1 1.72 1.72 1 2.6 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M17 2.6001L9 8.2001L1 2.6001" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{path('account_messages')}}">{% trans %}Amati{% endtrans %}</a>
+                <a href="{{path('account_messages')}}" {% if routeName == 'account_messages' %}class="active"{% endif %}>{% trans %}Amati{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -42,7 +43,7 @@
                     <path d="M15.4 4.19995H2.6C1.71634 4.19995 1 4.9163 1 5.79995V13.8C1 14.6836 1.71634 15.4 2.6 15.4H15.4C16.2837 15.4 17 14.6836 17 13.8V5.79995C17 4.9163 16.2837 4.19995 15.4 4.19995Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M12.1998 15.4V2.6C12.1998 2.17565 12.0312 1.76869 11.7312 1.46863C11.4311 1.16857 11.0242 1 10.5998 1H7.3998C6.97546 1 6.56849 1.16857 6.26843 1.46863C5.96838 1.76869 5.7998 2.17565 5.7998 2.6V15.4" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_orders') }}">{% trans %}Pieprasījumi{% endtrans %}
+                <a href="{{ path('account_orders') }}" {% if routeName == 'account_orders' %}class="active"{% endif %}>{% trans %}Pieprasījumi{% endtrans %}
                 </a>
             </div>
         </li>
@@ -54,7 +55,7 @@
                     <path d="M14.1177 15.0589C13.0824 15.0589 12.2354 14.2118 12.2354 13.1765C12.2354 12.1412 13.0824 11.2942 14.1177 11.2942C15.153 11.2942 16.0001 12.1412 16.0001 13.1765C16.0001 14.2118 15.153 15.0589 14.1177 15.0589ZM14.1177 12.2354C13.6001 12.2354 13.1765 12.6589 13.1765 13.1765C13.1765 13.6942 13.6001 14.1177 14.1177 14.1177C14.6354 14.1177 15.0589 13.6942 15.0589 13.1765C15.0589 12.6589 14.6354 12.2354 14.1177 12.2354Z" fill="#616161"/>
                     <path d="M2.82376 15.0589C1.78847 15.0589 0.941406 14.2118 0.941406 13.1765C0.941406 12.1412 1.78847 11.2942 2.82376 11.2942C3.85905 11.2942 4.70611 12.1412 4.70611 13.1765C4.70611 14.2118 3.85905 15.0589 2.82376 15.0589ZM2.82376 12.2354C2.30611 12.2354 1.88258 12.6589 1.88258 13.1765C1.88258 13.6942 2.30611 14.1177 2.82376 14.1177C3.34141 14.1177 3.76494 13.6942 3.76494 13.1765C3.76494 12.6589 3.34141 12.2354 2.82376 12.2354Z" fill="#616161"/>
                 </svg>
-                <a href="{{ path('account_myorders') }}">{% trans %}Mana rezervācija{% endtrans %}
+                <a href="{{ path('account_myorders') }}" {% if routeName == 'account_myorders' %}class="active"{% endif %}>{% trans %}Mana rezervācija{% endtrans %}
                 </a>
             </div>
         </li>
@@ -64,7 +65,7 @@
                     <path d="M15.4 11.1281V15.4001C15.4 15.8244 15.2314 16.2314 14.9314 16.5315C14.6313 16.8315 14.2243 17.0001 13.8 17.0001H2.6C2.17565 17.0001 1.76869 16.8315 1.46863 16.5315C1.16857 16.2314 1 15.8244 1 15.4001V4.2001C1 3.77575 1.16857 3.36878 1.46863 3.06873C1.76869 2.76867 2.17565 2.6001 2.6 2.6001H6.872" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M13.7998 1L16.9998 4.2L8.9998 12.2H5.7998V9L13.7998 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_review') }}">{% trans %}Atsauksmes{% endtrans %}</a>
+                <a href="{{ path('account_review') }}" {% if routeName == 'account_review' %}class="active"{% endif %}>{% trans %}Atsauksmes{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -73,7 +74,7 @@
                     <path d="M17 17V15C17 13.9391 16.5786 12.9217 15.8284 12.1716C15.0783 11.4214 14.0609 11 13 11H5C3.93913 11 2.92172 11.4214 2.17157 12.1716C1.42143 12.9217 1 13.9391 1 15V17" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M9 9C11.2091 9 13 7.20914 13 5C13 2.79086 11.2091 1 9 1C6.79086 1 5 2.79086 5 5C5 7.20914 6.79086 9 9 9Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_friends') }}">{% trans %}Referral sistēma{% endtrans %}</a>
+                <a href="{{ path('account_friends') }}" {% if routeName == 'account_friends' %}class="active"{% endif %}>{% trans %}Referral sistēma{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -82,13 +83,13 @@
                     <path d="M10.6002 2.59961H12.2003C12.6246 2.59961 13.0316 2.76818 13.3317 3.06825C13.6317 3.36832 13.8003 3.77529 13.8003 4.19965V15.3999C13.8003 15.8243 13.6317 16.2313 13.3317 16.5313C13.0316 16.8314 12.6246 17 12.2003 17H2.60004C2.17568 17 1.76871 16.8314 1.46864 16.5313C1.16857 16.2313 1 15.8243 1 15.3999V4.19965C1 3.77529 1.16857 3.36832 1.46864 3.06825C1.76871 2.76818 2.17568 2.59961 2.60004 2.59961H4.20008" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M9.79984 1H4.99973C4.55789 1 4.19971 1.35818 4.19971 1.80002V3.40006C4.19971 3.8419 4.55789 4.20008 4.99973 4.20008H9.79984C10.2417 4.20008 10.5999 3.8419 10.5999 3.40006V1.80002C10.5999 1.35818 10.2417 1 9.79984 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_userblacklist') }}">{% trans %}Melnais saraksts{% endtrans %}</a>
+                <a href="{{ path('account_userblacklist') }}"  {% if routeName == 'account_userblacklist' %}class="active"{% endif %}>{% trans %}Melnais saraksts{% endtrans %}</a>
             </div>
         </li>
         <li>
             <div class="accountMenuItem">
                 {{ block('svgAccoutnMenuSettings') }}
-                <a href="{{path('account_settings')}}">{% trans %}Iestatījumi{% endtrans %}</a>
+                <a href="{{path('account_settings')}}" {% if routeName == 'account_settings' %}class="active"{% endif %}>{% trans %}Iestatījumi{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -99,22 +100,23 @@
     </ul>
 </div>
 {% else %}
-<div class="col-ld-3 col-md-3">
-    <ul class="list-unstyled account-menu-list">
+<div class="col-ld-2 col-md-2 account-menu-list">
+    <ul class="list-unstyled">
         <li>
             <div class="accountMenuItem">
                 {{ block('accountAdverts') }}
-                <a href="{{ path('account_productsLocale',{'_locale' : app.request.locale}) }}">{% trans %}Manas reklāmas{% endtrans %} ({{ allProducts | length }})</a>
+                <a href="{{ path('account_productsLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_productsLocale' %}class="active"{% endif %}>
+                    {% trans %}Manas reklāmas{% endtrans %} ({{ allProducts | length }})</a>
             </div>
             
             <ul>
                 {% if settings.isModerate %}
-                    <li><a href="{{ path('account_products_confirmLocale',{'_locale' : app.request.locale}) }}">- {% trans %}Par moderāciju{% endtrans %} ({{ confirmProducts | length }})</a></li>
+                    <li><a href="{{ path('account_products_confirmLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_products_confirmLocale' %}class="active"{% endif %}>- {% trans %}Par moderāciju{% endtrans %} ({{ confirmProducts | length }})</a></li>
                 {% endif %}
-                <li><a href="{{ path('account_products_correctLocale',{'_locale' : app.request.locale}) }}">- {% trans %}Par korekciju{% endtrans %} ({{ correctProducts | length }})</a></li>
-                <li><a href="{{ path('account_products_currentLocale',{'_locale' : app.request.locale}) }}">- {% trans %}Pašreizējais{% endtrans %} ({{ currentProducts | length}})</a></li>
-                <li><a href="{{ path('account_products_stoppedLocale',{'_locale' : app.request.locale}) }}">- {% trans %}Pabeigts{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
-                <li><a href="{{ path('account_products_blockedLocale',{'_locale' : app.request.locale}) }}">- {% trans %}Slēdzenē{% endtrans %}  ({{ blockedProducts | length }})</a></li>
+                <li><a href="{{ path('account_products_correctLocale',{'_locale' : app.request.locale}) }}" {% if routeName == 'account_products_correctLocale' %}class="active"{% endif %}>- {% trans %}Par korekciju{% endtrans %} ({{ correctProducts | length }})</a></li>
+                <li><a href="{{ path('account_products_currentLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_products_currentLocale' %}class="active"{% endif %}>- {% trans %}Pašreizējais{% endtrans %} ({{ currentProducts | length}})</a></li>
+                <li><a href="{{ path('account_products_stoppedLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_products_stoppedLocale' %}class="active"{% endif %}>- {% trans %}Pabeigts{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
+                <li><a href="{{ path('account_products_blockedLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_products_blockedLocale' %}class="active"{% endif %}>- {% trans %}Slēdzenē{% endtrans %}  ({{ blockedProducts | length }})</a></li>
             </ul>
         </li>
         <li>
@@ -122,7 +124,7 @@
                 <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15.7663 2.3245C15.3753 1.9046 14.9111 1.5715 14.4002 1.34423C13.8893 1.11697 13.3417 1 12.7887 1C12.2357 1 11.6881 1.11697 11.1772 1.34423C10.6663 1.5715 10.2021 1.9046 9.81116 2.3245L8.9998 3.19554L8.18843 2.3245C7.39874 1.47672 6.32768 1.00044 5.21089 1.00044C4.09409 1.00044 3.02303 1.47672 2.23334 2.3245C1.44365 3.17228 1 4.32212 1 5.52107C1 6.72001 1.44365 7.86985 2.23334 8.71763L3.0447 9.58868L8.9998 15.9818L14.9549 9.58868L15.7663 8.71763C16.1574 8.29793 16.4677 7.7996 16.6794 7.25112C16.891 6.70264 17 6.11476 17 5.52107C17 4.92737 16.891 4.33949 16.6794 3.79101C16.4677 3.24254 16.1574 2.74421 15.7663 2.3245V2.3245Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_favproductsLocale',{'_locale' : app.request.locale}) }}">{% trans %}Piedāvātās reklāmas{% endtrans %}</a>
+                <a href="{{ path('account_favproductsLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_favproductsLocale' %}class="active"{% endif %}>{% trans %}Piedāvātās reklāmas{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -131,7 +133,7 @@
                     <path d="M2.6 1H15.4C16.28 1 17 1.72 17 2.6V12.2C17 13.08 16.28 13.8 15.4 13.8H2.6C1.72 13.8 1 13.08 1 12.2V2.6C1 1.72 1.72 1 2.6 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M17 2.6001L9 8.2001L1 2.6001" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}">{% trans %}Amati{% endtrans %}</a>
+                <a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}" {% if routeName == 'account_messagesLocale' %}class="active"{% endif %}>{% trans %}Amati{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -140,7 +142,7 @@
                     <path d="M15.4 4.19995H2.6C1.71634 4.19995 1 4.9163 1 5.79995V13.8C1 14.6836 1.71634 15.4 2.6 15.4H15.4C16.2837 15.4 17 14.6836 17 13.8V5.79995C17 4.9163 16.2837 4.19995 15.4 4.19995Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M12.1998 15.4V2.6C12.1998 2.17565 12.0312 1.76869 11.7312 1.46863C11.4311 1.16857 11.0242 1 10.5998 1H7.3998C6.97546 1 6.56849 1.16857 6.26843 1.46863C5.96838 1.76869 5.7998 2.17565 5.7998 2.6V15.4" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_ordersLocale',{'_locale' : app.request.locale}) }}">{% trans %}Pieprasījumi{% endtrans %}
+                <a href="{{ path('account_ordersLocale',{'_locale' : app.request.locale}) }}" {% if routeName == 'account_ordersLocale' %}class="active"{% endif %}>{% trans %}Pieprasījumi{% endtrans %}
                 </a>
             </div>
         </li>
@@ -152,7 +154,7 @@
                     <path d="M14.1177 15.0589C13.0824 15.0589 12.2354 14.2118 12.2354 13.1765C12.2354 12.1412 13.0824 11.2942 14.1177 11.2942C15.153 11.2942 16.0001 12.1412 16.0001 13.1765C16.0001 14.2118 15.153 15.0589 14.1177 15.0589ZM14.1177 12.2354C13.6001 12.2354 13.1765 12.6589 13.1765 13.1765C13.1765 13.6942 13.6001 14.1177 14.1177 14.1177C14.6354 14.1177 15.0589 13.6942 15.0589 13.1765C15.0589 12.6589 14.6354 12.2354 14.1177 12.2354Z" fill="#616161"/>
                     <path d="M2.82376 15.0589C1.78847 15.0589 0.941406 14.2118 0.941406 13.1765C0.941406 12.1412 1.78847 11.2942 2.82376 11.2942C3.85905 11.2942 4.70611 12.1412 4.70611 13.1765C4.70611 14.2118 3.85905 15.0589 2.82376 15.0589ZM2.82376 12.2354C2.30611 12.2354 1.88258 12.6589 1.88258 13.1765C1.88258 13.6942 2.30611 14.1177 2.82376 14.1177C3.34141 14.1177 3.76494 13.6942 3.76494 13.1765C3.76494 12.6589 3.34141 12.2354 2.82376 12.2354Z" fill="#616161"/>
                 </svg>
-                <a href="{{ path('account_myordersLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mana rezervācija{% endtrans %}
+                <a href="{{ path('account_myordersLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_myordersLocale' %}class="active"{% endif %}>{% trans %}Mana rezervācija{% endtrans %}
                 </a>
             </div>
         </li>
@@ -162,7 +164,7 @@
                     <path d="M15.4 11.1281V15.4001C15.4 15.8244 15.2314 16.2314 14.9314 16.5315C14.6313 16.8315 14.2243 17.0001 13.8 17.0001H2.6C2.17565 17.0001 1.76869 16.8315 1.46863 16.5315C1.16857 16.2314 1 15.8244 1 15.4001V4.2001C1 3.77575 1.16857 3.36878 1.46863 3.06873C1.76869 2.76867 2.17565 2.6001 2.6 2.6001H6.872" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M13.7998 1L16.9998 4.2L8.9998 12.2H5.7998V9L13.7998 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_reviewLocale',{'_locale' : app.request.locale}) }}">{% trans %}Atsauksmes{% endtrans %}</a>
+                <a href="{{ path('account_reviewLocale',{'_locale' : app.request.locale}) }}" {% if routeName == 'account_reviewLocale' %}class="active"{% endif %}>{% trans %}Atsauksmes{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -171,7 +173,7 @@
                     <path d="M17 17V15C17 13.9391 16.5786 12.9217 15.8284 12.1716C15.0783 11.4214 14.0609 11 13 11H5C3.93913 11 2.92172 11.4214 2.17157 12.1716C1.42143 12.9217 1 13.9391 1 15V17" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M9 9C11.2091 9 13 7.20914 13 5C13 2.79086 11.2091 1 9 1C6.79086 1 5 2.79086 5 5C5 7.20914 6.79086 9 9 9Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_friendsLocale',{'_locale' : app.request.locale}) }}">{% trans %}Referral sistēma{% endtrans %}</a>
+                <a href="{{ path('account_friendsLocale',{'_locale' : app.request.locale}) }}" {% if routeName == 'account_friendsLocale' %}class="active"{% endif %}>{% trans %}Referral sistēma{% endtrans %}</a>
             </div>
         </li>
         <li>
@@ -180,13 +182,13 @@
                     <path d="M10.6002 2.59961H12.2003C12.6246 2.59961 13.0316 2.76818 13.3317 3.06825C13.6317 3.36832 13.8003 3.77529 13.8003 4.19965V15.3999C13.8003 15.8243 13.6317 16.2313 13.3317 16.5313C13.0316 16.8314 12.6246 17 12.2003 17H2.60004C2.17568 17 1.76871 16.8314 1.46864 16.5313C1.16857 16.2313 1 15.8243 1 15.3999V4.19965C1 3.77529 1.16857 3.36832 1.46864 3.06825C1.76871 2.76818 2.17568 2.59961 2.60004 2.59961H4.20008" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M9.79984 1H4.99973C4.55789 1 4.19971 1.35818 4.19971 1.80002V3.40006C4.19971 3.8419 4.55789 4.20008 4.99973 4.20008H9.79984C10.2417 4.20008 10.5999 3.8419 10.5999 3.40006V1.80002C10.5999 1.35818 10.2417 1 9.79984 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_userblacklistLocale',{'_locale' : app.request.locale}) }}">{% trans %}Melnais saraksts{% endtrans %}</a>
+                <a href="{{ path('account_userblacklistLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_userblacklistLocale' %}class="active"{% endif %}>{% trans %}Melnais saraksts{% endtrans %}</a>
             </div>
         </li>
         <li>
             <div class="accountMenuItem">
                 {{ block('svgAccoutnMenuSettings') }}
-                <a href="{{path('account_settingsLocale',{'_locale' : app.request.locale})}}">{% trans %}Iestatījumi{% endtrans %}</a>
+                <a href="{{path('account_settingsLocale',{'_locale' : app.request.locale})}}" {% if routeName == 'account_settingsLocale' %}class="active"{% endif %}>{% trans %}Iestatījumi{% endtrans %}</a>
             </div>
         </li>
         <li>

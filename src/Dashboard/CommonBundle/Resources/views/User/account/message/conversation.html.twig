@@ -1,0 +1,173 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% form_theme formMessage _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block textarea_widget -%}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+{%- endblock textarea_widget -%}
+
+{%- block button_row -%}
+    <button class="message-button-answer" type="submit">{{form_label(form)}}</button>
+{%- endblock button_row -%}
+
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Сообщения{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% endif %}
+                    {% if  locale.isDefault %}
+                        <li><a href="{{ path('account', {'_locale' : locale.code}) }}">
+                    {% else %}
+                        <li><a href="{{ path('accountLocale', {'_locale' : locale.code}) }}">
+                    {% endif %}
+                        {% trans %}Личный кабинет{% endtrans %}
+                    </a></li>
+                    <li>/</li>
+                    <li>
+                    {% if  locale.isDefault %}
+                        <a href="{{path('account_messages')}}">
+                    {% else %}
+                        <a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}">
+                    {% endif %}
+                        {% trans %}Сообщения{% endtrans %}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav> 
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1><b>{% trans %}Сообщения{% endtrans %}</b></h1></div>
+            </div>
+        </div>
+    </div>
+     <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
+        <div class="col-ld-10 col-md-10">
+            <div class="account-advert-block-content">
+                <div class="accountSettingsTabs">
+                        <ul class="nav nav-tabs settingsTabs" id="myTab" role="tablist">
+                            <li class="nav-item active">
+                                <a class="nav-link" id="home-tab" data-toggle="tab" href="#inbox" role="tab" aria-controls="home" aria-selected="true" >
+                                    {% trans %}Сообщения{% endtrans %}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" style="padding:0;">
+                            <div class="tab-pane fade active in" id="inbox" role="tabpanel">
+                                <div class="accountConversationHeader">
+                                    <div class="accountConversationHeaderBack">
+                                        {% if  locale.isDefault %}
+                                            <a href="{{path('account_messages')}}">
+                                                <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 1rem;">
+                                                    <path d="M8 0.999999L2 7.91954L8 15" stroke="#616161" stroke-width="2"/>
+                                                </svg>
+                                                {% trans %}назад{% endtrans %}
+                                            </a>
+                                        {% else %}
+                                            <a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}">
+                                                <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 1rem;">
+                                                    <path d="M8 0.999999L2 7.91954L8 15" stroke="#616161" stroke-width="2"/>
+                                                </svg>
+                                                {% trans %}назад{% endtrans %}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="accountConversationHeaderTopic">
+                                        Mercedes-Benz S-klasse VI (W222, C217)
+                                    </div>
+                                </div>
+                                <div class="accountConversationMessages">
+                                    {% if messages %}
+                                    <div class="accountConversationMessagesWindow">
+                                    {% for message in messages %}
+                                        <div class="accountConversationMessage {% if message.userFrom.id != user.id %}oppoMessage{% endif %}">
+                                            {% if message.userFrom %}
+                                                <div class="accountConversationMessageUser">
+                                                    <div class="accountConversationMessageUserAvatar">
+                                                        {% if message.userFrom.userinfo.avatar %}
+                                                            <img src="{{ asset('bundles/images/users/avatars/' ~ message.userFrom.userinfo.avatar) }}" alt="" title="" />
+                                                        {% else %}
+                                                            <svg width="50" height="50" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <circle cx="32" cy="32" r="32" fill="#F5AA01"/>
+                                                                <path d="M31.9996 55.9001C18.7996 55.9001 8.09961 45.2001 8.09961 32.0001C8.09961 18.8001 18.7996 8.1001 31.9996 8.1001C45.1996 8.1001 55.8996 18.8001 55.8996 32.0001C55.8996 45.2001 45.1996 55.9001 31.9996 55.9001ZM31.9996 10.7001C20.2996 10.7001 10.6996 20.3001 10.6996 32.0001C10.6996 43.7001 20.2996 53.3001 31.9996 53.3001C43.6996 53.3001 53.2996 43.7001 53.2996 32.0001C53.2996 20.3001 43.6996 10.7001 31.9996 10.7001Z" fill="white"/>
+                                                                <path d="M17.9996 49.3002L15.5996 48.2002C16.2996 46.5002 18.4996 45.6002 20.9996 44.5002C23.3996 43.4002 26.3996 42.1002 26.3996 40.5002V38.3002C25.4996 37.6002 24.0996 36.0002 23.8996 33.7002C23.1996 33.0002 22.0996 31.7002 22.0996 30.1002C22.0996 29.1002 22.4996 28.3002 22.7996 27.8002C22.5996 26.7002 22.1996 24.5002 22.1996 22.8002C22.1996 17.3002 25.9996 13.7002 31.9996 13.7002C33.6996 13.7002 35.7996 14.2002 36.8996 15.4002C39.5996 15.9002 41.7996 19.1002 41.7996 22.8002C41.7996 25.2002 41.3996 27.2002 41.0996 28.1002C41.3996 28.6002 41.6996 29.3002 41.6996 30.1002C41.6996 32.0002 40.7996 33.2002 39.8996 33.8002C39.6996 36.1002 38.3996 37.6002 37.5996 38.3002V40.5002C37.5996 41.9002 40.0996 42.8002 42.3996 43.7002C45.0996 44.7002 47.8996 45.7002 48.7996 48.0002L46.2996 48.9002C45.8996 47.7002 43.4996 46.9002 41.4996 46.1002C38.3996 45.0002 34.8996 43.7002 34.8996 40.5002V36.9002L35.4996 36.5002C35.5996 36.5002 37.2996 35.3002 37.2996 33.0002V32.1002L38.0996 31.8002C38.1996 31.7002 38.9996 31.3002 38.9996 30.1002C38.9996 29.7002 38.6996 29.3002 38.5996 29.2002L38.0996 28.6002L38.2996 27.9002C38.2996 27.9002 38.9996 25.7002 38.9996 22.7002C38.9996 20.2002 37.5996 17.9002 36.0996 17.9002H35.2996L34.8996 17.2002C34.5996 16.7002 33.3996 16.2002 31.7996 16.2002C27.2996 16.2002 24.5996 18.6002 24.5996 22.7002C24.5996 24.6002 25.2996 27.7002 25.2996 27.7002L25.4996 28.4002L24.9996 28.9002C24.9996 28.9002 24.5996 29.4002 24.5996 29.9002C24.5996 30.6002 25.4996 31.5002 25.8996 31.9002L26.3996 32.3002V33.0002C26.3996 35.2002 28.2996 36.4002 28.2996 36.4002L28.8996 36.8002V40.4002C28.8996 43.7002 25.1996 45.4002 21.8996 46.8002C20.4996 47.6002 18.3996 48.6002 17.9996 49.3002Z" fill="white"/>
+                                                            </svg>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="accountConversationMessageUserInfo">
+                                                        <div class="accountConversationMessageUserName">{{ message.userFrom.userinfo.firstname }} {{ message.userFrom.userinfo.lastname }}</div>
+                                                        <div class="accountConversationMessageUserDate">{{ message.sentDate | date("d.m.Y в H:i")}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="accountConversationMessageText">
+                                                    {{ message.message | raw }}
+                                                    {% if message.image %}
+                                                        <div class="accountConversationMessageImage">
+                                                            <a href="/bundles/images/messages/{{message.image}}" data-lightbox="image-{{ message.id }}">
+                                                                <img src="/bundles/images/messages/{{message.image}}" alt="" title="" />
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}    
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                    </div>{% endif %}
+                                <div class="accountConversationMessage">
+                                        <div class="accountConversationMessageUser"></div>
+                                        <div class="accountConversationMessageText form">
+                                            {% if conversation.userOne and conversation.userTwo %}
+                                                {{ form_start(formMessage, {'method':'POST','multipart':true}) }}
+                                                    <div class="accountMessageFormText">
+                                                        {{ form_widget(formMessage.message)}}
+                                                    </div>
+                                                    <div class="accountMessageFormButtons">
+                                                        <div class="send-message-file">
+                                                            {{ form_widget(formMessage.image)}}
+                                                            <span>
+                                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 0.8rem;">
+                                                                    <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                    <path d="M8.5 10C9.32843 10 10 9.32843 10 8.5C10 7.67157 9.32843 7 8.5 7C7.67157 7 7 7.67157 7 8.5C7 9.32843 7.67157 10 8.5 10Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                    <path d="M21 15L16 10L5 21" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                </svg>
+                                                                {% trans %}Загрузить изображение{% endtrans %}
+                                                            </span>
+                                                        </div>
+                                                        {{ form_widget(formMessage.save,{'type' : 'submit'})}}
+                                                    </div>
+                                                {{ form_end(formMessage) }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+     </div>
+</div>
+{% endblock%}
+

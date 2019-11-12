@@ -61,7 +61,7 @@
         </div>
     </div>
     <div class="row content-row">
-        {{ render(controller('DashboardCommonBundle:Account:getSidebar')) }}
+        {{ render(controller('DashboardCommonBundle:Account:getSidebar', {'routeName' : routeName})) }}
         <div class="col-ld-10 col-md-10">
             <div class="account-advert-block account-block">
                        {% for flashMessage in app.session.flashbag.get('notice') %}

@@ -753,8 +753,10 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .account-menu-list li .accountMenuItem a.logout{padding-left: 3.8rem;}
 .account-menu-list li a.active{color:$orange-color;}
 .accountSettingsTabs ul li a{@include fontView("GothamProRegular",$black-text,2.2rem,3rem);}
-.nav-tabs.settingsTabs > li > a{@include border-radius(0);}
-.nav-tabs.settingsTabs > li.active > a{background: #fff;border:none;color:$black-text;}
+.nav-tabs.settingsTabs > li > a{@include border-radius(0);border:none;@include flexBox(row, flex-start, center);}
+.nav-tabs.settingsTabs > li > a > .numberNewItems{display: block;background: rgba(240,153,75,0.5);padding: 4px;@include fontView("GothamProMedium",$super-white-color,1.2rem,1.1rem);@include border-radius(50%);margin-left: 1rem;padding: 9px 4px;}
+.nav-tabs.settingsTabs > li > a > .numberNewItems span{background: $orange-color;margin: 4px 0;padding: 4px 6px;@include border-radius(50%);}
+.nav-tabs.settingsTabs > li.active > a{font-family:"GothamProMedium", sans-serif;background: #fff;border:none;color:$black-text;}
 .accountSettingsTabs .tab-content{@include box-shadow(none);@include border-radius(0px 9px 9px 9px);}
 .formParameter{@include flexBox(row,flex-start,center);margin-right: 9rem;}
 .formParameterLabel{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
@@ -824,9 +826,52 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertLikeButton button{border:2px solid $yellow-color;@include border-radius(25px);background:#fff;padding: 0.8rem 1.7rem 0.3rem;}
 .accountAdvertLikeButton{position: absolute;top:-18px;right:-2px;}
 .accountNocontent{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.4rem);}
-
-
-
+.accountMessageItem{@include flexBox(row, space-between, center);}
+.accountMessageItemUser{width: 40%;@include flexBox(row, flex-start, center);}
+.accountMessageItemCheck {padding-right: 4rem;}
+.accountMessageItem.active .accountMessageItemEnvelope svg path{fill:$orange-color;stroke:#fff;}
+.accountMessageItemEnvelope{@include flexBox(row, flex-start, center);padding-right: 4rem;}
+.accountMessageItemUserAvatar{padding-right: 2rem;}
+.accountMessageItemUserAvatar img{width: 50px;height: 50px;@include border-radius(50%);}
+.accountMessageItemUserName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.accountMessageItemTitle{width: 40%;@include flexBox(row, space-between, center);}
+.accountMessageItemTitleName{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.accountMessageItemTitleDate{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.accountMessageItem{border-bottom: 1px solid #DFE1E5;padding:1rem 2rem;}
+.accountMessageItem:hover{cursor:pointer;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
+.accountMessageItemButton{width: 20%;}
+.accountMessageItemButton{padding-left: 2rem;@include flexBox(row, flex-end,center);}
+.accountMessageItemButton a{display: block;background: $gray-color;@include border-radius(3px); @include fontView("GothamProBlack",$super-black-color,1.8rem,1.7rem);max-width:19.8rem;width: 100%;text-align: center;padding: 1.3rem 1.1rem;}
+.accountMessageItem.active .accountMessageItemButton a{background: $yellow-color;}
+.accountMessageItemButton a:hover,.accountMessageItemButton a:focus{background: $orange-color;text-decoration: none;}
+.accountMessageItem.active .accountMessageItemButton a:hover, .accountMessageItem.active .accountMessageItemButton a:focus{background: $orange-color;text-decoration: none;}
+.accountMessages{padding-bottom: 5rem;}
+.accountConversationHeader{@include flexBox(row,space-between,center);padding: 3.5rem 2rem; border-bottom: 1px solid #DFE1E5;}
+.accountConversationHeaderBack a{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);}
+.accountConversationHeaderBack a:hover,.accountConversationHeaderBack a:focus{text-decoration: none;}
+.accountConversationHeaderTopic{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.accountConversationMessage{@include flexBox(row,flex-start,flex-start);padding-bottom: 2rem;}
+.accountConversationMessage.oppoMessage{padding-left: 5rem;}
+.accountConversationMessageUser{@include flexBox(row,flex-start,center);width: 30%;}
+.accountConversationMessageUserAvatar img{width: 50px;height: 50px;@include border-radius(50%);}
+.accountConversationMessageUserAvatar{padding-right: 2rem;}
+.accountConversationMessageUserName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.accountConversationMessageUserDate{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.accountConversationMessageText{@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);width: 70%;padding-right: 5rem;}
+.accountConversationMessageText.form{padding-right: 0;}
+.accountConversationMessage.oppoMessage .accountConversationMessageText{background: #F7F7F7;@include border-radius(5px);padding: 2rem 3rem;padding-right:0;}
+.accountConversationMessages{padding-top: 4rem;padding-left: 2rem;padding-right: 2rem;}
+.accountMessageFormButtons{@include flexBox(row,space-between,center);}
+.accountMessageFormButtons button.message-button-answer{display: block;background: $yellow-color;@include border-radius(3px); @include fontView("GothamProBlack",$super-black-color,1.8rem,1.7rem);max-width:19.8rem;width: 100%;text-align: center;padding: 1.3rem 1.1rem;border:none}
+.accountMessageFormButtons button:hover,.accountMessageFormButtons button:focus{background: $orange-color;text-decoration: none;}
+.accountMessageFormText textarea{height: auto;width: 100%;height: 8rem;border: 1px solid #DFE1E5;background: #FDFDFD;@include border-radius(5px);display: block;padding: 1rem;}
+.accountMessageFormText{padding-bottom: 2rem;}
+.send-message-file{border:1px solid #DFE1E5;background: #F6F6F6;@include border-radius(30px);padding: 0.7rem 1.9rem;position: relative;}
+.send-message-file span{@include flexBox(row,flex-start,center);}
+.send-message-file input{position:absolute;top:0;left:0;width: 100%;height: 100%;@include opacity(0);}
+.accountConversationMessageImage{padding-top: 1rem;max-width:30rem;}
+.accountConversationMessageImage img{max-width:30rem;width: 100%;}
+.accountConversationMessagesWindow{max-height: 40rem;overflow-y:scroll;}
 
 
 
@@ -1327,7 +1372,7 @@ border-bottom-right-radius:4px;display:none;}
 .message-avatar{width: 40px;}
 .message-delete{display:block;width:22px;height:26px;background:url('../img/message-delete.png') 0 0 no-repeat;cursor:pointer;}
 .message-delete:hover{background:url('../img/message-delete.png') 0 -27px no-repeat;}
-.message-button-answer.readed{background:#b9b9b9;}
+
 .messages-table-block{padding-top:33px;}
 .messages-table-block .tab-content .tab-pane{padding-left:0;padding-right:0;text-transform:none;padding-top:28px;padding-bottom:0;}
 .messages-table-block .nav-tabs > li{display:block;position:relative;padding-right:25px;}
@@ -1356,7 +1401,7 @@ border-bottom-right-radius:4px;display:none;}
 input.change-avatar-input{display:none;}
 .change-avatar{color:#2980b9;font-size:1.4rem;font-family:"Roboto", sans-serif;font-weight:300;text-decoration:underline;cursor:pointer;line-height:3rem;}
 .change-avatar:hover{text-decoration:none;}
-.account-settings-forms .message-button-answer{font-size:1.2rem;font-family:"Roboto", sans-serif;}
+
 .account-settings-form-block-header{color:#3e3e3e;font-size:1.8rem;font-family:"Roboto", sans-serif;line-height:100%;}
 .account-settings-forms .control-label.no-top-padding{padding-top:0;}
 .account-settings-form-block-description{color:#6d6d6d;font-size:1.4rem;font-family:"Roboto", sans-serif;padding:14px 0;}
@@ -1368,14 +1413,12 @@ input.change-avatar-input{display:none;}
 .page-no-data{font-size:1.4rem;margin-top:15px;}
 .message-message-text{font-size:1.4rem;color:#747474;font-family:"Roboto", sans-serif;font-weight:300;margin-top:7px;}
 .conversation-message-row{margin-top:35px;}
-.send-message-textarea{width:100%; border:1px solid #c7ccd5;height:60px;display:block;margin-bottom:8px;padding:10px;}
+
+
 .send-message-form{margin-top:35px;}
-.send-message-form .message-button-answer{margin-top:8px;}
-a.message-button-answer:hover,a.message-button-answer:focus{color:#fff;text-decoration:none;}
-.send-message-file{width:130px;background:url('../img/send-image.png') 0 50% no-repeat;color:#6d6d6d;font-size:1.2rem;
-                  font-family:"Roboto", sans-serif;font-weight:300;overflow:hidden;
-                  position:relative;line-height:100%;padding-left:40px;cursor:pointer;}
-.send-message-file input{padding-left: 200px;position:absolute;top:0;left:0;}
+
+
+
 a.send-message-smile{color:#6d6d6d;font-size:22px;line-height:100%;cursor:pointer;}
 .message-message-text img{display: block;width: 315px;margin-top:10px;}
 .conversation-user-info{width:230px;}
@@ -1534,7 +1577,7 @@ a.send-message-smile{color:#6d6d6d;font-size:22px;line-height:100%;cursor:pointe
 .userprofile-maindata{border-bottom: 1px solid #dcdcdc;padding-bottom:20px;}
 .userprofile-review-header{font-size:1.8rem; color:#3e3e3e;font-family:"Roboto", sans-serif;font-weight:500;font-weight:500;padding-top:7px;}
 .userprofile-reviews{padding-top:35px;}
-.userprofile-reviews .message-button-answer{margin-bottom: 40px;}
+
 .top-seller-block{text-align:center;}
 .top-seller-avatar{margin-bottom:15px;}
 .top-sellers-row{margin-top:25px; margin-bottom: 25px;}
@@ -1593,7 +1636,6 @@ a.send-tab-form:hover{text-decoration:none;}
 .editmessage-conversation-block{max-height:450px;overflow:scroll;overflow-x: hidden;}
 .product-type{font-size:1.4rem;font-family: "Roboto",sans-serif;padding-bottom:15px;font-weight:300;}
 .product-breadscrumbs ul li:first-child{padding-left:0;}
-.send-message-file span{display:block;padding-top:7px; padding-bottom:7px;}
 .reviewStatusCommentBlock{display:none;}
 .jcarousel {
     position: relative;

@@ -827,6 +827,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertLikeButton{position: absolute;top:-18px;right:-2px;}
 .accountNocontent{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.4rem);}
 .accountMessageItem{@include flexBox(row, space-between, center);}
+.accountMessageItem.hide{display: none;}
 .accountMessageItemUser{width: 40%;@include flexBox(row, flex-start, center);}
 .accountMessageItemCheck {padding-right: 4rem;}
 .accountMessageItem.active .accountMessageItemEnvelope svg path{fill:$orange-color;stroke:#fff;}
@@ -872,11 +873,22 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountConversationMessageImage{padding-top: 1rem;max-width:30rem;}
 .accountConversationMessageImage img{max-width:30rem;width: 100%;}
 .accountConversationMessagesWindow{max-height: 40rem;overflow-y:scroll;}
-
-
-
-
-
+.account-advert-block-content{position: relative;}
+.accountWriteToSupport{position: absolute;top: 0;right: 0;@include flexBox(row,flex-start,center);}
+.accountWriteToSupport a{@include fontView("GothamProRegular",$orange-color,1.6rem,2.2rem);text-decoration: underline;}
+.accountWriteToSupport a:hover{text-decoration: none;}
+.accountMessagesTools{@include flexBox(row,space-between,center);padding-bottom: 4rem;}
+.accountMessagesToolsCheck{@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);@include flexBox(row,flex-start,center);padding-right: 6rem;}
+.accountMessagesToolsCheck span{display: block;padding-left: 1rem;}
+.accountMessagesToolsSelect ul li a{@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);text-decoration: none;display: block;padding-right: 2.5rem;}
+.accountMessagesToolsSelect ul li a.active{font-family:"GothamProBold",sans-serif;text-decoration:underline;}
+.accountMessagesToolsSelect ul li a:hover{text-decoration: underline;}
+.accountMessagesToolsSelect ul li a:focus{font-family:"GothamProBold",sans-serif;text-decoration:underline;}
+.accountMessagesToolsLeft{@include flexBox(row,flex-start,center);}
+.accountMessagesToolsRight{@include flexBox(row,flex-start,center);}
+.accountMessagesToolsRight button{border:none;background: none;@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);@include border-radius(5px);padding: 0.8rem 1.8rem;text-decoration: underline;}
+.accountMessagesToolsRight button:hover,.accountMessagesToolsRight button:focus{@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));color:#EB5757}
+                                  
 
 
 

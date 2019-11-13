@@ -362,6 +362,84 @@ class AccountController extends Controller
                                                                                        "routeName" => $request->attributes->get("_route")));
     }
     
+     /**
+     * @Route("/account/deleteconversation", name="account_conversation_delete") 
+     */
+    public function deleteConversationAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($request->request->get('conversation')){
+            foreach($request->request->get('conversation') as $key => $conversationId){
+                $conversation = $manager->getRepository("DashboardCommonBundle:Conversation")->find($conversationId);
+        
+                if($conversation)
+                {
+                    foreach($conversation->getMessages() as $message)
+                    {
+                        if($message->getImage())
+                        {
+                            if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/messages/' . $message->getImage()))
+                            {
+                                $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/messages/' . $message->getImage());
+                            }
+                        }
+
+                        $message->setUserOwner(null);
+                        $message->setProduct(null);
+                        $message->setUserTo(null);
+                        $message->setUserFrom(null);
+
+                        $manager->remove($message);
+                        $manager->flush();
+                    }
+
+                    $conversation->setUserOne(null);
+                    $conversation->setUserTwo(null);
+                    $manager->remove($conversation);
+                    $manager->flush();
+
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .                         $this->get('translator')->trans('<strong>Veiksmīga!</strong> Saruna tika dzēsta.') . '</div>'
+                    );
+                }
+            }
+        }
+        
+        return new Response("OK");
+    }
+    
+     /**
+     * @Route("/account/changeconversation", name="account_conversation_change") 
+     */
+    public function changeConversationAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($request->request->get('conversation')){
+            foreach($request->request->get('conversation') as $key => $conversationId){
+                $conversation = $manager->getRepository("DashboardCommonBundle:Conversation")->find($conversationId);
+        
+                if($conversation)
+                {
+                    foreach($conversation->getMessages() as $message)
+                    {
+                        $message->setIsNew(false);
+                        $manager->persist($message);
+                        $manager->flush();
+                    }
+                }
+            }
+        }
+        
+        return new Response("OK");
+    }
     
     /**
      * @Route("/account/settings", name="account_settings")

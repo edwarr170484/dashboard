@@ -930,8 +930,9 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountReviewRating{padding-bottom: 1.6rem;}
 .accountOrderInfo.order .accountOrderInfoProductStatus{text-align: center;}
 .accountOrders{padding-bottom: 5rem;}
-
-
+.alert{font-family:"GothamProRegular", sans-serif;font-weight:300;font-size: 1.4rem;color:$black-text;padding:7px;line-height:100%;padding-left:30px;position:relative;}
+.alert .close-alert{display:block;position:absolute;left:2px;top:8px;color:#fac3c7;font-weight:bold;background:none;border:none;font-size:2.4rem;}
+body.userAccount .col-md-10{padding-left: 4rem;}
 
 
 
@@ -1219,8 +1220,7 @@ a.register-back{color:#aeaeae;text-decoration:none;
 .register-block-close{display:block;position:absolute;right:30px;top:24px;font-size:28px;width:19px;height:20px;
 background:url('../img/cross.png') 0 0 no-repeat;}
 
-.alert{font-family:"Roboto", sans-serif;font-weight:300;font-size: 1.4rem;color:#666666;padding:7px;line-height:100%;padding-left:30px;position:relative;}
-.alert .close-alert{display:block;position:absolute;left:2px;top:8px;color:#fac3c7;font-weight:bold;background:none;border:none;font-size:2.4rem;}
+
 .register-form-checkbox-block:after{content:"";display:table;clear:both;}
 .register-form-forms input.hidden-input{display:none;}
 .register-form-checkbox-block{color:#6d6d6d;font-family:"Roboto", sans-serif;font-size:1.6rem;line-height:100%;margin-bottom:12px;font-weight:300;}

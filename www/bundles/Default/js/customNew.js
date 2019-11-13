@@ -79,3 +79,39 @@ function selectAll(element){
         }                
     });
 }
+
+function deleteConversations(text){
+    if(confirm(text)){
+        $.ajax({
+            url: '/account/deleteconversation',
+            type:'post',
+            data: $('.accountMessages input[type="checkbox"]:checked'),
+            dataType: 'html',
+            beforeSend: function(){},
+            success: function()
+            {
+                window.location.reload();
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                
+            }
+        });
+    }
+}
+
+function changeConverSations(){
+    $.ajax({
+        url: '/account/changeconversation',
+        type:'post',
+        data: $('.accountMessages input[type="checkbox"]:checked'),
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function()
+        {
+            window.location.reload();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+                
+        }
+    });
+}

@@ -416,62 +416,6 @@ class UserController extends Controller
         }
         
         return $password;
-    }
-    
-     /**
-     * @Route("/account/deletemessage/{conversationId}", name="account_conversation_delete", defaults={"conversationId" : 0}) 
-     */
-    public function deleteConversationAction($conversationId,Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $fm = new Filesystem();
-        
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $conversation = $manager->getRepository("DashboardCommonBundle:Conversation")->find($conversationId);
-        
-        if($conversation)
-        {
-            foreach($conversation->getMessages() as $message)
-            {
-                if($message->getImage())
-                {
-                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/messages/' . $message->getImage()))
-                    {
-                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/messages/' . $message->getImage());
-                    }
-                }
-
-                $message->setUserOwner(null);
-                $message->setProduct(null);
-                $message->setUserTo(null);
-                $message->setUserFrom(null);
-
-                $manager->remove($message);
-                $manager->flush();
-            }
-            
-            $conversation->setUserOne(null);
-            $conversation->setUserTwo(null);
-            $manager->remove($conversation);
-            $manager->flush();
-            
-            $this->addFlash(
-                    'notice',
-                    '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Veiksmīga!</strong> Saruna tika dzēsta.') . '</div>'
-            );
-        }
-        
-        if($locale->getIsDefault())
-        {
-            return $this->redirectToRoute("account_messages");
-        }
-        else
-        {
-            return $this->redirectToRoute("account_messagesLocale", array("_locale" => $locale->getCode()));
-        }
     } 
     
     /**
@@ -560,37 +504,6 @@ class UserController extends Controller
         }
         else
             return new Response($this->get('translator')->trans("Nederīgs pasūtījuma ID"));
-    }
-    
-    /**
-     * @Route("/account/chengemessagestatus/{messageId}", name="account_changemessagestatus")
-     */
-    public function changeMessageStatusAction($messageId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        $message = $manager->getRepository("DashboardCommonBundle:Message")->findOneBy(array("id" => $messageId, "userTo" => $user->getId(), "userOwner" => $user->getId()));
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        if($message)
-        {
-            if($message->getIsNew())
-            {
-                $message->setIsNew(false);
-            }
-            else
-            {
-                $message->setIsNew(true);
-            }
-            
-            $manager->persist($message);
-            $manager->flush();
-            
-            return new Response(1);
-        }
-        else
-            return new Response(0);
     }
 
     /**

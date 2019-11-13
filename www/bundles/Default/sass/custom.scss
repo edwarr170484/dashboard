@@ -888,10 +888,48 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountMessagesToolsRight{@include flexBox(row,flex-start,center);}
 .accountMessagesToolsRight button{border:none;background: none;@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);@include border-radius(5px);padding: 0.8rem 1.8rem;text-decoration: underline;}
 .accountMessagesToolsRight button:hover,.accountMessagesToolsRight button:focus{@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));color:#EB5757}
-                                  
-
-
-
+.accountOrder{border-bottom: 1px solid #DFE1E5;padding-bottom: 2.8rem;} 
+.accountOrder:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;}
+.accountOrderUser{@include flexBox(row,space-between,center);padding-top: 1.2rem;padding-bottom: 0.8rem;padding-left: 3rem;padding-right: 3rem;border-bottom: 1px solid #DFE1E5;}
+.accountOrderUserAvatar{@include flexBox(row,flex-start,center);}
+.accountOrderUserAvatarImage{padding-right: 2rem;}
+.accountOrderUserAvatarName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.accountOrderUserInfo ul{@include flexBox(row,flex-start,center);}
+.accountOrderUserInfo ul li{display: block;}
+.accountOrderUserInfo ul li a{@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);@include flexBox(row,flex-start,center);padding-right: 4.5rem;}
+.accountOrderUserInfo ul li a svg{margin-right: 1rem;}
+.accountOrderUserInfo ul li:last-child a{padding-right: 0;@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.accountOrderInfo{@include flexBox(row,space-between,center);padding-top: 0.8rem;padding-left: 3rem;padding-right: 3rem;}
+.accountOrderInfoProduct{width:70%;@include flexBox(row,flex-start,center);}
+.accountOrderInfoProductImage{padding-right: 5rem;}
+.accountOrderInfoProductImage img{width: 100%;max-width:155px;@include border-radius(9px);}
+.accountOrderInfoProductDescription{padding-right: 7rem;width: 50%;}
+.accountOrderInfoProductDescriptionTitle{padding-bottom: 1.8rem;@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.accountOrderInfoProductDescriptionTitle a{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.accountOrderInfoProductDescriptionFeatures{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.accountOrderInfoProductNumbers{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);width: 20%;}
+.accountOrderInfoProductNumbersPrice{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.accountOrderInfoProductNumbers .number{padding-bottom: 1rem;text-align: center;}
+.accountOrderInfoProductStatus{text-align: right;align-self: flex-start;padding-top: 1.5rem;}
+.accountOrderInfoProductStatus button{border:none;@include border-radius(5px);@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);width: 148px;padding: 0 1.2rem;text-align: center;}
+.accountOrderInfoProductStatus button.confirm{background: $orange-color;}
+.accountOrderInfoProductStatus button.inprocess{background: #fff;}
+.accountOrderInfoProductStatus button.stopped{background: $black-text;color:#fff;}
+.accountOrderInfoProductStatus button.break{background: #DFE1E5;}
+.accountOrderInfoProductStatus a.edit{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);display: block;padding-top: 2rem;text-decoration: underline;}
+.accountOrderInfoProductStatus a.edit:hover,.accountOrderInfoProductStatus a.edit:focus{text-decoration: none;}
+.accountOrderInfo.order .accountOrderInfoProduct{@include flexBox(row,flex-start,flex-start);}
+.accountOrderInfo.order .accountOrderInfoProductDescription{width:80%;padding-right: 0;}
+.accountOrderInfo.order .accountOrderInfoProduct{width: 80%;}
+.accountOrderInfoProductSubDescription{padding-top: 4rem;}
+.accountOrderInfoProductSubDescriptionTitle{@include fontView("GothamProBold",$black-text,1.4rem,2.4rem);padding-bottom: 1.5rem;}
+.accountOrderInfoProductSubDescriptionText{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.accountOrderInfo.order{padding-top: 3rem;}
+.accountReviewRating{@include flexBox(row,flex-start,center);}
+.accountReviewRating svg{margin-right: 5px;}
+.accountReviewRating{padding-bottom: 1.6rem;}
+.accountOrderInfo.order .accountOrderInfoProductStatus{text-align: center;}
+.accountOrders{padding-bottom: 5rem;}
 
 
 

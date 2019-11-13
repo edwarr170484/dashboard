@@ -17,10 +17,11 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 use Dashboard\CommonBundle\Entity\Message;
 use Dashboard\CommonBundle\Entity\Conversation;
+use Dashboard\CommonBundle\Entity\Review;
 
 use Dashboard\CommonBundle\Form\Type\UserType;
 use Dashboard\CommonBundle\Form\Type\UserPasswordType;
-
+use Dashboard\CommonBundle\Form\Type\ReviewType;
 
 class AccountController extends Controller
 {
@@ -824,6 +825,197 @@ class AccountController extends Controller
                                                                                     "locale" => $locale, 
                                                                                     "routeName" => $request->attributes->get("_route")));
         
+    }
+    
+    /**
+     * @Route("/account/orders/{page}", name="account_orders", defaults={"page" : 0})
+     * @Route("/{_locale}/account/orders/{page}", name="account_ordersLocale", defaults={"_locale" : "lv","page" : 0}, requirements={"_locale" : "lv|ru"})
+     */
+    public function ordersAction($page, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $orderStatuses = $manager->getRepository("DashboardCommonBundle:OrderStatus")->findAll();
+        //$orders = array_reverse($user->getReceivedOrders()->toArray());
+        
+        
+        $query = $manager->createQuery("SELECT o FROM DashboardCommonBundle:ProductOrder o WHERE o.userReceived = " . $user->getId() ." ORDER BY o.id DESC" );
+
+        try{
+            $orders = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $orders = 0;
+        }
+        
+        $totalOrders = count($orders);
+        
+        $query = $manager->createQuery("SELECT o FROM DashboardCommonBundle:ProductOrder o WHERE o.userReceived = " . $user->getId() ." ORDER BY o.id DESC" )->setFirstResult((($page > 0) ? ($page - 1) : 0) * 10)->setMaxResults(10);
+
+        try{
+            $orders = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $orders = 0;
+        }
+        
+        $helper = $this->get("app.helpers");
+        $pagination = $helper->paginator(($page > 0) ? (int)$page : 1, $totalOrders, 10, "/account/orders");
+        
+        return $this->render('DashboardCommonBundle:User:account/order/orders.html.twig', array("user" => $user,
+                                                                                  "orders" =>$orders,
+                                                                                  "orderStatuses" => $orderStatuses,
+                                                                                  "pagination" => $pagination,
+                                                                                  "locale" => $locale,
+                                                                                  "settings" => $settings,
+                                                                                  "routeName" => $request->attributes->get("_route")));
+    }
+    
+    /**
+     * @Route("/account/myorders", name="account_myorders")
+     * @Route("/{_locale}/account/myorders", name="account_myordersLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     */
+    public function myOrdersAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $orderStatuses = $manager->getRepository("DashboardCommonBundle:OrderStatus")->findAll();
+        $orders = array_reverse($user->getSendedOrders()->toArray());
+        
+        $review = new Review();
+        $reviewForm = $this->createForm(new ReviewType($manager, $locale), $review);
+        
+        $reviewForm->handleRequest($request);
+            
+        if ($reviewForm->isSubmitted() && $reviewForm->isValid())
+        {
+            $product = $manager->getRepository("DashboardCommonBundle:Product")->find($reviewForm['product']->getData());
+
+            if($product)
+            {
+                if($product->getUser()->getId() != $user->getId())
+                {
+                    $isReview = $manager->getRepository("DashboardCommonBundle:Review")->findOneBy(array("user" => $user, "targetUser" => $product->getUser(), "product" => $product));
+                    
+                    if($isReview)
+                    {
+                        $this->addFlash(
+                            'notice',
+                            '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                            $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs jau esat nosūtījis atsauksmi šim reklāmdevējam par šo reklāmu.') . '</div>'
+                        );
+
+                        if($locale->getIsDefault())
+                        {
+                            return $this->redirectToRoute("account_myorders");
+                        }
+                        else
+                        {
+                            return $this->redirectToRoute("account_myordersLocale", array("_locale" => $locale->getCode()));
+                        }
+                    }
+                    
+                    $review->setUser($user);
+                    $review->setTargetUser($product->getUser());
+                    $review->setProduct($product);
+                    $review->setDateAdded(new \DateTime("now"));
+                    
+                    if($reviewForm['mark']->getData())
+                        $review->setProductMark($reviewForm['mark']->getData()->getTitle());
+                    
+                    if($product->getUser()->getAlerts())
+                    {
+                        $message = \Swift_Message::newInstance()
+                        ->setSubject('Новый отзыв на сайте ' . $settings->getSiteName())
+                        ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                        ->setTo($product->getUser()->getEmail())
+                        ->setBody('О Вас оставили новый отзыв на сайте ' . $settings->getSiteName() . '. '
+                                . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_targetreview', array(), true) . '">личном кабинете</a>.','text/html');
+
+                        $this->get('mailer')->send($message);
+                    }
+                    
+                    $manager->persist($review);
+                    $manager->flush();
+                    
+                    //calculate rating
+                    //$currentRating = $productUser->getRating();
+                    
+                    $productUserReviews = $manager->getRepository("DashboardCommonBundle:Review")->findBy(array("targetUser" => $product->getUser()));
+                    $plusReviews = 0;
+                    
+                    if(count($productUserReviews) > 0)
+                    {
+                        foreach($productUserReviews as $productUserReview)
+                        {
+                            if($productUserReview->getStatus() == 1)
+                            {
+                                $plusReviews++;
+                            }
+                        }
+                        
+                        $userRating = ($plusReviews * 100) / count($productUserReviews);
+                    }
+                    else
+                       $userRating = 0; 
+                    
+                    $productUser = $product->getUser()->getUserinfo();
+                    $productUser->setRating(floor($userRating));
+                    
+                    $manager->persist($productUser);
+                    $manager->flush();
+                    
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Panākumi!</strong> Jūsu atsauksmes nosūtīta pārdevējam.') . '</div>'
+                    );
+                }
+                else
+                {
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs nevarat atstāt atsauksmes par sevi.') . '</div>'
+                    );
+                }
+            }
+            else
+            {
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                    $this->get('translator')->trans('<strong>Kļūda!</strong> Atbildes nav nosūtītas. Jūs vēlaties atstāt atsauksmi par esošu reklāmu.') . '</div>'
+                );
+            }
+               
+            if($locale->getIsDefault())
+            {
+                return $this->redirectToRoute("account_myorders");
+            }
+            else
+            {
+                return $this->redirectToRoute("account_myordersLocale", array("_locale" => $locale->getCode()));
+            }
+        }
+        
+        return $this->render('DashboardCommonBundle:User:account/order/myorders.html.twig', array("user" => $user,
+                                                                                    "orders" =>$orders,
+                                                                                    "orderStatuses" => $orderStatuses,
+                                                                                    "settings" => $settings,
+                                                                                    "locale" => $locale,
+                                                                                    "reviewForm" => $reviewForm->createView(),
+                                                                                    "routeName" => $request->attributes->get("_route")));
     }
 }
 

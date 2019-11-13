@@ -1,6 +1,6 @@
 {% extends 'DashboardCommonBundle:Common:base.html.twig' %}
 
-{% block title %}{% trans %}Lietotāja konts{% endtrans %}{% endblock %}
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Отзывы{% endtrans %}{% endblock %}
 
 {% form_theme reviewAnswerForm _self %}
 
@@ -38,58 +38,200 @@
 {%- endblock choice_widget -%}
 
 {% block body %}
-<nav class="navbar navbar-default">
-    <div class="container">
+<nav class="breadscrumbsBlock">
+      <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if  app.request.locale == 'lv' %}
-                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
-                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
-                        <li><a href="{{path('account_review')}}">{% trans %}Atsauksmes{% endtrans %}</a></li>
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
                     {% else %}
-                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
-                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
-                        <li><a href="{{path('account_reviewLocale',{'_locale' : app.request.locale})}}">{% trans %}Atsauksmes{% endtrans %}</a></li>
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
                     {% endif %}
-                    
+                    {% if  locale.isDefault %}
+                        <li><a href="{{ path('account', {'_locale' : locale.code}) }}">
+                    {% else %}
+                        <li><a href="{{ path('accountLocale', {'_locale' : locale.code}) }}">
+                    {% endif %}
+                        {% trans %}Личный кабинет{% endtrans %}
+                    </a></li>
+                    <li>/</li>
+                    <li>
+                    {% if  locale.isDefault %}
+                        <a href="{{path('account_review')}}">
+                    {% else %}
+                        <a href="{{path('account_reviewLocale',{'_locale' : app.request.locale})}}">
+                    {% endif %}
+                        {% trans %}Отзывы{% endtrans %}
+                    </a></li>
                 </ul>
             </div>
         </div>
+      </div>
+</nav>   
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1><b>{% trans %}Отзывы{% endtrans %}</b></h1></div>
+            </div>
+        </div>
     </div>
-</nav>
+    <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
+        <div class="col-ld-10 col-md-10">
+            <div class="account-advert-block-content" style="background: #fff;">
+                <div class="accountOrders">
+                    <div class="accountOrder">
+                        <div class="accountOrderInfo order">
+                            <div class="accountOrderInfoProduct">
+                                <div class="accountOrderInfoProductImage">
+                                    <div class="accountReviewRating">
+                                        {% set reviewRating = 3 %}
+                                        {% if reviewRating > 0 %}
+                                            {% for i in 1..reviewRating %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if reviewRating < 5 %}
+                                            {% for i in (reviewRating + 1)..5 %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <a href=""><img src="{{ asset('bundles/Default/t/rev.jpg') }}" alt="" title="" /></a>
+                                </div>
+                                <div class="accountOrderInfoProductDescription">
+                                    <div class="accountOrderInfoProductDescriptionTitle">
+                                        Хорошая компания, но менеджеры не опытные
+                                    </div>
+                                    <div class="accountOrderInfoProductDescriptionFeatures">
+                                        Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник
+                                    </div>
+                                    <div class="accountOrderInfoProductSubDescription">
+                                        <div class="accountOrderInfoProductSubDescriptionTitle">Ответ дилера:</div>
+                                        <div class="accountOrderInfoProductSubDescriptionText">
+                                            Спасибо за Ваш отзыв! Мы постараемся исправить сложившуюся ситуацию. И помните мы не читаем отзывы. Все что вы пишите будет использовано против вас.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accountOrderInfoProductStatus">
+                                <button class="inprocess">{% trans %}В процессе{% endtrans %}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accountOrder">
+                        <div class="accountOrderInfo order">
+                            <div class="accountOrderInfoProduct">
+                                <div class="accountOrderInfoProductImage">
+                                    <div class="accountReviewRating">
+                                        {% set reviewRating = 3 %}
+                                        {% if reviewRating > 0 %}
+                                            {% for i in 1..reviewRating %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if reviewRating < 5 %}
+                                            {% for i in (reviewRating + 1)..5 %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <a href=""><img src="{{ asset('bundles/Default/t/rev.jpg') }}" alt="" title="" /></a>
+                                </div>
+                                <div class="accountOrderInfoProductDescription">
+                                    <div class="accountOrderInfoProductDescriptionTitle">
+                                        Хорошая компания, но менеджеры не опытные
+                                    </div>
+                                    <div class="accountOrderInfoProductDescriptionFeatures">
+                                        Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник
+                                    </div>
+                                    <div class="accountOrderInfoProductSubDescription">
+                                        <div class="accountOrderInfoProductSubDescriptionTitle">Ответ дилера:</div>
+                                        <div class="accountOrderInfoProductSubDescriptionText">
+                                            Спасибо за Ваш отзыв! Мы постараемся исправить сложившуюся ситуацию. И помните мы не читаем отзывы. Все что вы пишите будет использовано против вас.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accountOrderInfoProductStatus">
+                                <button class="confirm">{% trans %}Опубликован{% endtrans %}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accountOrder">
+                        <div class="accountOrderInfo order">
+                            <div class="accountOrderInfoProduct">
+                                <div class="accountOrderInfoProductImage">
+                                    <div class="accountReviewRating">
+                                        {% set reviewRating = 3 %}
+                                        {% if reviewRating > 0 %}
+                                            {% for i in 1..reviewRating %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if reviewRating < 5 %}
+                                            {% for i in (reviewRating + 1)..5 %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <a href=""><img src="{{ asset('bundles/Default/t/rev.jpg') }}" alt="" title="" /></a>
+                                </div>
+                                <div class="accountOrderInfoProductDescription">
+                                    <div class="accountOrderInfoProductDescriptionTitle">
+                                        Хорошая компания, но менеджеры не опытные
+                                    </div>
+                                    <div class="accountOrderInfoProductDescriptionFeatures">
+                                        Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник
+                                    </div>
+                                    <div class="accountOrderInfoProductSubDescription">
+                                        <div class="accountOrderInfoProductSubDescriptionTitle">Ответ дилера:</div>
+                                        <div class="accountOrderInfoProductSubDescriptionText">
+                                            Спасибо за Ваш отзыв! Мы постараемся исправить сложившуюся ситуацию. И помните мы не читаем отзывы. Все что вы пишите будет использовано против вас.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accountOrderInfoProductStatus">
+                                <button class="break">{% trans %}Заблокирован{% endtrans %}</button>
+                                <a href="" class="edit">{% trans %}Редактировать{% endtrans %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
 <div class="container">
     <div class="row content-row">
         <div class="col-lg-5 col-md-5">
             <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
         </div>
-        <div class="col-lg-7 col-md-7">
-            <div class="account-purchase-menu">
-                <div class="row">
-                    <div class="col-lg-9 col-md-9">
-                        <ul class="list-unstyled list-inline account-purchase-menu-list">
-                            {% if  app.request.locale == 'lv' %}
-                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
-                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
-                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
-                            {% else %}
-                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
-                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
-                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        <ul class="list-unstyled list-inline account-purchase-menu-list">
-                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <div class="col-lg-12">
             <div class="row account-main-content-block">
-                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
                 <div class="col-ld-9 col-md-9 account-block-content">
                     <div class="account-advert-block account-block">
                         <div class="account-block-header"><h1>{% trans %}Atsauksmes{% endtrans %}</h1></div>

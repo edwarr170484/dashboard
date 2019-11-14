@@ -52,9 +52,24 @@ class User implements AdvancedUserInterface, \Serializable
     private $roles;
     
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
      */
-    private $alerts;
+    private $isAlertBroadcast;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
+     */
+    private $isAlertNewMessage;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
+     */
+    private $isAlertNewOrder;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
+     */
+    private $isAlertChangeOrderStatus;
     
     /**
      * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
@@ -320,29 +335,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function getIsActive()
     {
         return $this->isActive;
-    }
-
-    /**
-     * Set alerts
-     *
-     * @param boolean $alerts
-     * @return User
-     */
-    public function setAlerts($alerts)
-    {
-        $this->alerts = $alerts;
-
-        return $this;
-    }
-
-    /**
-     * Get alerts
-     *
-     * @return boolean 
-     */
-    public function getAlerts()
-    {
-        return $this->alerts;
     }
 
     /**
@@ -958,5 +950,28 @@ class User implements AdvancedUserInterface, \Serializable
     public function setFavoriteProducts(array $favoriteProducts)
     {
         $this->favoriteProducts = $favoriteProducts;
+    }
+
+    /**
+     * Set isHideEmail
+     *
+     * @param boolean $isHideEmail
+     * @return User
+     */
+    public function setIsHideEmail($isHideEmail)
+    {
+        $this->isHideEmail = $isHideEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get isHideEmail
+     *
+     * @return boolean 
+     */
+    public function getIsHideEmail()
+    {
+        return $this->isHideEmail;
     }
 }

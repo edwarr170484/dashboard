@@ -52,9 +52,24 @@ class User implements AdvancedUserInterface, \Serializable
     private $roles;
     
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
      */
-    private $alerts;
+    private $isAlertBroadcast;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
+     */
+    private $isAlertNewMessage;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
+     */
+    private $isAlertNewOrder;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
+     */
+    private $isAlertChangeOrderStatus;
     
     /**
      * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
@@ -320,29 +335,6 @@ class User implements AdvancedUserInterface, \Serializable
     public function getIsActive()
     {
         return $this->isActive;
-    }
-
-    /**
-     * Set alerts
-     *
-     * @param boolean $alerts
-     * @return User
-     */
-    public function setAlerts($alerts)
-    {
-        $this->alerts = $alerts;
-
-        return $this;
-    }
-
-    /**
-     * Get alerts
-     *
-     * @return boolean 
-     */
-    public function getAlerts()
-    {
-        return $this->alerts;
     }
 
     /**
@@ -981,5 +973,97 @@ class User implements AdvancedUserInterface, \Serializable
     public function getIsHideEmail()
     {
         return $this->isHideEmail;
+    }
+
+    /**
+     * Set isAlertBroadcast
+     *
+     * @param boolean $isAlertBroadcast
+     * @return User
+     */
+    public function setIsAlertBroadcast($isAlertBroadcast)
+    {
+        $this->isAlertBroadcast = $isAlertBroadcast;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAlertBroadcast
+     *
+     * @return boolean 
+     */
+    public function getIsAlertBroadcast()
+    {
+        return $this->isAlertBroadcast;
+    }
+
+    /**
+     * Set isAlertNewMessage
+     *
+     * @param boolean $isAlertNewMessage
+     * @return User
+     */
+    public function setIsAlertNewMessage($isAlertNewMessage)
+    {
+        $this->isAlertNewMessage = $isAlertNewMessage;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAlertNewMessage
+     *
+     * @return boolean 
+     */
+    public function getIsAlertNewMessage()
+    {
+        return $this->isAlertNewMessage;
+    }
+
+    /**
+     * Set isAlertNewOrder
+     *
+     * @param boolean $isAlertNewOrder
+     * @return User
+     */
+    public function setIsAlertNewOrder($isAlertNewOrder)
+    {
+        $this->isAlertNewOrder = $isAlertNewOrder;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAlertNewOrder
+     *
+     * @return boolean 
+     */
+    public function getIsAlertNewOrder()
+    {
+        return $this->isAlertNewOrder;
+    }
+
+    /**
+     * Set isAlertChangeOrderStatus
+     *
+     * @param boolean $isAlertChangeOrderStatus
+     * @return User
+     */
+    public function setIsAlertChangeOrderStatus($isAlertChangeOrderStatus)
+    {
+        $this->isAlertChangeOrderStatus = $isAlertChangeOrderStatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAlertChangeOrderStatus
+     *
+     * @return boolean 
+     */
+    public function getIsAlertChangeOrderStatus()
+    {
+        return $this->isAlertChangeOrderStatus;
     }
 }

@@ -11,6 +11,7 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -329,7 +330,7 @@ class AccountController extends Controller
             //send an email
             if($userTo)
             {
-                if($userTo->getAlerts())
+                if($userTo->getIsAlertNewMessage())
                 {
                     $message = \Swift_Message::newInstance()
                     ->setSubject('Вам пришло новое сообщение на сайте gribupardot.sunweb.by')
@@ -458,6 +459,12 @@ class AccountController extends Controller
         $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
         $formPassword = $this->createForm(new UserPasswordType($this->getDoctrine()->getManager()), $user);
         
+        $formAlert = $this->get('form.factory')->createNamedBuilder('alert', 'form', $user)
+            ->add('isAlertBroadcast', CheckboxType::class, array('required' => false, 'label' => $this->get('translator')->trans('я соглашаюсь получать информационную рассылку от ') . $settings->getSiteName(), 'attr' => array('class' => 'custom-checkbox')))
+            ->add('isAlertNewMessage', CheckboxType::class, array('required' => false, 'label' => $this->get('translator')->trans('получать информацию о новом сообщении'), 'attr' => array('class' => 'custom-checkbox')))
+            ->add('isAlertNewOrder', CheckboxType::class, array('required' => false, 'label' => $this->get('translator')->trans('получать информацию о новой заявке'), 'attr' => array('class' => 'custom-checkbox')))
+            ->add('isAlertChangeOrderStatus', CheckboxType::class, array('required' => false, 'label' => $this->get('translator')->trans('получать информацию о смене статуса заказа'), 'attr' => array('class' => 'custom-checkbox')))
+            ->getForm();
         
         $formMain->handleRequest($request);
         $formPassword->handleRequest($request);
@@ -574,9 +581,34 @@ class AccountController extends Controller
             }
         }
         
+        $formAlert->handleRequest($request);
+        if($formAlert->isValid()){
+            
+            $manager->persist($user);
+            $manager->flush();
+            
+            $this->addFlash(
+                'notice',
+                '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                $this->get('translator')->trans('<strong>Успешно!</strong> Изменения сохранены.') . '</div>'
+            );
+            
+            
+            if($locale->getIsDefault())
+            {
+                return $this->redirectToRoute("account_settings");
+            }
+            else
+            {
+                return $this->redirectToRoute("account_settingsLocale", array("_locale" => $locale->getCode()));
+            }
+        }
+        
         return $this->render('DashboardCommonBundle:User:account/settings.html.twig', array("avatar" => $user->getUserinfo()->getAvatar(),
                                                                                     "formMain" => $formMain->createView(),
                                                                                     "formPassword" => $formPassword->createView(),
+                                                                                    "formAlert" => $formAlert->createView(),
                                                                                     "user" => $user,
                                                                                     "socialAccounts" => $socialAccounts,
                                                                                     "settings" => $settings,
@@ -1094,6 +1126,145 @@ class AccountController extends Controller
                                                                                     "locale" => $locale,
                                                                                     "reviewForm" => $reviewForm->createView(),
                                                                                     "routeName" => $request->attributes->get("_route")));
+    }
+        
+     /**
+     * @Route("/account/userblacklist/{userId}", name="account_userblacklist", defaults={"userId" : 0} )
+     * @Route("/{_locale}/account/userblacklist/{userId}", name="account_userblacklistLocale", defaults={"_locale" : "lv", "userId" : 0}, requirements={"_locale" : "lv|ru"})
+     */
+    public function userBlacklistAction($userId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        if($userId)
+        {
+            $userTo = $manager->getRepository("DashboardCommonBundle:User")->find($userId);
+        
+            if($userTo)
+            {
+                $blacklistItem = $manager->getRepository("DashboardCommonBundle:Blacklist")->findOneBy(array("userAuthor" => $user->getId(), "userTo" => $userId));
+
+                if($blacklistItem)
+                {
+                    $manager->remove($blacklistItem);
+                    $manager->flush();
+
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Veiksmīga!</strong> Lietotājs ir noņemts no jūsu melnā saraksta.') . '</div>'
+                    );
+
+                    if($locale->getIsDefault())
+                    {
+                        return $this->redirectToRoute("account_userblacklist");
+                    }
+                    else
+                    {
+                        return $this->redirectToRoute ("account_userblacklistLocale", array("_locale" => $locale->getCode()));       
+                    }
+                }
+            }
+            else
+            {
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
+                    $this->get('translator')->trans('<strong>Kļūda!</strong> Šajā datubāzē nav šāda lietotāja.') . '</div>'
+                );
+
+                if($locale->getIsDefault())
+                {
+                    return $this->redirectToRoute("account_userblacklist");
+                }
+                else
+                {
+                    return $this->redirectToRoute ("account_userblacklistLocale", array("_locale" => $locale->getCode()));       
+                }
+            }
+        }
+        
+        $blackUsers = array();
+        
+        $blacklist = $manager->getRepository("DashboardCommonBundle:Blacklist")->findBy(array("userAuthor" => $user->getId()));
+        
+        if($blacklist)
+        {
+            foreach($blacklist as $item)
+            {
+                $itemUser = $manager->getRepository("DashboardCommonBundle:User")->find($item->getUserTo());
+                
+                if($itemUser)
+                {
+                    array_push($blackUsers, $itemUser);
+                }
+            }
+        }
+        
+        return $this->render('DashboardCommonBundle:User:account/blacklist.html.twig', array("blacklist" => $blackUsers,
+                                                                                         "user" => $user,
+                                                                                         "settings" => $settings,
+                                                                                         "locale" => $locale,
+                                                                                         "routeName" => $request->attributes->get("_route")));
+    } 
+    
+    /**
+     * @Route("/account/blacklist/delete", name="account_userblacklist_delete")
+     */
+    public function userBlacklistDeleteAction(Request $request){
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        if($request->request->get('blackListUser')){
+            foreach($request->request->get('blackListUser') as $userId){
+                
+                $userTo = $manager->getRepository("DashboardCommonBundle:User")->find($userId);
+        
+                if($userTo)
+                {
+                    $blacklistItem = $manager->getRepository("DashboardCommonBundle:Blacklist")->findOneBy(array("userAuthor" => $user->getId(), "userTo" => $userId));
+
+                    if($blacklistItem)
+                    {
+                        $manager->remove($blacklistItem);
+                        $manager->flush();
+                    }
+                }
+            }
+        }
+        
+        $this->addFlash(
+            'notice',
+            '<div class="alert alert-success alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+            $this->get('translator')->trans('<strong>Успешно!</strong> Выбранные пользователи удалены.') . '</div>'
+        );
+        
+        return new Response("OK");
+    }
+    
+     /**
+     * @Route("/account/bills", name="account_bills")
+     * @Route("/{_locale}/account/bills", name="account_billsLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     */
+    public function accountBillsAction(Request $request){
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        return $this->render('DashboardCommonBundle:User:account/bills.html.twig', array("bills" => 0,
+                                                                                        "user" => $user,
+                                                                                        "settings" => $settings,
+                                                                                        "locale" => $locale,
+                                                                                        "routeName" => $request->attributes->get("_route")));
     }
 }
 

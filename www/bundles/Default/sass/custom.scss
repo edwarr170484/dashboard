@@ -835,6 +835,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountMessageItemUserAvatar{padding-right: 2rem;}
 .accountMessageItemUserAvatar img{width: 50px;height: 50px;@include border-radius(50%);}
 .accountMessageItemUserName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.accountMessageItemUserName a{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
 .accountMessageItemTitle{width: 40%;@include flexBox(row, space-between, center);}
 .accountMessageItemTitleName{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountMessageItemTitleDate{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
@@ -872,7 +873,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .send-message-file input{position:absolute;top:0;left:0;width: 100%;height: 100%;@include opacity(0);}
 .accountConversationMessageImage{padding-top: 1rem;max-width:30rem;}
 .accountConversationMessageImage img{max-width:30rem;width: 100%;}
-.accountConversationMessagesWindow{max-height: 40rem;overflow-y:scroll;}
+.accountConversationMessagesWindow{max-height: 40rem;margin-bottom: 3rem;}
 .account-advert-block-content{position: relative;}
 .accountWriteToSupport{position: absolute;top: 0;right: 0;@include flexBox(row,flex-start,center);}
 .accountWriteToSupport a{@include fontView("GothamProRegular",$orange-color,1.6rem,2.2rem);text-decoration: underline;}
@@ -930,9 +931,29 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountReviewRating{padding-bottom: 1.6rem;}
 .accountOrderInfo.order .accountOrderInfoProductStatus{text-align: center;}
 .accountOrders{padding-bottom: 5rem;}
-.alert{font-family:"GothamProRegular", sans-serif;font-weight:300;font-size: 1.4rem;color:$black-text;padding:7px;line-height:100%;padding-left:30px;position:relative;}
-.alert .close-alert{display:block;position:absolute;left:2px;top:8px;color:#fac3c7;font-weight:bold;background:none;border:none;font-size:2.4rem;}
-body.userAccount .col-md-10{padding-left: 4rem;}
+.accountBlacklistUser .accountMessageItemUser{width: 80%;}
+.accountBlacklistUser{background: #fff;padding-left: 3rem;padding-right: 2.5rem;padding-top: 1rem;padding-bottom: 1rem;border-bottom: 1px solid #DFE1E5;}
+.accountBlacklistUserDelete a{background: none;border:none;}
+.accountBlacklistUserDelete a:hover svg path,.accountBlacklistUserDelete a:focus svg path{stroke:$yellow-color;}
+.accountBlacklistUser{@include flexBox(row,space-between,center);}
+.accountBlacklistUser:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
+.accountBlockHeaderTool button{border:none;background: #fff;@include border-radius(5px);@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));@include fontView("GothamProRegular",#EB5757,1.4rem,2.4rem);display: block;padding: 0.8rem 1.1rem;widows: 17rem;text-align:center;text-decoration:underline;}
+.accountBlockHeaderTool button:hover{text-decoration: none;}
+.userAccount .col-lg-10{padding-left: 4rem;}
+.accountBills{background: #fff;}
+.accountBill{@include flexBox(row,space-between,stretch);border-bottom: 1px solid #DFE1E5;padding:1.4rem 3rem;}
+.accountBill:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
+.accountBillDownload{width: 20%;@include flexBox(row,flex-start,center);}
+.accountBillInfo{width: 80%;@include flexBox(row,space-between,center);}
+.accountBillInfoItem{width: 33.33333%;}
+.accountBillInfoItem.date{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.accountBillInfoItem.title{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.accountBillInfoItem.price{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.accountBillDownload a{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
+.accountBillDownload svg{margin-right: 1.5rem;}
+
+
+
 
 
 
@@ -1220,7 +1241,8 @@ a.register-back{color:#aeaeae;text-decoration:none;
 .register-block-close{display:block;position:absolute;right:30px;top:24px;font-size:28px;width:19px;height:20px;
 background:url('../img/cross.png') 0 0 no-repeat;}
 
-
+.alert{font-family:"Roboto", sans-serif;font-weight:300;font-size: 1.4rem;color:#666666;padding:7px;line-height:100%;padding-left:30px;position:relative;}
+.alert .close-alert{display:block;position:absolute;left:2px;top:8px;color:#fac3c7;font-weight:bold;background:none;border:none;font-size:2.4rem;}
 .register-form-checkbox-block:after{content:"";display:table;clear:both;}
 .register-form-forms input.hidden-input{display:none;}
 .register-form-checkbox-block{color:#6d6d6d;font-family:"Roboto", sans-serif;font-size:1.6rem;line-height:100%;margin-bottom:12px;font-weight:300;}

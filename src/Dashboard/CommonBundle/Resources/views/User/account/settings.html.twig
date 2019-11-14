@@ -70,7 +70,7 @@
     </div>
     <div class="row content-row">
         {{ render(controller('DashboardCommonBundle:Account:getSidebar', {'routeName' : routeName})) }}
-        <div class="col-ld-10 col-md-10">
+        <div class="col-lg-10 col-md-10">
             <div class="accountSettingsTabs">
                 <ul class="nav nav-tabs settingsTabs" id="myTab" role="tablist">
                     <li class="nav-item active">
@@ -217,6 +217,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="alertSettings" role="tabpanel">
+                        {{ form_start(formAlert, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
                         <div class="accountBlockHeader subheader">
                             <div class="account-block-header">
                                 <h1><b>{% trans %}Настройка уведомлений{% endtrans %}</b></h1></div></div>
@@ -227,32 +228,32 @@
                             <div class="formParemetersItem">
                                 <div class="formParameter" style="margin-right: 0;">
                                     <div class="formParameterField">
-                                        <input type="checkbox" id="" name="" class="custom-checkbox" value="1">
-                                        <label>{% trans %}я соглашаюсь получать информационную рассылку от Auto28.es{% endtrans %}</label>
+                                        {{ form_widget(formAlert.isAlertBroadcast) }}
+                                        {{ form_label(formAlert.isAlertBroadcast) }}
                                     </div>
                                 </div>
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter" style="margin-right: 0;">
                                     <div class="formParameterField">
-                                        <input type="checkbox" id="" name="" class="custom-checkbox" value="1">
-                                        <label>{% trans %}получать информацию о новом сообщении{% endtrans %}</label>
+                                        {{ form_widget(formAlert.isAlertNewMessage) }}
+                                        {{ form_label(formAlert.isAlertNewMessage) }}
                                     </div>
                                 </div>
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter" style="margin-right: 0;">
                                     <div class="formParameterField">
-                                        <input type="checkbox" id="" name="" class="custom-checkbox" value="1">
-                                        <label>{% trans %}получать информацию о новой заявке{% endtrans %}</label>
+                                        {{ form_widget(formAlert.isAlertNewOrder) }}
+                                        {{ form_label(formAlert.isAlertNewOrder) }}
                                     </div>
                                 </div>
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter" style="margin-right: 0;">
                                     <div class="formParameterField">
-                                        <input type="checkbox" id="" name="" class="custom-checkbox" value="1">
-                                        <label>{% trans %}получать информацию о смене статуса заказа{% endtrans %}</label>
+                                        {{ form_widget(formAlert.isAlertChangeOrderStatus) }}
+                                        {{ form_label(formAlert.isAlertChangeOrderStatus) }}
                                     </div>
                                 </div>
                             </div>
@@ -264,6 +265,7 @@
                                 </div>
                             </div>
                         </div>
+                        {{ form_end(formAlert)}}
                     </div>
                 </div>
             </div>

@@ -1,3 +1,7 @@
+$(document).ready(function(){
+    $(".accountConversationMessagesWindow").mCustomScrollbar({scrollbarPosition: "outline"});
+});
+
 function showHideAllCategories(element){
     var newText = element.data('text');
     var text = element.html();
@@ -104,6 +108,23 @@ function changeConverSations(){
         url: '/account/changeconversation',
         type:'post',
         data: $('.accountMessages input[type="checkbox"]:checked'),
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function()
+        {
+            window.location.reload();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+                
+        }
+    });
+}
+
+function deleteFromBlacklist(){
+     $.ajax({
+        url: '/account/blacklist/delete',
+        type:'post',
+        data: $('#blackListUsers input[type="checkbox"]:checked'),
         dataType: 'html',
         beforeSend: function(){},
         success: function()

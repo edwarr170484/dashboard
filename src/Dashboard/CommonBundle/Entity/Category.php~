@@ -140,6 +140,8 @@ class Category
      */
     private $generations;
     
+    private $allProductsNumber;
+    
     /**
      * Constructor
      */
@@ -784,5 +786,15 @@ class Category
     public function getImage()
     {
         return $this->image;
+    }
+    
+    public function getAllProductsNumber(){
+        return $this->allProductsNumber;
+    }
+    
+    public function setAllProductsNumber($allProductsNumber){
+        $this->allProductsNumber = $allProductsNumber;
+        
+        return $this;
     }
 }

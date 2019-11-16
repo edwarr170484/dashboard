@@ -16,7 +16,7 @@
                     {% endif %}
                 </div>
                 <div class="footerSiteDescription">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, totam, porro dolorum vitae ad quasi veniam iusto sed tempora cumque perferendis aspernatur. Laboriosam, animi, inventore, quia numquam optio libero enim ipsa in dolores quis iusto atque qui.
+                    {% trans %}Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, totam, porro dolorum vitae ad quasi veniam iusto sed tempora cumque perferendis aspernatur. Laboriosam, animi, inventore, quia numquam optio libero enim ipsa in dolores quis iusto atque qui{% endtrans %}.
                 </div>
             </div>    
             <div class="col-md-9">
@@ -108,7 +108,7 @@
                            
 	<div class="modal fade" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
 	  <div class="modal-dialog" role="document">
-		{{ form_start(regionForm,{'attr' : {'class' : 'form-horizontal'}}) }}
+		{{ form_start(regionForm, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal userPlaceForm'}}) }}
                     <input name="selectFilterRegionCity" type="hidden" value="1" />
 			<div class="modal-content">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -127,9 +127,9 @@
                                     </div>
                                     <script>
                                         $('#siteRegion').change(function() {
-                                            var $form = $(".siteRegionSelect");
+                                            var $form = $(".userPlaceForm");
                                             var data = {};
-                                            data[$('#siteRegion').attr('name')] = $('#siteRegion').val();
+                                            data[$(this).attr('name')] = $(this).val();
                                             $.ajax({
                                                 url : $form.attr('action'),
                                                 type: $form.attr('method'),

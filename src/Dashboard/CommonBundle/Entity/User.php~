@@ -167,6 +167,11 @@ class User implements AdvancedUserInterface, \Serializable
     private $conversationTwo;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="user")
+     */
+    private $bills;
+    
+    /**
      * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Invite", mappedBy="user")
      */
     private $invite;
@@ -973,5 +978,130 @@ class User implements AdvancedUserInterface, \Serializable
     public function getIsHideEmail()
     {
         return $this->isHideEmail;
+    }
+
+    /**
+     * Set isAlertBroadcast
+     *
+     * @param boolean $isAlertBroadcast
+     * @return User
+     */
+    public function setIsAlertBroadcast($isAlertBroadcast)
+    {
+        $this->isAlertBroadcast = $isAlertBroadcast;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAlertBroadcast
+     *
+     * @return boolean 
+     */
+    public function getIsAlertBroadcast()
+    {
+        return $this->isAlertBroadcast;
+    }
+
+    /**
+     * Set isAlertNewMessage
+     *
+     * @param boolean $isAlertNewMessage
+     * @return User
+     */
+    public function setIsAlertNewMessage($isAlertNewMessage)
+    {
+        $this->isAlertNewMessage = $isAlertNewMessage;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAlertNewMessage
+     *
+     * @return boolean 
+     */
+    public function getIsAlertNewMessage()
+    {
+        return $this->isAlertNewMessage;
+    }
+
+    /**
+     * Set isAlertNewOrder
+     *
+     * @param boolean $isAlertNewOrder
+     * @return User
+     */
+    public function setIsAlertNewOrder($isAlertNewOrder)
+    {
+        $this->isAlertNewOrder = $isAlertNewOrder;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAlertNewOrder
+     *
+     * @return boolean 
+     */
+    public function getIsAlertNewOrder()
+    {
+        return $this->isAlertNewOrder;
+    }
+
+    /**
+     * Set isAlertChangeOrderStatus
+     *
+     * @param boolean $isAlertChangeOrderStatus
+     * @return User
+     */
+    public function setIsAlertChangeOrderStatus($isAlertChangeOrderStatus)
+    {
+        $this->isAlertChangeOrderStatus = $isAlertChangeOrderStatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAlertChangeOrderStatus
+     *
+     * @return boolean 
+     */
+    public function getIsAlertChangeOrderStatus()
+    {
+        return $this->isAlertChangeOrderStatus;
+    }
+
+    /**
+     * Add bills
+     *
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
+     * @return User
+     */
+    public function addBill(\Dashboard\CommonBundle\Entity\Bill $bills)
+    {
+        $this->bills[] = $bills;
+    
+        return $this;
+    }
+
+    /**
+     * Remove bills
+     *
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
+     */
+    public function removeBill(\Dashboard\CommonBundle\Entity\Bill $bills)
+    {
+        $this->bills->removeElement($bills);
+    }
+
+    /**
+     * Get bills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBills()
+    {
+        return $this->bills;
     }
 }

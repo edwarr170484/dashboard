@@ -821,6 +821,7 @@ class DefaultController extends Controller
         
         $statusForm = $this->get('form.factory')->createNamedBuilder('status', 'form', $status)
                 ->add('name', TextType::class, array('required' => true, 'label' => 'Статус заказа', 'attr' => array('class' => 'form-control','placeholder' => 'Статус заказа')))
+                ->add('color', TextType::class, array('required' => false, 'label' => 'Цвет для статуса', 'attr' => array('class' => 'form-control','placeholder' => 'Цвет для статуса')))
                 ->add('translations', 'collection', array('type' => new TranslationType($manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
                 ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success')))->getForm();
         
@@ -1324,6 +1325,13 @@ class DefaultController extends Controller
             ->add('isModerate', CheckboxType::class, array('required' => false, 'label' => 'Включить модерацию объявлений'))
             ->add('isShowCaptcha', CheckboxType::class, array('required' => false, 'label' => 'Включить Google Recaptcha'))
             ->add('isShowType', CheckboxType::class, array('required' => false, 'label' => 'Показывать блок выбора типа при добавлении или редактировании объявления'))
+            ->add('mainPageDefaultCategory', 'entity', array('class' => 'DashboardCommonBundle:Category',
+                            'choice_label' => 'title',
+                            'empty_data' => null,
+                            'required' => false, 
+                            'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->where('c.parent IS NULL');},
+                            'label' => 'Категория для главной по умолчанию:', 'attr' => array('class' => 'form-control','placeholder' => 'Категория для главной по умолчанию:')))  
+            ->add('userMessagesNumber', TextType::class, array('required' => false, 'label' => 'Количество сообщений в диалоге','attr' => array('class' => 'form-control')))
             ->add('categoryProductNumber', TextType::class, array('required' => false, 'label' => 'Количество объявлений на странице категории', 'attr' => array('class' => 'form-control','placeholder' => 'Количество объявлений на странице категории')))
             ->add('categoryPanelItemsNumber', TextType::class, array('required' => false, 'label' => 'Количество категорий до кнопки "Показать все марки"', 'attr' => array('class' => 'form-control','placeholder' => 'Количество категорий до кнопки "Показать все марки"')))
             ->add('mainpageAdvertsNumber', TextType::class, array('required' => false, 'label' => 'Количество объявлений на странице категории', 'attr' => array('class' => 'form-control','placeholder' => 'Количество объявлений на главной странице')))

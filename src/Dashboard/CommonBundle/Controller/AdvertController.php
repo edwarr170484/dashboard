@@ -64,11 +64,34 @@ class AdvertController extends Controller
         $advertInfo = ($session->get('advertInfo')) ? $serializer->deserialize($session->get('advertInfo'), 'Dashboard\CommonBundle\Model\AdvertInfo', 'json') : new AdvertInfo();
         $advertImages = ($session->get('advertImages')) ? $serializer->deserialize($session->get('advertImages'), 'Dashboard\CommonBundle\Model\AdvertImage[]', 'json') : array();
         $advertFilters = ($session->get('advertFilters')) ? $serializer->deserialize($session->get('advertFilters'), 'Dashboard\CommonBundle\Model\AdvertFilter[]', 'json') : array();
-        
+        dump($advertInfo);
         if($step){
             switch($step){
                 case "step11":
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
+                    if($category->getParent()->getId() != $advertInfo->getBaseCategory())
+                    {
+                        if(count($advertImages) > 0){
+                            $tempAdvertImages = new ArrayCollection($advertImages);
+                            foreach($advertImages as $image){
+                                if($image->getName()){
+                                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $image->getName())){
+                                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $image->getName());
+                                    }
+                                }
+                                $tempAdvertImages->removeElement($image);
+                            }
+                        }
+                        $advertInfo = new AdvertInfo();
+                        $advertImages = array();
+                        $advertFilters = array();
+                        $advertData = $serializer->serialize($advertInfo, 'json');
+                        $session->set('advertInfo', $advertData);
+                        $advertData = $serializer->serialize($advertImages, 'json');
+                        $session->set('advertImages', $advertData);
+                        $advertData = $serializer->serialize($advertFilters, 'json');
+                        $session->set('advertFilters', $advertData);
+                    }
                     if($category){
                         $advertInfo->setBaseCategory($category->getParent()->getId());
                         $advertData = $serializer->serialize($advertInfo, 'json');
@@ -86,8 +109,35 @@ class AdvertController extends Controller
                     $modifications = new ArrayCollection();
                     
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($data);
+                    $baseCategory = $advertInfo->getBaseCategory();
+                    
+                    if($category->getId() != $advertInfo->getCategory())
+                    {
+                        if(count($advertImages) > 0){
+                            $tempAdvertImages = new ArrayCollection($advertImages);
+                            foreach($advertImages as $image){
+                                if($image->getName()){
+                                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $image->getName())){
+                                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $image->getName());
+                                    }
+                                }
+                                $tempAdvertImages->removeElement($image);
+                            }
+                        }
+                        $advertInfo = new AdvertInfo();
+                        $advertImages = array();
+                        $advertFilters = array();
+                        $advertData = $serializer->serialize($advertInfo, 'json');
+                        $session->set('advertInfo', $advertData);
+                        $advertData = $serializer->serialize($advertImages, 'json');
+                        $session->set('advertImages', $advertData);
+                        $advertData = $serializer->serialize($advertFilters, 'json');
+                        $session->set('advertFilters', $advertData);
+                    }
+                    
                     if($category){
                         $advertInfo->setCategory($category->getId());
+                        $advertInfo->setBaseCategory($baseCategory);
                         $advertData = $serializer->serialize($advertInfo, 'json');
                         $session->set('advertInfo', $advertData);
                     }
@@ -207,6 +257,8 @@ class AdvertController extends Controller
                     $advertInfo->setGearType(0);
                     $advertInfo->setTransmissionType(0);
                     $advertInfo->setModification(0);
+                    $advertInfo->setRightWheel(0);
+                    $advertInfo->setIsGas(0);
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
@@ -240,6 +292,7 @@ class AdvertController extends Controller
                     $advertInfo->setGearType(0);
                     $advertInfo->setTransmissionType(0);
                     $advertInfo->setModification(0);
+                    $advertInfo->setIsGas(0);
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
@@ -258,6 +311,7 @@ class AdvertController extends Controller
                     $advertInfo->setGearType(0);
                     $advertInfo->setTransmissionType(0);
                     $advertInfo->setModification(0);
+                    $advertInfo->setIsGas(0);
                     
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
@@ -373,6 +427,24 @@ class AdvertController extends Controller
                     return $this->render('DashboardCommonBundle:Product:add/modifications.html.twig', array("modifications" => $modifications, "locale" => $locale, "advertInfo" => $advertInfo));
                     
                 break;    
+                
+                case 'setWheel':
+                    $val = ($data == 'true') ? true : false;
+                    $advertInfo->setRightWheel($val);
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    return new Response("OK");
+                break;
+            
+                case 'setGas':
+                    $val = ($data == 'true') ? true : false;
+                    $advertInfo->setIsGas($val);
+                    $advertData = $serializer->serialize($advertInfo, 'json');
+                    $session->set('advertInfo', $advertData);
+                    
+                    return new Response("OK");
+                break;
                 
                 case 'setmodification':
                     $advertInfo->setModification($data);

@@ -43,7 +43,7 @@
                                         {% if sessionRegion %}
                                             {{ sessionRegion.name }}
                                         {% else %}
-                                            {% trans %}Вся Испания{% endtrans %}
+                                            {% trans %}Испания{% endtrans %}
                                         {% endif %}
                                     {% endif %}
                                 </a>            
@@ -184,60 +184,104 @@
             </div>
             <div class="col-lg-6 col-md-6 siteMainMenu hidden-sm hidden-xs">
                 <ul class="list-unstyled">
-                    <li class="active submenu">
-                        <a href="">Легковые<div class="shadowBlock"></div></a>
-                        <div class="hover-border"></div>
-                        <div class="siteMainSubmenu">
-                            <ul class="list-unstyled">
-                                <li><a href="">С&nbsp;пробегом</a></li>
-                                <li><a href="">Новые</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="submenu">
-                        <a href="">Мотоциклы<div class="shadowBlock"></div></a>
-                        <div class="hover-border"></div>
-                        <div class="siteMainSubmenu">
-                            <ul class="list-unstyled">
-                                <li><a href="">Мотоциклы</a></li>
-                                <li><a href="">Скутеры</a></li>
-                                <li><a href="">Мотовездеходы</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li><a href="">Автодома</a><div class="hover-border"></div></li>
-                    <li class="submenu">
-                        <a href="">Коммерческие
-                            <div class="shadowBlock"></div>
-                        </a>
-                        <div class="hover-border"></div>
-                        <div class="siteMainSubmenu">
-                            <ul class="list-unstyled">
-                                <li><a href="">Автобусы</a></li>
-                                <li><a href="">Грузовики</a></li>
-                                <li><a href="">Тягачи</a></li>
-                                <li><a href="">Прицепы&nbsp;и&nbsp;полуприцепы</a></li>
-                                <li><a href="">Сельскохозяйственная</a></li>
-                                <li><a href="">Строительная&nbsp;и&nbsp;дорожная</a></li>
-                            </ul>
-                            <ul class="list-unstyled">
-                                <li><a href="">Погрузчики</a></li>
-                                <li><a href="">Автокраны</a></li>
-                                <li><a href="">Экскаваторы</a></li>
-                                <li><a href="">Бульдозеры</a></li>
-                                <li><a href="">Смопогрузчики</a></li>
-                                <li><a href="">Коммунальная</a></li>
-                            </ul>
-                        </div>
-                    </li>
+                    {% if categories %}
+                        {% for category in categories %}
+                            {% if category.id == 27 %}
+                                <li class="submenu">
+                                    <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.name,'_locale' : locale.code}) }}{% endif %}">
+                                        {% if category.translations | length > 0 %}
+                                            {% for translation in category.translations %}
+                                                {% if translation.locale.id == locale.id %}
+                                                    {{ translation.value }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}        
+                                            {{ category.title}}
+                                        {% endif %}
+                                        <div class="shadowBlock"></div>
+                                    </a>
+                                    <div class="hover-border"></div>
+                                    <div class="siteMainSubmenu">
+                                        <ul class="list-unstyled">
+                                            <li><a href="">С&nbsp;пробегом</a></li>
+                                            <li><a href="">Новые</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li class="{% if category.children | length > 0 %}submenu{% endif %}">
+                                    <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.name,'_locale' : locale.code}) }}{% endif %}">
+                                        {% if category.translations | length > 0 %}
+                                            {% for translation in category.translations %}
+                                                {% if translation.locale.id == locale.id %}
+                                                    {{ translation.value }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}        
+                                            {{ category.title}}
+                                        {% endif %}
+                                        <div class="shadowBlock"></div>
+                                    </a>
+                                    <div class="hover-border"></div>
+                                    <div class="siteMainSubmenu">
+                                        {% if category.children | length > 0 %}
+                                            {% if category.children | length > 6 %}
+                                                {% set childsNum = category.children | length %}
+                                                {% set columnsNum =  category.children | length / 6 %}
+                                                {% set start = 0 %}
+                                                {% set end = 5 %}
+                                                {% for column in 1..columnsNum %}
+                                                    <ul class="list-unstyled">
+                                                        {% for i in start..end %}
+                                                            <li>
+                                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.children[i].name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.children[i].name,'_locale' : locale.code}) }}{% endif %}">
+                                                                    {% if category.children[i].translations | length > 0 %}
+                                                                        {% for translation in category.children[i].translations %}
+                                                                            {% if translation.locale.id == locale.id %}
+                                                                                {{ translation.value }}
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% else %}        
+                                                                        {{ category.children[i].title}}
+                                                                    {% endif %}
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                        {% set start = start + 6 %}
+                                                        {% set end = end + 6 %}
+                                                    </ul>
+                                                {% endfor %}
+                                            {% else %}
+                                                <ul class="list-unstyled">
+                                                    {% for child in category.children %}
+                                                        <li>
+                                                            <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : child.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : child.name,'_locale' : locale.code}) }}{% endif %}">
+                                                                    {% if child.translations | length > 0 %}
+                                                                        {% for translation in child.translations %}
+                                                                            {% if translation.locale.id == locale.id %}
+                                                                                {{ translation.value }}
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% else %}        
+                                                                        {{ child.title}}
+                                                                    {% endif %}
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                     <li class="submenu">
                         <a href="">Услуги<div class="shadowBlock"></div></a>
                         <div class="hover-border"></div>
                         <div class="siteMainSubmenu">
                             <ul class="list-unstyled">
                                 <li><a href="">Дилеры</a></li>
-                                <li><a href="">Страхование</a></li>
-                                <li><a href="">Кредитование</a></li>
                                 <li><a href="">Сервисные&nbsp;центры</a></li>
                             </ul>
                         </div>
@@ -270,64 +314,76 @@
                                 <path d="M26 0.173828H0V2.18105H26V0.173828Z" fill="#EB840B"/>
                                 </svg>
                             </button>
+                            {% if categories %}
+                                {% for category in categories %}
+                                    {% if category.id == 27 %}
+                                        <div class="siteMenuGamburgerItem">
+                                            <div class="siteMenuGamburgerHeader">
+                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.name,'_locale' : locale.code}) }}{% endif %}">
+                                                    {% if category.translations | length > 0 %}
+                                                        {% for translation in category.translations %}
+                                                            {% if translation.locale.id == locale.id %}
+                                                                {{ translation.value }}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}        
+                                                        {{ category.title}}
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                            <ul class="list-unstyled">
+                                                <li><a href="">С пробегом</a></li>
+                                                <li><a href="">Новые</a></li>
+                                                <li><a href="">Дилеры</a></li>
+                                            </ul>
+                                        </div>
+                                    {% else %}
+                                        <div class="siteMenuGamburgerItem">
+                                            <div class="siteMenuGamburgerHeader">
+                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.name,'_locale' : locale.code}) }}{% endif %}">
+                                                    {% if category.translations | length > 0 %}
+                                                        {% for translation in category.translations %}
+                                                            {% if translation.locale.id == locale.id %}
+                                                                {{ translation.value }}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}        
+                                                        {{ category.title}}
+                                                    {% endif %}
+                                                </a>
+                                            </div>
+                                            {% if category.children | length > 0 %}
+                                                <ul class="list-unstyled">
+                                                    {% for child in category.children %}
+                                                        <li>
+                                                            <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : child.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : child.name,'_locale' : locale.code}) }}{% endif %}">
+                                                                    {% if child.translations | length > 0 %}
+                                                                        {% for translation in child.translations %}
+                                                                            {% if translation.locale.id == locale.id %}
+                                                                                {{ translation.value }}
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% else %}        
+                                                                        {{ child.title}}
+                                                                    {% endif %}
+                                                            </a>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                             <div class="siteMenuGamburgerItem">
-                                <div class="siteMenuGamburgerHeader">{% trans %}Легковые{% endtrans %}</div>
+                                <div class="siteMenuGamburgerHeader">{% trans %}Информация{% endtrans %}</div>
                                 <ul class="list-unstyled">
-                                    <li><a href="">С пробегом</a></li>
-                                    <li><a href="">Новые</a></li>
-                                    <li><a href="">Дилеры</a></li>
-                                </ul>
-                            </div>
-                            <div class="siteMenuGamburgerItem">
-                                <div class="siteMenuGamburgerHeader">{% trans %}Мотоциклы{% endtrans %}</div>
-                                <ul class="list-unstyled">
-                                    <li><a href="">Мотоциклы</a></li>
-                                    <li><a href="">Скутеры</a></li>
-                                    <li><a href="">Мотовездеходы</a></li>
-                                    <li><a href="">Снегоходы</a></li>
-                                </ul>
-                            </div>
-                            <div class="siteMenuGamburgerItem">
-                                <div class="siteMenuGamburgerHeader">{% trans %}Автодома{% endtrans %}</div>
-                                <ul class="list-unstyled">
-                                    <li><a href="">Автосалоны-пикапы</a></li>
-                                    <li><a href="">Каюты</a></li>
-                                    <li><a href="">Настурции</a></li>
-                                    <li><a href="">Караваны</a></li>
-                                    <li><a href="">Фургоны</a></li>
-                                    <li><a href="">Integral</a></li>
-                                    <li><a href="">Полуинтеграл</a></li>
-                                    <li><a href="">Другие автодома</a></li>
-                                </ul>        
-                            </div>
-                            <div class="siteMenuGamburgerItem">
-                                <div class="siteMenuGamburgerHeader">{% trans %}Коммерческие{% endtrans %}</div>
-                                <ul class="list-unstyled">
-                                    <li><a href="">Автобусы</a></li>
-                                    <li><a href="">Грузовики</a></li>
-                                    <li><a href="">Тягачи</a></li>
-                                    <li><a href="">Прицепы и полуприцепы</a></li>
-                                    <li><a href="">Сельскохозяйственная</a></li>
-                                    <li><a href="">Строительная и дорожная</a></li>
-                                    <li><a href="">Погрузчики</a></li>
-                                    <li><a href="">Автокраны</a></li>
-                                    <li><a href="">Эскаваторы</a></li>
-                                    <li><a href="">Бульдозеры</a></li>
-                                    <li><a href="">Самопогрузчики</a></li>
-                                    <li><a href="">Коммунальная</a></li>
+                                    <li><a href="">Дилерам</a></li>
+                                    <li><a href="">Автосервисам</a></li>
+                                    <li style="padding-top:3rem;"><a href="" style="font-family:'GothamProBold'">Обратная связь</a></li>
+                                    <li><a href="" style="font-family:'GothamProBold'">Разместить рекламу</a></li>
                                 </ul>  
                             </div>
-                                <div class="siteMenuGamburgerItem">
-                                    <div class="siteMenuGamburgerHeader">{% trans %}Информация{% endtrans %}</div>
-                                    <ul class="list-unstyled">
-                                        <li><a href="">Дилерам</a></li>
-                                        <li><a href="">Автосервисам</a></li>
-                                        <li><a href="">Страховым компаниям</a></li>
-                                        <li><a href="">Кредитование</a></li>
-                                        <li style="padding-top:3rem;"><a href="" style="font-family:'GothamProBold'">Обратная связь</a></li>
-                                        <li><a href="" style="font-family:'GothamProBold'">Разместить рекламу</a></li>
-                                    </ul>  
-                                </div>
                         </div>
         </div>
         {% for flashMessage in app.session.flashbag.get('notice_header') %}

@@ -40,6 +40,13 @@ class ServicePrice
      */
     private $service;
     
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="services")
+     * 
+     */
+    private $bills;
+    
 
     /**
      * Get id
@@ -141,5 +148,45 @@ class ServicePrice
     public function getService()
     {
         return $this->service;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->bills = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add bills
+     *
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
+     * @return ServicePrice
+     */
+    public function addBill(\Dashboard\CommonBundle\Entity\Bill $bills)
+    {
+        $this->bills[] = $bills;
+    
+        return $this;
+    }
+
+    /**
+     * Remove bills
+     *
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
+     */
+    public function removeBill(\Dashboard\CommonBundle\Entity\Bill $bills)
+    {
+        $this->bills->removeElement($bills);
+    }
+
+    /**
+     * Get bills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBills()
+    {
+        return $this->bills;
     }
 }

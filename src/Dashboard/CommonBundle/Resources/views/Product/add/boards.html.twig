@@ -1,4 +1,4 @@
-{% if boards %}
+{% if boards | length > 0 %}
     <td>
         <div class="advertFiltersItemName">{% trans %}Тип кузова{% endtrans %}</div>
     </td>
@@ -8,7 +8,7 @@
                 {% for board in boards %}
                     <li onclick="radioSetActive($(this))"><a href="javascript:voit(0)" onclick="getGenerationsByBoard({{ board.board.id }},'{{ locale.code }}')" {% if board.board.id == advertInfo.board %}class="active"{% endif %}>{{ board.board.value }}</a></li>
                 {% endfor %}
-                    <li class="static-filters"><div class="filter"><input name="rightWeel" type="checkbox" value="1" class="rightWeel-checkbox" /> {% trans %}Правый руль{% endtrans %}</div></li>
+                    <li class="static-filters"><div class="filter"><input onclick="setWheelValue($(this),'{{ locale.code }}')" name="rightWeel" type="checkbox" value="1" class="rightWeel-checkbox" {% if advertInfo.rightWheel %}checked="checked"{% endif %} /> {% trans %}Правый руль{% endtrans %}</div></li>
             </ul>
             <script>$(".rightWeel-checkbox").customCheckbox();</script>
         </div>

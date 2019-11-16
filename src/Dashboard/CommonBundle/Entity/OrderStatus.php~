@@ -22,6 +22,16 @@ class OrderStatus
      * @ORM\Column(type="string", length=255)
      */
     private $name;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":0})
+     */
+    private $color;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\ProductOrder", mappedBy="status")
+     */
+    private $orders;
 
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="orderStatus", cascade={"persist"})
@@ -99,5 +109,61 @@ class OrderStatus
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Add orders
+     *
+     * @param \Dashboard\CommonBundle\Entity\ProductOrder $orders
+     * @return OrderStatus
+     */
+    public function addOrder(\Dashboard\CommonBundle\Entity\ProductOrder $orders)
+    {
+        $this->orders[] = $orders;
+    
+        return $this;
+    }
+
+    /**
+     * Remove orders
+     *
+     * @param \Dashboard\CommonBundle\Entity\ProductOrder $orders
+     */
+    public function removeOrder(\Dashboard\CommonBundle\Entity\ProductOrder $orders)
+    {
+        $this->orders->removeElement($orders);
+    }
+
+    /**
+     * Get orders
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * Set color
+     *
+     * @param string $color
+     * @return OrderStatus
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+    
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return string 
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 }

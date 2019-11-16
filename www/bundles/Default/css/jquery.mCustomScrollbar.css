@@ -94,7 +94,7 @@ y-axis
 	.mCSB_scrollTools a + .mCSB_draggerContainer{ margin: 20px 0; }
 
 	.mCSB_scrollTools .mCSB_draggerRail{
-		width: 10px;
+		width: 12px;
 		height: 100%;
 		margin: 0 auto;
 		-webkit-border-radius: 16px; -moz-border-radius: 16px; border-radius: 16px;
@@ -109,7 +109,7 @@ y-axis
 
 	.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{ /* the dragger element */
 		position: relative;
-		width: 10px;
+		width: 6px;
 		height: 100%;
 		margin: 0 auto;
 		-webkit-border-radius: 16px; -moz-border-radius: 16px; border-radius: 16px;

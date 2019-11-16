@@ -66,11 +66,11 @@ body{font-size:10px;background:$white-color;}
 .siteMenuGamburgerMenu:after{content:"";display:table;clear:both;}
 .siteMenuGamburgerItem{width:200px;@include break-inside(avoid);}
 .siteMenuGamburgerHeader{@include fontView("GothamProBold", $black-text, 1.6rem, 2.2rem);padding-top: 2rem;}
+.siteMenuGamburgerHeader a{@include fontView("GothamProBold", $black-text, 1.6rem, 2.2rem);@include transition($aTransition);}
 .siteMenuGamburgerItem ul{margin-right: 2rem;margin-bottom: 1rem;@include break-inside(avoid);}
 .siteMenuGamburgerItem ul li{display: block;padding-top: 1.4rem;}
 .siteMenuGamburgerItem ul li a{@include fontView("GothamProRegular", $black-text, 1.4rem, 1.8rem);@include transition($aTransition);}
-.siteMenuGamburgerItem ul li a:hover,.siteMenuGamburgerItem ul li a:focus{color:$yellow-color;}
-
+.siteMenuGamburgerItem ul li a:hover,.siteMenuGamburgerItem ul li a:focus,.siteMenuGamburgerHeader a:hover,.siteMenuGamburgerHeader a:focus{color:$yellow-color;}
 .siteMenuMobileLogin>a:hover svg path,.siteMenuMobileLogin>a:focus svg path{fill:$black-text;}
 .header-functions
 {
@@ -582,7 +582,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .mainPageFiltersTabs ul li a.block svg{margin: 0;}
 .mainPageFiltersTabs ul li a.block span{display: block;@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);margin-top: 1rem;text-transform: none;border-bottom:2px solid transparent;padding-bottom: 2px;}
 .mainPageFiltersTabs ul li.active a svg path{fill:$black-text;}
-.mainPageFiltersTabs ul li.active a span{border-bottom:2px solid $yellow-color;}
+.mainPageFiltersTabs.category-filters ul li.active a span{border-bottom:2px solid $yellow-color;}
 .addAdvertStepsBlock{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(9px);width: 100%;}
 .addAdvertStepsBlockHeader{@include fontView("GothamProBlack",$black-text,3.2rem,3.6rem);background: $yellow-color;padding: 3rem;padding-bottom: 2.6rem;@include border-radius(9px 9px 0 0);}
 .addAdvertSteps li{@include flexBox(row,flex-start,center);margin-bottom: 1.2rem;}
@@ -826,6 +826,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertLikeButton button{border:2px solid $yellow-color;@include border-radius(25px);background:#fff;padding: 0.8rem 1.7rem 0.3rem;}
 .accountAdvertLikeButton{position: absolute;top:-18px;right:-2px;}
 .accountNocontent{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.4rem);}
+.accountNocontent.inTab{padding: 10px 15px;}
 .accountMessageItem{@include flexBox(row, space-between, center);}
 .accountMessageItem.hide{display: none;}
 .accountMessageItemUser{width: 40%;@include flexBox(row, flex-start, center);}
@@ -837,7 +838,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountMessageItemUserName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
 .accountMessageItemUserName a{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
 .accountMessageItemTitle{width: 40%;@include flexBox(row, space-between, center);}
-.accountMessageItemTitleName{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.accountMessageItemTitleName{@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);}
+.accountMessageItem.active .accountMessageItemTitleName{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountMessageItemTitleDate{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
 .accountMessageItem{border-bottom: 1px solid #DFE1E5;padding:1rem 2rem;}
 .accountMessageItem:hover{cursor:pointer;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
@@ -913,12 +915,10 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountOrderInfoProductNumbers .number{padding-bottom: 1rem;text-align: center;}
 .accountOrderInfoProductStatus{text-align: right;align-self: flex-start;padding-top: 1.5rem;}
 .accountOrderInfoProductStatus button{border:none;@include border-radius(5px);@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);width: 148px;padding: 0 1.2rem;text-align: center;}
-.accountOrderInfoProductStatus button.confirm{background: $orange-color;}
-.accountOrderInfoProductStatus button.inprocess{background: #fff;}
-.accountOrderInfoProductStatus button.stopped{background: $black-text;color:#fff;}
 .accountOrderInfoProductStatus button.break{background: #DFE1E5;}
-.accountOrderInfoProductStatus a.edit{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);display: block;padding-top: 2rem;text-decoration: underline;}
+.accountOrderInfoProductStatus a.edit{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);display: block;padding-top: 2rem;text-decoration: underline;@include flexBox(row,flex-start,center);}
 .accountOrderInfoProductStatus a.edit:hover,.accountOrderInfoProductStatus a.edit:focus{text-decoration: none;}
+.accountOrderInfoProductStatus a.edit:hover svg,.accountOrderInfoProductStatus a.edit:focus svg{fill:$yellow-color;}
 .accountOrderInfo.order .accountOrderInfoProduct{@include flexBox(row,flex-start,flex-start);}
 .accountOrderInfo.order .accountOrderInfoProductDescription{width:80%;padding-right: 0;}
 .accountOrderInfo.order .accountOrderInfoProduct{width: 80%;}
@@ -951,8 +951,9 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountBillInfoItem.price{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountBillDownload a{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
 .accountBillDownload svg{margin-right: 1.5rem;}
-
-
+.modal-content{@include border-radius(0);}
+.accountConversationMessageText button{display: block;width: 100%;text-align: center;background: #E7E7E7;padding: 1.3rem 4rem 1.5rem;@include border-radius(3px);border:none;@include fontView("GothamProMedium",#747474,1.8rem,1.7rem);}
+.accountConversationMessageText button:hover,.accountConversationMessageText button:focus{color:$black-text;background: $yellow-color;;@include fontView("GothamProMedium",$black-text,1.8rem,1.7rem);}
 
 
 

@@ -56,6 +56,11 @@ class Settings
     /**
      * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"0"})
      */
+    private $userMessagesNumber;
+    
+    /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"0"})
+     */
     private $advertDaysShowNumber;
     
     /**
@@ -116,6 +121,12 @@ class Settings
      * @ORM\Column(type="boolean", options={"default":"0"})
      */
     private $isShowCaptcha;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Category")
+     * @ORM\JoinColumn(name="default_category_id", referencedColumnName="id")
+     */
+    private $mainPageDefaultCategory;
     
     /**
      * @ORM\Column(type="boolean", options={"default":"0"})
@@ -830,5 +841,28 @@ class Settings
     public function getServiceTabText()
     {
         return $this->serviceTabText;
+    }
+
+    /**
+     * Set mainPageDefaultCategory
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $mainPageDefaultCategory
+     * @return Settings
+     */
+    public function setMainPageDefaultCategory(\Dashboard\CommonBundle\Entity\Category $mainPageDefaultCategory = null)
+    {
+        $this->mainPageDefaultCategory = $mainPageDefaultCategory;
+    
+        return $this;
+    }
+
+    /**
+     * Get mainPageDefaultCategory
+     *
+     * @return \Dashboard\CommonBundle\Entity\Category 
+     */
+    public function getMainPageDefaultCategory()
+    {
+        return $this->mainPageDefaultCategory;
     }
 }

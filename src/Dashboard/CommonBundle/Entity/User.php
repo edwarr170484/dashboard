@@ -167,6 +167,11 @@ class User implements AdvancedUserInterface, \Serializable
     private $conversationTwo;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="user")
+     */
+    private $bills;
+    
+    /**
      * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Invite", mappedBy="user")
      */
     private $invite;
@@ -1065,5 +1070,38 @@ class User implements AdvancedUserInterface, \Serializable
     public function getIsAlertChangeOrderStatus()
     {
         return $this->isAlertChangeOrderStatus;
+    }
+
+    /**
+     * Add bills
+     *
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
+     * @return User
+     */
+    public function addBill(\Dashboard\CommonBundle\Entity\Bill $bills)
+    {
+        $this->bills[] = $bills;
+    
+        return $this;
+    }
+
+    /**
+     * Remove bills
+     *
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
+     */
+    public function removeBill(\Dashboard\CommonBundle\Entity\Bill $bills)
+    {
+        $this->bills->removeElement($bills);
+    }
+
+    /**
+     * Get bills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBills()
+    {
+        return $this->bills;
     }
 }

@@ -1,6 +1,6 @@
 {% extends 'DashboardCommonBundle:Common:base.html.twig' %}
 
-{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Черный список{% endtrans %}{% endblock %}
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Финансы{% endtrans %}{% endblock %}
 {% block bodyClass %}class="userAccount"{% endblock %}
 {% block body %}
 <nav class="breadscrumbsBlock">
@@ -51,14 +51,14 @@
         {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
         <div class="col-lg-10 col-md-10">
             <div class="account-advert-block-content">
-                {% if bills %}
+                {% if user.bills | length > 0 %}
                     <div class="accountBills">
-                        {% for bill in bills %}
+                        {% for bill in user.bills %}
                             <div class="accountBill">
                                 <div class="accountBillInfo">
-                                    <div class="accountBillInfoItem date">21.12.2019 в 22.01</div>
-                                    <div class="accountBillInfoItem title">Счет №1234</div>
-                                    <div class="accountBillInfoItem price">10.99€</div>
+                                    <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
+                                    <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
+                                    <div class="accountBillInfoItem price">{{ bill.id }}{{ locale.currency.label | raw }}</div>
                                 </div>
                                 <div class="accountBillDownload">
                                     <svg width="26" height="32" viewBox="0 0 26 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,7 +68,9 @@
                                         <path d="M6 19H20" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
                                         <path d="M11 14V26" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
                                     </svg>
-                                    <a href="">Скачать счет</a>
+                                    {% if bill.file %}
+                                        <a href="{{ asset('bundles/images/bills/' ~ bill.file) }}">{% trans %}Скачать счет{% endtrans %}</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}

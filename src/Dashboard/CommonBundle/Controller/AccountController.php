@@ -92,7 +92,7 @@ class AccountController extends Controller
     
     /**
      * @Route("/account", name="account")
-     * @Route("/{_locale}/account", name="accountLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/account", name="accountLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function accountAction(Request $request)
     {
@@ -206,6 +206,35 @@ class AccountController extends Controller
     }
     
     /**
+     * @Route("/account/moremessages/{conversationId}/{start}", name="account_more_messages")
+     * @Route("/{_locale}/account/moremessages/{conversationId}/{start}", name="account_more_messagesLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function getMoreMessagesAction($conversationId,$start,Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $conversation = $manager->getRepository("DashboardCommonBundle:Conversation")->find($conversationId);
+        
+        $query = $manager->createQuery("SELECT m FROM DashboardCommonBundle:Message m WHERE m.conversation = " . $conversationId . " AND m.userOwner = " . $user->getId() . " ORDER BY m.sentDate DESC")->setFirstResult( $start)->setMaxResults($settings->getUserMessagesNumber());
+               
+        try{
+            $messages = $query->getResult();
+            $messages = array_reverse($messages);
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $messages = 0;
+        }
+        
+        return $this->render('DashboardCommonBundle:User:account/message/items.html.twig', array(
+                                                                                       "user" => $user,
+                                                                                       "messages" => $messages,
+                                                                                       "conversation" => $conversation));
+        
+    }
+    
+    /**
      * @Route("/account/conversation/{conversationId}", name="account_conversation", defaults={"conversationId" : 0})
      * @Route("/{_locale}/account/conversation/{conversationId}", name="account_conversationLocale", defaults={"_locale" : "es", "conversationId" : 0}, requirements={"_locale" : "es|ru"})
      */
@@ -229,10 +258,11 @@ class AccountController extends Controller
         }
         
         //load all conversation with this user
-        $query = $manager->createQuery("SELECT m FROM DashboardCommonBundle:Message m WHERE m.conversation = " . $conversationId . " AND m.userOwner = " . $user->getId() . " ORDER BY m.sentDate ASC");
+        $query = $manager->createQuery("SELECT m FROM DashboardCommonBundle:Message m WHERE m.conversation = " . $conversationId . " AND m.userOwner = " . $user->getId() . " ORDER BY m.sentDate DESC")->setFirstResult(0)->setMaxResults($settings->getUserMessagesNumber());
                
         try{
             $messages = $query->getResult();
+            $messages = array_reverse($messages);
         }
         catch(\Doctrine\ORM\NoResultException $e) {
             $messages = 0;
@@ -938,47 +968,27 @@ class AccountController extends Controller
     }
     
     /**
-     * @Route("/account/orders/{page}", name="account_orders", defaults={"page" : 0})
-     * @Route("/{_locale}/account/orders/{page}", name="account_ordersLocale", defaults={"_locale" : "lv","page" : 0}, requirements={"_locale" : "lv|ru"})
+     * @Route("/account/orders", name="account_orders")
+     * @Route("/{_locale}/account/orders", name="account_ordersLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
      */
-    public function ordersAction($page, Request $request)
+    public function ordersAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));        
         
-        $orderStatuses = $manager->getRepository("DashboardCommonBundle:OrderStatus")->findAll();
-        //$orders = array_reverse($user->getReceivedOrders()->toArray());
+        $query = $manager->createQuery("SELECT os,o FROM DashboardCommonBundle:OrderStatus os LEFT JOIN os.orders o WHERE o.userReceived = " . $user->getId());
         
-        
-        $query = $manager->createQuery("SELECT o FROM DashboardCommonBundle:ProductOrder o WHERE o.userReceived = " . $user->getId() ." ORDER BY o.id DESC" );
-
         try{
-            $orders = $query->getResult();
+            $orderStatuses = $query->getResult();
         }
         catch(\Doctrine\ORM\NoResultException $e) {
-            $orders = 0;
+            $orderStatuses = 0;
         }
-        
-        $totalOrders = count($orders);
-        
-        $query = $manager->createQuery("SELECT o FROM DashboardCommonBundle:ProductOrder o WHERE o.userReceived = " . $user->getId() ." ORDER BY o.id DESC" )->setFirstResult((($page > 0) ? ($page - 1) : 0) * 10)->setMaxResults(10);
-
-        try{
-            $orders = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $orders = 0;
-        }
-        
-        $helper = $this->get("app.helpers");
-        $pagination = $helper->paginator(($page > 0) ? (int)$page : 1, $totalOrders, 10, "/account/orders");
         
         return $this->render('DashboardCommonBundle:User:account/order/orders.html.twig', array("user" => $user,
-                                                                                  "orders" =>$orders,
                                                                                   "orderStatuses" => $orderStatuses,
-                                                                                  "pagination" => $pagination,
                                                                                   "locale" => $locale,
                                                                                   "settings" => $settings,
                                                                                   "routeName" => $request->attributes->get("_route")));
@@ -995,8 +1005,14 @@ class AccountController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        $orderStatuses = $manager->getRepository("DashboardCommonBundle:OrderStatus")->findAll();
-        $orders = array_reverse($user->getSendedOrders()->toArray());
+        $query = $manager->createQuery("SELECT os,o FROM DashboardCommonBundle:OrderStatus os LEFT JOIN os.orders o WHERE o.userSended = " . $user->getId());
+        
+        try{
+            $orderStatuses = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $orderStatuses = 0;
+        }
         
         $review = new Review();
         $reviewForm = $this->createForm(new ReviewType($manager, $locale), $review);
@@ -1120,7 +1136,6 @@ class AccountController extends Controller
         }
         
         return $this->render('DashboardCommonBundle:User:account/order/myorders.html.twig', array("user" => $user,
-                                                                                    "orders" =>$orders,
                                                                                     "orderStatuses" => $orderStatuses,
                                                                                     "settings" => $settings,
                                                                                     "locale" => $locale,
@@ -1260,7 +1275,9 @@ class AccountController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        return $this->render('DashboardCommonBundle:User:account/bills.html.twig', array("bills" => 0,
+        
+        
+        return $this->render('DashboardCommonBundle:User:account/bills.html.twig', array(
                                                                                         "user" => $user,
                                                                                         "settings" => $settings,
                                                                                         "locale" => $locale,

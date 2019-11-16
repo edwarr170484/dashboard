@@ -196,7 +196,8 @@
                 myDropzone.options.dictCancelUploadConfirmation = '';
                 var existingFileCount = existingFiles.length; 
                 myDropzone.options.maxFiles = myDropzone.options.maxFiles - existingFileCount;
-                if(myDropzone.options.maxFiles != 0){
+                var fotosNum = $(".dz-preview").length;
+                if(myDropzone.options.maxFiles != 0 && fotosNum > 0){
                     $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + myDropzone.options.maxFiles + '</div></div>');
                     $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
                 }

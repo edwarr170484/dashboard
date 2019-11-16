@@ -164,7 +164,6 @@ function getBoardTypesByYear(year, locale_code, text){
         {
             $(".modal-body-cover").hide();
             $("#addAdvertCarBoards").html(html);
-            $(".rightWeel-checkbox").customCheckbox();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -181,8 +180,9 @@ function getBoardTypesByOldYear(year, locale_code, element){
     
     $.ajax({
         url: '/' + locale_code + '/account/addadvert/boards/' + year,
-        type:'get',
+        type:'post',
         dataType: 'html',
+        data:$("input[name=rightWeel]:checked"),
         beforeSend: function(){
             $("#addAdvertCarGenerations").html('');
             $("#addAdvertCarEngines").html('');
@@ -195,7 +195,6 @@ function getBoardTypesByOldYear(year, locale_code, element){
         {
             $(".modal-body-cover").hide();
             $("#addAdvertCarBoards").html(html);
-            $(".rightWeel-checkbox").customCheckbox();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -207,8 +206,9 @@ function getBoardTypesByOldYear(year, locale_code, element){
 function getGenerationsByBoard(boardId,locale_code){
     $.ajax({
         url: '/' + locale_code + '/account/addadvert/generations/' + boardId,
-        type:'get',
+        type:'post',
         dataType: 'html',
+        data:$("input[name=rightWeel]:checked"),
         beforeSend: function(){
             $("#addAdvertCarGenerations").html('');
             $("#addAdvertCarEngines").html('');
@@ -441,4 +441,38 @@ function addService(element, textEmpty, textFull, currencyCode){
     }else{
         $("#addAdvertFinalButton").html(textEmpty);
     }
+}
+
+function setWheelValue(element, locale_code){
+    $.ajax({
+        url: '/' + locale_code + '/account/addadvert/setWheel/' + element.prop("checked"),
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(html)
+        {
+            
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
+}
+
+function setGasValue(element, locale_code){
+    $.ajax({
+        url: '/' + locale_code + '/account/addadvert/setGas/' + element.prop("checked"),
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(html)
+        {
+            
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
 }

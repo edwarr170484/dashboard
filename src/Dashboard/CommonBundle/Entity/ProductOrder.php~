@@ -37,6 +37,12 @@ class ProductOrder
     private $product;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\OrderStatus", inversedBy="orders")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     */
+    private $status;
+    
+    /**
      * @ORM\Column(type="string", length=255)
      */
     private $name;
@@ -52,6 +58,18 @@ class ProductOrder
     private $phone;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\City")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     */
+    private $city;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\CityCode")
+     * @ORM\JoinColumn(name="city_code_id", referencedColumnName="id")
+     */
+    private $cityCode;
+    
+    /**
      * @ORM\Column(type="text", nullable=true, options={"default":"0"})
      */
     private $comment;
@@ -62,11 +80,6 @@ class ProductOrder
     private $dateAdded;
     
     /**
-     * @ORM\Column(type="integer", length=255)
-     */
-    private $status;
-    
-    /**
      * @ORM\Column(type="string", length=512, nullable=true, options={"default":"0"})
      */
     private $statusComment;
@@ -75,6 +88,11 @@ class ProductOrder
      * @ORM\Column(type="boolean", nullable=true, options={"default":"1"})
      */
     private $isNew;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\ProductOrderInfo", mappedBy="order")
+     */
+    private $info;
 
     /**
      * Get id
@@ -202,29 +220,6 @@ class ProductOrder
     }
 
     /**
-     * Set status
-     *
-     * @param integer $status
-     * @return Order
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return integer 
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
      * Set userReceived
      *
      * @param \Dashboard\CommonBundle\Entity\User $userReceived
@@ -337,5 +332,114 @@ class ProductOrder
     public function getStatusComment()
     {
         return $this->statusComment;
+    }
+
+    /**
+     * Set status
+     *
+     * @param \Dashboard\CommonBundle\Entity\OrderStatus $status
+     * @return ProductOrder
+     */
+    public function setStatus(\Dashboard\CommonBundle\Entity\OrderStatus $status = null)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return \Dashboard\CommonBundle\Entity\OrderStatus 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->info = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add info
+     *
+     * @param \Dashboard\CommonBundle\Entity\ProductOrderInfo $info
+     * @return ProductOrder
+     */
+    public function addInfo(\Dashboard\CommonBundle\Entity\ProductOrderInfo $info)
+    {
+        $this->info[] = $info;
+    
+        return $this;
+    }
+
+    /**
+     * Remove info
+     *
+     * @param \Dashboard\CommonBundle\Entity\ProductOrderInfo $info
+     */
+    public function removeInfo(\Dashboard\CommonBundle\Entity\ProductOrderInfo $info)
+    {
+        $this->info->removeElement($info);
+    }
+
+    /**
+     * Get info
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInfo()
+    {
+        return $this->info;
+    }
+
+    /**
+     * Set city
+     *
+     * @param \Dashboard\CommonBundle\Entity\City $city
+     * @return ProductOrder
+     */
+    public function setCity(\Dashboard\CommonBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \Dashboard\CommonBundle\Entity\City 
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set cityCode
+     *
+     * @param \Dashboard\CommonBundle\Entity\CityCode $cityCode
+     * @return ProductOrder
+     */
+    public function setCityCode(\Dashboard\CommonBundle\Entity\CityCode $cityCode = null)
+    {
+        $this->cityCode = $cityCode;
+    
+        return $this;
+    }
+
+    /**
+     * Get cityCode
+     *
+     * @return \Dashboard\CommonBundle\Entity\CityCode 
+     */
+    public function getCityCode()
+    {
+        return $this->cityCode;
     }
 }

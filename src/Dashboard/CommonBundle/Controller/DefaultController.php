@@ -58,7 +58,7 @@ class DefaultController extends Controller
                 if($user->getUserinfo()->getRegion())
                     $this->get('session')->set('sessionRegion', $user->getUserinfo()->getRegion()->getId());
             }
-        }
+        }*/
         
         if(!$this->get('session')->has('sessionCity'))
         {
@@ -68,7 +68,7 @@ class DefaultController extends Controller
                 if($user->getUserinfo()->getCity())
                     $this->get('session')->set('sessionCity', $user->getUserinfo()->getCity()->getId());
             }
-        }*/
+        }
 
         $locales = $manager->getRepository("DashboardCommonBundle:Locale")->findAll();
         $sessionRegion = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionRegion'));
@@ -82,8 +82,12 @@ class DefaultController extends Controller
         else
             $uri = '/' . substr($request->server->get("REQUEST_URI"),4,strlen($request->server->get("REQUEST_URI")));
         
+        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL ORDER BY c.sortorder ASC');
+        $categories = $query->getResult();
+        
         return $this->render('DashboardCommonBundle:Common:header.html.twig', array("user" => $user,
                                                                                     "settings" => $settings,
+                                                                                    "categories" => $categories,
                                                                                     "sessionRegion" => $sessionRegion,
                                                                                     "sessionCity" => $sessionCity,
                                                                                     "locales" => $locales,
@@ -210,7 +214,7 @@ class DefaultController extends Controller
     }
     /**
      * @Route("/", name="main")
-     * @Route("/{_locale}", name="mainLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}", name="mainLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function indexAction(Request $request)
     {
@@ -246,6 +250,12 @@ class DefaultController extends Controller
         }
         catch(\Doctrine\ORM\NoResultException $e) {
             $categories = 0;
+        }
+        
+        foreach($categories as $category){
+            $productsNum = 0;
+            $this->getCategoryProducts($category, $productsNum);
+            $category->setAllProductsNumber($productsNum);
         }
         
         $selltypes = $manager->getRepository("DashboardCommonBundle:Selltype")->findAll();
@@ -292,6 +302,16 @@ class DefaultController extends Controller
                                                                                     "sessionCity" => $sessionCity));
     }
     
+    private function getCategoryProducts($category, &$productsNum){
+        $productsNum += count($category->getProduct());
+        
+        if($category->getChildren()){
+            foreach($category->getChildren() as $children){
+                $this->getCategoryProducts($children, $productsNum);
+            }
+        }
+    }
+    
     /**
      * @Route("/cahngeView/{view}", name="categoryChangeView", requirements={"view" : "list|grid"})
      * 
@@ -304,7 +324,7 @@ class DefaultController extends Controller
     
     /**
      * @Route("/category/{categoryName}/{page}", name="category", defaults={"categoryName":null,"page":1})
-     * @Route("/{_locale}/category/{categoryName}/{page}", name="categoryLocale", defaults={"_locale" : "lv","categoryName":null,"page":1}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/category/{categoryName}/{page}", name="categoryLocale", defaults={"_locale" : "es","categoryName":null,"page":1}, requirements={"_locale" : "es|ru"})
      */
     public function categoryAction($categoryName, $page, Request $request)        
     {
@@ -748,7 +768,7 @@ class DefaultController extends Controller
     
     /**
      * @Route("/product/{productId}_{productName}", name="product",defaults={"productId":null,"productName":null})
-     * @Route("/{_locale}/product/{productId}_{productName}", name="productLocale", defaults={"_locale" : "lv","productId":null,"productName":null}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/product/{productId}_{productName}", name="productLocale", defaults={"_locale" : "es","productId":null,"productName":null}, requirements={"_locale" : "es|ru"})
      */
     public function productAction($productId, $productName, Request $request)
     {
@@ -1392,7 +1412,7 @@ class DefaultController extends Controller
     
     /**
      * @Route("/pages/{route}", name="pages")
-     * @Route("/{_locale}/pages/{route}", name="pagesLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/pages/{route}", name="pagesLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function pagesAction($route, Request $request)        
     {
@@ -1414,7 +1434,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/404", name="notfound")
-     * @Route("/{_locale}/404", name="notfoundLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/404", name="notfoundLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function notfoundAction(Request $request)        
     {
@@ -1435,7 +1455,7 @@ class DefaultController extends Controller
     
     /**
      * @Route("/search", name="search")
-     * @Route("/{_locale}/search", name="searchLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/search", name="searchLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function searchAction(Request $request)
     {

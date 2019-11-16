@@ -34,6 +34,7 @@ class CategoryType extends AbstractType
             ->add('isShowFilters', CheckboxType::class, array('required' => false, 'label' => 'Показывать фильтры', 'attr' => array('class' => 'form-control')))
             ->add('isShowBu', CheckboxType::class, array('required' => false, 'label' => 'Показывать выбор "Б/У"', 'attr' => array('class' => 'form-control')))
             ->add('isShowPriceFilter', CheckboxType::class, array('required' => false, 'label' => 'Включить фильтр по цене', 'attr' => array('class' => 'form-control')))
+            ->add('isMainPageDefault', CheckboxType::class, array('required' => false, 'label' => 'Показать на главной странице по умолчанию', 'attr' => array('class' => 'form-control')))
             ->add('image', TextareaType::class, array('required' => false, 'label' => 'Код изображения SVG', 'attr' => array('class' => 'form-control')))
             ->add('parent', 'entity', array('class' => 'DashboardCommonBundle:Category', 
                                             'choice_label' => 'title',

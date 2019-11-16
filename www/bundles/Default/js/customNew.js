@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $(".accountConversationMessagesWindow").mCustomScrollbar({scrollbarPosition: "outline"});
+    $(".accountConversationMessagesWindow").mCustomScrollbar({scrollbarPosition: "outline",setTop: "-400px"});
 });
 
 function showHideAllCategories(element){
@@ -121,7 +121,7 @@ function changeConverSations(){
 }
 
 function deleteFromBlacklist(){
-     $.ajax({
+    $.ajax({
         url: '/account/blacklist/delete',
         type:'post',
         data: $('#blackListUsers input[type="checkbox"]:checked'),
@@ -130,6 +130,27 @@ function deleteFromBlacklist(){
         success: function()
         {
             window.location.reload();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+                
+        }
+    });
+}
+
+function getMessages(conversationId, locale_code, element){
+    var messages = ($(".accountConversationMessage").length) - 2;
+    var parent = element.parent().parent();
+    
+    $.ajax({
+        url: '/' + locale_code + '/account/moremessages/' + conversationId + '/' + messages,
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(data){
+            if(data){
+                parent.after(data);
+            }else{
+                parent.remove();
+            }
         },
         error: function(xhr, ajaxOptions, thrownError) {
                 

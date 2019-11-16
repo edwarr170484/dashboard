@@ -94,13 +94,19 @@
                                             </a>
                                         {% endif %}
                                     </div>
-                                    <div class="accountConversationHeaderTopic">
+                                    <!--<div class="accountConversationHeaderTopic">
                                         Mercedes-Benz S-klasse VI (W222, C217)
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <div class="accountConversationMessages">
                                     {% if messages %}
                                     <div class="accountConversationMessagesWindow">
+                                        <div class="accountConversationMessage">
+                                            <div class="accountConversationMessageUser"></div>
+                                            <div class="accountConversationMessageText" style="padding-right: 0;">
+                                                <button onclick="getMessages({{ conversation.id }}, '{{ locale.code }}', $(this))">{% trans %}Загрузить еще{% endtrans %}</button>
+                                            </div>
+                                        </div>
                                     {% for message in messages %}
                                         <div class="accountConversationMessage {% if message.userFrom.id != user.id %}oppoMessage{% endif %}">
                                             {% if message.userFrom %}

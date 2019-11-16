@@ -29,6 +29,28 @@ class AdvertInfo
     private $contactCityCode;
     private $servicePack;
     private $services;
+    private $rightWheel;
+    private $isGas;
+    
+    public function getIsGas()
+    {
+        return $this->isGas;
+    }
+
+    public function setIsGas($isGas)
+    {
+        $this->isGas = $isGas;
+    }
+    
+    public function getRightWheel()
+    {
+        return $this->rightWheel;
+    }
+
+    public function setRightWheel($rightWheel)
+    {
+        $this->rightWheel = $rightWheel;
+    }
     
     public function getServices()
     {

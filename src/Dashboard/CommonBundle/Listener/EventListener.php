@@ -20,7 +20,7 @@ class EventListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        
+
         if($request->attributes->get('_locale'))
         {
             $locale = $this->em->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->attributes->get('_locale')));

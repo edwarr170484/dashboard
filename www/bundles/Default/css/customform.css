@@ -2,7 +2,7 @@
 .select-cover{position:relative;border:1px solid #dfe1e5;padding:8px 15px;background:#fff;font-size: 1.3rem;font-family: "GothamProRegular", sans-serif;color:#494949;margin-bottom: 10px;}
 .select-cover.active{border:1px solid #EB840B;}
 .select-value{background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAHCAYAAAA8sqwkAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACLSURBVHgBfZBNDYUwEITftgqeAyTUAkpoagAcAAqQQFFAUMCVIzgBAy2zhANZfubS7ew3zaTknGtCCJ33fv59yFprlFKZArwQUQ8j+YATZpjVM2SM2WC0OAdc1wd4jDHWaOE1m28hCbNH4jULoASQHksB3wJnqACY8wyYP6O67rUMoM6EWn+Mi4RZO45WVFBZ19w8AAAAAElFTkSuQmCC') 100% 50% no-repeat;cursor:pointer;}
-.select-options{border:1px solid #dfe1e5;position:absolute;left:0;width:100%;top:100%;cursor:pointer;display:none;background:#fff;z-index:1;max-height:250px;overflow:scroll;overflow-x:hidden;margin-left: -1px;margin-right: -1px;}
+.select-options{border:1px solid #dfe1e5;position:absolute;left:0;right:0;top:100%;cursor:pointer;display:none;background:#fff;z-index:1;max-height:250px;overflow:scroll;overflow-x:hidden;margin-left: -1px;margin-right: -1px;}
 .select-cover.active .select-options{border:1px solid #EB840B;border-top:none;}
 .select-cover.selected{background: #FDEECC;}
 .select-option{padding-top:7px;padding-bottom:7px;padding-left:35px;padding-right:15px;color:#494949;}

@@ -954,6 +954,61 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .modal-content{@include border-radius(0);}
 .accountConversationMessageText button{display: block;width: 100%;text-align: center;background: #E7E7E7;padding: 1.3rem 4rem 1.5rem;@include border-radius(3px);border:none;@include fontView("GothamProMedium",#747474,1.8rem,1.7rem);}
 .accountConversationMessageText button:hover,.accountConversationMessageText button:focus{color:$black-text;background: $yellow-color;;@include fontView("GothamProMedium",$black-text,1.8rem,1.7rem);}
+.pageLeftMenu{border:2px solid $yellow-color;@include border-radius(5px);padding: 3rem 2.5rem;}
+.pageMenuHeader{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-bottom: 2rem;}
+.pageMenuList ul li a{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);display: block;padding-bottom: 2rem;}
+.pageMenuList ul li a:hover,.pageMenuList ul li a:focus{text-decoration: none;color:$yellow-color}
+.pageMenuList ul li{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.pageMenuButton.cookieAlertButton a{display: block;;font-size: 1.5rem;line-height: 1.4rem;width: 100%;padding: 1.4rem;text-align: center;background:#F5AA01;font-family: "GothamProBlack",sans-serif;color:#000;@include border-radius(3px);}
+.pageMenuButton.cookieAlertButton a:hover,.pageMenuButton.cookieAlertButton a:focus{background: $orange_color;text-decoration: none;}
+.pageMenuButton{padding-top: 1rem;}
+.pageContentBlockHeader{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);}
+.pageContentBlockInner .mainPageFiltersTabs ul li a{text-transform: none;font-size: 1.6rem;line-height: 2.2rem;@include border-radius(5px 5px 0px 0px);border:none}
+.pageContentBlockInner .mainPageFiltersTabs ul li.active a{border:none;}
+.categoryRateName{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);}
+.categoryRateDescriptionTitle{@include flexBox(row,space-between,center);}
+.categoryRateServices{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.categoryRateServices{@include flexBox(row,flex-end,center);}
+.categoryRateDescription{width: 80%;}
+.categoryRateDescriptionText{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-top: 1.8rem;text-align: justify;}
+.categoryRatePrice{width: 20%;@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;}
+.categoryRate{@include flexBox(row,flex-start,stretch);border-bottom:1px solid #DFE1E5;padding-bottom: 2rem;padding-top: 3rem;}
+.tab-pane .categoryRate:last-child{border-bottom: none;}
+.categoryRateServices .accountAdvertFunctions{position: relative;@include box-shadow(none);}
+.categoryRateServices .accountAdvertFunction div.button{padding: 0;padding-left: 2rem;}
+.pageContentBlockInner .mainPageFiltersTabs{padding-top: 3rem;}
+.pageContentBlock{padding-bottom: 8rem;}
+.pageContentServices{padding-top: 6rem;}
+.pageContentService{@include flexBox(row,flex-start,stretch);}
+.pageContentServiceDescription{width: 75%;}
+.pageContentServiceIcon{width: 25%;}
+.pageContentServiceDescriptionTitle{@include fontView("GothamProBold",$black-text,2.2rem,3.2rem);@include flexBox(row,flex-start,center);}
+.pageContentServiceDescriptionTitle svg{margin-right: 2rem;}
+.pageContentServiceDescriptionText{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-top: 2rem;padding-right: 6rem;text-align: justify;}
+.pageContentService{padding-bottom: 6.5rem;}
+.pageContentServiceMessage{@include fontView("GothamProRegular",$black-text,2.5rem,3.2rem);padding-bottom: 3.6rem;}
+.pageContentServiceMessage span{color:$yellow-color;}
+.pageContentAdvertismentIcon{width: 25%;}
+.pageContentAdvertismentDescription{width: 75%;padding-right: 6rem;text-align: justify;}
+.pageContentAdvertisment{@include flexBox(row,flex-start,stretch);}
+.pageContentAdvertismentDescriptionText{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-top: 3rem;padding-bottom: 3rem;}
+.pageContentAdvertismentDescriptionRate{@include flexBox(row,space-between,center);padding-bottom: 2rem;}
+.pageContentAdvertismentDescriptionRateTitle{width: 60%;@include fontView("GothamProRegular",$black-text,2.1rem,3.2rem);}
+.pageContentAdvertismentDescriptionRatePrice{width: 40%;@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);}
+.pageContentAdvertismentDescriptionRatePrice span{@include fontView("GothamProBold",$black-text,2.6rem,3.2rem);}
+.pageContentBanner{background: #E7E7E7;@include border-radius(0px 9px 9px 0px);padding:5rem 12.5rem;padding-left: 0;@include fontView("GothamProRegular",$black-text,2.6rem,3.6rem);position: relative;margin-bottom: 9rem;}
+.pageContentBannerBg{position: absolute;top: 0;width: 100%;height: 100%;left:-100%;background: #E7E7E7;}
+.pageMenuButton.cookieAlertButton.white a{background: #fff;color:$black-text;}
+.pageMenuButton.cookieAlertButton.white a:hover,.pageMenuButton.cookieAlertButton.white a:focus{background: $orange-color;}
+.pageContentBannerButtons{@include flexBox(row,space-between,center);padding-top: 4rem;}
+.pageContentBannerButtons .pageMenuButton.cookieAlertButton a{@include fontView("GothamProBlack",$black-text,1.8rem,1.7rem);padding: 2rem;width:380px;}
+.pageContentRates{background: #fff;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(0px 9px 9px 9px);margin-top: 4.7rem;}
+.pageContentRates .categoryRate{padding-left: 4rem;padding-top: 4rem;padding-right: 4rem;}
+.pageContentJobsList{width: 380px;}
+.pageContentJobsLists{@include flexBox(row,flex-start,stretch);flex-wrap:wrap;padding-top: 3rem;}
+.pageContentJobsItem{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);@include flexBox(row,flex-start,center);padding-bottom: 1.8rem;}
+.pageContentJobsItemIcon{width: 25px;height:25px;margin-right:1.7rem;@include flexBox(row,center,center);}
+
 
 
 

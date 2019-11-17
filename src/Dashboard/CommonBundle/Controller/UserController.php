@@ -51,7 +51,7 @@ class UserController extends Controller
 {    
     /**
      * @Route("/register/{link}", name="register", defaults = {"link" : "0"})
-     * @Route("/{_locale}/register/{link}", name="registerLocale", defaults={"_locale" : "lv","link" : "0"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/register/{link}", name="registerLocale", defaults={"_locale" : "es","link" : "0"}, requirements={"_locale" : "es|ru"})
      */
     public function registerAction($link, Request $request)
     {
@@ -222,7 +222,7 @@ class UserController extends Controller
     
     /**
      * @Route("/register/confirm/{key}", name="register_confirm")
-     * @Route("/{_locale}/register/confirm/{key}", name="register_confirmLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/register/confirm/{key}", name="register_confirmLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function registerConfirmAction($key, Request $request)
     {

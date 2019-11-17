@@ -9,7 +9,7 @@ class SecurityController extends Controller
 {
     /**
      * @Route("/login", name="login")
-     * @Route("/{_locale}/login", name="loginLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/login", name="loginLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function loginAction(Request $request)
     {

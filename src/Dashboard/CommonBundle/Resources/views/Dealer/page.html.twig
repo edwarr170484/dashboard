@@ -1,0 +1,647 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{{ page.metaTagTitle}}{% endblock %}
+{% block metatags %}
+    <meta content="{{ page.metaTagDescription }}" name="description" />
+    <meta content="{{ page.metaTagAuthor }}" name="author" />
+    <meta content="{{ page.metaTagRobots }}" name="robots" />
+    <meta content="{{ page.metaTagKeywords }}" name="keywords" />
+{% endblock %}
+
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                        <li><a href="">{{ page.title }}</a></li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                        <li>
+                            <a href="{% if locale.isDefault %}{{ path('dealer') }}{% else %}{{ path('dealerLocale',{'_locale' : locale.code}) }}{% endif %}">{{ page.title }}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-9 col-md-9">
+            <div class="content-block-header">
+                <h1>{{ page.title }}</h1>
+            </div>
+            <div class="page-content">
+                <div class="pageContentBanner">
+                    <div class="pageContentBannerBg"></div>
+                    <div class="pageContentBannerInner">
+                        Для многих людей {{ settings.siteName }} — это первая и единственная площадка, на которой можно купить автомобиль, мотоцикл или коммерческий транспорт. Благодаря нам миллионы автомобилистов по всей стране уже нашли свои машины, а продавцы автомобилей — своих клиентов.
+                    </div>
+                    <div class="pageContentBannerButtons">
+                        <div class="pageMenuButton cookieAlertButton">
+                            <a href="{% if locale.isDefault %}{{ path('register') }}{% else %}{{ path('registerLocale',{'_locale':locale.code}) }}{% endif %}">{% trans %}Стать клиентом{% endtrans %}</a>
+                        </div>
+                        <div class="pageMenuButton cookieAlertButton white">
+                            <a href="">{% trans %}Презентация PDF{% endtrans %}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="pageContentBlock">
+                    <div class="pageContentBlockHeader">{% trans %}Продвижение объявлений{% endtrans %}</div>
+                    <div class="pageContentBlockInner">
+                        <div class="pageContentServices">
+                            <div class="pageContentService">
+                                <div class="pageContentServiceDescription">
+                                    <div class="pageContentServiceDescriptionTitle">
+                                        <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M14.5 28C21.9558 28 28 21.9558 28 14.5C28 7.04416 21.9558 1 14.5 1C7.04416 1 1 7.04416 1 14.5C1 21.9558 7.04416 28 14.5 28Z" fill="#F5AA01"/>
+                                            <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Премиум
+                                    </div>
+                                    <div class="pageContentServiceDescriptionText">
+                                        Такие объявления имеют расширенную карточку в поисковой выдаче, что повышает привлекательность предложения в глазах покупателей, а также помещаются в специальный блок над поисковой выдачей
+                                    </div>
+                                </div>
+                                <div class="pageContentServiceIcon">
+                                    <svg width="237" height="126" viewBox="0 0 237 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="236.613" height="125.82" fill="#E7E7E7"/>
+                                        <rect opacity="0.9" x="5.38281" y="19.0635" width="225.848" height="59.6579" fill="#EB840B"/>
+                                        <rect x="218.672" y="24.2224" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="218.672" y="33.6416" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="218.672" y="43.0608" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="10.3164" y="21.7544" width="44.8556" height="36.1087" fill="white"/>
+                                        <rect x="10.3164" y="58.7607" width="21.9792" height="17.2694" fill="white"/>
+                                        <rect x="33.1934" y="58.7607" width="21.9792" height="17.2694" fill="white"/>
+                                        <rect x="58.3125" y="23.9976" width="63.9192" height="7.84973" fill="white"/>
+                                        <rect opacity="0.6" x="58.3125" y="38.1272" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect opacity="0.6" x="76.9277" y="38.1272" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect opacity="0.6" x="95.543" y="38.1272" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect x="58.3125" y="63.6943" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect x="76.9277" y="63.6943" width="51.3596" height="6.27978" fill="white"/>
+                                        <rect x="131.428" y="63.6943" width="28.9319" height="6.27978" fill="white"/>
+                                        <rect x="185.479" y="63.6943" width="40.8186" height="9.41967" fill="white"/>
+                                        <rect x="128.287" y="23.9976" width="30.0532" height="7.84973" fill="white"/>
+                                        <rect x="161.479" y="23.9976" width="23.9977" height="7.84973" fill="white"/>
+                                        <rect x="188.619" y="23.9976" width="23.9977" height="7.84973" fill="white"/>
+                                        <rect x="218.672" y="84.7771" width="7.62545" height="7.62545" fill="#AAAAAA"/>
+                                        <rect x="218.672" y="94.1963" width="7.62545" height="7.62545" fill="#AAAAAA"/>
+                                        <rect x="218.672" y="103.616" width="7.62545" height="7.62545" fill="#AAAAAA"/>
+                                        <rect x="10.3164" y="82.3096" width="44.8556" height="36.1087" fill="#AAAAAA"/>
+                                        <rect x="58.3125" y="84.5522" width="63.9192" height="7.84973" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="58.3125" y="98.6826" width="15.4752" height="6.27978" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="76.9258" y="98.6826" width="15.4752" height="6.27978" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="95.541" y="98.6826" width="15.4752" height="6.27978" fill="#AAAAAA"/>
+                                        <rect x="128.287" y="84.5522" width="30.0532" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="161.48" y="84.5522" width="23.9977" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="188.617" y="84.5522" width="23.9977" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="10.3164" y="8.74634" width="43.0614" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="58.3125" y="8.74634" width="43.0614" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="106.756" y="8.74634" width="21.5307" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="208.578" y="8.74634" width="7.84973" height="7.84973" fill="#C4C4C4"/>
+                                        <rect x="218.672" y="8.74634" width="7.84973" height="7.84973" fill="#C4C4C4"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="pageContentService">
+                                <div class="pageContentServiceDescription">
+                                    <div class="pageContentServiceDescriptionTitle">
+                                        <svg width="32" height="24" viewBox="0 0 32 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 11.7861C1 11.7861 6.39303 1 15.8308 1C25.2687 1 30.6617 11.7861 30.6617 11.7861C30.6617 11.7861 25.2687 22.5721 15.8308 22.5721C6.39303 22.5721 1 11.7861 1 11.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M15.8308 15.8308C18.0647 15.8308 19.8756 14.0199 19.8756 11.7861C19.8756 9.5522 18.0647 7.74129 15.8308 7.74129C13.597 7.74129 11.7861 9.5522 11.7861 11.7861C11.7861 14.0199 13.597 15.8308 15.8308 15.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M1 11.7861C1 11.7861 6.39303 1 15.8308 1C25.2687 1 30.6617 11.7861 30.6617 11.7861C30.6617 11.7861 25.2687 22.5721 15.8308 22.5721C6.39303 22.5721 1 11.7861 1 11.7861Z" fill="#F5AA01"/>
+                                            <path d="M15.8308 15.8308C18.0647 15.8308 19.8756 14.0199 19.8756 11.7861C19.8756 9.5522 18.0647 7.74129 15.8308 7.74129C13.597 7.74129 11.7861 9.5522 11.7861 11.7861C11.7861 14.0199 13.597 15.8308 15.8308 15.8308Z" fill="#F5AA01"/>
+                                            <path d="M1 11.7861C1 11.7861 6.39303 1 15.8308 1C25.2687 1 30.6617 11.7861 30.6617 11.7861C30.6617 11.7861 25.2687 22.5721 15.8308 22.5721C6.39303 22.5721 1 11.7861 1 11.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M15.8308 15.8308C18.0647 15.8308 19.8756 14.0199 19.8756 11.7861C19.8756 9.5522 18.0647 7.74129 15.8308 7.74129C13.597 7.74129 11.7861 9.5522 11.7861 11.7861C11.7861 14.0199 13.597 15.8308 15.8308 15.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Выделение
+                                    </div>
+                                    <div class="pageContentServiceDescriptionText">
+                                        Автоматическое применение услуг в пределах бюджета. Рациональное использование накопленной экспертизы по подключению услуг с целью повышения внимания покупателей к объявлению в зависимости от времени суток и от других факторов.
+                                    </div>
+                                </div>
+                                <div class="pageContentServiceIcon">
+                                    <svg width="237" height="127" viewBox="0 0 237 127" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="237" height="126.026" fill="#E7E7E7"/>
+                                        <rect x="219.027" y="88.9592" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.027" y="98.394" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.027" y="107.83" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="10.334" y="86.4883" width="44.9289" height="36.1678" fill="#AAAAAA"/>
+                                        <rect x="58.4082" y="88.7344" width="64.0237" height="7.86256" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="58.4082" y="102.887" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="77.0527" y="102.887" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="95.6992" y="102.887" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect x="128.496" y="88.7344" width="30.1024" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="161.744" y="88.7344" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="188.926" y="88.7344" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="219.027" y="47.4009" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.027" y="56.8357" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.027" y="66.2705" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="10.334" y="44.929" width="44.9289" height="36.1678" fill="#AAAAAA"/>
+                                        <rect x="58.4082" y="47.176" width="64.0237" height="7.86256" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="58.4082" y="61.3289" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="77.0527" y="61.3289" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="95.6992" y="61.3289" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect x="128.496" y="47.176" width="30.1024" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="161.744" y="47.176" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="188.926" y="47.176" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="219.027" y="5.8418" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.027" y="15.2766" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.027" y="24.7114" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="10.334" y="3.36963" width="44.9289" height="36.1678" fill="#AAAAAA"/>
+                                        <rect x="58.4082" y="5.61694" width="64.0237" height="7.86256" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="58.4082" y="19.7695" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="77.0527" y="19.7695" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="95.6992" y="19.7695" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect x="128.496" y="5.61694" width="30.1024" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="161.744" y="5.61694" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="188.926" y="5.61694" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="5.04492" y="42.5593" width="226.913" height="40.9071" stroke="#EB840B" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="pageContentService">
+                                <div class="pageContentServiceDescription">
+                                    <div class="pageContentServiceDescriptionTitle">
+                                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M16 22.8182C19.7656 22.8182 22.8182 19.7656 22.8182 16C22.8182 12.2344 19.7656 9.18182 16 9.18182C12.2344 9.18182 9.18182 12.2344 9.18182 16C9.18182 19.7656 12.2344 22.8182 16 22.8182Z" fill="#F5AA01"/>
+                                            <path d="M16 1V3.72727M16 28.2727V31M5.39091 5.39091L7.32727 7.32727M24.6727 24.6727L26.6091 26.6091M1 16H3.72727M28.2727 16H31M5.39091 26.6091L7.32727 24.6727M24.6727 7.32727L26.6091 5.39091M22.8182 16C22.8182 19.7656 19.7656 22.8182 16 22.8182C12.2344 22.8182 9.18182 19.7656 9.18182 16C9.18182 12.2344 12.2344 9.18182 16 9.18182C19.7656 9.18182 22.8182 12.2344 22.8182 16Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Спецпредложение
+                                    </div>
+                                    <div class="pageContentServiceDescriptionText">
+                                        Ваше объявление будет отображаться в специальном блоке на страницах поисковой выдачи и на страницах Каталога, а также иметь приоритетную позицию в блоке «Похожие» на карточках объявлений о продаже аналогичных авто.
+                                    </div>
+                                </div>
+                                <div class="pageContentServiceIcon">
+                                    <svg width="237" height="138" viewBox="0 0 237 138" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="237" height="137.932" fill="#E7E7E7"/>
+                                        <rect x="219.029" y="88.9595" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.029" y="98.3945" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.029" y="107.83" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="58.4082" y="88.7349" width="64.0237" height="7.86256" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="58.4082" y="102.887" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="77.0547" y="102.887" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="95.6992" y="102.887" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect x="128.498" y="88.7349" width="30.1024" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="161.744" y="88.7349" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="188.926" y="88.7349" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="219.029" y="47.3999" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.029" y="56.835" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.029" y="66.2703" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="10.334" y="44.9287" width="44.9289" height="36.1678" fill="#AAAAAA"/>
+                                        <rect x="58.4082" y="47.1753" width="64.0237" height="7.86256" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="58.4082" y="61.3279" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="77.0527" y="61.3279" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="95.6992" y="61.3279" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect x="128.496" y="47.1753" width="30.1024" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="161.744" y="47.1753" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="188.926" y="47.1753" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="219.029" y="5.84106" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.029" y="15.2764" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="219.029" y="24.7114" width="7.63792" height="7.63792" fill="#AAAAAA"/>
+                                        <rect x="10.334" y="3.36963" width="44.9289" height="36.1678" fill="#AAAAAA"/>
+                                        <rect x="58.4082" y="5.6167" width="64.0237" height="7.86256" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="58.4082" y="19.7693" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="77.0527" y="19.7693" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect opacity="0.6" x="95.6992" y="19.7693" width="15.5005" height="6.29005" fill="#AAAAAA"/>
+                                        <rect x="128.496" y="5.6167" width="30.1024" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="161.744" y="5.6167" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                        <rect x="188.926" y="5.6167" width="24.037" height="7.86256" fill="#AAAAAA"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="pageContentService">
+                                <div class="pageContentServiceDescription">
+                                    <div class="pageContentServiceDescriptionTitle">
+                                        <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M14.5 28C21.9558 28 28 21.9558 28 14.5C28 7.04416 21.9558 1 14.5 1C7.04416 1 1 7.04416 1 14.5C1 21.9558 7.04416 28 14.5 28Z" fill="#F5AA01"/>
+                                            <path d="M19.9 14.5L14.5 9.1L9.1 14.5" fill="#F5AA01"/>
+                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Поднятие объявления
+                                    </div>
+                                    <div class="pageContentServiceDescriptionText">
+                                        Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                    </div>
+                                </div>
+                                <div class="pageContentServiceIcon">
+                                    <svg width="237" height="126" viewBox="0 0 237 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="236.613" height="125.82" fill="#E7E7E7"/>
+                                        <rect opacity="0.4" x="5.38281" y="19.0635" width="225.848" height="59.6579" fill="#EB840B"/>
+                                        <rect x="5" y="79" width="226" height="43" fill="#EB840B"/>
+                                        <rect x="218.672" y="24.2224" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="218.672" y="33.6416" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="218.672" y="43.0608" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="10.3164" y="21.7544" width="44.8556" height="36.1087" fill="white"/>
+                                        <rect x="10.3164" y="58.7607" width="21.9792" height="17.2694" fill="white"/>
+                                        <rect x="33.1934" y="58.7607" width="21.9792" height="17.2694" fill="white"/>
+                                        <rect x="58.3125" y="23.9976" width="63.9192" height="7.84973" fill="white"/>
+                                        <rect opacity="0.6" x="58.3125" y="38.1272" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect opacity="0.6" x="76.9277" y="38.1272" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect opacity="0.6" x="95.543" y="38.1272" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect x="58.3125" y="63.6943" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect x="76.9277" y="63.6943" width="51.3596" height="6.27978" fill="white"/>
+                                        <rect x="131.428" y="63.6943" width="28.9319" height="6.27978" fill="white"/>
+                                        <rect x="185.479" y="63.6943" width="40.8186" height="9.41967" fill="white"/>
+                                        <rect x="128.287" y="23.9976" width="30.0532" height="7.84973" fill="white"/>
+                                        <rect x="161.479" y="23.9976" width="23.9977" height="7.84973" fill="white"/>
+                                        <rect x="188.619" y="23.9976" width="23.9977" height="7.84973" fill="white"/>
+                                        <rect x="218.672" y="84.7771" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="218.672" y="94.1963" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="218.672" y="103.616" width="7.62545" height="7.62545" fill="white"/>
+                                        <rect x="11" y="82.3096" width="44.8556" height="36.1087" fill="white"/>
+                                        <rect x="58.9961" y="84.5522" width="63.9192" height="7.84973" fill="white"/>
+                                        <rect opacity="0.6" x="58.9961" y="98.6826" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect opacity="0.6" x="77.6094" y="98.6826" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect opacity="0.6" x="96.2246" y="98.6826" width="15.4752" height="6.27978" fill="white"/>
+                                        <rect x="128.971" y="84.5522" width="30.0532" height="7.84973" fill="white"/>
+                                        <rect x="162.164" y="84.5522" width="23.9977" height="7.84973" fill="white"/>
+                                        <rect x="188.617" y="84.5522" width="23.9977" height="7.84973" fill="white"/>
+                                        <rect x="10.3164" y="8.74634" width="43.0614" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="58.3125" y="8.74634" width="43.0614" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="106.756" y="8.74634" width="21.5307" height="7.84973" fill="#AAAAAA"/>
+                                        <rect x="208.578" y="8.74634" width="7.84973" height="7.84973" fill="#C4C4C4"/>
+                                        <rect x="218.672" y="8.74634" width="7.84973" height="7.84973" fill="#C4C4C4"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pageContentServiceMessage">
+                            <span>*</span> Для дилеров доступны пакеты размещений сроком на 1 год
+                        </div>
+                    </div>
+                </div>
+                <div class="pageContentBlock">
+                    <div class="pageContentBlockHeader">{% trans %}Стоимость размещения легковых автомобилей{% endtrans %}</div>
+                    <div class="pageContentBlockInner">
+                        <div class="mainPageFiltersTabs">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {% set i = 1 %}
+                                    {% for category in categories %}
+                                        <li role="presentation" {% if i == 1 %}class="active"{% endif %}>
+                                            <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
+                                                {{ category.image |raw }}
+                                                <span>
+                                                    {% if category.translations | length > 0 %}
+                                                        {% for translation in category.translations %}
+                                                            {% if translation.locale.id == locale.id %}
+                                                                {{ translation.value }}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}        
+                                                        {{ category.title}}
+                                                    {% endif %}
+                                                </span><div class="shadowBlock"></div></a>
+                                        </li>
+                                        {% set i = i + 1 %}
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% set i = 1 %}
+                                    {% for category in categories %}
+                                        <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="categoryFilters{{ category.id }}">
+                                            <div class="categoryRate">
+                                                <div class="categoryRateDescription">
+                                                    <div class="categoryRateDescriptionTitle">
+                                                        <div class="categoryRateName">Estándar</div>
+                                                        <div class="categoryRateServices">
+                                                            <div class="accountAdvertFunctions">
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        10 размещений
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRateDescriptionText">
+                                                        Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                    </div>
+                                                </div>
+                                                <div class="categoryRatePrice">
+                                                    16,99€
+                                                </div>
+                                            </div>
+                                            <div class="categoryRate">
+                                                <div class="categoryRateDescription">
+                                                    <div class="categoryRateDescriptionTitle">
+                                                        <div class="categoryRateName">Avanzado</div>
+                                                        <div class="categoryRateServices">
+                                                            <div class="accountAdvertFunctions">
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        10 размещений
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        28
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        2
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRateDescriptionText">
+                                                        Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                    </div>
+                                                </div>
+                                                <div class="categoryRatePrice">
+                                                    25,99€
+                                                </div>
+                                            </div>
+                                            <div class="categoryRate">
+                                                <div class="categoryRateDescription">
+                                                    <div class="categoryRateDescriptionTitle">
+                                                        <div class="categoryRateName">Experimentado</div>
+                                                        <div class="categoryRateServices">
+                                                            <div class="accountAdvertFunctions">
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        25 размещений
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        2 
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        3 
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        5
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        7
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRateDescriptionText">
+                                                        Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                    </div>
+                                                </div>
+                                                <div class="categoryRatePrice">
+                                                    74,99€
+                                                </div>
+                                            </div>
+                                            <div class="categoryRate">
+                                                <div class="categoryRateDescription">
+                                                    <div class="categoryRateDescriptionTitle">
+                                                        <div class="categoryRateName">Profesional</div>
+                                                        <div class="categoryRateServices">
+                                                            <div class="accountAdvertFunctions">
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        50 размещений
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        5 
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        5 
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        10
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        12
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRateDescriptionText">
+                                                        Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                    </div>
+                                                </div>
+                                                <div class="categoryRatePrice">
+                                                    122,99€
+                                                </div>
+                                            </div>
+                                            <div class="categoryRate">
+                                                <div class="categoryRateDescription">
+                                                    <div class="categoryRateDescriptionTitle">
+                                                        <div class="categoryRateName">Supremo</div>
+                                                        <div class="categoryRateServices">
+                                                            <div class="accountAdvertFunctions">
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        100 размещений
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        10 
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        7
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        15
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountAdvertFunction">
+                                                                    <div class="button">
+                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        17
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRateDescriptionText">
+                                                        Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                    </div>
+                                                </div>
+                                                <div class="categoryRatePrice">
+                                                    198,99€
+                                                </div>
+                                            </div>
+                                        {% set i = i + 1 %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pageContentBlock">
+                    <div class="pageContentAdvertisment">
+                        <div class="pageContentAdvertismentDescription">
+                            <div class="pageContentBlockHeader">{% trans %}Реклама для новых автомобилей{% endtrans %}</div>
+                            <div class="pageContentAdvertismentDescriptionText">
+                                Согласно системе тарификации, цена публикации объявления о продаже автомобиля с пробегом зависит от стоимости самого автомобиля и срока размещения.
+
+Тип тарифа в сегменте новых автомобилей зависит от региона. В некоторых регионах бесплатное размещение объявлений, плата взимается только за звонки по ним. В других регионах действует фиксированная ставка на размещение любого количества объявлений.
+                            </div>
+                            <div class="pageContentAdvertismentDescriptionRates">
+                                <div class="pageContentAdvertismentDescriptionRate">
+                                    <div class="pageContentAdvertismentDescriptionRateTitle">Легковые автомобили</div>
+                                    <div class="pageContentAdvertismentDescriptionRatePrice">
+                                        7 дней - <span>3,99€</span>
+                                    </div>
+                                </div>
+                                <div class="pageContentAdvertismentDescriptionRate">
+                                    <div class="pageContentAdvertismentDescriptionRateTitle">Мотоциклы</div>
+                                    <div class="pageContentAdvertismentDescriptionRatePrice">
+                                        7 дней - <span>1,69€</span>
+                                    </div>
+                                </div>
+                                <div class="pageContentAdvertismentDescriptionRate">
+                                    <div class="pageContentAdvertismentDescriptionRateTitle">Автодома</div>
+                                    <div class="pageContentAdvertismentDescriptionRatePrice">
+                                        7 дней - <span>3,99€</span>
+                                    </div>
+                                </div>
+                                <div class="pageContentAdvertismentDescriptionRate">
+                                    <div class="pageContentAdvertismentDescriptionRateTitle">Коммерческий транспорт</div>
+                                    <div class="pageContentAdvertismentDescriptionRatePrice">
+                                        7 дней - <span>3,99€</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pageContentAdvertismentIcon">
+                            <svg width="268" height="124" viewBox="0 0 268 124" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="268" height="124" fill="#EB840B"/>
+                                <rect x="7.05273" y="28.2231" width="59.0217" height="43.3683" fill="white" stroke="white" stroke-width="2"/>
+                                <rect x="5.87305" y="75.2446" width="61.0217" height="7.16341" fill="white"/>
+                                <rect x="5.87305" y="12.8955" width="61.0217" height="7.16341" fill="white"/>
+                                <rect x="5.87305" y="95.1426" width="28.6536" height="7.16341" fill="white"/>
+                                <rect opacity="0.6" x="5.87305" y="89.5703" width="61.0217" height="3.97967" fill="white"/>
+                                <rect opacity="0.6" x="5.87305" y="83.9995" width="61.0217" height="3.97967" fill="white"/>
+                                <rect x="72.3184" y="28.2227" width="59.0217" height="43.3683" fill="white" stroke="white" stroke-width="2"/>
+                                <rect x="71.1387" y="75.2441" width="61.0217" height="7.16341" fill="white"/>
+                                <rect x="71.1387" y="95.1421" width="28.6536" height="7.16341" fill="white"/>
+                                <rect opacity="0.6" x="71.1387" y="89.5698" width="61.0217" height="3.97967" fill="white"/>
+                                <rect opacity="0.6" x="71.1387" y="84" width="61.0217" height="3.97967" fill="white"/>
+                                <rect x="137.584" y="28.2227" width="59.0217" height="43.3683" fill="white" stroke="white" stroke-width="2"/>
+                                <rect x="136.404" y="75.2441" width="61.0217" height="7.16341" fill="white"/>
+                                <rect x="136.404" y="95.1421" width="28.6536" height="7.16341" fill="white"/>
+                                <rect opacity="0.6" x="136.404" y="89.5698" width="61.0217" height="3.97967" fill="white"/>
+                                <rect opacity="0.6" x="136.404" y="84" width="61.0217" height="3.97967" fill="white"/>
+                                <rect x="202.852" y="28.2227" width="59.0217" height="43.3683" fill="white" stroke="white" stroke-width="2"/>
+                                <rect x="201.672" y="75.2441" width="61.0217" height="7.16341" fill="white"/>
+                                <rect x="201.672" y="95.1421" width="28.6536" height="7.16341" fill="white"/>
+                                <rect opacity="0.6" x="201.672" y="89.5698" width="61.0217" height="3.97967" fill="white"/>
+                                <rect opacity="0.6" x="201.672" y="84" width="61.0217" height="3.97967" fill="white"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-banner">
+                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page, 'position' : 'centerpage'})) }}
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" id="bannersSticky">
+            <div class="pageLeftMenu">
+                <div class="pageMenuHeader">{{ page.title }}</div>
+                <div class="pageMenuList">
+                    <ul class="list-unstyled">
+                        <li><a href="">- {% trans %}Продвижение объявлений{% endtrans %}</a></li>
+                        <li><a href="">- {% trans %}Стоимость размещения{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Сервисы{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Медийная реклама{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Правовая информация{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}О проекте{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}FAQ{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Обратная связь{% endtrans %}</a></li>
+                    </ul>
+                </div>
+                    <div class="pageMenuButton cookieAlertButton">
+                        <a href="{% if locale.isDefault %}{{ path('register') }}{% else %}{{ path('registerLocale',{'_locale':locale.code}) }}{% endif %}">{% trans %}Стать клиентом{% endtrans %}</a>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

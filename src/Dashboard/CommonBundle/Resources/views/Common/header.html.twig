@@ -281,8 +281,8 @@
                         <div class="hover-border"></div>
                         <div class="siteMainSubmenu">
                             <ul class="list-unstyled">
-                                <li><a href="">Дилеры</a></li>
-                                <li><a href="">Сервисные&nbsp;центры</a></li>
+                                <li><a href="{% if locale.isDefault %}{{ path('dealer') }}{% else %}{{ path('dealerLocale',{'_locale' : locale.code}) }}{% endif %}">Дилеры</a></li>
+                                <li><a href="{% if locale.isDefault %}{{ path('service') }}{% else %}{{ path('serviceLocale',{'_locale' : locale.code}) }}{% endif %}">Сервисные&nbsp;центры</a></li>
                             </ul>
                         </div>
                     </li>
@@ -378,8 +378,8 @@
                             <div class="siteMenuGamburgerItem">
                                 <div class="siteMenuGamburgerHeader">{% trans %}Информация{% endtrans %}</div>
                                 <ul class="list-unstyled">
-                                    <li><a href="">Дилерам</a></li>
-                                    <li><a href="">Автосервисам</a></li>
+                                    <li><a href="{% if locale.isDefault %}{{ path('dealer') }}{% else %}{{ path('dealerLocale',{'_locale' : locale.code}) }}{% endif %}">{% trans %}Дилерам{% endtrans %}</a></li>
+                                    <li><a href="{% if locale.isDefault %}{{ path('service') }}{% else %}{{ path('serviceLocale',{'_locale' : locale.code}) }}{% endif %}">{% trans %}Автосервисам{% endtrans %}</a></li>
                                     <li style="padding-top:3rem;"><a href="" style="font-family:'GothamProBold'">Обратная связь</a></li>
                                     <li><a href="" style="font-family:'GothamProBold'">Разместить рекламу</a></li>
                                 </ul>  

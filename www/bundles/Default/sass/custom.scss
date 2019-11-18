@@ -1008,14 +1008,20 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .pageContentJobsLists{@include flexBox(row,flex-start,stretch);flex-wrap:wrap;padding-top: 3rem;}
 .pageContentJobsItem{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);@include flexBox(row,flex-start,center);padding-bottom: 1.8rem;}
 .pageContentJobsItemIcon{width: 25px;height:25px;margin-right:1.7rem;@include flexBox(row,center,center);}
-
-
-
-
-
-
-
-
+.big-register-block{@include flexBox(row,center,center);}
+.registerBigForm{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(12px);background: #fff;padding: 6rem 13rem;margin: 6rem 0;}
+.registerBigFormHeader{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 5rem;}
+.registerBigInner .formParemetersItem{justify-content: space-between;}
+.registerBigInner .formParameter{margin-right: 0;width: 45%;}
+.registerBigInner .formParameter .formParameterLabel{width: 50%;}
+.registerBigInner .formParameter .formParameterField{width: 50%;}
+.registerBigInner .formParameter .formParameterField input,.registerBigInner .formParameter .formParameterField .select-cover{width: 100%;}
+.registerBigInner .formParameter .formParameterField .select-cover{margin-bottom: 0;}
+.registerBigInnerSubblock{padding-bottom: 1.4rem;}
+.registerBigInnerSubblockHeader{@include fontView("GothamProBold",#ABABAB,1.6rem,2.2rem);padding-bottom: 2rem;}
+.registerBigForm .pageContentServiceMessage{font-size: 1.6rem;line-height: 2.2rem;padding-top: 2.4rem;}
+.formParameterField .registerDescription{padding-left: 0;padding-right: 0;}
+.formParameter .register-form-forms{padding-left: 20%;}
 
 
 

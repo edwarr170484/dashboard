@@ -60,7 +60,6 @@
                                             <th>Email</th>
                                             <th>Роль</th>
                                             <th>Объявлений</th>
-                                            <th>Друзей</th>
                                             <th>Подтвержден</th>
                                             <th>Действия</th>
                                         </tr>
@@ -80,7 +79,6 @@
                                                         {%endfor %}
                                                     </td>
                                                     <td>{{ user.products | length }}</td>
-                                                    <td>{{ user.friends | length }}</td>
                                                     <td>
                                                         {% if user.isConfirm == 1 %}
                                                             <i class="fa fa-check fa-2x" style="color:#3c763d"></i>

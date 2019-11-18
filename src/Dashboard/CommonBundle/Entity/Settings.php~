@@ -865,4 +865,27 @@ class Settings
     {
         return $this->mainPageDefaultCategory;
     }
+
+    /**
+     * Set userMessagesNumber
+     *
+     * @param integer $userMessagesNumber
+     * @return Settings
+     */
+    public function setUserMessagesNumber($userMessagesNumber)
+    {
+        $this->userMessagesNumber = $userMessagesNumber;
+    
+        return $this;
+    }
+
+    /**
+     * Get userMessagesNumber
+     *
+     * @return integer 
+     */
+    public function getUserMessagesNumber()
+    {
+        return $this->userMessagesNumber;
+    }
 }

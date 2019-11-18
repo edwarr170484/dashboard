@@ -19,7 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\UserInfo;
-use Dashboard\CommonBundle\Entity\UserPurse;
 use Dashboard\CommonBundle\Entity\Product;
 use Dashboard\CommonBundle\Entity\FavoriteProducts;
 use Dashboard\CommonBundle\Entity\ProductFotos;
@@ -28,10 +27,6 @@ use Dashboard\CommonBundle\Entity\Message;
 use Dashboard\CommonBundle\Entity\Conversation;
 use Dashboard\CommonBundle\Entity\Register;
 use Dashboard\CommonBundle\Entity\Review;
-use Dashboard\CommonBundle\Entity\Invite;
-use Dashboard\CommonBundle\Entity\Friend;
-use Dashboard\CommonBundle\Entity\UserPurseHistory;
-use Dashboard\CommonBundle\Entity\UserActivity;
 use Dashboard\CommonBundle\Entity\Blacklist;
 
 use Dashboard\CommonBundle\Form\Type\UserType;
@@ -50,18 +45,17 @@ use Dashboard\CommonBundle\Form\DataTransformer\ProductToNumberTransformer;
 class UserController extends Controller
 {    
     /**
-     * @Route("/register/{link}", name="register", defaults = {"link" : "0"})
-     * @Route("/{_locale}/register/{link}", name="registerLocale", defaults={"_locale" : "es","link" : "0"}, requirements={"_locale" : "es|ru"})
+     * @Route("/register", name="register", defaults = {"link" : "0"})
+     * @Route("/{_locale}/register", name="registerLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function registerAction($link, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
-        
         $user = new User();
         
         $registerForm = $this->createForm(new UserRegisterType($link), $user);
-        
         $registerForm->handleRequest($request);
+        
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
@@ -98,19 +92,6 @@ class UserController extends Controller
                                                                                     'success' => $success,"settings" => $settings, "locale" => $locale));
             }
             
-            if(!$registerForm['termsAccept']->getData())
-            {
-                $this->addFlash(
-                    'notice',
-                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> Jums ir jāpiekrīt lietotāja līguma noteikumiem.') . '</div>'
-                );
-                
-                return $this->render('DashboardCommonBundle:User:register.html.twig', array('registerForm' => $registerForm->createView(),
-                                                                                    'success' => $success,"settings" => $settings, "locale" => $locale));
-            }
-            
             //check if email exists
             $query = $manager->createQuery("SELECT u FROM Dashboard\CommonBundle\Entity\User u WHERE u.username = '" . $registerForm['email']->getData() . "' OR u.email = '" . $registerForm['email']->getData() . "'");
 
@@ -140,73 +121,39 @@ class UserController extends Controller
                 }
             }
             
-            $userinfo = new UserInfo();
-            $userinfo->setUser($user);
+            $mailPassword = $user->getPassword();
+            $role = $this->getDoctrine()->getRepository("DashboardCommonBundle:Role")->findOneByRole("ROLE_INDIVIDUAL");
+            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
+            
+            $user->getUserinfo()->setUser($user);
             $user->setUsername($user->getEmail()); 
             $user->setIsActive(1);
-            
-            $settings = $this->getDoctrine()->getRepository("DashboardCommonBundle:Settings")->find(1);
-
-            $role = $this->getDoctrine()->getRepository("DashboardCommonBundle:Role")->findOneById($settings->getUserDefaultGroup());
-            $user->addRole($role);
-            
-            $user->setAdvertNumber(0);
-             
-            $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
-
-            $em = $this->getDoctrine()->getManager();
-            
-            $userActivity = new UserActivity();
-            $userActivity->setUser($user);
-            $userActivity->setEnterCount(0);
-            $userActivity->setLastActivity(new \DateTime("now"));
-            
-            $userpurse = new UserPurse();
-            $userpurse->setUser($user);
-            $userpurse->setBalanse(0);
-            
-            $em->persist($user);
-            $em->persist($userinfo);
-            $em->persist($userpurse);
-            $em->persist($userActivity);
-            $em->flush();
-            
-            $register = new Register();
-            $key = md5(md5(md5($password . rand(1, 99999999)) . rand(1, 99999)) . $user->getEmail());
-            $register->setConfirmKey($key);
-            
-            if($link)
-            {
-                $linkIs = $manager->getRepository("DashboardCommonBundle:Invite")->findOneByInviteCode($link);
-                
-                if($linkIs)
-                {
-                    $register->setInviteCode($link);
-                }
+            if($settings->getIsModerate()){
+                $user->setIsConfirm(0);
+            }else{
+                $user->setIsConfirm(1);
             }
+            $user->addRole($role);
+            $role->addUser($user);
+            $user->setAdvertNumber(0);
+            $user->setPassword($password);
             
-            $register->setDate(new \DateTime("now"));
-            
-            $query = $em->createQuery('SELECT u FROM Dashboard\CommonBundle\Entity\User u ORDER BY u.id ASC');
-            $users = $query->getResult();
-            $register->setUserId($users[count($users) - 1]->getId());
-            
-            $em->persist($register);
-            $em->flush();
+            $manager->persist($user);
+            $manager->persist($role);
+            $manager->flush();
             
             //send confirmation link to email
             $message = \Swift_Message::newInstance()
-            ->setSubject('Регистрация на портале gribupardot.sunweb.by')
-            ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-            ->setTo($registerForm['email']->getData())
-            ->setBody(
-                $this->renderView(
-                    'Emails/userregistration.html.twig',
-                    array('key' => $key)
-                ),
-                'text/html'
-            );
+                ->setSubject($this->get('translator')->trans('Регистрация на портале') . $settings->getSiteName())
+                ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                ->setTo($registerForm['email']->getData())
+                ->setBody(
+                    $this->renderView(
+                        'Emails/userregistration.html.twig',
+                        array('user' => $user, "settings" => $settings, "password" => $mailPassword)
+                    ),
+                    'text/html'
+                );
             
             $this->get('mailer')->send($message);
             
@@ -221,118 +168,8 @@ class UserController extends Controller
     }
     
     /**
-     * @Route("/register/confirm/{key}", name="register_confirm")
-     * @Route("/{_locale}/register/confirm/{key}", name="register_confirmLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
-     */
-    public function registerConfirmAction($key, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        if($key)
-        {
-            $confirmation = $manager->getRepository("DashboardCommonBundle:Register")->findOneByConfirmKey($key);
-            
-            if($confirmation)
-            {
-                $date = new \DateTime("now");
-                $diff=$date->diff($confirmation->getDate()); 
-                $user = $manager->getRepository("DashboardCommonBundle:User")->find($confirmation->getUserId());
-
-                if((($diff->d * 24) + $diff->h) < 48)
-                {
-                    $user->setIsConfirm(1);
-                    $userpurse = $user->getUserpurse();
-                    $userpurse->setBalanse(10);
-                    
-                    $userPurseHistory = new UserPurseHistory();
-                    $userPurseHistory->setActionDate(new \DateTime("now"));
-                    $userPurseHistory->setAction($this->get('translator')->trans("Naudas līdzekļu uzskaite reģistrācijai. Kredīts 10"). " " . $settings->getCurrency()->getName() . ".");
-                    $userPurseHistory->setCurrentBalanse(10);
-                    $userPurseHistory->setUserpurse($userpurse);
-                    
-                    $manager->persist($user);
-                    $manager->persist($userpurse);
-                    $manager->persist($userPurseHistory);
-                    
-                    $invite = $confirmation->getInviteCode();
-                    
-                    if($invite)
-                    {
-                        $friend = new Friend();
-                        $inviteCode = base64_decode($invite);
-                        
-                        $inviteData = unserialize($inviteCode);
-                        
-                        $userReferrer = $manager->getRepository("DashboardCommonBundle:User")->find($inviteData['user']);
-                        
-                        if($userReferrer)
-                        {
-                            $userReferrer->getUserpurse()->setBalanse($userReferrer->getUserpurse()->getBalanse() + 10);
-                            
-                            $userPurseHistory = new UserPurseHistory();
-                            $userPurseHistory->setActionDate(new \DateTime("now"));
-                            $userPurseHistory->setAction($this->get('translator')->trans("Kredītiestādes, lai piesaistītu jaunu lietotāju. Kredīts 10"). " " . $settings->getCurrency()->getName() . ".");
-                            $userPurseHistory->setCurrentBalanse($userReferrer->getUserpurse()->getBalanse() + 10);
-                            $userPurseHistory->setUserpurse($userReferrer->getUserpurse());
-                            
-                            $friend->setReferrer($userReferrer);
-                            $friend->setUser($user);
-                            $manager->persist($friend);
-                            $manager->persist($userReferrer);
-                            $manager->persist($userPurseHistory);
-                        }
-                    }
-                    
-                    $info = $this->get('translator')->trans('Jūs esat veiksmīgi apstiprinājis reģistrāciju. Tagad jūs varat pieteikties, izmantojot zemāk esošo veidlapu.');
-                    $manager->remove($confirmation);
-                    $manager->flush();
-                }
-                else
-                {
-                    $manager->remove($user->getUserinfo());
-                    $manager->remove($user->getActivity());
-                    if($user->getUserpurse()->getHistory())
-                    {
-                        foreach($user->getUserpurse()->getHistory() as $item)
-                        {
-                            $item->setUserpurse(null);
-                            $manager->remove($item);
-                        }
-                    }
-                    $manager->remove($user->getUserpurse());
-                    $manager->remove($user);
-                    $manager->remove($confirmation);
-                    $manager->flush();
-                    $info = $this->get('translator')->trans('Apstiprinājuma atslēga ir beidzies. Jums ir jāaizpilda reģistrācijas procedūra vēlreiz.');
-                }
-            }
-            else 
-            {
-                if($locale->getIsDefault())
-                {
-                     return $this->redirectToRoute("login");
-                }
-                else
-                {
-                     return $this->redirectToRoute("loginLocale", array("_locale" => $locale->getCode()));
-                }
-            }
-        }
-        else
-        {
-            $info = $this->get('translator')->trans('Apstiprinājuma atslēga nav derīga. Varbūt tas beidzās vai neeksistē. Mēģiniet reģistrēties vēlreiz.');
-        }
-        
-        return $this->render('DashboardCommonBundle:Security:login.html.twig', array('last_username' => '',
-                                                                                     'error'         => '', 
-                                                                                     'info'          => $info));
-    }
-    
-    /**
      * @Route("/restore", name="restore")
-     * @Route("/{_locale}/restore", name="restoreLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/restore", name="restoreLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function restoreAction(Request $request)
     {

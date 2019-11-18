@@ -1,0 +1,233 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% form_theme registerForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block button_row -%}
+    <button class="message-button-answer" type="submit">{{form_label(form)}}</button>
+{%- endblock button_row -%}
+
+{%- block checkbox_widget -%}
+    {%- for attrname, attrvalue in attr -%}
+        {%- if attrname in ['id'] -%}
+            <div class="div-checkbox small-margin {% if checked %} active {% endif %}" data-checkbox="{{ attrvalue }}"></div>
+        {%- endif -%}
+    {%- endfor -%}
+        
+    <input type="checkbox" {{ block('widget_attributes') }} value="1" {% if checked %} checked="checked"{% endif %} />
+{%- endblock checkbox_widget -%}
+
+{% block title %}{% trans %}Регистрация дилера{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                        <li><a href="">{{ page.title }}</a></li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                        <li>
+                            <a href="{% if locale.isDefault %}{{ path('dealerRegister') }}{% else %}{{ path('dealerRegisterLocale',{'_locale' : locale.code}) }}{% endif %}">{% trans %}Регистрация дилера{% endtrans %}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="big-register-block">
+                <div class="registerBigForm">
+                    {% if success %}
+                        {% if settings.isModerate %}
+                            <div class="registerBigFormHeader">{% trans %}Заявление отправлено на модерацию{% endtrans %}</div>
+                            <div class="accountNocontent">
+                                {% trans %}Ваше заявление на регистрацию отправлено на модерацию. Наши специалисты проверят его и свяжутся с вами в самое ближайшее время{% endtrans %}.
+                            </div>
+                        {% else %}
+                            <div class="registerBigFormHeader">{% trans %}Спасибо за регистрацию!{% endtrans %}</div>
+                            <div class="accountNocontent">
+                                {% trans %}Регистрационные данные отправлены на введенный Вами email. Используйте их для входа в личный кабинет{% endtrans %}.
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="registerBigFormHeader">{% trans %}Регистрация дилера{% endtrans %}</div>
+                        <div class="registerBigInner">
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        {{ form_start(registerForm, {'method':'POST', 'attr': {'class': 'form-horizontal dealerRegisterForm'}}) }}
+                        <div class="registerBigInnerSubblock">
+                            <div class="registerBigInnerSubblockHeader">{% trans %}Данные компании{% endtrans %}</div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.company) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.company) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.nifNumber) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.nifNumber) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.city) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.city) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.cityCode) }} <sup>*</sup></div>
+                                    <div class="formParameterField" id="cityCodeField">
+                                        {{ form_widget(registerForm.dealerinfo.cityCode) }}
+                                    </div>
+                                </div>
+                                <script>
+                                    $('#dealerRegister_dealerinfo_city').change(function() {
+                                        var $form = $('.dealerRegisterForm');
+                                        var data = {};
+                                        data[$('#dealerRegister_dealerinfo_city').attr('name')] = $('#dealerRegister_dealerinfo_city').val();
+
+                                        $.ajax({
+                                            url : $form.attr('action'),
+                                            type: $form.attr('method'),
+                                            data : data,
+                                            success: function(html) {
+                                                $('#cityCodeField').html($(html).find('#cityCodeField').html());
+                                                $('#dealerRegister_dealerinfo_cityCode').customSelect();
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.address) }}</div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.address) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.website) }}</div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.website) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="registerBigInnerSubblock">
+                            <div class="registerBigInnerSubblockHeader">{% trans %}Данные пользователя{% endtrans %}</div>   
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.firstname) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.firstname) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.lastname) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.lastname) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.position) }}</div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.position) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel"></div>
+                                    <div class="formParameterField"></div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.email) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.email) }}
+                                        {{ form_widget(registerForm.dealerinfo.user) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.phone) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.phone) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.password.first) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.password.first) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(registerForm.password.second) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.password.second) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pageContentServiceMessage">
+                                <span>*</span> - {% trans %}Este campo es obligatorio{% endtrans %}
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel"></div>
+                                    <div class="formParameterField">
+                                        {% if settings.isShowCaptcha %}
+                                            <script>
+                                                var registerCaptcha;
+                                                var onloadCallback = function() {
+                                                registerCaptcha = grecaptcha.render('registerCaptcha', {
+                                                        'sitekey' : '6Lc6wCkTAAAAAHoOUvGPxIsIVZ67R09ZYGhmILND'
+                                                    });
+                                                };
+                                            </script>
+                                            <div class="register-password-block">
+                                                <div class="g-recaptcha" id="registerCaptcha"></div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="register-form-forms">
+                                        <button type="submit">{% trans %}Зарегистрироваться{% endtrans %}</button>
+                                        <div class="registerDescription">
+                                            {% trans %}Нажимая кнопку я соглашаюсь с <a href="">Условиями обслуживания</a> и  <a href="">Политикой конфиденциальности{% endtrans %}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_end(registerForm) }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

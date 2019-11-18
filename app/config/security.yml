@@ -6,8 +6,10 @@ security:
             algorithm: bcrypt
                 
     role_hierarchy:
-        ROLE_ADMIN:       [ROLE_USER, ROLE_DEALER]
+        ROLE_ADMIN:       [ROLE_DEALER,ROLE_SERVICE,ROLE_INDIVIDUAL]
+        ROLE_INDIVIDUAL:  ROLE_INDIVIDUAL 
         ROLE_DEALER:      ROLE_DEALER
+        ROLE_SERVICE:     ROLE_SERVICE
 
     providers:
         admin_db_provider:
@@ -78,6 +80,6 @@ security:
         - { path: ^/restore, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/check-vkontakte, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/check-facebook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/account, roles: ROLE_DEALER }
+        - { path: ^/account, roles: [ROLE_DEALER,ROLE_SERVICE,ROLE_INDIVIDUAL] }
         
         

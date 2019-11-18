@@ -103,36 +103,7 @@ class AccountController extends Controller
         
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        if($user->getActivity())
-        {
-            if($user->getActivity()->getEnterCount() == 0)
-            {
-                $user->getActivity()->setEnterCount(1);
-                $user->getActivity()->setLastActivity(new \DateTime("now"));
 
-                $manager->persist($user);
-                $manager->flush();
-
-                $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-warning alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Informācija!</strong> Lai pievienotu reklāmas, aizpildiet savu profilu.') . '</div>'
-                );
-
-                if($locale->getIsDefault())
-                {
-                     return $this->redirectToRoute("account_settings");
-                }
-                else
-                {
-                     return $this->redirectToRoute("account_settingsLocale", array("_locale" => $locale->getCode()));
-                }
-            }
-        }
-        
-        
         //current products
         $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' ORDER BY p.dateAdded DESC')->setMaxResults(4);
 

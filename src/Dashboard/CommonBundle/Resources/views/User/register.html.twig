@@ -77,14 +77,25 @@
                 <div class="loginBlock">
                     {% if  app.request.locale == 'lv' %}
                             {% if success %}   
-                                <div class="register-block result">
-                                    <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
-                                    <div class="register-block-description confirm-restore">
-                                        {% trans %}Ваш аккаунт успешно зарегистрирован в системе. Регистрационные данные отправлены на введенный Вам email{% endtrans %}
+                                {% if settings.isModerate %}
+                                    <div class="register-block result">
+                                        <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
+                                        <div class="register-block-description confirm-restore">
+                                            {% trans %}Ваш аккаунт зарегистрирован в системе и проходит модерацию нашими специалистами. Регистрационные данные отправлены на введенный Вами email{% endtrans %}
+                                        </div>
+                                        <div class="resultEmail">{{ email }}</div>
+                                        <div class="resultNavigation"><a href="{{path('login')}}">Войдите</a>, используя свои данные</div>
                                     </div>
-                                    <div class="resultEmail">{{ email }}</div>
-                                    <div class="resultNavigation"><a href="{{path('login')}}">Войдите</a>, используя свои данные</div>
-                                </div>
+                                {% else %}
+                                    <div class="register-block result">
+                                        <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
+                                        <div class="register-block-description confirm-restore">
+                                            {% trans %}Ваш аккаунт успешно зарегистрирован в системе. Регистрационные данные отправлены на введенный Вами email{% endtrans %}
+                                        </div>
+                                        <div class="resultEmail">{{ email }}</div>
+                                        <div class="resultNavigation"><a href="{{path('login')}}">Войдите</a>, используя свои данные</div>
+                                    </div>    
+                                {% endif %}
                             {% else %}
                                 <div class="register-block">
                                     <h1 class="register-block-header"><a href="{{path('login')}}">{% trans %}Войти{% endtrans %}</a> {% trans %} или Зарегистрироваться{% endtrans %}</h1>
@@ -126,14 +137,25 @@
                             {% endif %}
                     {% else %}
                             {% if success %}
-                               <div class="register-block result">
-                                    <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
-                                    <div class="register-block-description confirm-restore">
-                                        {% trans %}Ваш аккаунт успешно зарегистрирован в системе. Регистрационные данные отправлены на введенный Вам email{% endtrans %}
+                                {% if settings.isModerate %}
+                                    <div class="register-block result">
+                                        <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
+                                        <div class="register-block-description confirm-restore">
+                                            {% trans %}Ваш аккаунт зарегистрирован в системе и проходит модерацию нашими специалистами. Регистрационные данные отправлены на введенный Вами email{% endtrans %}
+                                        </div>
+                                        <div class="resultEmail">{{ email }}</div>
+                                        <div class="resultNavigation"><a href="{{path('loginLocale', {'_locale' : app.request.locale})}}">Войдите</a>, используя свои данные</div>
                                     </div>
-                                    <div class="resultEmail">{{ email }}</div>
-                                    <div class="resultNavigation"><a href="{{path('loginLocale', {'_locale' : app.request.locale})}}">Войдите</a>, используя свои данные</div>
-                                </div> 
+                                {% else %}
+                                    <div class="register-block result">
+                                        <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
+                                        <div class="register-block-description confirm-restore">
+                                            {% trans %}Ваш аккаунт успешно зарегистрирован в системе. Регистрационные данные отправлены на введенный Вами email{% endtrans %}
+                                        </div>
+                                        <div class="resultEmail">{{ email }}</div>
+                                        <div class="resultNavigation"><a href="{{path('loginLocale', {'_locale' : app.request.locale})}}">Войдите</a>, используя свои данные</div>
+                                    </div>    
+                                {% endif %}
                             {% else %}
                                 <div class="register-block">
                                     <h1 class="register-block-header"><a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Войти{% endtrans %}</a> {% trans %} или Зарегистрироваться{% endtrans %}</h1>

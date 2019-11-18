@@ -56,7 +56,7 @@
                     </div>
                     <div class="pageContentBannerButtons">
                         <div class="pageMenuButton cookieAlertButton">
-                            <a href="{% if locale.isDefault %}{{ path('register') }}{% else %}{{ path('registerLocale',{'_locale':locale.code}) }}{% endif %}">{% trans %}Стать клиентом{% endtrans %}</a>
+                            <a href="{% if locale.isDefault %}{{ path('dealerRegister') }}{% else %}{{ path('dealerRegisterLocale',{'_locale':locale.code}) }}{% endif %}">{% trans %}Стать клиентом{% endtrans %}</a>
                         </div>
                         <div class="pageMenuButton cookieAlertButton white">
                             <a href="">{% trans %}Презентация PDF{% endtrans %}</a>
@@ -638,7 +638,7 @@
                     </ul>
                 </div>
                     <div class="pageMenuButton cookieAlertButton">
-                        <a href="{% if locale.isDefault %}{{ path('register') }}{% else %}{{ path('registerLocale',{'_locale':locale.code}) }}{% endif %}">{% trans %}Стать клиентом{% endtrans %}</a>
+                        <a href="{% if locale.isDefault %}{{ path('dealerRegister') }}{% else %}{{ path('dealerRegisterLocale',{'_locale':locale.code}) }}{% endif %}">{% trans %}Стать клиентом{% endtrans %}</a>
                     </div>
             </div>
         </div>

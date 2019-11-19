@@ -1,6 +1,6 @@
 {% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
 
-{% form_theme serviceForm _self %}
+{% form_theme rateForm _self %}
 
 {%- block form_widget_simple -%}
     {%- set type = type|default('text') -%}
@@ -29,7 +29,7 @@
     {%- endif -%}
 {%- endblock form_label -%}
 
-{% block _service_translations_widget %}
+{% block _rate_translations_widget %}
     <table class="table table-bordered table-translations">
         <thead>
             <tr>
@@ -44,7 +44,7 @@
     </table> 
 {% endblock %}
 
-{% block _service_translations_entry_row %}
+{% block _rate_translations_entry_row %}
     <tr>
         <td>{{ form_widget(form.locale)}}</td>
         <td>{{ form_widget(form.value)}}{{ form_widget(form.mark)}}</td>
@@ -55,13 +55,12 @@
     </tr>
 {% endblock %}
 
-{% block _service_prices_widget %}
-    <table class="table table-bordered table-service-prices">
+{% block _rate_services_widget %}
+    <table class="table table-bordered table-rate-services">
         <thead>
             <tr>
-                <th>{% trans %}ID для счет-фактур{% endtrans %}</th>
-                <th>{% trans %}Категория{% endtrans %}</th>
-                <th>{% trans %}Цена{% endtrans %}</th>
+                <th>{% trans %}Услуга{% endtrans %}</th>
+                <th>{% trans %}Количество единиц услуги{% endtrans %}</th>
                 <th>{% trans %}Действия{% endtrans %}</th>
             </tr>
         </thead>
@@ -71,11 +70,10 @@
     </table> 
 {% endblock %}
 
-{% block _service_prices_entry_row %}
+{% block _rate_services_entry_row %}
     <tr>
-        <td>{{ form_widget(form.billId)}}</td>
-        <td>{{ form_widget(form.category)}}</td>
-        <td>{{ form_widget(form.price)}}{{ form_widget(form.service)}}</td>
+        <td>{{ form_widget(form.service)}}</td>
+        <td>{{ form_widget(form.value)}}{{ form_widget(form.rate)}}</td>
         <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить объект?'))return false;else $(this).parent().parent().remove()">
                 <i class="fa fa-times" title="Удалить объект"></i>
             </button> 
@@ -83,16 +81,16 @@
     </tr>
 {% endblock %}
 
-{% block title %}{% trans %} Панель управления - Редактировать услугу{% endtrans %}{% endblock %}
+{% block title %}{% trans %} Панель управления - Редактировать тариф{% endtrans %}{% endblock %}
 
 {% block body %}
     <div id="content" class="content">
         <ol class="breadcrumb pull-right">
             <li><a href="{{ path('admin_main') }}">Главная</a></li>
-            <li><a href="{{ path('admin_service') }}">Услуги</a></li>
-            <li class="active">Редактировать услугу</li>
+            <li><a href="{{ path('admin_rate') }}">Тарифы</a></li>
+            <li class="active">Редактировать тариф</li>
         </ol>
-        <h1 class="page-header">Услуги <small>Редактировать услугу</small></h1>
+        <h1 class="page-header">Тарифы <small>Редактировать тариф</small></h1>
         <div class="row">
             <div class="col-md-12 ui-sortable">
                 {% for flashMessage in app.session.flashbag.get('notice') %}
@@ -102,10 +100,10 @@
                 {% endfor %}
                 <div data-sortable-id="table-basic-7" class="panel panel-inverse">
                     <div class="panel-heading ui-sortable-handle">
-                        <h4 class="panel-title">Информация об услуге</h4>
+                        <h4 class="panel-title">Информация о тарифе</h4>
                     </div>
                     <div class="panel-body">
-                        {{ form_start(serviceForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        {{ form_start(rateForm, {'attr' : {'class' : 'form-horizontal'}})}}
                         <ul class="nav nav-tabs">
                             <li class="active">
                                 <a data-toggle="tab" href="#maininfo">Основная информация</a>
@@ -114,39 +112,45 @@
                                 <a data-toggle="tab" href="#translations">Переводы</a>
                             </li>
                             <li>
-                                <a data-toggle="tab" href="#prices">Цены</a>
+                                <a data-toggle="tab" href="#services">Услуги</a>
                             </li>
                         </ul>
                         <div class="tab-content">
                             <div id="maininfo" class="tab-pane fade active in">
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">{{ form_label(serviceForm.title)}}</label>
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.name)}}</label>
                                     <div class="col-md-9">
-                                        {{ form_widget(serviceForm.title)}}
+                                        {{ form_widget(rateForm.name)}}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">{{ form_label(serviceForm.icon)}}</label>
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.billId)}}</label>
                                     <div class="col-md-9">
-                                        {{ form_widget(serviceForm.icon)}}
+                                        {{ form_widget(rateForm.billId)}}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">{{ form_label(serviceForm.iconGray)}}</label>
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.price)}}</label>
                                     <div class="col-md-9">
-                                        {{ form_widget(serviceForm.iconGray)}}
+                                        {{ form_widget(rateForm.price)}}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">{{ form_label(serviceForm.days)}}</label>
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.advertNumber)}}</label>
                                     <div class="col-md-9">
-                                        {{ form_widget(serviceForm.days)}}
+                                        {{ form_widget(rateForm.advertNumber)}}
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">{{ form_label(serviceForm.description)}}</label>
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.userRole)}}</label>
                                     <div class="col-md-9">
-                                        {{ form_widget(serviceForm.description)}}
+                                        {{ form_widget(rateForm.userRole)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.description)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(rateForm.description)}}
                                     </div>
                                 </div>
                             </div>
@@ -155,37 +159,36 @@
                                     <div class="col-md-12">
                                          <button class="btn btn-sm btn-success m-b-15" id="add-translation" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
  Добавить перевод</button>
-                                        {{ form_widget(serviceForm.translations,{'id' : 'object_translations'})}}
-                                        {% if serviceForm.translations | length <= 0 %}
+                                        {{ form_widget(rateForm.translations,{'id' : 'object_translations'})}}
+                                        {% if rateForm.translations | length <= 0 %}
                                             Переводы не добавлены
                                         {% endif %}
                                     </div>
                                 </div>
                             </div>
-                            <div id="prices" class="tab-pane fade">
+                            <div id="services" class="tab-pane fade">
                                 <div class="row">
                                     <div class="col-md-12">
-                                         <button class="btn btn-sm btn-success m-b-15" id="add-service-price" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
- Добавить цену</button>
-                                        {{ form_widget(serviceForm.prices)}}
-                                        {% if serviceForm.prices | length <= 0 %}
-                                            Цены не добавлены
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-rate-service" type="button">
+                                             <i class="fa fa-plus" aria-hidden="true"></i>Добавить услугу</button>
+                                        {{ form_widget(rateForm.services)}}
+                                        {% if rateForm.services | length <= 0 %}
+                                            Услуги не добавлены
                                         {% endif %}
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3">{{ form_label(serviceForm.save)}}</label>
+                                <label class="col-md-3">{{ form_label(rateForm.save)}}</label>
                                 <div class="col-md-9">
-                                    {{ form_widget(serviceForm.save,{'type' : 'submit'})}}
+                                    {{ form_widget(rateForm.save,{'type' : 'submit'})}}
                                 </div>
                             </div>        
                         </div>
-                        {{ form_end(serviceForm)}}
+                        {{ form_end(rateForm)}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 {% endblock %}
-

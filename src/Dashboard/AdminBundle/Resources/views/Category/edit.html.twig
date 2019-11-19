@@ -280,6 +280,34 @@
     </tr>
 {% endblock %}
 
+{% block _category_rates_widget %}
+    <table class="table table-bordered table-rates">
+        <thead>
+            <tr>
+                <th>{% trans %}ID тарифа для счетов{% endtrans %}</th>
+                <th>{% trans %}Тариф{% endtrans %}</th>
+                <th>{% trans %}Цена{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _category_rates_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.billId)}}</td>
+        <td>{{ form_widget(form.rate)}}</td>
+        <td>{{ form_widget(form.price)}}{{ form_widget(form.category)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить объект?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить перевод объект"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
 {% block title %}{% trans %} Панель управления - Редактировать категорию{% endtrans %}{% endblock %}
 
 {% block body %}
@@ -318,6 +346,9 @@
                             </li>
                             <li>
                                 <a data-toggle="tab" href="#generations">Поколения</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#rates">Тарифы</a>
                             </li>
                             <li>
                                 <a data-toggle="tab" href="#meta">Мета-теги</a>
@@ -385,12 +416,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 ">{{ form_label(categoryForm.isMainPageDefault)}}</label>
-                                    <div class="col-md-9">
-                                        {{ form_widget(categoryForm.isMainPageDefault)}}
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="col-md-3 ">{{ form_label(categoryForm.parent)}}</label>
                                     <div class="col-md-9">
                                         {{ form_widget(categoryForm.parent)}}
@@ -455,6 +480,18 @@
                                         {{ form_widget(categoryForm.generations)}}
                                         {% if categoryForm.generations | length <= 0 %}
                                             Поколения не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="rates" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-category-rate" type="button">
+                                             <i class="fa fa-plus" aria-hidden="true"></i>Добавить тариф</button>
+                                        {{ form_widget(categoryForm.rates)}}
+                                        {% if categoryForm.rates | length <= 0 %}
+                                            Тарифы не добавлены
                                         {% endif %}
                                     </div>
                                 </div>

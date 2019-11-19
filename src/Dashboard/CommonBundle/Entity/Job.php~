@@ -1,0 +1,36 @@
+<?php
+namespace Dashboard\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Table()
+ * @ORM\Entity()
+ */
+class Job
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\JobCategory", inversedBy="jobs")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+    
+    /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": null})
+     */
+    private $sortorder;
+    
+}
+

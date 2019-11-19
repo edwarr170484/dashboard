@@ -24,9 +24,14 @@ class Service
     private $title;
     
     /**
-     * @ORM\Column(type="text", nullable=true, options={"default":"0"})
+     * @ORM\Column(type="text", nullable=true, options={"default": 0})
      */
     private $icon;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true, options={"default": 0})
+     */
+    private $iconGray;
     
     /**
      * @ORM\Column(type="text", nullable=true, options={"default":"0"})
@@ -367,5 +372,28 @@ class Service
     public function getUserRoles()
     {
         return $this->userRoles;
+    }
+
+    /**
+     * Set iconGray
+     *
+     * @param string $iconGray
+     * @return Service
+     */
+    public function setIconGray($iconGray)
+    {
+        $this->iconGray = $iconGray;
+    
+        return $this;
+    }
+
+    /**
+     * Get iconGray
+     *
+     * @return string 
+     */
+    public function getIconGray()
+    {
+        return $this->iconGray;
     }
 }

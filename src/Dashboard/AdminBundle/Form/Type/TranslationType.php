@@ -18,6 +18,7 @@ use Dashboard\AdminBundle\Form\DataTransformer\CityToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\ServiceToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\GenerationToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\PackToNumberTransformer;
+use Dashboard\AdminBundle\Form\DataTransformer\RateToNumberTransformer;
 
 class TranslationType extends AbstractType
 {
@@ -46,7 +47,8 @@ class TranslationType extends AbstractType
             ->add($builder->create('city', 'hidden')->addModelTransformer(new CityToNumberTransformer($this->em)))
             ->add($builder->create('service', 'hidden')->addModelTransformer(new ServiceToNumberTransformer($this->em)))
             ->add($builder->create('generation', 'hidden')->addModelTransformer(new GenerationToNumberTransformer($this->em)))
-            ->add($builder->create('pack', 'hidden')->addModelTransformer(new PackToNumberTransformer($this->em)));
+            ->add($builder->create('pack', 'hidden')->addModelTransformer(new PackToNumberTransformer($this->em)))
+            ->add($builder->create('rate', 'hidden')->addModelTransformer(new RateToNumberTransformer($this->em)));
     }
     
     public function configureOptions(OptionsResolver $resolver)

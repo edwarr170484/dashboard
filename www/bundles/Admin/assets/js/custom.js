@@ -280,6 +280,30 @@ $(document).ready(function(){
         $(".table-service-prices > tbody").append(newForm);
     });
     
+    $("#add-rate-service").click(function(){ 
+        var prototype = $("#rate_services").data("prototype");
+        var count = $(".table-rate-services > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        
+        $(".table-rate-services > tbody").append(newForm);
+    });
+    
+    $("#add-category-rate").click(function(){ 
+        var prototype = $("#category_rates").data("prototype");
+        var count = $(".table-rates > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        
+        $(".table-rates > tbody").append(newForm);
+    });
+    
+    $("#add-job").click(function(){ 
+        var prototype = $("#jobcategory_jobs").data("prototype");
+        var count = $(".table-jobs > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        
+        $(".table-jobs > tbody").append(newForm);
+    });
+    
     $("#adminRegion").change(function(){
         
         $.ajax({

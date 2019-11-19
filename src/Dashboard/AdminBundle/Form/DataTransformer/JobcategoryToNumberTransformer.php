@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ServiceToNumberTransformer implements DataTransformerInterface
+class JobcategoryToNumberTransformer implements DataTransformerInterface
 {
     private $manager;
 
@@ -15,34 +15,31 @@ class ServiceToNumberTransformer implements DataTransformerInterface
         $this->manager = $manager;
     }
     
-    public function transform($service)
+    public function transform($category)
     {
-        if (null === $service) {
+        if (null === $category) {
             return '';
         }
 
-        return $service->getId();
+        return $category->getId();
     }
     
-    public function reverseTransform($serviceId)
+    public function reverseTransform($categoryId)
     {
-        if (!$serviceId) {
+        if (!$categoryId) {
             return;
         }
 
-        $service = $this->manager->getRepository('DashboardCommonBundle:Service')->find($serviceId);
+        $category = $this->manager->getRepository('DashboardCommonBundle:JobCategory')->find($categoryId);
 
-        if (null === $service) {
+        if (null === $category) {
             
             throw new TransformationFailedException(sprintf(
-                'Service with service_id "%s" does not exist!',
-                $serviceId
+                'Category with category_id "%s" does not exist!',
+                $categoryId
             ));
         }
 
-        return $service;
+        return $category;
     }
 }
-
-
-

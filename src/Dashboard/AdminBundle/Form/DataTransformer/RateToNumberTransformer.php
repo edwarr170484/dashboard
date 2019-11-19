@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class ServiceToNumberTransformer implements DataTransformerInterface
+class RateToNumberTransformer implements DataTransformerInterface
 {
     private $manager;
 
@@ -15,34 +15,31 @@ class ServiceToNumberTransformer implements DataTransformerInterface
         $this->manager = $manager;
     }
     
-    public function transform($service)
+    public function transform($rate)
     {
-        if (null === $service) {
+        if (null === $rate) {
             return '';
         }
 
-        return $service->getId();
+        return $rate->getId();
     }
     
-    public function reverseTransform($serviceId)
+    public function reverseTransform($rateId)
     {
-        if (!$serviceId) {
+        if (!$rateId) {
             return;
         }
 
-        $service = $this->manager->getRepository('DashboardCommonBundle:Service')->find($serviceId);
+        $rate = $this->manager->getRepository('DashboardCommonBundle:Rate')->find($rateId);
 
-        if (null === $service) {
+        if (null === $rate) {
             
             throw new TransformationFailedException(sprintf(
-                'Service with service_id "%s" does not exist!',
-                $serviceId
+                'Rate with rate_id "%s" does not exist!',
+                $rateId
             ));
         }
 
-        return $service;
+        return $rate;
     }
 }
-
-
-

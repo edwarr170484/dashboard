@@ -1,0 +1,145 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme categoryForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block _jobcategory_jobs_widget %}
+    <table class="table table-bordered table-jobs">
+        <thead>
+            <tr>
+                <th>{% trans %}Название{% endtrans %}</th>
+                <th>{% trans %}Порядок{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _jobcategory_jobs_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.name)}}</td>
+        <td>{{ form_widget(form.sortorder)}}{{ form_widget(form.category)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить объект?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить объект"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block title %}{% trans %} Панель управления - Редактировать категорию{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_jobs_categories') }}">Категории</a></li>
+            <li class="active">Редактировать категорию</li>
+        </ol>
+        <h1 class="page-header">Категории <small>Редактировать категорию</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация о категории</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(categoryForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#jobs">Работы</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(categoryForm.name)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(categoryForm.name)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(categoryForm.icon)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(categoryForm.icon)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(categoryForm.sortorder)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(categoryForm.sortorder)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(categoryForm.imageNew)}}</label>
+                                    <div class="col-md-9">
+                                        {% if categoryForm.vars.value.image %}
+                                            <img class="m-b-15" src="{{ asset('bundles/images/jobs/' ~ categoryForm.vars.value.image) }}" alt="" title="" width="250px" />
+                                        {% endif %}
+                                        {{ form_widget(categoryForm.imageNew) }}
+                                        {{ form_widget(categoryForm.image) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="jobs" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-job" type="button">
+                                             <i class="fa fa-plus" aria-hidden="true"></i>Добавить работу</button>
+                                        {{ form_widget(categoryForm.jobs)}}
+                                        {% if categoryForm.jobs | length <= 0 %}
+                                            Работы не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3">{{ form_label(categoryForm.save)}}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(categoryForm.save,{'type' : 'submit'})}}
+                                </div>
+                            </div>        
+                        </div>
+                        {{ form_end(categoryForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

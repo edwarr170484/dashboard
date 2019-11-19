@@ -1,0 +1,46 @@
+<?php
+namespace Dashboard\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Table()
+ * @ORM\Entity()
+ */
+class JobCategory
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Job", mappedBy="category")
+     * @ORM\OrderBy({"sortorder" = "ASC"})
+     */
+    private $jobs;
+    
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true, options={"default": null})
+     */
+    private $image;
+    
+    /**
+     * @ORM\Column(type="text", nullable=true, options={"default": null})
+     */
+    private $icon;
+    
+    /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": null})
+     */
+    private $sortorder;
+    
+}
+

@@ -96,6 +96,12 @@ class Translation
     private $pack;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Rate", inversedBy="translations")
+     * @ORM\JoinColumn(name="rate_id", referencedColumnName="id")
+     */
+    private $rate;
+    
+    /**
      * @ORM\Column(type="text",nullable=true, options={"default":"0"})
      */
     private $value;
@@ -431,5 +437,28 @@ class Translation
     public function getPack()
     {
         return $this->pack;
+    }
+
+    /**
+     * Set rate
+     *
+     * @param \Dashboard\CommonBundle\Entity\Rate $rate
+     * @return Translation
+     */
+    public function setRate(\Dashboard\CommonBundle\Entity\Rate $rate = null)
+    {
+        $this->rate = $rate;
+    
+        return $this;
+    }
+
+    /**
+     * Get rate
+     *
+     * @return \Dashboard\CommonBundle\Entity\Rate 
+     */
+    public function getRate()
+    {
+        return $this->rate;
     }
 }

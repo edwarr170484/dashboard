@@ -60,6 +60,11 @@ class Role implements RoleInterface
      */
     private $servicePacks;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Rate", mappedBy="userRole", cascade={"persist"})
+     */
+    private $rates;
+    
 
     public function __construct()
     {
@@ -290,5 +295,38 @@ class Role implements RoleInterface
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Add rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\Rate $rates
+     * @return Role
+     */
+    public function addRate(\Dashboard\CommonBundle\Entity\Rate $rates)
+    {
+        $this->rates[] = $rates;
+    
+        return $this;
+    }
+
+    /**
+     * Remove rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\Rate $rates
+     */
+    public function removeRate(\Dashboard\CommonBundle\Entity\Rate $rates)
+    {
+        $this->rates->removeElement($rates);
+    }
+
+    /**
+     * Get rates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRates()
+    {
+        return $this->rates;
     }
 }

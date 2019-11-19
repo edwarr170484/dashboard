@@ -78,6 +78,15 @@ class CategoryController extends Controller
                         }
                     }
                     
+                    if($category->getRates())
+                    {
+                        foreach($category->getRates() as $rate)
+                        {
+                            $rate->setCategory(null);
+                            $manager->remove($rate);
+                        }
+                    }
+                    
                     $manager->remove($category);
                     $manager->flush();
 
@@ -315,6 +324,7 @@ class CategoryController extends Controller
         $originalGenerationModifications = new ArrayCollection();
         $originalGenerationBoards = new ArrayCollection();
         $originalGenerationItems = new ArrayCollection();
+        $originalRates = new ArrayCollection();
         
         $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
         
@@ -349,6 +359,9 @@ class CategoryController extends Controller
                         $originalGenerationItems->add($generationItem);
                     }
                 }
+            }
+            foreach ($category->getRates() as $item) {
+                $originalRates->add($item);
             }
         }
         
@@ -464,6 +477,18 @@ class CategoryController extends Controller
                 }
             }
             
+            if($originalRates)
+            {
+                foreach ($originalRates as $item) 
+                {
+                    if (false === $category->getRates()->contains($item)) 
+                    {
+                        $item->setCategory(null);
+                        $manager->remove($item);
+                    }
+                }
+            }
+            
             if($category->getGenerations()){
                 foreach($category->getGenerations() as $key => $generation){
                     if($generation->getTranslations()){
@@ -529,6 +554,15 @@ class CategoryController extends Controller
             if($category->getDescriptions())
             {
                 foreach($category->getDescriptions() as $item)
+                {
+                    $item->setCategory($category);
+                    $manager->persist($item);
+                }
+            }
+            
+            if($category->getRates())
+            {
+                foreach($category->getRates() as $item)
                 {
                     $item->setCategory($category);
                     $manager->persist($item);

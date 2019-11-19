@@ -140,6 +140,11 @@ class Category
      */
     private $generations;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\CategoryRate", mappedBy="category")
+     */
+    private $rates;
+    
     private $allProductsNumber;
     
     /**
@@ -796,5 +801,38 @@ class Category
         $this->allProductsNumber = $allProductsNumber;
         
         return $this;
+    }
+
+    /**
+     * Add rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\CategoryRate $rates
+     * @return Category
+     */
+    public function addRate(\Dashboard\CommonBundle\Entity\CategoryRate $rates)
+    {
+        $this->rates[] = $rates;
+    
+        return $this;
+    }
+
+    /**
+     * Remove rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\CategoryRate $rates
+     */
+    public function removeRate(\Dashboard\CommonBundle\Entity\CategoryRate $rates)
+    {
+        $this->rates->removeElement($rates);
+    }
+
+    /**
+     * Get rates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRates()
+    {
+        return $this->rates;
     }
 }

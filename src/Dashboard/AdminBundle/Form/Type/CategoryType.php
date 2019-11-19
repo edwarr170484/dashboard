@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 use Dashboard\AdminBundle\Form\Type\TranslationType;
 use Dashboard\AdminBundle\Form\Type\GenerationType;
+use Dashboard\AdminBundle\Form\Type\CategoryRateType;
 
 class CategoryType extends AbstractType
 {
@@ -34,7 +35,6 @@ class CategoryType extends AbstractType
             ->add('isShowFilters', CheckboxType::class, array('required' => false, 'label' => 'Показывать фильтры', 'attr' => array('class' => 'form-control')))
             ->add('isShowBu', CheckboxType::class, array('required' => false, 'label' => 'Показывать выбор "Б/У"', 'attr' => array('class' => 'form-control')))
             ->add('isShowPriceFilter', CheckboxType::class, array('required' => false, 'label' => 'Включить фильтр по цене', 'attr' => array('class' => 'form-control')))
-            ->add('isMainPageDefault', CheckboxType::class, array('required' => false, 'label' => 'Показать на главной странице по умолчанию', 'attr' => array('class' => 'form-control')))
             ->add('image', TextareaType::class, array('required' => false, 'label' => 'Код изображения SVG', 'attr' => array('class' => 'form-control')))
             ->add('parent', 'entity', array('class' => 'DashboardCommonBundle:Category', 
                                             'choice_label' => 'title',
@@ -54,6 +54,7 @@ class CategoryType extends AbstractType
             ->add('translations', 'collection', array('type' => new TranslationType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('generations', 'collection', array('type' => new GenerationType($this->em, $this->category->getGenerations()), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('descriptions', 'collection', array('type' => new DescriptionType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
+            ->add('rates', 'collection', array('type' => new CategoryRateType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')));
     }
     

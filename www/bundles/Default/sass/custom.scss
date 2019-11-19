@@ -150,6 +150,7 @@ body{font-size:10px;background:$white-color;}
 .mainPageSitHeader{padding-top: 9rem;padding-bottom: 3.3rem;}
 .mainPageSitHeader h2{color:$black-text;}
 .siteInfoPane{background: $yellow-color;@include border-radius(9px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding-left: 2.4rem;margin-bottom: 5rem;min-height:240px;}
+.siteInfoPane.no-shadow{@include box-shadow(none);}
 .siteInfoPane:hover{background: $orange-color;}
 .siteInfoPaneInner{background: #fff;padding: 3.5rem 4.6rem;@include border-radius(0 9px 9px 0);position: relative;min-height:240px;}
 .innerHeader h4{color:$black-text;}
@@ -553,7 +554,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 #owlMainSlider button.owl-dot.active{background: $yellow-color;width: 18px;height: 18px;}
 #owlMainSlider button.owl-dot:hover{background: $black-text;}
 #owlMainSlider button.owl-dot.active:hover{background: $yellow-color;}
-#owlMainSlider .owl-dots{width: 50%;margin-left: auto;@include flexBox(row,center,center);}
+#owlMainSlider .owl-dots{width: 100%;margin-left: auto;@include flexBox(row,center,center);}
 .mainPageSiteSubheader{@include fontView("GothamProRegular",$black-text,3.2rem,100%);padding-bottom: 6rem;}
 .cookieAlerts{@include flexBox(row,space-between,center);}
 .cookieAlertBlock{background: $super-white-color;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 3rem 0;}

@@ -15,13 +15,19 @@
 			
 			selectOptions.each(function(){
                             if($(this).attr("value") === selectValue){
-                                cover.append("<div class='select-value'>" + $(this).html() + "</div><div class='select-options'></div>");
+                                cover.append("<div class='select-value'>" + $(this).html() + "</div>");
+                                if(selectOptions.length > 0){
+                                    cover.append("<div class='select-options'></div>");
+                                }
                                 selected = 1;
                             }
 			});
                         
 			if(selected === 0){
-                            cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div><div class='select-options'></div>");
+                            cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div>");
+                            if(selectOptions.length > 0){
+                                    cover.append("<div class='select-options'></div>");
+                                }
                         }
                         
                         if(multiple === 1){

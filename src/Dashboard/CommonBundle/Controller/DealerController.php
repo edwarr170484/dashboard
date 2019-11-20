@@ -144,4 +144,18 @@ class DealerController extends Controller
                                                                                       "registerForm" => $registerForm->createView(),
                                                                                       "success" => $success));
     }
+    
+    /**
+     * @Route("/dealers", name="dealers")
+     * @Route("/{_locale}/dealers", name="dealersLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function dealersAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        return $this->render('DashboardCommonBundle:Dealer:dealers.html.twig', array("locale" => $locale,
+                                                                                      "settings" => $settings));
+    }
 }

@@ -134,4 +134,18 @@ class OfficeController extends Controller
                                                                                       "registerForm" => $registerForm->createView(),
                                                                                       "success" => $success));
     }
+    
+    /**
+     * @Route("/services", name="services")
+     * @Route("/{_locale}/services", name="servicesLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function dealersAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        return $this->render('DashboardCommonBundle:Office:services.html.twig', array("locale" => $locale,
+                                                                                      "settings" => $settings));
+    }
 }

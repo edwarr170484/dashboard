@@ -281,8 +281,8 @@
                         <div class="hover-border"></div>
                         <div class="siteMainSubmenu">
                             <ul class="list-unstyled">
-                                <li><a href="{% if locale.isDefault %}{{ path('dealer') }}{% else %}{{ path('dealerLocale',{'_locale' : locale.code}) }}{% endif %}">Дилеры</a></li>
-                                <li><a href="{% if locale.isDefault %}{{ path('service') }}{% else %}{{ path('serviceLocale',{'_locale' : locale.code}) }}{% endif %}">Сервисные&nbsp;центры</a></li>
+                                <li><a href="{% if locale.isDefault %}{{ path('dealers') }}{% else %}{{ path('dealersLocale',{'_locale' : locale.code}) }}{% endif %}">Дилеры</a></li>
+                                <li><a href="{% if locale.isDefault %}{{ path('services') }}{% else %}{{ path('servicesLocale',{'_locale' : locale.code}) }}{% endif %}">Сервисные&nbsp;центры</a></li>
                             </ul>
                         </div>
                     </li>

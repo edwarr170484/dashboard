@@ -10,6 +10,7 @@ h1,h2,h4{@include fontView("GothamProBlack",#fff,4.8rem,5.6rem);margin: 0;}
 h3{@include fontView("GothamProBlack",#fff,3.6rem,4rem);margin: 0;}
 a,input{outline:none !important;}
 body{font-size:10px;background:$white-color;}
+header{background: #fff;}
 .headerlocale{background: $gray-color;}
 .headerMenu{@include flexBox(row,space-between,center);}
 .header-locale{position: relative;@include flexBox(row,flex-start,center);}
@@ -101,7 +102,7 @@ body{font-size:10px;background:$white-color;}
 }
 .header-add-button:hover i svg path,.header-add-button:focus i svg path{fill:$black-text;}
 .header-add-button i{margin-right:7px;}
-.siteMainMenu ul{@include flexBox(row,space-between,center);}
+.siteMainMenu ul{@include flexBox(row,space-between,center);background:$white-color;}
 .siteMainMenu ul li a{@include fontView("GothamProRegular", $black-text, 1.6rem, 100%);display: block;padding: 1.5rem;z-index:1000;position: relative;}
 .shadowBlock{position:absolute;top: 100%;left: 0;width:100%;height:15px;background: $white-color;}
 .siteMainMenu ul li{position: relative;padding: 0;}
@@ -1023,11 +1024,60 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .registerBigForm .pageContentServiceMessage{font-size: 1.6rem;line-height: 2.2rem;padding-top: 2.4rem;}
 .formParameterField .registerDescription{padding-left: 0;padding-right: 0;}
 .formParameter .register-form-forms{padding-left: 20%;}
-
-
-
-
-
+.dealersContainer{background: #f9f9f9;position: relative;}
+.mapListSearchBlockHeader{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-bottom: 1.5rem;}
+.mapListSearchBlockTabs{padding-bottom: 1.5rem;}
+.mapListSearchBlockTabs ul li{padding-left: 0;padding-right: 3rem;}
+.mapListSearchBlockTabs ul li a{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.mapListSearchBlockTabs ul li a.active{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);}
+.mapListSearchBlockForm{@include flexBox(row,flex-start,stretch);}
+.mapListSearchBlockForm .formParameterField{width: 40%;}
+.mapListSearchBlockForm .formParameterField.button{width: 20%;}
+.mapListSearchBlockForm .formParameterField input{padding: 1.1rem;@include border-radius(0);}
+.mapListSearchBlockForm .formParameterField .select-cover{@include border-radius(2px 0px 0px 2px);width: 100%;}
+.formParameterField button.find{border:none;@include border-radius(0 3px 3px 0);background: $orange-color;padding: 1.2rem;@include fontView("GothamProRegular",#fff,1.4rem,1.3rem);text-align: center;margin-top: 0;width: 100%;}
+.mapListSearchBlock{padding-bottom: 3.6rem;padding-top: 5rem;}
+.mapListItemImage{width: 30%;}
+.mapListItemImageSrc{padding-bottom: 1.1rem;}
+.mapListItemImageSrc img{width: 100%;@include border-radius(9px);}
+.mapListItemImageRating{@include flexBox(row,space-between,center);}
+.accountReviewRatingNum{@include fontView("GothamProRegular",#494949,1.3rem,1.8rem);}
+.mapListItemImageRating .accountReviewRating{padding-bottom: 0;}
+.mapListItem{padding-bottom: 1.6rem;border-bottom: 1px solid #DFE1E5;padding-top:1.5rem;}
+.mapListItem:hover{background: #fff;cursor:pointer;}
+.mapListItemInfo{padding-left: 1.5rem;}
+.mapListItemInfoName{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}
+.mapListItemInfoName a{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);}
+.mapListItemInfoName a:hover,.mapListItemInfoName a:focus{text-decoration: none;}
+.mapListItem{@include flexBox(row,flex-start,center);position: relative;}
+.mapListItemInfoText{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);@include flexBox(row,flex-start,center);padding-bottom: 1rem;}
+.mapListItemInfoText a{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);position: relative;z-index:3;}
+.mapListItemInfoText a:hover,.mapListItemInfoText a:focus{text-decoration: none;}
+.mapListItemInfoText svg{margin-right: 1rem;}
+.mapListItemInfoText span.open{color:$orange-color;}
+.mapListItems{height: 800px;}
+.mapListItemLink{position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: block;z-index:1;}
+.mapImage{position: absolute;top:0;right:0;width: 65%;}
+.mapListAutoLogo, .mapListAutoName{display: block;}
+.mapListAutoName{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 1.5rem;}
+.mapListAuto{@include flexBox(column,flex-start,center);}
+.mapListAutoLabel{padding-top: 1.5rem;}
+.mapListAutoLabel:hover{background: #C4C4C4;}
+.mapListItems.hide{display: none;}
+.mapListServicesJobs .pageContentJobsItem{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.mapListServicesJobs .pageContentJobsItemIcon{margin-right: 0.9rem;}
+.mapListServicesJobs .pageContentJobsList{width: 50%;}
+.mapListServicesJobs{border-top:1px solid #DFE1E5;padding-bottom: 1.2rem;}
+.mapListItemsHeader{@include fontView("GothamProBold",$black-text,1.8rem,4rem);}
+.mapAutoNamesList{@include flexBox(row,flex-start,center);flex-wrap: wrap;padding-top: 2.1rem;padding-bottom: 3rem;}
+.mapAutoName{width: 25%;}
+.mapAutoName a{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);display: block;padding-bottom: 1rem;}
+.mapAutoName a:hover,.mapAutoName a:focus{text-decoration: none;color:$orange-color;}
+.mapListPopularServiceImage img{width: 100%;max-width:250px;}
+.mapListPopularServiceName{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);text-align: center;padding: 1.5rem 0;}
+.mapListItemsServices{@include flexBox(row,space-between,stretch);}
+.mapListPopularService a{display: block;}
+.mapListPopularService a:hover,.mapListPopularService a:focus{text-decoration: none;}
 
 
 

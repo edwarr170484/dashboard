@@ -1,5 +1,11 @@
 $(document).ready(function(){
     $(".accountConversationMessagesWindow").mCustomScrollbar({scrollbarPosition: "outline",setTop: "-400px"});
+    $(".mapListItems").mCustomScrollbar();
+    
+    $("#selectAutoMark").click(function(){
+        $(this).find("input").blur();
+        $(".mapListItems").toggleClass("hide");
+    });
 });
 
 function showHideAllCategories(element){

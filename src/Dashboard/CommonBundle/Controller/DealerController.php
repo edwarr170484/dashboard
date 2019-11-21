@@ -146,6 +146,30 @@ class DealerController extends Controller
     }
     
     /**
+     * @Route("/dealerpage/{dealerName}", name="dealerPage")
+     * @Route("/{_locale}/dealerpage/{dealerName}", name="dealerPageLocale", defaults={"_locale" : "es","dealerName" : 0}, requirements={"_locale" : "es|ru"})
+     */
+    public function dealerPageAction($dealerName,Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $query = $manager->createQuery('SELECT c,cc FROM Dashboard\CommonBundle\Entity\Category c LEFT JOIN c.children cc WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder, cc.sortorder');
+        
+        try{
+            $categories = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $categories = 0;
+        }
+        
+        return $this->render('DashboardCommonBundle:Dealer:dealer.html.twig', array("locale" => $locale,
+                                                                                    "settings" => $settings,
+                                                                                    "categories" => $categories));
+    }
+    
+    /**
      * @Route("/dealers", name="dealers")
      * @Route("/{_locale}/dealers", name="dealersLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */

@@ -145,7 +145,16 @@ class OfficeController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
+        $categories = $manager->getRepository("DashboardCommonBundle:JobCategory")->findAll();
+        $query = $manager->createQuery("SELECT jc FROM DashboardCommonBundle:JobCategory jc WHERE jc.image is null");
+        
+        $allCategories = $query->getResult();
+        $jobsPerList = ceil(count($allCategories) / 2);
+        
         return $this->render('DashboardCommonBundle:Office:services.html.twig', array("locale" => $locale,
-                                                                                      "settings" => $settings));
+                                                                                      "settings" => $settings,
+                                                                                      "categories" => $categories,
+                                                                                      "jobsPerList" => $jobsPerList,
+                                                                                      "allCategories" => $allCategories));
     }
 }

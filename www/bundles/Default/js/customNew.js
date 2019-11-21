@@ -17,6 +17,14 @@ function showHideAllCategories(element){
     $(".fullCategoryList").toggleClass("view");
 }
 
+function showHideAllServicesCategories(element){
+    var newText = element.data('text');
+    var text = element.html();
+    element.html(newText);
+    element.data('text', text);
+    $(".mapAutoNamesList").toggleClass("hide");
+}
+
 function selectCategoryItems(element, maxItems){
     var container = element.parent().parent().parent();
     var search = element.val().toLowerCase();

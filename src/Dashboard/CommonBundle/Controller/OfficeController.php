@@ -157,4 +157,18 @@ class OfficeController extends Controller
                                                                                       "jobsPerList" => $jobsPerList,
                                                                                       "allCategories" => $allCategories));
     }
+    
+    /**
+     * @Route("/servicepage/{serviceName}", name="servicePage")
+     * @Route("/{_locale}/servicepage/{serviceName}", name="servicePageLocale", defaults={"_locale" : "es","serviceName" : 0}, requirements={"_locale" : "es|ru"})
+     */
+    public function servicePageAction($serviceName,Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        return $this->render('DashboardCommonBundle:Office:service.html.twig', array("locale" => $locale,
+                                                                                     "settings" => $settings));
+    }
 }

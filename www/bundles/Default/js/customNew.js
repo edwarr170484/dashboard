@@ -1,11 +1,35 @@
 $(document).ready(function(){
     $(".accountConversationMessagesWindow").mCustomScrollbar({scrollbarPosition: "outline",setTop: "-400px"});
     $(".mapListItems").mCustomScrollbar();
+    $(".serviceInfo").mCustomScrollbar();
     
     $("#selectAutoMark").click(function(){
         $(this).find("input").blur();
         $(".mapListItems").toggleClass("hide");
     });
+    
+    $("#productModalSlider").owlCarousel({
+        items:1,
+        center:true,
+        callbacks: true,
+        URLhashListener: true,
+        startPosition: 'URLHash',
+        navContainer : '#productModalSlider',
+        navText : ['<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.5 43L1.5 22L22.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 43L22.5 22L1.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
+    });
+    
+    $("#mapServiceSlider").owlCarousel({
+        items:1,
+        center:true,
+        callbacks: true,
+        URLhashListener: true,
+        startPosition: 'URLHash',
+        navContainer : '#mapServiceSlider',
+        navText : ['<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.5 43L1.5 22L22.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 43L22.5 22L1.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
+    });
+    
+    $(".jobsSublist").click(function(){$(this).toggleClass("opened");})
+    
 });
 
 function showHideAllCategories(element){

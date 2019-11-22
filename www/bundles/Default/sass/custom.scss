@@ -1057,7 +1057,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .mapListItemInfoText span.open{color:$orange-color;}
 .mapListItems{height: 800px;}
 .mapListItemLink{position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: block;z-index:1;}
-.mapImage{position: absolute;top:0;right:0;width: 65%;}
+.mapImage{position: absolute;top:0;right:0;width: 65%;padding-left: 1.5rem;height:500px;}
 .mapListAutoLogo, .mapListAutoName{display: block;}
 .mapListAutoName{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 1.5rem;}
 .mapListAuto{@include flexBox(column,flex-start,center);}
@@ -1106,6 +1106,9 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .dealerPageDescriptionTitle{@include fontView("GothamProBlack",$black-text,1.7rem,3.2rem);padding-bottom: 1rem;}
 .dealerPageDescriptionText{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-bottom: 2rem;}
 .dealerPageDescriptionLinks ul li{padding: 0;padding-right: 1.5rem;}
+.dealerPageDescriptionLinks ul li a{display: block;}
+.dealerPageDescriptionLinks ul.list-inline{margin-left: 0;}
+.dealerPageDescriptionLinks ul{@include flexBox(row,flex-start,center);}
 .dealerPageProducts{padding-top: 4rem;}
 .dealerPageProducts .categoryAdvert{margin-bottom: 0;border-bottom: 1px solid #E7E7E7;@include border-radius(0);}
 .dealerPageProducts .categoryAdvert.payed{@include border-radius(9px);border-bottom:3px solid #F5AA01;}
@@ -1138,3 +1141,51 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .mapAutoNamesList + .mainPageAutoListShowAll{justify-content: flex-end;}
 .mapAutoNamesList + .mainPageAutoListShowAll button{background: none;padding: 0;color:$yellow-color}
 .mapAutoNamesList + .mainPageAutoListShowAll button:hover{text-decoration: underline;color:$orange-color;}
+.mapServiceLogo .mapListItemImageRating{justify-content: flex-start;}
+.mapServiceLogo{@include flexBox(row,space-between,center);border-bottom:1px solid #DFE1E5;padding-bottom: 1.5rem;}
+.mapServiceLogoImage{max-width: 192px;}
+.mapServiceFotos{}
+.mapServiceFotoSliderItem img{@include border-radius(5px);}
+.mapServiceInfo .dealerPageHeaderUserInfoName{@include fontView("GothamProBold",$black-text,1.8rem,4rem);padding-bottom: 1.1rem;}
+.mapServiceInfoSchedule{@include flexBox(row,space-between,center);}
+.mapServiceInfoSchedule .mapListItemInfoText{padding-bottom: 0;}
+.mapServiceInfoScheduleWrite a{@include flexBox(row,flex-start,center);background: #E7E7E7;@include border-radius(9px);@include fontView("GothamProRegular",#747474,1.4rem,1.8rem);padding: 0.9rem 1.4rem;}
+.mapServiceInfoScheduleWrite a svg{margin-right: 1.1rem;}
+.mapServiceInfoScheduleWrite a:hover,.mapServiceInfoScheduleWrite a:focus{text-decoration: none;color:$yellow-color}
+.mapServiceInfoScheduleWrite a:hover svg path,.mapServiceInfoScheduleWrite a:focus svg path{stroke:$yellow-color;}
+.mapServiceInfo{border-bottom:1px solid #DFE1E5;padding-bottom:2rem;}
+.mapServiceDescription{padding-top: 3rem;padding-bottom: 2rem;@include fontView("GothamProRegular",#747474,1.4rem,1.8rem);}
+.mapServiceJobsHeader{@include fontView("GothamProBold",$black-text,1.8rem,4rem);padding-bottom: 1rem;}
+.mapServiceJobsList ul li{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
+.mapServiceJobsList ul li:hover{cursor:pointer;color:$yellow-color;}
+.mapServiceJobsList ul li:hover svg path{stroke:$yellow-color;}
+.mapServiceJobsList ul li .mapServiceJobInfo{@include flexBox(row,space-between,center);padding-bottom: 1.5rem;}
+.mapServiceJobsList > ul > li.opened{@include fontView("GothamProBold",$black-text,1.4rem,1.8rem);}
+.mapServiceJobsList > ul > li.opened svg{@include transform(rotate(180deg));}
+.mapServiceJobName{@include flexBox(row,flex-start,center);}
+.mapServiceJobName svg{margin-right: 1rem;}
+.mapServiceJobsList ul li > ul{display: none;}
+.mapServiceJobsList > ul > li.opened > ul{display: block;}
+.mapServiceJobsList ul li > ul > li .mapServiceJobName{padding-left: 4rem;}
+.mapServiceJobs{border-bottom:1px solid #DFE1E5;padding-bottom: 0.5rem;}
+.serviceInfo{height: 90rem;}
+.mapServiceAdvancedInfo{padding-top: 1.5rem;padding-bottom: 3rem;}
+.mapServiceAdvancedInfoTools{@include flexBox(row, space-between, center)}
+.mapServiceAdvancedInfoComplaint a{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
+.mapServiceAdvancedInfoComplaint a:hover,.mapServiceAdvancedInfoComplaint a:focus{text-decoration:none;color:$yellow-color;}
+.mapServiceAdvancedInfoDescription{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 1.6rem;}
+.mapServiceReviews{padding-top: 3rem;}
+.mapServiceReviewsHeader{@include flexBox(row,space-between,center);}
+.mapServiceReviewsHeaderRating{width: 60%;@include flexBox(row,flex-start,center);}
+.mapServiceReviewsHeaderRatingTitle{@include fontView("GothamProBold",$black-text,1.8rem,4rem);padding-right: 2rem;}
+.mapServiceReviewsHeader .cookieAlertButton button{@include fontView("GothamProBlack",$black-text,1.5rem,1.4rem);width: 18.9rem;}
+.mapServiceReviewsHeader .accountReviewRating{padding-bottom: 0;}
+.mapServiceReviewsItem{border-bottom:1px solid #DFE1E5;padding: 1.5rem 0;}
+.mapServiceReviewsItemText{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 1.5rem;}
+.mapServiceReviewsItemHeader{@include flexBox(row,space-between, stretch);}
+.mapServiceReviewsItemTitle{@include fontView("GothamProBold",$black-text,1.4rem,1.8rem);}
+.mapServiceReviewsItemDate{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
+.mapServiceReviewsItems{padding-top: 3rem;}
+.mapServiceReviewsItem .accountReviewRating{padding-bottom: 0;}
+.mapServiceReviewsItemsButton{text-align: center;}
+.mapServiceReviewsItemsButton button{border:none;background: none;padding: 0;@include fontView("GothamProRegular",$orange-color,1.4rem,1.8rem);}

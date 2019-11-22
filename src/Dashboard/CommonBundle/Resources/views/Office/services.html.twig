@@ -125,7 +125,7 @@
                     {% endif %}
                     <div class="mapListItemsHeader">{% trans %}Популярные сервисы{% endtrans %}</div>
                     <div class="mapListItem">
-                        <a href="" class="mapListItemLink"></a>
+                        <a href="{% if locale.isDefault %}{{ path('servicePage') }}{% else %}{{ path('servicePageLocale', {'_locale' : locale.code}) }}{% endif %}" class="mapListItemLink"></a>
                         <div class="mapListItemImage">
                             <div class="mapListItemImageSrc">
                                 <img src="{{ asset('bundles/Default/t/фото.jpg') }}" alt="" title="" />
@@ -172,7 +172,7 @@
                         </div>
                     </div>
                     <div class="mapListItem">
-                        <a href="" class="mapListItemLink"></a>
+                        <a href="{% if locale.isDefault %}{{ path('servicePage') }}{% else %}{{ path('servicePageLocale', {'_locale' : locale.code}) }}{% endif %}" class="mapListItemLink"></a>
                         <div class="mapListItemImage">
                             <div class="mapListItemImageSrc">
                                 <img src="{{ asset('bundles/Default/t/фото.jpg') }}" alt="" title="" />
@@ -219,7 +219,7 @@
                         </div>
                     </div>
                     <div class="mapListItem">
-                        <a href="" class="mapListItemLink"></a>
+                        <a href="{% if locale.isDefault %}{{ path('servicePage') }}{% else %}{{ path('servicePageLocale', {'_locale' : locale.code}) }}{% endif %}" class="mapListItemLink"></a>
                         <div class="mapListItemImage">
                             <div class="mapListItemImageSrc">
                                 <img src="{{ asset('bundles/Default/t/фото.jpg') }}" alt="" title="" />
@@ -266,7 +266,7 @@
                         </div>
                     </div>
                     <div class="mapListItem">
-                        <a href="" class="mapListItemLink"></a>
+                        <a href="{% if locale.isDefault %}{{ path('servicePage') }}{% else %}{{ path('servicePageLocale', {'_locale' : locale.code}) }}{% endif %}" class="mapListItemLink"></a>
                         <div class="mapListItemImage">
                             <div class="mapListItemImageSrc">
                                 <img src="{{ asset('bundles/Default/t/фото.jpg') }}" alt="" title="" />
@@ -313,7 +313,7 @@
                         </div>
                     </div>
                     <div class="mapListItem">
-                        <a href="" class="mapListItemLink"></a>
+                        <a href="{% if locale.isDefault %}{{ path('servicePage') }}{% else %}{{ path('servicePageLocale', {'_locale' : locale.code}) }}{% endif %}" class="mapListItemLink"></a>
                         <div class="mapListItemImage">
                             <div class="mapListItemImageSrc">
                                 <img src="{{ asset('bundles/Default/t/фото.jpg') }}" alt="" title="" />

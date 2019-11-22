@@ -1,0 +1,30 @@
+<?php
+namespace Dashboard\CommonBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Table()
+ * @ORM\Entity()
+ */
+class DealerFoto
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\DealerInfo", inversedBy="fotos")
+     * @ORM\JoinColumn(name="dealer_info_id", referencedColumnName="id")
+     */
+    private $dealerInfo;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
+     */
+    private $image; 
+}
+

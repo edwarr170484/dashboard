@@ -9,14 +9,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-
-use Doctrine\Common\Persistence\ObjectManager;
-use Dashboard\CommonBundle\Form\DataTransformer\InfoToNumberTransformer;
-
 use Dashboard\CommonBundle\Entity\City;
 
 class UserInfoType extends AbstractType
@@ -30,11 +22,6 @@ class UserInfoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstname', TextType::class, array('required' => true, 'label' => 'vārds', 'attr' => array('class' => 'form-control','placeholder' => 'Имя')))
-            ->add('lastname', TextType::class, array('required' => false, 'label' => 'uzvārds', 'attr' => array('class' => 'form-control','placeholder' => 'Фамилия')))
-            ->add('phone', TextType::class, array('required' => false, 'label' => 'Tālruņa numurs', 'attr' => array('class' => 'form-control','placeholder' => 'Телефон')))
-            ->add('avatarNew', FileType::class, array('required' => false, 'label' => '','mapped' => false, 'attr' => array('class' => 'change-avatar-input form-control')))
-            ->add('avatar', HiddenType::class, array('required' => false, 'label' => ''))
             ->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
                     'choice_label' => function($city)
                     {

@@ -4,6 +4,9 @@
 
 {% form_theme formPassword _self %}
 
+{% form_theme formDealer _self %}
+
+
 {%- block form_widget_simple -%}
     {%- set type = type|default('text') -%}
     <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
@@ -66,6 +69,11 @@
             <div class="accountBlockHeader">
                 <div class="account-block-header"><h1>{% trans %}<b>Мои настройки</b>{% endtrans %}</h1></div>
             </div>
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="notice-message">
+                    {{ flashMessage | raw }}
+                </div>                             
+            {% endfor %}
         </div>
     </div>
     <div class="row content-row">
@@ -74,22 +82,118 @@
             <div class="accountSettingsTabs">
                 <ul class="nav nav-tabs settingsTabs" id="myTab" role="tablist">
                     <li class="nav-item active">
-                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#personalSettings" role="tab" aria-controls="home" aria-selected="true" >{% trans %}Личные данные{% endtrans %}</a>
+                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#companySettings" role="tab" aria-controls="home" aria-selected="true" >{% trans %}Данные компании{% endtrans %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#companyShops" role="tab" aria-controls="home" aria-selected="true" >{% trans %}Автосалоны{% endtrans %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#personalSettings" role="tab" aria-controls="home" aria-selected="true" >{% trans %}Контакты{% endtrans %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#alertSettings" role="tab" aria-controls="home" aria-selected="true" >{% trans %}Настройка уведомлений{% endtrans %}</a>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade active in" id="personalSettings" role="tabpanel">
+                    <div class="tab-pane fade active in" id="companySettings" role="tabpanel">
+                        {{ form_start(formDealer, {'method':'POST', 'multipart':true,'attr': {'class': 'form-horizontal userSettingsForm'}}) }}
+                        <div class="accountBlockHeader subheader">
+                            <div class="account-block-header"><h1><b>{% trans %}Данные компании{% endtrans %}</b></h1></div>
+                        </div>
+                        <div class="accountSettingsFormBlock">
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.firma) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.firma) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.company) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.company) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.nifNumber) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.nifNumber) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.website) }}:</div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.website) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.cityCode) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.cityCode) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.city) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.city) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.address) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.address) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.email) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.email) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.logotypeNew) }}:</div>
+                                    <div class="formParameterField dealerLogoField">
+                                        <a class="change-avatar logotype">
+                                            <svg width="126" height="126" viewBox="0 0 126 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="0.5" y="0.5" width="125" height="125" rx="4.5" stroke="#DFE1E5"/>
+                                                <rect x="3.5" y="3.5" width="119" height="119" rx="4.5" stroke="#F5AA01" stroke-dasharray="12 6"/>
+                                                <circle cx="63" cy="63" r="27.5" stroke="#F5AA01" stroke-width="3"/>
+                                                <line x1="47" y1="63.5" x2="79" y2="63.5" stroke="#F5AA01" stroke-width="3"/>
+                                                <line x1="62.5" y1="79" x2="62.5" y2="47" stroke="#F5AA01" stroke-width="3"/>
+                                            </svg>
+                                        </a>
+                                        {% if formDealer.logotype.vars.value %}
+                                            <div class="dealerSettingsLogotype">
+                                                <img src="{{ asset('bundles/images/dealers/logotypes/' ~ formDealer.logotype.vars.value) }}" alt="" title="" />
+                                                <div class="dealerSettingsLogotypeCover">
+                                                    <button>{% trans %}Удалить{% endtrans %}</button>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        {{ form_widget(formDealer.logotypeNew) }}
+                                        {{ form_widget(formDealer.logotype) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                        {{ form_end(formDealer) }}
+                    </div>
+                    <div class="tab-pane fade" id="companyShops" role="tabpanel">
+                        <div class="accountBlockHeader subheader">
+                            <div class="account-block-header"><h1><b>{% trans %}Добавление автосалона{% endtrans %}</b></h1></div></div>
+                    </div>
+                    <div class="tab-pane fade" id="personalSettings" role="tabpanel">
                         <div class="accountBlockHeader subheader">
                             <div class="account-block-header"><h1><b>{% trans %}Контакты{% endtrans %}</b></h1></div></div>
                         <div class="accountSettingsFormBlock">
-                            {% for flashMessage in app.session.flashbag.get('notice') %}
-                                <div class="notice-message">
-                                    {{ flashMessage | raw }}
-                                </div>                             
-                            {% endfor %}
                             {{ form_start(formMain, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal userSettingsForm'}}) }}
                             <div class="formParemetersItem">
                                 <div class="formParameter">

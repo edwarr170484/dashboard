@@ -137,28 +137,16 @@
                             <div class="registerBigInnerSubblockHeader">{% trans %}Данные пользователя{% endtrans %}</div>   
                             <div class="formParemetersItem">
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.firstname) }} <sup>*</sup></div>
+                                    <div class="formParameterLabel">{{ form_label(registerForm.firstname) }} <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(registerForm.dealerinfo.firstname) }}
+                                        {{ form_widget(registerForm.firstname) }}
                                     </div>
                                 </div>
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.lastname) }} <sup>*</sup></div>
+                                    <div class="formParameterLabel">{{ form_label(registerForm.lastname) }} <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(registerForm.dealerinfo.lastname) }}
+                                        {{ form_widget(registerForm.lastname) }}
                                     </div>
-                                </div>
-                            </div>
-                            <div class="formParemetersItem">
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.position) }}</div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(registerForm.dealerinfo.position) }}
-                                    </div>
-                                </div>
-                                <div class="formParameter">
-                                    <div class="formParameterLabel"></div>
-                                    <div class="formParameterField"></div>
                                 </div>
                             </div>
                             <div class="formParemetersItem">
@@ -170,9 +158,9 @@
                                     </div>
                                 </div>
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.phone) }} <sup>*</sup></div>
+                                    <div class="formParameterLabel">{{ form_label(registerForm.phone) }} <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(registerForm.dealerinfo.phone) }}
+                                        {{ form_widget(registerForm.phone) }}
                                     </div>
                                 </div>
                             </div>

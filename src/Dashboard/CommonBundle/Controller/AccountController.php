@@ -501,8 +501,8 @@ class AccountController extends Controller
                                                                                     "routeName" => $request->attributes->get("_route")));
             }
             
-            $avatar = $formMain['userinfo']['avatarNew']->getData();
-            $oldAvatar = $formMain['userinfo']['avatar']->getData();
+            $avatar = $formMain['avatarNew']->getData();
+            $oldAvatar = $formMain['avatar']->getData();
             
             if($avatar)
             {
@@ -516,7 +516,7 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
-                $user->getUserinfo()->setAvatar($localAvatarName);
+                $user->setAvatar($localAvatarName);
             }
             
             $user->setUsername($user->getEmail());
@@ -606,7 +606,7 @@ class AccountController extends Controller
             }
         }
         
-        return $this->render('DashboardCommonBundle:User:account/settings.html.twig', array("avatar" => $user->getUserinfo()->getAvatar(),
+        return $this->render('DashboardCommonBundle:User:account/settings.html.twig', array("avatar" => $user->getAvatar(),
                                                                                     "formMain" => $formMain->createView(),
                                                                                     "formPassword" => $formPassword->createView(),
                                                                                     "formAlert" => $formAlert->createView(),

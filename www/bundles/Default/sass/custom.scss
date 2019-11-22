@@ -1189,3 +1189,11 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .mapServiceReviewsItem .accountReviewRating{padding-bottom: 0;}
 .mapServiceReviewsItemsButton{text-align: center;}
 .mapServiceReviewsItemsButton button{border:none;background: none;padding: 0;@include fontView("GothamProRegular",$orange-color,1.4rem,1.8rem);}
+.formParameterField input[type='file']{display: none;}
+.change-avatar.logotype{padding-left: 0;display: block;width: 126px;height: 126px;margin-right: 3.4rem;}
+.dealerSettingsLogotype{width: 126px;height: 126px;position: relative;@include flexBox(row,center,center);border:2px solid #DFE1E5;@include border-radius(5px);}
+.dealerSettingsLogotype img{max-width:100%;}
+.dealerSettingsLogotypeCover{position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(34,43,42,0.2);display: none;@include border-radius(5px);}
+.dealerSettingsLogotype:hover .dealerSettingsLogotypeCover{@include flexBox(row,center,center);}
+.dealerSettingsLogotypeCover button{@include border-radius(5px);border:none;background: #494949;padding: 0.9rem 2.1rem;@include fontView("GothamProRegular",#fff,1.4rem,1.8rem);text-align: center;width: 99px;}
+.formParameterField.dealerLogoField{@include flexBox(row,flex-start,center);}

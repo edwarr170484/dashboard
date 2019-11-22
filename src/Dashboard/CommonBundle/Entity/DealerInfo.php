@@ -34,7 +34,17 @@ class DealerInfo
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
      */
+    private $firma;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
+     */
     private $nifNumber;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
+     */
+    private $website;
     
     /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\City")
@@ -56,38 +66,42 @@ class DealerInfo
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
      */
-    private $website;
+    private $email;  
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerPhone", mappedBy="dealerInfo")
+     */
+    private $phones;
     
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
      */
-    private $firstname;
+    private $logotype; 
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
+     * @ORM\Column(type="text", nullable=true, options={"default": null})
      */
-    private $lastname;
+    private $description; 
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerAuto", mappedBy="dealerInfo")
      */
-    private $position;
+    private $autos;
     
     /**
-     * @ORM\Column(type="string", length=50, nullable=true, options={"default": null})
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
-    private $phone;
+    private $isNewAuto; 
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
-    private $avatar;
+    private $isOldAuto;
     
     /**
-     * @ORM\Column(type="integer", length=3, nullable=true, options={"default": 0})
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerFoto", mappedBy="dealerInfo")
      */
-    private $rating;
-    
+    private $fotos;
 
     /**
      * Get id
@@ -192,144 +206,6 @@ class DealerInfo
     }
 
     /**
-     * Set firstname
-     *
-     * @param string $firstname
-     * @return DealerInfo
-     */
-    public function setFirstname($firstname)
-    {
-        $this->firstname = $firstname;
-    
-        return $this;
-    }
-
-    /**
-     * Get firstname
-     *
-     * @return string 
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * Set lastname
-     *
-     * @param string $lastname
-     * @return DealerInfo
-     */
-    public function setLastname($lastname)
-    {
-        $this->lastname = $lastname;
-    
-        return $this;
-    }
-
-    /**
-     * Get lastname
-     *
-     * @return string 
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * Set position
-     *
-     * @param string $position
-     * @return DealerInfo
-     */
-    public function setPosition($position)
-    {
-        $this->position = $position;
-    
-        return $this;
-    }
-
-    /**
-     * Get position
-     *
-     * @return string 
-     */
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
-    /**
-     * Set phone
-     *
-     * @param string $phone
-     * @return DealerInfo
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-    
-        return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return string 
-     */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * Set avatar
-     *
-     * @param string $avatar
-     * @return DealerInfo
-     */
-    public function setAvatar($avatar)
-    {
-        $this->avatar = $avatar;
-    
-        return $this;
-    }
-
-    /**
-     * Get avatar
-     *
-     * @return string 
-     */
-    public function getAvatar()
-    {
-        return $this->avatar;
-    }
-
-    /**
-     * Set rating
-     *
-     * @param integer $rating
-     * @return DealerInfo
-     */
-    public function setRating($rating)
-    {
-        $this->rating = $rating;
-    
-        return $this;
-    }
-
-    /**
-     * Get rating
-     *
-     * @return integer 
-     */
-    public function getRating()
-    {
-        return $this->rating;
-    }
-
-    /**
      * Set user
      *
      * @param \Dashboard\CommonBundle\Entity\User $user
@@ -396,5 +272,251 @@ class DealerInfo
     public function getCityCode()
     {
         return $this->cityCode;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->autos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fotos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set firma
+     *
+     * @param string $firma
+     * @return DealerInfo
+     */
+    public function setFirma($firma)
+    {
+        $this->firma = $firma;
+    
+        return $this;
+    }
+
+    /**
+     * Get firma
+     *
+     * @return string 
+     */
+    public function getFirma()
+    {
+        return $this->firma;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return DealerInfo
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set logotype
+     *
+     * @param string $logotype
+     * @return DealerInfo
+     */
+    public function setLogotype($logotype)
+    {
+        $this->logotype = $logotype;
+    
+        return $this;
+    }
+
+    /**
+     * Get logotype
+     *
+     * @return string 
+     */
+    public function getLogotype()
+    {
+        return $this->logotype;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return DealerInfo
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set isNewAuto
+     *
+     * @param boolean $isNewAuto
+     * @return DealerInfo
+     */
+    public function setIsNewAuto($isNewAuto)
+    {
+        $this->isNewAuto = $isNewAuto;
+    
+        return $this;
+    }
+
+    /**
+     * Get isNewAuto
+     *
+     * @return boolean 
+     */
+    public function getIsNewAuto()
+    {
+        return $this->isNewAuto;
+    }
+
+    /**
+     * Set isOldAuto
+     *
+     * @param boolean $isOldAuto
+     * @return DealerInfo
+     */
+    public function setIsOldAuto($isOldAuto)
+    {
+        $this->isOldAuto = $isOldAuto;
+    
+        return $this;
+    }
+
+    /**
+     * Get isOldAuto
+     *
+     * @return boolean 
+     */
+    public function getIsOldAuto()
+    {
+        return $this->isOldAuto;
+    }
+
+    /**
+     * Add phones
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerPhone $phones
+     * @return DealerInfo
+     */
+    public function addPhone(\Dashboard\CommonBundle\Entity\DealerPhone $phones)
+    {
+        $this->phones[] = $phones;
+    
+        return $this;
+    }
+
+    /**
+     * Remove phones
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerPhone $phones
+     */
+    public function removePhone(\Dashboard\CommonBundle\Entity\DealerPhone $phones)
+    {
+        $this->phones->removeElement($phones);
+    }
+
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * Add autos
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerAuto $autos
+     * @return DealerInfo
+     */
+    public function addAuto(\Dashboard\CommonBundle\Entity\DealerAuto $autos)
+    {
+        $this->autos[] = $autos;
+    
+        return $this;
+    }
+
+    /**
+     * Remove autos
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerAuto $autos
+     */
+    public function removeAuto(\Dashboard\CommonBundle\Entity\DealerAuto $autos)
+    {
+        $this->autos->removeElement($autos);
+    }
+
+    /**
+     * Get autos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAutos()
+    {
+        return $this->autos;
+    }
+
+    /**
+     * Add fotos
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerFoto $fotos
+     * @return DealerInfo
+     */
+    public function addFoto(\Dashboard\CommonBundle\Entity\DealerFoto $fotos)
+    {
+        $this->fotos[] = $fotos;
+    
+        return $this;
+    }
+
+    /**
+     * Remove fotos
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerFoto $fotos
+     */
+    public function removeFoto(\Dashboard\CommonBundle\Entity\DealerFoto $fotos)
+    {
+        $this->fotos->removeElement($fotos);
+    }
+
+    /**
+     * Get fotos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFotos()
+    {
+        return $this->fotos;
     }
 }

@@ -36,6 +36,26 @@ class User implements AdvancedUserInterface, \Serializable
     private $email;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     */
+    private $firstname;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     */
+    private $lastname;
+    
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true, options={"default":"null"})
+     */
+    private $phone;
+    
+        /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
+     */
+    private $avatar;
+    
+    /**
      * @ORM\Column(type="boolean" , nullable=true, options={"default": 0})
      */
     private $isHideEmail;
@@ -44,13 +64,7 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
-    
-     /**
-     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
-     * 
-     */
-    private $roles;
-    
+        
     /**
      * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
      */
@@ -85,6 +99,12 @@ class User implements AdvancedUserInterface, \Serializable
      * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
      */
     private $fbID;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Role", inversedBy="users")
+     * 
+     */
+    private $roles;
     
     /**
      * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\UserInfo", mappedBy="user", cascade={"persist"})
@@ -305,6 +325,98 @@ class User implements AdvancedUserInterface, \Serializable
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * Set firstname
+     *
+     * @param string $firstname
+     * @return User
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    
+        return $this;
+    }
+
+    /**
+     * Get firstname
+     *
+     * @return string 
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * Set lastname
+     *
+     * @param string $lastname
+     * @return User
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastname
+     *
+     * @return string 
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return User
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set avatar
+     *
+     * @param string $avatar
+     * @return User
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+    
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return string 
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
     }
 
     /**
@@ -558,6 +670,29 @@ class User implements AdvancedUserInterface, \Serializable
     public function getUserinfo()
     {
         return $this->userinfo;
+    }
+
+    /**
+     * Set dealerinfo
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerInfo $dealerinfo
+     * @return User
+     */
+    public function setDealerinfo(\Dashboard\CommonBundle\Entity\DealerInfo $dealerinfo = null)
+    {
+        $this->dealerinfo = $dealerinfo;
+    
+        return $this;
+    }
+
+    /**
+     * Get dealerinfo
+     *
+     * @return \Dashboard\CommonBundle\Entity\DealerInfo 
+     */
+    public function getDealerinfo()
+    {
+        return $this->dealerinfo;
     }
 
     /**
@@ -965,28 +1100,5 @@ class User implements AdvancedUserInterface, \Serializable
     public function setFavoriteProducts(array $favoriteProducts)
     {
         $this->favoriteProducts = $favoriteProducts;
-    }
-
-    /**
-     * Set dealerinfo
-     *
-     * @param \Dashboard\CommonBundle\Entity\DealerInfo $dealerinfo
-     * @return User
-     */
-    public function setDealerinfo(\Dashboard\CommonBundle\Entity\DealerInfo $dealerinfo = null)
-    {
-        $this->dealerinfo = $dealerinfo;
-    
-        return $this;
-    }
-
-    /**
-     * Get dealerinfo
-     *
-     * @return \Dashboard\CommonBundle\Entity\DealerInfo 
-     */
-    public function getDealerinfo()
-    {
-        return $this->dealerinfo;
     }
 }

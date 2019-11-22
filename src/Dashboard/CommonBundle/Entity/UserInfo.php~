@@ -18,21 +18,6 @@ class UserInfo
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
-     */
-    private $firstname;
-    
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
-     */
-    private $lastname;
-    
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true, options={"default":"null"})
-     */
-    private $phone;
     
     /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Region", inversedBy="user")
@@ -51,11 +36,6 @@ class UserInfo
      * @ORM\JoinColumn(name="city_code_id", referencedColumnName="id")
      */
     private $cityCode;
-    
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
-     */
-    private $avatar;
     
     /**
      * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
@@ -90,98 +70,6 @@ class UserInfo
     }
 
     /**
-     * Set firstname
-     *
-     * @param string $firstname
-     * @return UserInfo
-     */
-    public function setFirstname($firstname)
-    {
-        $this->firstname = $firstname;
-
-        return $this;
-    }
-
-    /**
-     * Get firstname
-     *
-     * @return string 
-     */
-    public function getFirstname()
-    {
-        return $this->firstname;
-    }
-
-    /**
-     * Set lastname
-     *
-     * @param string $lastname
-     * @return UserInfo
-     */
-    public function setLastname($lastname)
-    {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    /**
-     * Get lastname
-     *
-     * @return string 
-     */
-    public function getLastname()
-    {
-        return $this->lastname;
-    }
-
-    /**
-     * Set phone
-     *
-     * @param string $phone
-     * @return UserInfo
-     */
-    public function setPhone($phone)
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return string 
-     */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * Set avatar
-     *
-     * @param string $avatar
-     * @return UserInfo
-     */
-    public function setAvatar($avatar)
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
-    /**
-     * Get avatar
-     *
-     * @return string 
-     */
-    public function getAvatar()
-    {
-        return $this->avatar;
-    }
-
-    /**
      * Set emailmessagesalerts
      *
      * @param boolean $emailmessagesalerts
@@ -190,7 +78,7 @@ class UserInfo
     public function setEmailmessagesalerts($emailmessagesalerts)
     {
         $this->emailmessagesalerts = $emailmessagesalerts;
-
+    
         return $this;
     }
 
@@ -213,7 +101,7 @@ class UserInfo
     public function setEmailmessagesreminders($emailmessagesreminders)
     {
         $this->emailmessagesreminders = $emailmessagesreminders;
-
+    
         return $this;
     }
 
@@ -236,7 +124,7 @@ class UserInfo
     public function setRating($rating)
     {
         $this->rating = $rating;
-
+    
         return $this;
     }
 
@@ -259,7 +147,7 @@ class UserInfo
     public function setRegion(\Dashboard\CommonBundle\Entity\Region $region = null)
     {
         $this->region = $region;
-
+    
         return $this;
     }
 
@@ -282,7 +170,7 @@ class UserInfo
     public function setCity(\Dashboard\CommonBundle\Entity\City $city = null)
     {
         $this->city = $city;
-
+    
         return $this;
     }
 
@@ -305,7 +193,7 @@ class UserInfo
     public function setCityCode(\Dashboard\CommonBundle\Entity\CityCode $cityCode = null)
     {
         $this->cityCode = $cityCode;
-
+    
         return $this;
     }
 
@@ -328,7 +216,7 @@ class UserInfo
     public function setUser(\Dashboard\CommonBundle\Entity\User $user = null)
     {
         $this->user = $user;
-
+    
         return $this;
     }
 

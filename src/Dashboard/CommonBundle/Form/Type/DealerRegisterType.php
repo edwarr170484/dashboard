@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 use Dashboard\CommonBundle\Form\Type\DealerInfoType;
 
@@ -32,6 +33,9 @@ class DealerRegisterType extends AbstractType
                     'attr' => array('class' => 'password','placeholder' => 'Пароль')
                 )
             )
+            ->add('firstname', TextType::class, array('required' => true, 'label' => 'Имя', 'attr' => array('class' => 'form-control')))
+            ->add('lastname', TextType::class, array('required' => true, 'label' => 'Фамилия', 'attr' => array('class' => 'form-control')))
+            ->add('phone', TextType::class, array('required' => true, 'label' => 'Телефон', 'attr' => array('class' => 'form-control')))
             ->add('dealerinfo', new DealerInfoType($this->manager, $this->user, $this->locale), array('data_class' => 'Dashboard\CommonBundle\Entity\DealerInfo'));
     }
     

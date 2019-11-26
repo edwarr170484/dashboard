@@ -1,11 +1,9 @@
 {% extends 'DashboardCommonBundle:Common:base.html.twig' %}
 
 {% form_theme formMain _self %}
-
 {% form_theme formPassword _self %}
-
 {% form_theme formDealer _self %}
-
+{% form_theme formAutos _self %}
 
 {%- block form_widget_simple -%}
     {%- set type = type|default('text') -%}
@@ -16,15 +14,40 @@
     <button class="message-button-answer" type="submit">{{form_label(form)}}</button>
 {%- endblock button_row -%}
 
-{%- block checkbox_widget -%}
-    {%- for attrname, attrvalue in attr -%}
-        {%- if attrname in ['id'] -%}
-            <div class="div-checkbox small-margin {% if checked %} active {% endif %}" data-checkbox="{{ attrvalue }}"></div>
+{% block _dealerinfo_phones_widget %}
+    <div class="dealerPhonesList">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
+
+{% block _dealerinfo_phones_entry_row %}
+    <div class="dealerPhonesItem">
+        {{ form_widget(form.phone)}}
+        {{ form_widget(form.dealerInfo)}}
+    </div>
+{% endblock %}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
         {%- endif -%}
-    {%- endfor -%}
-        
-    <input type="checkbox" {{ block('widget_attributes') }} value="1" {% if checked %} checked="checked"{% endif %} />
-{%- endblock checkbox_widget -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
 
 {% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Iestatījumi{% endtrans %}{% endblock %}
 {% block bodyClass %}class="userAccount"{% endblock %}
@@ -159,6 +182,19 @@
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.phones) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.phones) }}
+                                        <button id="addDealerPhone" type="button">
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M1 10.9998H21M11 0.999817V20.9998V0.999817Z" stroke="#747474" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem" style="padding-bottom: 3rem;">
+                                <div class="formParameter">
                                     <div class="formParameterLabel">{{ form_label(formDealer.logotypeNew) }}:</div>
                                     <div class="formParameterField dealerLogoField">
                                         <a class="change-avatar logotype">
@@ -174,7 +210,7 @@
                                             <div class="dealerSettingsLogotype">
                                                 <img src="{{ asset('bundles/images/dealers/logotypes/' ~ formDealer.logotype.vars.value) }}" alt="" title="" />
                                                 <div class="dealerSettingsLogotypeCover">
-                                                    <button>{% trans %}Удалить{% endtrans %}</button>
+                                                    <button type="button" onclick="deleteDealerLogotype('{% trans %}Удалить логотип?{% endtrans %}')">{% trans %}Удалить{% endtrans %}</button>
                                                 </div>
                                             </div>
                                         {% endif %}
@@ -183,7 +219,174 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>   
+                            <div class="formParemetersItem" style="padding-bottom: 6rem;">
+                                <div class="formParameter" style="display: block;">
+                                   <div class="formParameterLabel">{% trans %}Режим работы{% endtrans %}: <sup>*</sup></div>
+                                   <div class="formParameterField">
+                                       <ul class="list-unstyled list-inline workdays" id="weekdays">
+                                           <li>
+                                               <div class="workDay workingDay weekDay {% if formDealer.workinfo.monday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealer.workinfo.monday) }}
+                                                    {{ form_label(formDealer.workinfo.monday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay workingDay weekDay {% if formDealer.workinfo.tuesday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealer.workinfo.tuesday) }}
+                                                    {{ form_label(formDealer.workinfo.tuesday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay workingDay weekDay {% if formDealer.workinfo.wednesday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealer.workinfo.wednesday) }}
+                                                    {{ form_label(formDealer.workinfo.wednesday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay workingDay weekDay {% if formDealer.workinfo.thursday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealer.workinfo.thursday) }}
+                                                    {{ form_label(formDealer.workinfo.thursday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay workingDay weekDay {% if formDealer.workinfo.friday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealer.workinfo.friday) }}
+                                                    {{ form_label(formDealer.workinfo.friday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay holidayDay weekDay {% if formDealer.workinfo.saturday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealer.workinfo.saturday) }}
+                                                    {{ form_label(formDealer.workinfo.saturday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay holidayDay weekDay {% if formDealer.workinfo.sunday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealer.workinfo.sunday) }}
+                                                    {{ form_label(formDealer.workinfo.sunday) }}
+                                                    {{ form_widget(formDealer.workinfo.dealer) }}
+                                               </div>
+                                           </li>
+                                           <li class="allDay">
+                                               <div class="workDay {% if formDealer.workinfo.fullDay.vars.checked %}active{% endif %}" onclick="resetWorkTimes($(this))">
+                                                    {{ form_widget(formDealer.workinfo.fullDay) }}
+                                                    {{ form_label(formDealer.workinfo.fullDay) }}
+                                               </div>
+                                           </li><li>
+                                               {{ form_widget(formDealer.workinfo.workStart) }}
+                                           </li><li class="space"> - </li><li>
+                                               {{ form_widget(formDealer.workinfo.workStop) }}
+                                           </li>
+                                       </ul>
+                                       <ul class="list-unstyled list-inline workdays">
+                                           <li style="padding-right: 10px;">
+                                               <div class="workDay selectDaysButton {% if formDealer.workinfo.isWokdays.vars.checked %}active{% endif %}" onclick="selectWeekDays($(this), $('#weekdays'), '.workingDay')">
+                                                    {{ form_widget(formDealer.workinfo.isWokdays) }}
+                                                    {{ form_label(formDealer.workinfo.isWokdays) }}
+                                               </div>
+                                           </li><li style="padding-right: 10px;">
+                                               <div class="workDay selectDaysButton {% if formDealer.workinfo.isHolidays.vars.checked %}active{% endif %}" onclick="selectWeekDays($(this), $('#weekdays'), '.holidayDay')">
+                                                    {{ form_widget(formDealer.workinfo.isHolidays) }}
+                                                    {{ form_label(formDealer.workinfo.isHolidays) }}
+                                               </div>
+                                           </li><li style="padding-right: 24px;">
+                                               <div class="workDay selectDaysButton {% if formDealer.workinfo.isAlldays.vars.checked %}active{% endif %}" onclick="selectWeekDays($(this), $('#weekdays'), '.weekDay')">
+                                                    {{ form_widget(formDealer.workinfo.isAlldays) }}
+                                                    {{ form_label(formDealer.workinfo.isAlldays) }}
+                                               </div>
+                                           </li>
+                                           <li class="space">
+                                               перерыв:
+                                           </li><li>
+                                               {{ form_widget(formDealer.workinfo.breakStart) }}
+                                           </li><li class="space"> - </li><li>
+                                               {{ form_widget(formDealer.workinfo.breakStop) }}
+                                           </li>
+                                       </ul>
+                                   </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem" style="padding-bottom: 6rem;">
+                                <div class="formParameter" style="display: block;">
+                                    <div class="formParemetersItemSubheader">{% trans %}Выберите с какими типами автомобилей работает компания{% endtrans %}</div>
+                                    <div class="static-filters">
+                                        <div class="filter">
+                                            {{ form_widget(formDealer.isNewAuto) }}
+                                            {{ form_label(formDealer.isNewAuto) }}
+                                        </div>
+                                        <div class="filter">
+                                            {{ form_widget(formDealer.isOldAuto) }}
+                                            {{ form_label(formDealer.isOldAuto) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem" style="padding-bottom: 1rem;">
+                                <div class="formParameter" style="display: block;">
+                                    <div class="formParemetersItemSubheader">{% trans %}С какими марками автомобилей Вы работаете{% endtrans %}</div>
+                                    <div class="dealerAutosListBlock">
+                                        {% if user.dealerInfo.autos | length > 0 %}
+                                            <div class="dealerAutoList">
+                                                {% for auto in user.dealerInfo.autos %}
+                                                    <div class="dealerAutoListItem">
+                                                        {{ auto.image | raw }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                        <div class="dealerAutoButton">
+                                            <button data-toggle="modal" data-target="#dealerAutoMarksModal" type="button">Выбор марки</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>            
+                        </div>
+                        <div class="accountBlockHeader subheader">
+                            <div class="account-block-header"><h1><b>{% trans %}Фотогалерея{% endtrans %}</b></h1></div>
+                        </div>
+                        <div class="accountSettingsFormBlock">
+                        <table class="table" id="dealerFotoTable">    
+                            <tbody>
+                                <tr class="addAdvertFotoBlock">
+                                    <td style="vertical-align: top;"><div class="advertFiltersItemName" style="padding-left: 0;margin: 0;">{% trans %}Фотографии{% endtrans %}</div></td>
+                                    <td>
+                                        <div class="advertFiltersItemValue fotos" id="advertFotos">
+                                            <div class="advertFotosStartBg">
+                                                <div class="addFotoIcon"><div class="addFotoIconInner"></div></div><div class="addFotoDescription">{% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        <div class="accountBlockHeader subheader">
+                            <div class="account-block-header"><h1><b>{% trans %}Описание компании{% endtrans %}</b></h1></div>
+                        </div>
+                        <div class="accountSettingsFormBlock">
+                            <div class="formParemetersItem">
+                                <div class="formParameter" style="align-items:flex-start">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.description) }}: <sup>*</sup>
+                                        <span>{% trans %}Не более 2000 знаков{% endtrans %}</span>
+                                    </div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.description) }}
+                                        <div class="addAdvertParameterDescription">
+                                            <div class="addAdvertParameterDescriptionTitle">{% trans %}О чем стоит написать{% endtrans %}:</div>
+                                            <div class="addAdvertParameterDescriptionText">
+                                                <ul class="list-unstyled">
+                                                    <li>- напишите чем занимается Ваша компания,</li>
+                                                    <li>- ваши преимущества и другую информацию которая может заинтересовать</li>
+                                                    <li>вашего потенциального клиента</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel"></div>
+                                    <div class="formParameterField cookieAlertButton">
+                                        {{ form_widget(formDealer.save,{'type' : 'submit'})}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {{ form_end(formDealer) }}
                     </div>
                     <div class="tab-pane fade" id="companyShops" role="tabpanel">
@@ -198,7 +401,7 @@
                             <div class="formParemetersItem">
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Аватар{% endtrans %}:</div>
-                                    <div class="formParameterField">
+                                    <div class="formParameterField dealerLogoField">
                                         {% if avatar %}
                                             <img src="{{ asset('bundles/images/users/avatars/') }}{{avatar}}" alt="" title="" />
                                         {% else %}
@@ -208,8 +411,8 @@
                                                 <path d="M17.9996 49.3002L15.5996 48.2002C16.2996 46.5002 18.4996 45.6002 20.9996 44.5002C23.3996 43.4002 26.3996 42.1002 26.3996 40.5002V38.3002C25.4996 37.6002 24.0996 36.0002 23.8996 33.7002C23.1996 33.0002 22.0996 31.7002 22.0996 30.1002C22.0996 29.1002 22.4996 28.3002 22.7996 27.8002C22.5996 26.7002 22.1996 24.5002 22.1996 22.8002C22.1996 17.3002 25.9996 13.7002 31.9996 13.7002C33.6996 13.7002 35.7996 14.2002 36.8996 15.4002C39.5996 15.9002 41.7996 19.1002 41.7996 22.8002C41.7996 25.2002 41.3996 27.2002 41.0996 28.1002C41.3996 28.6002 41.6996 29.3002 41.6996 30.1002C41.6996 32.0002 40.7996 33.2002 39.8996 33.8002C39.6996 36.1002 38.3996 37.6002 37.5996 38.3002V40.5002C37.5996 41.9002 40.0996 42.8002 42.3996 43.7002C45.0996 44.7002 47.8996 45.7002 48.7996 48.0002L46.2996 48.9002C45.8996 47.7002 43.4996 46.9002 41.4996 46.1002C38.3996 45.0002 34.8996 43.7002 34.8996 40.5002V36.9002L35.4996 36.5002C35.5996 36.5002 37.2996 35.3002 37.2996 33.0002V32.1002L38.0996 31.8002C38.1996 31.7002 38.9996 31.3002 38.9996 30.1002C38.9996 29.7002 38.6996 29.3002 38.5996 29.2002L38.0996 28.6002L38.2996 27.9002C38.2996 27.9002 38.9996 25.7002 38.9996 22.7002C38.9996 20.2002 37.5996 17.9002 36.0996 17.9002H35.2996L34.8996 17.2002C34.5996 16.7002 33.3996 16.2002 31.7996 16.2002C27.2996 16.2002 24.5996 18.6002 24.5996 22.7002C24.5996 24.6002 25.2996 27.7002 25.2996 27.7002L25.4996 28.4002L24.9996 28.9002C24.9996 28.9002 24.5996 29.4002 24.5996 29.9002C24.5996 30.6002 25.4996 31.5002 25.8996 31.9002L26.3996 32.3002V33.0002C26.3996 35.2002 28.2996 36.4002 28.2996 36.4002L28.8996 36.8002V40.4002C28.8996 43.7002 25.1996 45.4002 21.8996 46.8002C20.4996 47.6002 18.3996 48.6002 17.9996 49.3002Z" fill="white"/>
                                             </svg>
                                         {% endif %}
-                                        {{ form_widget(formMain.avatarNew) }}
-                                        {{ form_widget(formMain.avatar) }}
+                                        {{ form_widget(formMain.userinfo.avatarNew) }}
+                                        {{ form_widget(formMain.userinfo.avatar) }}
                                         <a class="change-avatar">{% trans %}изменить{% endtrans %}</a>
                                     </div>
                                 </div>
@@ -218,13 +421,13 @@
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Имя{% endtrans %}: <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(formMain.firstname) }}
+                                        {{ form_widget(formMain.userinfo.firstname) }}
                                     </div>
                                 </div>
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Фамилия{% endtrans %}: <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(formMain.lastname) }}
+                                        {{ form_widget(formMain.userinfo.lastname) }}
                                     </div>
                                 </div>
                             </div>
@@ -232,7 +435,7 @@
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Телефон{% endtrans %}: <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(formMain.phone) }}
+                                        {{ form_widget(formMain.userinfo.phone) }}
                                     </div>
                                 </div>
                                 <div class="formParameter" style="margin-right: 3rem;">
@@ -376,4 +579,150 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="dealerAutoMarksModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            {{ form_start(formAutos) }}
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                </svg>
+            </button>
+            <div class="modal-header">
+                <h3 class="modal-title" id="regionModalLabel">{% trans %}Выбор марки{% endtrans %}</h3>
+            </div>
+            <div class="modal-body dealerAutosModalBody">
+                <div class="dealerAutos">
+                    {% for auto in formAutos.autos %}
+                        {% set index = auto.vars.value %}
+                        {% set entity = formAutos.autos.vars.choices[index].data %}
+                        <div class="dealerAuto">
+                            {{ form_widget(auto) }}
+                            <div class="dealerAutoInner {% if auto.vars.checked %}active{% endif %}">
+                                <div class="dealerAutoInnerCover">
+                                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="13" cy="13" r="13" fill="#EB840B"/>
+                                    <path d="M18.2004 9.75L10.6035 16.9L7.15039 13.65" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div class="dealerAutoInnerLogo">
+                                    {{ entity.image | raw }}
+                                </div>
+                                <div class="dealerAutoInnerName">{{ entity.title }}</div>
+                            </div>
+                        </div>
+                        {{ form_widget(auto) }}
+                    {% endfor %}    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-12"><button type="submit" class="btn">{% trans %}Сохранить{% endtrans %}</button></div>
+            </div>
+            {{ form_end(formAutos) }}
+        </div>
+    </div>
+</div>
+<script>
+        myDropzone = new Dropzone("div#advertFotos", {
+            url: "/account/dealer/ajaxloadfotos",
+            dictDefaultMessage : '<div class="advertFotosStartBg"><div class="addFotoIcon"><div class="addFotoIconInner"></div></div><div class="addFotoDescription">{% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}</div></div>',
+            maxFiles : 30,
+            maxFilesize: 256,
+            filesizeBase: 1024,
+            previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  \n\
+                                                                <div class=\"dz-image\">\n\
+                                                                    <img data-dz-thumbnail />\n\
+                                                                </div>\n  \n\
+                                                                \n\
+                                                                <div class=\"dz-progress\">\n\
+                                                                    <span class=\"dz-upload\" data-dz-uploadprogress></span>\n\
+                                                                </div>\n  \n\
+                                                                <div class=\"dz-error-message\">\n\
+                                                                    <span data-dz-errormessage></span>\n\
+                                                                </div>\n  \n\</div>",
+            acceptedFiles: 'image/*',
+            thumbnailWidth: 260,
+            thumbnailHeight: 150,
+            addRemoveLinks:true,
+            dictRemoveFile: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff"/><path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            dictCancelUploadConfirmation : ' ',
+            init:function() {
+                {% if dealerImages | length > 0 %}
+                    $(".advertFotosStartBg").remove();
+                {% endif%}
+                var myDropzone = this;
+                var existingFiles = [
+                    {% if dealerImages | length > 0 %}
+                        {% for image in dealerImages %}
+                            { name: "{{ image.image }}", size: 12345678,imageUrl:'/bundles/images/dealers/{{ image.image }}' },
+                        {% endfor%}
+                    {% endif %}
+                ];
+                for (i = 0; i < existingFiles.length; i++) {
+                    myDropzone.emit("addedfile",existingFiles[i]);
+                    myDropzone.files.push(existingFiles[i]);
+                    var imageName = document.createAttribute("imageName");
+                    imageName.value = existingFiles[i].name;
+                    myDropzone.files[i].previewElement.attributes.setNamedItem(imageName);
+                    myDropzone.createThumbnailFromUrl(existingFiles[i], existingFiles[i].imageUrl);
+                    myDropzone.emit("complete", existingFiles[i]);
+                }
+                myDropzone.options.dictCancelUploadConfirmation = '';
+                var existingFileCount = existingFiles.length; 
+                myDropzone.options.maxFiles = myDropzone.options.maxFiles - existingFileCount;
+                var fotosNum = $(".dz-preview").length;
+                if(myDropzone.options.maxFiles != 0 && fotosNum > 0){
+                    $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + myDropzone.options.maxFiles + '</div></div>');
+                    $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+                }
+            },
+            complete: function complete(file) {
+                if (file._removeLink) {
+                    file._removeLink.innerHTML = this.options.dictRemoveFile;
+                }
+                if (file.previewElement) {
+                    return file.previewElement.classList.add("dz-complete");
+                }
+            },
+            success: function(file, response){
+                var answer = JSON.parse(response);
+                $(".advertFotosStartBg").remove();
+                $(".addFotoIcon").remove();
+                
+                if(answer.imageName){
+                    var imageName = document.createAttribute("imageName");
+                    imageName.value = answer.imageName;
+                    file.previewElement.attributes.setNamedItem(imageName);
+                }
+                
+                $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + (30 - $(".dz-preview").length) + '</div></div>');
+                $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+            },
+            error: function(file){
+                myDropzone.removeFile(file);
+            },
+            removedfile: function(file){
+                $(".addFotoIcon").remove();
+                var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
+                $.ajax({
+                    url: '/account/dealer/deleteimage/' + imageName,
+                    type:'get',
+                    dataType: 'html'
+                });
+                var _ref;
+                var ret = (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                
+                $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + (30 - $(".dz-preview").length) + '</div></div>');
+                $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+                
+                if($(".dz-preview").length === 0){
+                    $("div#advertFotos").html(this.options.dictDefaultMessage);
+                    $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
+                }
+                
+                return ret;
+            }
+            });
+        $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
+    </script>
 {% endblock%}

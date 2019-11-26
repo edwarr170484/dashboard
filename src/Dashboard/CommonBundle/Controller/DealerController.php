@@ -7,15 +7,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\DealerInfo;
+use Dashboard\CommonBundle\Entity\DealerFoto;
+use Dashboard\CommonBundle\Entity\DealerAuto;
 use Dashboard\CommonBundle\Form\Type\DealerRegisterType;
 use Dashboard\CommonBundle\Entity\Message;
 use Dashboard\CommonBundle\Entity\Conversation;
@@ -194,6 +197,7 @@ class DealerController extends Controller
             $dealer->setAdvertNumber(0);
             $dealer->setPassword($password);
             $dealer->getDealerinfo()->setUser($dealer);
+            $dealer->getUserinfo()->setUser($dealer);
             
             $manager->persist($dealer);
             $manager->persist($role);
@@ -270,13 +274,32 @@ class DealerController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $fm = new Filesystem();
-        $socialAccounts = 0;
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $originalPhones = new ArrayCollection();
+        
+        if($user->getDealerInfo()){
+            if($user->getDealerInfo()->getPhones()){
+                foreach($user->getDealerInfo()->getPhones() as $dealerPhone){
+                    $originalPhones->add($dealerPhone);
+                }
+            }
+        }
         
         $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
         $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale), $user->getDealerInfo());
         $formPassword = $this->createForm(new UserPasswordType($this->getDoctrine()->getManager()), $user);
+        $formAutos = $this->get('form.factory')->createNamedBuilder('autos', 'form', $user->getDealerInfo())
+             ->add('autos', 'entity', array('class' => 'DashboardCommonBundle:Category',
+                                              'choice_label' => function($category){
+                                                    return $category->getTitle();
+                                              },
+                                              'required' => false, 
+                                              'label' => '',
+                                              'multiple' => true,
+                                              'expanded' => true,
+                                              'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->where('c.parent = 27');},
+                                              'attr' => array('class' => 'form-control')))->getForm();
         
         $formAlert = $this->get('form.factory')->createNamedBuilder('alert', 'form', $user)
             ->add('isAlertBroadcast', CheckboxType::class, array('required' => false, 'label' => $this->get('translator')->trans('я соглашаюсь получать информационную рассылку от ') . $settings->getSiteName(), 'attr' => array('class' => 'custom-checkbox')))
@@ -288,6 +311,7 @@ class DealerController extends Controller
         $formMain->handleRequest($request);
         $formPassword->handleRequest($request);
         $formDealer->handleRequest($request);
+        $formAutos->handleRequest($request);
         
         if($formMain->isValid())
         {
@@ -314,15 +338,16 @@ class DealerController extends Controller
                                                                                     "formMain" => $formMain->createView(),
                                                                                     "formPassword" => $formPassword->createView(),
                                                                                     "formDealer" => $formDealer->createView(),
+                                                                                    "formAutos" => $formAutos->createView(),
                                                                                     "user" => $user,
-                                                                                    "socialAccounts" => $socialAccounts,
                                                                                     "settings" => $settings,
                                                                                     "locale" => $locale,
+                                                                                    "dealerImages" => $user->getDealerinfo()->getFotos(),
                                                                                     "routeName" => $request->attributes->get("_route")));
             }
             
-            $avatar = $formMain['avatarNew']->getData();
-            $oldAvatar = $formMain['avatar']->getData();
+            $avatar = $formMain['userinfo']['avatarNew']->getData();
+            $oldAvatar = $formMain['userinfo']['avatar']->getData();
             
             if($avatar)
             {
@@ -363,8 +388,26 @@ class DealerController extends Controller
         
         if($formDealer->isValid())
         {
-            $avatar = $formMain['logotypeNew']->getData();
-            $oldAvatar = $formMain['logotype']->getData();
+            
+            $user->getDealerInfo()->getWorkinfo()->setDealer($user->getDealerInfo());
+            
+            if($originalPhones){
+                foreach($originalPhones as $dealerPhone){
+                    if(false === $user->getDealerInfo()->getPhones()->contains($dealerPhone)){
+                        $dealerPhone->setDealerInfo(null);
+                        $manager->remove($dealerPhone);
+                    }
+                }
+            }
+            if($user->getDealerInfo()->getPhones()){
+                foreach($user->getDealerInfo()->getPhones() as $dealerPhone){
+                    $dealerPhone->setDealerInfo($user->getDealerInfo());
+                    $manager->persist($dealerPhone);
+                }
+            }
+            
+            $avatar = $formDealer['logotypeNew']->getData();
+            $oldAvatar = $formDealer['logotype']->getData();
             
             if($avatar)
             {
@@ -382,6 +425,7 @@ class DealerController extends Controller
             }
             
             $manager->persist($user->getDealerInfo());
+            $manager->persist($user->getDealerInfo()->getWorkinfo());
             $manager->flush();
             
             $this->addFlash(
@@ -391,6 +435,26 @@ class DealerController extends Controller
                 $this->get('translator')->trans('<strong>Gatavs!</strong> Lietotāja dati tika veiksmīgi saglabāti.') . '</div>'
             );
             
+            if($locale->getIsDefault()){
+                return $this->redirectToRoute("account_dealer_settings");
+            }
+            else{
+                return $this->redirectToRoute("account_dealer_settingsLocale", array("_locale" => $locale->getCode()));
+            }
+            
+        }
+        
+        if($formAutos->isValid()){
+            
+            $manager->persist($user->getDealerInfo());            
+            $manager->flush();
+            
+            $this->addFlash(
+                'notice',
+                '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                $this->get('translator')->trans('<strong>Успешно!</strong> Изменения сохранены.') . '</div>'
+            );
             
             if($locale->getIsDefault())
             {
@@ -468,15 +532,110 @@ class DealerController extends Controller
             }
         }
         
-        return $this->render('DashboardCommonBundle:Dealer:account/settings.html.twig', array("avatar" => $user->getAvatar(),
+        return $this->render('DashboardCommonBundle:Dealer:account/settings.html.twig', array("avatar" => $user->getUserinfo()->getAvatar(),
                                                                                     "formMain" => $formMain->createView(),
                                                                                     "formPassword" => $formPassword->createView(),
                                                                                     "formAlert" => $formAlert->createView(),
                                                                                     "formDealer" => $formDealer->createView(),
+                                                                                    "formAutos" => $formAutos->createView(),
                                                                                     "user" => $user,
-                                                                                    "socialAccounts" => $socialAccounts,
                                                                                     "settings" => $settings,
                                                                                     "locale" => $locale,
+                                                                                    "dealerImages" => $user->getDealerInfo()->getFotos(),
                                                                                     "routeName" => $request->attributes->get("_route")));
+    }
+    
+    /**
+     * @Route("/account/dealer/ajaxloadfotos", name="ajaxDealerLoadFotos")
+     */
+    public function ajaxLoadFotosAction(Request $request)
+    {
+        $fm = new Filesystem();
+        $error = 0;
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $extentions = array("jpg", "jpeg", "png", "gif", "JPG", "JPEG", "PNG", "GIF");
+        $image = $request->files->all()["file"];
+
+        if($image)
+        {           
+            $extention = $image->getClientOriginalExtension();
+            $localImageName = rand(1, 99999999).'.'.$extention;
+            
+            if(in_array($extention, $extentions))
+            {
+                try
+                {
+                    $image->move('bundles/images/dealers',$localImageName);
+                    
+                    $simpleImage = $this->get('app.simpleimage');
+                    $simpleImage->load('bundles/images/dealers/' . $localImageName);
+                    $simpleImage->resizeToWidth(1024);
+                    $simpleImage->save('bundles/images/dealers/' . $localImageName);
+                    
+                    $newImage = new DealerFoto();
+                    $newImage->setImage($localImageName);
+                    $newImage->setDealerInfo($user->getDealerinfo());
+                    $manager->persist($newImage);
+                    $manager->flush();
+                }
+                catch (Symfony\Component\HttpFoundation\File\Exception\FileException $e)
+                {
+                    $error = $this->get('translator')->trans("Доступные форматы для изображений: jpg, jpeg, png, gif.");
+                }
+            }
+            else 
+            {
+                $error = $this->get('translator')->trans("Доступные форматы для изображений: jpg, jpeg, png, gif.");
+            }
+
+            $data = $error ? array('error' => $error) : array('imageName' => $localImageName);
+            
+            return new Response(json_encode( $data ));
+        }
+    }
+    
+    /**
+     * @Route("/account/dealer/deleteimage/{data}", name="ajaxDealerDeleteFoto")
+     */
+    public function ajaxDeleteFotoAction($data, Request $request)
+    {
+        $fm = new Filesystem();
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $dealerImage = $manager->getRepository("DashboardCommonBundle:DealerFoto")->findOneBy(array("image" => $data, "dealerInfo" => $user->getDealerinfo()));
+        
+        if($dealerImage){
+            if($dealerImage->getImage() == $data){
+                if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/dealers/' . $dealerImage->getImage())){
+                    $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/dealers/' . $dealerImage->getImage());
+                }
+                $manager->remove($dealerImage);
+                $manager->flush();
+            }
+        }
+        
+        return new Response("OK");
+    }
+    
+    /**
+     * @Route("/account/dealer/deletelogo", name="ajaxDealerDeleteLogo")
+     */
+    public function ajaxDeleteLogotypeAction(Request $request)
+    {
+        $fm = new Filesystem();
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user && $user->getDealerinfo()->getLogotype()){
+            if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/dealers/logotypes/' . $user->getDealerinfo()->getLogotype())){
+                $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/dealers/logotypes/' . $user->getDealerinfo()->getLogotype());
+            }
+            $user->getDealerinfo()->setLogotype(null);
+            $manager->persist($user->getDealerinfo());
+            $manager->flush();
+        }
+        
+        return new Response("OK");
     }
 }

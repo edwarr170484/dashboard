@@ -137,15 +137,15 @@
                             <div class="registerBigInnerSubblockHeader">{% trans %}Данные пользователя{% endtrans %}</div>   
                             <div class="formParemetersItem">
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.firstname) }} <sup>*</sup></div>
+                                    <div class="formParameterLabel">{{ form_label(registerForm.userinfo.firstname) }} <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(registerForm.firstname) }}
+                                        {{ form_widget(registerForm.userinfo.firstname) }}
                                     </div>
                                 </div>
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.lastname) }} <sup>*</sup></div>
+                                    <div class="formParameterLabel">{{ form_label(registerForm.userinfo.lastname) }} <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(registerForm.lastname) }}
+                                        {{ form_widget(registerForm.userinfo.lastname) }}
                                     </div>
                                 </div>
                             </div>
@@ -158,9 +158,9 @@
                                     </div>
                                 </div>
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.phone) }} <sup>*</sup></div>
+                                    <div class="formParameterLabel">{{ form_label(registerForm.userinfo.phone) }} <sup>*</sup></div>
                                     <div class="formParameterField">
-                                        {{ form_widget(registerForm.phone) }}
+                                        {{ form_widget(registerForm.userinfo.phone) }}
                                     </div>
                                 </div>
                             </div>

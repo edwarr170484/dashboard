@@ -762,6 +762,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountSettingsTabs .tab-content{@include box-shadow(none);@include border-radius(0px 9px 9px 9px);}
 .formParameter{@include flexBox(row,flex-start,center);margin-right: 9rem;}
 .formParameterLabel{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.formParameterLabel label{font-weight: normal;}
 .formParameterField img{width: 64px;height:64px;@include border-radius(50%);}
 .formParameterLabel{width: 16rem;}
 .formParameterField .change-avatar{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-left: 1.5rem;}
@@ -1197,3 +1198,42 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .dealerSettingsLogotype:hover .dealerSettingsLogotypeCover{@include flexBox(row,center,center);}
 .dealerSettingsLogotypeCover button{@include border-radius(5px);border:none;background: #494949;padding: 0.9rem 2.1rem;@include fontView("GothamProRegular",#fff,1.4rem,1.8rem);text-align: center;width: 99px;}
 .formParameterField.dealerLogoField{@include flexBox(row,flex-start,center);}
+#addDealerPhone{width: 3.8rem;height: 3.8rem;border:2px solid $yellow-color;@include border-radius(5px);@include flexBox(row,center,center);background: none;position: absolute;bottom:1.6rem;right:-4.5rem;}
+.formParameterField button#addDealerPhone{margin-top: 0;}
+#addDealerPhone:hover,#addDealerPhone:focus{background: $yellow-color;}
+#addDealerPhone:hover svg path,#addDealerPhone:focus svg path{stroke:#fff;}
+.formParameterField{position: relative;}
+.dealerPhonesItem{padding-bottom: 1.6rem;}
+.form-control.dealerDescription{width: 66rem;height: 19.5rem;@include border-radius(2px);margin-bottom: 2rem;}
+.formParameterLabel span{display: block;@include fontView("GothamProRegular",#747474,1.3rem,1.2rem);}
+#dealerFotoTable > tbody > tr > td{padding: 1.7rem 1.9rem;border:none;background: none;}
+#dealerFotoTable > tbody > tr{background: none;}
+.formParemetersItemSubheader{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);padding-bottom: 1.5rem;}
+.static-filters label{margin-bottom: 0;@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.dealerAutoButton button{background: $yellow-color;@include border-radius(3px);border:none;@include fontView("GothamProRegular",#fff,1.6rem,2.2rem);padding: 0.9rem 0;width: 22rem;text-align: center;}
+.dealerAutoButton button:hover,.dealerAutoButton button:focus{background: $orange-color;}
+#dealerAutoMarksModal .modal-header{border:none;}
+#dealerAutoMarksModal .modal-content{padding: 5rem 7rem;}
+#dealerAutoMarksModal .modal-footer{border:none;}
+.dealerAutos{@include flexBox(row,flex-start,flex-start);flex-wrap:wrap;}
+.dealerAuto{position: relative;margin-right: 0.5rem;margin-bottom: 0.5rem;}
+.dealerAuto input[type='checkbox']{position: absolute;display: block;width: 100%;height: 100%;top: 0;left: 0;border:none;@include opacity(0);z-index: 1;}
+.dealerAutoInner{width: 106px;height:101px;position: relative;@include flexBox(column,center,center);}
+.dealerAutoInner > .dealerAutoInnerCover > svg{margin-top: -9px;margin-left: -9px;}
+.dealerAutoInnerName{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
+.dealerAutoInnerLogo svg{width: 60px;height:60px;}
+.dealerAutoInnerCover{background: rgba(245,170,1,0.6);width: 100%;height:100%;position: absolute;top:0;left:0;@include border-radius(5px);display: none;}
+.dealerAutoInner.active .dealerAutoInnerCover{display: block;}
+.dealerAutoList{padding-right: 2rem;@include flexBox(row,flex-start,center);}
+.dealerAutoListItem{@include flexBox(row,flex-start,center);margin-right: 10px;}
+.dealerAutoListItem svg{width: 36px;height: 36px;}
+.dealerAutosListBlock{@include flexBox(row,flex-start,center);}
+.workDay{padding: 11px 10px;@include flexBox(row,center,center);position: relative;border:1px solid #AAAAAA;@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);background: none;@include border-radius(2px);}
+.workDay.active{background: rgba(245,170,1,0.3);}
+.workDay input[type='checkbox']{position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: block;@include opacity(0);z-index:1;margin: 0;}
+.workdays{margin: 0;display: block;padding-top: 1.6rem;}
+.workdays li{padding: 0;}
+.workdays li.allDay{padding: 0 3rem;}
+.workdays li input.workTime{border:1px solid #AAAAAA;@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);padding: 11px 10px;padding-bottom: 10px;width: 63px;@include border-radius(2px);box-sizing: border-box;}
+.workdays li input.workTime:focus{border:1px solid #F5AA01;}
+.workdays li.space{@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);padding: 11px 10px;}

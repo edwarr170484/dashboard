@@ -10,12 +10,16 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 use Dashboard\CommonBundle\Entity\City;
 use Dashboard\CommonBundle\Form\DataTransformer\UserToNumberTransformer;
+use Dashboard\CommonBundle\Form\Type\WorkInfoType;
 
 class DealerEditType extends AbstractType
 {
@@ -33,10 +37,16 @@ class DealerEditType extends AbstractType
             ->add('website', TextType::class, array('required' => false, 'label' => 'Сайт', 'attr' => array('class' => 'form-control')))
             ->add('address', TextType::class, array('required' => true, 'label' => 'Адрес', 'attr' => array('class' => 'form-control')))
             ->add('email', TextType::class, array('required' => true, 'label' => 'Email', 'attr' => array('class' => 'form-control')))
+            ->add('phones', CollectionType::class, array('entry_type' => new DealerPhoneType($this->em), 'required' => false,'allow_add' => true,'allow_delete' => true, 'by_reference' => false,'label' => 'Телефоны')) 
             ->add($builder->create('user', 'hidden')->addModelTransformer(new UserToNumberTransformer($this->em)))
             ->add('logotypeNew', FileType::class, array('required' => false, 'label' => 'Логотип','mapped' => false, 'attr' => array('class' => 'change-avatar-input')))
-            ->add('logotype', HiddenType::class, array('required' => false, 'label' => ''));
-            
+            ->add('logotype', HiddenType::class, array('required' => false, 'label' => ''))
+            ->add('description', TextareaType::class, array('required' => false, 'label' => 'Описание', 'attr' => array('class' => 'form-control dealerDescription','placeholder' => 'Описание компании'))) 
+            ->add('isNewAuto', CheckboxType::class, array('required' => false, 'label' => 'Новые', 'attr' => array('class' => 'custom-checkbox')))
+            ->add('isOldAuto', CheckboxType::class, array('required' => false, 'label' => 'С пробегом', 'attr' => array('class' => 'custom-checkbox')))
+            ->add('workinfo', new WorkInfoType($this->em), array('data_class' => 'Dashboard\CommonBundle\Entity\Workinfo'))     
+            ->add('save', ButtonType::class, array('label' => 'Сохранить'));
+        
             $builder->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
                     'choice_label' => function($city)
                     {

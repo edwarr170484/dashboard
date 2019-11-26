@@ -52,11 +52,11 @@
                         <div class="hidden-sm hidden-xs">
                             <ul class="list-unstyled list-inline loginned-top-info">
                                 <li>
-                                    {% if app.user.firstname or  app.user.lastname %}
+                                    {% if app.user.userinfo.firstname or  app.user.userinfo.lastname %}
                                         {% if  app.request.locale == 'lv' %}
-                                            <a href="{{path('account')}}">{{ app.user.firstname }} {{app.user.lastname}}</a>
+                                            <a href="{{path('account')}}">{{ app.user.userinfo.firstname }} {{app.user.userinfo.lastname}}</a>
                                         {% else %}
-                                            <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{{ app.user.firstname }} {{app.user.lastname}}</a>
+                                            <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{{ app.user.userinfo.firstname }} {{app.user.userinfo.lastname}}</a>
                                         {% endif %}
                                     {% elseif app.user.vkID %}
                                         {% if  app.request.locale == 'lv' %}

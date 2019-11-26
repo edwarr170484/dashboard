@@ -28,5 +28,60 @@ class DealerAuto
      */
     private $auto;
     
-}
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dealerInfo
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerInfo $dealerInfo
+     * @return DealerAuto
+     */
+    public function setDealerInfo(\Dashboard\CommonBundle\Entity\DealerInfo $dealerInfo = null)
+    {
+        $this->dealerInfo = $dealerInfo;
+    
+        return $this;
+    }
+
+    /**
+     * Get dealerInfo
+     *
+     * @return \Dashboard\CommonBundle\Entity\DealerInfo 
+     */
+    public function getDealerInfo()
+    {
+        return $this->dealerInfo;
+    }
+
+    /**
+     * Set auto
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $auto
+     * @return DealerAuto
+     */
+    public function setAuto(\Dashboard\CommonBundle\Entity\Category $auto = null)
+    {
+        $this->auto = $auto;
+    
+        return $this;
+    }
+
+    /**
+     * Get auto
+     *
+     * @return \Dashboard\CommonBundle\Entity\Category 
+     */
+    public function getAuto()
+    {
+        return $this->auto;
+    }
+}

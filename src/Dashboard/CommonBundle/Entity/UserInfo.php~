@@ -20,6 +20,26 @@ class UserInfo
     private $id;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     */
+    private $firstname;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     */
+    private $lastname;
+    
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true, options={"default":"null"})
+     */
+    private $phone;
+    
+        /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
+     */
+    private $avatar;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Region", inversedBy="user")
      * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
      */
@@ -67,6 +87,98 @@ class UserInfo
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set firstname
+     *
+     * @param string $firstname
+     * @return UserInfo
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    
+        return $this;
+    }
+
+    /**
+     * Get firstname
+     *
+     * @return string 
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * Set lastname
+     *
+     * @param string $lastname
+     * @return UserInfo
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastname
+     *
+     * @return string 
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return UserInfo
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set avatar
+     *
+     * @param string $avatar
+     * @return UserInfo
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+    
+        return $this;
+    }
+
+    /**
+     * Get avatar
+     *
+     * @return string 
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
     }
 
     /**

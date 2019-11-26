@@ -27,12 +27,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', EmailType::class, array('required' => false, 'label' => 'e-pasts', 'attr' => array('class' => 'form-control')))  
-            ->add('firstname', TextType::class, array('required' => true, 'label' => 'vārds', 'attr' => array('class' => 'form-control','placeholder' => 'Имя')))
-            ->add('lastname', TextType::class, array('required' => false, 'label' => 'uzvārds', 'attr' => array('class' => 'form-control','placeholder' => 'Фамилия')))
-            ->add('phone', TextType::class, array('required' => false, 'label' => 'Телефон', 'attr' => array('class' => 'form-control','placeholder' => 'Телефон')))
-            ->add('avatarNew', FileType::class, array('required' => false, 'label' => '','mapped' => false, 'attr' => array('class' => 'change-avatar-input')))
-            ->add('avatar', HiddenType::class, array('required' => false, 'label' => ''))
+            ->add('email', EmailType::class, array('required' => false, 'label' => 'E-mail', 'attr' => array('class' => 'form-control')))  
             ->add('isHideEmail', CheckboxType::class, array('required' => false, 'label' => 'Запретить показ на сайте', 'attr' => array('class' => 'custom-checkbox')))
             ->add('userinfo', new UserInfoType($this->em, $this->user, $this->locale), array('data_class' => 'Dashboard\CommonBundle\Entity\UserInfo'))
             ->add('save', ButtonType::class, array('label' => 'Сохранить'));

@@ -84,7 +84,8 @@ class DealerInfo
     private $description; 
     
     /**
-     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerAuto", mappedBy="dealerInfo")
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Category", inversedBy="dealers")
+     * @ORM\JoinTable(name="dealer_autos")
      */
     private $autos;
     
@@ -102,6 +103,21 @@ class DealerInfo
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerFoto", mappedBy="dealerInfo")
      */
     private $fotos;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Workinfo", mappedBy="dealer", cascade={"persist"})
+     */
+    private $workinfo;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->autos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fotos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -137,6 +153,29 @@ class DealerInfo
     }
 
     /**
+     * Set firma
+     *
+     * @param string $firma
+     * @return DealerInfo
+     */
+    public function setFirma($firma)
+    {
+        $this->firma = $firma;
+    
+        return $this;
+    }
+
+    /**
+     * Get firma
+     *
+     * @return string 
+     */
+    public function getFirma()
+    {
+        return $this->firma;
+    }
+
+    /**
      * Set nifNumber
      *
      * @param string $nifNumber
@@ -157,29 +196,6 @@ class DealerInfo
     public function getNifNumber()
     {
         return $this->nifNumber;
-    }
-
-    /**
-     * Set address
-     *
-     * @param string $address
-     * @return DealerInfo
-     */
-    public function setAddress($address)
-    {
-        $this->address = $address;
-    
-        return $this;
-    }
-
-    /**
-     * Get address
-     *
-     * @return string 
-     */
-    public function getAddress()
-    {
-        return $this->address;
     }
 
     /**
@@ -206,104 +222,26 @@ class DealerInfo
     }
 
     /**
-     * Set user
+     * Set address
      *
-     * @param \Dashboard\CommonBundle\Entity\User $user
+     * @param string $address
      * @return DealerInfo
      */
-    public function setUser(\Dashboard\CommonBundle\Entity\User $user = null)
+    public function setAddress($address)
     {
-        $this->user = $user;
+        $this->address = $address;
     
         return $this;
     }
 
     /**
-     * Get user
-     *
-     * @return \Dashboard\CommonBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set city
-     *
-     * @param \Dashboard\CommonBundle\Entity\City $city
-     * @return DealerInfo
-     */
-    public function setCity(\Dashboard\CommonBundle\Entity\City $city = null)
-    {
-        $this->city = $city;
-    
-        return $this;
-    }
-
-    /**
-     * Get city
-     *
-     * @return \Dashboard\CommonBundle\Entity\City 
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * Set cityCode
-     *
-     * @param \Dashboard\CommonBundle\Entity\CityCode $cityCode
-     * @return DealerInfo
-     */
-    public function setCityCode(\Dashboard\CommonBundle\Entity\CityCode $cityCode = null)
-    {
-        $this->cityCode = $cityCode;
-    
-        return $this;
-    }
-
-    /**
-     * Get cityCode
-     *
-     * @return \Dashboard\CommonBundle\Entity\CityCode 
-     */
-    public function getCityCode()
-    {
-        return $this->cityCode;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->autos = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->fotos = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Set firma
-     *
-     * @param string $firma
-     * @return DealerInfo
-     */
-    public function setFirma($firma)
-    {
-        $this->firma = $firma;
-    
-        return $this;
-    }
-
-    /**
-     * Get firma
+     * Get address
      *
      * @return string 
      */
-    public function getFirma()
+    public function getAddress()
     {
-        return $this->firma;
+        return $this->address;
     }
 
     /**
@@ -422,6 +360,75 @@ class DealerInfo
     }
 
     /**
+     * Set user
+     *
+     * @param \Dashboard\CommonBundle\Entity\User $user
+     * @return DealerInfo
+     */
+    public function setUser(\Dashboard\CommonBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Dashboard\CommonBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set city
+     *
+     * @param \Dashboard\CommonBundle\Entity\City $city
+     * @return DealerInfo
+     */
+    public function setCity(\Dashboard\CommonBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \Dashboard\CommonBundle\Entity\City 
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * Set cityCode
+     *
+     * @param \Dashboard\CommonBundle\Entity\CityCode $cityCode
+     * @return DealerInfo
+     */
+    public function setCityCode(\Dashboard\CommonBundle\Entity\CityCode $cityCode = null)
+    {
+        $this->cityCode = $cityCode;
+    
+        return $this;
+    }
+
+    /**
+     * Get cityCode
+     *
+     * @return \Dashboard\CommonBundle\Entity\CityCode 
+     */
+    public function getCityCode()
+    {
+        return $this->cityCode;
+    }
+
+    /**
      * Add phones
      *
      * @param \Dashboard\CommonBundle\Entity\DealerPhone $phones
@@ -457,10 +464,10 @@ class DealerInfo
     /**
      * Add autos
      *
-     * @param \Dashboard\CommonBundle\Entity\DealerAuto $autos
+     * @param \Dashboard\CommonBundle\Entity\Category $autos
      * @return DealerInfo
      */
-    public function addAuto(\Dashboard\CommonBundle\Entity\DealerAuto $autos)
+    public function addAuto(\Dashboard\CommonBundle\Entity\Category $autos)
     {
         $this->autos[] = $autos;
     
@@ -470,9 +477,9 @@ class DealerInfo
     /**
      * Remove autos
      *
-     * @param \Dashboard\CommonBundle\Entity\DealerAuto $autos
+     * @param \Dashboard\CommonBundle\Entity\Category $autos
      */
-    public function removeAuto(\Dashboard\CommonBundle\Entity\DealerAuto $autos)
+    public function removeAuto(\Dashboard\CommonBundle\Entity\Category $autos)
     {
         $this->autos->removeElement($autos);
     }
@@ -518,5 +525,28 @@ class DealerInfo
     public function getFotos()
     {
         return $this->fotos;
+    }
+
+    /**
+     * Set workinfo
+     *
+     * @param \Dashboard\CommonBundle\Entity\Workinfo $workinfo
+     * @return DealerInfo
+     */
+    public function setWorkinfo(\Dashboard\CommonBundle\Entity\Workinfo $workinfo = null)
+    {
+        $this->workinfo = $workinfo;
+    
+        return $this;
+    }
+
+    /**
+     * Get workinfo
+     *
+     * @return \Dashboard\CommonBundle\Entity\Workinfo 
+     */
+    public function getWorkinfo()
+    {
+        return $this->workinfo;
     }
 }

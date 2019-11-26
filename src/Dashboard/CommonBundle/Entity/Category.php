@@ -145,6 +145,11 @@ class Category
      */
     private $rates;
     
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerInfo", mappedBy="autos", cascade={"persist"})
+     */
+    private $dealers;
+    
     private $allProductsNumber;
     
     /**
@@ -834,5 +839,38 @@ class Category
     public function getRates()
     {
         return $this->rates;
+    }
+
+    /**
+     * Add dealers
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerInfo $dealers
+     * @return Category
+     */
+    public function addDealer(\Dashboard\CommonBundle\Entity\DealerInfo $dealers)
+    {
+        $this->dealers[] = $dealers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove dealers
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerInfo $dealers
+     */
+    public function removeDealer(\Dashboard\CommonBundle\Entity\DealerInfo $dealers)
+    {
+        $this->dealers->removeElement($dealers);
+    }
+
+    /**
+     * Get dealers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDealers()
+    {
+        return $this->dealers;
     }
 }

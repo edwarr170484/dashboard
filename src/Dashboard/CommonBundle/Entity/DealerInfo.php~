@@ -84,7 +84,8 @@ class DealerInfo
     private $description; 
     
     /**
-     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerAuto", mappedBy="dealerInfo")
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Category", inversedBy="dealers")
+     * @ORM\JoinTable(name="dealer_autos")
      */
     private $autos;
     
@@ -102,6 +103,21 @@ class DealerInfo
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerFoto", mappedBy="dealerInfo")
      */
     private $fotos;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Workinfo", mappedBy="dealer", cascade={"persist"})
+     */
+    private $workinfo;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->autos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fotos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -137,6 +153,29 @@ class DealerInfo
     }
 
     /**
+     * Set firma
+     *
+     * @param string $firma
+     * @return DealerInfo
+     */
+    public function setFirma($firma)
+    {
+        $this->firma = $firma;
+    
+        return $this;
+    }
+
+    /**
+     * Get firma
+     *
+     * @return string 
+     */
+    public function getFirma()
+    {
+        return $this->firma;
+    }
+
+    /**
      * Set nifNumber
      *
      * @param string $nifNumber
@@ -157,6 +196,29 @@ class DealerInfo
     public function getNifNumber()
     {
         return $this->nifNumber;
+    }
+
+    /**
+     * Set website
+     *
+     * @param string $website
+     * @return DealerInfo
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    
+        return $this;
+    }
+
+    /**
+     * Get website
+     *
+     * @return string 
+     */
+    public function getWebsite()
+    {
+        return $this->website;
     }
 
     /**
@@ -183,26 +245,118 @@ class DealerInfo
     }
 
     /**
-     * Set website
+     * Set email
      *
-     * @param string $website
+     * @param string $email
      * @return DealerInfo
      */
-    public function setWebsite($website)
+    public function setEmail($email)
     {
-        $this->website = $website;
+        $this->email = $email;
     
         return $this;
     }
 
     /**
-     * Get website
+     * Get email
      *
      * @return string 
      */
-    public function getWebsite()
+    public function getEmail()
     {
-        return $this->website;
+        return $this->email;
+    }
+
+    /**
+     * Set logotype
+     *
+     * @param string $logotype
+     * @return DealerInfo
+     */
+    public function setLogotype($logotype)
+    {
+        $this->logotype = $logotype;
+    
+        return $this;
+    }
+
+    /**
+     * Get logotype
+     *
+     * @return string 
+     */
+    public function getLogotype()
+    {
+        return $this->logotype;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return DealerInfo
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set isNewAuto
+     *
+     * @param boolean $isNewAuto
+     * @return DealerInfo
+     */
+    public function setIsNewAuto($isNewAuto)
+    {
+        $this->isNewAuto = $isNewAuto;
+    
+        return $this;
+    }
+
+    /**
+     * Get isNewAuto
+     *
+     * @return boolean 
+     */
+    public function getIsNewAuto()
+    {
+        return $this->isNewAuto;
+    }
+
+    /**
+     * Set isOldAuto
+     *
+     * @param boolean $isOldAuto
+     * @return DealerInfo
+     */
+    public function setIsOldAuto($isOldAuto)
+    {
+        $this->isOldAuto = $isOldAuto;
+    
+        return $this;
+    }
+
+    /**
+     * Get isOldAuto
+     *
+     * @return boolean 
+     */
+    public function getIsOldAuto()
+    {
+        return $this->isOldAuto;
     }
 
     /**
@@ -272,5 +426,104 @@ class DealerInfo
     public function getCityCode()
     {
         return $this->cityCode;
+    }
+
+    /**
+     * Add phones
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerPhone $phones
+     * @return DealerInfo
+     */
+    public function addPhone(\Dashboard\CommonBundle\Entity\DealerPhone $phones)
+    {
+        $this->phones[] = $phones;
+    
+        return $this;
+    }
+
+    /**
+     * Remove phones
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerPhone $phones
+     */
+    public function removePhone(\Dashboard\CommonBundle\Entity\DealerPhone $phones)
+    {
+        $this->phones->removeElement($phones);
+    }
+
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * Add autos
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $autos
+     * @return DealerInfo
+     */
+    public function addAuto(\Dashboard\CommonBundle\Entity\Category $autos)
+    {
+        $this->autos[] = $autos;
+    
+        return $this;
+    }
+
+    /**
+     * Remove autos
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $autos
+     */
+    public function removeAuto(\Dashboard\CommonBundle\Entity\Category $autos)
+    {
+        $this->autos->removeElement($autos);
+    }
+
+    /**
+     * Get autos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAutos()
+    {
+        return $this->autos;
+    }
+
+    /**
+     * Add fotos
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerFoto $fotos
+     * @return DealerInfo
+     */
+    public function addFoto(\Dashboard\CommonBundle\Entity\DealerFoto $fotos)
+    {
+        $this->fotos[] = $fotos;
+    
+        return $this;
+    }
+
+    /**
+     * Remove fotos
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerFoto $fotos
+     */
+    public function removeFoto(\Dashboard\CommonBundle\Entity\DealerFoto $fotos)
+    {
+        $this->fotos->removeElement($fotos);
+    }
+
+    /**
+     * Get fotos
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFotos()
+    {
+        return $this->fotos;
     }
 }

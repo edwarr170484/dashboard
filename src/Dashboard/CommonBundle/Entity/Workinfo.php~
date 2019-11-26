@@ -1,0 +1,106 @@
+<?php
+namespace Dashboard\CommonBundle\Entity;
+
+use Symfony\Component\Security\Core\Role\RoleInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Table()
+ * @ORM\Entity()
+ */
+class Workinfo
+{
+    
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\DealerInfo", inversedBy="workdays")
+     * @ORM\JoinColumn(name="dealer_id", referencedColumnName="id")
+     */
+    private $dealer;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $monday;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $tuesday;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $wednesday;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $thursday;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $friday;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $saturday;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $sunday;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $fullDay;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $isWokdays;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $isHolidays;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $isAlldays;
+    
+    
+    /**
+     * @ORM\Column(type="time", nullable=true, options={"default": 0})
+     */
+    private $workStart;
+    
+    /**
+     * @ORM\Column(type="time", nullable=true, options={"default": 0})
+     */
+    private $workStop;
+    
+    /**
+     * @ORM\Column(type="time", nullable=true, options={"default": 0})
+     */
+    private $breakStart;
+    
+    /**
+     * @ORM\Column(type="time", nullable=true, options={"default": 0})
+     */
+    private $breakStop;
+    
+}
+

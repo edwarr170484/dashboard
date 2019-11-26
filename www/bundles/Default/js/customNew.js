@@ -28,9 +28,65 @@ $(document).ready(function(){
         navText : ['<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.5 43L1.5 22L22.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 43L22.5 22L1.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
     });
     
-    $(".jobsSublist").click(function(){$(this).toggleClass("opened");})
+    $(".jobsSublist").click(function(){$(this).toggleClass("opened");});
+    
+    $("#addDealerPhone").click(function(){
+        var prototype = $("#dealerinfo_phones").data("prototype");
+        var count = $(".dealerPhonesItem").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        $(".dealerPhonesList").append(newForm);
+    });
+    
+    $(".dealerAuto").click(function(){$(this).find('.dealerAutoInner').toggleClass('active');});
     
 });
+
+function resetWorkTimes(element){
+    element.toggleClass('active');
+    $(".workdays").find('input[type="text"]').val("00:00");
+}
+
+function selectWeekDays(element, area, dayClass){
+    var hasActive = element.hasClass('active');
+    var days = area.find(dayClass);
+    element.toggleClass('active');
+    
+    if(hasActive){
+        days.each(function(){
+            if($(this).hasClass('active')){
+                $(this).removeClass('active');
+                $(this).find("input").prop("checked", false);
+            }
+        });
+    }else{
+        days.each(function(){
+            if(!$(this).hasClass('active')){
+                $(this).addClass('active');
+                $(this).find("input").prop("checked", true);
+            }
+        });
+    }
+}
+
+function deleteDealerLogotype(text){
+    if(confirm(text)){
+        $.ajax({
+            url: '/account/dealer/deletelogo',
+            type:'post',
+            data: $('.accountMessages input[type="checkbox"]:checked'),
+            dataType: 'html',
+            beforeSend: function(){},
+            success: function()
+            {
+                $("#dealerinfo_logotype").val(0);
+                $(".dealerSettingsLogotype").remove();
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+
+            }
+        });
+    }
+}
 
 function showHideAllCategories(element){
     var newText = element.data('text');

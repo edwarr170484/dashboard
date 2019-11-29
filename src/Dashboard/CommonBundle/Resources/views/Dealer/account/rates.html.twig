@@ -1,0 +1,415 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+{% use 'DashboardCommonBundle:Common:icons.html.twig' %}
+
+{% block title %}{% trans %}Личный кабинет{% endtrans %}{% endblock %}
+{% block bodyClass %}class="userAccount"{% endblock %}
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% endif %}
+                    {% if  locale.isDefault %}
+                        <li><a href="{{ path('accountDealer', {'_locale' : locale.code}) }}">
+                    {% else %}
+                        <li><a href="{{ path('accountDealerLocale', {'_locale' : locale.code}) }}">
+                    {% endif %}
+                        {% trans %}Личный кабинет{% endtrans %}
+                    </a></li>
+                    <li>/</li>
+                    <li>
+                    {% if  locale.isDefault %}
+                        <a href="{{path('account_dealer_rates')}}">
+                    {% else %}
+                        <a href="{{path('account_dealer_ratesLocale',{'_locale' : app.request.locale})}}">
+                    {% endif %}
+                        {% trans %}Тарифы{% endtrans %}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav> 
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1>{% trans %}Тарифы{% endtrans %}</h1></div>
+            </div>
+        </div>
+    </div>
+    <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Dealer:getSidebar', {'routeName' : routeName})) }}
+        <div class="col-lg-10 col-md-10">
+            <div class="account-advert-block account-block">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div class="account-advert-block-content">
+                    <div class="row advert-category-adverts">
+                        <div class="col-lg-12 col-md-12">
+                                    <div class="accountRatesInformation">
+                                        <div class="accountRatesInformationHeader">{% trans %}В рамках вашего пакета доступно:{% endtrans %}</div>
+                                        <div class="accountRatesInformationList dealerAccountRates">
+                                            <div class="accountRatesInformationListItem">18 Сolocaciones</div>
+                                            <div class="accountRatesInformationListItem">
+                                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M25 13C25 19.6274 19.6274 25 13 25M25 13C25 6.37258 19.6274 1 13 1M25 13H20.2M13 25C6.37258 25 1 19.6274 1 13M13 25V20.2M1 13C1 6.37258 6.37258 1 13 1M1 13H5.8M13 1V5.8" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                5 Publicación de la  Premium
+                                            </div>
+                                            <div class="accountRatesInformationListItem">
+                                                <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M13 18.4565C16.0125 18.4565 18.4545 16.0144 18.4545 13.002C18.4545 9.98949 16.0125 7.54741 13 7.54741C9.98754 7.54741 7.54545 9.98949 7.54545 13.002C7.54545 16.0144 9.98754 18.4565 13 18.4565Z" fill="#F5AA01"/>
+                                                    <path d="M13 1.00195V3.18377M13 22.8201V25.002M4.51273 4.51468L6.06182 6.06377M19.9382 19.9401L21.4873 21.4892M1 13.002H3.18182M22.8182 13.002H25M4.51273 21.4892L6.06182 19.9401M19.9382 6.06377L21.4873 4.51468M18.4545 13.002C18.4545 16.0144 16.0125 18.4565 13 18.4565C9.98754 18.4565 7.54545 16.0144 7.54545 13.002C7.54545 9.98949 9.98754 7.54741 13 7.54741C16.0125 7.54741 18.4545 9.98949 18.4545 13.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                5 Colocación especial de anuncios
+                                            </div>
+                                            <div class="accountRatesInformationListItem">
+                                                <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1 9.72727C1 9.72727 5.36364 1 13 1C20.6364 1 25 9.72727 25 9.72727C25 9.72727 20.6364 18.4545 13 18.4545C5.36364 18.4545 1 9.72727 1 9.72727Z" fill="#F5AA01"/>
+                                                    <path d="M13 13C14.8075 13 16.2727 11.5347 16.2727 9.72727C16.2727 7.9198 14.8075 6.45455 13 6.45455C11.1925 6.45455 9.72727 7.9198 9.72727 9.72727C9.72727 11.5347 11.1925 13 13 13Z" fill="#F5AA01"/>
+                                                    <path d="M1 9.72727C1 9.72727 5.36364 1 13 1C20.6364 1 25 9.72727 25 9.72727C25 9.72727 20.6364 18.4545 13 18.4545C5.36364 18.4545 1 9.72727 1 9.72727Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M13 13C14.8075 13 16.2727 11.5347 16.2727 9.72727C16.2727 7.9198 14.8075 6.45455 13 6.45455C11.1925 6.45455 9.72727 7.9198 9.72727 9.72727C9.72727 11.5347 11.1925 13 13 13Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                28 Destacando un anuncio en color
+                                            </div>
+                                            <div class="accountRatesInformationListItem">
+                                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z" fill="#F5AA01"/>
+                                                    <path d="M17.8 13L13 8.2L8.2 13" fill="#F5AA01"/>
+                                                    <path d="M17.8 13L13 8.2M13 8.2L8.2 13M13 8.2V17.8M25 13C25 19.6274 19.6274 25 13 25C6.37258 25 1 19.6274 1 13C1 6.37258 6.37258 1 13 1C19.6274 1 25 6.37258 25 13Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                12 Levantar anuncio
+                                            </div>
+                                            <div class="accountRatesInformationListItem">
+                                                <a href="{% if locale.isDefault %}{{ path('account_dealer_rates') }}{% else %}{{ path('account_dealer_ratesLocale',{'_locale' : app.request.locale}) }}{% endif %}">
+                                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                        <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="#EB840B"/>
+                                                        <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="#EB840B"/>
+                                                        <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                        <path d="M20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                        <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="white"/>
+                                                        <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="white"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <div class="col-lg-12 col-md-12">
+                            <div class="pageContentBlockInner dealerAccountRates">
+                                <div class="mainPageFiltersTabs dealerAccountRates">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            {% set i = 1 %}
+                                            {% for category in categories %}
+                                                <li role="presentation" {% if i == 1 %}class="active"{% endif %}>
+                                                    <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
+                                                        {{ category.image |raw }}
+                                                        <span>
+                                                            {% if category.translations | length > 0 %}
+                                                                {% for translation in category.translations %}
+                                                                    {% if translation.locale.id == locale.id %}
+                                                                        {{ translation.value }}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% else %}        
+                                                                {{ category.title}}
+                                                            {% endif %}
+                                                        </span><div class="shadowBlock"></div></a>
+                                                </li>
+                                                {% set i = i + 1 %}
+                                            {% endfor %}
+                                        </ul>
+                                        <div class="tab-content">
+                                            {% set i = 1 %}
+                                            {% for category in categories %}
+                                                <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="categoryFilters{{ category.id }}">
+                                                    <div class="categoryRate">
+                                                        <div class="categoryRateDescription">
+                                                            <div class="categoryRateDescriptionTitle">
+                                                                <div class="categoryRateName">Estándar</div>
+                                                                <div class="categoryRateServices">
+                                                                    <div class="accountAdvertFunctions">
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                10 размещений
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="categoryRateDescriptionText">
+                                                                Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                            </div>
+                                                        </div>
+                                                        <div class="categoryRatePrice">
+                                                            16,99€
+                                                        </div>
+                                                        <div class="categoryRateOrderButton">
+                                                            <button>{% trans %}Заказать{% endtrans %}</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRate">
+                                                        <div class="categoryRateDescription">
+                                                            <div class="categoryRateDescriptionTitle">
+                                                                <div class="categoryRateName">Avanzado</div>
+                                                                <div class="categoryRateServices">
+                                                                    <div class="accountAdvertFunctions">
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                10 размещений
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                        <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                28
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                2
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="categoryRateDescriptionText">
+                                                                Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                            </div>
+                                                        </div>
+                                                        <div class="categoryRatePrice">
+                                                            25,99€
+                                                        </div>
+                                                        <div class="categoryRateOrderButton">
+                                                            <button>{% trans %}Заказать{% endtrans %}</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRate">
+                                                        <div class="categoryRateDescription">
+                                                            <div class="categoryRateDescriptionTitle">
+                                                                <div class="categoryRateName">Experimentado</div>
+                                                                <div class="categoryRateServices">
+                                                                    <div class="accountAdvertFunctions">
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                25 размещений
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                2 
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                3 
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                        <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                5
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                7
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="categoryRateDescriptionText">
+                                                                Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                            </div>
+                                                        </div>
+                                                        <div class="categoryRatePrice">
+                                                            74,99€
+                                                        </div>
+                                                        <div class="categoryRateOrderButton">
+                                                            <button>{% trans %}Заказать{% endtrans %}</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRate">
+                                                        <div class="categoryRateDescription">
+                                                            <div class="categoryRateDescriptionTitle">
+                                                                <div class="categoryRateName">Profesional</div>
+                                                                <div class="categoryRateServices">
+                                                                    <div class="accountAdvertFunctions">
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                50 размещений
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                5 
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                5 
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                        <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                10
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                12
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="categoryRateDescriptionText">
+                                                                Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                            </div>
+                                                        </div>
+                                                        <div class="categoryRatePrice">
+                                                            122,99€
+                                                        </div>
+                                                        <div class="categoryRateOrderButton">
+                                                            <button>{% trans %}Заказать{% endtrans %}</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="categoryRate">
+                                                        <div class="categoryRateDescription">
+                                                            <div class="categoryRateDescriptionTitle">
+                                                                <div class="categoryRateName">Supremo</div>
+                                                                <div class="categoryRateServices">
+                                                                    <div class="accountAdvertFunctions">
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                100 размещений
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                10 
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                7
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                        <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                15
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="accountAdvertFunction">
+                                                                            <div class="button">
+                                                                                <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                                </svg>
+                                                                                17
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="categoryRateDescriptionText">
+                                                                Данная услуга действует разово, она не просто поднимает ваше объявление в поиске, но ещё и обновляет дату публикации и количество просмотров объявления. Таким образом, она отлично работает даже в случае самых застоявшихся автомобилей.
+                                                            </div>
+                                                        </div>
+                                                        <div class="categoryRatePrice">
+                                                            198,99€
+                                                        </div>
+                                                        <div class="categoryRateOrderButton">
+                                                            <button>{% trans %}Заказать{% endtrans %}</button>
+                                                        </div>
+                                                    </div>
+                                                {% set i = i + 1 %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                </div>
+                                <div class="dealerAccountRatesDescription">
+                                    Elit dolore ex minim id amet excepteur. Fugiat consectetur consequat deserunt irure labore adipisicing. Dolor aliquip anim cupidatat excepteur incididunt. Magna ut laboris esse voluptate incididunt. Aliquip magna amet laboris mollit fugiat fugiat laborum nostrud. Et velit proident officia elit ullamco id.
+
+Nulla anim sint dolore esse magna elit proident. Ipsum exercitation adipisicing qui quis fugiat dolore commodo. Eu eiusmod velit duis voluptate sunt nostrud veniam laborum sit proident ea. Consectetur irure ipsum nisi ut.
+Mollit incididunt aute magna non. Pariatur velit minim nisi est do enim reprehenderit elit consequat culpa ipsum labore. In irure velit ex consectetur esse ex nulla ex officia proident in eiusmod. Anim sint eu nostrud anim non aliqua fugiat exercitation et reprehenderit consectetur amet officia.
+Occaecat nulla consectetur id ex. Amet dolore occaecat ea velit proident veniam reprehenderit officia fugiat dolore non sint dolore irure. Lorem ipsum proident sint dolore veniam esse consequat eu nostrud Lorem Lorem.
+Exercitation pariatur irure dolor nulla. Veniam ea et exercitation non. Officia esse amet ad nostrud pariatur ullamco cillum Lorem qui consectetur minim voluptate sunt.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

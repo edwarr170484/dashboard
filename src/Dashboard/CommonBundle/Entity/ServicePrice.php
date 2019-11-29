@@ -39,14 +39,7 @@ class ServicePrice
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
      */
     private $service;
-    
-    
-    /**
-     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="services")
-     * 
-     */
-    private $bills;
-    
+   
 
     /**
      * Get id
@@ -67,7 +60,7 @@ class ServicePrice
     public function setBillId($billId)
     {
         $this->billId = $billId;
-
+    
         return $this;
     }
 
@@ -90,7 +83,7 @@ class ServicePrice
     public function setPrice($price)
     {
         $this->price = $price;
-
+    
         return $this;
     }
 
@@ -113,7 +106,7 @@ class ServicePrice
     public function setCategory(\Dashboard\CommonBundle\Entity\Category $category = null)
     {
         $this->category = $category;
-
+    
         return $this;
     }
 
@@ -136,7 +129,7 @@ class ServicePrice
     public function setService(\Dashboard\CommonBundle\Entity\Service $service = null)
     {
         $this->service = $service;
-
+    
         return $this;
     }
 
@@ -148,45 +141,5 @@ class ServicePrice
     public function getService()
     {
         return $this->service;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->bills = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add bills
-     *
-     * @param \Dashboard\CommonBundle\Entity\Bill $bills
-     * @return ServicePrice
-     */
-    public function addBill(\Dashboard\CommonBundle\Entity\Bill $bills)
-    {
-        $this->bills[] = $bills;
-    
-        return $this;
-    }
-
-    /**
-     * Remove bills
-     *
-     * @param \Dashboard\CommonBundle\Entity\Bill $bills
-     */
-    public function removeBill(\Dashboard\CommonBundle\Entity\Bill $bills)
-    {
-        $this->bills->removeElement($bills);
-    }
-
-    /**
-     * Get bills
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getBills()
-    {
-        return $this->bills;
     }
 }

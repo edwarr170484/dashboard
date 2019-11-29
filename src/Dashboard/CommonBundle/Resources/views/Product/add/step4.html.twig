@@ -59,9 +59,21 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %}</span></td>
                                 <td>
                                     <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}">
-                                        <option value="Новый" {% if advertInfo.condition == 'Новый' %}selected="selected"{% endif %}>Новый</option>
-                                        <option value="Подержанный" {% if advertInfo.condition == 'Подержанный' %}selected="selected"{% endif %}>Подержанный</option>
-                                        <option value="Битый" {% if advertInfo.condition == 'Битый' %}selected="selected"{% endif %}>Битый</option>
+                                        {% if conditions %}
+                                            {% for condition in conditions %}
+                                                <option value="{{ condition.id }}" {% if advertInfo.condition == condition.id %}selected="selected"{% endif %}>
+                                                    {% if condition.translations | length > 0 %}
+                                                        {% for translation in condition.translations %}
+                                                            {% if translation.locale.id == locale.id %}
+                                                                {{ translation.value }}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}        
+                                                        {{ condition.title }}
+                                                    {% endif %} 
+                                                </option>
+                                            {% endfor %}
+                                        {% endif %}
                                     </select>
                                 </td>
                                 <td></td>

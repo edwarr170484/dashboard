@@ -1,0 +1,764 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Отзывы{% endtrans %}{% endblock %}
+
+{% form_theme reviewAnswerForm _self %}
+
+{%- block choice_widget -%}
+<div class="div-select-options">
+    {%- set options = choices -%}
+    {% for group_label, choice in options %}
+    <div class="select-option" data-value="{{ choice.value }}" {% if choice is selectedchoice(value) %}data-selected="1"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</div>
+    {% endfor %}
+</div>
+<select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? placeholder|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {% for group_label, choice in options %}
+            {%- if choice is iterable -%}
+                <optgroup label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
+                    {% set options = choice %}
+                    {{- block('choice_widget_options') -}}
+                </optgroup>
+            {%- else -%}
+                {% set attr = choice.attr %}
+                <option value="{{ choice.value }}" {{ block('attributes') }}{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</option>
+            {%- endif -%}
+        {% endfor %}
+</select>
+{%- endblock choice_widget -%}
+{% block bodyClass %}class="userAccount"{% endblock %}
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% endif %}
+                    {% if  locale.isDefault %}
+                        <li><a href="{{ path('accountDealer', {'_locale' : locale.code}) }}">
+                    {% else %}
+                        <li><a href="{{ path('accountDealerLocale', {'_locale' : locale.code}) }}">
+                    {% endif %}
+                        {% trans %}Личный кабинет{% endtrans %}
+                    </a></li>
+                    <li>/</li>
+                    <li>
+                    {% if  locale.isDefault %}
+                        <a href="{{path('account_dealer_review')}}">
+                    {% else %}
+                        <a href="{{path('account_dealer_reviewLocale',{'_locale' : app.request.locale})}}">
+                    {% endif %}
+                        {% trans %}Отзывы{% endtrans %}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>   
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1><b>{% trans %}Отзывы{% endtrans %}</b></h1></div>
+            </div>
+        </div>
+    </div>
+    <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Dealer:getSidebar', {'routeName' : routeName})) }}
+        <div class="col-lg-10 col-md-10">
+            <div class="account-advert-block-content" style="background: #fff;">
+                <div class="accountOrders">
+                    <div class="accountOrder">
+                        <div class="accountOrderInfo order">
+                            <div class="accountOrderInfoProduct">
+                                <div class="accountOrderInfoProductImage">
+                                    <div class="accountReviewRating">
+                                        {% set reviewRating = 3 %}
+                                        {% if reviewRating > 0 %}
+                                            {% for i in 1..reviewRating %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if reviewRating < 5 %}
+                                            {% for i in (reviewRating + 1)..5 %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <a href=""><img src="{{ asset('bundles/Default/t/rev.jpg') }}" alt="" title="" /></a>
+                                </div>
+                                <div class="accountOrderInfoProductDescription">
+                                    <div class="accountOrderInfoProductDescriptionTitle">
+                                        Хорошая компания, но менеджеры не опытные
+                                    </div>
+                                    <div class="accountOrderInfoProductDescriptionFeatures">
+                                        Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник
+                                    </div>
+                                    <div class="accountOrderInfoProductSubDescription">
+                                        <div class="accountOrderInfoProductSubDescriptionTitle">Ответ дилера:</div>
+                                        <div class="accountOrderInfoProductSubDescriptionText">
+                                            Спасибо за Ваш отзыв! Мы постараемся исправить сложившуюся ситуацию. И помните мы не читаем отзывы. Все что вы пишите будет использовано против вас.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accountOrderInfoProductStatus">
+                                <button class="inprocess">{% trans %}В процессе{% endtrans %}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accountOrder">
+                        <div class="accountOrderInfo order">
+                            <div class="accountOrderInfoProduct">
+                                <div class="accountOrderInfoProductImage">
+                                    <div class="accountReviewRating">
+                                        {% set reviewRating = 3 %}
+                                        {% if reviewRating > 0 %}
+                                            {% for i in 1..reviewRating %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if reviewRating < 5 %}
+                                            {% for i in (reviewRating + 1)..5 %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <a href=""><img src="{{ asset('bundles/Default/t/rev.jpg') }}" alt="" title="" /></a>
+                                </div>
+                                <div class="accountOrderInfoProductDescription">
+                                    <div class="accountOrderInfoProductDescriptionTitle">
+                                        Хорошая компания, но менеджеры не опытные
+                                    </div>
+                                    <div class="accountOrderInfoProductDescriptionFeatures">
+                                        Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник
+                                    </div>
+                                    <div class="accountOrderInfoProductSubDescription">
+                                        <div class="accountOrderInfoProductSubDescriptionTitle">Ответ дилера:</div>
+                                        <div class="accountOrderInfoProductSubDescriptionText">
+                                            Спасибо за Ваш отзыв! Мы постараемся исправить сложившуюся ситуацию. И помните мы не читаем отзывы. Все что вы пишите будет использовано против вас.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accountOrderInfoProductStatus">
+                                <button class="confirm">{% trans %}Опубликован{% endtrans %}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accountOrder">
+                        <div class="accountOrderInfo order">
+                            <div class="accountOrderInfoProduct">
+                                <div class="accountOrderInfoProductImage">
+                                    <div class="accountReviewRating">
+                                        {% set reviewRating = 3 %}
+                                        {% if reviewRating > 0 %}
+                                            {% for i in 1..reviewRating %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if reviewRating < 5 %}
+                                            {% for i in (reviewRating + 1)..5 %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    <a href=""><img src="{{ asset('bundles/Default/t/rev.jpg') }}" alt="" title="" /></a>
+                                </div>
+                                <div class="accountOrderInfoProductDescription">
+                                    <div class="accountOrderInfoProductDescriptionTitle">
+                                        Хорошая компания, но менеджеры не опытные
+                                    </div>
+                                    <div class="accountOrderInfoProductDescriptionFeatures">
+                                        Lorem Ipsum - это текст-"рыба", часто используемый в печати и вэб-дизайне. Lorem Ipsum является стандартной "рыбой" для текстов на латинице с начала XVI века. В то время некий безымянный печатник
+                                    </div>
+                                    <div class="accountOrderInfoProductSubDescription">
+                                        <div class="accountOrderInfoProductSubDescriptionTitle">Ответ дилера:</div>
+                                        <div class="accountOrderInfoProductSubDescriptionText">
+                                            Спасибо за Ваш отзыв! Мы постараемся исправить сложившуюся ситуацию. И помните мы не читаем отзывы. Все что вы пишите будет использовано против вас.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accountOrderInfoProductStatus">
+                                <button class="break">{% trans %}Заблокирован{% endtrans %}</button>
+                                <a href="" class="edit">{% trans %}Редактировать{% endtrans %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-5 col-md-5">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Atsauksmes{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                            {% if myreviews or targetReviews%}
+                            <div class="review-menu">
+                                <ul class="list-unstyled list-inline">
+                                    <li>{% trans %}Izvēlieties{% endtrans %}</li>
+                                    <li class="review-menu-action active">
+                                        <a href="javascript:void(0)" onclick="selectAllReviews($(this))">{% trans %}viss{% endtrans %}({{ plusReviews + minusReviews + neitralReviews }})</a>
+                                    </li>
+                                    <li class="review-menu-action">
+                                        <a href="javascript:void(0)" onclick="selectReviews(1, $(this))">{% trans %}pozitīvs{% endtrans %}({{ plusReviews }})</a>
+                                    </li>
+                                    <li class="review-menu-action">
+                                        <a href="javascript:void(0)" onclick="selectReviews(-1, $(this))">{% trans %}negatīvs{% endtrans %}({{ minusReviews }})</a>
+                                    </li>
+                                    <li class="review-menu-action">
+                                        <a href="javascript:void(0)" onclick="selectReviews(0, $(this))">{% trans %}neitrāla{% endtrans %}({{ neitralReviews }})</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <ul class="nav nav-tabs review-nav-tabs" role="tablist">
+                                  <li role="presentation" class="active"><a href="#my" aria-controls="home" role="tab" data-toggle="tab">{% trans %}Mana atsauksme{% endtrans %}</a></li>
+                                  <li role="presentation"><a href="#onme" aria-controls="profile" role="tab" data-toggle="tab">{% trans %}Atsauksmes man{% endtrans %}</a></li>
+                                </ul>
+                                <!-- Tab panes -->
+                                {% if app.request.locale == 'lv' %}
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active reviews-tab-pane" id="my">
+                                        <div class="account-reviews-block">
+                                            {% if myreviews %}
+                                                {% for myreview in myreviews %}
+                                                    <div class="account-review-block review-status{{ myreview.status }}">
+                                                        <div class="row">
+                                                            <div class="col-lg-2 col-md-2 review-user-rating">
+                                                                <div class="review-rating-cover">
+                                                                    <div class="review-ocenka review-ocenka{{ myreview.status }}"></div>
+                                                                    {% if myreview.targetUser %}
+                                                                            <div class="review-user-avatar">
+                                                                                <a href="{{ path('profile', {'userId' : myreview.targetUser.id}) }}">
+                                                                                    {% if myreview.targetUser.userinfo.avatar %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/' ~ myreview.targetUser.userinfo.avatar) }}" alt="" title="" />
+                                                                                    {% elseif myreview.targetUser.userinfo.sex %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ myreview.targetUser.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                    {% else %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                    {% endif %}
+                                                                                </a>
+                                                                                <!--<div class="user-online"></div>-->
+                                                                            </div>    
+                                                                    {% else %}
+                                                                        <div class="review-user-avatar"> 
+                                                                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" /> 
+                                                                        </div>   
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-9">
+                                                                <div class="row">
+                                                                    {% if myreview.targetUser %}
+                                                                        <div class="col-lg-6">
+                                                                            <a href="{{ path('profile', {'userId' : myreview.targetUser.id}) }}"><div class="review-from-name">{{ myreview.targetUser.userinfo.firstname }} {{ myreview.targetUser.userinfo.lastname }}</div></a>
+                                                                            <div class="review-from-rating">{% trans %}Vērtējums{% endtrans %}: <span>{{ myreview.targetUser.userinfo.rating }} %</span></div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if myreview.product %}
+                                                                        <div class="col-lg-6">
+                                                                            <div class="review-product"><a href="{{ path('product', {'productId' : myreview.product.id, 'productName' : myreview.product.translit }) }}">{{ myreview.product.name }}</a></div>
+                                                                            <div class="review-dateadded"><div>{{ myreview.dateAdded | date("d.m.Y в H:i") }}</div></div>        
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Reklāma ir noņemta{% endtrans %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-md-12 review-message">
+                                                                        {{ myreview.reviewText }}
+                                                                    </div>
+                                                                    {% if myreview.answer %}
+                                                                        <div class="col-lg-12 col-md-12 review-answer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-4 review-answer-status review-answer-status{{ myreview.answer.status }}">{% trans %}Atbildes novērtējums{% endtrans %}: </div>
+                                                                                <div class="col-md-8 review-answer-text">{{ myreview.answer.reviewText }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if myreview.answerTo %}
+                                                                        <div class="col-lg-12 col-md-12 review-answer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12"><strong>{% trans %}Šī ir atbilde uz atsauksmi{% endtrans %}:</strong>  {{ myreview.answerTo.reviewText }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-1 col-md-1">
+                                                                <a class="message-delete" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties izdzēst atsauksmi{% endtrans %}?'))return false;" href="{{ path('account_review', {'reviewId' : myreview.id}) }}"></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>    
+                                                {% endfor%}
+                                                {% if myreviews | length > 1220 %}
+                                                    <div class="row review-block-bottom">
+                                                       <div class="col-lg-4 show-number-filter">
+                                                           <div class="row">
+                                                               <div class="col-lg-7 show-number-label">{% trans %}Parādīts ar{% endtrans %}:</div>
+                                                               <div class="col-lg-5">
+                                                                   <div class="div-select show-number">20</div>
+                                                                   <div class="div-select-options show-number" data-select="birthdaymonth">
+                                                                        <div class="select-option" data-value="20">20</div>
+                                                                        <div class="select-option" data-value="40">40</div>
+                                                                        <div class="select-option" data-value="60">60</div>
+                                                                        <div class="select-option" data-value="80">80</div>
+                                                                   </div>
+                                                                   <select id="birthdaymonth" class="form-control hidden-input" placeholder="{% trans %}Mēnesis{% endtrans %}" name="">
+                                                                        <option value="20">20</option>
+                                                                        <option value="40">40</option>
+                                                                        <option value="60">60</option>
+                                                                        <option value="80">80</option>
+                                                                   </select>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-lg-8 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">4</a></li>
+                                                                <li><a href="">5</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>    
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane reviews-tab-pane" id="onme">
+                                        <div class="account-reviews-block">
+                                        {% if targetReviews %}
+                                            {% for targetReview in targetReviews %}
+                                                    <div class="account-review-block review-status{{ targetReview.status }}">
+                                                        <div class="row">
+                                                            <div class="col-lg-2 col-md-2 review-user-rating">
+                                                                <div class="review-rating-cover">
+                                                                    <div class="review-ocenka review-ocenka{{ targetReview.status }}"></div>                                                                   
+                                                                    {% if targetReview.user %}
+                                                                            <div class="review-user-avatar">
+                                                                                <a href="{{ path('profile', {'userId' : targetReview.user.id}) }}">
+                                                                                    {% if targetReview.user.userinfo.avatar %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/' ~ targetReview.user.userinfo.avatar) }}" alt="" title="" />
+                                                                                    {% elseif targetReview.user.userinfo.sex %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ targetReview.user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                    {% else %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                    {% endif %}
+                                                                                    <!--<div class="user-online"></div>-->
+                                                                                </a>
+                                                                            </div>    
+                                                                    {% else %}
+                                                                        <div class="review-user-avatar"> 
+                                                                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" /> 
+                                                                        </div>   
+                                                                    {% endif %}
+                                                                </div>
+                                                                {% if not targetReview.answer %}
+                                                                    {% if targetReview.product %}
+                                                                        <div><a href="" class="reviewModalOpen" data-target="#reviewModal" data-toggle="modal" data-product="{{ targetReview.product.id }}" data-review="{{ targetReview.id }}">{% trans %}atbilde{% endtrans %}</a></div>
+                                                                    {% else %}
+                                                                        <div><a href="" class="reviewModalOpen" data-target="#reviewModal" data-toggle="modal" data-product="0" data-review="{{ targetReview.id }}">{% trans %}atbilde{% endtrans %}</a></div>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-lg-10 col-md-10">
+                                                                <div class="row">
+                                                                    {% if targetReview.user %}
+                                                                        <div class="col-lg-6">
+                                                                            <a href="{{ path('profile', {'userId' : targetReview.user.id}) }}"><div class="review-from-name">{{ targetReview.user.userinfo.firstname }} {{ targetReview.user.userinfo.lastname }}</div></a>
+                                                                            <div class="review-from-rating">рейтинг: <span>{{ targetReview.user.userinfo.rating }} %</span></div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}.
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if targetReview.product %}
+                                                                        <div class="col-lg-6">
+                                                                            <div class="review-product"><a href="{{ path('product', {'productId' : targetReview.product.id, 'productName' : targetReview.product.translit }) }}">{{ targetReview.product.name }}</a></div>
+                                                                            <div class="review-dateadded"><div>{{ targetReview.dateAdded | date("d.m.Y в H:i") }}</div></div>        
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Reklāma ir noņemta{% endtrans %}.
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-md-12 review-message">
+                                                                        {{ targetReview.reviewText }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>     
+                                            {% endfor %}
+                                            {% if targetReviews | length > 1220 %}
+                                                    <div class="row review-block-bottom">
+                                                       <div class="col-lg-4 show-number-filter">
+                                                           <div class="row">
+                                                               <div class="col-lg-7 show-number-label">{% trans %}Parādīts ar{% endtrans %}:</div>
+                                                               <div class="col-lg-5">
+                                                                   <div class="div-select show-number">20</div>
+                                                                   <div class="div-select-options show-number" data-select="birthdaymonth">
+                                                                        <div class="select-option" data-value="20">20</div>
+                                                                        <div class="select-option" data-value="40">40</div>
+                                                                        <div class="select-option" data-value="60">60</div>
+                                                                        <div class="select-option" data-value="80">80</div>
+                                                                   </div>
+                                                                   <select id="birthdaymonth" class="form-control hidden-input" placeholder="{% trans %}Mēnesis{% endtrans %}" name="">
+                                                                        <option value="20">20</option>
+                                                                        <option value="40">40</option>
+                                                                        <option value="60">60</option>
+                                                                        <option value="80">80</option>
+                                                                   </select>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-lg-8 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">4</a></li>
+                                                                <li><a href="">5</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                        {% endif %}           
+                                        </div>      
+                                    </div>
+                                </div>
+                                {% else %}
+                                    <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active reviews-tab-pane" id="my">
+                                        <div class="account-reviews-block">
+                                            {% if myreviews %}
+                                                {% for myreview in myreviews %}
+                                                    <div class="account-review-block review-status{{ myreview.status }}">
+                                                        <div class="row">
+                                                            <div class="col-lg-2 col-md-2 review-user-rating">
+                                                                <div class="review-rating-cover">
+                                                                    <div class="review-ocenka review-ocenka{{ myreview.status }}"></div>
+                                                                    {% if myreview.targetUser %}
+                                                                            <div class="review-user-avatar">
+                                                                                <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : myreview.targetUser.id}) }}">
+                                                                                    {% if myreview.targetUser.userinfo.avatar %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/' ~ myreview.targetUser.userinfo.avatar) }}" alt="" title="" />
+                                                                                    {% elseif myreview.targetUser.userinfo.sex %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ myreview.targetUser.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                    {% else %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                    {% endif %}
+                                                                                </a>
+                                                                                <!--<div class="user-online"></div>-->
+                                                                            </div>    
+                                                                    {% else %}
+                                                                        <div class="review-user-avatar"> 
+                                                                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" /> 
+                                                                        </div>   
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-9">
+                                                                <div class="row">
+                                                                    {% if myreview.targetUser %}
+                                                                        <div class="col-lg-6">
+                                                                            <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : myreview.targetUser.id}) }}"><div class="review-from-name">{{ myreview.targetUser.userinfo.firstname }} {{ myreview.targetUser.userinfo.lastname }}</div></a>
+                                                                            <div class="review-from-rating">{% trans %}Vērtējums{% endtrans %}: <span>{{ myreview.targetUser.userinfo.rating }} %</span></div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if myreview.product %}
+                                                                        <div class="col-lg-6">
+                                                                            <div class="review-product"><a href="{{ path('productLocale', {'_locale' : app.request.locale,'productId' : myreview.product.id, 'productName' : myreview.product.translit }) }}">{{ myreview.product.name }}</a></div>
+                                                                            <div class="review-dateadded"><div>{{ myreview.dateAdded | date("d.m.Y в H:i") }}</div></div>        
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Reklāma ir noņemta{% endtrans %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-md-12 review-message">
+                                                                        {{ myreview.reviewText }}
+                                                                    </div>
+                                                                    {% if myreview.answer %}
+                                                                        <div class="col-lg-12 col-md-12 review-answer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-4 review-answer-status review-answer-status{{ myreview.answer.status }}">{% trans %}Atbildes novērtējums{% endtrans %}: </div>
+                                                                                <div class="col-md-8 review-answer-text">{{ myreview.answer.reviewText }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if myreview.answerTo %}
+                                                                        <div class="col-lg-12 col-md-12 review-answer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12"><strong>{% trans %}Šī ir atbilde uz atsauksmi{% endtrans %}:</strong>  {{ myreview.answerTo.reviewText }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-1 col-md-1">
+                                                                <a class="message-delete" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties izdzēst atsauksmi{% endtrans %}?'))return false;" href="{{ path('account_reviewLocale', {'_locale' : app.request.locale,'reviewId' : myreview.id}) }}"></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>    
+                                                {% endfor%}
+                                                {% if myreviews | length > 1220 %}
+                                                    <div class="row review-block-bottom">
+                                                       <div class="col-lg-4 show-number-filter">
+                                                           <div class="row">
+                                                               <div class="col-lg-7 show-number-label">{% trans %}Parādīts ar{% endtrans %}:</div>
+                                                               <div class="col-lg-5">
+                                                                   <div class="div-select show-number">20</div>
+                                                                   <div class="div-select-options show-number" data-select="birthdaymonth">
+                                                                        <div class="select-option" data-value="20">20</div>
+                                                                        <div class="select-option" data-value="40">40</div>
+                                                                        <div class="select-option" data-value="60">60</div>
+                                                                        <div class="select-option" data-value="80">80</div>
+                                                                   </div>
+                                                                   <select id="birthdaymonth" class="form-control hidden-input" placeholder="{% trans %}Mēnesis{% endtrans %}" name="">
+                                                                        <option value="20">20</option>
+                                                                        <option value="40">40</option>
+                                                                        <option value="60">60</option>
+                                                                        <option value="80">80</option>
+                                                                   </select>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-lg-8 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">4</a></li>
+                                                                <li><a href="">5</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>    
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane reviews-tab-pane" id="onme">
+                                        <div class="account-reviews-block">
+                                        {% if targetReviews %}
+                                            {% for targetReview in targetReviews %}
+                                                    <div class="account-review-block review-status{{ targetReview.status }}">
+                                                        <div class="row">
+                                                            <div class="col-lg-2 col-md-2 review-user-rating">
+                                                                <div class="review-rating-cover">
+                                                                    <div class="review-ocenka review-ocenka{{ targetReview.status }}"></div>                                                                   
+                                                                    {% if targetReview.user %}
+                                                                            <div class="review-user-avatar">
+                                                                                <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : targetReview.user.id}) }}">
+                                                                                    {% if targetReview.user.userinfo.avatar %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/' ~ targetReview.user.userinfo.avatar) }}" alt="" title="" />
+                                                                                    {% elseif targetReview.user.userinfo.sex %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ targetReview.user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                    {% else %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                    {% endif %}
+                                                                                    <!--<div class="user-online"></div>-->
+                                                                                </a>
+                                                                            </div>    
+                                                                    {% else %}
+                                                                        <div class="review-user-avatar"> 
+                                                                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" /> 
+                                                                        </div>   
+                                                                    {% endif %}
+                                                                </div>
+                                                                {% if not targetReview.answer %}
+                                                                    {% if targetReview.product %}
+                                                                        <div><a href="" class="reviewModalOpen" data-target="#reviewModal" data-toggle="modal" data-product="{{ targetReview.product.id }}" data-review="{{ targetReview.id }}">{% trans %}atbilde{% endtrans %}</a></div>
+                                                                    {% else %}
+                                                                        <div><a href="" class="reviewModalOpen" data-target="#reviewModal" data-toggle="modal" data-product="0" data-review="{{ targetReview.id }}">{% trans %}atbilde{% endtrans %}</a></div>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-lg-10 col-md-10">
+                                                                <div class="row">
+                                                                    {% if targetReview.user %}
+                                                                        <div class="col-lg-6">
+                                                                            <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : targetReview.user.id}) }}"><div class="review-from-name">{{ targetReview.user.userinfo.firstname }} {{ targetReview.user.userinfo.lastname }}</div></a>
+                                                                            <div class="review-from-rating">рейтинг: <span>{{ targetReview.user.userinfo.rating }} %</span></div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}.
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if targetReview.product %}
+                                                                        <div class="col-lg-6">
+                                                                            <div class="review-product"><a href="{{ path('productLocale', {'_locale' : app.request.locale,'productId' : targetReview.product.id, 'productName' : targetReview.product.translit }) }}">{{ targetReview.product.name }}</a></div>
+                                                                            <div class="review-dateadded"><div>{{ targetReview.dateAdded | date("d.m.Y в H:i") }}</div></div>        
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Reklāma ir noņemta{% endtrans %}.
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-md-12 review-message">
+                                                                        {{ targetReview.reviewText }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>     
+                                            {% endfor %}
+                                            {% if targetReviews | length > 1220 %}
+                                                    <div class="row review-block-bottom">
+                                                       <div class="col-lg-4 show-number-filter">
+                                                           <div class="row">
+                                                               <div class="col-lg-7 show-number-label">{% trans %}Parādīts ar{% endtrans %}:</div>
+                                                               <div class="col-lg-5">
+                                                                   <div class="div-select show-number">20</div>
+                                                                   <div class="div-select-options show-number" data-select="birthdaymonth">
+                                                                        <div class="select-option" data-value="20">20</div>
+                                                                        <div class="select-option" data-value="40">40</div>
+                                                                        <div class="select-option" data-value="60">60</div>
+                                                                        <div class="select-option" data-value="80">80</div>
+                                                                   </div>
+                                                                   <select id="birthdaymonth" class="form-control hidden-input" placeholder="{% trans %}Mēnesis{% endtrans %}" name="">
+                                                                        <option value="20">20</option>
+                                                                        <option value="40">40</option>
+                                                                        <option value="60">60</option>
+                                                                        <option value="80">80</option>
+                                                                   </select>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-lg-8 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">4</a></li>
+                                                                <li><a href="">5</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                        {% endif %}           
+                                        </div>      
+                                    </div>
+                                </div>
+                                {% endif %}
+                              </div>
+                              {% else %}
+                                  <div class="account-block-content-notfound">{% trans %}Neviens komentārs vēl nav pievienots{% endtrans %}</div>
+                              {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{ form_start(reviewAnswerForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title" id="regionModalLabel">{% trans %}Atbildiet uz lietotāju atsauksmēm{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(reviewAnswerForm.status) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                            <div class="position-relative">
+                                <div class="div-select">{% trans %}Neitrāls{% endtrans %}</div>
+                                {{ form_widget(reviewAnswerForm.status)}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(reviewAnswerForm.reviewText) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                            {{ form_widget(reviewAnswerForm.reviewText) }}
+                        </div>
+                    </div> 
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8">
+                        {{ form_widget(reviewAnswerForm.save,{'type' : 'submit'}) }}
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                {{ form_end(reviewAnswerForm) }}
+            </div>
+        </div>
+</div>
+{% endblock%}

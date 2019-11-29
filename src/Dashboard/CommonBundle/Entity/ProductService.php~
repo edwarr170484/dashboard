@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ProductService
 {
-    
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -20,32 +19,49 @@ class ProductService
     private $id;
     
     /**
-     * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Product", inversedBy="service")
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Product", inversedBy="service")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Service", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Service")
      * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
      */
     private $service;
     
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true, options={"default": NULL})
      */
     private $dateAdded;
     
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true, options={"default": NULL})
      */
     private $dateEnd;
     
     /**
-     * @ORM\Column(type="boolean", options={"default":"0"})
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
+     */
+    private $count;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
     private $isActive;
     
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="services")
+     */
+    private $bills;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->bills = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -66,7 +82,7 @@ class ProductService
     public function setDateAdded($dateAdded)
     {
         $this->dateAdded = $dateAdded;
-
+    
         return $this;
     }
 
@@ -81,6 +97,52 @@ class ProductService
     }
 
     /**
+     * Set dateEnd
+     *
+     * @param \DateTime $dateEnd
+     * @return ProductService
+     */
+    public function setDateEnd($dateEnd)
+    {
+        $this->dateEnd = $dateEnd;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateEnd
+     *
+     * @return \DateTime 
+     */
+    public function getDateEnd()
+    {
+        return $this->dateEnd;
+    }
+
+    /**
+     * Set count
+     *
+     * @param integer $count
+     * @return ProductService
+     */
+    public function setCount($count)
+    {
+        $this->count = $count;
+    
+        return $this;
+    }
+
+    /**
+     * Get count
+     *
+     * @return integer 
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
+
+    /**
      * Set isActive
      *
      * @param boolean $isActive
@@ -89,7 +151,7 @@ class ProductService
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-
+    
         return $this;
     }
 
@@ -112,7 +174,7 @@ class ProductService
     public function setProduct(\Dashboard\CommonBundle\Entity\Product $product = null)
     {
         $this->product = $product;
-
+    
         return $this;
     }
 
@@ -135,7 +197,7 @@ class ProductService
     public function setService(\Dashboard\CommonBundle\Entity\Service $service = null)
     {
         $this->service = $service;
-
+    
         return $this;
     }
 
@@ -150,25 +212,35 @@ class ProductService
     }
 
     /**
-     * Set dateEnd
+     * Add bills
      *
-     * @param \DateTime $dateEnd
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
      * @return ProductService
      */
-    public function setDateEnd($dateEnd)
+    public function addBill(\Dashboard\CommonBundle\Entity\Bill $bills)
     {
-        $this->dateEnd = $dateEnd;
-
+        $this->bills[] = $bills;
+    
         return $this;
     }
 
     /**
-     * Get dateEnd
+     * Remove bills
      *
-     * @return \DateTime 
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
      */
-    public function getDateEnd()
+    public function removeBill(\Dashboard\CommonBundle\Entity\Bill $bills)
     {
-        return $this->dateEnd;
+        $this->bills->removeElement($bills);
+    }
+
+    /**
+     * Get bills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBills()
+    {
+        return $this->bills;
     }
 }

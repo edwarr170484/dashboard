@@ -1,0 +1,194 @@
+{% form_theme formDealerSalon 'DashboardCommonBundle:Dealer:account/fields.html.twig' %}
+
+<div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            {% if locale.isDefault %}
+                {{ form_start(formDealerSalon, {'action' : path('account_dealer_editsalon', {'salonId' : salon.id})}) }}
+            {% else %}
+                {{ form_start(formDealerSalon, {'action' : path('account_dealer_editsalonLocale' , {'salonId' : salon.id, '_locale' : locale.code})}) }}
+            {% endif %}
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                </svg>
+            </button>
+            <div class="modal-header" style="border:none">
+                <h3 class="modal-title" id="regionModalLabel">{% trans %}Редактирование автосалона{% endtrans %}</h3>
+            </div>
+            <div class="modal-body">
+                <div class="accountSettingsFormBlock">
+                    <div class="dealerSalonParams">
+                        <div class="dealerSalonParamsLogo">
+                            <div class="formParameterLabel" style="padding-top: 1.2rem;padding-bottom: 3rem;">{{ form_label(formDealerSalon.logotypeNew) }}:</div>
+                            <div class="formParameterField dealerLogoField">
+                                {% if formDealerSalon.logotype.vars.value %}
+                                    <div class="dealerSettingsLogotype" id="dealerSalonLogotype">
+                                        <img src="{{ asset('bundles/images/dealers/salons/' ~ formDealerSalon.logotype.vars.value) }}" alt="" title="" />
+                                        <div class="dealerSettingsLogotypeCover">
+                                            <button type="button" onclick="deleteDealerSalonLogotype({{ salon.id }}, '{% trans %}Удалить логотип?{% endtrans %}','{{ locale.code }}')">{% trans %}Удалить{% endtrans %}</button>
+                                        </div>
+                                    </div>
+                                    <a class="change-avatar logotype hide" onclick='$(this).parent().find(".change-avatar-input").trigger("click");'>
+                                        <svg width="126" height="126" viewBox="0 0 126 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="0.5" y="0.5" width="125" height="125" rx="4.5" stroke="#DFE1E5"/>
+                                            <rect x="3.5" y="3.5" width="119" height="119" rx="4.5" stroke="#F5AA01" stroke-dasharray="12 6"/>
+                                            <circle cx="63" cy="63" r="27.5" stroke="#F5AA01" stroke-width="3"/>
+                                            <line x1="47" y1="63.5" x2="79" y2="63.5" stroke="#F5AA01" stroke-width="3"/>
+                                            <line x1="62.5" y1="79" x2="62.5" y2="47" stroke="#F5AA01" stroke-width="3"/>
+                                        </svg>
+                                    </a>
+                                {% else %}
+                                    <a class="change-avatar logotype" onclick='$(this).parent().find(".change-avatar-input").trigger("click");'>
+                                        <svg width="126" height="126" viewBox="0 0 126 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="0.5" y="0.5" width="125" height="125" rx="4.5" stroke="#DFE1E5"/>
+                                            <rect x="3.5" y="3.5" width="119" height="119" rx="4.5" stroke="#F5AA01" stroke-dasharray="12 6"/>
+                                            <circle cx="63" cy="63" r="27.5" stroke="#F5AA01" stroke-width="3"/>
+                                            <line x1="47" y1="63.5" x2="79" y2="63.5" stroke="#F5AA01" stroke-width="3"/>
+                                            <line x1="62.5" y1="79" x2="62.5" y2="47" stroke="#F5AA01" stroke-width="3"/>
+                                        </svg>
+                                    </a>
+                                {% endif %}
+                                {{ form_widget(formDealerSalon.logotypeNew) }}
+                                {{ form_widget(formDealerSalon.logotype) }}
+                            </div>
+                        </div>
+                        <div class="dealerSalonParamsInfo">
+                            <div class="formParemetersItem salonModalParameters">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealerSalon.name) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealerSalon.name) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem salonModalParameters">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealerSalon.address) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealerSalon.address) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem salonModalParameters">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealerSalon.website) }}: </div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealerSalon.website) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem salonModalParameters">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel" style="padding-bottom: 1.6rem;">{{ form_label(formDealerSalon.phones) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealerSalon.phones) }}
+                                        <button id="addDealerSalonPhoneModal" class="addObjectPhone" type="button">
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M1 10.9998H21M11 0.999817V20.9998V0.999817Z" stroke="#747474" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </button>
+                                        <script>
+                                            $("#addDealerSalonPhoneModal").click(function(){
+                                                var prototype = $("#dealersalon_phones").data("prototype");
+                                                var count = $(".dealerSalonPhonesItemModal").length;
+                                                var newForm = prototype.replace(/__name__/g, count);
+                                                $(".dealerSalonPhonesListModal").append(newForm);
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formParemetersItem">
+                                <div class="formParameter" style="display: block;">
+                                   <div class="formParameterLabel">{% trans %}Режим работы{% endtrans %}: <sup>*</sup></div>
+                                   <div class="formParameterField">
+                                       <ul class="list-unstyled list-inline workdays salonWorkdays" id="salonweekdays">
+                                           <li>
+                                               <div class="workDay workingDay weekDay {% if formDealerSalon.workinfo.monday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealerSalon.workinfo.monday) }}
+                                                    {{ form_label(formDealerSalon.workinfo.monday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay workingDay weekDay {% if formDealerSalon.workinfo.tuesday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealerSalon.workinfo.tuesday) }}
+                                                    {{ form_label(formDealerSalon.workinfo.tuesday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay workingDay weekDay {% if formDealerSalon.workinfo.wednesday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealerSalon.workinfo.wednesday) }}
+                                                    {{ form_label(formDealerSalon.workinfo.wednesday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay workingDay weekDay {% if formDealerSalon.workinfo.thursday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealerSalon.workinfo.thursday) }}
+                                                    {{ form_label(formDealerSalon.workinfo.thursday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay workingDay weekDay {% if formDealerSalon.workinfo.friday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealerSalon.workinfo.friday) }}
+                                                    {{ form_label(formDealerSalon.workinfo.friday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay holidayDay weekDay {% if formDealerSalon.workinfo.saturday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealerSalon.workinfo.saturday) }}
+                                                    {{ form_label(formDealerSalon.workinfo.saturday) }}
+                                               </div>
+                                           </li><li>
+                                               <div class="workDay holidayDay weekDay {% if formDealerSalon.workinfo.sunday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
+                                                    {{ form_widget(formDealerSalon.workinfo.sunday) }}
+                                                    {{ form_label(formDealerSalon.workinfo.sunday) }}
+                                                    {{ form_widget(formDealerSalon.workinfo.dealerSalon) }}
+                                                    {{ form_widget(formDealerSalon.workinfo.dealer) }}
+                                               </div>
+                                           </li>
+                                           <li class="allDay">
+                                               <div class="workDay {% if formDealerSalon.workinfo.fullDay.vars.checked %}active{% endif %}" onclick="resetWorkTimes($(this),$('.salonWorkdays'))">
+                                                    {{ form_widget(formDealerSalon.workinfo.fullDay) }}
+                                                    {{ form_label(formDealerSalon.workinfo.fullDay) }}
+                                               </div>
+                                           </li><li>
+                                               {{ form_widget(formDealerSalon.workinfo.workStart) }}
+                                           </li><li class="space"> - </li><li>
+                                               {{ form_widget(formDealerSalon.workinfo.workStop) }}
+                                           </li>
+                                       </ul>
+                                       <ul class="list-unstyled list-inline workdays salonWorkdays">
+                                           <li style="padding-right: 10px;">
+                                               <div class="workDay selectDaysButton {% if formDealerSalon.workinfo.isWokdays.vars.checked %}active{% endif %}" onclick="selectWeekDays($(this), $('#salonweekdays'), '.workingDay')">
+                                                    {{ form_widget(formDealerSalon.workinfo.isWokdays) }}
+                                                    {{ form_label(formDealerSalon.workinfo.isWokdays) }}
+                                               </div>
+                                           </li><li style="padding-right: 10px;">
+                                               <div class="workDay selectDaysButton {% if formDealerSalon.workinfo.isHolidays.vars.checked %}active{% endif %}" onclick="selectWeekDays($(this), $('#salonweekdays'), '.holidayDay')">
+                                                    {{ form_widget(formDealerSalon.workinfo.isHolidays) }}
+                                                    {{ form_label(formDealerSalon.workinfo.isHolidays) }}
+                                               </div>
+                                           </li><li style="padding-right: 24px;">
+                                               <div class="workDay selectDaysButton {% if formDealerSalon.workinfo.isAlldays.vars.checked %}active{% endif %}" onclick="selectWeekDays($(this), $('#salonweekdays'), '.weekDay')">
+                                                    {{ form_widget(formDealerSalon.workinfo.isAlldays) }}
+                                                    {{ form_label(formDealerSalon.workinfo.isAlldays) }}
+                                               </div>
+                                           </li>
+                                           <li class="space">
+                                               перерыв:
+                                           </li><li>
+                                               {{ form_widget(formDealerSalon.workinfo.breakStart) }}
+                                           </li><li class="space"> - </li><li>
+                                               {{ form_widget(formDealerSalon.workinfo.breakStop) }}
+                                           </li>
+                                       </ul>
+                                   </div>
+                                </div>
+                            </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border:none">
+                <div class="col-lg-12">
+                    <button type="submit" class="btn">{% trans %}Сохранить{% endtrans %}</button>
+                </div>
+            </div>
+            {{ form_end(formDealerSalon) }}
+        </div>
+</div>

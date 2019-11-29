@@ -29,7 +29,7 @@ class ReviewController extends Controller
 {
     /**
      * @Route("/account/review/{reviewId}", name="account_review", defaults={"reviewId" : 0})
-     * @Route("/{_locale}/account/review/{reviewId}", name="account_reviewLocale", defaults={"_locale" : "lv","reviewId" : 0}, requirements={"_locale" : "lv|ru"})
+     * @Route("/{_locale}/account/review/{reviewId}", name="account_reviewLocale", defaults={"_locale" : "es","reviewId" : 0}, requirements={"_locale" : "es|ru"})
      */
     public function reviewAction($reviewId, Request $request)
     {
@@ -182,6 +182,172 @@ class ReviewController extends Controller
         }
         
         return $this->render('DashboardCommonBundle:User:account/review/reviews.html.twig', array("user" => $user,
+                                                                                   "myreviews" => $myReviews,
+                                                                                   "targetReviews" => $targetReviews,
+                                                                                   "plusReviews" => $plusReviews,
+                                                                                   "minusReviews" => $minusReviews,
+                                                                                   "neitralReviews" => $neitralReviews,
+                                                                                   "reviewAnswerForm" => $reviewAnswerForm->createView(),
+                                                                                   "settings" => $settings,
+                                                                                   "locale" => $locale,
+                                                                                   "routeName" => $request->attributes->get("_route")));
+    } 
+    
+    /**
+     * @Route("/account/dealer/review/{reviewId}", name="account_dealer_review", defaults={"reviewId" : 0})
+     * @Route("/{_locale}/dealer/account/review/{reviewId}", name="account_dealer_reviewLocale", defaults={"_locale" : "es","reviewId" : 0}, requirements={"_locale" : "es|ru"})
+     */
+    public function reviewDealerAction($reviewId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        if($reviewId)
+        {
+            $this->deleteReview($reviewId, $user);
+            
+            if($locale->getIsDefault())
+            {
+                return $this->redirectToRoute("account_review");
+            }
+            else
+            {
+                return $this->redirectToRoute("account_reviewLocale", array("_locale" => $locale->getCode()));
+            }
+        }
+        
+        $plusReviews = 0;
+        $minusReviews = 0;
+        $neitralReviews = 0;
+        $myReviews = array();
+        $targetReviews = array();
+        
+        $myReviews = array_reverse($user->getReviews()->toArray());
+        $targetReviews = array_reverse($user->getTargetReviews()->toArray());
+        
+        if($myReviews)
+        {
+            foreach($myReviews as $review)
+            {
+                if($review->getStatus() == 1)
+                {
+                    $plusReviews++;
+                }
+                if($review->getStatus() == -1)
+                {
+                    $minusReviews++;
+                }
+                if($review->getStatus() == 0)
+                {
+                    $neitralReviews++;
+                }
+            }
+        }
+        
+        if($targetReviews)
+        {
+            foreach($targetReviews as $review)
+            {
+                if($review->getStatus() == 1)
+                {
+                    $plusReviews++;
+                }
+                if($review->getStatus() == -1)
+                {
+                    $minusReviews++;
+                }
+                if($review->getStatus() == 0)
+                {
+                    $neitralReviews++;
+                }
+            }
+        }
+        
+        $review = new Review();
+        $reviewAnswerForm = $this->createForm(new ReviewAnswerType($manager), $review);
+        
+        $reviewAnswerForm->handleRequest($request);
+        
+        if ($reviewAnswerForm->isSubmitted() && $reviewAnswerForm->isValid())
+        {
+            $reviewAnswer = $manager->getRepository("DashboardCommonBundle:Review")->find($reviewAnswerForm['review']->getData());
+            
+            if($reviewAnswer)
+            {
+                $isReview = $manager->getRepository("DashboardCommonBundle:Review")->findOneBy(array("user" => $user, "answerTo" => $reviewAnswer));
+                    
+                    if($isReview)
+                    {
+                        $this->addFlash(
+                            'notice',
+                            '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
+                            $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs jau esat iesniedzis atsauksmi par šo atsauksmi.') . '</div>'
+                        );
+                        
+                        return $this->redirectToRoute("account_review");
+                    }
+                    
+                $review->setUser($user);
+                $review->setTargetUser($reviewAnswer->getUser());
+                $review->setProduct($reviewAnswer->getProduct());
+                $review->setDateAdded(new \DateTime("now"));
+                $review->setAnswerTo($reviewAnswer);
+                
+                $manager->persist($review);
+                $manager->flush();
+                
+                //calculate rating
+                $productUserReviews = $manager->getRepository("DashboardCommonBundle:Review")->findBy(array("targetUser" => $reviewAnswer->getUser()));
+                $plusReviews = 0;
+                    
+                if(count($productUserReviews) > 0)
+                {
+                    foreach($productUserReviews as $productUserReview)
+                    {
+                        if($productUserReview->getStatus() == 1)
+                        {
+                            $plusReviews++;
+                        }
+                    }
+                        
+                    $userRating = ($plusReviews * 100) / count($productUserReviews);
+                }
+                else
+                    $userRating = 0; 
+                
+                $answerUser = $reviewAnswer->getUser()->getUserinfo();
+                $answerUser->setRating(floor($userRating));
+                    
+                $manager->persist($answerUser);
+                $manager->flush();
+                
+                $reviewAnswer->setAnswer($review);
+                
+                $manager->persist($reviewAnswer);
+                $manager->flush();
+                
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
+                    $this->get('translator')->trans('<strong>Veiksmīga!</strong> Atbilde tika nosūtīta.') . '</div>'
+                );
+            }
+            
+            if($locale->getIsDefault())
+            {
+                return $this->redirectToRoute("account_review");
+            }
+            else
+            {
+                return $this->redirectToRoute("account_reviewLocale", array("_locale" => $locale->getCode()));
+            }
+        }
+        
+        return $this->render('DashboardCommonBundle:Dealer:account/review/reviews.html.twig', array("user" => $user,
                                                                                    "myreviews" => $myReviews,
                                                                                    "targetReviews" => $targetReviews,
                                                                                    "plusReviews" => $plusReviews,

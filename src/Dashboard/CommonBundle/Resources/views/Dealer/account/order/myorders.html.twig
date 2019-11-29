@@ -1,0 +1,338 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% form_theme reviewForm _self %}
+
+{%- block choice_widget -%}
+<div class="div-select-options">
+    {%- set options = choices -%}
+    {% for group_label, choice in options %}
+    <div class="select-option" data-value="{{ choice.value }}" {% if choice is selectedchoice(value) %}data-selected="1"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label | raw : choice.label|trans({}, choice_translation_domain) | raw}}</div>
+    {% endfor %}
+</div>
+<select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? placeholder|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {% for group_label, choice in options %}
+            {%- if choice is iterable -%}
+                <optgroup label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
+                    {% set options = choice %}
+                    {{- block('choice_widget_options') -}}
+                </optgroup>
+            {%- else -%}
+                {% set attr = choice.attr %}
+                <option value="{{ choice.value }}" {{ block('attributes') }}{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</option>
+            {%- endif -%}
+        {% endfor %}
+</select>
+{%- endblock choice_widget -%}
+
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Мои заказы{% endtrans %}{% endblock %}
+{% block bodyClass %}class="userAccount"{% endblock %}
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% endif %}
+                    {% if  locale.isDefault %}
+                        <li><a href="{{ path('accountDealer', {'_locale' : locale.code}) }}">
+                    {% else %}
+                        <li><a href="{{ path('accountDealerLocale', {'_locale' : locale.code}) }}">
+                    {% endif %}
+                        {% trans %}Личный кабинет{% endtrans %}
+                    </a></li>
+                    <li>/</li>
+                    <li>
+                    {% if  locale.isDefault %}
+                        <a href="{{path('account_dealer_myorders')}}">
+                    {% else %}
+                        <a href="{{path('account_dealer_myordersLocale',{'_locale' : app.request.locale})}}">
+                    {% endif %}
+                        {% trans %}Мои заказы{% endtrans %}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>     
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1><b>{% trans %}Мои заказы{% endtrans %}</b></h1></div>
+            </div>
+        </div>
+    </div>
+    <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Dealer:getSidebar', {'routeName' : routeName})) }}
+        <div class="col-lg-10 col-md-10">
+            <div class="account-advert-block-content">
+                {% if orderStatuses %}
+                    <div class="accountSettingsTabs">
+                        {% if orderStatuses %}
+                            <ul class="nav nav-tabs settingsTabs" id="myTab" role="tablist">
+                                {% set i = 1 %}
+                                {% for orderStatus in orderStatuses %}
+                                    <li class="nav-item {% if i == 1 %}active{% endif %}">
+                                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#orderStatus{{ orderStatus.id }}" role="tab" aria-controls="orderStatus{{ orderStatus.id }}" aria-selected="true" >
+                                            {% if orderStatus.translations | length > 0 %}
+                                                    {% for translation in orderStatus.translations %}
+                                                        {% if translation.locale.id == locale.id %}
+                                                            {{ translation.value }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                            {% else %}        
+                                                {{ orderStatus.name}}
+                                            {% endif %}
+                                        </a>
+                                    </li>
+                                    {% set i = i + 1 %}
+                                {% endfor %}
+                            </ul>    
+                        {% endif %}
+                        <div class="tab-content" style="padding-left: 0;padding-right: 0;padding-top: 0;padding-bottom: 0;">
+                            {% set i = 1 %}
+                            {% for orderStatus in orderStatuses %}
+                                <div class="tab-pane fade {% if i == 1 %}active in{% endif %}" id="orderStatus{{ orderStatus.id }}" role="tabpanel">
+                                    {% if orderStatus.orders | length > 0 %}
+                                        {% for order in orderStatus.orders %}
+                                            <div class="accountOrders">
+                                                <div class="accountOrder">
+                                                    <div class="accountOrderUser">
+                                                        <div class="accountOrderUserAvatar">
+                                                            <div class="accountOrderUserAvatarImage">
+                                                                {% if order.userReceived.userinfo.avatar %}
+                                                                    <img class="img-circle" src="{{ asset('bundles/images/users/avatars/') }}{{ order.userReceived.userinfo.avatar }}" alt="" title="" />
+                                                                {% else %}
+                                                                    <svg width="50" height="50" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <circle cx="32" cy="32" r="32" fill="#F5AA01"/>
+                                                                        <path d="M31.9996 55.9001C18.7996 55.9001 8.09961 45.2001 8.09961 32.0001C8.09961 18.8001 18.7996 8.1001 31.9996 8.1001C45.1996 8.1001 55.8996 18.8001 55.8996 32.0001C55.8996 45.2001 45.1996 55.9001 31.9996 55.9001ZM31.9996 10.7001C20.2996 10.7001 10.6996 20.3001 10.6996 32.0001C10.6996 43.7001 20.2996 53.3001 31.9996 53.3001C43.6996 53.3001 53.2996 43.7001 53.2996 32.0001C53.2996 20.3001 43.6996 10.7001 31.9996 10.7001Z" fill="white"/>
+                                                                        <path d="M17.9996 49.3002L15.5996 48.2002C16.2996 46.5002 18.4996 45.6002 20.9996 44.5002C23.3996 43.4002 26.3996 42.1002 26.3996 40.5002V38.3002C25.4996 37.6002 24.0996 36.0002 23.8996 33.7002C23.1996 33.0002 22.0996 31.7002 22.0996 30.1002C22.0996 29.1002 22.4996 28.3002 22.7996 27.8002C22.5996 26.7002 22.1996 24.5002 22.1996 22.8002C22.1996 17.3002 25.9996 13.7002 31.9996 13.7002C33.6996 13.7002 35.7996 14.2002 36.8996 15.4002C39.5996 15.9002 41.7996 19.1002 41.7996 22.8002C41.7996 25.2002 41.3996 27.2002 41.0996 28.1002C41.3996 28.6002 41.6996 29.3002 41.6996 30.1002C41.6996 32.0002 40.7996 33.2002 39.8996 33.8002C39.6996 36.1002 38.3996 37.6002 37.5996 38.3002V40.5002C37.5996 41.9002 40.0996 42.8002 42.3996 43.7002C45.0996 44.7002 47.8996 45.7002 48.7996 48.0002L46.2996 48.9002C45.8996 47.7002 43.4996 46.9002 41.4996 46.1002C38.3996 45.0002 34.8996 43.7002 34.8996 40.5002V36.9002L35.4996 36.5002C35.5996 36.5002 37.2996 35.3002 37.2996 33.0002V32.1002L38.0996 31.8002C38.1996 31.7002 38.9996 31.3002 38.9996 30.1002C38.9996 29.7002 38.6996 29.3002 38.5996 29.2002L38.0996 28.6002L38.2996 27.9002C38.2996 27.9002 38.9996 25.7002 38.9996 22.7002C38.9996 20.2002 37.5996 17.9002 36.0996 17.9002H35.2996L34.8996 17.2002C34.5996 16.7002 33.3996 16.2002 31.7996 16.2002C27.2996 16.2002 24.5996 18.6002 24.5996 22.7002C24.5996 24.6002 25.2996 27.7002 25.2996 27.7002L25.4996 28.4002L24.9996 28.9002C24.9996 28.9002 24.5996 29.4002 24.5996 29.9002C24.5996 30.6002 25.4996 31.5002 25.8996 31.9002L26.3996 32.3002V33.0002C26.3996 35.2002 28.2996 36.4002 28.2996 36.4002L28.8996 36.8002V40.4002C28.8996 43.7002 25.1996 45.4002 21.8996 46.8002C20.4996 47.6002 18.3996 48.6002 17.9996 49.3002Z" fill="white"/>
+                                                                    </svg>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="accountOrderUserAvatarName">{% if order.userReceived.userinfo.firstname %}{{ order.userReceived.userinfo.firstname }}{% endif %} {% if order.userReceived.userinfo.lastname %}{{ order.userReceived.userinfo.lastname }}{% endif %}</div>
+                                                        </div>
+                                                        <div class="accountOrderUserInfo">
+                                                            <ul class="list-unstyled list-inline">
+                                                                <li><a href="javascript:void(0)">{% trans %}Написать продавцу{% endtrans %}</a></li>
+                                                                <li><a href="tel:{{ order.userReceived.userinfo.phone }}">
+                                                                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M2.81556 6.05889C3.93556 8.26 5.74 10.0567 7.94111 11.1844L9.65222 9.47333C9.86222 9.26333 10.1733 9.19333 10.4456 9.28667C11.3167 9.57444 12.2578 9.73 13.2222 9.73C13.65 9.73 14 10.08 14 10.5078V13.2222C14 13.65 13.65 14 13.2222 14C5.91889 14 0 8.08111 0 0.777778C0 0.35 0.35 0 0.777778 0H3.5C3.92778 0 4.27778 0.35 4.27778 0.777778C4.27778 1.75 4.43333 2.68333 4.72111 3.55444C4.80667 3.82667 4.74444 4.13 4.52667 4.34778L2.81556 6.05889Z" fill="#616161"/>
+                                                                        </svg>
+                                                                        {{ order.userReceived.userinfo.phone }}
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)">
+                                                                        <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M3 6.44775H5H21" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                            <path d="M8 6.44785V4.4207C8 3.88307 8.21071 3.36746 8.58579 2.98729C8.96086 2.60713 9.46957 2.39355 10 2.39355H14C14.5304 2.39355 15.0391 2.60713 15.4142 2.98729C15.7893 3.36746 16 3.88307 16 4.4207V6.44785M19 6.44785V20.6379C19 21.1755 18.7893 21.6911 18.4142 22.0713C18.0391 22.4515 17.5304 22.665 17 22.665H7C6.46957 22.665 5.96086 22.4515 5.58579 22.0713C5.21071 21.6911 5 21.1755 5 20.6379V6.44785H19Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                            <path d="M10 11.5156V17.5971" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                            <path d="M14 11.5156V17.5971" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        {% trans %}Отменить заявку{% endtrans %}
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    {% if order.product %}
+                                                        <div class="accountOrderInfo">
+                                                            <div class="accountOrderInfoProduct">
+                                                                <div class="accountOrderInfoProductImage">
+                                                                    {% if locale.isDefault %}
+                                                                        <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">
+                                                                            {% if order.product.fotos | length > 0 %}
+                                                                                <img src="{{ asset('bundles/images/products/' ~ order.product.fotos[0].foto) }}" alt="{{ order.product.fotos[0].alt }}" title="{{ order.product.fotos[0].title }}" />
+                                                                            {% else %}
+                                                                                <img src="{{ asset('bundles/images/products/bez-foto.png') }}" alt="" title="" />
+                                                                            {% endif %}
+                                                                        </a>
+                                                                    {% else %}
+                                                                        <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit, '_locale' : locale.code}) }}">
+                                                                            {% if order.product.fotos | length > 0 %}
+                                                                                <img src="{{ asset('bundles/images/products/' ~ order.product.fotos[0].foto) }}" alt="" title="" />
+                                                                            {% else %}
+                                                                                <img src="{{ asset('bundles/images/products/bez-foto.png') }}" alt="" title="" />
+                                                                            {% endif %}
+                                                                        </a>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="accountOrderInfoProductDescription">
+                                                                    <div class="accountOrderInfoProductDescriptionTitle">
+                                                                        {% if locale.isDefault %}
+                                                                            <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">{{ order.product.name }}</a>
+                                                                        {% else %}
+                                                                            <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit, '_locale' : locale.code}) }}">
+                                                                                {{ order.product.name }}
+                                                                            </a>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                    <div class="accountOrderInfoProductDescriptionFeatures">
+                                                                        {% if order.info.board.board.translations | length > 0 %}
+                                                                            {% for translation in order.info.board.board.translations %}
+                                                                                {% if translation.locale.id == locale.id %}
+                                                                                    {{ translation.value }}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}        
+                                                                            {{ order.info.board.board.value }}
+                                                                        {% endif %}, 
+                                                                        {{ order.info.modification.size }} {% trans %}л {% endtrans %}/ {{ order.info.modification.power }} {% trans %}л.с.{% endtrans %} /
+                                                                        {% if order.info.gasType.translations | length > 0 %}
+                                                                            {% for translation in order.info.gasType.translations %}
+                                                                                {% if translation.locale.id == locale.id %}
+                                                                                    {{ translation.value }}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}        
+                                                                            {{ order.info.gasType.value }}
+                                                                        {% endif %}, 
+                                                                        {% if order.info.gearType.translations | length > 0 %}
+                                                                            {% for translation in order.info.gearType.translations %}
+                                                                                {% if translation.locale.id == locale.id %}
+                                                                                    {{ translation.value }}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}        
+                                                                            {{ order.info.gearType.value }}
+                                                                        {% endif %}, 
+                                                                        {% if order.info.transmissionType.translations | length > 0 %}
+                                                                            {% for translation in order.info.transmissionType.translations %}
+                                                                                {% if translation.locale.id == locale.id %}
+                                                                                    {{ translation.value }}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% else %}        
+                                                                            {{ order.info.transmissionType.value }}
+                                                                        {% endif %} {% trans %}привод{% endtrans %}
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accountOrderInfoProductNumbers">
+                                                                    <div class="accountOrderInfoProductNumbersPrice number">{{ order.product.price }} {{ locale.currency.label | raw }}</div>
+                                                                    <div class="number"> {{ order.info.year }}</div>
+                                                                    <div class="number">{{ order.info.probeg }} {% trans %}км{% endtrans %}</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="accountOrderInfoProductStatus">
+                                                                <button class="inprocess" style="background: {{ order.status.color }};{% if order.status.id == 7 %}color:#fff;{% endif %}">
+                                                                    {% if orderStatus.translations | length > 0 %}
+                                                                        {% for translation in orderStatus.translations %}
+                                                                            {% if translation.locale.id == locale.id %}
+                                                                                {{ translation.value }}
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% else %}        
+                                                                        {{ orderStatus.name}}
+                                                                    {% endif %}
+                                                                </button>
+                                                                {% if order.status.id == 7 %}
+                                                                    <a class="edit">
+                                                                        <svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 9px;">
+                                                                            <path d="M21 11.3854C21.0038 12.8519 20.6612 14.2986 20 15.6076C19.216 17.1762 18.0108 18.4956 16.5194 19.4179C15.0279 20.3402 13.3091 20.8291 11.5555 20.8298C10.089 20.8336 8.64234 20.491 7.33332 19.8298L1 21.9409L3.11111 15.6076C2.44992 14.2986 2.10729 12.8519 2.11111 11.3854C2.11179 9.63178 2.60068 7.913 3.52302 6.42155C4.44536 4.93011 5.76472 3.72491 7.33332 2.94095C8.64234 2.27976 10.089 1.93713 11.5555 1.94095H12.1111C14.427 2.06872 16.6145 3.04624 18.2546 4.68634C19.8947 6.32645 20.8722 8.51389 21 10.8298V11.3854Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                        </svg>
+                                                                        {% trans %}Оставить отзыв{% endtrans %}
+                                                                    </a>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="accountNocontent inTab">
+                                            {% trans %}Не заказов со статусом {% endtrans %} 
+                                            {% if orderStatus.translations | length > 0 %}
+                                                {% for translation in orderStatus.translations %}
+                                                    {% if translation.locale.id == locale.id %}
+                                                        {{ translation.value }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}        
+                                                {{ orderStatus.name}}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </div>
+                    </div>    
+                {% else %}
+                    <div class="accountNocontent">{% trans %}Заказов пока нет{% endtrans %}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{ form_start(reviewForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title" id="regionModalLabel">{% trans %}Оставить отзыв{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="review-user-block"></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(reviewForm.status) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                            <div class="position-relative review-mark-select-block">
+                                <div class="div-select">{% trans %}Neitrāls{% endtrans %}</div>
+                                {{ form_widget(reviewForm.status)}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(reviewForm.mark) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                            <div class="position-relative">
+                                <div class="div-select">{% trans %}Izvēlieties opciju{% endtrans %}</div>
+                                {{ form_widget(reviewForm.mark)}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(reviewForm.reviewText) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                            {{ form_widget(reviewForm.reviewText) }}
+                        </div>
+                    </div> 
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8">
+                        {{ form_widget(reviewForm.save,{'type' : 'submit'}) }}
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                {{ form_end(reviewForm) }}
+            </div>
+        </div>
+</div>
+{% endblock%}
+
+
+

@@ -54,11 +54,6 @@ class Pack
     private $services;
     
     /**
-     * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Product", mappedBy="servicePack")
-     */
-    private $product;
-    
-    /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\PackPrice", mappedBy="pack", cascade={"persist"})
      */
     private $prices;
@@ -75,6 +70,8 @@ class Pack
     {
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->prices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userRoles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -96,7 +93,7 @@ class Pack
     public function setName($name)
     {
         $this->name = $name;
-
+    
         return $this;
     }
 
@@ -111,6 +108,52 @@ class Pack
     }
 
     /**
+     * Set label
+     *
+     * @param string $label
+     * @return Pack
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+    
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string 
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set bgClass
+     *
+     * @param string $bgClass
+     * @return Pack
+     */
+    public function setBgClass($bgClass)
+    {
+        $this->bgClass = $bgClass;
+    
+        return $this;
+    }
+
+    /**
+     * Get bgClass
+     *
+     * @return string 
+     */
+    public function getBgClass()
+    {
+        return $this->bgClass;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
@@ -119,7 +162,7 @@ class Pack
     public function setDescription($description)
     {
         $this->description = $description;
-
+    
         return $this;
     }
 
@@ -142,7 +185,7 @@ class Pack
     public function setPrice($price)
     {
         $this->price = $price;
-
+    
         return $this;
     }
 
@@ -165,7 +208,7 @@ class Pack
     public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
     {
         $this->translations[] = $translations;
-
+    
         return $this;
     }
 
@@ -198,7 +241,7 @@ class Pack
     public function addService(\Dashboard\CommonBundle\Entity\PackService $services)
     {
         $this->services[] = $services;
-
+    
         return $this;
     }
 
@@ -223,29 +266,6 @@ class Pack
     }
 
     /**
-     * Set product
-     *
-     * @param \Dashboard\CommonBundle\Entity\Product $product
-     * @return Pack
-     */
-    public function setProduct(\Dashboard\CommonBundle\Entity\Product $product = null)
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    /**
-     * Get product
-     *
-     * @return \Dashboard\CommonBundle\Entity\Product 
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
      * Add prices
      *
      * @param \Dashboard\CommonBundle\Entity\PackPrice $prices
@@ -254,7 +274,7 @@ class Pack
     public function addPrice(\Dashboard\CommonBundle\Entity\PackPrice $prices)
     {
         $this->prices[] = $prices;
-
+    
         return $this;
     }
 
@@ -287,7 +307,7 @@ class Pack
     public function addUserRole(\Dashboard\CommonBundle\Entity\Role $userRoles)
     {
         $this->userRoles[] = $userRoles;
-
+    
         return $this;
     }
 
@@ -309,51 +329,5 @@ class Pack
     public function getUserRoles()
     {
         return $this->userRoles;
-    }
-
-    /**
-     * Set label
-     *
-     * @param string $label
-     * @return Pack
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    /**
-     * Get label
-     *
-     * @return string 
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * Set bgClass
-     *
-     * @param string $bgClass
-     * @return Pack
-     */
-    public function setBgClass($bgClass)
-    {
-        $this->bgClass = $bgClass;
-
-        return $this;
-    }
-
-    /**
-     * Get bgClass
-     *
-     * @return string 
-     */
-    public function getBgClass()
-    {
-        return $this->bgClass;
     }
 }

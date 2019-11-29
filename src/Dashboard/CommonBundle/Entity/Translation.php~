@@ -30,18 +30,6 @@ class Translation
     private $category;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Selltype", inversedBy="translations")
-     * @ORM\JoinColumn(name="selltype_id", referencedColumnName="id")
-     */
-    private $selltype;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Mark", inversedBy="translations")
-     * @ORM\JoinColumn(name="mark_id", referencedColumnName="id")
-     */
-    private $mark;
-    
-    /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Filter", inversedBy="translations")
      * @ORM\JoinColumn(name="filter_id", referencedColumnName="id")
      */
@@ -102,10 +90,17 @@ class Translation
     private $rate;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Shape", inversedBy="translations")
+     * @ORM\JoinColumn(name="shape_id", referencedColumnName="id")
+     */
+    private $shape;
+    
+    /**
      * @ORM\Column(type="text",nullable=true, options={"default":"0"})
      */
     private $value;
-    
+   
+
     /**
      * Get id
      *
@@ -183,52 +178,6 @@ class Translation
     public function getCategory()
     {
         return $this->category;
-    }
-
-    /**
-     * Set selltype
-     *
-     * @param \Dashboard\CommonBundle\Entity\Selltype $selltype
-     * @return Translation
-     */
-    public function setSelltype(\Dashboard\CommonBundle\Entity\Selltype $selltype = null)
-    {
-        $this->selltype = $selltype;
-    
-        return $this;
-    }
-
-    /**
-     * Get selltype
-     *
-     * @return \Dashboard\CommonBundle\Entity\Selltype 
-     */
-    public function getSelltype()
-    {
-        return $this->selltype;
-    }
-
-    /**
-     * Set mark
-     *
-     * @param \Dashboard\CommonBundle\Entity\Mark $mark
-     * @return Translation
-     */
-    public function setMark(\Dashboard\CommonBundle\Entity\Mark $mark = null)
-    {
-        $this->mark = $mark;
-    
-        return $this;
-    }
-
-    /**
-     * Get mark
-     *
-     * @return \Dashboard\CommonBundle\Entity\Mark 
-     */
-    public function getMark()
-    {
-        return $this->mark;
     }
 
     /**
@@ -369,7 +318,6 @@ class Translation
         return $this->service;
     }
 
-
     /**
      * Set modification
      *
@@ -379,7 +327,7 @@ class Translation
     public function setModification(\Dashboard\CommonBundle\Entity\Modification $modification = null)
     {
         $this->modification = $modification;
-
+    
         return $this;
     }
 
@@ -402,7 +350,7 @@ class Translation
     public function setGeneration(\Dashboard\CommonBundle\Entity\Generation $generation = null)
     {
         $this->generation = $generation;
-
+    
         return $this;
     }
 
@@ -425,7 +373,7 @@ class Translation
     public function setPack(\Dashboard\CommonBundle\Entity\Pack $pack = null)
     {
         $this->pack = $pack;
-
+    
         return $this;
     }
 
@@ -461,4 +409,28 @@ class Translation
     {
         return $this->rate;
     }
+
+    /**
+     * Set shape
+     *
+     * @param \Dashboard\CommonBundle\Entity\Shape $shape
+     * @return Translation
+     */
+    public function setShape(\Dashboard\CommonBundle\Entity\Shape $shape = null)
+    {
+        $this->shape = $shape;
+    
+        return $this;
+    }
+
+    /**
+     * Get shape
+     *
+     * @return \Dashboard\CommonBundle\Entity\Shape 
+     */
+    public function getShape()
+    {
+        return $this->shape;
+    }
+    
 }

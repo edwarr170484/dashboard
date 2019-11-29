@@ -9,8 +9,6 @@ use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Dashboard\CommonBundle\Form\DataTransformer\CategoryToNumberTransformer;
-use Dashboard\CommonBundle\Form\DataTransformer\SelltypeToNumberTransformer;
-use Dashboard\CommonBundle\Form\DataTransformer\MarkToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\FilterToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\FilterValueToNumberTransformer;
 use Dashboard\AdminBundle\Form\DataTransformer\RegionToNumberTransformer;
@@ -39,8 +37,6 @@ class TranslationType extends AbstractType
                             'label' => 'Локализация:', 'attr' => array('class' => 'hidden-input form-control','id' => 'region','placeholder' => 'Локализация:')))
             ->add('value', TextareaType::class, array('required' => false, 'label' => 'Значение для перевода', 'attr' => array('class' => 'form-control','placeholder' => 'Значение для перевода')))
             ->add($builder->create('category', 'hidden')->addModelTransformer(new CategoryToNumberTransformer($this->em)))
-            ->add($builder->create('selltype', 'hidden')->addModelTransformer(new SelltypeToNumberTransformer($this->em)))
-            ->add($builder->create('mark', 'hidden')->addModelTransformer(new MarkToNumberTransformer($this->em)))
             ->add($builder->create('filter', 'hidden')->addModelTransformer(new FilterToNumberTransformer($this->em)))                        
             ->add($builder->create('filterValue', 'hidden')->addModelTransformer(new FilterValueToNumberTransformer($this->em)))
             ->add($builder->create('region', 'hidden')->addModelTransformer(new RegionToNumberTransformer($this->em)))                        

@@ -1,0 +1,122 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Завершенные{% endtrans %}{% endblock %}
+{% block bodyClass %}class="userAccount"{% endblock %}
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% endif %}
+                    {% if  locale.isDefault %}
+                        <li><a href="{{ path('accountDealer', {'_locale' : locale.code}) }}">
+                    {% else %}
+                        <li><a href="{{ path('accountDealerLocale', {'_locale' : locale.code}) }}">
+                    {% endif %}
+                        {% trans %}Личный кабинет{% endtrans %}
+                    </a></li>
+                    <li>/</li>
+                    <li>
+                    {% if  locale.isDefault %}
+                        <a href="{{path('account_dealer_products_stopped')}}">
+                    {% else %}
+                        <a href="{{path('account_dealer_products_stoppedLocale',{'_locale' : app.request.locale})}}">
+                    {% endif %}
+                        {% trans %}Завершенные объявления{% endtrans %}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav> 
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1>{% trans %}<b>Заврешенные</b> объявления{% endtrans %}</h1></div>
+            </div>
+        </div>
+    </div>
+    <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Dealer:getSidebar', {'routeName' : routeName})) }}
+        <div class="col-lg-10 col-md-10">
+            <div class="account-advert-block account-block">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div class="account-advert-block-content">
+                    <div class="row advert-category-adverts">
+                        <div class="col-lg-12 col-md-12">
+                                    <div class="accountRatesInformation">
+                                        <div class="accountRatesInformationHeader">{% trans %}В рамках вашего пакета доступно:{% endtrans %}</div>
+                                        <div class="accountRatesInformationList">
+                                            <div class="accountRatesInformationListItem">18 Сolocaciones</div>
+                                            <div class="accountRatesInformationListItem">
+                                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M25 13C25 19.6274 19.6274 25 13 25M25 13C25 6.37258 19.6274 1 13 1M25 13H20.2M13 25C6.37258 25 1 19.6274 1 13M13 25V20.2M1 13C1 6.37258 6.37258 1 13 1M1 13H5.8M13 1V5.8" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                5 Publicación de la  Premium
+                                            </div>
+                                            <div class="accountRatesInformationListItem">
+                                                <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M13 18.4565C16.0125 18.4565 18.4545 16.0144 18.4545 13.002C18.4545 9.98949 16.0125 7.54741 13 7.54741C9.98754 7.54741 7.54545 9.98949 7.54545 13.002C7.54545 16.0144 9.98754 18.4565 13 18.4565Z" fill="#F5AA01"/>
+                                                    <path d="M13 1.00195V3.18377M13 22.8201V25.002M4.51273 4.51468L6.06182 6.06377M19.9382 19.9401L21.4873 21.4892M1 13.002H3.18182M22.8182 13.002H25M4.51273 21.4892L6.06182 19.9401M19.9382 6.06377L21.4873 4.51468M18.4545 13.002C18.4545 16.0144 16.0125 18.4565 13 18.4565C9.98754 18.4565 7.54545 16.0144 7.54545 13.002C7.54545 9.98949 9.98754 7.54741 13 7.54741C16.0125 7.54741 18.4545 9.98949 18.4545 13.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                5 Colocación especial de anuncios
+                                            </div>
+                                            <div class="accountRatesInformationListItem">
+                                                <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1 9.72727C1 9.72727 5.36364 1 13 1C20.6364 1 25 9.72727 25 9.72727C25 9.72727 20.6364 18.4545 13 18.4545C5.36364 18.4545 1 9.72727 1 9.72727Z" fill="#F5AA01"/>
+                                                    <path d="M13 13C14.8075 13 16.2727 11.5347 16.2727 9.72727C16.2727 7.9198 14.8075 6.45455 13 6.45455C11.1925 6.45455 9.72727 7.9198 9.72727 9.72727C9.72727 11.5347 11.1925 13 13 13Z" fill="#F5AA01"/>
+                                                    <path d="M1 9.72727C1 9.72727 5.36364 1 13 1C20.6364 1 25 9.72727 25 9.72727C25 9.72727 20.6364 18.4545 13 18.4545C5.36364 18.4545 1 9.72727 1 9.72727Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    <path d="M13 13C14.8075 13 16.2727 11.5347 16.2727 9.72727C16.2727 7.9198 14.8075 6.45455 13 6.45455C11.1925 6.45455 9.72727 7.9198 9.72727 9.72727C9.72727 11.5347 11.1925 13 13 13Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                28 Destacando un anuncio en color
+                                            </div>
+                                            <div class="accountRatesInformationListItem">
+                                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M13 25C19.6274 25 25 19.6274 25 13C25 6.37258 19.6274 1 13 1C6.37258 1 1 6.37258 1 13C1 19.6274 6.37258 25 13 25Z" fill="#F5AA01"/>
+                                                    <path d="M17.8 13L13 8.2L8.2 13" fill="#F5AA01"/>
+                                                    <path d="M17.8 13L13 8.2M13 8.2L8.2 13M13 8.2V17.8M25 13C25 19.6274 19.6274 25 13 25C6.37258 25 1 19.6274 1 13C1 6.37258 6.37258 1 13 1C19.6274 1 25 6.37258 25 13Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                </svg>
+                                                12 Levantar anuncio
+                                            </div>
+                                            <div class="accountRatesInformationListItem">
+                                                <a href="{% if locale.isDefault %}{{ path('account_dealer_rates') }}{% else %}{{ path('account_dealer_ratesLocale',{'_locale' : app.request.locale}) }}{% endif %}">
+                                                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                        <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="#EB840B"/>
+                                                        <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="#EB840B"/>
+                                                        <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                        <path d="M20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                        <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="white"/>
+                                                        <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="white"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        <div class="col-lg-12 col-md-12">
+                            <div class="accountNocontent">{% trans %}Нет завершенных объявлений{% endtrans %}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}
+

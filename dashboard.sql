@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Ноя 26 2019 г., 14:43
+-- Время создания: Ноя 29 2019 г., 15:44
 -- Версия сервера: 10.1.9-MariaDB
 -- Версия PHP: 5.6.15
 
@@ -57,10 +57,43 @@ INSERT INTO `banner` (`id`, `title`, `image`, `link`, `date_added`, `position`, 
 CREATE TABLE `bill` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `date_added` datetime NOT NULL,
-  `price` int(11) DEFAULT '0',
-  `file` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0'
+  `date_added` datetime DEFAULT NULL,
+  `price` double DEFAULT '0',
+  `file` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
+  `rate_id` int(11) DEFAULT NULL,
+  `service_pack_id` int(11) DEFAULT NULL,
+  `date_payed` datetime DEFAULT NULL,
+  `is_payed` tinyint(1) DEFAULT '0',
+  `product_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `bill`
+--
+
+INSERT INTO `bill` (`id`, `user_id`, `date_added`, `price`, `file`, `rate_id`, `service_pack_id`, `date_payed`, `is_payed`, `product_id`) VALUES
+(1, 6, '2019-11-29 17:40:15', 3.99, NULL, NULL, NULL, NULL, NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `bill_product_service`
+--
+
+CREATE TABLE `bill_product_service` (
+  `bill_id` int(11) NOT NULL,
+  `product_service_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `bill_product_service`
+--
+
+INSERT INTO `bill_product_service` (`bill_id`, `product_service_id`) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4);
 
 -- --------------------------------------------------------
 
@@ -15228,6 +15261,47 @@ INSERT INTO `dealer_phone` (`id`, `dealer_info_id`, `phone`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `dealer_salon`
+--
+
+CREATE TABLE `dealer_salon` (
+  `id` int(11) NOT NULL,
+  `dealer_info_id` int(11) DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `website` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `logotype` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `dealer_salon`
+--
+
+INSERT INTO `dealer_salon` (`id`, `dealer_info_id`, `name`, `address`, `website`, `logotype`) VALUES
+(6, 1, 'Taller de coches MOTOR TARRAGONA', 'Barcelona, Avenida de Lourdes, 18', 'www.gonviauto.com', '383064922167.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `dealer_salon_phone`
+--
+
+CREATE TABLE `dealer_salon_phone` (
+  `id` int(11) NOT NULL,
+  `dealer_salon_id` int(11) DEFAULT NULL,
+  `phone` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `dealer_salon_phone`
+--
+
+INSERT INTO `dealer_salon_phone` (`id`, `dealer_salon_id`, `phone`) VALUES
+(6, 6, '+34 920 37 08 05');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `favorite_products`
 --
 
@@ -15647,27 +15721,6 @@ INSERT INTO `job_category` (`id`, `name`, `image`, `icon`, `sortorder`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `liqpay`
---
-
-CREATE TABLE `liqpay` (
-  `id` int(11) NOT NULL,
-  `public_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `private_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `currency` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `sandbox` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Дамп данных таблицы `liqpay`
---
-
-INSERT INTO `liqpay` (`id`, `public_key`, `private_key`, `currency`, `sandbox`) VALUES
-(1, 'i84902635400', '6zF3Ob1YfPeGjakkGCw5vnspEOsk9W1PRtPuQ8ux', 'EUR', 0);
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `locale`
 --
 
@@ -15689,26 +15742,6 @@ CREATE TABLE `locale` (
 INSERT INTO `locale` (`id`, `currency_id`, `name`, `code`, `country`, `sortorder`, `is_active`, `is_default`) VALUES
 (1, 1, 'Espana', 'es', 'Spain.png', 1, 1, 1),
 (2, 2, 'Русский', 'ru', 'Russia.png', 2, 1, 0);
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `mark`
---
-
-CREATE TABLE `mark` (
-  `id` int(11) NOT NULL,
-  `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Дамп данных таблицы `mark`
---
-
-INSERT INTO `mark` (`id`, `title`) VALUES
-(1, 'Отлично, рекомендую'),
-(2, 'Плохое качество'),
-(3, 'Среднее качество');
 
 -- --------------------------------------------------------
 
@@ -15968,38 +16001,31 @@ CREATE TABLE `product` (
   `user_id` int(11) DEFAULT NULL,
   `region_id` int(11) DEFAULT NULL,
   `city_id` int(11) DEFAULT NULL,
-  `selltype_id` int(11) DEFAULT NULL,
   `author_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `author_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
   `author_phone` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `typeno` tinyint(1) NOT NULL,
-  `typebu` tinyint(1) NOT NULL,
-  `typenew` tinyint(1) NOT NULL,
   `name` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `description` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `price` int(11) DEFAULT NULL,
   `mainfoto` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `viewcommon` tinyint(1) NOT NULL,
-  `viewpremium` tinyint(1) NOT NULL,
-  `viewselected` tinyint(1) NOT NULL,
-  `sortorder` int(11) DEFAULT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `is_active` tinyint(1) DEFAULT '0',
   `date_added` datetime NOT NULL,
   `date_edited` datetime NOT NULL,
-  `rating_likes` int(11) DEFAULT NULL,
-  `rating_dislikes` int(11) DEFAULT NULL,
-  `views` int(11) DEFAULT NULL,
-  `views_per_date` int(11) DEFAULT NULL,
+  `views` int(11) DEFAULT '0',
+  `views_per_date` int(11) DEFAULT '0',
   `is_blocked` tinyint(1) DEFAULT '0',
-  `is_confirm` tinyint(1) NOT NULL DEFAULT '0',
-  `meta_tag_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `meta_tag_description` varchar(512) COLLATE utf8_unicode_ci DEFAULT 'null',
+  `is_confirm` tinyint(1) DEFAULT '0',
   `is_correct` tinyint(1) DEFAULT '0',
   `correct_reason` longtext COLLATE utf8_unicode_ci,
   `translit` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `term` int(11) DEFAULT NULL,
-  `pack_id` int(11) DEFAULT NULL
+  `city_code_id` int(11) DEFAULT NULL,
+  `is_draft` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `product`
+--
+
+INSERT INTO `product` (`id`, `category_id`, `user_id`, `region_id`, `city_id`, `author_name`, `author_email`, `author_phone`, `name`, `mainfoto`, `is_active`, `date_added`, `date_edited`, `views`, `views_per_date`, `is_blocked`, `is_confirm`, `is_correct`, `correct_reason`, `translit`, `city_code_id`, `is_draft`) VALUES
+(1, 251, 6, 1, 41, 'John Doe', 'smurf84@mail.ru', '+375251234567', 'Ford Focus', NULL, 1, '2019-11-29 17:40:15', '2019-11-29 17:40:15', NULL, NULL, NULL, NULL, NULL, NULL, 'Ford_Focus', 1193, 1);
 
 -- --------------------------------------------------------
 
@@ -16012,6 +16038,16 @@ CREATE TABLE `product_filters` (
   `filter_value_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Дамп данных таблицы `product_filters`
+--
+
+INSERT INTO `product_filters` (`product_id`, `filter_value_id`) VALUES
+(1, 77),
+(1, 81),
+(1, 85),
+(1, 89);
+
 -- --------------------------------------------------------
 
 --
@@ -16021,11 +16057,52 @@ CREATE TABLE `product_filters` (
 CREATE TABLE `product_fotos` (
   `id` int(11) NOT NULL,
   `product_id` int(11) DEFAULT NULL,
-  `foto` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `alt` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
-  `sortorder` int(11) DEFAULT NULL
+  `foto` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `product_fotos`
+--
+
+INSERT INTO `product_fotos` (`id`, `product_id`, `foto`) VALUES
+(1, 1, '87615966.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `product_info`
+--
+
+CREATE TABLE `product_info` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `generation_id` int(11) DEFAULT NULL,
+  `board_id` int(11) DEFAULT NULL,
+  `gas_type_id` int(11) DEFAULT NULL,
+  `gas_transmission_id` int(11) DEFAULT NULL,
+  `gear_type_id` int(11) DEFAULT NULL,
+  `modification_id` int(11) DEFAULT NULL,
+  `color_id` int(11) DEFAULT NULL,
+  `shape_id` int(11) DEFAULT NULL,
+  `price` double DEFAULT '0',
+  `year` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
+  `probeg` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
+  `wheel` tinyint(1) DEFAULT '0',
+  `is_gas_baloon` tinyint(1) DEFAULT '0',
+  `owners` int(11) DEFAULT '0',
+  `vin` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
+  `description` longtext COLLATE utf8_unicode_ci,
+  `nds` tinyint(1) DEFAULT '0',
+  `torg` tinyint(1) DEFAULT '0',
+  `garant` double DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `product_info`
+--
+
+INSERT INTO `product_info` (`id`, `product_id`, `generation_id`, `board_id`, `gas_type_id`, `gas_transmission_id`, `gear_type_id`, `modification_id`, `color_id`, `shape_id`, `price`, `year`, `probeg`, `wheel`, `is_gas_baloon`, `owners`, `vin`, `description`, `nds`, `torg`, `garant`) VALUES
+(1, 1, 1, NULL, 58, 60, 63, 1, 73, 2, 30000, '1999', '50', 0, 0, 0, '12332112123', 'ТОРГ ДЛЯ РЕАЛЬНЫХ ПОКУПАТЕЛЕЙ\n\nАвтомобиль куплен у официального дилера BMW в Калиниграде. В эксплуатации с апреля 2018 года. Немецкая сборка. Стоит на расширенной гарантии. Пройдено 2 ТО. Состояние абсолютно нового авто так как весь год машина больше стояла чем ездила в связи с постоянными и длительными командировками владельца. \nНа хранение зимние колёса в сборе с 18" легкосплавными дисками Double-spoke 634\n\nЦвет и отделка салона:\n\n-Серый Гранит металлик\n-Кожа ''Dakota''Слоновая Кость с эксклюзивным швом/ контрастной окантовкой - Черный\n- Спортивные сиденья для водителя и переднего пассажира \n\nДополнительные опции:\n\n- Стандарт EU5\n- Выбор автомобиля важного для СОР\n- Автоматическая коробка передач\n- Оснащение национальной системой торможения\n- Обогрев рулевого колеса\n- Спортивное кожаное рулевое колесо\n- Шины с возможностью аварийного хода после прокола\n- Контроль давления в шинах\n- Автоматическая система закрывания/открывания крышки багажника\n- Комфортный доступ\n- Автодоводчик дверей\n- Камера заднего вида\n- Интерактивный ключ BMW display key\n- Велюровые коврики\n- Знак аварийной остановки и аптечка\n- Пакет курильщика\n- Электрорегулировка передних сидений с функцией "Память" для сиденья водителя\n- Система складывающихся задних сидений\n- Спортивные сиденья для водителя и переднего пассажира\n- Подогрев сидений (спереди и сзади)\n- Декоративные планки - ''Глянцевый Черный''Акцентные вставки ''Жемчужный Хром''\n- Пакет Ambient Air (ионизация и ароматизация салона)\n- Расширенный пакет зеркал заднего вида\n- Пакет освещения\n- Сигнализация аварийного сближения при парковке (спереди и сзади)\n- Автоматический контроль климата\n- Спидометр с обозначением километров\n- Светодиодные противотуманные фары\n- Навигационная система Professional\n- CD-плеер\n- Аудиосистема типа Hi-Fi\n- TeleServices\n- Функция интеллектуального экстренного   вызова\n- Сервисы BMW ConnectedDrive\n- Информация о дорожной ситуации онлайн\n- Консьерж-сервис\n- Дистанционное управление автомобилем\n- Подготовка к Apple CarPlay\n- Голосовое воспроизведение на русском языке (для навигации)\n- Многофункциональный дисплей на приборнойпанели\n- Региональный код 5 для DVD\n- Внешний дизайн "Глянцевый черный" BMW Индивидуал\n-Индивидуальная обивка потолка салона, Aнтрацит\n- Линия отделки Sport Line\n- Пакет BMW Ремонт, вкл. 3 года\n- Пакет услуг ConnectedDrive\n-Исполнение для стран с холодным климатом\n- Русский/Сервисная книжка\n-Специальная подготовка кузова\n- Интервал замены масла 15.000 км/18 мес\n- Специфическая для России опция\n- Закрывание центрального замка при началедвижения\n- Cтраны с плохим дорожным покрытием\n- Внешний защитный слой\n- Пакет Basic', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -16108,10 +16185,21 @@ CREATE TABLE `product_service` (
   `id` int(11) NOT NULL,
   `product_id` int(11) DEFAULT NULL,
   `service_id` int(11) DEFAULT NULL,
-  `date_added` datetime NOT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '0',
-  `date_end` datetime NOT NULL
+  `date_added` datetime DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT '0',
+  `date_end` datetime DEFAULT NULL,
+  `count` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `product_service`
+--
+
+INSERT INTO `product_service` (`id`, `product_id`, `service_id`, `date_added`, `is_active`, `date_end`, `count`) VALUES
+(1, NULL, 1, NULL, 0, NULL, 1),
+(2, NULL, 2, NULL, 0, NULL, 1),
+(3, NULL, 3, NULL, 0, NULL, 1),
+(4, NULL, 4, NULL, 0, NULL, 7);
 
 -- --------------------------------------------------------
 
@@ -16226,12 +16314,10 @@ CREATE TABLE `review` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `user_target_id` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL,
   `answer_id` int(11) DEFAULT NULL,
   `review_text` longtext COLLATE utf8_unicode_ci NOT NULL,
   `date_added` datetime NOT NULL,
   `status` int(11) DEFAULT '0',
-  `product_mark` varchar(512) COLLATE utf8_unicode_ci DEFAULT '0',
   `answer_to_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -16315,53 +16401,29 @@ INSERT INTO `role_service` (`role_id`, `service_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `selltype`
---
-
-CREATE TABLE `selltype` (
-  `id` int(11) NOT NULL,
-  `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Дамп данных таблицы `selltype`
---
-
-INSERT INTO `selltype` (`id`, `title`) VALUES
-(4, 'Продам'),
-(5, 'Куплю'),
-(6, 'Аренда'),
-(7, 'Обмен'),
-(10, 'Спрос/Ищу'),
-(11, 'Приму в дар'),
-(12, 'Отдам даром'),
-(14, 'Услуги');
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `service`
 --
 
 CREATE TABLE `service` (
   `id` int(11) NOT NULL,
-  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` longtext COLLATE utf8_unicode_ci,
   `price` double DEFAULT '0',
   `days` int(11) DEFAULT '0',
   `icon` longtext COLLATE utf8_unicode_ci,
-  `icon_gray` longtext COLLATE utf8_unicode_ci
+  `icon_gray` longtext COLLATE utf8_unicode_ci,
+  `type` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `service`
 --
 
-INSERT INTO `service` (`id`, `title`, `description`, `price`, `days`, `icon`, `icon_gray`) VALUES
-(1, 'Премиум-размещение', 'Ваше объявление будет показываться на самом заметном месте сайта &mdash; на главной странице, в категориях над обычными объявлениями и на страницах результатов поиска.<br /> Стоимость услуги &mdash; 5 евро в сутки.', 50, 1, '<svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>\r\n<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>'),
-(2, 'Выделить', 'Ваше объявление будет показываться на странице результатов поиска и в своей категории, оно отмечатся особой иконкой и отображаются другой цветовой гаммой. BONUS При этом оно поднимется на первое место в результатах поиска бесплатно. Цена - 3 евро/сутки.', 30, 1, '<svg width="32" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M1 12.5273C1 12.5273 6.39303 1.74121 15.8308 1.74121C25.2687 1.74121 30.6617 12.5273 30.6617 12.5273C30.6617 12.5273 25.2687 23.3134 15.8308 23.3134C6.39303 23.3134 1 12.5273 1 12.5273Z" fill="#F5AA01"/>\r\n<path d="M15.8308 16.5721C18.0647 16.5721 19.8756 14.7611 19.8756 12.5273C19.8756 10.2934 18.0647 8.4825 15.8308 8.4825C13.597 8.4825 11.7861 10.2934 11.7861 12.5273C11.7861 14.7611 13.597 16.5721 15.8308 16.5721Z" fill="#F5AA01"/>\r\n<path d="M1 12.5273C1 12.5273 6.39303 1.74121 15.8308 1.74121C25.2687 1.74121 30.6617 12.5273 30.6617 12.5273C30.6617 12.5273 25.2687 23.3134 15.8308 23.3134C6.39303 23.3134 1 12.5273 1 12.5273Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M15.8308 16.5721C18.0647 16.5721 19.8756 14.7611 19.8756 12.5273C19.8756 10.2934 18.0647 8.4825 15.8308 8.4825C13.597 8.4825 11.7861 10.2934 11.7861 12.5273C11.7861 14.7611 13.597 16.5721 15.8308 16.5721Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>'),
-(3, 'Поднять', 'Ваше объявление поднимется на первое место в результатах поиска, как если бы оно было только что подано на сайт. BONUS На следующий день, в это же время, оно будет поднято ещё раз бесплатно. <br /> Стоимость услуги&nbsp;20 грн/сутки.', 20, 1, '<svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M14.5 28C21.9558 28 28 21.9558 28 14.5C28 7.04416 21.9558 1 14.5 1C7.04416 1 1 7.04416 1 14.5C1 21.9558 7.04416 28 14.5 28Z" fill="#F5AA01"/>\r\n<path d="M19.9 14.5L14.5 9.1L9.1 14.5" fill="#F5AA01"/>\r\n<path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                                <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>'),
-(4, 'Спецпредложение', NULL, 2.99, 7, '<svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M16 23.2757C19.7656 23.2757 22.8182 20.2231 22.8182 16.4575C22.8182 12.6919 19.7656 9.63934 16 9.63934C12.2344 9.63934 9.18182 12.6919 9.18182 16.4575C9.18182 20.2231 12.2344 23.2757 16 23.2757Z" fill="#F5AA01"/>\r\n<path d="M16 1.45752V4.18479M16 28.7302V31.4575M5.39091 5.84843L7.32727 7.78479M24.6727 25.1302L26.6091 27.0666M1 16.4575H3.72727M28.2727 16.4575H31M5.39091 27.0666L7.32727 25.1302M24.6727 7.78479L26.6091 5.84843M22.8182 16.4575C22.8182 20.2231 19.7656 23.2757 16 23.2757C12.2344 23.2757 9.18182 20.2231 9.18182 16.4575C9.18182 12.6919 12.2344 9.63934 16 9.63934C19.7656 9.63934 22.8182 12.6919 22.8182 16.4575Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<div class="button">\r\n                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>\r\n                                                                        7\r\n                                                                    </div>');
+INSERT INTO `service` (`id`, `title`, `description`, `price`, `days`, `icon`, `icon_gray`, `type`) VALUES
+(1, 'Премиум-размещение', 'Ваше объявление будет показываться на самом заметном месте сайта &mdash; на главной странице, в категориях над обычными объявлениями и на страницах результатов поиска.<br /> Стоимость услуги &mdash; 5 евро в сутки.', 50, 1, '<svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>\r\n<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>', 0),
+(2, 'Выделить', 'Ваше объявление будет показываться на странице результатов поиска и в своей категории, оно отмечатся особой иконкой и отображаются другой цветовой гаммой. BONUS При этом оно поднимется на первое место в результатах поиска бесплатно. Цена - 3 евро/сутки.', 30, 1, '<svg width="32" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M1 12.5273C1 12.5273 6.39303 1.74121 15.8308 1.74121C25.2687 1.74121 30.6617 12.5273 30.6617 12.5273C30.6617 12.5273 25.2687 23.3134 15.8308 23.3134C6.39303 23.3134 1 12.5273 1 12.5273Z" fill="#F5AA01"/>\r\n<path d="M15.8308 16.5721C18.0647 16.5721 19.8756 14.7611 19.8756 12.5273C19.8756 10.2934 18.0647 8.4825 15.8308 8.4825C13.597 8.4825 11.7861 10.2934 11.7861 12.5273C11.7861 14.7611 13.597 16.5721 15.8308 16.5721Z" fill="#F5AA01"/>\r\n<path d="M1 12.5273C1 12.5273 6.39303 1.74121 15.8308 1.74121C25.2687 1.74121 30.6617 12.5273 30.6617 12.5273C30.6617 12.5273 25.2687 23.3134 15.8308 23.3134C6.39303 23.3134 1 12.5273 1 12.5273Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M15.8308 16.5721C18.0647 16.5721 19.8756 14.7611 19.8756 12.5273C19.8756 10.2934 18.0647 8.4825 15.8308 8.4825C13.597 8.4825 11.7861 10.2934 11.7861 12.5273C11.7861 14.7611 13.597 16.5721 15.8308 16.5721Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>', 0),
+(3, 'Поднять', 'Ваше объявление поднимется на первое место в результатах поиска, как если бы оно было только что подано на сайт. BONUS На следующий день, в это же время, оно будет поднято ещё раз бесплатно. <br /> Стоимость услуги&nbsp;20 грн/сутки.', 20, 1, '<svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M14.5 28C21.9558 28 28 21.9558 28 14.5C28 7.04416 21.9558 1 14.5 1C7.04416 1 1 7.04416 1 14.5C1 21.9558 7.04416 28 14.5 28Z" fill="#F5AA01"/>\r\n<path d="M19.9 14.5L14.5 9.1L9.1 14.5" fill="#F5AA01"/>\r\n<path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                                <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>', 0),
+(4, 'Спецпредложение', NULL, 2.99, 7, '<svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M16 23.2757C19.7656 23.2757 22.8182 20.2231 22.8182 16.4575C22.8182 12.6919 19.7656 9.63934 16 9.63934C12.2344 9.63934 9.18182 12.6919 9.18182 16.4575C9.18182 20.2231 12.2344 23.2757 16 23.2757Z" fill="#F5AA01"/>\r\n<path d="M16 1.45752V4.18479M16 28.7302V31.4575M5.39091 5.84843L7.32727 7.78479M24.6727 25.1302L26.6091 27.0666M1 16.4575H3.72727M28.2727 16.4575H31M5.39091 27.0666L7.32727 25.1302M24.6727 7.78479L26.6091 5.84843M22.8182 16.4575C22.8182 20.2231 19.7656 23.2757 16 23.2757C12.2344 23.2757 9.18182 20.2231 9.18182 16.4575C9.18182 12.6919 12.2344 9.63934 16 9.63934C19.7656 9.63934 22.8182 12.6919 22.8182 16.4575Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<div class="button">\r\n                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>\r\n                                                                        7\r\n                                                                    </div>', 0);
 
 -- --------------------------------------------------------
 
@@ -16451,6 +16513,27 @@ INSERT INTO `settings` (`id`, `user_default_group`, `user_advert_limit_text`, `s
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `shape`
+--
+
+CREATE TABLE `shape` (
+  `id` int(11) NOT NULL,
+  `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `shape`
+--
+
+INSERT INTO `shape` (`id`, `title`) VALUES
+(1, 'Новый'),
+(2, 'С пробегом'),
+(3, 'Не требует ремонта'),
+(4, 'Требуется ремонт');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `textblock`
 --
 
@@ -16477,9 +16560,6 @@ CREATE TABLE `translation` (
   `id` int(11) NOT NULL,
   `locale_id` int(11) DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
-  `value` longtext COLLATE utf8_unicode_ci,
-  `selltype_id` int(11) DEFAULT NULL,
-  `mark_id` int(11) DEFAULT NULL,
   `filter_id` int(11) DEFAULT NULL,
   `filter_value_id` int(11) DEFAULT NULL,
   `order_status_id` int(11) DEFAULT NULL,
@@ -16489,162 +16569,164 @@ CREATE TABLE `translation` (
   `modification_id` int(11) DEFAULT NULL,
   `generation_id` int(11) DEFAULT NULL,
   `pack_id` int(11) DEFAULT NULL,
-  `rate_id` int(11) DEFAULT NULL
+  `rate_id` int(11) DEFAULT NULL,
+  `shape_id` int(11) DEFAULT NULL,
+  `value` longtext COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `translation`
 --
 
-INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `value`, `selltype_id`, `mark_id`, `filter_id`, `filter_value_id`, `order_status_id`, `region_id`, `city_id`, `service_id`, `modification_id`, `generation_id`, `pack_id`, `rate_id`) VALUES
-(26, 1, NULL, 'Rīga', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(27, 2, NULL, 'Рига', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(32, 1, 27, 'Легковые', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(33, 2, 27, 'Легковые', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(56, 1, NULL, 'Pārdošana', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(57, 2, NULL, 'Продам', 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(58, 1, NULL, 'Pērciet', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(59, 2, NULL, 'Куплю', 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(60, 1, NULL, 'Īre', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(61, 2, NULL, 'Аренда', 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(62, 1, NULL, 'Apmaiņa', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(63, 2, NULL, 'Обмен', 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(64, 1, NULL, 'Pieprasījums/meklēšana', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(65, 2, NULL, 'Спрос/Ищу', 10, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(66, 1, NULL, 'Es pieņemšu dāvanu', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(67, 2, NULL, 'Приму в дар', 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(68, 1, NULL, 'Es atdošu par neko', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(69, 2, NULL, 'Отдам даром', 12, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, 1, NULL, 'Pakalpojumi', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(71, 2, NULL, 'Услуги', 14, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(78, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(79, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(80, 1, NULL, 'Augstākā izmitināšana', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
-(81, 2, NULL, 'Премиум-размещение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL),
-(82, 1, NULL, 'Izcelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL),
-(83, 2, NULL, 'Выделить', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL),
-(84, 1, NULL, 'Pacelt', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL),
-(85, 2, NULL, 'Поднять', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL),
-(110, 1, NULL, 'Apstrādē', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(111, 2, NULL, 'В обработке', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(112, 1, NULL, 'Fine, es iesaku', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(113, 2, NULL, 'Отлично, рекомендую', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(114, 1, 28, 'Audi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(115, 2, 28, 'Audi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(118, 1, NULL, 'Двигатель', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(119, 2, NULL, 'Двигатель', NULL, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(120, 1, NULL, 'Бензин', NULL, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(121, 2, NULL, 'Бензин', NULL, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(122, 1, NULL, 'Дизель', NULL, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(123, 2, NULL, 'Дизель', NULL, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(124, 1, NULL, 'Привод', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(125, 2, NULL, 'Привод', NULL, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(126, 1, NULL, 'Передний', NULL, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(127, 2, NULL, 'Передний', NULL, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(128, 1, NULL, 'Задний', NULL, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(129, 2, NULL, 'Задний', NULL, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(130, 1, NULL, 'Полный', NULL, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(131, 2, NULL, 'Полный', NULL, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(132, 1, NULL, 'Коробка передач', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(133, 2, NULL, 'Коробка передач', NULL, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(134, 1, NULL, 'Механическая', NULL, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(135, 2, NULL, 'Механическая', NULL, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(136, 1, NULL, 'Автоматическая', NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(137, 2, NULL, 'Автоматическая', NULL, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(138, 1, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(139, 2, NULL, 'Роботизированная', NULL, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(140, 1, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(141, 2, NULL, 'Вариатор', NULL, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(144, 1, NULL, 'Тип кузова', NULL, NULL, 19, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(145, 2, NULL, 'Тип кузова', NULL, NULL, 19, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(146, 1, NULL, 'Седан', NULL, NULL, NULL, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(147, 2, NULL, 'Седан', NULL, NULL, NULL, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(148, 1, NULL, 'Хэчбек 3 дв.', NULL, NULL, NULL, 68, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(149, 2, NULL, 'Хэчбек 3 дв.', NULL, NULL, NULL, 68, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(150, 1, NULL, 'Хэчбек 5 дв.', NULL, NULL, NULL, 69, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(151, 2, NULL, 'Хэчбек 5 дв.', NULL, NULL, NULL, 69, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(152, 1, NULL, 'Универсал 5 дв.', NULL, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(153, 2, NULL, 'Универсал 5 дв.', NULL, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(154, 1, NULL, 'Кабриолет', NULL, NULL, NULL, 71, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(155, 2, NULL, 'Кабриолет', NULL, NULL, NULL, 71, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(156, 1, 251, 'Focus', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(157, 2, 251, 'Focus', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(158, 1, NULL, 'Цвет', NULL, NULL, 20, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(159, 2, NULL, 'Цвет', NULL, NULL, 20, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(160, 1, NULL, 'Белый', NULL, NULL, NULL, 72, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(161, 2, NULL, 'Белый', NULL, NULL, NULL, 72, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(162, 1, NULL, 'Черный', NULL, NULL, NULL, 73, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(163, 2, NULL, 'Черный', NULL, NULL, NULL, 73, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(164, 1, NULL, 'Желтый', NULL, NULL, NULL, 74, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(165, 2, NULL, 'Желтый', NULL, NULL, NULL, 74, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(166, 1, NULL, 'Фиолетовый', NULL, NULL, NULL, 75, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(167, 2, NULL, 'Фиолетовый', NULL, NULL, NULL, 75, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(168, 1, NULL, 'Зеленый', NULL, NULL, NULL, 76, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(169, 2, NULL, 'Зеленый', NULL, NULL, NULL, 76, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(170, 1, NULL, 'Комплектация', NULL, NULL, 22, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(171, 2, NULL, 'Комплектация', NULL, NULL, 22, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(172, 1, NULL, 'Гидроусилитель руля', NULL, NULL, NULL, 77, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(173, 2, NULL, 'Гидроусилитель руля', NULL, NULL, NULL, 77, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(174, 1, NULL, 'Датчик дождя', NULL, NULL, NULL, 78, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(175, 2, NULL, 'Датчик дождя', NULL, NULL, NULL, 78, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(176, 1, NULL, 'Спорт-обвес', NULL, NULL, NULL, 79, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(177, 2, NULL, 'Спорт-обвес', NULL, NULL, NULL, 79, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(178, 1, NULL, 'Кондиционер', NULL, NULL, NULL, 80, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(179, 2, NULL, 'Кондиционер', NULL, NULL, NULL, 80, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(180, 1, NULL, 'Салон', NULL, NULL, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(181, 2, NULL, 'Салон', NULL, NULL, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(182, 1, NULL, 'Кожаный салон', NULL, NULL, NULL, 81, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(183, 2, NULL, 'Кожаный салон', NULL, NULL, NULL, 81, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(184, 1, NULL, 'Полокотники', NULL, NULL, NULL, 82, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(185, 2, NULL, 'Полокотники', NULL, NULL, NULL, 82, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(186, 1, NULL, 'Хлодильник', NULL, NULL, NULL, 83, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(187, 2, NULL, 'Хлодильник', NULL, NULL, NULL, 83, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(188, 1, NULL, 'Шторки на окнах', NULL, NULL, NULL, 84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(189, 2, NULL, 'Шторки на окнах', NULL, NULL, NULL, 84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(190, 1, NULL, 'Руль', NULL, NULL, 24, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(191, 2, NULL, 'Руль', NULL, NULL, 24, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(192, 1, NULL, 'Регулируемый', NULL, NULL, NULL, 85, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(193, 2, NULL, 'Регулируемый', NULL, NULL, NULL, 85, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(194, 1, NULL, 'Многофункциональный', NULL, NULL, NULL, 86, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(195, 2, NULL, 'Многофункциональный', NULL, NULL, NULL, 86, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(196, 1, NULL, 'С обогревом', NULL, NULL, NULL, 87, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(197, 2, NULL, 'С обогревом', NULL, NULL, NULL, 87, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(198, 1, NULL, 'Спортивный', NULL, NULL, NULL, 88, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(199, 2, NULL, 'Спортивный', NULL, NULL, NULL, 88, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(200, 1, NULL, 'Сидения', NULL, NULL, 25, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(201, 2, NULL, 'Сидения', NULL, NULL, 25, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(202, 1, NULL, 'Эл. регулируемые', NULL, NULL, NULL, 89, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(203, 2, NULL, 'Эл. регулируемые', NULL, NULL, NULL, 89, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(204, 1, NULL, 'Спортивные', NULL, NULL, NULL, 90, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(205, 2, NULL, 'Спортивные', NULL, NULL, NULL, 90, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(206, 1, NULL, 'С массажем', NULL, NULL, NULL, 91, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(207, 2, NULL, 'С массажем', NULL, NULL, NULL, 91, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(208, 1, NULL, 'С обогревом', NULL, NULL, NULL, 92, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(209, 2, NULL, 'С обогревом', NULL, NULL, NULL, 92, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(210, 1, NULL, 'Espana', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(211, 2, NULL, 'Испания', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-(212, 1, NULL, '<span class="tabMulNumber">x20</span><span class="tabTitle">Увеличение<br/>звонков</span>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL),
-(213, 2, NULL, '<span class="tabMulNumber">x20</span><span class="tabTitle">Увеличение<br/>звонков</span>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL),
-(214, 1, NULL, 'Спецпредложение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL),
-(215, 2, NULL, 'Спецпредложение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL),
-(216, 1, NULL, '<span class="tabMulNumber">x10</span><span class="tabTitle">Увеличение<br/>звонков</span>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL),
-(217, 2, NULL, '<span class="tabMulNumber">x10</span><span class="tabTitle">Увеличение<br/>звонков</span>', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL),
-(218, 1, NULL, '1 año de publicación TdC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1),
-(219, 2, NULL, '1 año de publicación TdC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1),
-(220, 1, NULL, '3 años de publicación TdC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2),
-(221, 2, NULL, '3 años de publicación TdC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2),
-(222, 1, NULL, '5 años de publicación TdC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3),
-(223, 2, NULL, '5 años de publicación TdC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3),
-(224, 1, NULL, 'Estándar', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4),
-(225, 2, NULL, 'Estándar', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4),
-(226, 1, NULL, 'Avanzado', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5),
-(227, 2, NULL, 'Avanzado', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5),
-(228, 1, NULL, 'Experimentado', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6),
-(229, 2, NULL, 'Experimentado', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6),
-(230, 1, NULL, 'Profesional', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7),
-(231, 2, NULL, 'Profesional', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7),
-(232, 1, NULL, 'Supremo', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8),
-(233, 2, NULL, 'Supremo', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8);
+INSERT INTO `translation` (`id`, `locale_id`, `category_id`, `filter_id`, `filter_value_id`, `order_status_id`, `region_id`, `city_id`, `service_id`, `modification_id`, `generation_id`, `pack_id`, `rate_id`, `shape_id`, `value`) VALUES
+(1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Rīga'),
+(2, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Рига'),
+(3, 1, 27, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Легковые'),
+(4, 2, 27, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Легковые'),
+(5, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Pārdošana'),
+(6, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Продам'),
+(7, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Pērciet'),
+(8, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Куплю'),
+(9, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Īre'),
+(10, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Аренда'),
+(11, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Apmaiņa'),
+(12, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Обмен'),
+(13, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Pieprasījums/meklēšana'),
+(14, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Спрос/Ищу'),
+(15, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Es pieņemšu dāvanu'),
+(16, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Приму в дар'),
+(17, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Es atdošu par neko'),
+(18, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Отдам даром'),
+(19, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Pakalpojumi'),
+(20, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Услуги'),
+(21, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Augstākā izmitināšana'),
+(22, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Премиум-размещение'),
+(23, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, 'Augstākā izmitināšana'),
+(24, 2, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, 'Премиум-размещение'),
+(25, 1, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, 'Izcelt'),
+(26, 2, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, NULL, NULL, NULL, 'Выделить'),
+(27, 1, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL, 'Pacelt'),
+(28, 2, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, NULL, NULL, NULL, 'Поднять'),
+(29, 1, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Apstrādē'),
+(30, 2, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'В обработке'),
+(31, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Fine, es iesaku'),
+(32, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Отлично, рекомендую'),
+(33, 1, 28, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Audi'),
+(34, 2, 28, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Audi'),
+(35, 1, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Двигатель'),
+(36, 2, NULL, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Двигатель'),
+(37, 1, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Бензин'),
+(38, 2, NULL, NULL, 58, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Бензин'),
+(39, 1, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Дизель'),
+(40, 2, NULL, NULL, 59, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Дизель'),
+(41, 1, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Привод'),
+(42, 2, NULL, 17, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Привод'),
+(43, 1, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Передний'),
+(44, 2, NULL, NULL, 60, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Передний'),
+(45, 1, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Задний'),
+(46, 2, NULL, NULL, 61, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Задний'),
+(47, 1, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Полный'),
+(48, 2, NULL, NULL, 62, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Полный'),
+(49, 1, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Коробка передач'),
+(50, 2, NULL, 18, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Коробка передач'),
+(51, 1, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Механическая'),
+(52, 2, NULL, NULL, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Механическая'),
+(53, 1, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Автоматическая'),
+(54, 2, NULL, NULL, 64, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Автоматическая'),
+(55, 1, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Роботизированная'),
+(56, 2, NULL, NULL, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Роботизированная'),
+(57, 1, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Вариатор'),
+(58, 2, NULL, NULL, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Вариатор'),
+(59, 1, NULL, 19, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Тип кузова'),
+(60, 2, NULL, 19, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Тип кузова'),
+(61, 1, NULL, NULL, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Седан'),
+(62, 2, NULL, NULL, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Седан'),
+(63, 1, NULL, NULL, 68, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Хэчбек 3 дв.'),
+(64, 2, NULL, NULL, 68, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Хэчбек 3 дв.'),
+(65, 1, NULL, NULL, 69, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Хэчбек 5 дв.'),
+(66, 2, NULL, NULL, 69, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Хэчбек 5 дв.'),
+(67, 1, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Универсал 5 дв.'),
+(68, 2, NULL, NULL, 70, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Универсал 5 дв.'),
+(69, 1, NULL, NULL, 71, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Кабриолет'),
+(70, 2, NULL, NULL, 71, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Кабриолет'),
+(71, 1, 251, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Focus'),
+(72, 2, 251, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Focus'),
+(73, 1, NULL, 20, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Цвет'),
+(74, 2, NULL, 20, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Цвет'),
+(75, 1, NULL, NULL, 72, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Белый'),
+(76, 2, NULL, NULL, 72, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Белый'),
+(77, 1, NULL, NULL, 73, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Черный'),
+(78, 2, NULL, NULL, 73, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Черный'),
+(79, 1, NULL, NULL, 74, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Желтый'),
+(80, 2, NULL, NULL, 74, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Желтый'),
+(81, 1, NULL, NULL, 75, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Фиолетовый'),
+(82, 2, NULL, NULL, 75, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Фиолетовый'),
+(83, 1, NULL, NULL, 76, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Зеленый'),
+(84, 2, NULL, NULL, 76, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Зеленый'),
+(85, 1, NULL, 22, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Комплектация'),
+(86, 2, NULL, 22, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Комплектация'),
+(87, 1, NULL, NULL, 77, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Гидроусилитель руля'),
+(88, 2, NULL, NULL, 77, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Гидроусилитель руля'),
+(89, 1, NULL, NULL, 78, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Датчик дождя'),
+(90, 2, NULL, NULL, 78, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Датчик дождя'),
+(91, 1, NULL, NULL, 79, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Спорт-обвес'),
+(92, 2, NULL, NULL, 79, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Спорт-обвес'),
+(93, 1, NULL, NULL, 80, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Кондиционер'),
+(94, 2, NULL, NULL, 80, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Кондиционер'),
+(95, 1, NULL, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Салон'),
+(96, 2, NULL, 23, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Салон'),
+(97, 1, NULL, NULL, 81, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Кожаный салон'),
+(98, 2, NULL, NULL, 81, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Кожаный салон'),
+(99, 1, NULL, NULL, 82, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Полокотники'),
+(100, 2, NULL, NULL, 82, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Полокотники'),
+(101, 1, NULL, NULL, 83, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Хлодильник'),
+(102, 2, NULL, NULL, 83, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Хлодильник'),
+(103, 1, NULL, NULL, 84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Шторки на окнах'),
+(104, 2, NULL, NULL, 84, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Шторки на окнах'),
+(105, 1, NULL, 24, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Руль'),
+(106, 2, NULL, 24, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Руль'),
+(107, 1, NULL, NULL, 85, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Регулируемый'),
+(108, 2, NULL, NULL, 85, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Регулируемый'),
+(109, 1, NULL, NULL, 86, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Многофункциональный'),
+(110, 2, NULL, NULL, 86, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Многофункциональный'),
+(111, 1, NULL, NULL, 87, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'С обогревом'),
+(112, 2, NULL, NULL, 87, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'С обогревом'),
+(113, 1, NULL, NULL, 88, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Спортивный'),
+(114, 2, NULL, NULL, 88, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Спортивный'),
+(115, 1, NULL, 25, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Сидения'),
+(116, 2, NULL, 25, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Сидения'),
+(117, 1, NULL, NULL, 89, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Эл. регулируемые'),
+(118, 2, NULL, NULL, 89, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Эл. регулируемые'),
+(119, 1, NULL, NULL, 90, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Спортивные'),
+(120, 2, NULL, NULL, 90, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Спортивные'),
+(121, 1, NULL, NULL, 91, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'С массажем'),
+(122, 2, NULL, NULL, 91, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'С массажем'),
+(123, 1, NULL, NULL, 92, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'С обогревом'),
+(124, 2, NULL, NULL, 92, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'С обогревом'),
+(125, 1, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Espana'),
+(126, 2, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Испания'),
+(127, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, '<span class="tabMulNumber">x20</span><span class="tabTitle">Увеличение<br/>звонков</span>'),
+(128, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL, '<span class="tabMulNumber">x20</span><span class="tabTitle">Увеличение<br/>звонков</span>'),
+(129, 1, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL, NULL, 'Спецпредложение'),
+(130, 2, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, NULL, NULL, NULL, NULL, 'Спецпредложение'),
+(131, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, '<span class="tabMulNumber">x10</span><span class="tabTitle">Увеличение<br/>звонков</span>'),
+(132, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, NULL, '<span class="tabMulNumber">x10</span><span class="tabTitle">Увеличение<br/>звонков</span>'),
+(133, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '1 año de publicación TdC'),
+(134, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, '1 año de publicación TdC'),
+(135, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, '3 años de publicación TdC'),
+(136, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, '3 años de publicación TdC'),
+(137, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '5 años de publicación TdC'),
+(138, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 3, NULL, '5 años de publicación TdC'),
+(139, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, 'Estándar'),
+(140, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 4, NULL, 'Estándar'),
+(141, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, 'Avanzado'),
+(142, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 5, NULL, 'Avanzado'),
+(143, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6, NULL, 'Experimentado'),
+(144, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 6, NULL, 'Experimentado'),
+(145, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, NULL, 'Profesional'),
+(146, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 7, NULL, 'Profesional'),
+(147, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8, NULL, 'Supremo'),
+(148, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 8, NULL, 'Supremo');
 
 -- --------------------------------------------------------
 
@@ -16750,15 +16832,17 @@ CREATE TABLE `workinfo` (
   `work_start` time DEFAULT NULL,
   `work_stop` time DEFAULT NULL,
   `break_start` time DEFAULT NULL,
-  `break_stop` time DEFAULT NULL
+  `break_stop` time DEFAULT NULL,
+  `dealer_salon_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `workinfo`
 --
 
-INSERT INTO `workinfo` (`id`, `dealer_id`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `full_day`, `is_wokdays`, `is_holidays`, `is_alldays`, `work_start`, `work_stop`, `break_start`, `break_stop`) VALUES
-(1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, '09:00:00', '18:00:00', '13:00:00', '14:00:00');
+INSERT INTO `workinfo` (`id`, `dealer_id`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `full_day`, `is_wokdays`, `is_holidays`, `is_alldays`, `work_start`, `work_stop`, `break_start`, `break_stop`, `dealer_salon_id`) VALUES
+(1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, '09:00:00', '18:00:00', '13:00:00', '14:00:00', NULL),
+(7, NULL, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, '00:00:00', '00:00:00', '00:00:00', '00:00:00', 6);
 
 --
 -- Индексы сохранённых таблиц
@@ -16775,7 +16859,18 @@ ALTER TABLE `banner`
 --
 ALTER TABLE `bill`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_7A2119E3A76ED395` (`user_id`);
+  ADD KEY `IDX_7A2119E3A76ED395` (`user_id`),
+  ADD KEY `IDX_7A2119E3BC999F9F` (`rate_id`),
+  ADD KEY `IDX_7A2119E3D69DE08B` (`service_pack_id`),
+  ADD KEY `IDX_7A2119E34584665A` (`product_id`);
+
+--
+-- Индексы таблицы `bill_product_service`
+--
+ALTER TABLE `bill_product_service`
+  ADD PRIMARY KEY (`bill_id`,`product_service_id`),
+  ADD KEY `IDX_E33BB9231A8C12F5` (`bill_id`),
+  ADD KEY `IDX_E33BB9237E3BF6CD` (`product_service_id`);
 
 --
 -- Индексы таблицы `bill_service_price`
@@ -16898,6 +16993,20 @@ ALTER TABLE `dealer_phone`
   ADD KEY `IDX_693903A31B55EFAB` (`dealer_info_id`);
 
 --
+-- Индексы таблицы `dealer_salon`
+--
+ALTER TABLE `dealer_salon`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_DF1E60691B55EFAB` (`dealer_info_id`);
+
+--
+-- Индексы таблицы `dealer_salon_phone`
+--
+ALTER TABLE `dealer_salon_phone`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_4EAD003FBEB56384` (`dealer_salon_id`);
+
+--
 -- Индексы таблицы `favorite_products`
 --
 ALTER TABLE `favorite_products`
@@ -16985,23 +17094,11 @@ ALTER TABLE `job_category`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `liqpay`
---
-ALTER TABLE `liqpay`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Индексы таблицы `locale`
 --
 ALTER TABLE `locale`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `UNIQ_4180C69838248176` (`currency_id`);
-
---
--- Индексы таблицы `mark`
---
-ALTER TABLE `mark`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `message`
@@ -17069,12 +17166,11 @@ ALTER TABLE `pages_banners`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_D34A04AD1919B217` (`pack_id`),
   ADD KEY `IDX_D34A04AD12469DE2` (`category_id`),
   ADD KEY `IDX_D34A04ADA76ED395` (`user_id`),
   ADD KEY `IDX_D34A04AD98260155` (`region_id`),
   ADD KEY `IDX_D34A04AD8BAC62AF` (`city_id`),
-  ADD KEY `IDX_D34A04AD5EBADE83` (`selltype_id`);
+  ADD KEY `IDX_D34A04AD9A924045` (`city_code_id`);
 
 --
 -- Индексы таблицы `product_filters`
@@ -17090,6 +17186,21 @@ ALTER TABLE `product_filters`
 ALTER TABLE `product_fotos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_6AD87E9B4584665A` (`product_id`);
+
+--
+-- Индексы таблицы `product_info`
+--
+ALTER TABLE `product_info`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_466113F64584665A` (`product_id`),
+  ADD KEY `IDX_466113F6553A6EC4` (`generation_id`),
+  ADD KEY `IDX_466113F6E7EC5785` (`board_id`),
+  ADD KEY `IDX_466113F63145108E` (`gas_type_id`),
+  ADD KEY `IDX_466113F62DBF1AFE` (`gas_transmission_id`),
+  ADD KEY `IDX_466113F632CA4F08` (`gear_type_id`),
+  ADD KEY `IDX_466113F64A605127` (`modification_id`),
+  ADD KEY `IDX_466113F67ADA1FB5` (`color_id`),
+  ADD KEY `IDX_466113F650266CBB` (`shape_id`);
 
 --
 -- Индексы таблицы `product_options`
@@ -17136,8 +17247,8 @@ ALTER TABLE `product_reviews`
 --
 ALTER TABLE `product_service`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_304481624584665A` (`product_id`),
-  ADD KEY `IDX_30448162ED5CA9E6` (`service_id`);
+  ADD KEY `IDX_30448162ED5CA9E6` (`service_id`),
+  ADD KEY `IDX_304481624584665A` (`product_id`);
 
 --
 -- Индексы таблицы `rate`
@@ -17175,8 +17286,7 @@ ALTER TABLE `review`
   ADD UNIQUE KEY `UNIQ_794381C6AA334807` (`answer_id`),
   ADD UNIQUE KEY `UNIQ_794381C6AB0FA336` (`answer_to_id`),
   ADD KEY `IDX_794381C6A76ED395` (`user_id`),
-  ADD KEY `IDX_794381C6156E8682` (`user_target_id`),
-  ADD KEY `IDX_794381C64584665A` (`product_id`);
+  ADD KEY `IDX_794381C6156E8682` (`user_target_id`);
 
 --
 -- Индексы таблицы `role`
@@ -17202,12 +17312,6 @@ ALTER TABLE `role_service`
   ADD KEY `IDX_5D503F29ED5CA9E6` (`service_id`);
 
 --
--- Индексы таблицы `selltype`
---
-ALTER TABLE `selltype`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Индексы таблицы `service`
 --
 ALTER TABLE `service`
@@ -17231,6 +17335,12 @@ ALTER TABLE `settings`
   ADD KEY `IDX_E545A0C5C6B58E54` (`default_category_id`);
 
 --
+-- Индексы таблицы `shape`
+--
+ALTER TABLE `shape`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `textblock`
 --
 ALTER TABLE `textblock`
@@ -17243,8 +17353,6 @@ ALTER TABLE `translation`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_B469456FE559DFD1` (`locale_id`),
   ADD KEY `IDX_B469456F12469DE2` (`category_id`),
-  ADD KEY `IDX_B469456F5EBADE83` (`selltype_id`),
-  ADD KEY `IDX_B469456F4290F12B` (`mark_id`),
   ADD KEY `IDX_B469456FD395B25E` (`filter_id`),
   ADD KEY `IDX_B469456FC44FBE02` (`filter_value_id`),
   ADD KEY `IDX_B469456FD7707B45` (`order_status_id`),
@@ -17254,7 +17362,8 @@ ALTER TABLE `translation`
   ADD KEY `IDX_B469456F4A605127` (`modification_id`),
   ADD KEY `IDX_B469456F553A6EC4` (`generation_id`),
   ADD KEY `IDX_B469456F1919B217` (`pack_id`),
-  ADD KEY `IDX_B469456FBC999F9F` (`rate_id`);
+  ADD KEY `IDX_B469456FBC999F9F` (`rate_id`),
+  ADD KEY `IDX_B469456F50266CBB` (`shape_id`);
 
 --
 -- Индексы таблицы `users`
@@ -17285,7 +17394,8 @@ ALTER TABLE `user_role`
 --
 ALTER TABLE `workinfo`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_FC8C7F31249E6EA1` (`dealer_id`);
+  ADD UNIQUE KEY `UNIQ_FC8C7F31249E6EA1` (`dealer_id`),
+  ADD UNIQUE KEY `UNIQ_FC8C7F31BEB56384` (`dealer_salon_id`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -17300,7 +17410,7 @@ ALTER TABLE `banner`
 -- AUTO_INCREMENT для таблицы `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT для таблицы `blacklist`
 --
@@ -17362,6 +17472,16 @@ ALTER TABLE `dealer_info`
 ALTER TABLE `dealer_phone`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
+-- AUTO_INCREMENT для таблицы `dealer_salon`
+--
+ALTER TABLE `dealer_salon`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблицы `dealer_salon_phone`
+--
+ALTER TABLE `dealer_salon_phone`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
 -- AUTO_INCREMENT для таблицы `favorite_products`
 --
 ALTER TABLE `favorite_products`
@@ -17417,20 +17537,10 @@ ALTER TABLE `job`
 ALTER TABLE `job_category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
--- AUTO_INCREMENT для таблицы `liqpay`
---
-ALTER TABLE `liqpay`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
 -- AUTO_INCREMENT для таблицы `locale`
 --
 ALTER TABLE `locale`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT для таблицы `mark`
---
-ALTER TABLE `mark`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `message`
 --
@@ -17470,12 +17580,17 @@ ALTER TABLE `page`
 -- AUTO_INCREMENT для таблицы `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT для таблицы `product_fotos`
 --
 ALTER TABLE `product_fotos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `product_info`
+--
+ALTER TABLE `product_info`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT для таблицы `product_options`
 --
@@ -17500,7 +17615,7 @@ ALTER TABLE `product_reviews`
 -- AUTO_INCREMENT для таблицы `product_service`
 --
 ALTER TABLE `product_service`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `rate`
 --
@@ -17532,11 +17647,6 @@ ALTER TABLE `review`
 ALTER TABLE `role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
--- AUTO_INCREMENT для таблицы `selltype`
---
-ALTER TABLE `selltype`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
---
 -- AUTO_INCREMENT для таблицы `service`
 --
 ALTER TABLE `service`
@@ -17552,6 +17662,11 @@ ALTER TABLE `service_price`
 ALTER TABLE `settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
+-- AUTO_INCREMENT для таблицы `shape`
+--
+ALTER TABLE `shape`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT для таблицы `textblock`
 --
 ALTER TABLE `textblock`
@@ -17560,7 +17675,7 @@ ALTER TABLE `textblock`
 -- AUTO_INCREMENT для таблицы `translation`
 --
 ALTER TABLE `translation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=234;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
@@ -17575,7 +17690,7 @@ ALTER TABLE `user_info`
 -- AUTO_INCREMENT для таблицы `workinfo`
 --
 ALTER TABLE `workinfo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
@@ -17584,7 +17699,17 @@ ALTER TABLE `workinfo`
 -- Ограничения внешнего ключа таблицы `bill`
 --
 ALTER TABLE `bill`
-  ADD CONSTRAINT `FK_7A2119E3A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `FK_7A2119E34584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `FK_7A2119E3A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_7A2119E3BC999F9F` FOREIGN KEY (`rate_id`) REFERENCES `rate` (`id`),
+  ADD CONSTRAINT `FK_7A2119E3D69DE08B` FOREIGN KEY (`service_pack_id`) REFERENCES `pack` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `bill_product_service`
+--
+ALTER TABLE `bill_product_service`
+  ADD CONSTRAINT `FK_E33BB9231A8C12F5` FOREIGN KEY (`bill_id`) REFERENCES `bill` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_E33BB9237E3BF6CD` FOREIGN KEY (`product_service_id`) REFERENCES `product_service` (`id`) ON DELETE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `bill_service_price`
@@ -17679,6 +17804,18 @@ ALTER TABLE `dealer_info`
 --
 ALTER TABLE `dealer_phone`
   ADD CONSTRAINT `FK_693903A31B55EFAB` FOREIGN KEY (`dealer_info_id`) REFERENCES `dealer_info` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `dealer_salon`
+--
+ALTER TABLE `dealer_salon`
+  ADD CONSTRAINT `FK_DF1E60691B55EFAB` FOREIGN KEY (`dealer_info_id`) REFERENCES `dealer_info` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `dealer_salon_phone`
+--
+ALTER TABLE `dealer_salon_phone`
+  ADD CONSTRAINT `FK_4EAD003FBEB56384` FOREIGN KEY (`dealer_salon_id`) REFERENCES `dealer_salon` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `filter`
@@ -17794,10 +17931,9 @@ ALTER TABLE `pages_banners`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `FK_D34A04AD12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
-  ADD CONSTRAINT `FK_D34A04AD1919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`),
-  ADD CONSTRAINT `FK_D34A04AD5EBADE83` FOREIGN KEY (`selltype_id`) REFERENCES `selltype` (`id`),
   ADD CONSTRAINT `FK_D34A04AD8BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
   ADD CONSTRAINT `FK_D34A04AD98260155` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
+  ADD CONSTRAINT `FK_D34A04AD9A924045` FOREIGN KEY (`city_code_id`) REFERENCES `city_code` (`id`),
   ADD CONSTRAINT `FK_D34A04ADA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
@@ -17812,6 +17948,20 @@ ALTER TABLE `product_filters`
 --
 ALTER TABLE `product_fotos`
   ADD CONSTRAINT `FK_6AD87E9B4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `product_info`
+--
+ALTER TABLE `product_info`
+  ADD CONSTRAINT `FK_466113F62DBF1AFE` FOREIGN KEY (`gas_transmission_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_466113F63145108E` FOREIGN KEY (`gas_type_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_466113F632CA4F08` FOREIGN KEY (`gear_type_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_466113F64584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `FK_466113F64A605127` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`),
+  ADD CONSTRAINT `FK_466113F650266CBB` FOREIGN KEY (`shape_id`) REFERENCES `shape` (`id`),
+  ADD CONSTRAINT `FK_466113F6553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
+  ADD CONSTRAINT `FK_466113F67ADA1FB5` FOREIGN KEY (`color_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_466113F6E7EC5785` FOREIGN KEY (`board_id`) REFERENCES `generation_board` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `product_options`
@@ -17874,7 +18024,6 @@ ALTER TABLE `rate_service`
 --
 ALTER TABLE `review`
   ADD CONSTRAINT `FK_794381C6156E8682` FOREIGN KEY (`user_target_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `FK_794381C64584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   ADD CONSTRAINT `FK_794381C6A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `FK_794381C6AA334807` FOREIGN KEY (`answer_id`) REFERENCES `review` (`id`),
   ADD CONSTRAINT `FK_794381C6AB0FA336` FOREIGN KEY (`answer_to_id`) REFERENCES `review` (`id`);
@@ -17914,10 +18063,9 @@ ALTER TABLE `settings`
 ALTER TABLE `translation`
   ADD CONSTRAINT `FK_B469456F12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
   ADD CONSTRAINT `FK_B469456F1919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`),
-  ADD CONSTRAINT `FK_B469456F4290F12B` FOREIGN KEY (`mark_id`) REFERENCES `mark` (`id`),
   ADD CONSTRAINT `FK_B469456F4A605127` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`),
+  ADD CONSTRAINT `FK_B469456F50266CBB` FOREIGN KEY (`shape_id`) REFERENCES `shape` (`id`),
   ADD CONSTRAINT `FK_B469456F553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
-  ADD CONSTRAINT `FK_B469456F5EBADE83` FOREIGN KEY (`selltype_id`) REFERENCES `selltype` (`id`),
   ADD CONSTRAINT `FK_B469456F8BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
   ADD CONSTRAINT `FK_B469456F98260155` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
   ADD CONSTRAINT `FK_B469456FBC999F9F` FOREIGN KEY (`rate_id`) REFERENCES `rate` (`id`),
@@ -17947,7 +18095,8 @@ ALTER TABLE `user_role`
 -- Ограничения внешнего ключа таблицы `workinfo`
 --
 ALTER TABLE `workinfo`
-  ADD CONSTRAINT `FK_FC8C7F31249E6EA1` FOREIGN KEY (`dealer_id`) REFERENCES `dealer_info` (`id`);
+  ADD CONSTRAINT `FK_FC8C7F31249E6EA1` FOREIGN KEY (`dealer_id`) REFERENCES `dealer_info` (`id`),
+  ADD CONSTRAINT `FK_FC8C7F31BEB56384` FOREIGN KEY (`dealer_salon_id`) REFERENCES `dealer_salon` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -108,6 +108,11 @@ class DealerInfo
      * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\Workinfo", mappedBy="dealer", cascade={"persist"})
      */
     private $workinfo;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerSalon", mappedBy="dealerInfo")
+     */
+    private $salons;
 
     /**
      * Constructor
@@ -548,5 +553,38 @@ class DealerInfo
     public function getWorkinfo()
     {
         return $this->workinfo;
+    }
+
+    /**
+     * Add salons
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalon $salons
+     * @return DealerInfo
+     */
+    public function addSalon(\Dashboard\CommonBundle\Entity\DealerSalon $salons)
+    {
+        $this->salons[] = $salons;
+    
+        return $this;
+    }
+
+    /**
+     * Remove salons
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalon $salons
+     */
+    public function removeSalon(\Dashboard\CommonBundle\Entity\DealerSalon $salons)
+    {
+        $this->salons->removeElement($salons);
+    }
+
+    /**
+     * Get salons
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSalons()
+    {
+        return $this->salons;
     }
 }

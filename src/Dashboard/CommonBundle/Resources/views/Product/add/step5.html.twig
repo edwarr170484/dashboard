@@ -155,7 +155,7 @@
                                                                 {{ board.value }}
                                                             </div>
                                                             <div class="categoryAdvertType">
-                                                                {{ advertInfo.condition }}
+                                                                {{ shape.title }}
                                                             </div>
                                                             {% if advertInfo.garant %}
                                                                 <div class="categoryAdvertType garant">
@@ -333,10 +333,10 @@
                 <div class="addAdvertUserAgreement">
                     Нажимая на кнопку «Опубликовать объявление», вы принимаете условия <a href="">Пользовательского соглашения</a>
                 </div>
-                <button onclick="addAdvert('{{ locale.code }}','{% trans %}Заполните поля помеченный звездочкой{% endtrans %}')" id="addAdvertFinalButton">{% trans %}Разместить и оплатить <span>6,99</span> &euro;{% endtrans %}</button>
+                <button onclick="addAdvert('{{ locale.code }}','{% trans %}Заполните поля помеченный звездочкой{% endtrans %}', null)" id="addAdvertFinalButton">{% trans %}Разместить и оплатить <span>6,99</span> &euro;{% endtrans %}</button>
             </div> 
             <div class="cookieAlertButton nextStep gray">
-                <button onclick="">{% trans %}Сохранить как черновик{% endtrans %}</button>
+                <button onclick="addAdvert('{{ locale.code }}','{% trans %}Заполните поля помеченный звездочкой{% endtrans %}', 1)">{% trans %}Сохранить как черновик{% endtrans %}</button>
             </div>
     </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">

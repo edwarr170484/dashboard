@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table()
  * @ORM\Entity()
  */
-class Mark 
+class Shape
 {
     /**
      * @ORM\Column(type="integer")
@@ -21,11 +21,19 @@ class Mark
      * @ORM\Column(type="string", length=100)
      */
     private $title;
-
+    
     /**
-     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="mark", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="shape", cascade={"persist"})
      */
     private $translations;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -41,7 +49,7 @@ class Mark
      * Set title
      *
      * @param string $title
-     * @return Mark
+     * @return Shape
      */
     public function setTitle($title)
     {
@@ -59,19 +67,12 @@ class Mark
     {
         return $this->title;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Add translations
      *
      * @param \Dashboard\CommonBundle\Entity\Translation $translations
-     * @return Mark
+     * @return Shape
      */
     public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
     {

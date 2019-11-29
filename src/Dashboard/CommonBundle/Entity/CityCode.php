@@ -33,6 +33,11 @@ class CityCode
      */
     private $users;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Product", mappedBy="cityCode")
+     */
+    private $products;
+    
 
     /**
      * Get id
@@ -128,5 +133,38 @@ class CityCode
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add products
+     *
+     * @param \Dashboard\CommonBundle\Entity\Product $products
+     * @return CityCode
+     */
+    public function addProduct(\Dashboard\CommonBundle\Entity\Product $products)
+    {
+        $this->products[] = $products;
+    
+        return $this;
+    }
+
+    /**
+     * Remove products
+     *
+     * @param \Dashboard\CommonBundle\Entity\Product $products
+     */
+    public function removeProduct(\Dashboard\CommonBundle\Entity\Product $products)
+    {
+        $this->products->removeElement($products);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProducts()
+    {
+        return $this->products;
     }
 }

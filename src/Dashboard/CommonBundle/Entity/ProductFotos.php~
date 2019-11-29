@@ -27,21 +27,7 @@ class ProductFotos
      * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
      */
     private $foto;
-    
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
-     */
-    private $alt;
-    
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
-     */
-    private $title;
-    
-    /**
-     * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"null"})
-     */
-    private $sortorder;
+
 
     /**
      * Get id
@@ -57,12 +43,12 @@ class ProductFotos
      * Set foto
      *
      * @param string $foto
-     * @return ProductFoto
+     * @return ProductFotos
      */
     public function setFoto($foto)
     {
         $this->foto = $foto;
-
+    
         return $this;
     }
 
@@ -77,84 +63,15 @@ class ProductFotos
     }
 
     /**
-     * Set alt
-     *
-     * @param string $alt
-     * @return ProductFoto
-     */
-    public function setAlt($alt)
-    {
-        $this->alt = $alt;
-
-        return $this;
-    }
-
-    /**
-     * Get alt
-     *
-     * @return string 
-     */
-    public function getAlt()
-    {
-        return $this->alt;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return ProductFoto
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set sortorder
-     *
-     * @param integer $sortorder
-     * @return ProductFoto
-     */
-    public function setSortorder($sortorder)
-    {
-        $this->sortorder = $sortorder;
-
-        return $this;
-    }
-
-    /**
-     * Get sortorder
-     *
-     * @return integer 
-     */
-    public function getSortorder()
-    {
-        return $this->sortorder;
-    }
-
-    /**
      * Set product
      *
      * @param \Dashboard\CommonBundle\Entity\Product $product
-     * @return ProductFoto
+     * @return ProductFotos
      */
     public function setProduct(\Dashboard\CommonBundle\Entity\Product $product = null)
     {
         $this->product = $product;
-
+    
         return $this;
     }
 

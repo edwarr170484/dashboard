@@ -283,12 +283,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .searchBlockInner input:focus{border-bottom: 2px solid $black-text;}
 .searchBlockForm{border-left: 1px solid $gray-color;padding-top:1rem;padding-bottom:1rem;margin-left: 3rem;width: 100%;}
 .searchBlockInner button{width: 26px;height: 26px;display: block;position: absolute;top:50%;margin-top: -13px;right:30px;border:none;background: none;}
-.content-block-header h1
-{
-    color:$black-text;
-}
-.content-row{margin-top: 4rem}
-.content-row.aligned{@include flexBox(row,flex-start,center);flex-wrap: wrap}
+.content-block-header h1{color:$black-text;}
+.content-row{margin-top: 4rem;@include flexBox(row,flex-start,stretch);flex-wrap: wrap}
 .nav-tabs > li{margin-bottom: 0;}
 .categorySortFields{@include flexBox(row,space-between,center);padding-top: 10px;padding-bottom: 10px;padding-left: 30px;padding-right: 30px;}
 .categorySortParams{@include flexBox(row,flex-start,center);width: 100%;}
@@ -768,7 +764,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .formParameterField .change-avatar{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-left: 1.5rem;}
 .formParameterLabel sup{color:$orange-color;}
 .formParameterField input{border:1px solid #aaa;@include border-radius(2px);color:$black-text;width: 22rem;padding: 1.2rem;@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);height: auto;display: block;}
-.formParameterField .select-cover{width: 22rem;border:1px solid #aaa;@include border-radius(2px);}
+.formParameterField .select-cover{width: 22rem;border:1px solid #aaa;@include border-radius(2px);margin-bottom:0;}
 .formParemetersItem{@include flexBox(row,flex-start,center);padding-bottom: 1.6rem;}
 .formParameterField label{@include fontView("GothamProRegular",$input-black,1.6rem,2.2rem);margin-bottom: 0;font-weight: normal;}
 .formParameterField button{width: 22rem;margin-top: 2.4rem;}
@@ -942,6 +938,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountBlacklistUser:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
 .accountBlockHeaderTool button{border:none;background: #fff;@include border-radius(5px);@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));@include fontView("GothamProRegular",#EB5757,1.4rem,2.4rem);display: block;padding: 0.8rem 1.1rem;widows: 17rem;text-align:center;text-decoration:underline;}
 .accountBlockHeaderTool button:hover{text-decoration: none;}
+body.userAccount{background:#F9F9F9;}
 .userAccount .col-lg-10{padding-left: 4rem;}
 .accountBills{background: #fff;}
 .accountBill{@include flexBox(row,space-between,stretch);border-bottom: 1px solid #DFE1E5;padding:1.4rem 3rem;}
@@ -1202,8 +1199,16 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .formParameterField button#addDealerPhone{margin-top: 0;}
 #addDealerPhone:hover,#addDealerPhone:focus{background: $yellow-color;}
 #addDealerPhone:hover svg path,#addDealerPhone:focus svg path{stroke:#fff;}
+.formParameterField button.addObjectPhone{width: 3.8rem;height: 3.8rem;border:2px solid $yellow-color;@include border-radius(5px);@include flexBox(row,center,center);background: none;position: absolute;bottom:1.6rem;right:-4.5rem;}
+.formParameterField button.addObjectPhone{margin-top: 0;}
+.formParameterField button.addObjectPhone:hover,.formParameterField button.addObjectPhone:focus{background: $yellow-color;}
+.formParameterField button.addObjectPhone:hover svg path,.formParameterField button.addObjectPhone:focus svg path{stroke:#fff;}
+#addDealerSalonPhone{width: 3.8rem;height: 3.8rem;border:2px solid $yellow-color;@include border-radius(5px);@include flexBox(row,center,center);background: none;position: absolute;bottom:1.6rem;right:-4.5rem;}
+.formParameterField button#addDealerSalonPhone{margin-top: 0;}
+#addDealerSalonPhone:hover,#addDealerSalonPhone:focus{background: $yellow-color;}
+#addDealerSalonPhone:hover svg path,#addDealerSalonPhone:focus svg path{stroke:#fff;}
 .formParameterField{position: relative;}
-.dealerPhonesItem{padding-bottom: 1.6rem;}
+.dealerPhonesItem,.dealerSalonPhonesItem,.dealerSalonPhonesItemModal{padding-bottom: 1.6rem;}
 .form-control.dealerDescription{width: 66rem;height: 19.5rem;@include border-radius(2px);margin-bottom: 2rem;}
 .formParameterLabel span{display: block;@include fontView("GothamProRegular",#747474,1.3rem,1.2rem);}
 #dealerFotoTable > tbody > tr > td{padding: 1.7rem 1.9rem;border:none;background: none;}
@@ -1237,3 +1242,37 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .workdays li input.workTime{border:1px solid #AAAAAA;@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);padding: 11px 10px;padding-bottom: 10px;width: 63px;@include border-radius(2px);box-sizing: border-box;}
 .workdays li input.workTime:focus{border:1px solid #F5AA01;}
 .workdays li.space{@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);padding: 11px 10px;}
+.accountSettingsFormBlockHeader{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-bottom: 3rem;}
+.dealerSettingsPage{padding-top: 3rem;}
+.dealerSettingsPage .mapListItemImage{width:207px;}
+.dealerSettingsPage .mapListItemImage .mapListItemImageSrc{padding-bottom: 0;}
+.dealerSettingsPage .mapListItem{align-items: flex-start;}
+.dealerSettingsPage .mapListItemInfoName{font-size: 2.5rem;line-height: 3.2rem;padding-bottom: 2rem;}
+.dealerSettingsPage .mapListItemInfoText,.dealerSettingsPage .mapListItemInfoText a{font-size: 1.6rem;line-height: 2.2rem;}
+.dealerSettingsPage .mapListItemInfoText{padding-bottom: 1.5rem;}
+.dealerSettingsPage .mapListItemInfo{padding-left: 2.4rem;}
+.dealerSettingsPage .mapListItem{padding-top: 3rem;padding-bottom: 3rem;position: relative;}
+.mapListItemEditButton{position: absolute;top:3rem;right:0;}
+.mapListItemEditButton button{@include flexBox(row,flex-start,center);background: none;border:none;@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.mapListItemEditButton button svg{margin-right: 1.1rem;}
+#dealerAutoSalonsModal .modal-content, #dealerAutoSalonEditModal .modal-content{padding: 5rem 7rem;}
+.dealerSalonParams{@include flexBox(row,space-between,flex-start);}
+.formParemetersItem.salonModalParameters .formParameter{margin-right: 0;}
+.modal-footer-tools{@include flexBox(row,space-between, center);}
+.modal-footer-tools .mapListItemEditButton{position: relative;top: 0;left: 0;}
+.logotype.hide{display: none;}
+.mapListItemEditButton .accountAdvertFunctions.right{right: 0;top: 0;}
+.accountRatesInformationHeader{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-bottom: 2rem;}
+.accountRatesInformationList{@include flexBox(row,flex-start,center);padding-bottom: 9rem;}
+.accountRatesInformationListItem{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);@include flexBox(row,flex-start,center);padding-right: 2.8rem;}
+.accountRatesInformationListItem svg{margin-right: 1rem;}
+.accountRatesInformationListItem a{@include flexBox(row,center,center);}
+.mainPageFiltersTabs.dealerAccountRates{padding-top: 0;}
+.accountRatesInformationList.dealerAccountRates{padding-bottom: 7rem;}
+.dealerAccountRates .categoryRateDescription{width: 60%;}
+.categoryRateOrderButton{width: 20%;}
+.categoryRateOrderButton button{background: none;border:1px solid #222B2A;@include border-radius(3px);@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);padding: 1.2rem 1.1rem;width: 18rem;text-align: center;}
+.categoryRateOrderButton button:hover,.categoryRateOrderButton button:focus{background: $yellow-color;border:1px solid #AAAAAA;}
+.dealerAccountRates .tab-content{padding: 3rem 4rem;padding-top: 0;}
+.dealerAccountRatesDescription{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-top: 7rem;padding-bottom: 6rem;}
+.nav-tabs{border:none;}

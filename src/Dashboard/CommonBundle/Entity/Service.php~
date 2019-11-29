@@ -19,7 +19,7 @@ class Service
     private $id;
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
      */
     private $title;
     
@@ -34,24 +34,24 @@ class Service
     private $iconGray;
     
     /**
-     * @ORM\Column(type="text", nullable=true, options={"default":"0"})
+     * @ORM\Column(type="text", nullable=true, options={"default": null})
      */
     private $description;
     
     /**
-     * @ORM\Column(type="float", length=15, nullable=true, options={"default":"0"})
+     * @ORM\Column(type="float", length=15, nullable=true, options={"default": 0})
      */
     private $price;
     
     /**
-     * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"0"})
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
      */
     private $days;
     
-    /**
-     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\ProductService", mappedBy="service")
+     /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
      */
-    private $products;
+    private $type;
     
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="service", cascade={"persist"})
@@ -73,15 +73,15 @@ class Service
      */
     private $userRoles;
     
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->prices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->packServices = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userRoles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -103,7 +103,7 @@ class Service
     public function setTitle($title)
     {
         $this->title = $title;
-
+    
         return $this;
     }
 
@@ -126,7 +126,7 @@ class Service
     public function setIcon($icon)
     {
         $this->icon = $icon;
-
+    
         return $this;
     }
 
@@ -141,6 +141,29 @@ class Service
     }
 
     /**
+     * Set iconGray
+     *
+     * @param string $iconGray
+     * @return Service
+     */
+    public function setIconGray($iconGray)
+    {
+        $this->iconGray = $iconGray;
+    
+        return $this;
+    }
+
+    /**
+     * Get iconGray
+     *
+     * @return string 
+     */
+    public function getIconGray()
+    {
+        return $this->iconGray;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
@@ -149,7 +172,7 @@ class Service
     public function setDescription($description)
     {
         $this->description = $description;
-
+    
         return $this;
     }
 
@@ -172,7 +195,7 @@ class Service
     public function setPrice($price)
     {
         $this->price = $price;
-
+    
         return $this;
     }
 
@@ -195,7 +218,7 @@ class Service
     public function setDays($days)
     {
         $this->days = $days;
-
+    
         return $this;
     }
 
@@ -210,36 +233,26 @@ class Service
     }
 
     /**
-     * Add products
+     * Set type
      *
-     * @param \Dashboard\CommonBundle\Entity\ProductService $products
+     * @param integer $type
      * @return Service
      */
-    public function addProduct(\Dashboard\CommonBundle\Entity\ProductService $products)
+    public function setType($type)
     {
-        $this->products[] = $products;
-
+        $this->type = $type;
+    
         return $this;
     }
 
     /**
-     * Remove products
+     * Get type
      *
-     * @param \Dashboard\CommonBundle\Entity\ProductService $products
+     * @return integer 
      */
-    public function removeProduct(\Dashboard\CommonBundle\Entity\ProductService $products)
+    public function getType()
     {
-        $this->products->removeElement($products);
-    }
-
-    /**
-     * Get products
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProducts()
-    {
-        return $this->products;
+        return $this->type;
     }
 
     /**
@@ -251,7 +264,7 @@ class Service
     public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
     {
         $this->translations[] = $translations;
-
+    
         return $this;
     }
 
@@ -276,39 +289,6 @@ class Service
     }
 
     /**
-     * Add packServices
-     *
-     * @param \Dashboard\CommonBundle\Entity\PackService $packServices
-     * @return Service
-     */
-    public function addPackService(\Dashboard\CommonBundle\Entity\PackService $packServices)
-    {
-        $this->packServices[] = $packServices;
-
-        return $this;
-    }
-
-    /**
-     * Remove packServices
-     *
-     * @param \Dashboard\CommonBundle\Entity\PackService $packServices
-     */
-    public function removePackService(\Dashboard\CommonBundle\Entity\PackService $packServices)
-    {
-        $this->packServices->removeElement($packServices);
-    }
-
-    /**
-     * Get packServices
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPackServices()
-    {
-        return $this->packServices;
-    }
-
-    /**
      * Add prices
      *
      * @param \Dashboard\CommonBundle\Entity\ServicePrice $prices
@@ -317,7 +297,7 @@ class Service
     public function addPrice(\Dashboard\CommonBundle\Entity\ServicePrice $prices)
     {
         $this->prices[] = $prices;
-
+    
         return $this;
     }
 
@@ -342,6 +322,39 @@ class Service
     }
 
     /**
+     * Add packServices
+     *
+     * @param \Dashboard\CommonBundle\Entity\PackService $packServices
+     * @return Service
+     */
+    public function addPackService(\Dashboard\CommonBundle\Entity\PackService $packServices)
+    {
+        $this->packServices[] = $packServices;
+    
+        return $this;
+    }
+
+    /**
+     * Remove packServices
+     *
+     * @param \Dashboard\CommonBundle\Entity\PackService $packServices
+     */
+    public function removePackService(\Dashboard\CommonBundle\Entity\PackService $packServices)
+    {
+        $this->packServices->removeElement($packServices);
+    }
+
+    /**
+     * Get packServices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPackServices()
+    {
+        return $this->packServices;
+    }
+
+    /**
      * Add userRoles
      *
      * @param \Dashboard\CommonBundle\Entity\Role $userRoles
@@ -350,7 +363,7 @@ class Service
     public function addUserRole(\Dashboard\CommonBundle\Entity\Role $userRoles)
     {
         $this->userRoles[] = $userRoles;
-
+    
         return $this;
     }
 
@@ -372,28 +385,5 @@ class Service
     public function getUserRoles()
     {
         return $this->userRoles;
-    }
-
-    /**
-     * Set iconGray
-     *
-     * @param string $iconGray
-     * @return Service
-     */
-    public function setIconGray($iconGray)
-    {
-        $this->iconGray = $iconGray;
-    
-        return $this;
-    }
-
-    /**
-     * Get iconGray
-     *
-     * @return string 
-     */
-    public function getIconGray()
-    {
-        return $this->iconGray;
     }
 }

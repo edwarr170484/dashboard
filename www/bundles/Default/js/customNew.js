@@ -3,6 +3,8 @@ $(document).ready(function(){
     $(".mapListItems").mCustomScrollbar();
     $(".serviceInfo").mCustomScrollbar();
     
+    $(".change-avatar").click(function(){$(this).parent().find(".change-avatar-input").trigger("click");});
+    
     $("#selectAutoMark").click(function(){
         $(this).find("input").blur();
         $(".mapListItems").toggleClass("hide");
@@ -37,13 +39,20 @@ $(document).ready(function(){
         $(".dealerPhonesList").append(newForm);
     });
     
+    $("#addDealerSalonPhone").click(function(){
+        var prototype = $("#dealersalon_phones").data("prototype");
+        var count = $(".dealerSalonPhonesItem").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        $(".dealerSalonPhonesList").append(newForm);
+    });
+    
     $(".dealerAuto").click(function(){$(this).find('.dealerAutoInner').toggleClass('active');});
     
 });
 
-function resetWorkTimes(element){
+function resetWorkTimes(element, area){
     element.toggleClass('active');
-    $(".workdays").find('input[type="text"]').val("00:00");
+    area.find('input[type="text"]').val("00:00");
 }
 
 function selectWeekDays(element, area, dayClass){
@@ -250,4 +259,55 @@ function getMessages(conversationId, locale_code, element){
                 
         }
     });
+}
+
+function getSalonEditForm(salonId, locale_code){
+    $.ajax({
+        url: '/' + locale_code + '/account/dealer/editsalon/' + salonId,
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(data){
+            $("#dealerAutoSalonEditModal").html(data);
+            $("#dealerAutoSalonEditModal").modal();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+                
+        }
+    });
+}
+
+function deleteDealerSalon(salonId, locale_code, text){
+    if(confirm(text)){
+        $.ajax({
+            url: '/' + locale_code + '/account/dealer/deletesalon/' + salonId,
+            dataType: 'html',
+            beforeSend: function(){},
+            success: function(){
+                $("#dealerSalon" + salonId).remove();
+                $("#dealerAutoSalonEditModal").modal('hide');
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+
+            }
+        });
+    }
+}
+
+function deleteDealerSalonLogotype(salonId, text, locale_code){
+    if(confirm(text)){
+        $.ajax({
+            url: '/' + locale_code + '/account/dealer/deletesalonlogo/' + salonId,
+            dataType: 'html',
+            beforeSend: function(){},
+            success: function(){
+                $("#dealerSalonLogotype").parent().find(".change-avatar").removeClass("hide");
+                $("#dealerSalon" + salonId).find("img").attr('src','');
+                $("#dealersalon_logotype").val('');
+                $("#dealerSalonLogotype").remove();
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+
+            }
+        });
+    }
 }

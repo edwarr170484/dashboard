@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 use Dashboard\CommonBundle\Form\DataTransformer\DealerInfoToNumberTransformer;
+use Dashboard\CommonBundle\Form\DataTransformer\DealerSalonToNumberTransformer;
 use Dashboard\CommonBundle\Form\DataTransformer\TimeToTextTransformer;
 
 class WorkInfoType extends AbstractType
@@ -35,7 +36,8 @@ class WorkInfoType extends AbstractType
             ->add('workStop', TextType::class, array('required' => false, 'label' => '', 'attr' => array('class' => 'workTime','placeholder' => '00:00')))
             ->add('breakStart', TextType::class, array('required' => false, 'label' => '', 'attr' => array('class' => 'workTime','placeholder' => '00:00')))
             ->add('breakStop', TextType::class, array('required' => false, 'label' => '', 'attr' => array('class' => 'workTime','placeholder' => '00:00')))
-            ->add($builder->create('dealer', 'hidden')->addModelTransformer(new DealerInfoToNumberTransformer($this->em)));
+            ->add($builder->create('dealer', 'hidden')->addModelTransformer(new DealerInfoToNumberTransformer($this->em)))
+            ->add($builder->create('dealerSalon', 'hidden')->addModelTransformer(new DealerSalonToNumberTransformer($this->em)));
         
         $builder->get('workStart')->addModelTransformer(new TimeToTextTransformer($this->em));
         $builder->get('workStop')->addModelTransformer(new TimeToTextTransformer($this->em));

@@ -404,8 +404,6 @@ $(document).ready(function(){
             });
         });
         
-        $(".change-avatar").click(function(){$(".change-avatar-input").trigger("click");});
-        
         $(".select-option").each(function(){ 
              if($(this).data("selected") == 1)
              {

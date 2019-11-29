@@ -5,10 +5,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Table(name="selltype")
+ * @ORM\Table()
  * @ORM\Entity()
  */
-class Selltype 
+class Condition 
 {
     /**
      * @ORM\Column(type="integer")
@@ -18,17 +18,12 @@ class Selltype
     private $id;
     
     /**
-     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Product", mappedBy="selltype")
-     */
-    private $product;
-    
-    /**
      * @ORM\Column(type="string", length=100)
      */
     private $title;
     
     /**
-     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="selltype", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="condition", cascade={"persist"})
      */
     private $translations;
     
@@ -37,7 +32,7 @@ class Selltype
      */
     public function __construct()
     {
-        $this->product = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -54,7 +49,7 @@ class Selltype
      * Set title
      *
      * @param string $title
-     * @return Selltype
+     * @return Condition
      */
     public function setTitle($title)
     {
@@ -74,43 +69,10 @@ class Selltype
     }
 
     /**
-     * Add product
-     *
-     * @param \Dashboard\CommonBundle\Entity\Product $product
-     * @return Selltype
-     */
-    public function addProduct(\Dashboard\CommonBundle\Entity\Product $product)
-    {
-        $this->product[] = $product;
-    
-        return $this;
-    }
-
-    /**
-     * Remove product
-     *
-     * @param \Dashboard\CommonBundle\Entity\Product $product
-     */
-    public function removeProduct(\Dashboard\CommonBundle\Entity\Product $product)
-    {
-        $this->product->removeElement($product);
-    }
-
-    /**
-     * Get product
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
      * Add translations
      *
      * @param \Dashboard\CommonBundle\Entity\Translation $translations
-     * @return Selltype
+     * @return Condition
      */
     public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
     {

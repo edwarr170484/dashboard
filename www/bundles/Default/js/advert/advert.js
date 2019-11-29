@@ -111,7 +111,7 @@ function getStep5(locale_code){
     });
 }
 
-function addAdvert(locale_code,text){
+function addAdvert(locale_code,text, isDraft){
     var error = 0;
     $(".advertFiltersItems input[type='text']").each(function(){
        if($(this).attr('required') == 'required'){
@@ -124,9 +124,13 @@ function addAdvert(locale_code,text){
        } 
     });
     
+    if(error === 1){alert(text);}
+    
+    var draftParameter = (isDraft) ? '/' + isDraft : '';
+    
     if(!error){
         $.ajax({
-            url: '/' + locale_code + '/account/addadvert/finalAdd',
+            url: '/' + locale_code + '/account/createadvert' + draftParameter,
             type:'post',
             data: $(".advertFiltersItems input[type='text'], .advertFiltersItems input[type='checkbox']:checked, .advertFiltersItems input[type='hidden']"),
             dataType: 'html',

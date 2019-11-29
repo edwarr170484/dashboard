@@ -1,0 +1,85 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Финансы{% endtrans %}{% endblock %}
+{% block bodyClass %}class="userAccount"{% endblock %}
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% endif %}
+                    {% if  locale.isDefault %}
+                        <li><a href="{{ path('accountDealer', {'_locale' : locale.code}) }}">
+                    {% else %}
+                        <li><a href="{{ path('accountDealerLocale', {'_locale' : locale.code}) }}">
+                    {% endif %}
+                        {% trans %}Личный кабинет{% endtrans %}
+                    </a></li>
+                    <li>/</li>
+                    <li>
+                    {% if  locale.isDefault %}
+                        <a href="{{path('account_dealer_bills')}}">
+                    {% else %}
+                        <a href="{{path('account_dealer_billsLocale',{'_locale' : app.request.locale})}}">
+                    {% endif %}
+                        {% trans %}Финансы{% endtrans %}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1><b>{% trans %}Финансы{% endtrans %}</b></h1></div>
+            </div>
+        </div>
+    </div>
+    <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Dealer:getSidebar', {'routeName' : routeName})) }}
+        <div class="col-lg-10 col-md-10">
+            <div class="account-advert-block-content">
+                {% if user.bills | length > 0 %}
+                    <div class="accountBills">
+                        {% for bill in user.bills %}
+                            <div class="accountBill">
+                                <div class="accountBillInfo">
+                                    <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
+                                    <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
+                                    <div class="accountBillInfoItem price">{{ bill.id }}{{ locale.currency.label | raw }}</div>
+                                </div>
+                                <div class="accountBillDownload">
+                                    <svg width="26" height="32" viewBox="0 0 26 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 1L1 7V31H25V1H7Z" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
+                                        <path d="M7 1V7H1" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
+                                        <path d="M20 14H6V26H20V14Z" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
+                                        <path d="M6 19H20" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
+                                        <path d="M11 14V26" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
+                                    </svg>
+                                    {% if bill.file %}
+                                        <a href="{{ asset('bundles/images/bills/' ~ bill.file) }}">{% trans %}Скачать счет{% endtrans %}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="accountNocontent">{% trans %}Нет ни одного счета{% endtrans %}</div> 
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

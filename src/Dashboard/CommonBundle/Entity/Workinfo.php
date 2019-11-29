@@ -27,6 +27,12 @@ class Workinfo
     private $dealer;
     
     /**
+     * @ORM\OneToOne(targetEntity="Dashboard\CommonBundle\Entity\DealerSalon", inversedBy="workinfo")
+     * @ORM\JoinColumn(name="dealer_salon_id", referencedColumnName="id")
+     */
+    private $dealerSalon;
+    
+    /**
      * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
     private $monday;
@@ -479,5 +485,28 @@ class Workinfo
     public function getDealer()
     {
         return $this->dealer;
+    }
+
+    /**
+     * Set dealerSalon
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalon $dealerSalon
+     * @return Workinfo
+     */
+    public function setDealerSalon(\Dashboard\CommonBundle\Entity\DealerSalon $dealerSalon = null)
+    {
+        $this->dealerSalon = $dealerSalon;
+    
+        return $this;
+    }
+
+    /**
+     * Get dealerSalon
+     *
+     * @return \Dashboard\CommonBundle\Entity\DealerSalon 
+     */
+    public function getDealerSalon()
+    {
+        return $this->dealerSalon;
     }
 }

@@ -42,17 +42,6 @@ class Review
     private $targetUser;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Product", inversedBy="reviews")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
-     */
-    private $product;
-    
-    /**
-     * @ORM\Column(type="string", length=512, nullable=true, options={"default":"0"})
-     */
-    private $productMark;
-    
-    /**
      * @ORM\Column(type="text")
      */
     private $reviewText;
@@ -67,6 +56,7 @@ class Review
      */
     private $status;
     
+
     /**
      * Get id
      *
@@ -78,75 +68,6 @@ class Review
     }
 
     /**
-     * Set user
-     *
-     * @param \Dashboard\CommonBundle\Entity\User $user
-     * @return Review
-     */
-    public function setUser(\Dashboard\CommonBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Dashboard\CommonBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set targetUser
-     *
-     * @param \Dashboard\CommonBundle\Entity\User $targetUser
-     * @return Review
-     */
-    public function setTargetUser(\Dashboard\CommonBundle\Entity\User $targetUser = null)
-    {
-        $this->targetUser = $targetUser;
-
-        return $this;
-    }
-
-    /**
-     * Get targetUser
-     *
-     * @return \Dashboard\CommonBundle\Entity\User 
-     */
-    public function getTargetUser()
-    {
-        return $this->targetUser;
-    }
-
-    /**
-     * Set product
-     *
-     * @param \Dashboard\CommonBundle\Entity\Product $product
-     * @return Review
-     */
-    public function setProduct(\Dashboard\CommonBundle\Entity\Product $product = null)
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    /**
-     * Get product
-     *
-     * @return \Dashboard\CommonBundle\Entity\Product 
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
      * Set reviewText
      *
      * @param string $reviewText
@@ -155,7 +76,7 @@ class Review
     public function setReviewText($reviewText)
     {
         $this->reviewText = $reviewText;
-
+    
         return $this;
     }
 
@@ -178,7 +99,7 @@ class Review
     public function setDateAdded($dateAdded)
     {
         $this->dateAdded = $dateAdded;
-
+    
         return $this;
     }
 
@@ -201,7 +122,7 @@ class Review
     public function setStatus($status)
     {
         $this->status = $status;
-
+    
         return $this;
     }
 
@@ -224,7 +145,7 @@ class Review
     public function setAnswer(\Dashboard\CommonBundle\Entity\Review $answer = null)
     {
         $this->answer = $answer;
-
+    
         return $this;
     }
 
@@ -239,29 +160,6 @@ class Review
     }
 
     /**
-     * Set productMark
-     *
-     * @param string $productMark
-     * @return Review
-     */
-    public function setProductMark($productMark)
-    {
-        $this->productMark = $productMark;
-
-        return $this;
-    }
-
-    /**
-     * Get productMark
-     *
-     * @return string 
-     */
-    public function getProductMark()
-    {
-        return $this->productMark;
-    }
-
-    /**
      * Set answerTo
      *
      * @param \Dashboard\CommonBundle\Entity\Review $answerTo
@@ -270,7 +168,7 @@ class Review
     public function setAnswerTo(\Dashboard\CommonBundle\Entity\Review $answerTo = null)
     {
         $this->answerTo = $answerTo;
-
+    
         return $this;
     }
 
@@ -282,5 +180,51 @@ class Review
     public function getAnswerTo()
     {
         return $this->answerTo;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Dashboard\CommonBundle\Entity\User $user
+     * @return Review
+     */
+    public function setUser(\Dashboard\CommonBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Dashboard\CommonBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set targetUser
+     *
+     * @param \Dashboard\CommonBundle\Entity\User $targetUser
+     * @return Review
+     */
+    public function setTargetUser(\Dashboard\CommonBundle\Entity\User $targetUser = null)
+    {
+        $this->targetUser = $targetUser;
+    
+        return $this;
+    }
+
+    /**
+     * Get targetUser
+     *
+     * @return \Dashboard\CommonBundle\Entity\User 
+     */
+    public function getTargetUser()
+    {
+        return $this->targetUser;
     }
 }

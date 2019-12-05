@@ -258,8 +258,6 @@ class DefaultController extends Controller
             $category->setAllProductsNumber($productsNum);
         }
         
-        $selltypes = $manager->getRepository("DashboardCommonBundle:Selltype")->findAll();
-        
         //query premium products
         $sql = "SELECT p,ps FROM DashboardCommonBundle:Product p LEFT JOIN p.service ps LEFT JOIN p.user pu WHERE pu.isActive = 1 AND ps.service = 1";
         
@@ -296,7 +294,6 @@ class DefaultController extends Controller
                                                                                     "prmiumProducts" => $prmiumProducts,
                                                                                     "allcities" => $allcities,
                                                                                     "page" => $page,
-                                                                                    "selltypes" => $selltypes,
                                                                                     "locale" => $locale,
                                                                                     "settings" => $settings,"sessionRegion" => $sessionRegion,
                                                                                     "sessionCity" => $sessionCity));

@@ -1,0 +1,219 @@
+<div class="accountAdvert" id="advert{{ product.id }}">
+    {% if product.isDraft %}
+        <div class="accountAdvertFunctions left">
+            <div class="accountAdvertFunction">
+                <div class="button">
+                    {% trans %}Объявление не активно{% endtrans %}
+                </div>
+            </div>
+            <div class="accountAdvertFunction">
+                <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы хотите опубликовать объявление?{% endtrans %}','publicate')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="11" stroke="#616161" stroke-width="2"/>
+                        <path d="M12 12.25V12.5347L12.2449 12.68L16.3096 15.0918L16.0816 15.4658L11.5 12.7169V7.5H12V12.25Z" stroke="#616161"/>
+                    </svg>
+                    {% trans %}Опубликовать{% endtrans %}
+                </button>
+            </div>
+        </div>
+    {% else %}
+        <div class="accountAdvertFunctions left">
+            <div class="accountAdvertFunction">
+                <div class="button">
+                    {% if not product.isConfirm or not product.isActive or product.isBlocked %}
+                        {% trans %}Объявление не активно{% endtrans %}
+                    {% else %}
+                        <b>Осталось</b>&nbsp;{{ product.daysLeft }} {% trans %}дней{% endtrans %}
+                    {% endif %}
+                </div>
+            </div>
+            {% if product.isActive %}
+                {% if product.isBlocked %}
+                    <div class="accountAdvertFunction">
+                        <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы хотите разблокировать объявление?{% endtrans %}','unblocked')">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="11" stroke="#616161" stroke-width="2"/>
+                                <path d="M12 12.25V12.5347L12.2449 12.68L16.3096 15.0918L16.0816 15.4658L11.5 12.7169V7.5H12V12.25Z" stroke="#616161"/>
+                            </svg>
+                            {% trans %}Опубликовать повторно{% endtrans %}
+                        </button>
+                    </div>
+                {% else %}
+                    {% if product.service | length > 0 %}
+                        {% for service in product.service %}
+                            {% if not service.service.isButton %}
+                                <div class="accountAdvertFunction">
+                                    <div class="button">
+                                        {{ service.service.iconGray | raw }}
+                                        {{ service.count }} {{ service.service.parameter }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% if product.isActive and product.isConfirm %}
+                            {% for service in product.service %}
+                                {% if service.service.isButton %}
+                                    <div class="accountAdvertFunction">
+                                        <button>
+                                            {{ service.service.iconGray | raw }}
+                                            {{ service.count }} {{ service.service.parameter }}
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% for service in product.service %}
+                                {% if service.service.isButton %}
+                                    <div class="accountAdvertFunction">
+                                        <div class="button">
+                                            {{ service.service.iconGray | raw }}
+                                            {{ service.count }} {{ service.service.parameter }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <div class="accountAdvertFunction">
+                    <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы хотите продлить объявление?{% endtrans %}','switchon')">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="11" stroke="#616161" stroke-width="2"/>
+                            <path d="M12 12.25V12.5347L12.2449 12.68L16.3096 15.0918L16.0816 15.4658L11.5 12.7169V7.5H12V12.25Z" stroke="#616161"/>
+                        </svg>
+                        {% trans %}Продлить объявление{% endtrans %}
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% if product.isDraft %}
+        <div class="accountAdvertFunctions right">
+            <div class="accountAdvertFunction">
+                <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы действительно хотите удалить объявление?{% endtrans %}','delete')">{% trans %}удалить{% endtrans %}</button>
+            </div>
+            <div class="accountAdvertFunction">
+                <button>{% trans %}редактировать{% endtrans %}</button>
+            </div>
+        </div>
+    {% else %}
+        <div class="accountAdvertFunctions right">
+            <div class="accountAdvertFunction">
+                {% if product.isActive and product.isConfirm %}
+                    <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы хотите снять объявление с продажи?{% endtrans %}','archive')">{% trans %}снять с продажи{% endtrans %}</button>
+                {% else %}
+                    <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы действительно хотите удалить объявление?{% endtrans %}','delete')">{% trans %}удалить{% endtrans %}</button>
+                {% endif %}
+            </div>
+            <div class="accountAdvertFunction">
+                <button>{% trans %}редактировать{% endtrans %}</button>
+            </div>
+        </div>
+    {% endif %}
+    <div class="accountAdvertInfoLeft">
+        <div class="accountAdvertImage">
+            {% if product.fotos | length > 0 %}
+                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+            {% endif %}
+            <div class="accountAdvertInfoViews">{% trans %}Просмотров{% endtrans %}: {% if product.views %}{{ product.views }}{% else %}0{% endif %}</div>
+        </div>
+        <div class="accountAdvertInfo">
+            <div class="accountAdvertInfoName">
+                {{ product.name }}
+                {% if product.info.generation.translations | length > 0 %}
+                    {% for translation in product.info.generation.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}        
+                    {{ product.info.generation.name }}
+                {% endif %} 
+            </div>
+                <div class="accountAdvertInfoBoard">
+                    {% if product.info.board %}
+                        <div class="accountAdvertInfoBoardItem">
+                            {{ product.info.board.value }}
+                        </div>
+                    {% endif %}
+                    {% if product.info.shape %}
+                        <div class="accountAdvertInfoBoardItem">
+                            {{ product.info.shape.title }}
+                        </div>
+                    {% endif %}
+                </div>
+            <div class="accountAdvertInfoModification">
+                <div class="accountAdvertInfoModificationItem">
+                    {% if product.info.modification %}{{ product.info.modification.size }} /  {{ product.info.modification.power }} {% trans %}л.с.{% endtrans %}  / {% endif %} {% if product.info.gasType %} {{ product.info.gasType.value }}{% endif %}
+                </div>
+                {% if product.info.transmissionType %}
+                    <div class="accountAdvertInfoModificationItem">
+                        {{ product.info.transmissionType.value }} {% trans %}привод{% endtrans %}
+                    </div>
+                {% endif %}
+                {% if product.info.gearType %}
+                    <div class="accountAdvertInfoModificationItem">
+                        {{ product.info.gearType.value }}
+                    </div>
+                {% endif %}
+                {% if product.info.color %}
+                    <div class="accountAdvertInfoModificationItem">
+                        {{ product.info.color.value }}
+                    </div>
+                {% endif %}
+            </div>
+            {% if product.city %}
+                <div class="accountAdvertInfoCity">
+                    <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 9px;">
+                        <path d="M5.5 3.38135C5.10444 3.38135 4.71776 3.4946 4.38886 3.70679C4.05996 3.91897 3.80362 4.22056 3.65224 4.57341C3.50087 4.92626 3.46126 5.31452 3.53843 5.68911C3.6156 6.06369 3.80608 6.40777 4.08579 6.67783C4.36549 6.94789 4.72186 7.1318 5.10982 7.20631C5.49778 7.28082 5.89991 7.24258 6.26537 7.09643C6.63082 6.95027 6.94318 6.70276 7.16294 6.38521C7.3827 6.06765 7.5 5.6943 7.5 5.31238C7.5 4.80024 7.28929 4.30907 6.91421 3.94693C6.53914 3.5848 6.03043 3.38135 5.5 3.38135ZM5.5 6.2779C5.30222 6.2779 5.10888 6.22127 4.94443 6.11518C4.77998 6.00909 4.65181 5.85829 4.57612 5.68187C4.50043 5.50544 4.48063 5.31131 4.51922 5.12402C4.5578 4.93673 4.65304 4.76469 4.79289 4.62966C4.93275 4.49463 5.11093 4.40267 5.30491 4.36542C5.49889 4.32816 5.69996 4.34728 5.88268 4.42036C6.06541 4.49344 6.22159 4.61719 6.33147 4.77597C6.44135 4.93475 6.5 5.12142 6.5 5.31238C6.5 5.56845 6.39464 5.81404 6.20711 5.99511C6.01957 6.17618 5.76522 6.2779 5.5 6.2779Z" fill="#616161"/>
+                        <path d="M5.5 0.00195312C4.04131 0.00195313 2.64236 0.561434 1.61091 1.55732C0.579463 2.5532 0 3.90391 0 5.3123C0 9.85506 5 13.2875 5.215 13.4323L5.5 13.6254L5.785 13.4323C6 13.2875 11 9.85506 11 5.3123C11 3.90391 10.4205 2.5532 9.38909 1.55732C8.35764 0.561434 6.95869 0.00195313 5.5 0.00195312ZM5.5 12.433C4.465 11.6509 1 8.76402 1 5.3123C1 4.15998 1.47411 3.05485 2.31802 2.24004C3.16193 1.42523 4.30653 0.96747 5.5 0.96747C6.69347 0.96747 7.83807 1.42523 8.68198 2.24004C9.52589 3.05485 10 4.15998 10 5.3123C10 8.76402 6.535 11.6509 5.5 12.433Z" fill="#616161"/>
+                    </svg>
+                    {{ product.city.name }}
+                </div>
+            {% endif %}
+            {% if product.correctReason %}
+                <div class="accountAdvertBlockReason">{% trans %}Причина блокировки{% endtrans %}: {{ product.correctReason }}</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="accountAdvertInfoRight">
+        <div class="accountAdvertInfoNumbers">
+            <div class="accountAdvertInfoPrice">{{ product.info.price }} {{ locale.currency.label | raw }}</div>
+            <div class="accountAdvertInfoYear">{{ product.info.year }}</div>
+            <div class="accountAdvertInfoProbeg">{{ product.info.probeg }} {% trans %}км{% endtrans %}</div>
+        </div>
+        {% if product.isConfirm and product.isActive %}
+        <div class="accountAdvertServiceButtons">
+            {% if user.roles[0].services | length > 0 %}
+                {% for service in user.roles[0].services %}
+                    {% if service.prices | length > 0 %}
+                        {% set servicePrice = 0 %}
+                        {% for price in service.prices %}
+                            {% if price.category.id == product.baseCategory.id %}
+                                {% set servicePrice = price.price %}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% set servicePrice = service.price %}
+                    {% endif %}
+                    <div class="accountAdvertServiceButton">
+                        <button onclick="toggleProductService({{ product.id }}, {{ service.id }}, {{ servicePrice }}, '{{ locale.code }}', $(this), '{% trans %}Общая сумма{% endtrans %}','{% trans %}Оплатить{% endtrans %}')">
+                            {{ service.iconGray | raw }}
+                            <span class="buttonServiceName">
+                                <span class="buttonServiceNameTitle">{{ service.title }}</span>
+                                <span class="buttonServiceRule">
+                                    {{ service.days }} {{ service.parameter }}
+                                </span>
+                            </span>
+                            <span class="buttonServicePrice">
+                                {{ servicePrice }} {{ locale.currency.label | raw }}
+                            </span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endif %}
+    </div>
+</div>

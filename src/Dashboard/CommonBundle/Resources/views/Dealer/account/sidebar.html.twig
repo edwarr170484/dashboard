@@ -15,6 +15,7 @@
                     <li><a href="{{ path('account_dealer_products_confirm') }}"  {% if routeName == 'account_dealer_products_confirm' %}class="active"{% endif %}>- {% trans %}На модерации{% endtrans %} ({{ confirmProducts | length }})</a></li>
                 {% endif %}
                 <li><a href="{{ path('account_dealer_products_current') }}"  {% if routeName == 'account_dealer_products_current' %}class="active"{% endif %}>- {% trans %}Текущие{% endtrans %} ({{ currentProducts | length}})</a></li>
+                <li><a href="{{ path('account_dealer_products_drafts') }}"  {% if routeName == 'account_dealer_products_drafts' %}class="active"{% endif %}>- {% trans %}Черновики{% endtrans %} ({{ draftProducts | length}})</a></li>
                 <li><a href="{{ path('account_dealer_products_stopped') }}"  {% if routeName == 'account_dealer_products_stopped' %}class="active"{% endif %}>- {% trans %}Архив{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
                 <li><a href="{{ path('account_dealer_products_blocked') }}"  {% if routeName == 'account_products_blocked' %}class="active"{% endif %}>- {% trans %}Заблокированные{% endtrans %}  ({{ blockedProducts | length }})</a></li>
             </ul>
@@ -128,6 +129,7 @@
                     <li><a href="{{ path('account_dealer_products_confirmLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_dealer_products_confirmLocale' %}class="active"{% endif %}>- {% trans %}На модерации{% endtrans %} ({{ confirmProducts | length }})</a></li>
                 {% endif %}
                 <li><a href="{{ path('account_dealer_products_currentLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_dealer_products_currentLocale' %}class="active"{% endif %}>- {% trans %}Текущие{% endtrans %} ({{ currentProducts | length}})</a></li>
+                <li><a href="{{ path('account_dealer_products_draftsLocale') }}"  {% if routeName == 'account_dealer_products_draftsLocale' %}class="active"{% endif %}>- {% trans %}Черновики{% endtrans %} ({{ draftProducts | length}})</a></li>
                 <li><a href="{{ path('account_dealer_products_stoppedLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_dealer_products_stoppedLocale' %}class="active"{% endif %}>- {% trans %}Архив{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
                 <li><a href="{{ path('account_dealer_products_blockedLocale',{'_locale' : app.request.locale}) }}"  {% if routeName == 'account_dealer_products_blockedLocale' %}class="active"{% endif %}>- {% trans %}Заблокированные{% endtrans %}  ({{ blockedProducts | length }})</a></li>
             </ul>

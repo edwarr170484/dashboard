@@ -25,6 +25,12 @@ class Product
     private $category;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Category")
+     * @ORM\JoinColumn(name="base_category_id", referencedColumnName="id")
+     */
+    private $baseCategory;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\User", inversedBy="products")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
@@ -80,7 +86,6 @@ class Product
     
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\ProductFotos", mappedBy="product", cascade={"persist"})
-     * @ORM\OrderBy({"sortorder" = "ASC"})
      */
     private $fotos;
     
@@ -108,11 +113,6 @@ class Product
      * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
     private $isBlocked;
-    
-    /**
-     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
-     */
-    private $isCorrect;
     
     /**
      * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
@@ -165,6 +165,8 @@ class Product
      */
     private $info;
     
+    private $daysLeft;
+    
     /**
      * Constructor
      */
@@ -176,6 +178,19 @@ class Product
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
         $this->filters = new \Doctrine\Common\Collections\ArrayCollection();
         $this->service = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    public function getDaysLeft(){
+        
+        $today = new \DateTime("now");
+        $endDate = $this->getDateAdded()->add(new \DateInterval('P30D'));
+        $interval = $today->diff($endDate);        
+        
+        if($interval->invert){
+            return 0;
+        }else{
+            return $interval->d + 1;
+        }
     }
 
     /**
@@ -393,29 +408,6 @@ class Product
     public function getIsBlocked()
     {
         return $this->isBlocked;
-    }
-
-    /**
-     * Set isCorrect
-     *
-     * @param boolean $isCorrect
-     * @return Product
-     */
-    public function setIsCorrect($isCorrect)
-    {
-        $this->isCorrect = $isCorrect;
-    
-        return $this;
-    }
-
-    /**
-     * Get isCorrect
-     *
-     * @return boolean 
-     */
-    public function getIsCorrect()
-    {
-        return $this->isCorrect;
     }
 
     /**
@@ -867,5 +859,51 @@ class Product
     public function getInfo()
     {
         return $this->info;
+    }
+
+    /**
+     * Set isDraft
+     *
+     * @param boolean $isDraft
+     * @return Product
+     */
+    public function setIsDraft($isDraft)
+    {
+        $this->isDraft = $isDraft;
+    
+        return $this;
+    }
+
+    /**
+     * Get isDraft
+     *
+     * @return boolean 
+     */
+    public function getIsDraft()
+    {
+        return $this->isDraft;
+    }
+
+    /**
+     * Set baseCategory
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $baseCategory
+     * @return Product
+     */
+    public function setBaseCategory(\Dashboard\CommonBundle\Entity\Category $baseCategory = null)
+    {
+        $this->baseCategory = $baseCategory;
+    
+        return $this;
+    }
+
+    /**
+     * Get baseCategory
+     *
+     * @return \Dashboard\CommonBundle\Entity\Category 
+     */
+    public function getBaseCategory()
+    {
+        return $this->baseCategory;
     }
 }

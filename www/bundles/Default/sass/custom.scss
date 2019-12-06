@@ -776,7 +776,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertImage img{width: 100%;@include border-radius(5px);}
 .accountAdvertInfoName{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);}
 .accountAdvertInfoBoard{@include flexBox(row,flex-start,center);padding-top: 1rem;padding-bottom: 2rem;}
-.accountAdvertInfoBoardItem{background: $gray-color;@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 1rem 1.5rem;@include border-radius(5px);}
+.accountAdvertInfoBoardItem{background: $gray-color;@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 1rem 1.5rem;@include border-radius(5px);margin-right: 5px;}
 .accountAdvertInfoViews{@include fontView("GothamProRegular",#747474,1.4rem,1.8rem);padding-top: 0.6rem;}
 .accountAdvertInfoModificationItem{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);width: 50%;padding-bottom: 1rem;}
 .accountAdvertInfoModification{@include flexBox(row,flex-start,center);flex-wrap:wrap;}
@@ -786,7 +786,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertInfoPrice{@include fontView("GothamProBold",$black-text,2.6rem,3.2rem);text-align: center;padding-bottom: 2rem;}
 .accountAdvertInfoYear{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;padding-bottom: 2rem;}
 .accountAdvertInfoProbeg{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;padding-bottom: 2rem;}
-.accountAdvertServiceButtons{width: 50%;padding-left: 3rem;}
+.accountAdvertServiceButtons{width: 50%;padding-left:1.5rem;}
 .accountAdvertServiceButton button{background: #fff;border:1px solid #AAAAAA;@include border-radius(9px);display: block;padding: 0.7rem 1rem;@include flexBox(row,flex-start,center);width: 100%;margin-bottom: 1rem;}
 .accountAdvertServiceButton button.active{background: $yellow-color;}
 .buttonServiceNameTitle{display: block;width: 100%;@include fontView("GothamProMedium",$super-black-color,1.4rem,1.8rem);}
@@ -1276,3 +1276,14 @@ body.userAccount{background:#F9F9F9;}
 .dealerAccountRates .tab-content{padding: 3rem 4rem;padding-top: 0;}
 .dealerAccountRatesDescription{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-top: 7rem;padding-bottom: 6rem;}
 .nav-tabs{border:none;}
+.accountAdvertFunction svg{width: 24px;height: 24px;}
+.modalFlashText{padding: 2rem 0;@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.modal-footer .flash-footer{text-align: center;}
+.accountAdvertBlockReason{width: 100%;}
+.accountAdvertBlockReason{@include fontView("GothamProRegular",$black-text,1.2rem,1.8rem);padding: 0.5rem 1.5rem;background: #f8d7da;@include border-radius(0.25rem);margin: 0.5rem 0;}
+.accountBottomPaymentSumm{position: fixed;bottom:0;left:0;width: 100%;background: #fff;padding: 1.9rem 0;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));z-index:99;}
+.accountBottomPaymentSummValue{@include flexBox(row,flex-end,center);padding-right: 7rem;}
+.accountBottomPaymentSummValueText{@include fontView("GothamProRegular",$black-text,2.5rem,3.2rem);padding-right:3rem;}
+.accountBottomPaymentSummValueButton a{@include fontView("GothamProBlack",$super-black-color,1.8rem,1.7rem);display:block;background: $yellow-color;@include border-radius(3px);padding:1.3rem 5rem;text-align:center;}
+.accountBottomPaymentSummValueButton a:hover,.accountBottomPaymentSummValueButton a:focus{background: $orange-color;text-decoration: none;}
+.accoutnProductServicesTotalSumma{@include fontView("GothamProBlack",$super-black-color,2.5rem,3.2rem);padding-right:3rem;}

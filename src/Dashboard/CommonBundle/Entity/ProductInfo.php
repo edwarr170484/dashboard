@@ -46,7 +46,7 @@ class ProductInfo
     private $generation;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\GenerationBoard")
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\FilterValue")
      * @ORM\JoinColumn(name="board_id", referencedColumnName="id")
      */
     private $board;
@@ -127,6 +127,8 @@ class ProductInfo
      */
     private $garant;
     
+
+   
 
     /**
      * Get id
@@ -440,10 +442,10 @@ class ProductInfo
     /**
      * Set board
      *
-     * @param \Dashboard\CommonBundle\Entity\GenerationBoard $board
+     * @param \Dashboard\CommonBundle\Entity\FilterValue $board
      * @return ProductInfo
      */
-    public function setBoard(\Dashboard\CommonBundle\Entity\GenerationBoard $board = null)
+    public function setBoard(\Dashboard\CommonBundle\Entity\FilterValue $board = null)
     {
         $this->board = $board;
     
@@ -453,7 +455,7 @@ class ProductInfo
     /**
      * Get board
      *
-     * @return \Dashboard\CommonBundle\Entity\GenerationBoard 
+     * @return \Dashboard\CommonBundle\Entity\FilterValue 
      */
     public function getBoard()
     {

@@ -48,10 +48,20 @@ class Service
      */
     private $days;
     
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
+     */
+    private $parameter;
+    
      /**
      * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
      */
     private $type;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $isButton;
     
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="service", cascade={"persist"})
@@ -385,5 +395,51 @@ class Service
     public function getUserRoles()
     {
         return $this->userRoles;
+    }
+
+    /**
+     * Set parameter
+     *
+     * @param string $parameter
+     * @return Service
+     */
+    public function setParameter($parameter)
+    {
+        $this->parameter = $parameter;
+    
+        return $this;
+    }
+
+    /**
+     * Get parameter
+     *
+     * @return string 
+     */
+    public function getParameter()
+    {
+        return $this->parameter;
+    }
+
+    /**
+     * Set isButton
+     *
+     * @param boolean $isButton
+     * @return Service
+     */
+    public function setIsButton($isButton)
+    {
+        $this->isButton = $isButton;
+    
+        return $this;
+    }
+
+    /**
+     * Get isButton
+     *
+     * @return boolean 
+     */
+    public function getIsButton()
+    {
+        return $this->isButton;
     }
 }

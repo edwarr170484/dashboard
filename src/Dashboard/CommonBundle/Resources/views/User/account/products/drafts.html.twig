@@ -16,20 +16,20 @@
                         <li>/</li>
                     {% endif %}
                     {% if  locale.isDefault %}
-                        <li><a href="{{ path('account', {'_locale' : locale.code}) }}">
+                        <li><a href="{{ path('accountDealer', {'_locale' : locale.code}) }}">
                     {% else %}
-                        <li><a href="{{ path('accountLocale', {'_locale' : locale.code}) }}">
+                        <li><a href="{{ path('accountDealerLocale', {'_locale' : locale.code}) }}">
                     {% endif %}
                         {% trans %}Личный кабинет{% endtrans %}
                     </a></li>
                     <li>/</li>
                     <li>
                     {% if  locale.isDefault %}
-                        <a href="{{path('account_products_correct')}}">
+                        <a href="{{path('account_products_drafts')}}">
                     {% else %}
-                        <a href="{{path('account_products_correctLocale',{'_locale' : app.request.locale})}}">
+                        <a href="{{path('account_products_draftsLocale',{'_locale' : app.request.locale})}}">
                     {% endif %}
-                        {% trans %}Объявления на корректировке{% endtrans %}
+                        {% trans %}Черновики{% endtrans %}
                     </a></li>
                 </ul>
             </div>
@@ -43,7 +43,7 @@
         </div>
         <div class="col-lg-10 col-md-10">
             <div class="accountBlockHeader">
-                <div class="account-block-header"><h1>{% trans %}<b>Объявления</b> на корректировке{% endtrans %}</h1></div>
+                <div class="account-block-header"><h1>{% trans %}Черновики{% endtrans %}</h1></div>
             </div>
         </div>
     </div>
@@ -59,7 +59,15 @@
                 <div class="account-advert-block-content">
                     <div class="row advert-category-adverts">
                         <div class="col-lg-12 col-md-12">
-                            <div class="accountNocontent">{% trans %}Нет объявлений на корректировке{% endtrans %}</div>
+                            {% if products | length > 0 %}
+                                <div class="accountAdverts">
+                                    {% for product in products %}
+                                        {{ include ('DashboardCommonBundle:User:account/products/product.html.twig', {product : product, user : user, locale : locale}) }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="accountNocontent">{% trans %}Нет ни одного объявления{% endtrans %}</div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -68,5 +76,3 @@
     </div>
 </div>
 {% endblock%}
-
-

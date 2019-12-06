@@ -685,6 +685,7 @@ class AdvertController extends Controller
             $product = new Product();
             $product->setUser($user);
             $product->setCategory($category);
+            $product->setBaseCategory($baseCategory);
             $product->setAuthorName($advertInfo->getContactName());
             $product->setAuthorPhone($advertInfo->getContactPhone());
             $product->setAuthorEmail($advertInfo->getContactEmail());
@@ -803,7 +804,7 @@ class AdvertController extends Controller
             $info->setWheel($advertInfo->getRightWheel());
             $info->setYear($advertInfo->getYear());
             
-            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->find($advertInfo->getBoard());
+            $board = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
             $info->setBoard($board);
             
             $color = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getColor());
@@ -832,6 +833,9 @@ class AdvertController extends Controller
             if($isDraft){
                 $product->setIsDraft(1);
             }
+            
+            $product->setIsConfirm(0);
+            $product->setIsBlocked(0);
             
             $manager->persist($product);
             $manager->persist($bill);
@@ -869,6 +873,203 @@ class AdvertController extends Controller
             array_push($productName, $categoryName);
             $this->generateCategoriesTree($category->getParent(), $productName, $locale);
         }
+    }
+    
+    /**
+     * @Route("/{_locale}/account/advert/ajax/{action}/{productId}", name="advertPublicate", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function advertPublicateAction($action, $productId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $product = $manager->getRepository("DashboardCommonBundle:Product")->findOneBy(array("id" => $productId, "user" => $user));
+        
+        $flashText = '';
+        $flashTitle = '';
+        
+        if($product){
+            switch($action){
+                case 'publicate':
+                    $product->setIsDraft(0);
+                    if($settings->getIsModerate()){
+                        $product->setIsConfirm(0);
+                    }else{
+                        $product->setIsConfirm(1);
+                    }
+
+                    $manager->persist($product);
+                    $manager->flush();
+                    
+                    if($settings->getIsModerate()){
+                        $flashTitle = $this->get('translator')->trans('Ваше объявление отправлено на модерацию');
+                        $flashText = $this->get('translator')->trans(' Мы модерируем каждое объявление и проверим его в течении 30 минут. Потому что мы заботимся о безопасности наших пользователей и о качестве базы объявлений. Все объявления модерируются в порядке очереди. Если вы подаете объявление в ночное время, то оно будет промодерировано утром следующего дня.');
+                    }else{
+                        $flashTitle = $this->get('translator')->trans('Ваше объявление опубликовано');
+                        $flashText = $this->get('translator')->trans('Благодарим за использование нашего сервиса. Вы можете воспользоваться платными услугами для увеличения шансов на продажу.');
+                    }
+                break;
+                
+                case 'archive':
+                    $product->setIsActive(0);
+                    $manager->persist($product);
+                    $manager->flush();
+                    
+                    $flashTitle = $this->get('translator')->trans('Успешно');
+                    $flashText = $this->get('translator')->trans('Объявление перемещено в архив');
+                break;    
+            
+                case 'switchon':
+                    $product->setIsActive(1);
+                    $product->setDateAdded(new \DateTime("now"));
+                    $product->setDateEdited(new \DateTime("now"));
+                    
+                    if($settings->getIsModerate()){
+                        $product->setIsConfirm(0);
+                    }else{
+                        $product->setIsConfirm(1);
+                    }
+                    
+                    $manager->persist($product);
+                    $manager->flush();
+                    
+                    if($settings->getIsModerate()){
+                        $flashTitle = $this->get('translator')->trans('Ваше объявление отправлено на модерацию');
+                        $flashText = $this->get('translator')->trans(' Мы модерируем каждое объявление и проверим его в течении 30 минут. Потому что мы заботимся о безопасности наших пользователей и о качестве базы объявлений. Все объявления модерируются в порядке очереди. Если вы подаете объявление в ночное время, то оно будет промодерировано утром следующего дня.');
+                    }else{
+                        $flashTitle = $this->get('translator')->trans('Ваше объявление опубликовано');
+                        $flashText = $this->get('translator')->trans('Объявление продлено и перемещено в раздел "Текущие".');
+                    }
+                    
+                break;
+                
+                case 'unblocked':
+                    $product->setIsBlocked(0);
+                    $product->setCorrectReason(NULL);
+                            
+                    if($settings->getIsModerate()){
+                        $product->setIsConfirm(0);
+                    }else{
+                        $product->setIsConfirm(1);
+                    }
+
+                    $manager->persist($product);
+                    $manager->flush();
+                    
+                    if($settings->getIsModerate()){
+                        $flashTitle = $this->get('translator')->trans('Ваше объявление отправлено на модерацию');
+                        $flashText = $this->get('translator')->trans(' Мы модерируем каждое объявление и проверим его в течении 30 минут. Потому что мы заботимся о безопасности наших пользователей и о качестве базы объявлений. Все объявления модерируются в порядке очереди. Если вы подаете объявление в ночное время, то оно будет промодерировано утром следующего дня.');
+                    }else{
+                        $flashTitle = $this->get('translator')->trans('Ваше объявление разблокировано');
+                        $flashText = $this->get('translator')->trans('Вы можете воспользоваться платными услугами для увеличения шансов на продажу.');
+                    }
+                break;
+                
+                case 'delete':
+                    $this->deleteAdvert($product, $request);
+                    
+                    $flashTitle = $this->get('translator')->trans('Объявление удалено');
+                    $flashText = $this->get('translator')->trans('Вы можете добавить другие объявления на нашу доску.');
+                break;
+            }
+        }
+        
+        
+        $flashMessage = $this->renderView('DashboardCommonBundle:Flash:advert/actionResult.html.twig', array("settings" => $settings,"locale" => $locale, "text" => $flashText, "title" => $flashTitle));
+        $this->addFlash('notice', $flashMessage);
+
+        return new Response("OK");
+    }
+    
+    private function deleteAdvert($product, $request){
+        
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        
+        if($product->getMainfoto()){
+            if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $product->getMainfoto()))
+            {
+                $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $product->getMainfoto());
+            }
+        }
+        
+        if($product->getFotos()){
+            foreach($product->getFotos() as $foto){
+                if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto()))
+                {
+                    $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto());
+                }
+                
+                $foto->setProduct(null);
+                $manager->remove($foto);
+            }
+        }
+        
+        if($product->getOrders()){
+            foreach($product->getOrders() as $order){
+                $order->setUserReceived(null);
+                $order->setUserSended(null);
+                $order->setProduct(null);
+                
+                $manager->remove($order);
+            }
+        }
+        
+        if($product->getComplaint()){
+            foreach($product->getComplaint() as $complaint){
+                $complaint->setProduct(null);
+                $manager->remove($complaint);
+            }
+        }
+        
+        if($product->getMessages()){
+            foreach($product->getMessages() as $message){
+                $message->setProduct(null);
+                $manager->remove($message);
+            }
+        }
+        
+        if($product->getFilters()){
+            foreach($product->getFilters() as $filter){
+                $filter->removeProduct($product);
+                $manager->persist($filter);
+            }
+        }
+        
+        if($product->getService()){
+            foreach($product->getService() as $service){
+                if($service->getBills()){
+                    foreach($service->getBills() as $bill){
+                        $bill->setProduct(null);
+                        $bill->removeService($service);
+                        $manager->remove($bill);
+                    }
+                }
+                
+                $service->setProduct(null);
+                $manager->remove($service);
+            }
+        }
+        
+        $bills = $manager->getRepository("DashboardCommonBundle:Bill")->findBy(array("product" => $product));
+        if($bills){
+            foreach($bills as $bill){
+                $bill->setProduct(null);
+                $manager->remove($bill);
+            }
+        }
+        
+        $info = $product->getInfo();
+        if($info){
+            $info->setProduct(null);
+            $manager->remove($info);
+        }
+        
+        $manager->remove($product);
+        $manager->flush();
+        
+        return true;
     }
     
     /**

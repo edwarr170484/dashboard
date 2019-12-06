@@ -480,3 +480,37 @@ function setGasValue(element, locale_code){
         }
     });
 }
+
+function doAdvertAction(productId, locale_code, text, action){
+    if(confirm(text)){
+        $.ajax({
+            url: '/' + locale_code + '/account/advert/ajax/' + action + '/' + productId,
+            type:'get',
+            dataType: 'html',
+            beforeSend: function(){},
+            success: function()
+            {
+                window.location.reload();
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                $(".modal-body-cover").hide();
+                err=xhr.responseText;
+            }
+        });
+    }
+}
+
+function toggleProductService(productId, serviceId, servicePrice, locale_code, element, titleText, buttonText){
+    $("body").find('.accountBottomPaymentSumm').remove();
+    
+    if(element.hasClass("active")){
+        
+    }else{
+        
+    }
+    
+    if(totalPrice > 0){
+        $("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">' + titleText + ':</div><div class="accoutnProductServicesTotalSumma">' + totalPrice + ' &euro;</div><div class="accountBottomPaymentSummValueButton"><a href="">' + buttonText + '</a></div></div></div></div></div></div>');
+    }
+    
+}

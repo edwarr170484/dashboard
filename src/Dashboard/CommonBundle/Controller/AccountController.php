@@ -38,19 +38,19 @@ class AccountController extends Controller
         $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId());
         $allProducts = $query->getResult();
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isCorrect = 0 AND p.isConfirm = 1 AND p.isActive = 1 AND p.isBlocked = 0');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 1 AND p.isBlocked = 0 AND p.isDraft = 0');
         $currentProducts = $query->getResult();
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isCorrect = 0 AND p.isConfirm = 0 AND p.isActive = 0 AND p.isBlocked = 0');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isDraft = 1');
+        $draftProducts = $query->getResult();
+        
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 0 AND p.isBlocked = 0 AND p.isDraft = 0');
         $confirmProducts = $query->getResult();
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isCorrect = 1 AND p.isConfirm = 0 AND p.isActive = 0 AND p.isBlocked = 0');
-        $correctProducts = $query->getResult();
-        
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isCorrect = 0 AND p.isConfirm = 1 AND p.isActive = 0 AND p.isBlocked = 0');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 0 AND p.isBlocked = 0 AND p.isDraft = 0');
         $stoppedProducts = $query->getResult();
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isBlocked = 1');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isActive = 1 AND p.isBlocked = 1 AND p.isDraft = 0');
         $blockedProducts = $query->getResult();
         
         $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isDeleted <> 1 AND m.userTo = ' . $user->getId() . ' AND m.isNew = 1 AND m.userOwner = ' . $user->getId());
@@ -78,13 +78,13 @@ class AccountController extends Controller
                       "confirmProducts" => $confirmProducts,
                       "stoppedProducts" => $stoppedProducts,
                       "blockedProducts" => $blockedProducts,
+                      "draftProducts"   => $draftProducts,
                       "newMessages" => count($messages),
                       "messagesInbox" => $messagesInbox,
                       "messagesSent" => $messagesSent,
                       "messagesTrash" => $messagesTrash,
                       "orderReceived" => $orderReceived,
                       "orderBanned" => $orderBanned,
-                      "correctProducts" => $correctProducts,
                       "settings" => $settings,
                       "locale" => $locale,
                       "routeName" => $routeName));
@@ -670,49 +670,18 @@ class AccountController extends Controller
         $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' ORDER BY p.isActive DESC');
 
         try
-            {
-                $products = $query->getResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $products = 0;
-            }
+        {
+            $products = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $products = 0;
+        }
         
         return $this->render('DashboardCommonBundle:User:account/products/products.html.twig', array("products" => $products, 
                                                                                     "settings" => $settings, 
                                                                                     "user" => $user, 
                                                                                     "title" => "Мои объявления",
                                                                                     "services" => $services,
-                                                                                    "settings" => $settings,
-                                                                                    "locale" => $locale,
-                                                                                    "routeName" => $request->attributes->get("_route")));
-    }
-    
-    /**
-     * @Route("/account/correctproducts", name="account_products_correct")
-     * @Route("/{_locale}/account/correctproducts", name="account_products_correctLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
-     */
-    public function productsCorrectAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isCorrect = 1 AND p.isConfirm = 0 AND p.isActive = 0 AND p.isBlocked = 0');
-
-        try
-            {
-                $products = $query->getResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $products = 0;
-            }
-        
-        //вычисляем сколько осталось дней
-        
-        return $this->render('DashboardCommonBundle:User:account/products/correct.html.twig', array("products" => $products,  
-                                                                                    "user" => $user, 
                                                                                     "settings" => $settings,
                                                                                     "locale" => $locale,
                                                                                     "routeName" => $request->attributes->get("_route")));
@@ -731,7 +700,7 @@ class AccountController extends Controller
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isCorrect = 0 AND p.isConfirm = 1 AND p.isActive = 1 AND p.isBlocked = 0');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 1 AND p.isBlocked = 0');
 
         try
             {
@@ -763,7 +732,7 @@ class AccountController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isCorrect = 0 AND p.isConfirm = 0 AND p.isActive = 0 AND p.isBlocked = 0');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 0 AND p.isBlocked = 0');
 
         try
             {
@@ -779,6 +748,39 @@ class AccountController extends Controller
                                                                                     "settings" => $settings, 
                                                                                     "user" => $user, 
                                                                                     "title" => "Объявления на модерации",
+                                                                                    "settings" => $settings,
+                                                                                    "locale" => $locale,
+                                                                                    "routeName" => $request->attributes->get("_route")));
+    }
+    
+    /**
+     * @Route("/account/drafts", name="account_products_drafts")
+     * @Route("/{_locale}/account/drafts", name="account_products_draftsLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function productsDraftAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isDraft = 1');
+
+        try
+            {
+                $products = $query->getResult();
+            }
+            catch(\Doctrine\ORM\NoResultException $e) {
+                $products = 0;
+            }
+        
+        //вычисляем сколько осталось дней
+        
+        return $this->render('DashboardCommonBundle:User:account/products/drafts.html.twig', array("products" => $products, 
+                                                                                    "settings" => $settings, 
+                                                                                    "user" => $user, 
+                                                                                    "title" => "Черновики",
                                                                                     "settings" => $settings,
                                                                                     "locale" => $locale,
                                                                                     "routeName" => $request->attributes->get("_route")));
@@ -811,7 +813,7 @@ class AccountController extends Controller
             }
         }
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isCorrect = 0 AND p.isConfirm = 1 AND p.isActive = 0 AND p.isBlocked = 0');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 0 AND p.isBlocked = 0');
 
         try
             {
@@ -855,7 +857,7 @@ class AccountController extends Controller
             }
         }
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isBlocked = 1');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isActive = 1 AND p.isBlocked = 1');
 
         try
             {

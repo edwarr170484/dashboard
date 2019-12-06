@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Ноя 29 2019 г., 15:44
+-- Время создания: Дек 06 2019 г., 16:03
 -- Версия сервера: 10.1.9-MariaDB
 -- Версия PHP: 5.6.15
 
@@ -72,7 +72,7 @@ CREATE TABLE `bill` (
 --
 
 INSERT INTO `bill` (`id`, `user_id`, `date_added`, `price`, `file`, `rate_id`, `service_pack_id`, `date_payed`, `is_payed`, `product_id`) VALUES
-(1, 6, '2019-11-29 17:40:15', 3.99, NULL, NULL, NULL, NULL, NULL, 1);
+(3, 1, '2019-12-06 15:56:56', 6.99, NULL, NULL, 2, NULL, NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -84,16 +84,6 @@ CREATE TABLE `bill_product_service` (
   `bill_id` int(11) NOT NULL,
   `product_service_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Дамп данных таблицы `bill_product_service`
---
-
-INSERT INTO `bill_product_service` (`bill_id`, `product_service_id`) VALUES
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 4);
 
 -- --------------------------------------------------------
 
@@ -16013,19 +16003,19 @@ CREATE TABLE `product` (
   `views_per_date` int(11) DEFAULT '0',
   `is_blocked` tinyint(1) DEFAULT '0',
   `is_confirm` tinyint(1) DEFAULT '0',
-  `is_correct` tinyint(1) DEFAULT '0',
   `correct_reason` longtext COLLATE utf8_unicode_ci,
   `translit` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
   `city_code_id` int(11) DEFAULT NULL,
-  `is_draft` tinyint(1) DEFAULT '0'
+  `is_draft` tinyint(1) DEFAULT '0',
+  `base_category_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `product`
 --
 
-INSERT INTO `product` (`id`, `category_id`, `user_id`, `region_id`, `city_id`, `author_name`, `author_email`, `author_phone`, `name`, `mainfoto`, `is_active`, `date_added`, `date_edited`, `views`, `views_per_date`, `is_blocked`, `is_confirm`, `is_correct`, `correct_reason`, `translit`, `city_code_id`, `is_draft`) VALUES
-(1, 251, 6, 1, 41, 'John Doe', 'smurf84@mail.ru', '+375251234567', 'Ford Focus', NULL, 1, '2019-11-29 17:40:15', '2019-11-29 17:40:15', NULL, NULL, NULL, NULL, NULL, NULL, 'Ford_Focus', 1193, 1);
+INSERT INTO `product` (`id`, `category_id`, `user_id`, `region_id`, `city_id`, `author_name`, `author_email`, `author_phone`, `name`, `mainfoto`, `is_active`, `date_added`, `date_edited`, `views`, `views_per_date`, `is_blocked`, `is_confirm`, `correct_reason`, `translit`, `city_code_id`, `is_draft`, `base_category_id`) VALUES
+(3, 251, 1, 1, 41, 'Sunweb Sunweb', 'sales@sunweb.by', '+3721234567845', 'Ford Focus', NULL, 1, '2019-12-06 15:56:56', '2019-12-06 15:56:56', NULL, NULL, 0, 1, NULL, 'Ford_Focus', 1450, 0, 27);
 
 -- --------------------------------------------------------
 
@@ -16043,10 +16033,14 @@ CREATE TABLE `product_filters` (
 --
 
 INSERT INTO `product_filters` (`product_id`, `filter_value_id`) VALUES
-(1, 77),
-(1, 81),
-(1, 85),
-(1, 89);
+(3, 77),
+(3, 78),
+(3, 81),
+(3, 82),
+(3, 85),
+(3, 86),
+(3, 89),
+(3, 90);
 
 -- --------------------------------------------------------
 
@@ -16065,7 +16059,7 @@ CREATE TABLE `product_fotos` (
 --
 
 INSERT INTO `product_fotos` (`id`, `product_id`, `foto`) VALUES
-(1, 1, '87615966.jpg');
+(4, 3, '34228516.jpg');
 
 -- --------------------------------------------------------
 
@@ -16102,7 +16096,7 @@ CREATE TABLE `product_info` (
 --
 
 INSERT INTO `product_info` (`id`, `product_id`, `generation_id`, `board_id`, `gas_type_id`, `gas_transmission_id`, `gear_type_id`, `modification_id`, `color_id`, `shape_id`, `price`, `year`, `probeg`, `wheel`, `is_gas_baloon`, `owners`, `vin`, `description`, `nds`, `torg`, `garant`) VALUES
-(1, 1, 1, NULL, 58, 60, 63, 1, 73, 2, 30000, '1999', '50', 0, 0, 0, '12332112123', 'ТОРГ ДЛЯ РЕАЛЬНЫХ ПОКУПАТЕЛЕЙ\n\nАвтомобиль куплен у официального дилера BMW в Калиниграде. В эксплуатации с апреля 2018 года. Немецкая сборка. Стоит на расширенной гарантии. Пройдено 2 ТО. Состояние абсолютно нового авто так как весь год машина больше стояла чем ездила в связи с постоянными и длительными командировками владельца. \nНа хранение зимние колёса в сборе с 18" легкосплавными дисками Double-spoke 634\n\nЦвет и отделка салона:\n\n-Серый Гранит металлик\n-Кожа ''Dakota''Слоновая Кость с эксклюзивным швом/ контрастной окантовкой - Черный\n- Спортивные сиденья для водителя и переднего пассажира \n\nДополнительные опции:\n\n- Стандарт EU5\n- Выбор автомобиля важного для СОР\n- Автоматическая коробка передач\n- Оснащение национальной системой торможения\n- Обогрев рулевого колеса\n- Спортивное кожаное рулевое колесо\n- Шины с возможностью аварийного хода после прокола\n- Контроль давления в шинах\n- Автоматическая система закрывания/открывания крышки багажника\n- Комфортный доступ\n- Автодоводчик дверей\n- Камера заднего вида\n- Интерактивный ключ BMW display key\n- Велюровые коврики\n- Знак аварийной остановки и аптечка\n- Пакет курильщика\n- Электрорегулировка передних сидений с функцией "Память" для сиденья водителя\n- Система складывающихся задних сидений\n- Спортивные сиденья для водителя и переднего пассажира\n- Подогрев сидений (спереди и сзади)\n- Декоративные планки - ''Глянцевый Черный''Акцентные вставки ''Жемчужный Хром''\n- Пакет Ambient Air (ионизация и ароматизация салона)\n- Расширенный пакет зеркал заднего вида\n- Пакет освещения\n- Сигнализация аварийного сближения при парковке (спереди и сзади)\n- Автоматический контроль климата\n- Спидометр с обозначением километров\n- Светодиодные противотуманные фары\n- Навигационная система Professional\n- CD-плеер\n- Аудиосистема типа Hi-Fi\n- TeleServices\n- Функция интеллектуального экстренного   вызова\n- Сервисы BMW ConnectedDrive\n- Информация о дорожной ситуации онлайн\n- Консьерж-сервис\n- Дистанционное управление автомобилем\n- Подготовка к Apple CarPlay\n- Голосовое воспроизведение на русском языке (для навигации)\n- Многофункциональный дисплей на приборнойпанели\n- Региональный код 5 для DVD\n- Внешний дизайн "Глянцевый черный" BMW Индивидуал\n-Индивидуальная обивка потолка салона, Aнтрацит\n- Линия отделки Sport Line\n- Пакет BMW Ремонт, вкл. 3 года\n- Пакет услуг ConnectedDrive\n-Исполнение для стран с холодным климатом\n- Русский/Сервисная книжка\n-Специальная подготовка кузова\n- Интервал замены масла 15.000 км/18 мес\n- Специфическая для России опция\n- Закрывание центрального замка при началедвижения\n- Cтраны с плохим дорожным покрытием\n- Внешний защитный слой\n- Пакет Basic', NULL, 1, NULL);
+(3, 3, 1, 67, 58, 60, 63, 1, 74, 2, 10000, '1999', '15000', 0, 0, 0, '12345634567936723', 'Составляя текст объявления, помните, что самый правильный подход к его подготовке – честность и детальность описания автомобиля. Многие сайты предлагают стандартные формы заполнения, какие-то более подробные, какие-то – менее. На am.ru, например, очень подробная форма, которая позволяет составить полное описание машины. Но оно стандартно для всех, а вот поле для комментариев заполняется индивидуально, носит более эмоциональную окраску и создаёт образ автомобиля и его владельца.', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -16162,22 +16156,6 @@ CREATE TABLE `product_order_info` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `product_reviews`
---
-
-CREATE TABLE `product_reviews` (
-  `id` int(11) NOT NULL,
-  `product_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `review` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `date_added` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `is_active` tinyint(1) NOT NULL,
-  `sortorder` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `product_service`
 --
 
@@ -16196,10 +16174,10 @@ CREATE TABLE `product_service` (
 --
 
 INSERT INTO `product_service` (`id`, `product_id`, `service_id`, `date_added`, `is_active`, `date_end`, `count`) VALUES
-(1, NULL, 1, NULL, 0, NULL, 1),
-(2, NULL, 2, NULL, 0, NULL, 1),
-(3, NULL, 3, NULL, 0, NULL, 1),
-(4, NULL, 4, NULL, 0, NULL, 7);
+(1, 3, 1, NULL, 0, NULL, 7),
+(2, 3, 2, NULL, 0, NULL, 30),
+(3, 3, 3, NULL, 0, NULL, 3),
+(4, 3, 4, NULL, 0, NULL, 7);
 
 -- --------------------------------------------------------
 
@@ -16412,18 +16390,20 @@ CREATE TABLE `service` (
   `days` int(11) DEFAULT '0',
   `icon` longtext COLLATE utf8_unicode_ci,
   `icon_gray` longtext COLLATE utf8_unicode_ci,
-  `type` int(11) DEFAULT '0'
+  `type` int(11) DEFAULT '0',
+  `parameter` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
+  `is_button` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `service`
 --
 
-INSERT INTO `service` (`id`, `title`, `description`, `price`, `days`, `icon`, `icon_gray`, `type`) VALUES
-(1, 'Премиум-размещение', 'Ваше объявление будет показываться на самом заметном месте сайта &mdash; на главной странице, в категориях над обычными объявлениями и на страницах результатов поиска.<br /> Стоимость услуги &mdash; 5 евро в сутки.', 50, 1, '<svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>\r\n<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>', 0),
-(2, 'Выделить', 'Ваше объявление будет показываться на странице результатов поиска и в своей категории, оно отмечатся особой иконкой и отображаются другой цветовой гаммой. BONUS При этом оно поднимется на первое место в результатах поиска бесплатно. Цена - 3 евро/сутки.', 30, 1, '<svg width="32" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M1 12.5273C1 12.5273 6.39303 1.74121 15.8308 1.74121C25.2687 1.74121 30.6617 12.5273 30.6617 12.5273C30.6617 12.5273 25.2687 23.3134 15.8308 23.3134C6.39303 23.3134 1 12.5273 1 12.5273Z" fill="#F5AA01"/>\r\n<path d="M15.8308 16.5721C18.0647 16.5721 19.8756 14.7611 19.8756 12.5273C19.8756 10.2934 18.0647 8.4825 15.8308 8.4825C13.597 8.4825 11.7861 10.2934 11.7861 12.5273C11.7861 14.7611 13.597 16.5721 15.8308 16.5721Z" fill="#F5AA01"/>\r\n<path d="M1 12.5273C1 12.5273 6.39303 1.74121 15.8308 1.74121C25.2687 1.74121 30.6617 12.5273 30.6617 12.5273C30.6617 12.5273 25.2687 23.3134 15.8308 23.3134C6.39303 23.3134 1 12.5273 1 12.5273Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M15.8308 16.5721C18.0647 16.5721 19.8756 14.7611 19.8756 12.5273C19.8756 10.2934 18.0647 8.4825 15.8308 8.4825C13.597 8.4825 11.7861 10.2934 11.7861 12.5273C11.7861 14.7611 13.597 16.5721 15.8308 16.5721Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="24" height="24" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>', 0),
-(3, 'Поднять', 'Ваше объявление поднимется на первое место в результатах поиска, как если бы оно было только что подано на сайт. BONUS На следующий день, в это же время, оно будет поднято ещё раз бесплатно. <br /> Стоимость услуги&nbsp;20 грн/сутки.', 20, 1, '<svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M14.5 28C21.9558 28 28 21.9558 28 14.5C28 7.04416 21.9558 1 14.5 1C7.04416 1 1 7.04416 1 14.5C1 21.9558 7.04416 28 14.5 28Z" fill="#F5AA01"/>\r\n<path d="M19.9 14.5L14.5 9.1L9.1 14.5" fill="#F5AA01"/>\r\n<path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="27" height="17" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                                <path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>', 0),
-(4, 'Спецпредложение', NULL, 2.99, 7, '<svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M16 23.2757C19.7656 23.2757 22.8182 20.2231 22.8182 16.4575C22.8182 12.6919 19.7656 9.63934 16 9.63934C12.2344 9.63934 9.18182 12.6919 9.18182 16.4575C9.18182 20.2231 12.2344 23.2757 16 23.2757Z" fill="#F5AA01"/>\r\n<path d="M16 1.45752V4.18479M16 28.7302V31.4575M5.39091 5.84843L7.32727 7.78479M24.6727 25.1302L26.6091 27.0666M1 16.4575H3.72727M28.2727 16.4575H31M5.39091 27.0666L7.32727 25.1302M24.6727 7.78479L26.6091 5.84843M22.8182 16.4575C22.8182 20.2231 19.7656 23.2757 16 23.2757C12.2344 23.2757 9.18182 20.2231 9.18182 16.4575C9.18182 12.6919 12.2344 9.63934 16 9.63934C19.7656 9.63934 22.8182 12.6919 22.8182 16.4575Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<div class="button">\r\n                                                                        <svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                            <path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>\r\n                                                                        7\r\n                                                                    </div>', 0);
+INSERT INTO `service` (`id`, `title`, `description`, `price`, `days`, `icon`, `icon_gray`, `type`, `parameter`, `is_button`) VALUES
+(1, 'Премиум-размещение', 'Ваше объявление будет показываться на самом заметном месте сайта &mdash; на главной странице, в категориях над обычными объявлениями и на страницах результатов поиска.<br /> Стоимость услуги &mdash; 5 евро в сутки.', 50, 7, '<svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M14.5 28.2637C21.9558 28.2637 28 22.2195 28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367C7.04416 1.26367 1 7.30783 1 14.7637C1 22.2195 7.04416 28.2637 14.5 28.2637Z" fill="#F5AA01"/>\r\n<path d="M28 14.7637C28 22.2195 21.9558 28.2637 14.5 28.2637M28 14.7637C28 7.30783 21.9558 1.26367 14.5 1.26367M28 14.7637H22.6M14.5 28.2637C7.04416 28.2637 1 22.2195 1 14.7637M14.5 28.2637V22.8637M1 14.7637C1 7.30783 7.04416 1.26367 14.5 1.26367M1 14.7637H6.4M14.5 1.26367V6.66367" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="24" height="24" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n                                                                                <path d="M28 14.5C28 21.9558 21.9558 28 14.5 28M28 14.5C28 7.04416 21.9558 1 14.5 1M28 14.5H22.6M14.5 28C7.04416 28 1 21.9558 1 14.5M14.5 28V22.6M1 14.5C1 7.04416 7.04416 1 14.5 1M1 14.5H6.4M14.5 1V6.4" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n                                                                        </svg>', 0, 'дней', 0),
+(2, 'Выделить', 'Ваше объявление будет показываться на странице результатов поиска и в своей категории, оно отмечатся особой иконкой и отображаются другой цветовой гаммой. BONUS При этом оно поднимется на первое место в результатах поиска бесплатно. Цена - 3 евро/сутки.', 30, 7, '<svg width="32" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M1 12.5273C1 12.5273 6.39303 1.74121 15.8308 1.74121C25.2687 1.74121 30.6617 12.5273 30.6617 12.5273C30.6617 12.5273 25.2687 23.3134 15.8308 23.3134C6.39303 23.3134 1 12.5273 1 12.5273Z" fill="#F5AA01"/>\r\n<path d="M15.8308 16.5721C18.0647 16.5721 19.8756 14.7611 19.8756 12.5273C19.8756 10.2934 18.0647 8.4825 15.8308 8.4825C13.597 8.4825 11.7861 10.2934 11.7861 12.5273C11.7861 14.7611 13.597 16.5721 15.8308 16.5721Z" fill="#F5AA01"/>\r\n<path d="M1 12.5273C1 12.5273 6.39303 1.74121 15.8308 1.74121C25.2687 1.74121 30.6617 12.5273 30.6617 12.5273C30.6617 12.5273 25.2687 23.3134 15.8308 23.3134C6.39303 23.3134 1 12.5273 1 12.5273Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M15.8308 16.5721C18.0647 16.5721 19.8756 14.7611 19.8756 12.5273C19.8756 10.2934 18.0647 8.4825 15.8308 8.4825C13.597 8.4825 11.7861 10.2934 11.7861 12.5273C11.7861 14.7611 13.597 16.5721 15.8308 16.5721Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="32" height="25" viewBox="0 0 32 25" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M1 12.7861C1 12.7861 6.39303 2 15.8308 2C25.2687 2 30.6617 12.7861 30.6617 12.7861C30.6617 12.7861 25.2687 23.5721 15.8308 23.5721C6.39303 23.5721 1 12.7861 1 12.7861Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n<path d="M15.8308 16.8308C18.0647 16.8308 19.8756 15.0199 19.8756 12.7861C19.8756 10.5522 18.0647 8.74129 15.8308 8.74129C13.597 8.74129 11.7861 10.5522 11.7861 12.7861C11.7861 15.0199 13.597 16.8308 15.8308 16.8308Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', 0, 'дней', 0),
+(3, 'Поднять', 'Ваше объявление поднимется на первое место в результатах поиска, как если бы оно было только что подано на сайт. BONUS На следующий день, в это же время, оно будет поднято ещё раз бесплатно. <br /> Стоимость услуги&nbsp;20 грн/сутки.', 20, 3, '<svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M14.5 28C21.9558 28 28 21.9558 28 14.5C28 7.04416 21.9558 1 14.5 1C7.04416 1 1 7.04416 1 14.5C1 21.9558 7.04416 28 14.5 28Z" fill="#F5AA01"/>\r\n<path d="M19.9 14.5L14.5 9.1L9.1 14.5" fill="#F5AA01"/>\r\n<path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M19.9 14.5L14.5 9.1M14.5 9.1L9.1 14.5M14.5 9.1V19.9M28 14.5C28 21.9558 21.9558 28 14.5 28C7.04416 28 1 21.9558 1 14.5C1 7.04416 7.04416 1 14.5 1C21.9558 1 28 7.04416 28 14.5Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', 0, 'поднятий', 1),
+(4, 'Спецпредложение', NULL, 2.99, 10, '<svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M16 23.2757C19.7656 23.2757 22.8182 20.2231 22.8182 16.4575C22.8182 12.6919 19.7656 9.63934 16 9.63934C12.2344 9.63934 9.18182 12.6919 9.18182 16.4575C9.18182 20.2231 12.2344 23.2757 16 23.2757Z" fill="#F5AA01"/>\r\n<path d="M16 1.45752V4.18479M16 28.7302V31.4575M5.39091 5.84843L7.32727 7.78479M24.6727 25.1302L26.6091 27.0666M1 16.4575H3.72727M28.2727 16.4575H31M5.39091 27.0666L7.32727 25.1302M24.6727 7.78479L26.6091 5.84843M22.8182 16.4575C22.8182 20.2231 19.7656 23.2757 16 23.2757C12.2344 23.2757 9.18182 20.2231 9.18182 16.4575C9.18182 12.6919 12.2344 9.63934 16 9.63934C19.7656 9.63934 22.8182 12.6919 22.8182 16.4575Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', '<svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">\r\n<path d="M16 1.00195V3.72923M16 28.2747V31.002M5.39091 5.39286L7.32727 7.32923M24.6727 24.6747L26.6091 26.611M1 16.002H3.72727M28.2727 16.002H31M5.39091 26.611L7.32727 24.6747M24.6727 7.32923L26.6091 5.39286M22.8182 16.002C22.8182 19.7675 19.7656 22.8201 16 22.8201C12.2344 22.8201 9.18182 19.7675 9.18182 16.002C9.18182 12.2364 12.2344 9.18377 16 9.18377C19.7656 9.18377 22.8182 12.2364 22.8182 16.002Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\r\n</svg>', 0, 'дней', 0);
 
 -- --------------------------------------------------------
 
@@ -17170,7 +17150,8 @@ ALTER TABLE `product`
   ADD KEY `IDX_D34A04ADA76ED395` (`user_id`),
   ADD KEY `IDX_D34A04AD98260155` (`region_id`),
   ADD KEY `IDX_D34A04AD8BAC62AF` (`city_id`),
-  ADD KEY `IDX_D34A04AD9A924045` (`city_code_id`);
+  ADD KEY `IDX_D34A04AD9A924045` (`city_code_id`),
+  ADD KEY `IDX_D34A04AD1B636B1A` (`base_category_id`);
 
 --
 -- Индексы таблицы `product_filters`
@@ -17233,14 +17214,6 @@ ALTER TABLE `product_order_info`
   ADD KEY `IDX_151F546B2DBF1AFE` (`gas_transmission_id`),
   ADD KEY `IDX_151F546B32CA4F08` (`gear_type_id`),
   ADD KEY `IDX_151F546B4A605127` (`modification_id`);
-
---
--- Индексы таблицы `product_reviews`
---
-ALTER TABLE `product_reviews`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_B8A9F0BF4584665A` (`product_id`),
-  ADD KEY `IDX_B8A9F0BFA76ED395` (`user_id`);
 
 --
 -- Индексы таблицы `product_service`
@@ -17410,7 +17383,7 @@ ALTER TABLE `banner`
 -- AUTO_INCREMENT для таблицы `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `blacklist`
 --
@@ -17430,7 +17403,7 @@ ALTER TABLE `category_description`
 -- AUTO_INCREMENT для таблицы `category_rate`
 --
 ALTER TABLE `category_rate`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT для таблицы `city`
 --
@@ -17530,12 +17503,12 @@ ALTER TABLE `generation_item`
 -- AUTO_INCREMENT для таблицы `job`
 --
 ALTER TABLE `job`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 --
 -- AUTO_INCREMENT для таблицы `job_category`
 --
 ALTER TABLE `job_category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT для таблицы `locale`
 --
@@ -17580,17 +17553,17 @@ ALTER TABLE `page`
 -- AUTO_INCREMENT для таблицы `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `product_fotos`
 --
 ALTER TABLE `product_fotos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `product_info`
 --
 ALTER TABLE `product_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `product_options`
 --
@@ -17600,16 +17573,11 @@ ALTER TABLE `product_options`
 -- AUTO_INCREMENT для таблицы `product_order`
 --
 ALTER TABLE `product_order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `product_order_info`
 --
 ALTER TABLE `product_order_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT для таблицы `product_reviews`
---
-ALTER TABLE `product_reviews`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `product_service`
@@ -17620,12 +17588,12 @@ ALTER TABLE `product_service`
 -- AUTO_INCREMENT для таблицы `rate`
 --
 ALTER TABLE `rate`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT для таблицы `rate_service`
 --
 ALTER TABLE `rate_service`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT для таблицы `region`
 --
@@ -17931,6 +17899,7 @@ ALTER TABLE `pages_banners`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `FK_D34A04AD12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_D34A04AD1B636B1A` FOREIGN KEY (`base_category_id`) REFERENCES `category` (`id`),
   ADD CONSTRAINT `FK_D34A04AD8BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
   ADD CONSTRAINT `FK_D34A04AD98260155` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
   ADD CONSTRAINT `FK_D34A04AD9A924045` FOREIGN KEY (`city_code_id`) REFERENCES `city_code` (`id`),
@@ -17961,7 +17930,7 @@ ALTER TABLE `product_info`
   ADD CONSTRAINT `FK_466113F650266CBB` FOREIGN KEY (`shape_id`) REFERENCES `shape` (`id`),
   ADD CONSTRAINT `FK_466113F6553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
   ADD CONSTRAINT `FK_466113F67ADA1FB5` FOREIGN KEY (`color_id`) REFERENCES `filter_value` (`id`),
-  ADD CONSTRAINT `FK_466113F6E7EC5785` FOREIGN KEY (`board_id`) REFERENCES `generation_board` (`id`);
+  ADD CONSTRAINT `FK_466113F6E7EC5785` FOREIGN KEY (`board_id`) REFERENCES `filter_value` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `product_options`
@@ -17991,13 +17960,6 @@ ALTER TABLE `product_order_info`
   ADD CONSTRAINT `FK_151F546B553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
   ADD CONSTRAINT `FK_151F546B8D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `product_order` (`id`),
   ADD CONSTRAINT `FK_151F546BE7EC5785` FOREIGN KEY (`board_id`) REFERENCES `generation_board` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `product_reviews`
---
-ALTER TABLE `product_reviews`
-  ADD CONSTRAINT `FK_B8A9F0BF4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-  ADD CONSTRAINT `FK_B8A9F0BFA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `product_service`

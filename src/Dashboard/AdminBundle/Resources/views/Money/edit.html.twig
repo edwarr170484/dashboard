@@ -1,0 +1,100 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme paymentForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block title %}{% trans %} Панель управления - Редактировать платежную систему{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_payments_list') }}">Платежные системы</a></li>
+            <li class="active">Редактировать платежную систему</li>
+        </ol>
+        <h1 class="page-header">Редактировать платежную систему</h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация о платежной системе</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(paymentForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(paymentForm.title)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(paymentForm.title)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(paymentForm.icon)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(paymentForm.icon)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(paymentForm.tieser)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(paymentForm.tieser)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(paymentForm.info)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(paymentForm.info)}}
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="form-group">
+                                <label class="col-md-3">{{ form_label(paymentForm.save)}}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(paymentForm.save,{'type' : 'submit'})}}
+                                </div>
+                            </div>        
+                        </div>
+                        {{ form_end(paymentForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

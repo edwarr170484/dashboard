@@ -26,7 +26,7 @@ class FavoriteProducts
      * @ORM\Column(type="integer", length=15)
      */
     private $productId;
-    
+  
 
     /**
      * Get id
@@ -47,7 +47,7 @@ class FavoriteProducts
     public function setUserId($userId)
     {
         $this->userId = $userId;
-
+    
         return $this;
     }
 
@@ -70,7 +70,7 @@ class FavoriteProducts
     public function setProductId($productId)
     {
         $this->productId = $productId;
-
+    
         return $this;
     }
 

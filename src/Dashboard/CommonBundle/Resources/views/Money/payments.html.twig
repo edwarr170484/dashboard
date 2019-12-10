@@ -1,0 +1,123 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Выбор способа оплаты{% endtrans %}{% endblock %}
+{% block bodyClass %}class="userAccount"{% endblock %}
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if locale.isDefault %}
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% else %}
+                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% endif %}
+                    {% if  locale.isDefault %}
+                        <li><a href="{{ path('account', {'_locale' : locale.code}) }}">
+                    {% else %}
+                        <li><a href="{{ path('accountLocale', {'_locale' : locale.code}) }}">
+                    {% endif %}
+                        {% trans %}Личный кабинет{% endtrans %}
+                    </a></li>
+                    <li>/</li>
+                    <li>
+                    {% if  locale.isDefault %}
+                        <a href="{{path('account_payments')}}">
+                    {% else %}
+                        <a href="{{path('account_paymentsLocale',{'_locale' : app.request.locale})}}">
+                    {% endif %}
+                        {% trans %}Оплата{% endtrans %}
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1><b>{% trans %}Оплата{% endtrans %}</b></h1></div>
+            </div>
+        </div>
+    </div>
+    <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
+        <div class="col-lg-10 col-md-10">
+            <div class="account-advert-block-content">
+                <div class="accountSettingsTabs">
+                    <div class="tab-content" style="padding:0;">
+                        <div class="tab-pane fade active in" id="inbox" role="tabpanel">
+                            <div class="accountConversationHeader">
+                                <div class="accountConversationHeaderBack">
+                                    {% if  locale.isDefault %}
+                                        <a href="{{path('account_products')}}">
+                                            <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 1rem;">
+                                                <path d="M8 0.999999L2 7.91954L8 15" stroke="#616161" stroke-width="2"/>
+                                            </svg>
+                                            {% trans %}назад{% endtrans %}
+                                        </a>
+                                    {% else %}
+                                    <a href="{{path('account_productsLocale',{'_locale' : app.request.locale})}}">
+                                        <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 1rem;">
+                                            <path d="M8 0.999999L2 7.91954L8 15" stroke="#616161" stroke-width="2"/>
+                                        </svg>
+                                        {% trans %}назад{% endtrans %}
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                <div class="accountConversationHeaderTopic">
+                                    Сумма к оплате: <span>{{ totalPrice }} {{ locale.currency.label | raw }}</span>
+                                </div>
+                            </div>
+                                <div class="paymentsMethodsBlock">
+                                    <div class="paymentsMethodsBlockHeader">{% trans %}Пожалуйста, выберите удобный способ оплаты{% endtrans %}</div>
+                                    <div class="paymentsMethodsBlockInner">
+                                        {% if user.roles[0].payments | length > 0 %}
+                                            <ul class="list-unstyled list-inline paymentsList">
+                                                {% set i = 1 %}
+                                                {% for payment in user.roles[0].payments %}
+                                                    <li {% if i == 1%}class="active"{% endif %}><a href="#payment{{ payment.id }}" class="payment-link" data-toggle="tab" role="tab" aria-controls="payment{{ payment.id }}" aria-selected="true">{{ payment.icon | raw }}</a></li>
+                                                    {% set i = i + 1 %}
+                                                {% endfor %}
+                                            </ul>
+                                            <div class="tab-content" id="paymentsTabsContent">
+                                                {% set i = 1 %}
+                                                {% for payment in user.roles[0].payments %}
+                                                    <div class="tab-pane fade {% if i == 1%}active in{% endif %}" id="payment{{ payment.id }}" role="tabpanel" aria-labelledby="home-tab">
+                                                        <div class="paymentInfoBlock">
+                                                            <div class="paymentInfoShield">
+                                                                <svg width="25" height="28" viewBox="0 0 25 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M16.8556 8.73633L10.996 16.4726L8.39404 13.5594" stroke="#222B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                    <path d="M23.5774 4.89051C18.8485 3.92106 16.8933 3.20303 12.625 1C8.35666 3.20303 6.40151 3.92106 1.67255 4.89051C0.815816 20.409 11.8095 25.7676 12.625 26.143C13.4405 25.7676 24.4342 20.409 23.5774 4.89051Z" stroke="#222B2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                </svg>
+                                                            </div>
+                                                            <div class="payemntInfoData">
+                                                                <div class="paymentTabName">{{ payment.title }}</div>
+                                                                <div class="paymentTabTieser">{{ payment.tieser | raw }}</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="paymentInfoLink">
+                                                            <div class="accountBottomPaymentSummValueButton" id=""><a href="">{% trans %}Оплатить{% endtrans %}</a></div>
+                                                        </div>
+                                                    </div>
+                                                    {% set i = i + 1 %}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

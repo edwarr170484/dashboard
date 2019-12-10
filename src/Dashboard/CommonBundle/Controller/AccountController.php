@@ -41,10 +41,10 @@ class AccountController extends Controller
         $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 1 AND p.isBlocked = 0 AND p.isDraft = 0');
         $currentProducts = $query->getResult();
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isDraft = 1');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isDraft = 1 AND p.isActive = 1 AND p.isBlocked = 0');
         $draftProducts = $query->getResult();
         
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 0 AND p.isBlocked = 0 AND p.isDraft = 0');
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 0 AND p.isActive = 1 AND p.isBlocked = 0 AND p.isDraft = 0');
         $confirmProducts = $query->getResult();
         
         $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 0 AND p.isBlocked = 0 AND p.isDraft = 0');
@@ -56,15 +56,6 @@ class AccountController extends Controller
         $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isDeleted <> 1 AND m.userTo = ' . $user->getId() . ' AND m.isNew = 1 AND m.userOwner = ' . $user->getId());
             
         $messages = $query->getResult();
-        
-        $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isDeleted <> 1 AND m.userTo = ' . $user->getId() .' AND m.userOwner = ' . $user->getId());
-        $messagesInbox = $query->getResult();
-        
-        $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isDeleted <> 1 AND m.userFrom = ' . $user->getId() .' AND m.userOwner = ' . $user->getId());   
-        $messagesSent = $query->getResult();
-        
-        $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isDeleted = 1 AND m.userOwner = ' . $user->getId());    
-        $messagesTrash = $query->getResult();
         
         $query = $manager->createQuery('SELECT o FROM Dashboard\CommonBundle\Entity\ProductOrder o WHERE o.userReceived = ' . $user->getId() . ' AND o.isNew = 1');    
         $orderReceived = $query->getResult();
@@ -80,9 +71,6 @@ class AccountController extends Controller
                       "blockedProducts" => $blockedProducts,
                       "draftProducts"   => $draftProducts,
                       "newMessages" => count($messages),
-                      "messagesInbox" => $messagesInbox,
-                      "messagesSent" => $messagesSent,
-                      "messagesTrash" => $messagesTrash,
                       "orderReceived" => $orderReceived,
                       "orderBanned" => $orderBanned,
                       "settings" => $settings,
@@ -99,13 +87,12 @@ class AccountController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $allProducts = $manager->getRepository("Dashboard\CommonBundle\Entity\Product")->findByUser($user);
-        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
         
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
 
         //current products
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' ORDER BY p.dateAdded DESC')->setMaxResults(4);
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' ORDER BY p.isActive DESC')->setMaxResults(4);
 
         try
         {
@@ -119,33 +106,216 @@ class AccountController extends Controller
         //favorite products
         $productsId = $manager->getRepository("DashboardCommonBundle:FavoriteProducts")->findByUserId($user->getId());
         
-        $favProducts = array();
+        $favProducts = new ArrayCollection();
         
         if($productsId)
         {
             foreach($productsId as $productId)
             {
                 $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId->getProductId());
-                if($product)
-                    array_push($favProducts, $product);
+                if($product){
+                    $favProducts->add($product);
+                }
             }
         }
-        
-        //new messages
-        $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isNew = 1 AND m.userTo = ' . $user->getId() .' AND m.userOwner = ' . $user->getId(). ' ORDER BY m.sentDate DESC')->setMaxResults(2);
-        
-        $messages = $query->getResult();
         
         return $this->render('DashboardCommonBundle:User:account/account.html.twig', array("user" => $user,
                                                                                    "countProducts" => count($allProducts),
                                                                                    "products" => $products,
                                                                                    "favProducts" => $favProducts,
-                                                                                   "messages" => $messages,
-                                                                                   "services" => $services,
                                                                                    "locale" => $locale,
                                                                                    "routeName" => $request->attributes->get("_route"),
                                                                                    "settings" => $settings));
     }
+    
+    /**
+     * @Route("/account/products", name="account_products")
+     * @Route("/{_locale}/account/products", name="account_productsLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function productsAction(Request $request)
+    {   
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
+        
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' ORDER BY p.isActive DESC');
+
+        try
+        {
+            $products = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $products = 0;
+        }
+        
+        return $this->render('DashboardCommonBundle:User:account/products/products.html.twig', array("products" => $products, 
+                                                                                    "settings" => $settings, 
+                                                                                    "user" => $user, 
+                                                                                    "title" => "Мои объявления",
+                                                                                    "services" => $services,
+                                                                                    "settings" => $settings,
+                                                                                    "locale" => $locale,
+                                                                                    "routeName" => $request->attributes->get("_route")));
+    }
+    
+    /**
+     * @Route("/account/confirmproducts", name="account_products_confirm")
+     * @Route("/{_locale}/account/confirmproducts", name="account_products_confirmLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function productsConfirmAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isActive = 1 AND p.isConfirm = 0 AND p.isBlocked = 0');
+
+        try
+            {
+                $products = $query->getResult();
+            }
+            catch(\Doctrine\ORM\NoResultException $e) {
+                $products = 0;
+            }
+        
+        //вычисляем сколько осталось дней
+        
+        return $this->render('DashboardCommonBundle:User:account/products/confirm.html.twig', array("products" => $products, 
+                                                                                    "settings" => $settings, 
+                                                                                    "user" => $user, 
+                                                                                    "title" => "Объявления на модерации",
+                                                                                    "settings" => $settings,
+                                                                                    "locale" => $locale,
+                                                                                    "routeName" => $request->attributes->get("_route")));
+    }
+    
+    /**
+     * @Route("/account/currentproducts", name="account_products_current")
+     * @Route("/{_locale}/account/currentproducts", name="account_products_currentLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function productsCurrentAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
+        
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 1 AND p.isBlocked = 0');
+
+        try
+            {
+                $products = $query->getResult();
+            }
+            catch(\Doctrine\ORM\NoResultException $e) {
+                $products = 0;
+            }
+        
+        //вычисляем сколько осталось дней
+        
+        return $this->render('DashboardCommonBundle:User:account/products/products.html.twig', array("products" => $products, 
+                                                                                    "settings" => $settings,
+                                                                                    "locale" => $locale, 
+                                                                                    "user" => $user, 
+                                                                                    "services" => $services,
+                                                                                    "routeName" => $request->attributes->get("_route")));
+    }
+    
+    /**
+     * @Route("/account/drafts", name="account_products_drafts")
+     * @Route("/{_locale}/account/drafts", name="account_products_draftsLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function productsDraftAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isDraft = 1 AND p.isActive = 1');
+
+        try
+            {
+                $products = $query->getResult();
+            }
+            catch(\Doctrine\ORM\NoResultException $e) {
+                $products = 0;
+            }
+        
+        //вычисляем сколько осталось дней
+        
+        return $this->render('DashboardCommonBundle:User:account/products/drafts.html.twig', array("products" => $products, 
+                                                                                    "settings" => $settings, 
+                                                                                    "user" => $user, 
+                                                                                    "title" => "Черновики",
+                                                                                    "settings" => $settings,
+                                                                                    "locale" => $locale,
+                                                                                    "routeName" => $request->attributes->get("_route")));
+    }
+    
+    /**
+     * @Route("/account/stoppedproducts", name="account_products_stopped")
+     * @Route("/{_locale}/account/stoppedproducts", name="account_products_stoppedLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function productsStoppedAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
+        
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 0 AND p.isBlocked = 0');
+
+        try
+        {
+            $products = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $products = 0;
+        }
+        
+        return $this->render('DashboardCommonBundle:User:account/products/stopped.html.twig', array("products" => $products,  
+                                                                                           "user" => $user, 
+                                                                                           "services" => $services,
+                                                                                           "settings" => $settings,
+                                                                                           "locale" => $locale,
+                                                                                           "routeName" => $request->attributes->get("_route")));
+    }
+    
+    /**
+     * @Route("/account/blockedproducts", name="account_products_blocked")
+     * @Route("/{_locale}/account/blockedproducts", name="account_products_blockedLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     */
+    public function productsBlockedAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isActive = 1 AND p.isBlocked = 1');
+
+        try
+        {
+            $products = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $products = 0;
+        }
+        
+        return $this->render('DashboardCommonBundle:User:account/products/blocked.html.twig', array("products" => $products, "settings" => $settings,"user" => $user, "title" => $this->get('translator')->trans("Bloķētās reklāmas"),"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route")));
+        
+    }  
     
     /**
      * @Route("/account/messages/{messageId}", name="account_messages", defaults={"messageId" : 0})
@@ -616,259 +786,6 @@ class AccountController extends Controller
                                                                                     "locale" => $locale,
                                                                                     "routeName" => $request->attributes->get("_route")));
     }
-    
-    /**
-     * @Route("/account/products/{productId}", name="account_products", defaults={"productId" : 0})
-     * @Route("/{_locale}/account/products/{productId}", name="account_productsLocale", defaults={"_locale" : "lv","productId" : 0}, requirements={"_locale" : "lv|ru"})
-     */
-    public function productsAction($productId, Request $request)
-    {   
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
-        
-        if($productId)
-        {
-            $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.id=' . $productId . ' AND p.user = ' . $user->getId());
-        
-            try
-            {
-                $product = $query->getSingleResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $product = 0;
-            }
-            
-            if($product)
-            {
-                $product->setIsActive(0);
-                $manager->persist($product);
-                $manager->flush();
-                
-                $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                        $this->get('translator')->trans('<strong>Veiksmīgi!</strong> Šī reklāma ir pārvietota uz Izpildīto sadaļu.') . '</div>'
-                    );
-                
-                
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("account_products_stopped");
-                }
-                else
-                {
-                    return $this->redirectToRoute("account_products_stoppedLocale", array("_locale" => $locale->getCode()));
-                }
-            }
-        }
-        
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' ORDER BY p.isActive DESC');
-
-        try
-        {
-            $products = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $products = 0;
-        }
-        
-        return $this->render('DashboardCommonBundle:User:account/products/products.html.twig', array("products" => $products, 
-                                                                                    "settings" => $settings, 
-                                                                                    "user" => $user, 
-                                                                                    "title" => "Мои объявления",
-                                                                                    "services" => $services,
-                                                                                    "settings" => $settings,
-                                                                                    "locale" => $locale,
-                                                                                    "routeName" => $request->attributes->get("_route")));
-    }
-    
-    /**
-     * @Route("/account/currentproducts", name="account_products_current")
-     * @Route("/{_locale}/account/currentproducts", name="account_products_currentLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
-     */
-    public function productsCurrentAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
-        
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 1 AND p.isBlocked = 0');
-
-        try
-            {
-                $products = $query->getResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $products = 0;
-            }
-        
-        //вычисляем сколько осталось дней
-        
-        return $this->render('DashboardCommonBundle:User:account/products/products.html.twig', array("products" => $products, 
-                                                                                    "settings" => $settings,
-                                                                                    "locale" => $locale, 
-                                                                                    "user" => $user, 
-                                                                                    "services" => $services,
-                                                                                    "routeName" => $request->attributes->get("_route")));
-    }
-    
-    /**
-     * @Route("/account/confirmproducts", name="account_products_confirm")
-     * @Route("/{_locale}/account/confirmproducts", name="account_products_confirmLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
-     */
-    public function productsConfirmAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 0 AND p.isBlocked = 0');
-
-        try
-            {
-                $products = $query->getResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $products = 0;
-            }
-        
-        //вычисляем сколько осталось дней
-        
-        return $this->render('DashboardCommonBundle:User:account/products/confirm.html.twig', array("products" => $products, 
-                                                                                    "settings" => $settings, 
-                                                                                    "user" => $user, 
-                                                                                    "title" => "Объявления на модерации",
-                                                                                    "settings" => $settings,
-                                                                                    "locale" => $locale,
-                                                                                    "routeName" => $request->attributes->get("_route")));
-    }
-    
-    /**
-     * @Route("/account/drafts", name="account_products_drafts")
-     * @Route("/{_locale}/account/drafts", name="account_products_draftsLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
-     */
-    public function productsDraftAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isDraft = 1');
-
-        try
-            {
-                $products = $query->getResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $products = 0;
-            }
-        
-        //вычисляем сколько осталось дней
-        
-        return $this->render('DashboardCommonBundle:User:account/products/drafts.html.twig', array("products" => $products, 
-                                                                                    "settings" => $settings, 
-                                                                                    "user" => $user, 
-                                                                                    "title" => "Черновики",
-                                                                                    "settings" => $settings,
-                                                                                    "locale" => $locale,
-                                                                                    "routeName" => $request->attributes->get("_route")));
-    }
-    
-    /**
-     * @Route("/account/stoppedproducts/{productId}", name="account_products_stopped", defaults={"productId" : "0"})
-     * @Route("/{_locale}/account/stoppedproducts/{productId}", name="account_products_stoppedLocale", defaults={"_locale" : "lv","productId" : "0"}, requirements={"_locale" : "lv|ru"})
-     */
-    public function productsStoppedAction($productId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
-        
-        if($productId)
-        {
-            $this->deleteAdvert($productId, $request);
-            
-            if($locale->getIsDefault())
-            {
-                return $this->redirectToRoute("account_products_stopped");
-            }
-            else
-            {
-                return $this->redirectToRoute("account_products_stoppedLocale", array("_locale" => $locale->getCode()));
-            }
-        }
-        
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isConfirm = 1 AND p.isActive = 0 AND p.isBlocked = 0');
-
-        try
-            {
-                $products = $query->getResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $products = 0;
-            }
-        
-        return $this->render('DashboardCommonBundle:User:account/products/stopped.html.twig', array("products" => $products,  
-                                                                                           "user" => $user, 
-                                                                                           "services" => $services,
-                                                                                           "settings" => $settings,
-                                                                                           "locale" => $locale,
-                                                                                           "routeName" => $request->attributes->get("_route")));
-    }
-    
-    /**
-     * @Route("/account/blockedproducts/{productId}", name="account_products_blocked", defaults={"productId" : 0})
-     * @Route("/{_locale}/account/blockedproducts/{productId}", name="account_products_blockedLocale", defaults={"_locale" : "lv","productId" : 0}, requirements={"_locale" : "lv|ru"})
-     */
-    public function productsBlockedAction($productId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        if($productId)
-        {
-            $this->deleteAdvert($productId, $request);
-
-            if($locale->getIsDefault())
-            {
-                return $this->redirectToRoute("account_products_blocked");
-            }
-            else
-            {
-                return $this->redirectToRoute("account_products_blockedLocale", array("_locale" => $locale->getCode()));
-            }
-        }
-        
-        $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isActive = 1 AND p.isBlocked = 1');
-
-        try
-            {
-                $products = $query->getResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $products = 0;
-            }
-        
-        return $this->render('DashboardCommonBundle:User:account/products/blocked.html.twig', array("products" => $products, "settings" => $settings,"user" => $user, "title" => $this->get('translator')->trans("Bloķētās reklāmas"),"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route")));
-    }  
     
     /**
      * @Route("/account/favproducts/{productId}", name="account_favproducts", defaults={"productId" : 0})

@@ -96,7 +96,7 @@ class DefaultController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $settings = $this->getDoctrine()->getRepository("DashboardCommonBundle:Settings")->find(1);
-        $products = $manager->getRepository("DashboardCommonBundle:Product")->findBy(array("isConfirm" => "0", "isCorrect" => "0", "isBlocked" => "0"));
+        $products = $manager->getRepository("DashboardCommonBundle:Product")->findBy(array("isConfirm" => "0", "isBlocked" => "0"));
         $complaints = $manager->getRepository("DashboardCommonBundle:Complaint")->findBy(array("status" => "0"));
         $messages = $manager->getRepository("DashboardCommonBundle:FormMessage")->findBy(array("isNew" => "1"));
         
@@ -206,6 +206,12 @@ class DefaultController extends Controller
                             'multiple' => true,
                             'expanded' => true,
                             'label' => 'Услуги для пользователей группы:', 'attr' => array('class' => 'form-control')))
+                ->add('payments', 'entity', array('class' => 'DashboardCommonBundle:Payment',
+                            'choice_label' => 'title',
+                            'required' => false, 
+                            'multiple' => true,
+                            'expanded' => true,
+                            'label' => 'Платежные системы для пользователей группы:', 'attr' => array('class' => 'form-control')))
                 ->add('servicePacks', 'entity', array('class' => 'DashboardCommonBundle:Pack',
                             'choice_label' => 'label',
                             'required' => false, 

@@ -33,6 +33,7 @@ use Dashboard\CommonBundle\Entity\FilterValue;
 use Dashboard\CommonBundle\Model\AdvertInfo;
 use Dashboard\CommonBundle\Model\AdvertImage;
 use Dashboard\CommonBundle\Model\AdvertFilter;
+use Dashboard\CommonBundle\Model\SelectedService;
 
 class AdvertController extends Controller
 {
@@ -971,6 +972,74 @@ class AdvertController extends Controller
                     
                     $flashTitle = $this->get('translator')->trans('Объявление удалено');
                     $flashText = $this->get('translator')->trans('Вы можете добавить другие объявления на нашу доску.');
+                break;
+            
+                case 'addservice':
+                    $session = new Session();
+                    $data = explode(";", $productId);
+                
+                    $encoders = [new JsonEncoder()];
+                    $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
+                    $serializer = new Serializer($normalizers, $encoders);
+                    
+                    $selectedServices = ($session->get('selectedServices')) ? $serializer->deserialize($session->get('selectedServices'), 'Dashboard\CommonBundle\Model\SelectedService[]', 'json') : array();
+                    
+                    $newService = new SelectedService();
+                    $newService->setProduct($data[0]);
+                    $newService->setService($data[1]);
+                    $newService->setPrice($data[2]);
+                    
+                    array_push($selectedServices, $newService);
+                                        
+                    $servicesData = $serializer->serialize($selectedServices, 'json');
+                    $session->set('selectedServices', $servicesData);
+                    
+                    $totalPrice = 0;
+                    
+                    foreach($selectedServices as $selectedService){
+                        $totalPrice += $selectedService->getPrice();
+                    }
+                    
+                    return new Response($totalPrice);
+                    
+                break;
+                
+                case 'removeservice':
+                    $session = new Session();
+                    $data = explode(";", $productId);
+                   
+                    $encoders = [new JsonEncoder()];
+                    $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
+                    $serializer = new Serializer($normalizers, $encoders);
+                    
+                    $selectedServices = ($session->get('selectedServices')) ? $serializer->deserialize($session->get('selectedServices'), 'Dashboard\CommonBundle\Model\SelectedService[]', 'json') : array();
+                    
+                    $tmpSelectedServices = new ArrayCollection();
+                    
+                    foreach($selectedServices as $selectedService){
+                        if($selectedService->getProduct() == $data[0] && $selectedService->getService() == $data[1]){
+                            continue;
+                        }else{
+                            $tmpSelectedServices->add($selectedService);
+                        }
+                    }
+                    
+                    $totalPrice = 0;
+                    
+                    if(count($tmpSelectedServices) > 0){
+                        $servicesData = $serializer->serialize($tmpSelectedServices->toArray(), 'json');
+                        $session->set('selectedServices', $servicesData);
+                        
+                        foreach($tmpSelectedServices as $selectedService){
+                            $totalPrice += $selectedService->getPrice();
+                        }
+                        
+                    }else{
+                        $session->remove('selectedServices');
+                    }
+                                        
+                    return new Response($totalPrice);
+                    
                 break;
             }
         }

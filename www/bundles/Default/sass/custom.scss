@@ -775,6 +775,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertImage{width: 100%;max-width: 26rem;overflow:hidden;margin-right: 3rem;}
 .accountAdvertImage img{width: 100%;@include border-radius(5px);}
 .accountAdvertInfoName{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);}
+.accountAdvertInfoName a{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);}
+.accountAdvertInfoName a:hover,.accountAdvertInfoName a:focus{text-decoration: none;}
 .accountAdvertInfoBoard{@include flexBox(row,flex-start,center);padding-top: 1rem;padding-bottom: 2rem;}
 .accountAdvertInfoBoardItem{background: $gray-color;@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 1rem 1.5rem;@include border-radius(5px);margin-right: 5px;}
 .accountAdvertInfoViews{@include fontView("GothamProRegular",#747474,1.4rem,1.8rem);padding-top: 0.6rem;}
@@ -852,7 +854,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountConversationHeader{@include flexBox(row,space-between,center);padding: 3.5rem 2rem; border-bottom: 1px solid #DFE1E5;}
 .accountConversationHeaderBack a{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);}
 .accountConversationHeaderBack a:hover,.accountConversationHeaderBack a:focus{text-decoration: none;}
-.accountConversationHeaderTopic{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.accountConversationHeaderTopic{@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);}
+.accountConversationHeaderTopic span{@include fontView("GothamProBold",$black-text,1.7rem,2.6rem);}
 .accountConversationMessage{@include flexBox(row,flex-start,flex-start);padding-bottom: 2rem;}
 .accountConversationMessage.oppoMessage{padding-left: 5rem;}
 .accountConversationMessageUser{@include flexBox(row,flex-start,center);width: 30%;}
@@ -1287,3 +1290,16 @@ body.userAccount{background:#F9F9F9;}
 .accountBottomPaymentSummValueButton a{@include fontView("GothamProBlack",$super-black-color,1.8rem,1.7rem);display:block;background: $yellow-color;@include border-radius(3px);padding:1.3rem 5rem;text-align:center;}
 .accountBottomPaymentSummValueButton a:hover,.accountBottomPaymentSummValueButton a:focus{background: $orange-color;text-decoration: none;}
 .accoutnProductServicesTotalSumma{@include fontView("GothamProBlack",$super-black-color,2.5rem,3.2rem);padding-right:3rem;}
+.paymentsMethodsBlockHeader{@include fontView("GothamProBlack",$super-black-color,2.5rem,3.2rem);padding-bottom: 7rem;}
+.paymentsMethodsBlock{@include flexBox(column,flex-start,center);padding-top: 6rem;}
+.payment-link{background: #F6F6F6;display: block;@include border-radius(5px);}
+.payment-link:hover,.payment-link:focus{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));background: #fff;}
+.paymentsList li.active .payment-link{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));background: #fff;}
+.paymentsList{padding-bottom: 5rem;}
+.paymentTabName{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);}
+.paymentTabTieser{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+#paymentsTabsContent{padding: 0;}
+.paymentInfoBlock{@include flexBox(row,flex-start,stretch);}
+.paymentInfoShield{padding-right: 1.5rem;}
+.paymentInfoLink{@include flexBox(row,center,center);padding-top: 7rem;padding-bottom: 6rem;}
+.paymentsMethodsBlockInner ul{@include flexBox(row,center,center);}

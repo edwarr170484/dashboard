@@ -55,6 +55,12 @@ class Role implements RoleInterface
     private $services;
     
     /**
+     * @ORM\ManyToMany(targetEntity="Payment", inversedBy="userRoles")
+     * 
+     */
+    private $payments;
+    
+    /**
      * @ORM\ManyToMany(targetEntity="Pack", inversedBy="userRoles")
      * 
      */
@@ -328,5 +334,38 @@ class Role implements RoleInterface
     public function getRates()
     {
         return $this->rates;
+    }
+
+    /**
+     * Add payments
+     *
+     * @param \Dashboard\CommonBundle\Entity\Payment $payments
+     * @return Role
+     */
+    public function addPayment(\Dashboard\CommonBundle\Entity\Payment $payments)
+    {
+        $this->payments[] = $payments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove payments
+     *
+     * @param \Dashboard\CommonBundle\Entity\Payment $payments
+     */
+    public function removePayment(\Dashboard\CommonBundle\Entity\Payment $payments)
+    {
+        $this->payments->removeElement($payments);
+    }
+
+    /**
+     * Get payments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPayments()
+    {
+        return $this->payments;
     }
 }

@@ -3,46 +3,42 @@
 namespace Dashboard\CommonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Table()
- * @ORM\Entity()
+ * Paymeny
  */
-class Payment
+class Paymeny
 {
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @var integer
      */
     private $id;
-    
+
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
+     * @var string
      */
-    private $title;
-    
+    private $title = 0;
+
     /**
-     * @ORM\Column(type="text", nullable=true, options={"default": 0})
+     * @var string
      */
-    private $icon;
-    
+    private $icon = 0;
+
     /**
-     * @ORM\Column(type="text", nullable=true, options={"default": 0})
+     * @var string
      */
-    private $tieser;
-    
+    private $tieser = 0;
+
     /**
-     * @ORM\Column(type="text", nullable=true, options={"default": 0})
+     * @var string
      */
-    private $info;
-    
+    private $info = 0;
+
     /**
-     * @ORM\ManyToMany(targetEntity="Role", mappedBy="payments")
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $userRoles;
-    
+
     /**
      * Constructor
      */
@@ -65,7 +61,7 @@ class Payment
      * Set title
      *
      * @param string $title
-     * @return Payment
+     * @return Paymeny
      */
     public function setTitle($title)
     {
@@ -88,7 +84,7 @@ class Payment
      * Set icon
      *
      * @param string $icon
-     * @return Payment
+     * @return Paymeny
      */
     public function setIcon($icon)
     {
@@ -111,7 +107,7 @@ class Payment
      * Set tieser
      *
      * @param string $tieser
-     * @return Payment
+     * @return Paymeny
      */
     public function setTieser($tieser)
     {
@@ -134,7 +130,7 @@ class Payment
      * Set info
      *
      * @param string $info
-     * @return Payment
+     * @return Paymeny
      */
     public function setInfo($info)
     {
@@ -157,7 +153,7 @@ class Payment
      * Add userRoles
      *
      * @param \Dashboard\CommonBundle\Entity\Role $userRoles
-     * @return Payment
+     * @return Paymeny
      */
     public function addUserRole(\Dashboard\CommonBundle\Entity\Role $userRoles)
     {

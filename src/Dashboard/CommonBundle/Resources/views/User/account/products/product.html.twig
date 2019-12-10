@@ -114,13 +114,13 @@
     <div class="accountAdvertInfoLeft">
         <div class="accountAdvertImage">
             {% if product.fotos | length > 0 %}
-                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}"><img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
             {% endif %}
             <div class="accountAdvertInfoViews">{% trans %}Просмотров{% endtrans %}: {% if product.views %}{{ product.views }}{% else %}0{% endif %}</div>
         </div>
         <div class="accountAdvertInfo">
             <div class="accountAdvertInfoName">
-                {{ product.name }}
+                <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}">{{ product.name }}
                 {% if product.info.generation.translations | length > 0 %}
                     {% for translation in product.info.generation.translations %}
                         {% if translation.locale.id == locale.id %}
@@ -130,6 +130,7 @@
                 {% else %}        
                     {{ product.info.generation.name }}
                 {% endif %} 
+                </a>
             </div>
                 <div class="accountAdvertInfoBoard">
                     {% if product.info.board %}

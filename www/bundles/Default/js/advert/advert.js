@@ -502,15 +502,32 @@ function doAdvertAction(productId, locale_code, text, action){
 
 function toggleProductService(productId, serviceId, servicePrice, locale_code, element, titleText, buttonText){
     $("body").find('.accountBottomPaymentSumm').remove();
+    var serviceAction = '';
+    var data = productId + ";" + serviceId + ";" + servicePrice;
+    var totalPrice = 0;
     
     if(element.hasClass("active")){
-        
+        serviceAction = 'removeservice'; 
     }else{
-        
+        serviceAction = 'addservice';
     }
     
-    if(totalPrice > 0){
-        $("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">' + titleText + ':</div><div class="accoutnProductServicesTotalSumma">' + totalPrice + ' &euro;</div><div class="accountBottomPaymentSummValueButton"><a href="">' + buttonText + '</a></div></div></div></div></div></div>');
-    }
-    
+    $.ajax({
+            url: '/' + locale_code + '/account/advert/ajax/' + serviceAction + '/' + data,
+            type:'get',
+            dataType: 'html',
+            beforeSend: function(){},
+            success: function(data)
+            {
+                element.toggleClass("active");
+                totalPrice = data;
+                if(totalPrice > 0){
+                    $("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">' + titleText + ':</div><div class="accoutnProductServicesTotalSumma">' + totalPrice + ' &euro;</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments">' + buttonText + '</a></div></div></div></div></div></div>');
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                $(".modal-body-cover").hide();
+                err=xhr.responseText;
+            }
+        });
 }

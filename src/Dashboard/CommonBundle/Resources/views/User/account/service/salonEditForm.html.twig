@@ -1,19 +1,15 @@
-{% form_theme formDealerSalon 'DashboardCommonBundle:Dealer:account/fields.html.twig' %}
+{% form_theme formDealerSalon 'DashboardCommonBundle:User:account/dealer/fields.html.twig' %}
 
 <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            {% if locale.isDefault %}
-                {{ form_start(formDealerSalon, {'action' : path('account_dealer_editsalon', {'salonId' : salon.id})}) }}
-            {% else %}
-                {{ form_start(formDealerSalon, {'action' : path('account_dealer_editsalonLocale' , {'salonId' : salon.id, '_locale' : locale.code})}) }}
-            {% endif %}
+            {{ form_start(formDealerSalon, {'action' : path('account_editservice', {'salonId' : salon.id})}) }}
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
                 </svg>
             </button>
             <div class="modal-header" style="border:none">
-                <h3 class="modal-title" id="regionModalLabel">{% trans %}Редактирование автосалона{% endtrans %}</h3>
+                <h3 class="modal-title" id="regionModalLabel">{% trans %}Редактирование автосервиса{% endtrans %}</h3>
             </div>
             <div class="modal-body">
                 <div class="accountSettingsFormBlock">
@@ -97,6 +93,38 @@
                                         </script>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formParemetersItem" style="display: block;">
+                        <div class="formParameter" style="display: block;margin-right: 0;">
+                            <div class="formParameterLabel" style="width: 100%;padding-bottom: 2rem;">{% trans %}Выбор оказываемых услуги{% endtrans %}: </div>
+                            <div class="formParameterField" id="salonJobs">
+                                {% if jobCategories | length > 0 %}
+                                    <div class="dealerSalonJobsItems">
+                                    {% for jobCategory in jobCategories %}
+                                        <div class="dealerSalonJobItem">
+                                            <div class="dealerSalonJobItemTitle" onclick="toggleJobs($(this))">
+                                                {{ jobCategory.icon | raw }}
+                                                {{ jobCategory.name }}
+                                            </div>
+                                            <div class="dealerSalonJobItemJobs">
+                                                {% if jobCategory.jobs | length > 0 %}
+                                                    {% for job in formDealerSalon.jobs %}
+                                                        {% set index = job.vars.value %}
+                                                        {% set entity = formDealerSalon.jobs.vars.choices[index].data %}
+                                                        {% if entity.category.id == jobCategory.id %}
+                                                            <div class="dealerSalonJobItemJob">
+                                                                {{ form_widget(job,{'attr' : {'class' : 'custom-checkbox-modal'}}) }} {{ entity.name }}
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

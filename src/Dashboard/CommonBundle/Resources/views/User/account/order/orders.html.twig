@@ -8,29 +8,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if locale.isDefault %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% else %}
-                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% endif %}
-                    {% if  locale.isDefault %}
-                        <li><a href="{{ path('account', {'_locale' : locale.code}) }}">
-                    {% else %}
-                        <li><a href="{{ path('accountLocale', {'_locale' : locale.code}) }}">
-                    {% endif %}
-                        {% trans %}Личный кабинет{% endtrans %}
-                    </a></li>
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
                     <li>/</li>
-                    <li>
-                    {% if  locale.isDefault %}
-                        <a href="{{path('account_orders')}}">
-                    {% else %}
-                        <a href="{{path('account_ordersLocale',{'_locale' : app.request.locale})}}">
-                    {% endif %}
-                        {% trans %}Заявки{% endtrans %}
-                    </a></li>
+                    <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li>{% trans %}Заявки{% endtrans %}</li>
                 </ul>
             </div>
         </div>
@@ -125,72 +107,24 @@
                                                         <div class="accountOrderInfo">
                                                             <div class="accountOrderInfoProduct">
                                                                 <div class="accountOrderInfoProductImage">
-                                                                    {% if locale.isDefault %}
-                                                                        <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">
-                                                                            {% if order.product.fotos | length > 0 %}
-                                                                                <img src="{{ asset('bundles/images/products/' ~ order.product.fotos[0].foto) }}" alt="{{ order.product.fotos[0].alt }}" title="{{ order.product.fotos[0].title }}" />
-                                                                            {% else %}
-                                                                                <img src="{{ asset('bundles/images/products/bez-foto.png') }}" alt="" title="" />
-                                                                            {% endif %}
-                                                                        </a>
-                                                                    {% else %}
-                                                                        <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit, '_locale' : locale.code}) }}">
-                                                                            {% if order.product.fotos | length > 0 %}
-                                                                                <img src="{{ asset('bundles/images/products/' ~ order.product.fotos[0].foto) }}" alt="" title="" />
-                                                                            {% else %}
-                                                                                <img src="{{ asset('bundles/images/products/bez-foto.png') }}" alt="" title="" />
-                                                                            {% endif %}
-                                                                        </a>
-                                                                    {% endif %}
+                                                                    <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">
+                                                                        {% if order.product.fotos | length > 0 %}
+                                                                            <img src="{{ asset('bundles/images/products/' ~ order.product.fotos[0].foto) }}" alt="{{ order.product.fotos[0].alt }}" title="{{ order.product.fotos[0].title }}" />
+                                                                        {% else %}
+                                                                            <img src="{{ asset('bundles/images/products/bez-foto.png') }}" alt="" title="" />
+                                                                        {% endif %}
+                                                                    </a>
                                                                 </div>
                                                                 <div class="accountOrderInfoProductDescription">
                                                                     <div class="accountOrderInfoProductDescriptionTitle">
-                                                                        {% if locale.isDefault %}
-                                                                            <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">{{ order.product.name }}</a>
-                                                                        {% else %}
-                                                                            <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit, '_locale' : locale.code}) }}">
-                                                                                {{ order.product.name }}
-                                                                            </a>
-                                                                        {% endif %}
+                                                                        <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">{{ order.product.name }}</a>
                                                                     </div>
                                                                     <div class="accountOrderInfoProductDescriptionFeatures">
-                                                                        {% if order.info.board.board.translations | length > 0 %}
-                                                                            {% for translation in order.info.board.board.translations %}
-                                                                                {% if translation.locale.id == locale.id %}
-                                                                                    {{ translation.value }}
-                                                                                {% endif %}
-                                                                            {% endfor %}
-                                                                        {% else %}        
-                                                                            {{ order.info.board.board.value }}
-                                                                        {% endif %}, 
+                                                                        {{ order.info.board.board.value }}, 
                                                                         {{ order.info.modification.size }} {% trans %}л {% endtrans %}/ {{ order.info.modification.power }} {% trans %}л.с.{% endtrans %} /
-                                                                        {% if order.info.gasType.translations | length > 0 %}
-                                                                            {% for translation in order.info.gasType.translations %}
-                                                                                {% if translation.locale.id == locale.id %}
-                                                                                    {{ translation.value }}
-                                                                                {% endif %}
-                                                                            {% endfor %}
-                                                                        {% else %}        
-                                                                            {{ order.info.gasType.value }}
-                                                                        {% endif %}, 
-                                                                        {% if order.info.gearType.translations | length > 0 %}
-                                                                            {% for translation in order.info.gearType.translations %}
-                                                                                {% if translation.locale.id == locale.id %}
-                                                                                    {{ translation.value }}
-                                                                                {% endif %}
-                                                                            {% endfor %}
-                                                                        {% else %}        
-                                                                            {{ order.info.gearType.value }}
-                                                                        {% endif %}, 
-                                                                        {% if order.info.transmissionType.translations | length > 0 %}
-                                                                            {% for translation in order.info.transmissionType.translations %}
-                                                                                {% if translation.locale.id == locale.id %}
-                                                                                    {{ translation.value }}
-                                                                                {% endif %}
-                                                                            {% endfor %}
-                                                                        {% else %}        
-                                                                            {{ order.info.transmissionType.value }}
-                                                                        {% endif %} {% trans %}привод{% endtrans %}
+                                                                        {{ order.info.gasType.value }}, 
+                                                                        {{ order.info.gearType.value }}, 
+                                                                        {{ order.info.transmissionType.value }} {% trans %}привод{% endtrans %}
                                                                     </div>
                                                                 </div>
                                                                 <div class="accountOrderInfoProductNumbers">
@@ -201,15 +135,7 @@
                                                             </div>
                                                             <div class="accountOrderInfoProductStatus">
                                                                 <button class="inprocess" style="background: {{ order.color }};{% if order.status == 7 %}color:#fff;{% endif %}">
-                                                                    {% if orderStatus.translations | length > 0 %}
-                                                                        {% for translation in orderStatus.translations %}
-                                                                            {% if translation.locale.id == locale.id %}
-                                                                                {{ translation.value }}
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    {% else %}        
-                                                                        {{ orderStatus.name}}
-                                                                    {% endif %}
+                                                                    {{ orderStatus.name}}
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -220,15 +146,7 @@
                                     {% else %}
                                         <div class="accountNocontent inTab">
                                             {% trans %}Нет заявок со статусом {% endtrans %} 
-                                            {% if orderStatus.translations | length > 0 %}
-                                                {% for translation in orderStatus.translations %}
-                                                    {% if translation.locale.id == locale.id %}
-                                                        {{ translation.value }}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% else %}        
-                                                {{ orderStatus.name}}
-                                            {% endif %}
+                                            {{ orderStatus.name}}
                                         </div>
                                     {% endif %}
                                 </div>

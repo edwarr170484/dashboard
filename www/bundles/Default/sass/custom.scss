@@ -789,6 +789,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertInfoYear{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;padding-bottom: 2rem;}
 .accountAdvertInfoProbeg{@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);text-align: center;padding-bottom: 2rem;}
 .accountAdvertServiceButtons{width: 50%;padding-left:1.5rem;}
+.accountAdvertServiceButtons.rateButtons{width: 100%;padding: 0;}
 .accountAdvertServiceButton button{background: #fff;border:1px solid #AAAAAA;@include border-radius(9px);display: block;padding: 0.7rem 1rem;@include flexBox(row,flex-start,center);width: 100%;margin-bottom: 1rem;}
 .accountAdvertServiceButton button.active{background: $yellow-color;}
 .buttonServiceNameTitle{display: block;width: 100%;@include fontView("GothamProMedium",$super-black-color,1.4rem,1.8rem);}
@@ -894,6 +895,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountMessagesToolsRight button{border:none;background: none;@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);@include border-radius(5px);padding: 0.8rem 1.8rem;text-decoration: underline;}
 .accountMessagesToolsRight button:hover,.accountMessagesToolsRight button:focus{@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));color:#EB5757}
 .accountOrder{border-bottom: 1px solid #DFE1E5;padding-bottom: 2.8rem;} 
+.accountOrder.review{background: #fff;}
 .accountOrder:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;}
 .accountOrderUser{@include flexBox(row,space-between,center);padding-top: 1.2rem;padding-bottom: 0.8rem;padding-left: 3rem;padding-right: 3rem;border-bottom: 1px solid #DFE1E5;}
 .accountOrderUserAvatar{@include flexBox(row,flex-start,center);}
@@ -948,7 +950,7 @@ body.userAccount{background:#F9F9F9;}
 .accountBill:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
 .accountBillDownload{width: 20%;@include flexBox(row,flex-start,center);}
 .accountBillInfo{width: 80%;@include flexBox(row,space-between,center);}
-.accountBillInfoItem{width: 33.33333%;}
+.accountBillInfoItem{width: 25%;}
 .accountBillInfoItem.date{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
 .accountBillInfoItem.title{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountBillInfoItem.price{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
@@ -1303,3 +1305,15 @@ body.userAccount{background:#F9F9F9;}
 .paymentInfoShield{padding-right: 1.5rem;}
 .paymentInfoLink{@include flexBox(row,center,center);padding-top: 7rem;padding-bottom: 6rem;}
 .paymentsMethodsBlockInner ul{@include flexBox(row,center,center);}
+.accountBillStatus span{@include border-radius(3px);@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);padding: 0.7rem;text-transform:lowercase;}
+.accountBillStatus span.inprocess{background: #DFE1E5;}
+.accountBillStatus span.complete{background: $yellow-color;}
+.dealerSalonJobsItems{@include flexBox(row,flex-start,stretch);flex-wrap:wrap;}
+.dealerSalonJobItem{width: 50%;padding-bottom: 3rem;}
+.dealerSalonJobItemTitle{@include flexBox(row,flex-start,center);@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);padding-bottom: 2rem;cursor:pointer;}
+.dealerSalonJobItemTitle svg{margin-right: 1.7rem;}
+.dealerSalonJobItemJobs{padding-left: 3.7rem;display: none;}
+.dealerSalonJobItemJob{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}
+.dealerSalonJobItemJob.custom-checkbox{margin-right: 1.3rem;}
+.salonJobs,#salonJobs{height: 350px;}
+.alert{@include fontView("GothamProRegular",$black-text,1.3rem,1.8rem);margin-bottom: 0;}

@@ -32,6 +32,18 @@ class Job
      */
     private $sortorder;
     
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerSalon", mappedBy="jobs")
+     */
+    private $salons;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->salons = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -110,5 +122,38 @@ class Job
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Add salons
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalon $salons
+     * @return Job
+     */
+    public function addSalon(\Dashboard\CommonBundle\Entity\DealerSalon $salons)
+    {
+        $this->salons[] = $salons;
+    
+        return $this;
+    }
+
+    /**
+     * Remove salons
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalon $salons
+     */
+    public function removeSalon(\Dashboard\CommonBundle\Entity\DealerSalon $salons)
+    {
+        $this->salons->removeElement($salons);
+    }
+
+    /**
+     * Get salons
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSalons()
+    {
+        return $this->salons;
     }
 }

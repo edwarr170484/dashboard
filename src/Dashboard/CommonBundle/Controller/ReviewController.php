@@ -41,15 +41,7 @@ class ReviewController extends Controller
         if($reviewId)
         {
             $this->deleteReview($reviewId, $user);
-            
-            if($locale->getIsDefault())
-            {
-                return $this->redirectToRoute("account_review");
-            }
-            else
-            {
-                return $this->redirectToRoute("account_reviewLocale", array("_locale" => $locale->getCode()));
-            }
+            return $this->redirectToRoute("account_review");
         }
         
         $plusReviews = 0;
@@ -118,7 +110,7 @@ class ReviewController extends Controller
                             'notice',
                             '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                            $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs jau esat iesniedzis atsauksmi par šo atsauksmi.') . '</div>'
+                            $this->get('translator')->trans('<strong>Ошибка!</strong> Вы уже отправляли ответ на этот отзыв.') . '</div>'
                         );
                         
                         return $this->redirectToRoute("account_review");
@@ -171,14 +163,7 @@ class ReviewController extends Controller
                 );
             }
             
-            if($locale->getIsDefault())
-            {
-                return $this->redirectToRoute("account_review");
-            }
-            else
-            {
-                return $this->redirectToRoute("account_reviewLocale", array("_locale" => $locale->getCode()));
-            }
+            return $this->redirectToRoute("account_review");
         }
         
         return $this->render('DashboardCommonBundle:User:account/review/reviews.html.twig', array("user" => $user,

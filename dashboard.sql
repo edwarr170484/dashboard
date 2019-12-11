@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Дек 10 2019 г., 15:56
+-- Время создания: Дек 11 2019 г., 15:59
 -- Версия сервера: 10.1.9-MariaDB
 -- Версия PHP: 5.6.15
 
@@ -15226,7 +15226,7 @@ CREATE TABLE `dealer_info` (
 --
 
 INSERT INTO `dealer_info` (`id`, `user_id`, `city_id`, `city_code_id`, `company`, `nif_number`, `address`, `website`, `firma`, `email`, `logotype`, `description`, `is_new_auto`, `is_old_auto`) VALUES
-(1, 6, 2, 134, 'Engines and tools', '12345674567', 'Address', NULL, 'Engines and tools', 'email@mail.com', '8518.jpg', 'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.', 1, 1);
+(1, 6, 2, 134, 'Engines and tools', '12345674567', 'Address', NULL, 'Engines and tools', 'email@mail.com', '89392.png', 'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -15268,7 +15268,19 @@ CREATE TABLE `dealer_salon` (
 --
 
 INSERT INTO `dealer_salon` (`id`, `dealer_info_id`, `name`, `address`, `website`, `logotype`) VALUES
-(6, 1, 'Taller de coches MOTOR TARRAGONA', 'Barcelona, Avenida de Lourdes, 18', 'www.gonviauto.com', '383064922167.jpg');
+(6, 1, 'Taller de coches MOTOR TARRAGONA', 'Barcelona, Avenida de Lourdes, 18', 'www.gonviauto.com', '383064922167.jpg'),
+(7, 1, 'Taller de coches MOTOR TARRAGONA', 'Barcelona, Avenida de Lourdes, 18', 'www.gonviauto.com', '626629749173617.jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `dealer_salon_job`
+--
+
+CREATE TABLE `dealer_salon_job` (
+  `dealer_salon_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -15287,7 +15299,9 @@ CREATE TABLE `dealer_salon_phone` (
 --
 
 INSERT INTO `dealer_salon_phone` (`id`, `dealer_salon_id`, `phone`) VALUES
-(6, 6, '+34 920 37 08 05');
+(6, 6, '+34 920 37 08 05'),
+(7, 7, '+34 920 37 08 05'),
+(8, 7, '+34 920 37 08 06');
 
 -- --------------------------------------------------------
 
@@ -15760,8 +15774,8 @@ CREATE TABLE `message` (
 --
 
 INSERT INTO `message` (`id`, `user_from_id`, `user_to_id`, `subject`, `message`, `image`, `is_new`, `is_deleted`, `sent_date`, `readed_date`, `product_id`, `user_owner_id`, `conversation_id`) VALUES
-(1, 2, 1, 'Это тема сообщения', 'Это текст сообщения', NULL, 0, 0, '2018-09-20 09:38:56', '2019-11-18 09:40:37', NULL, 2, 1),
-(2, 2, 1, 'Это тема сообщения', 'Это текст сообщения', NULL, 0, 0, '2018-09-20 09:38:56', '2019-11-18 09:40:37', NULL, 1, 1),
+(1, 2, 1, 'Это тема сообщения', 'Это текст сообщения', NULL, 0, 0, '2018-09-20 09:38:56', '2019-12-11 11:19:02', NULL, 2, 1),
+(2, 2, 1, 'Это тема сообщения', 'Это текст сообщения', NULL, 0, 0, '2018-09-20 09:38:56', '2019-12-11 11:19:02', NULL, 1, 1),
 (3, 1, 2, NULL, 'Это ответ на сообщение', NULL, 0, 0, '2018-09-20 11:12:56', '2018-09-20 11:23:18', NULL, 1, 1),
 (4, 1, 2, NULL, 'Это ответ на сообщение', NULL, 0, 0, '2018-09-20 11:12:56', '2018-09-20 11:23:18', NULL, 2, 1),
 (5, 1, 2, NULL, 'Это еще одно сообщение с картинкой', '5219.jpg', 1, 0, '2019-11-12 16:52:33', '2019-11-12 16:52:33', NULL, 1, 1),
@@ -16783,9 +16797,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_active`, `is_confirm`, `advert_number`, `fb_id`, `is_hide_email`, `is_alert_broadcast`, `is_alert_new_message`, `is_alert_new_order`, `is_alert_change_order_status`) VALUES
-(1, 'sales@sunweb.by', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'sales@sunweb.by', 1, 1, 3, NULL, 0, 0, 1, 0, 0),
+(1, 'sales@sunweb.by', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'sales@sunweb.by', 1, 1, 3, NULL, 0, 1, 1, 1, 0),
 (2, 'host@sunweb.by', '$2y$13$vtSH86/tdpg2PTsPbqweNurffISvjjHnNJgvB.YtgoSPgt2BHNQXi', 'host@sunweb.by', 1, 1, 0, NULL, 0, 0, 0, 0, 0),
-(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL);
+(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -16813,9 +16827,9 @@ CREATE TABLE `user_info` (
 --
 
 INSERT INTO `user_info` (`id`, `user_id`, `emailmessagesalerts`, `emailmessagesreminders`, `region_id`, `city_id`, `rating`, `city_code_id`, `firstname`, `lastname`, `phone`, `avatar`) VALUES
-(2732, 1, 0, 0, NULL, 41, 0, 11840, 'Sunweb', 'Sunweb', 'null', NULL),
+(2732, 1, 0, 0, NULL, 41, 0, 11840, 'Sunweb', 'Sites', 'null', NULL),
 (2733, 2, NULL, NULL, 1, 20, NULL, NULL, 'null', 'null', 'null', NULL),
-(2734, 6, NULL, NULL, NULL, NULL, NULL, NULL, 'John', 'Doe', '+375251234567', NULL);
+(2734, 6, NULL, NULL, NULL, 41, NULL, 11840, 'John', 'Doe', '+375251234567', NULL);
 
 -- --------------------------------------------------------
 
@@ -16835,7 +16849,7 @@ CREATE TABLE `user_role` (
 INSERT INTO `user_role` (`user_id`, `role_id`) VALUES
 (1, 1),
 (2, 2),
-(6, 2);
+(6, 4);
 
 -- --------------------------------------------------------
 
@@ -16870,7 +16884,8 @@ CREATE TABLE `workinfo` (
 
 INSERT INTO `workinfo` (`id`, `dealer_id`, `monday`, `tuesday`, `wednesday`, `thursday`, `friday`, `saturday`, `sunday`, `full_day`, `is_wokdays`, `is_holidays`, `is_alldays`, `work_start`, `work_stop`, `break_start`, `break_stop`, `dealer_salon_id`) VALUES
 (1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, '09:00:00', '18:00:00', '13:00:00', '14:00:00', NULL),
-(7, NULL, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, '00:00:00', '00:00:00', '00:00:00', '00:00:00', 6);
+(7, NULL, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, '00:00:00', '00:00:00', '00:00:00', '00:00:00', 6),
+(8, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, '09:00:00', '18:00:00', NULL, NULL, 7);
 
 --
 -- Индексы сохранённых таблиц
@@ -17026,6 +17041,14 @@ ALTER TABLE `dealer_phone`
 ALTER TABLE `dealer_salon`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_DF1E60691B55EFAB` (`dealer_info_id`);
+
+--
+-- Индексы таблицы `dealer_salon_job`
+--
+ALTER TABLE `dealer_salon_job`
+  ADD PRIMARY KEY (`dealer_salon_id`,`job_id`),
+  ADD KEY `IDX_7A677A31BEB56384` (`dealer_salon_id`),
+  ADD KEY `IDX_7A677A31BE04EA9` (`job_id`);
 
 --
 -- Индексы таблицы `dealer_salon_phone`
@@ -17510,12 +17533,12 @@ ALTER TABLE `dealer_phone`
 -- AUTO_INCREMENT для таблицы `dealer_salon`
 --
 ALTER TABLE `dealer_salon`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT для таблицы `dealer_salon_phone`
 --
 ALTER TABLE `dealer_salon_phone`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT для таблицы `favorite_products`
 --
@@ -17725,7 +17748,7 @@ ALTER TABLE `user_info`
 -- AUTO_INCREMENT для таблицы `workinfo`
 --
 ALTER TABLE `workinfo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
@@ -17845,6 +17868,13 @@ ALTER TABLE `dealer_phone`
 --
 ALTER TABLE `dealer_salon`
   ADD CONSTRAINT `FK_DF1E60691B55EFAB` FOREIGN KEY (`dealer_info_id`) REFERENCES `dealer_info` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `dealer_salon_job`
+--
+ALTER TABLE `dealer_salon_job`
+  ADD CONSTRAINT `FK_7A677A31BE04EA9` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_7A677A31BEB56384` FOREIGN KEY (`dealer_salon_id`) REFERENCES `dealer_salon` (`id`) ON DELETE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `dealer_salon_phone`

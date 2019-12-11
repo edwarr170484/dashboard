@@ -2,40 +2,44 @@
 
 <div class="col-ld-2 col-md-2 account-menu-list">
     <ul class="list-unstyled">
-        <li>
-            <div class="accountMenuItem">
-                {{ block('accountAdverts') }}
-                <a href="{{ path('account_products') }}" {% if routeName == 'account_products' %}class="active"{% endif %}>
-                    {% trans %}Мои объявления{% endtrans %} ({{ allProducts | length }})
-                </a>
-            </div>
-            <ul>
-                {% if settings.isModerate %}
-                    <li><a href="{{ path('account_products_confirm') }}"  {% if routeName == 'account_products_confirm' %}class="active"{% endif %}>- {% trans %}На модерации{% endtrans %} ({{ confirmProducts | length }})</a></li>
-                {% endif %}
-                <li><a href="{{ path('account_products_current') }}"  {% if routeName == 'account_products_current' %}class="active"{% endif %}>- {% trans %}Текущие{% endtrans %} ({{ currentProducts | length}})</a></li>
-                <li><a href="{{ path('account_products_drafts') }}"  {% if routeName == 'account_products_drafts' %}class="active"{% endif %}>- {% trans %}Черновики{% endtrans %} ({{ draftProducts | length}})</a></li>
-                <li><a href="{{ path('account_products_stopped') }}"  {% if routeName == 'account_products_stopped' %}class="active"{% endif %}>- {% trans %}Архив{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
-                <li><a href="{{ path('account_products_blocked') }}"  {% if routeName == 'account_products_blocked' %}class="active"{% endif %}>- {% trans %}Заблокированные{% endtrans %}  ({{ blockedProducts | length }})</a></li>
-            </ul>
-        </li>
+        {% if userRole.role != 'ROLE_SERVICE' %}
+            <li>
+                <div class="accountMenuItem">
+                    {{ block('accountAdverts') }}
+                    <a href="{{ path('account_products') }}" {% if routeName == 'account_products' %}class="active"{% endif %}>
+                        {% trans %}Мои объявления{% endtrans %} ({{ allProducts | length }})
+                    </a>
+                </div>
+                <ul>
+
+                    {% if settings.isModerate %}
+                        <li><a href="{{ path('account_products', {'productType' : 'confirm'}) }}" {% if productType == 'confirm' %}class="active"{% endif %}>- {% trans %}На модерации{% endtrans %} ({{ confirmProducts | length }})</a></li>
+                    {% endif %}
+                    <li><a href="{{ path('account_products', {'productType' : 'current'}) }}" {% if productType == 'current' %}class="active"{% endif %}>- {% trans %}Текущие{% endtrans %} ({{ currentProducts | length}})</a></li>
+                    <li><a href="{{ path('account_products', {'productType' : 'drafts'}) }}" {% if productType == 'drafts' %}class="active"{% endif %}>- {% trans %}Черновики{% endtrans %} ({{ draftProducts | length}})</a></li>
+                    <li><a href="{{ path('account_products', {'productType' : 'stopped'}) }}" {% if productType == 'stopped' %}class="active"{% endif %}>- {% trans %}Архив{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
+                    <li><a href="{{ path('account_products', {'productType' : 'blocked'}) }}" {% if productType == 'blocked' %}class="active"{% endif %}>- {% trans %}Заблокированные{% endtrans %}  ({{ blockedProducts | length }})</a></li>
+                </ul>
+            </li>
         <li>
             <div class="accountMenuItem">
                 <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15.7663 2.3245C15.3753 1.9046 14.9111 1.5715 14.4002 1.34423C13.8893 1.11697 13.3417 1 12.7887 1C12.2357 1 11.6881 1.11697 11.1772 1.34423C10.6663 1.5715 10.2021 1.9046 9.81116 2.3245L8.9998 3.19554L8.18843 2.3245C7.39874 1.47672 6.32768 1.00044 5.21089 1.00044C4.09409 1.00044 3.02303 1.47672 2.23334 2.3245C1.44365 3.17228 1 4.32212 1 5.52107C1 6.72001 1.44365 7.86985 2.23334 8.71763L3.0447 9.58868L8.9998 15.9818L14.9549 9.58868L15.7663 8.71763C16.1574 8.29793 16.4677 7.7996 16.6794 7.25112C16.891 6.70264 17 6.11476 17 5.52107C17 4.92737 16.891 4.33949 16.6794 3.79101C16.4677 3.24254 16.1574 2.74421 15.7663 2.3245V2.3245Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_favproducts') }}" {% if routeName == 'account_favproducts' %}class="active"{% endif %}>{% trans %}Избранные объявления{% endtrans %}</a>
+                <a href="{{ path('account_favorite_products') }}" {% if routeName == 'account_favorite_products' %}class="active"{% endif %}>{% trans %}Избранные объявления{% endtrans %}</a>
             </div>
-        </li>
+        </li>   
+        {% endif %}
         <li>
             <div class="accountMenuItem">
                 <svg width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.6 1H15.4C16.28 1 17 1.72 17 2.6V12.2C17 13.08 16.28 13.8 15.4 13.8H2.6C1.72 13.8 1 13.08 1 12.2V2.6C1 1.72 1.72 1 2.6 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M17 2.6001L9 8.2001L1 2.6001" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{path('account_messages')}}" {% if routeName == 'account_messages' %}class="active"{% endif %}>{% trans %}Сообщения{% endtrans %}</a>
+                <a href="{{path('account_conversations')}}" {% if routeName == 'account_conversations' %}class="active"{% endif %}>{% trans %}Сообщения{% endtrans %}</a>
             </div>
         </li>
+        {% if userRole.role != 'ROLE_SERVICE' %}
         <li>
             <div class="accountMenuItem">
                 <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,21 +62,44 @@
                 </a>
             </div>
         </li>
-        <li>
-            <div class="accountMenuItem">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15.4 11.1281V15.4001C15.4 15.8244 15.2314 16.2314 14.9314 16.5315C14.6313 16.8315 14.2243 17.0001 13.8 17.0001H2.6C2.17565 17.0001 1.76869 16.8315 1.46863 16.5315C1.16857 16.2314 1 15.8244 1 15.4001V4.2001C1 3.77575 1.16857 3.36878 1.46863 3.06873C1.76869 2.76867 2.17565 2.6001 2.6 2.6001H6.872" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M13.7998 1L16.9998 4.2L8.9998 12.2H5.7998V9L13.7998 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <a href="{{ path('account_review') }}" {% if routeName == 'account_review' %}class="active"{% endif %}>{% trans %}Отзывы{% endtrans %}</a>
-            </div>
-        </li>
+        {% endif %}
+        {% if userRole.role == 'ROLE_DEALER' or userRole.role == 'ROLE_SERVICE' %}
+            <li>
+                <div class="accountMenuItem">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.4 11.1281V15.4001C15.4 15.8244 15.2314 16.2314 14.9314 16.5315C14.6313 16.8315 14.2243 17.0001 13.8 17.0001H2.6C2.17565 17.0001 1.76869 16.8315 1.46863 16.5315C1.16857 16.2314 1 15.8244 1 15.4001V4.2001C1 3.77575 1.16857 3.36878 1.46863 3.06873C1.76869 2.76867 2.17565 2.6001 2.6 2.6001H6.872" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.7998 1L16.9998 4.2L8.9998 12.2H5.7998V9L13.7998 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <a href="{{ path('account_review') }}" {% if routeName == 'account_review' %}class="active"{% endif %}>{% trans %}Отзывы о компании{% endtrans %}</a>
+                </div>
+            </li>
+        {% else %}
+            <li>
+                <div class="accountMenuItem">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.4 11.1281V15.4001C15.4 15.8244 15.2314 16.2314 14.9314 16.5315C14.6313 16.8315 14.2243 17.0001 13.8 17.0001H2.6C2.17565 17.0001 1.76869 16.8315 1.46863 16.5315C1.16857 16.2314 1 15.8244 1 15.4001V4.2001C1 3.77575 1.16857 3.36878 1.46863 3.06873C1.76869 2.76867 2.17565 2.6001 2.6 2.6001H6.872" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M13.7998 1L16.9998 4.2L8.9998 12.2H5.7998V9L13.7998 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <a href="{{ path('account_review') }}" {% if routeName == 'account_review' %}class="active"{% endif %}>{% trans %}Отзывы{% endtrans %}</a>
+                </div>
+            </li>
+        {% endif %}
+        {% if userRole.role == 'ROLE_DEALER' or userRole.role == 'ROLE_SERVICE' %}
+            <li>
+                <div class="accountMenuItem">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 6.00012V7.00012H9.14062C8.95312 6.38554 8.76302 5.77877 8.57031 5.17981C8.38281 4.57564 8.19271 3.96627 8 3.35168C7.80729 3.96627 7.61458 4.57564 7.42188 5.17981C7.23438 5.77877 7.04688 6.38554 6.85938 7.00012H2.9375C3.46875 7.40637 3.99479 7.81262 4.51562 8.21887C5.03646 8.62512 5.5651 9.02877 6.10156 9.42981C5.89323 10.0756 5.6901 10.7189 5.49219 11.3595C5.29427 11.9949 5.09635 12.6355 4.89844 13.2814L8 10.8907V12.1564L3 16.0001L4.9375 9.797L0 6.00012H6.125L8 0.00012207L9.875 6.00012H16ZM9 9.00012H16V10.0001H9V9.00012ZM9 12.0001H16V13.0001H9V12.0001Z" fill="#616161"/>
+                    </svg>
+                    <a href="{{ path('account_rates') }}" {% if routeName == 'account_rates' %}class="active"{% endif %}>{% trans %}Тарифы{% endtrans %}</a>
+                </div>
+            </li>
+        {% endif %}
         <li>
             <div class="accountMenuItem">
                 <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15.9258 13.4966C15.556 13.891 15.1464 14.2478 14.7038 14.5605C14.2656 14.87 13.7963 15.1352 13.3025 15.3495C12.8168 15.5606 12.3047 15.7242 11.7726 15.8345C11.2546 15.9419 10.7194 15.9984 10.1727 15.9984C9.10021 15.9984 8.07693 15.7828 7.1431 15.3923C6.17272 14.9865 5.29994 14.3923 4.5701 13.6556L4.53834 13.6235V13.6217C4.07162 13.1451 3.66374 12.6095 3.32676 12.0269C3.00183 11.4651 2.74254 10.8587 2.5596 10.2191H0.1085H0V10.1096V9.33957V9.23003H0.1085H2.34308C2.31533 9.0492 2.29361 8.86664 2.27821 8.68253C2.25927 8.45699 2.2496 8.22903 2.2496 7.99933C2.2496 7.77011 2.25936 7.54253 2.27831 7.31718C2.29381 7.13259 2.31572 6.94945 2.34346 6.76824H0.1085H0V6.6587V5.88865V5.77921H0.1085H2.55979C2.74273 5.13957 3.00202 4.53334 3.32695 3.97155C3.66393 3.389 4.07181 2.85329 4.53853 2.37669V2.37495L4.57029 2.34279C5.30013 1.60597 6.17292 1.01172 7.14329 0.60603C8.07702 0.215598 9.10031 0 10.1728 0C10.6972 0 11.2107 0.0518709 11.7081 0.15088C12.2175 0.252207 12.7108 0.403473 13.1824 0.599268C13.6627 0.798252 14.1188 1.04321 14.5452 1.32826C14.9766 1.61669 15.3781 1.94646 15.7439 2.31168L15.8211 2.38867L15.7452 2.46614L15.209 3.01363L15.1328 3.09149L15.056 3.01489C14.734 2.69333 14.381 2.40306 14.0025 2.1496C13.6284 1.89904 13.2296 1.6844 12.811 1.51111C12.4012 1.34092 11.9699 1.20926 11.522 1.12059C11.0864 1.03433 10.6352 0.989121 10.1727 0.989121C9.23167 0.989121 8.33459 1.17796 7.51701 1.51981C6.66786 1.87489 5.9032 2.39572 5.26282 3.04222L5.18895 3.1167L5.18857 3.11641C4.82289 3.49699 4.4994 3.91988 4.22595 4.37706C3.9635 4.81578 3.74736 5.28552 3.58413 5.77931H11.9432H12.0517V5.88885V6.65889V6.76843H11.9432H3.33556C3.30274 6.95553 3.27729 7.14418 3.25968 7.33418C3.23959 7.55036 3.22935 7.77223 3.22935 7.99942C3.22935 8.22661 3.23959 8.44829 3.25968 8.66447C3.27739 8.85447 3.30274 9.04312 3.33556 9.23012H11.9434H12.0519V9.33966V10.1097V10.2192H11.9434H3.58423C3.74717 10.7129 3.96331 11.1828 4.22575 11.6215C4.49863 12.0777 4.82183 12.5001 5.18742 12.8807L5.18761 12.8804L5.26282 12.9563C5.9032 13.6028 6.66796 14.1237 7.51701 14.4787C8.33459 14.8207 9.23167 15.0094 10.1727 15.0094C10.6548 15.0094 11.1243 14.9603 11.5765 14.8666C12.0408 14.7706 12.489 14.6271 12.9156 14.4417C13.3524 14.2521 13.7651 14.0195 14.1479 13.7497C14.5353 13.4768 14.8937 13.1647 15.2174 12.8195L15.2914 12.7406L15.37 12.8156L15.9214 13.3423L16 13.4174L15.9258 13.4966Z" fill="#616161"/>
                 </svg>
-                <a href="{{ path('account_bills',{'_locale' : app.request.locale}) }}" {% if routeName == 'account_bills' %}class="active"{% endif %}>{% trans %}Финансы{% endtrans %}</a>
+                <a href="{{ path('account_bills') }}" {% if routeName == 'account_bills' %}class="active"{% endif %}>{% trans %}Финансы{% endtrans %}</a>
             </div>
         </li>
         <li>

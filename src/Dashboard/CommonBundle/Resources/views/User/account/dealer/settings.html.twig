@@ -63,7 +63,7 @@
     {%- endif -%}
 {%- endblock form_label -%}
 
-{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Iestatījumi{% endtrans %}{% endblock %}
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Настройки{% endtrans %}{% endblock %}
 {% block bodyClass %}class="userAccount"{% endblock %}
 {% block body %}
 <nav class="breadscrumbsBlock">
@@ -71,27 +71,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if locale.isDefault %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% else %}
-                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% endif %}
-                    {% if  locale.isDefault %}
-                        <li><a href="{{ path('accountDealer', {'_locale' : locale.code}) }}">
-                    {% else %}
-                        <li><a href="{{ path('accountDealerLocale', {'_locale' : locale.code}) }}">
-                    {% endif %}
-                        {% trans %}Личный кабинет{% endtrans %}
-                    </a></li>
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
                     <li>/</li>
-                    {% if  locale.isDefault %}
-                        <li><a href="{{ path('account_dealer_settings') }}">
-                    {% else %}
-                        <li><a href="{{ path('account_dealer_settingsLocale', {'_locale' : locale.code}) }}">
-                    {% endif %}
-                        {% trans %}Настройки{% endtrans %}</a></li>
+                    <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li>{% trans %}Настройки{% endtrans %}</li>
                 </ul>
             </div>
         </div>
@@ -114,7 +98,7 @@
         </div>
     </div>
     <div class="row content-row">
-        {{ render(controller('DashboardCommonBundle:Dealer:getSidebar', {'routeName' : routeName})) }}
+        {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
         <div class="col-lg-10 col-md-10">
             <div class="accountSettingsTabs">
                 <ul class="nav nav-tabs settingsTabs" id="myTab" role="tablist">
@@ -246,7 +230,7 @@
                             <div class="formParemetersItem" style="padding-bottom: 6rem;">
                                 <div class="formParameter" style="display: block;">
                                    <div class="formParameterLabel">{% trans %}Режим работы{% endtrans %}: <sup>*</sup></div>
-                                   <div class="formParameterField">
+                                   <div class="formParameterField">{{ form_label(formDealer.workinfo) }}
                                        <ul class="list-unstyled list-inline workdays dealerWorkdays" id="weekdays">
                                            <li>
                                                <div class="workDay workingDay weekDay {% if formDealer.workinfo.monday.vars.checked %}active{% endif %}" onclick="$(this).toggleClass('active');">
@@ -881,7 +865,7 @@
 </div>
 <script>
         myDropzone = new Dropzone("div#advertFotos", {
-            url: "/account/dealer/ajaxloadfotos",
+            url: "/account/ajaxloadfotos",
             dictDefaultMessage : '<div class="advertFotosStartBg"><div class="addFotoIcon"><div class="addFotoIconInner"></div></div><div class="addFotoDescription">{% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}</div></div>',
             maxFiles : 30,
             maxFilesize: 256,
@@ -962,7 +946,7 @@
                 $(".addFotoIcon").remove();
                 var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
                 $.ajax({
-                    url: '/account/dealer/deleteimage/' + imageName,
+                    url: '/account/deleteimage/' + imageName,
                     type:'get',
                     dataType: 'html'
                 });

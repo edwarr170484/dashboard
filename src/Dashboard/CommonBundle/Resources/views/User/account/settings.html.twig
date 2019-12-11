@@ -23,7 +23,7 @@
     <input type="checkbox" {{ block('widget_attributes') }} value="1" {% if checked %} checked="checked"{% endif %} />
 {%- endblock checkbox_widget -%}
 
-{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Iestatījumi{% endtrans %}{% endblock %}
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Настройки{% endtrans %}{% endblock %}
 {% block bodyClass %}class="userAccount"{% endblock %}
 {% block body %}
 <nav class="breadscrumbsBlock">
@@ -31,27 +31,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if locale.isDefault %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% else %}
-                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% endif %}
-                    {% if  locale.isDefault %}
-                        <li><a href="{{ path('account', {'_locale' : locale.code}) }}">
-                    {% else %}
-                        <li><a href="{{ path('accountLocale', {'_locale' : locale.code}) }}">
-                    {% endif %}
-                        {% trans %}Личный кабинет{% endtrans %}
-                    </a></li>
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
                     <li>/</li>
-                    {% if  locale.isDefault %}
-                        <li><a href="{{ path('account_settings') }}">
-                    {% else %}
-                        <li><a href="{{ path('account_settingsLocale', {'_locale' : locale.code}) }}">
-                    {% endif %}
-                        {% trans %}Настройки{% endtrans %}</a></li>
+                    <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li>{% trans %}Настройки{% endtrans %}</li>
                 </ul>
             </div>
         </div>

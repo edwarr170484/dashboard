@@ -2,6 +2,7 @@ $(document).ready(function(){
     $(".accountConversationMessagesWindow").mCustomScrollbar({scrollbarPosition: "outline",setTop: "-400px"});
     $(".mapListItems").mCustomScrollbar();
     $(".serviceInfo").mCustomScrollbar();
+    $(".salonJobs").mCustomScrollbar();
     
     $(".change-avatar").click(function(){$(this).parent().find(".change-avatar-input").trigger("click");});
     
@@ -80,7 +81,7 @@ function selectWeekDays(element, area, dayClass){
 function deleteDealerLogotype(text){
     if(confirm(text)){
         $.ajax({
-            url: '/account/dealer/deletelogo',
+            url: '/account/deletelogo',
             type:'post',
             data: $('.accountMessages input[type="checkbox"]:checked'),
             dataType: 'html',
@@ -206,7 +207,7 @@ function deleteConversations(text){
     }
 }
 
-function changeConverSations(){
+function changeConversations(){
     $.ajax({
         url: '/account/changeconversation',
         type:'post',
@@ -216,6 +217,27 @@ function changeConverSations(){
         success: function()
         {
             window.location.reload();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+                
+        }
+    });
+}
+
+function getMessages(conversationId, element){
+    var messages = ($(".accountConversationMessage").length) - 2;
+    var parent = element.parent().parent();
+    
+    $.ajax({
+        url: '/account/moremessages/' + conversationId + '/' + messages,
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(data){
+            if(data){
+                parent.after(data);
+            }else{
+                parent.remove();
+            }
         },
         error: function(xhr, ajaxOptions, thrownError) {
                 
@@ -240,30 +262,9 @@ function deleteFromBlacklist(){
     });
 }
 
-function getMessages(conversationId, locale_code, element){
-    var messages = ($(".accountConversationMessage").length) - 2;
-    var parent = element.parent().parent();
-    
-    $.ajax({
-        url: '/' + locale_code + '/account/moremessages/' + conversationId + '/' + messages,
-        dataType: 'html',
-        beforeSend: function(){},
-        success: function(data){
-            if(data){
-                parent.after(data);
-            }else{
-                parent.remove();
-            }
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-                
-        }
-    });
-}
-
 function getSalonEditForm(salonId, locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/dealer/editsalon/' + salonId,
+        url: '/account/editsalon/' + salonId,
         dataType: 'html',
         beforeSend: function(){},
         success: function(data){
@@ -276,10 +277,27 @@ function getSalonEditForm(salonId, locale_code){
     });
 }
 
+function getServiceEditForm(salonId, locale_code){
+    $.ajax({
+        url: '/account/editservice/' + salonId,
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(data){
+            $("#dealerAutoSalonEditModal").html(data);
+            $("#dealerAutoSalonEditModal").modal();
+            $("#salonJobs").mCustomScrollbar();
+            $(".custom-checkbox-modal").customCheckbox();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+                
+        }
+    });
+}
+
 function deleteDealerSalon(salonId, locale_code, text){
     if(confirm(text)){
         $.ajax({
-            url: '/' + locale_code + '/account/dealer/deletesalon/' + salonId,
+            url: '/account/deletesalon/' + salonId,
             dataType: 'html',
             beforeSend: function(){},
             success: function(){
@@ -293,10 +311,10 @@ function deleteDealerSalon(salonId, locale_code, text){
     }
 }
 
-function deleteDealerSalonLogotype(salonId, text, locale_code){
+function deleteDealerSalonLogotype(salonId, text){
     if(confirm(text)){
         $.ajax({
-            url: '/' + locale_code + '/account/dealer/deletesalonlogo/' + salonId,
+            url: '/account/deletesalonlogo/' + salonId,
             dataType: 'html',
             beforeSend: function(){},
             success: function(){
@@ -310,4 +328,8 @@ function deleteDealerSalonLogotype(salonId, text, locale_code){
             }
         });
     }
+}
+
+function toggleJobs(element){
+    element.parent().find(".dealerSalonJobItemJobs").slideToggle();
 }

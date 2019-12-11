@@ -8,29 +8,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if locale.isDefault %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% else %}
-                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% endif %}
-                    {% if  locale.isDefault %}
-                        <li><a href="{{ path('account', {'_locale' : locale.code}) }}">
-                    {% else %}
-                        <li><a href="{{ path('accountLocale', {'_locale' : locale.code}) }}">
-                    {% endif %}
-                        {% trans %}Личный кабинет{% endtrans %}
-                    </a></li>
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
                     <li>/</li>
-                    <li>
-                    {% if  locale.isDefault %}
-                        <a href="{{path('account_messages')}}">
-                    {% else %}
-                        <a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}">
-                    {% endif %}
-                        {% trans %}Сообщения{% endtrans %}
-                    </a></li>
+                    <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li>{% trans %}Сообщения{% endtrans %}</li>
                 </ul>
             </div>
         </div>
@@ -71,7 +53,7 @@
                     </div>
                 </div>
                 <div class="accountMessagesToolsRight">
-                    <button onclick="changeConverSations()">{% trans %}Отметить прочитанным{% endtrans %}</button>
+                    <button onclick="changeConversations()">{% trans %}Отметить прочитанным{% endtrans %}</button>
                     <button onclick="deleteConversations('{% trans%}Действительно удалить выделенные беседы?{% endtrans %}')">{% trans %}Удалить{% endtrans %}</button>
                 </div>
             </div>
@@ -164,13 +146,13 @@
                                                             {% if conversation.userTwo %}
                                                                 {{ conversation.userTwo.userinfo.firstname }} {{ conversation.userTwo.userinfo.lastname }}
                                                             {% else %}
-                                                                {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                {% trans %}Пользователь был удален{% endtrans %}
                                                             {% endif %}
                                                         {% else %}
                                                             {% if conversation.userOne %}
                                                                 {{conversation.userOne.userinfo.firstname}} {{conversation.userOne.userinfo.lastname}}
                                                             {% else %}
-                                                                {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                {% trans %}Пользователь был удален{% endtrans %}
                                                             {% endif %}
                                                         {% endif %}
                                                     </div>
@@ -188,11 +170,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="accountMessageItemButton">
-                                                    {% if locale.isDefault %}
-                                                        <a href="{{ path('account_conversation') }}">{% trans %}Ответить{% endtrans %}</a>
-                                                    {% else %}
-                                                        <a href="{{ path('account_conversationLocale', {'conversationId' : conversation.id, '_locale' : locale.code}) }}">{% trans %}Ответить{% endtrans %}</a>
-                                                    {% endif %}
+                                                    <a href="{{ path('account_conversation',{'conversationId' : conversation.id}) }}">{% trans %}Ответить{% endtrans %}</a>
                                                 </div>
                                             </div>
                                         {% endfor %} 

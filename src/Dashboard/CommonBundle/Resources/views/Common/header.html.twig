@@ -53,23 +53,9 @@
                             <ul class="list-unstyled list-inline loginned-top-info">
                                 <li>
                                     {% if app.user.userinfo.firstname or  app.user.userinfo.lastname %}
-                                        {% if  app.request.locale == 'lv' %}
-                                            <a href="{{path('account')}}">{{ app.user.userinfo.firstname }} {{app.user.userinfo.lastname}}</a>
-                                        {% else %}
-                                            <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{{ app.user.userinfo.firstname }} {{app.user.userinfo.lastname}}</a>
-                                        {% endif %}
-                                    {% elseif app.user.vkID %}
-                                        {% if  app.request.locale == 'lv' %}
-                                            <a href="{{path('account')}}">{{ app.user.vkID }}</a>
-                                        {% else %}
-                                            <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{{ app.user.vkID }}</a>
-                                        {% endif %}
+                                         <a href="{{path('account')}}">{{ app.user.userinfo.firstname }} {{app.user.userinfo.lastname}}</a>
                                     {% elseif app.user.fbID %} 
-                                        {% if  app.request.locale == 'lv' %}
-                                            <a href="{{path('account')}}">{{ app.user.fbID }}</a>
-                                        {% else %}
-                                            <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{{ app.user.fbID }}</a>
-                                        {% endif %}
+                                        <a href="{{path('account')}}">{{ app.user.fbID }}</a>
                                     {% endif %}
                                 </li>
                                 <li>
@@ -129,15 +115,9 @@
                             </div>
                             <div class="hidden-sm hidden-xs">
                                 <ul class="list-unstyled list-inline">
-                                    {% if  app.request.locale == 'lv' %}   
-                                        <li><a href="{{path('login')}}">{% trans %}Pierakstieties{% endtrans %}</a><div class="hover-border"></div></li>
-                                        <li> / </li>
-                                        <li><a href="{{path('register')}}">{% trans %}Reģistrācijas{% endtrans %}</a><div class="hover-border"></div></li>
-                                    {% else %}
-                                        <li><a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Pierakstieties{% endtrans %}</a></a><div class="hover-border"></div></li>
-                                        <li> / </li>
-                                        <li><a href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Reģistrācijas{% endtrans %}</a></a><div class="hover-border"></div></li>
-                                    {% endif %}
+                                    <li><a href="{{path('login')}}">{% trans %}Pierakstieties{% endtrans %}</a><div class="hover-border"></div></li>
+                                    <li> / </li>
+                                    <li><a href="{{path('register')}}">{% trans %}Reģistrācijas{% endtrans %}</a><div class="hover-border"></div></li>
                                 </ul>
                             </div>
                         {% endif %} 
@@ -151,28 +131,18 @@
             <div class="col-lg-3 col-md-3 siteLogo">
                 <div class="siteLogoImage">
                     {% if settings.siteLogo %}
-                        {% if  locale.isDefault %}
-                            <a href="{{ path('main') }}">
-                                <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
-                            </a>
-                        {% else %}
-                            <a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">
-                                <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
-                            </a>
-                        {% endif %}
+                        <a href="{{ path('main') }}">
+                            <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                        </a>
                     {% endif %}
                 </div>
                 <div class="headerFunctions">
                     <div class="siteMenuMobileLogin hidden-lg hidden-md">
-                        {% if  locale.isDefault %}   
-                            <a href="{{path('login')}}"><svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M4.90742 8.27197C4.90742 10.8382 6.18012 13.0968 8.101 14.4171C3.88142 15.4709 0.9 18.2092 0.9 21.5483C0.9 22.2787 1.36511 22.8617 2.09073 23.3216C2.81668 23.7817 3.82129 24.1311 4.94531 24.3933C7.19494 24.918 9.95332 25.1 12 25.1C14.0467 25.1 16.8051 24.918 19.0547 24.3933C20.1787 24.1311 21.1833 23.7817 21.9093 23.3216C22.6349 22.8617 23.1 22.2787 23.1 21.5483C23.1 18.2092 20.1186 15.4709 15.899 14.4171C17.8199 13.0968 19.0926 10.8382 19.0926 8.27197C19.0926 4.21071 15.9144 0.9 12 0.9C8.08563 0.9 4.90742 4.21071 4.90742 8.27197ZM6.54795 8.27197C6.54795 5.14089 8.99772 2.6 12 2.6C15.0023 2.6 17.4521 5.14089 17.4521 8.27197C17.4521 11.403 15.0023 13.9435 12 13.9435C8.99771 13.9435 6.54795 11.403 6.54795 8.27197ZM12 23.4C9.07063 23.4 6.73188 23.0782 5.10657 22.6746C4.29353 22.4727 3.66159 22.251 3.22437 22.0402C3.00554 21.9347 2.83844 21.8334 2.72241 21.7407C2.6112 21.6518 2.55825 21.5798 2.54099 21.5291C2.54933 19.927 3.59103 18.4599 5.29983 17.3873C7.01231 16.3124 9.38193 15.6435 12 15.6435C14.6178 15.6435 16.9872 16.3122 18.6996 17.387C20.4085 18.4595 21.4503 19.9265 21.459 21.5284C21.4422 21.5788 21.3898 21.6507 21.2788 21.7397C21.1632 21.8324 20.9965 21.9337 20.7779 22.0392C20.3412 22.25 19.7095 22.4719 18.8964 22.6739C17.2711 23.0779 14.9313 23.4 12 23.4Z" fill="#747474" stroke="#747474" stroke-width="0.2"/>
-</svg></a>
-                        {% else %}
-                            <a href="{{path('loginLocale',{'_locale' : app.request.locale})}}"><svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M4.90742 8.27197C4.90742 10.8382 6.18012 13.0968 8.101 14.4171C3.88142 15.4709 0.9 18.2092 0.9 21.5483C0.9 22.2787 1.36511 22.8617 2.09073 23.3216C2.81668 23.7817 3.82129 24.1311 4.94531 24.3933C7.19494 24.918 9.95332 25.1 12 25.1C14.0467 25.1 16.8051 24.918 19.0547 24.3933C20.1787 24.1311 21.1833 23.7817 21.9093 23.3216C22.6349 22.8617 23.1 22.2787 23.1 21.5483C23.1 18.2092 20.1186 15.4709 15.899 14.4171C17.8199 13.0968 19.0926 10.8382 19.0926 8.27197C19.0926 4.21071 15.9144 0.9 12 0.9C8.08563 0.9 4.90742 4.21071 4.90742 8.27197ZM6.54795 8.27197C6.54795 5.14089 8.99772 2.6 12 2.6C15.0023 2.6 17.4521 5.14089 17.4521 8.27197C17.4521 11.403 15.0023 13.9435 12 13.9435C8.99771 13.9435 6.54795 11.403 6.54795 8.27197ZM12 23.4C9.07063 23.4 6.73188 23.0782 5.10657 22.6746C4.29353 22.4727 3.66159 22.251 3.22437 22.0402C3.00554 21.9347 2.83844 21.8334 2.72241 21.7407C2.6112 21.6518 2.55825 21.5798 2.54099 21.5291C2.54933 19.927 3.59103 18.4599 5.29983 17.3873C7.01231 16.3124 9.38193 15.6435 12 15.6435C14.6178 15.6435 16.9872 16.3122 18.6996 17.387C20.4085 18.4595 21.4503 19.9265 21.459 21.5284C21.4422 21.5788 21.3898 21.6507 21.2788 21.7397C21.1632 21.8324 20.9965 21.9337 20.7779 22.0392C20.3412 22.25 19.7095 22.4719 18.8964 22.6739C17.2711 23.0779 14.9313 23.4 12 23.4Z" fill="#747474" stroke="#747474" stroke-width="0.2"/>
-</svg></a>
-                        {% endif %}
+                        <a href="{{path('login')}}">
+                            <svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.90742 8.27197C4.90742 10.8382 6.18012 13.0968 8.101 14.4171C3.88142 15.4709 0.9 18.2092 0.9 21.5483C0.9 22.2787 1.36511 22.8617 2.09073 23.3216C2.81668 23.7817 3.82129 24.1311 4.94531 24.3933C7.19494 24.918 9.95332 25.1 12 25.1C14.0467 25.1 16.8051 24.918 19.0547 24.3933C20.1787 24.1311 21.1833 23.7817 21.9093 23.3216C22.6349 22.8617 23.1 22.2787 23.1 21.5483C23.1 18.2092 20.1186 15.4709 15.899 14.4171C17.8199 13.0968 19.0926 10.8382 19.0926 8.27197C19.0926 4.21071 15.9144 0.9 12 0.9C8.08563 0.9 4.90742 4.21071 4.90742 8.27197ZM6.54795 8.27197C6.54795 5.14089 8.99772 2.6 12 2.6C15.0023 2.6 17.4521 5.14089 17.4521 8.27197C17.4521 11.403 15.0023 13.9435 12 13.9435C8.99771 13.9435 6.54795 11.403 6.54795 8.27197ZM12 23.4C9.07063 23.4 6.73188 23.0782 5.10657 22.6746C4.29353 22.4727 3.66159 22.251 3.22437 22.0402C3.00554 21.9347 2.83844 21.8334 2.72241 21.7407C2.6112 21.6518 2.55825 21.5798 2.54099 21.5291C2.54933 19.927 3.59103 18.4599 5.29983 17.3873C7.01231 16.3124 9.38193 15.6435 12 15.6435C14.6178 15.6435 16.9872 16.3122 18.6996 17.387C20.4085 18.4595 21.4503 19.9265 21.459 21.5284C21.4422 21.5788 21.3898 21.6507 21.2788 21.7397C21.1632 21.8324 20.9965 21.9337 20.7779 22.0392C20.3412 22.25 19.7095 22.4719 18.8964 22.6739C17.2711 23.0779 14.9313 23.4 12 23.4Z" fill="#747474" stroke="#747474" stroke-width="0.2"/>
+                            </svg>
+                        </a>
                     </div>
                     <div class="siteMenuGamburger">
                         <button onclick='$(".siteMenuGamburgerMenu").show();'>{{ block('svgGamburger') }}</button>
@@ -188,38 +158,22 @@
                         {% for category in categories %}
                             {% if category.id == 27 %}
                                 <li class="submenu">
-                                    <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.name,'_locale' : locale.code}) }}{% endif %}">
-                                        {% if category.translations | length > 0 %}
-                                            {% for translation in category.translations %}
-                                                {% if translation.locale.id == locale.id %}
-                                                    {{ translation.value }}
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% else %}        
-                                            {{ category.title}}
-                                        {% endif %}
+                                    <a href="{{ path('category',{'categoryName' : category.name}) }}">
+                                        {{ category.title}}
                                         <div class="shadowBlock"></div>
                                     </a>
                                     <div class="hover-border"></div>
                                     <div class="siteMainSubmenu">
                                         <ul class="list-unstyled">
-                                            <li><a href="">С&nbsp;пробегом</a></li>
-                                            <li><a href="">Новые</a></li>
+                                            <li><a href="">{% trans %}С&nbsp;пробегом{% endtrans %}</a></li>
+                                            <li><a href="">{% trans %}Новые{% endtrans %}</a></li>
                                         </ul>
                                     </div>
                                 </li>
                             {% else %}
                                 <li class="{% if category.children | length > 0 %}submenu{% endif %}">
-                                    <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.name,'_locale' : locale.code}) }}{% endif %}">
-                                        {% if category.translations | length > 0 %}
-                                            {% for translation in category.translations %}
-                                                {% if translation.locale.id == locale.id %}
-                                                    {{ translation.value }}
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% else %}        
-                                            {{ category.title}}
-                                        {% endif %}
+                                    <a href="{{ path('category',{'categoryName' : category.name}) }}">
+                                        {{ category.title}}
                                         <div class="shadowBlock"></div>
                                     </a>
                                     <div class="hover-border"></div>
@@ -234,16 +188,8 @@
                                                     <ul class="list-unstyled">
                                                         {% for i in start..end %}
                                                             <li>
-                                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.children[i].name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.children[i].name,'_locale' : locale.code}) }}{% endif %}">
-                                                                    {% if category.children[i].translations | length > 0 %}
-                                                                        {% for translation in category.children[i].translations %}
-                                                                            {% if translation.locale.id == locale.id %}
-                                                                                {{ translation.value }}
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    {% else %}        
-                                                                        {{ category.children[i].title}}
-                                                                    {% endif %}
+                                                                <a href="{{ path('category',{'categoryName' : category.children[i].name}) }}">
+                                                                    {{ category.children[i].title}}
                                                                 </a>
                                                             </li>
                                                         {% endfor %}
@@ -255,17 +201,7 @@
                                                 <ul class="list-unstyled">
                                                     {% for child in category.children %}
                                                         <li>
-                                                            <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : child.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : child.name,'_locale' : locale.code}) }}{% endif %}">
-                                                                    {% if child.translations | length > 0 %}
-                                                                        {% for translation in child.translations %}
-                                                                            {% if translation.locale.id == locale.id %}
-                                                                                {{ translation.value }}
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    {% else %}        
-                                                                        {{ child.title}}
-                                                                    {% endif %}
-                                                            </a>
+                                                            <a href="{{ path('category',{'categoryName' : child.name}) }}">{{ child.title}}</a>
                                                         </li>
                                                     {% endfor %}
                                                 </ul>
@@ -277,34 +213,23 @@
                         {% endfor %}
                     {% endif %}
                     <li class="submenu">
-                        <a href="">Услуги<div class="shadowBlock"></div></a>
+                        <a href="">{% trans %}Услуги{% endtrans %}<div class="shadowBlock"></div></a>
                         <div class="hover-border"></div>
                         <div class="siteMainSubmenu">
                             <ul class="list-unstyled">
-                                <li><a href="{% if locale.isDefault %}{{ path('dealers') }}{% else %}{{ path('dealersLocale',{'_locale' : locale.code}) }}{% endif %}">Дилеры</a></li>
-                                <li><a href="{% if locale.isDefault %}{{ path('services') }}{% else %}{{ path('servicesLocale',{'_locale' : locale.code}) }}{% endif %}">Сервисные&nbsp;центры</a></li>
+                                <li><a href="{{ path('dealers') }}">{% trans %}Дилеры{% endtrans %}</a></li>
+                                <li><a href="{{ path('services') }}">{% trans %}Сервисные&nbsp;центры{% endtrans %}</a></li>
                             </ul>
                         </div>
                     </li>
                 </ul>
             </div>
             <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
-                            {% if locale.isDefault %}
-                                {% if app.user %}
-                                    <a href="{{path('addAdvert')}}" class="header-add-button pull-right">
-                                        {{ block('svgAddAdvert') }}
-                                    </a>
-                                {% else %}
-                                    <a href="{{path('login')}}" class="header-add-button pull-right">
-                                        {{ block('svgAddAdvert') }}</a>
-                                {% endif %}
-                            {% else %}
-                                {% if app.user %}
-                                    <a href="{{path('addAdvertLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
-                                {% else %}
-                                    <a href="{{path('loginLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
-                                {% endif %}
-                            {% endif %}
+                {% if app.user %}
+                    <a href="{{path('addAdvert')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
+                {% else %}
+                    <a href="{{path('login')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
+                {% endif %}
             </div>
             <div class="siteMenuGamburgerMenu">
                             <button onclick='$(".siteMenuGamburgerMenu").hide();'>
@@ -319,54 +244,24 @@
                                     {% if category.id == 27 %}
                                         <div class="siteMenuGamburgerItem">
                                             <div class="siteMenuGamburgerHeader">
-                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.name,'_locale' : locale.code}) }}{% endif %}">
-                                                    {% if category.translations | length > 0 %}
-                                                        {% for translation in category.translations %}
-                                                            {% if translation.locale.id == locale.id %}
-                                                                {{ translation.value }}
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% else %}        
-                                                        {{ category.title}}
-                                                    {% endif %}
-                                                </a>
+                                                <a href="{{ path('category',{'categoryName' : category.name}) }}">{{ category.title}}</a>
                                             </div>
                                             <ul class="list-unstyled">
-                                                <li><a href="">С пробегом</a></li>
-                                                <li><a href="">Новые</a></li>
-                                                <li><a href="">Дилеры</a></li>
+                                                <li><a href="">{% trans %}С пробегом{% endtrans %}</a></li>
+                                                <li><a href="">{% trans %}Новые{% endtrans %}</a></li>
+                                                <li><a href="">{% trans %}Дилеры{% endtrans %}</a></li>
                                             </ul>
                                         </div>
                                     {% else %}
                                         <div class="siteMenuGamburgerItem">
                                             <div class="siteMenuGamburgerHeader">
-                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : category.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : category.name,'_locale' : locale.code}) }}{% endif %}">
-                                                    {% if category.translations | length > 0 %}
-                                                        {% for translation in category.translations %}
-                                                            {% if translation.locale.id == locale.id %}
-                                                                {{ translation.value }}
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% else %}        
-                                                        {{ category.title}}
-                                                    {% endif %}
-                                                </a>
+                                                <a href="{{ path('category',{'categoryName' : category.name}) }}">{{ category.title}}</a>
                                             </div>
                                             {% if category.children | length > 0 %}
                                                 <ul class="list-unstyled">
                                                     {% for child in category.children %}
                                                         <li>
-                                                            <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : child.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : child.name,'_locale' : locale.code}) }}{% endif %}">
-                                                                    {% if child.translations | length > 0 %}
-                                                                        {% for translation in child.translations %}
-                                                                            {% if translation.locale.id == locale.id %}
-                                                                                {{ translation.value }}
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    {% else %}        
-                                                                        {{ child.title}}
-                                                                    {% endif %}
-                                                            </a>
+                                                            <a href="{{ path('category',{'categoryName' : child.name}) }}">{{ child.title}}</a>
                                                         </li>
                                                     {% endfor %}
                                                 </ul>
@@ -378,8 +273,8 @@
                             <div class="siteMenuGamburgerItem">
                                 <div class="siteMenuGamburgerHeader">{% trans %}Информация{% endtrans %}</div>
                                 <ul class="list-unstyled">
-                                    <li><a href="{% if locale.isDefault %}{{ path('dealer') }}{% else %}{{ path('dealerLocale',{'_locale' : locale.code}) }}{% endif %}">{% trans %}Дилерам{% endtrans %}</a></li>
-                                    <li><a href="{% if locale.isDefault %}{{ path('service') }}{% else %}{{ path('serviceLocale',{'_locale' : locale.code}) }}{% endif %}">{% trans %}Автосервисам{% endtrans %}</a></li>
+                                    <li><a href="{{ path('dealer') }}">{% trans %}Дилерам{% endtrans %}</a></li>
+                                    <li><a href="{{ path('service') }}">{% trans %}Автосервисам{% endtrans %}</a></li>
                                     <li style="padding-top:3rem;"><a href="" style="font-family:'GothamProBold'">Обратная связь</a></li>
                                     <li><a href="" style="font-family:'GothamProBold'">Разместить рекламу</a></li>
                                 </ul>  
@@ -393,21 +288,10 @@
         {% endfor %}
     </div>
     <div class="addAdvertButtonMobile hidden-lg hidden-md">
-        {% if  locale.isDefault %}
-            {% if app.user %}
-                <a href="{{path('addAdvert')}}">
-                    {{ block('svgAddAdvertMobile') }}
-                </a>
-            {% else %}
-                <a href="{{path('login')}}">
-                    {{ block('svgAddAdvertMobile') }}</a>
-             {% endif %}
+        {% if app.user %}
+            <a href="{{path('addAdvert')}}">{{ block('svgAddAdvertMobile') }}</a>
         {% else %}
-            {% if app.user %}
-                <a href="{{path('addAdvertLocale',{'_locale' : app.request.locale})}}">{{ block('svgAddAdvertMobile') }}</a>
-            {% else %}
-                <a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{{ block('svgAddAdvertMobile') }}</a>
-            {% endif %}
+            <a href="{{path('login')}}">{{ block('svgAddAdvertMobile') }}</a>
         {% endif %}
     </div>
 </header>

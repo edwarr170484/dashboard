@@ -44,7 +44,7 @@ class DealerEditType extends AbstractType
             ->add('description', TextareaType::class, array('required' => false, 'label' => 'Описание', 'attr' => array('class' => 'form-control dealerDescription','placeholder' => 'Описание компании'))) 
             ->add('isNewAuto', CheckboxType::class, array('required' => false, 'label' => 'Новые', 'attr' => array('class' => 'custom-checkbox')))
             ->add('isOldAuto', CheckboxType::class, array('required' => false, 'label' => 'С пробегом', 'attr' => array('class' => 'custom-checkbox')))
-            ->add('workinfo', new WorkInfoType($this->em), array('data_class' => 'Dashboard\CommonBundle\Entity\Workinfo'))     
+            ->add('workinfo', new WorkInfoType($this->em), array('label' => ' ','data_class' => 'Dashboard\CommonBundle\Entity\Workinfo'))     
             ->add('save', ButtonType::class, array('label' => 'Сохранить'));
         
             $builder->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 

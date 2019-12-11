@@ -1,33 +1,24 @@
 {% extends 'DashboardCommonBundle:Common:base.html.twig' %}
 
-{% block title %}{% trans %}Piesakieties savā kontā{% endtrans %}{% endblock %}
+{% block title %}{% trans %}Вход в личный кабинет{% endtrans %}{% endblock %}
 
 {% block body %}
 <script>
-            
-            var loginCaptcha;
-            
-            var onloadCallback = function() {
-              loginCaptcha = grecaptcha.render('loginCaptcha', {
-                'sitekey' : '6Lc6wCkTAAAAAHoOUvGPxIsIVZ67R09ZYGhmILND'
-              });
-            };
-
+    var loginCaptcha;
+    var onloadCallback = function() {
+        loginCaptcha = grecaptcha.render('loginCaptcha', {
+            'sitekey' : '6Lc6wCkTAAAAAHoOUvGPxIsIVZ67R09ZYGhmILND'
+        });
+    };
 </script>
 <nav class="breadscrumbsBlock">
       <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if  app.request.locale == 'lv' %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                        <li><a href="">{% trans %}Вход в личный кабинет{% endtrans %}</a></li>
-                    {% else %}
-                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                        <li><a href="">{% trans %}Вход в личный кабинет{% endtrans %}</a></li>
-                    {% endif %}
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li><a href="">{% trans %}Вход в личный кабинет{% endtrans %}</a></li>
                 </ul>
             </div>
         </div>
@@ -38,7 +29,6 @@
         <div class="row login-blocks">
             <div class="col-lg-5 col-md-5 col-md-offset-1">
                 <div class="loginBlock">
-                    {% if  app.request.locale == 'lv' %}
                             <div class="register-block">
                                 <div class="register-block-header">{% trans %}Войти или{% endtrans %} <a href="{{path('register')}}">{% trans %}Зарегистрироваться{% endtrans %}</a></div>
                                 {% if error %}
@@ -46,7 +36,7 @@
                                         <button class="close-alert" data-dismiss="alert" type="button">
                                             <span aria-hidden="true">×</span>
                                         </button>
-                                        {{ error.message | replace({"Bad credentials." : "<b>Kļūda!</b> Nederīgs lietotājvārds vai parole", "User account is disabled." : "<b>Ошибка!</b> Ваш аккаунт заблокирован."}) | raw }}
+                                        {{ error.message | replace({"Bad credentials." : "<b>Ошибка!</b> Неверный логин или пароль", "User account is disabled." : "<b>Ошибка!</b> Ваш аккаунт заблокирован."}) | raw }}
                                     </div>
                                 {% endif %}
                                 <div class="register-form-forms">
@@ -74,43 +64,6 @@
                                     <a class="registerUserLink" href="{{path('register')}}">{% trans %}Зарегистрироваться{% endtrans %}</a>
                                 </div>
                             </div>
-                        {% else %}
-                            <div class="register-block">
-                                <div class="register-block-header">{% trans %}Войти или{% endtrans %} <a href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Зарегистрироваться{% endtrans %}</a></div>
-                                {% if error %}
-                                    <div class="alert alert-danger">
-                                        <button class="close-alert" data-dismiss="alert" type="button">
-                                            <span aria-hidden="true">×</span>
-                                        </button>
-                                        {{ error.message | replace({"Bad credentials." : "<b>Ошибка!</b> Неверный логин или пароль", "User account is disabled." : "<b>Ошибка!</b> Ваш аккаунт заблокирован."}) | raw }}
-                                    </div>
-                                {% endif %}
-                                    <div class="register-form-forms">
-                                        <form action="{{path('login')}}" method="post">
-                                            <div class="registerInputBlock">
-                                                <input class="email" name="_username" value="{{ last_username }}" placeholder="{% trans %}E-mail{% endtrans %}" required />
-                                                <div class="inputMessage"></div>
-                                            </div>
-                                            <div class="registerInputBlock">
-                                                <input class="password" name="_password" type="password" value="" placeholder="{% trans %}Пароль{% endtrans %}" required />
-                                                <div class="inputMessage"></div>
-                                            </div>
-                                            {% if app.session.get('loginerror') %}
-                                                <div class="g-recaptcha" id="loginCaptcha"></div>
-                                            {% endif %}
-                                            <input type="hidden" name="_failure_path" value="{{path('loginLocale',{'_locale' : 'ru'})}}" />
-                                            <input type="hidden" name="_target_path" value="{{ path('accountLocale',{'_locale' : 'ru'}) }}" />
-                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-                                            <button type="submit">{% trans %}Войти{% endtrans %}</button>
-                                        </form>
-                                    </div>
-                                    <div class="forgotPassword">
-                                        <a class="fogotPaswordLink" href="{{path('restoreLocale',{'_locale' : app.request.locale})}}">{% trans %}Забыли пароль?{% endtrans %}</a>
-                                        {% trans %}У вас нет аккаунта?{% endtrans %}
-                                        <a class="registerUserLink" href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Зарегистрироваться{% endtrans %}</a>
-                                    </div>
-                            </div>
-                        {% endif %}
                 </div>
             </div>
             <div class="col-lg-5 col-md-5">

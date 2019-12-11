@@ -24,7 +24,6 @@ use Dashboard\CommonBundle\Form\Type\ProductFotoType;
 use Dashboard\CommonBundle\Entity\Selltype;
 
 use Dashboard\CommonBundle\Form\DataTransformer\ReviewToNumberTransformer;
-use Dashboard\CommonBundle\Form\DataTransformer\ProductToNumberTransformer;
 
 use Dashboard\CommonBundle\Entity\Category;
 
@@ -42,7 +41,6 @@ class ReviewAnswerType extends AbstractType
         $builder
             ->add('reviewText', TextareaType::class, array('required' => true, 'label' => 'Jūsu atbilde:', 'attr' => array('class' => 'form-control')))
             ->add('status', ChoiceType::class, array('choices' => array("0" => "Neitrāls","1" => "Pozitīvs", "-1" => "Negatīvs"), 'data' => '0','label' => "Lietotāja vērtējums:",'empty_value' => false,'required' => false, 'attr' => array('class' => 'hidden-input')))
-            ->add($builder->create('product', 'hidden',array('attr' => array('class' => 'review_product_id')))->addModelTransformer(new ProductToNumberTransformer($this->manager)))
             ->add($builder->create('review', 'hidden', array('mapped' => false, 'attr' => array('class' => 'review_review_id')))->addModelTransformer(new ReviewToNumberTransformer($this->manager)))
             ->add('save', ButtonType::class, array('label' => 'Sūtīt', 'attr' => array('class' => 'message-button-answer')));
     }

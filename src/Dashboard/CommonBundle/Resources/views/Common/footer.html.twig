@@ -4,15 +4,9 @@
             <div class="col-md-3 footerLogoBlock" >
                 <div class="footerLogo">
                     {% if settings.siteLogo %}
-                        {% if  app.request.locale == 'lv' %}
-                            <a href="{{ path('main') }}">
-                                <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
-                            </a>
-                        {% else %}
-                            <a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}" >
-                                <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
-                            </a>
-                        {% endif %}
+                        <a href="{{ path('main') }}">
+                            <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                        </a>
                     {% endif %}
                 </div>
                 <div class="footerSiteDescription">
@@ -31,11 +25,7 @@
                                     {% if footerPages %}
                                         {% for page in footerPages %}
                                             {% if page.footerMenuSection == 1 %}
-                                                {% if  app.request.locale == 'lv' %}
-                                                    <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
-                                                {% else %}
-                                                    <li><a href="{{ path('pagesLocale',{'route' : page.route,'_locale' : app.request.locale}) }}">{{ page.title }}</a></li>
-                                                {% endif %}
+                                                <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}
@@ -51,11 +41,7 @@
                                     {% if footerPages %}
                                         {% for page in footerPages %}
                                             {% if page.footerMenuSection == 2 %}
-                                                {% if  app.request.locale == 'lv' %}
-                                                    <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
-                                                {% else %}
-                                                    <li><a href="{{ path('pagesLocale',{'route' : page.route,'_locale' : app.request.locale}) }}">{{ page.title }}</a></li>
-                                                {% endif %}
+                                                <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}
@@ -70,11 +56,7 @@
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                     <ul class="list-unstyled footer-menu-list">
                                         <li>
-                                            {% if  app.request.locale == 'lv' %}
-                                                <a href="{{path('account')}}">{% trans %}Личный кабинет{% endtrans %}</a>
-                                            {% else %}
-                                                <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Личный кабинет{% endtrans %}</a>
-                                            {% endif %}
+                                            <a href="{{path('account')}}">{% trans %}Личный кабинет{% endtrans %}</a>
                                         </li>
                                         <li>
                                             <a href="{{path('logout')}}" class="top-info-logout">{% trans %}Выйти{% endtrans %}</a>
@@ -82,15 +64,9 @@
                                     </ul>
                                 {% else %}
                                 <ul class="list-unstyled footer-menu-list no-flex">
-                                    {% if  app.request.locale == 'lv' %}   
-                                        <li><a href="{{path('login')}}">{% trans %}Войти{% endtrans %}</a></li>
-                                        <li><a href="{{path('register')}}">{% trans %}Регистрация{% endtrans %}</a></li>
-                                        <li><a href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a></li>
-                                    {% else %}
-                                        <li><a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Войти{% endtrans %}</a></li>
-                                        <li><a href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Регистрация{% endtrans %}</a></li>
-                                        <li><a href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a></li>
-                                    {% endif %}
+                                    <li><a href="{{path('login')}}">{% trans %}Войти{% endtrans %}</a></li>
+                                    <li><a href="{{path('register')}}">{% trans %}Регистрация{% endtrans %}</a></li>
+                                    <li><a href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a></li>
                                 </ul>    
                                 {% endif %}
                             </div>
@@ -188,12 +164,8 @@
                                 <div><img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" /></div>
                             {% endif %}
                             <div class="searchBlockForm">
-                                {% if  app.request.locale == 'lv' %}
-                                    <form action="{{ path('search') }}" method="post">
-                                {% else %}
-                                    <form action="{{ path('searchLocale',{'_locale' : app.request.locale}) }}" method="post">
-                                {% endif %}
-                                <input name="searchText" type="text" placeholder="{% trans %}SITE MEKLĒŠANA{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
+                                <form action="{{ path('search') }}" method="post">
+                                    <input name="searchText" type="text" placeholder="{% trans %}SITE MEKLĒŠANA{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
                                 </form>
                             </div>
                             <button type="button" data-dismiss="modal" aria-label="Close">

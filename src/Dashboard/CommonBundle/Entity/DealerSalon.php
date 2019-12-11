@@ -53,11 +53,17 @@ class DealerSalon
     private $workinfo;
     
     /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Job", inversedBy="salons")
+     */
+    private $jobs;
+    
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -140,6 +146,29 @@ class DealerSalon
     }
 
     /**
+     * Set logotype
+     *
+     * @param string $logotype
+     * @return DealerSalon
+     */
+    public function setLogotype($logotype)
+    {
+        $this->logotype = $logotype;
+    
+        return $this;
+    }
+
+    /**
+     * Get logotype
+     *
+     * @return string 
+     */
+    public function getLogotype()
+    {
+        return $this->logotype;
+    }
+
+    /**
      * Set dealerInfo
      *
      * @param \Dashboard\CommonBundle\Entity\DealerInfo $dealerInfo
@@ -219,25 +248,35 @@ class DealerSalon
     }
 
     /**
-     * Set logotype
+     * Add jobs
      *
-     * @param string $logotype
+     * @param \Dashboard\CommonBundle\Entity\Job $jobs
      * @return DealerSalon
      */
-    public function setLogotype($logotype)
+    public function addJob(\Dashboard\CommonBundle\Entity\Job $jobs)
     {
-        $this->logotype = $logotype;
+        $this->jobs[] = $jobs;
     
         return $this;
     }
 
     /**
-     * Get logotype
+     * Remove jobs
      *
-     * @return string 
+     * @param \Dashboard\CommonBundle\Entity\Job $jobs
      */
-    public function getLogotype()
+    public function removeJob(\Dashboard\CommonBundle\Entity\Job $jobs)
     {
-        return $this->logotype;
+        $this->jobs->removeElement($jobs);
+    }
+
+    /**
+     * Get jobs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
     }
 }

@@ -47,7 +47,7 @@
 {% block _rate_translations_entry_row %}
     <tr>
         <td>{{ form_widget(form.locale)}}</td>
-        <td>{{ form_widget(form.value)}}{{ form_widget(form.mark)}}</td>
+        <td>{{ form_widget(form.value)}}</td>
         <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
                 <i class="fa fa-times" title="Удалить перевод для языка"></i>
             </button> 

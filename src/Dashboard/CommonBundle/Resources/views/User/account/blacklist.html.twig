@@ -8,29 +8,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if locale.isDefault %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% else %}
-                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% endif %}
-                    {% if  locale.isDefault %}
-                        <li><a href="{{ path('account', {'_locale' : locale.code}) }}">
-                    {% else %}
-                        <li><a href="{{ path('accountLocale', {'_locale' : locale.code}) }}">
-                    {% endif %}
-                        {% trans %}Личный кабинет{% endtrans %}
-                    </a></li>
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
                     <li>/</li>
-                    <li>
-                    {% if  locale.isDefault %}
-                        <a href="{{path('account_userblacklist')}}">
-                    {% else %}
-                        <a href="{{path('account_userblacklistLocale',{'_locale' : app.request.locale})}}">
-                    {% endif %}
-                        {% trans %}Черный список{% endtrans %}
-                    </a></li>
+                    <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li>{% trans %}Черный список{% endtrans %}</li>
                 </ul>
             </div>
         </div>
@@ -44,7 +26,7 @@
         <div class="col-lg-10 col-md-10">
             <div class="accountBlockHeader">
                 <div class="account-block-header"><h1><b>{% trans %}Черный список{% endtrans %}</b></h1></div>
-                {% if blacklist %}
+                {% if blacklist | length > 0 %}
                     <div class="accountBlockHeaderTool"><button onclick="deleteFromBlacklist()">Убрать из списка</button></div>
                 {% endif %}
             </div>
@@ -54,55 +36,47 @@
         {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
         <div class="col-lg-10 col-md-10">
             <div class="account-advert-block-content">
-                {% if blacklist %}
-                <div class="row" id="blackListUsers">
-                    {% for user in blacklist %}
-                        <div class="col-lg-6">
-                            <div class="accountBlacklistUser">
-                                <div class="accountMessageItemUser">
-                                    <div class="accountMessageItemCheck">
-                                        <input type="checkbox" id="" name="blackListUser[]" class="custom-checkbox" value="{{ user.id }}">
-                                    </div>
-                                    <div class="accountMessageItemUserAvatar">
-                                        <a href="{% if locale.isDefault %}{{ path('profile' ,{'userId' : user.id}) }}{% else %}{{ path('profileLocale' ,{'userId' : user.id,'_locale' : locale.code}) }}{% endif %}">
-                                            {% if user.userinfo.avatar %}
-                                                <img class="img-circle" src="{{ asset('bundles/images/users/avatars/') }}{{user.userinfo.avatar}}" alt="" title="" />
+                {% if blacklist | length > 0 %}
+                    <div class="row" id="blackListUsers">
+                        {% for user in blacklist %}
+                            <div class="col-lg-6">
+                                <div class="accountBlacklistUser">
+                                    <div class="accountMessageItemUser">
+                                        <div class="accountMessageItemCheck">
+                                            <input type="checkbox" id="" name="blackListUser[]" class="custom-checkbox" value="{{ user.id }}">
+                                        </div>
+                                        <div class="accountMessageItemUserAvatar">
+                                            <a href="{{ path('profile' ,{'userId' : user.id}) }}">
+                                                {% if user.userinfo.avatar %}
+                                                    <img class="img-circle" src="{{ asset('bundles/images/users/avatars/') }}{{user.userinfo.avatar}}" alt="" title="" />
+                                                {% else %}
+                                                    <svg width="50" height="50" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <circle cx="32" cy="32" r="32" fill="#F5AA01"/>
+                                                        <path d="M31.9996 55.9001C18.7996 55.9001 8.09961 45.2001 8.09961 32.0001C8.09961 18.8001 18.7996 8.1001 31.9996 8.1001C45.1996 8.1001 55.8996 18.8001 55.8996 32.0001C55.8996 45.2001 45.1996 55.9001 31.9996 55.9001ZM31.9996 10.7001C20.2996 10.7001 10.6996 20.3001 10.6996 32.0001C10.6996 43.7001 20.2996 53.3001 31.9996 53.3001C43.6996 53.3001 53.2996 43.7001 53.2996 32.0001C53.2996 20.3001 43.6996 10.7001 31.9996 10.7001Z" fill="white"/>
+                                                        <path d="M17.9996 49.3002L15.5996 48.2002C16.2996 46.5002 18.4996 45.6002 20.9996 44.5002C23.3996 43.4002 26.3996 42.1002 26.3996 40.5002V38.3002C25.4996 37.6002 24.0996 36.0002 23.8996 33.7002C23.1996 33.0002 22.0996 31.7002 22.0996 30.1002C22.0996 29.1002 22.4996 28.3002 22.7996 27.8002C22.5996 26.7002 22.1996 24.5002 22.1996 22.8002C22.1996 17.3002 25.9996 13.7002 31.9996 13.7002C33.6996 13.7002 35.7996 14.2002 36.8996 15.4002C39.5996 15.9002 41.7996 19.1002 41.7996 22.8002C41.7996 25.2002 41.3996 27.2002 41.0996 28.1002C41.3996 28.6002 41.6996 29.3002 41.6996 30.1002C41.6996 32.0002 40.7996 33.2002 39.8996 33.8002C39.6996 36.1002 38.3996 37.6002 37.5996 38.3002V40.5002C37.5996 41.9002 40.0996 42.8002 42.3996 43.7002C45.0996 44.7002 47.8996 45.7002 48.7996 48.0002L46.2996 48.9002C45.8996 47.7002 43.4996 46.9002 41.4996 46.1002C38.3996 45.0002 34.8996 43.7002 34.8996 40.5002V36.9002L35.4996 36.5002C35.5996 36.5002 37.2996 35.3002 37.2996 33.0002V32.1002L38.0996 31.8002C38.1996 31.7002 38.9996 31.3002 38.9996 30.1002C38.9996 29.7002 38.6996 29.3002 38.5996 29.2002L38.0996 28.6002L38.2996 27.9002C38.2996 27.9002 38.9996 25.7002 38.9996 22.7002C38.9996 20.2002 37.5996 17.9002 36.0996 17.9002H35.2996L34.8996 17.2002C34.5996 16.7002 33.3996 16.2002 31.7996 16.2002C27.2996 16.2002 24.5996 18.6002 24.5996 22.7002C24.5996 24.6002 25.2996 27.7002 25.2996 27.7002L25.4996 28.4002L24.9996 28.9002C24.9996 28.9002 24.5996 29.4002 24.5996 29.9002C24.5996 30.6002 25.4996 31.5002 25.8996 31.9002L26.3996 32.3002V33.0002C26.3996 35.2002 28.2996 36.4002 28.2996 36.4002L28.8996 36.8002V40.4002C28.8996 43.7002 25.1996 45.4002 21.8996 46.8002C20.4996 47.6002 18.3996 48.6002 17.9996 49.3002Z" fill="white"/>
+                                                    </svg>
+                                                {% endif %}
+                                            </a>                      
+                                        </div>
+                                        <div class="accountMessageItemUserName">
+                                            {% if user.userinfo.firstname and  user.userinfo.lastname%}
+                                                 <a href="{{ path('profile' ,{'userId' : user.id}) }}">{{user.userinfo.firstname}} {{user.userinfo.lastname}}</a>
                                             {% else %}
-                                                <svg width="50" height="50" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <circle cx="32" cy="32" r="32" fill="#F5AA01"/>
-                                                    <path d="M31.9996 55.9001C18.7996 55.9001 8.09961 45.2001 8.09961 32.0001C8.09961 18.8001 18.7996 8.1001 31.9996 8.1001C45.1996 8.1001 55.8996 18.8001 55.8996 32.0001C55.8996 45.2001 45.1996 55.9001 31.9996 55.9001ZM31.9996 10.7001C20.2996 10.7001 10.6996 20.3001 10.6996 32.0001C10.6996 43.7001 20.2996 53.3001 31.9996 53.3001C43.6996 53.3001 53.2996 43.7001 53.2996 32.0001C53.2996 20.3001 43.6996 10.7001 31.9996 10.7001Z" fill="white"/>
-                                                    <path d="M17.9996 49.3002L15.5996 48.2002C16.2996 46.5002 18.4996 45.6002 20.9996 44.5002C23.3996 43.4002 26.3996 42.1002 26.3996 40.5002V38.3002C25.4996 37.6002 24.0996 36.0002 23.8996 33.7002C23.1996 33.0002 22.0996 31.7002 22.0996 30.1002C22.0996 29.1002 22.4996 28.3002 22.7996 27.8002C22.5996 26.7002 22.1996 24.5002 22.1996 22.8002C22.1996 17.3002 25.9996 13.7002 31.9996 13.7002C33.6996 13.7002 35.7996 14.2002 36.8996 15.4002C39.5996 15.9002 41.7996 19.1002 41.7996 22.8002C41.7996 25.2002 41.3996 27.2002 41.0996 28.1002C41.3996 28.6002 41.6996 29.3002 41.6996 30.1002C41.6996 32.0002 40.7996 33.2002 39.8996 33.8002C39.6996 36.1002 38.3996 37.6002 37.5996 38.3002V40.5002C37.5996 41.9002 40.0996 42.8002 42.3996 43.7002C45.0996 44.7002 47.8996 45.7002 48.7996 48.0002L46.2996 48.9002C45.8996 47.7002 43.4996 46.9002 41.4996 46.1002C38.3996 45.0002 34.8996 43.7002 34.8996 40.5002V36.9002L35.4996 36.5002C35.5996 36.5002 37.2996 35.3002 37.2996 33.0002V32.1002L38.0996 31.8002C38.1996 31.7002 38.9996 31.3002 38.9996 30.1002C38.9996 29.7002 38.6996 29.3002 38.5996 29.2002L38.0996 28.6002L38.2996 27.9002C38.2996 27.9002 38.9996 25.7002 38.9996 22.7002C38.9996 20.2002 37.5996 17.9002 36.0996 17.9002H35.2996L34.8996 17.2002C34.5996 16.7002 33.3996 16.2002 31.7996 16.2002C27.2996 16.2002 24.5996 18.6002 24.5996 22.7002C24.5996 24.6002 25.2996 27.7002 25.2996 27.7002L25.4996 28.4002L24.9996 28.9002C24.9996 28.9002 24.5996 29.4002 24.5996 29.9002C24.5996 30.6002 25.4996 31.5002 25.8996 31.9002L26.3996 32.3002V33.0002C26.3996 35.2002 28.2996 36.4002 28.2996 36.4002L28.8996 36.8002V40.4002C28.8996 43.7002 25.1996 45.4002 21.8996 46.8002C20.4996 47.6002 18.3996 48.6002 17.9996 49.3002Z" fill="white"/>
-                                                </svg>
-                                            {% endif %}
-                                        </a>                      
+                                                <a href="{{ path('profile' ,{'userId' : user.id}) }}"{{user.email}}</a>
+                                            {% endif%}
+                                        </div>
                                     </div>
-                                    <div class="accountMessageItemUserName">
-                                        {% if user.userinfo.firstname and  user.userinfo.lastname%}
-                                             <a href="{% if locale.isDefault %}{{ path('profile' ,{'userId' : user.id}) }}{% else %}{{ path('profileLocale' ,{'userId' : user.id,'_locale' : locale.code}) }}{% endif %}">{{user.userinfo.firstname}}{{user.userinfo.lastname}}</a>
-                                        {% else %}
-                                            <a href="{% if locale.isDefault %}{{ path('profile' ,{'userId' : user.id}) }}{% else %}{{ path('profileLocale' ,{'userId' : user.id,'_locale' : locale.code}) }}{% endif %}"{{user.email}}</a>
-                                        {% endif%}
-                                    </div>
-                                </div>
-                                <div class="accountBlacklistUserDelete">
-                                    {% if locale.isDefault %}
-                                        <a href="{{ path('account_userblacklist',{'userId' : user.id}) }}">
+                                    <div class="accountBlacklistUserDelete">
+                                        <a href="{{ path('account_userblacklist', {'userId' : user.id}) }}">
                                             <svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M1 5.80001H3.44444M3.44444 5.80001H23M3.44444 5.80001L3.44484 22.6C3.44484 23.2365 3.70238 23.847 4.1608 24.2971C4.61923 24.7471 5.24098 25 5.88929 25H18.1115C18.7598 25 19.3816 24.7471 19.84 24.2971C20.2984 23.847 20.556 23.2365 20.556 22.6V5.8L3.44444 5.80001ZM7.11151 5.8V3.4C7.11151 2.76348 7.36905 2.15303 7.82747 1.70294C8.28589 1.25286 8.90765 1 9.55595 1H14.4448C15.0931 1 15.7149 1.25286 16.1733 1.70294C16.6317 2.15303 16.8893 2.76348 16.8893 3.4V5.8M7.82747 20.5V10M16.1733 20.5V10M12.2037 11.5V20.5" stroke="#ABABAB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
                                         </a>
-                                    {% else %}
-                                        <a href="{{ path('account_userblacklistLocale', {'userId' : user.id, '_locale' : locale.code}) }}">
-                                            <svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M1 5.80001H3.44444M3.44444 5.80001H23M3.44444 5.80001L3.44484 22.6C3.44484 23.2365 3.70238 23.847 4.1608 24.2971C4.61923 24.7471 5.24098 25 5.88929 25H18.1115C18.7598 25 19.3816 24.7471 19.84 24.2971C20.2984 23.847 20.556 23.2365 20.556 22.6V5.8L3.44444 5.80001ZM7.11151 5.8V3.4C7.11151 2.76348 7.36905 2.15303 7.82747 1.70294C8.28589 1.25286 8.90765 1 9.55595 1H14.4448C15.0931 1 15.7149 1.25286 16.1733 1.70294C16.6317 2.15303 16.8893 2.76348 16.8893 3.4V5.8M7.82747 20.5V10M16.1733 20.5V10M12.2037 11.5V20.5" stroke="#ABABAB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-                                        </a>
-                                    {% endif %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                </div>    
+                        {% endfor %}
+                    </div>    
                 {% else %}
                     <div class="accountNocontent">{% trans %}Черный список пуст{% endtrans %}</div>   
                 {% endif %}

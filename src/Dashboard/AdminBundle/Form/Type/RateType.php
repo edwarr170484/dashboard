@@ -29,6 +29,7 @@ class RateType extends AbstractType
             ->add('billId', TextType::class, array('required' => false,'label' => 'ID для счетов', 'attr' => array('class' => 'form-control')))
             ->add('price', TextType::class, array('required' => false,'label' => 'Цена', 'attr' => array('class' => 'form-control')))
             ->add('advertNumber', TextType::class, array('required' => false,'label' => 'Количество размещений', 'attr' => array('class' => 'form-control')))
+            ->add('activeTime', TextType::class, array('required' => false,'label' => 'Время действия тарифа (лет)', 'attr' => array('class' => 'form-control')))
             ->add('description', TextareaType::class, array('required' => false,'label' => 'Описание', 'attr' => array('class' => 'form-control tinyeditor')))
             ->add('userRole', 'entity', array('class' => 'DashboardCommonBundle:Role',
                             'choice_label' => 'title',

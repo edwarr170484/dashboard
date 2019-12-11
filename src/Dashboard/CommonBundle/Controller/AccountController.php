@@ -1203,6 +1203,10 @@ class AccountController extends Controller
                 $dealerSalon->setLogotype($localAvatarName);
             }
             
+            $dealerSalon->setDateAdded(new \DateTime("now"));
+            $dealerSalon->setDateStopped(new \DateTime("now"));
+            $dealerSalon->setIsActive(1);
+            
             $manager->persist($dealerSalon);
             $manager->persist($dealerSalon->getWorkinfo());
             $manager->flush();
@@ -1494,6 +1498,10 @@ class AccountController extends Controller
                 $avatar->move('bundles/images/dealers/salons',$localAvatarName);
                 $dealerSalon->setLogotype($localAvatarName);
             }
+            
+            $dealerSalon->setDateAdded(new \DateTime("now"));
+            $dealerSalon->setDateStopped(new \DateTime("now"));
+            $dealerSalon->setIsActive(0);
             
             $manager->persist($dealerSalon);
             $manager->persist($dealerSalon->getWorkinfo());
@@ -1904,6 +1912,26 @@ class AccountController extends Controller
         }
         
         return new Response("DELETED");
+    }
+    
+    /**
+     * @Route("/account/dealer/ajax/{action}/{objectId}", name="dealerActions")
+     */
+    public function dealerActionsAction($action, $objectId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        switch($action){
+            case 'addrate':
+                    $data = explode(";", $objectId);
+                    
+                    return new Response($data[2]);
+                    
+            break;
+        }
     }
 }
 

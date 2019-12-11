@@ -1317,3 +1317,9 @@ body.userAccount{background:#F9F9F9;}
 .dealerSalonJobItemJob.custom-checkbox{margin-right: 1.3rem;}
 .salonJobs,#salonJobs{height: 350px;}
 .alert{@include fontView("GothamProRegular",$black-text,1.3rem,1.8rem);margin-bottom: 0;}
+.mapListItem.dealerSalon{justify-content: space-between;}
+.dealerSalonInformation{@include flexBox(row,flex-start,stretch);}
+.accountAdvertServiceButton.rateButton button{position: relative;}
+.accountAdvertServiceButton.rateButton button.active{background: #F5AA01;}
+.accountAdvertServiceButton.rateButton button:hover,accountAdvertServiceButton.rateButton:focus{background: #F5AA01;}
+.rateActiveTime{position: absolute;top:0.7rem;left:1rem;@include fontView("GothamProMedium",$black-text,2.4rem,4rem);width: 3rem;height: 3rem;@include flexBox(row,center,center);}

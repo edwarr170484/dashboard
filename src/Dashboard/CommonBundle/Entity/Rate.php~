@@ -59,6 +59,11 @@ class Rate
     private $advertNumber;
     
     /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
+     */
+    private $activeTime;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -279,5 +284,28 @@ class Rate
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set activeTime
+     *
+     * @param integer $activeTime
+     * @return Rate
+     */
+    public function setActiveTime($activeTime)
+    {
+        $this->activeTime = $activeTime;
+
+        return $this;
+    }
+
+    /**
+     * Get activeTime
+     *
+     * @return integer 
+     */
+    public function getActiveTime()
+    {
+        return $this->activeTime;
     }
 }

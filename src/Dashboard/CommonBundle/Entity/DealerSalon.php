@@ -40,7 +40,22 @@ class DealerSalon
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
      */
-    private $logotype; 
+    private $logotype;
+    
+     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateAdded;
+    
+     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateStopped;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $isActive;
     
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerSalonPhone", mappedBy="dealerSalon")
@@ -278,5 +293,74 @@ class DealerSalon
     public function getJobs()
     {
         return $this->jobs;
+    }
+
+    /**
+     * Set dateAdded
+     *
+     * @param \DateTime $dateAdded
+     * @return DealerSalon
+     */
+    public function setDateAdded($dateAdded)
+    {
+        $this->dateAdded = $dateAdded;
+
+        return $this;
+    }
+
+    /**
+     * Get dateAdded
+     *
+     * @return \DateTime 
+     */
+    public function getDateAdded()
+    {
+        return $this->dateAdded;
+    }
+
+    /**
+     * Set dateStopped
+     *
+     * @param \DateTime $dateStopped
+     * @return DealerSalon
+     */
+    public function setDateStopped($dateStopped)
+    {
+        $this->dateStopped = $dateStopped;
+
+        return $this;
+    }
+
+    /**
+     * Get dateStopped
+     *
+     * @return \DateTime 
+     */
+    public function getDateStopped()
+    {
+        return $this->dateStopped;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return DealerSalon
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

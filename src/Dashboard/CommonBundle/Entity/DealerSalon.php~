@@ -40,7 +40,22 @@ class DealerSalon
     /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default": null})
      */
-    private $logotype; 
+    private $logotype;
+    
+     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateAdded;
+    
+     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $dateStopped;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $isActive;
     
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerSalonPhone", mappedBy="dealerSalon")
@@ -57,4 +72,226 @@ class DealerSalon
      */
     private $jobs;
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return DealerSalon
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return DealerSalon
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string 
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set website
+     *
+     * @param string $website
+     * @return DealerSalon
+     */
+    public function setWebsite($website)
+    {
+        $this->website = $website;
+    
+        return $this;
+    }
+
+    /**
+     * Get website
+     *
+     * @return string 
+     */
+    public function getWebsite()
+    {
+        return $this->website;
+    }
+
+    /**
+     * Set logotype
+     *
+     * @param string $logotype
+     * @return DealerSalon
+     */
+    public function setLogotype($logotype)
+    {
+        $this->logotype = $logotype;
+    
+        return $this;
+    }
+
+    /**
+     * Get logotype
+     *
+     * @return string 
+     */
+    public function getLogotype()
+    {
+        return $this->logotype;
+    }
+
+    /**
+     * Set dealerInfo
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerInfo $dealerInfo
+     * @return DealerSalon
+     */
+    public function setDealerInfo(\Dashboard\CommonBundle\Entity\DealerInfo $dealerInfo = null)
+    {
+        $this->dealerInfo = $dealerInfo;
+    
+        return $this;
+    }
+
+    /**
+     * Get dealerInfo
+     *
+     * @return \Dashboard\CommonBundle\Entity\DealerInfo 
+     */
+    public function getDealerInfo()
+    {
+        return $this->dealerInfo;
+    }
+
+    /**
+     * Add phones
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalonPhone $phones
+     * @return DealerSalon
+     */
+    public function addPhone(\Dashboard\CommonBundle\Entity\DealerSalonPhone $phones)
+    {
+        $this->phones[] = $phones;
+    
+        return $this;
+    }
+
+    /**
+     * Remove phones
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalonPhone $phones
+     */
+    public function removePhone(\Dashboard\CommonBundle\Entity\DealerSalonPhone $phones)
+    {
+        $this->phones->removeElement($phones);
+    }
+
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * Set workinfo
+     *
+     * @param \Dashboard\CommonBundle\Entity\Workinfo $workinfo
+     * @return DealerSalon
+     */
+    public function setWorkinfo(\Dashboard\CommonBundle\Entity\Workinfo $workinfo = null)
+    {
+        $this->workinfo = $workinfo;
+    
+        return $this;
+    }
+
+    /**
+     * Get workinfo
+     *
+     * @return \Dashboard\CommonBundle\Entity\Workinfo 
+     */
+    public function getWorkinfo()
+    {
+        return $this->workinfo;
+    }
+
+    /**
+     * Add jobs
+     *
+     * @param \Dashboard\CommonBundle\Entity\Job $jobs
+     * @return DealerSalon
+     */
+    public function addJob(\Dashboard\CommonBundle\Entity\Job $jobs)
+    {
+        $this->jobs[] = $jobs;
+    
+        return $this;
+    }
+
+    /**
+     * Remove jobs
+     *
+     * @param \Dashboard\CommonBundle\Entity\Job $jobs
+     */
+    public function removeJob(\Dashboard\CommonBundle\Entity\Job $jobs)
+    {
+        $this->jobs->removeElement($jobs);
+    }
+
+    /**
+     * Get jobs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
+    }
 }

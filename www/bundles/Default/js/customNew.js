@@ -103,8 +103,8 @@ function showHideAllCategories(element){
     var text = element.html();
     element.html(newText);
     element.data('text', text);
-    $(".shortCategoryList").toggleClass("hide");
-    $(".fullCategoryList").toggleClass("view");
+    element.parent().parent().parent().find(".shortCategoryList").toggleClass("hide");
+    element.parent().parent().parent().find(".fullCategoryList").toggleClass("view");
 }
 
 function showHideAllServicesCategories(element){

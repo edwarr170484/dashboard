@@ -187,9 +187,11 @@ header{background: #fff;}
 .mainPageAutoListBlock{background: $gray-color;padding-bottom: 7.4rem;padding-top: 9rem;}
 .mainPageAutoListHeader h3{color:$gray-color-1;}
 .mainPageAutoList ul{@include flexBox(row,space-between,center);@include flex-wrap(wrap);padding-top: 6rem;padding-bottom: 2.9rem;}
+.mainPageAutoList.productEdit ul{padding-top: 1rem;}
 .mainPageAutoList ul li{width: 20%;padding: 0;margin-bottom: 11px;background: url('../img/round-arrow.png') 0 50% no-repeat;padding-left: 48px;@include flexBox(row,flex-start,center);padding-top: 6px;padding-bottom: 6px;}
 .mainPageAutoList ul li a{@include fontView("GothamProBold",$black-text,1.8rem,1.7rem);text-transform:uppercase;border-bottom:2px solid transparent;transition:$aTransition;}
 .mainPageAutoList ul li:hover a,.mainPageAutoList ul li:focus a{text-decoration:none;border-bottom:2px solid $yellow-color;}
+.mainPageAutoList ul li a.active{border-bottom:2px solid $yellow-color;}
 .mainPageAutoListShowAll{@include flexBox(row,center,center);}
 .mainPageAutoListShowAll button{background: $yellow-color;border:none;@include border-radius(3px);@include fontView("GothamProRegular",#fff,1.4rem,100%);padding: 1.2rem 6.2rem 1.3rem;max-width: 220px;text-align: center;transition:$aTransition;}
 .mainPageAutoListShowAll button:hover,.mainPageAutoListShowAll button:focus{background: $orange-color;}
@@ -574,6 +576,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvertDealerName{padding-bottom: 15px;}
 .mainPageFiltersTabs ul.justLinks li a{background: none;padding: 0;@include box-shadow(none);}
 .mainPageFiltersTabs ul.justLinks{padding-top: 0;}
+ul.justLinks li{position: relative;}
 .addAdvertFiltersButtons{@include flexBox(row,flex-end,center);}
 .addAdvertFiltersButtons .mainPageFiltersShowResults button{max-width: 250px;padding: 1.4rem 4.5rem;}
 .mainPageFiltersTabs ul li a.block{@include flexBox(column, flex-start, center);}
@@ -612,20 +615,21 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 #advertFiltersItemsTable > tbody > tr > td{vertical-align:middle;border: none;}
 .advertFiltersItemValue{@include flexBox(row,flex-start,center);}
 .advertFiltersItemValue ul.years{@include flexBox(row,flex-start,center);}
-.advertFiltersItemValue ul.years li{display: block;}
+.advertFiltersItemValue ul.years li{display: block;position: relative;}
 .advertFiltersItemValue ul.years li.yearsOlder{position: relative;}
 .yearsOlderItems{position: absolute;top:100%;left: 8px;background: #fff;z-index:9;}
+.yearsOlderItem{position: relative;}
 .advertFiltersItemValue ul.years li .yearsOlderItem a{@include fontView("GothamProRegular",$black-text,1.6rem,3.2rem);display: block;text-align: center;padding: 3px 16px;@include border-radius(0);}
 .advertFiltersItemValue ul.years li .yearsOlderItem a:hover,.advertFiltersItemValue ul.years li .yearsOlderItem a:focus{text-decoration: none;background: $yellow-color;}
 .yearsOlderItems{display: none;height:290px;overflow-y:scroll;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
-.addProductFilterRadios li{padding-right: 2rem;}
-.addProductFilterRadios li a{@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 10px 16px;background: $gray-color;@include border-radius(5px);}
+.addProductFilterRadios li{padding-right: 2rem;position: relative;}
+.addProductFilterRadios li a{@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 10px 16px;background: $gray-color;@include border-radius(5px);display: block;}
 .addProductFilterRadios li a:hover,.addProductFilterRadios li a:focus{text-decoration: none;}
 .addProductFilterRadios li a:focus,.addProductFilterRadios li a.active{background: $yellow-color;}
 .advertFiltersItemValue ul.years li.yearsOlder a.olderBloakcTrigger{@include flexBox(row,flex-start,center);}
 .advertFiltersItemValue ul.years li.yearsOlder a.olderBloakcTrigger.active{@include fontView("GothamProRegular",$black-text,2.2rem,3.2rem);background: $yellow-color;}
 .advertFiltersItemValue ul.list-inline{@include flexBox(row,flex-start,center);}
-.addAdvertModification{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.addAdvertModification{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);position: relative;}
 .addAdvertModificationParam{padding-right: 2rem;}
 .addAdvertModificationParam.power{@include fontView("GothamProBold",$yellow-color,1.6rem,2.2rem)}
 .addAdvertModificationParam.label{color:$input-black;font-size: 1.6rem;line-height: 2.2rem;}
@@ -637,7 +641,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertFiltersItemName, .advertFiltersItemValue{margin-top: 1.5rem;margin-bottom: 1.5rem;}
 .addAdvertModification{cursor:pointer;}
 .addAdvertModification:hover,.addAdvertModification.active,.addAdvertGeneration:hover,.addAdvertGeneration.active{background: $gray-color;}
-.addAdvertGeneration{cursor:pointer;}
+.addAdvertGeneration{cursor:pointer;position: relative;}
 .cookieAlertButton.nextStep{@include flexBox(row,flex-end,center);padding-bottom: 6rem;}
 .advertFiltersItemValue ul.color{@include flexBox(row,flex-start,center);}
 .advertFiltersItemValue ul.color li a{display: block;width: 28px;height: 28px;border:1px solid #ABABAB;@include border-radius(50%);margin-right: 10px;}
@@ -722,6 +726,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .headerMenu ul.loginned-top-info li a{padding: 0;text-transform: none}
 .mainPageAutoList ul.shortCategoryList.hide,.mainPageAutoList ul.fullCategoryList{display: none;}
 .mainPageAutoList ul.fullCategoryList.view{@include flexBox(row,space-between,center);@include flex-wrap(wrap);}
+.categoryItem{position: relative;}
 .categoryItem.hide{display: none;}
 .cookieAlertButton.nextStep.hide{display: none;}
 .dz-preview{position: relative;margin:15px;}
@@ -801,6 +806,9 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .accountAdvertFunctions.right{right:3rem;top:-2rem;}
 .accountAdvertFunctions.left{left:3rem;top:-2rem;}
 .accountAdvertFunction button{background: none;border:none;@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);padding: 0.9rem 2.4rem;@include flexBox(row,flex-start,center);}
+.accountAdvertFunction a{background: none;border:none;@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);padding: 0.9rem 2.4rem;@include flexBox(row,flex-start,center);}
+.accountAdvertFunction a:hover,.accountAdvertFunction a:focus{background: #FDEECC;text-decoration: none;}
+.accountAdvertFunction:last-child a{@include border-radius(0 9px 9px 0);}
 .accountAdvertFunction div.button{background: none;border:none;@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);padding: 0.9rem 2.4rem;@include flexBox(row,flex-start,center);}
 .accountAdvertFunction button svg,.accountAdvertFunction div.button svg{margin-right: 1rem;}
 .accountAdvertFunction:first-child div.button{@include border-radius(9px 0 0 9px);}
@@ -1323,3 +1331,7 @@ body.userAccount{background:#F9F9F9;}
 .accountAdvertServiceButton.rateButton button.active{background: #F5AA01;}
 .accountAdvertServiceButton.rateButton button:hover,accountAdvertServiceButton.rateButton:focus{background: #F5AA01;}
 .rateActiveTime{position: absolute;top:0.7rem;left:1rem;@include fontView("GothamProMedium",$black-text,2.4rem,4rem);width: 3rem;height: 3rem;@include flexBox(row,center,center);}
+.advertAutoMarka{padding-bottom: 2rem;}
+.advertHeader{padding-bottom: 3rem;}
+.hidden-radio-parameter{position: absolute;top: 0;left: 0;width: 100%;height: 100%;@include opacity(0);z-index:1;margin-top: 0;pointer-events: none;}
+input[type="radio"]{margin-top: 0;}

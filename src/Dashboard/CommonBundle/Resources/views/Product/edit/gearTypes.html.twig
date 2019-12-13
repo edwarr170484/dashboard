@@ -1,0 +1,15 @@
+{% if gearTypes | length > 0 %}
+    <td><div class="advertFiltersItemName">{% trans %}Коробка{% endtrans %}</div></td>
+    <td>
+        <div class="advertFiltersItemValue">
+            <ul class="list-unstyled list-inline addProductFilterRadios">
+                {% for gearType in gearTypes %}
+                    <li onclick="radioSetActive($(this))">
+                        <a href="javascript:voit(0)" onclick="" {% if gearType.id == product.info.gearType.id %}class="active"{% endif %}>{{ gearType.value }}</a>
+                        <input name="gearType[]" type="radio" class="hidden-radio-parameter" value="{{ gearType.id }}"  {% if gearType.id == product.info.gearType.id %}checked="checked"{% endif %}/>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </td>
+{% endif %}

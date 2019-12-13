@@ -94,7 +94,7 @@
                 <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы действительно хотите удалить объявление?{% endtrans %}','delete')">{% trans %}удалить{% endtrans %}</button>
             </div>
             <div class="accountAdvertFunction">
-                <button>{% trans %}редактировать{% endtrans %}</button>
+                <a href="{{ path('editAdvert',{'productId' : product.id}) }}">{% trans %}редактировать{% endtrans %}</a>
             </div>
         </div>
     {% else %}
@@ -107,7 +107,7 @@
                 {% endif %}
             </div>
             <div class="accountAdvertFunction">
-                <button>{% trans %}редактировать{% endtrans %}</button>
+                <a href="{{ path('editAdvert',{'productId' : product.id}) }}">{% trans %}редактировать{% endtrans %}</a>
             </div>
         </div>
     {% endif %}

@@ -39,7 +39,6 @@ class AdvertController extends Controller
 {
     /**
      * @Route("/account/addadvert/{step}/{data}", name="addAdvert", defaults={"step" : "0", "data" : 0})
-     * @Route("/{_locale}/account/addadvert/{step}/{data}", name="addAdvertLocale", defaults={"_locale" : "es", "step" : "0", "data" : 0}, requirements={"_locale" : "es|ru"})
      */
     public function addAdvertAction($step, $data,Request $request)
     {
@@ -575,12 +574,201 @@ class AdvertController extends Controller
         
         return $this->render('DashboardCommonBundle:Product:add/add.html.twig', array("categories" => $categories, "settings" => $settings, "locale" => $locale));
     }
+    
+    /**
+     * @Route("/account/editadvert/{productId}", name="editAdvert")
+     */
+    public function editAdvertAction($productId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId);
+                
+        $category = $product->getCategory();
+        $baseCategory = $product->getBaseCategory();
+        
+        $categories = $manager->getRepository("DashboardCommonBundle:Category")->findBy(array("parent" => $baseCategory));
+        
+        $boards = new ArrayCollection();
+        $boardGenerations = new ArrayCollection();
+        $gasTypes = new ArrayCollection();
+        $gearTypes = new ArrayCollection();
+        $transmittionTypes = new ArrayCollection();
+        $modifications = new ArrayCollection();
+        
+        if($product->getInfo()->getYear()){
+            $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $product->getInfo()->getYear() . ' AND g.yearTo >= ' . $product->getInfo()->getYear());
+                    
+            $generations = $query->getResult();
+                        
+            if($generations){
+                foreach($generations as $generation){
+                    if($generation->getBoards()){
+                        foreach($generation->getBoards() as $generationBoard){
+                            if(false === $boards->contains($generationBoard->getBoard())){
+                                $boards->add($generationBoard);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        if($product->getInfo()->getBoard()){
+            $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $product->getInfo()->getBoard()->getId());
+            $boardGenerations = $query->getResult();
+        }
+        
+        if($product->getInfo()->getGeneration()){
+            $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($product->getInfo()->getBoard()->getId());
+            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+
+            $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gi.board = ' . $board->getId());
+
+            $items = $query->getResult();
+
+            if($items){
+                foreach($items as $item){
+                    if(false === $gasTypes->contains($item->getGasType())){
+                        $gasTypes->add($item->getGasType());
+                    }
+                }
+            }
+        }
+        
+        if($product->getInfo()->getGasType()){
+            $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($product->getInfo()->getBoard());
+            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+
+            $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $product->getInfo()->getGasType()->getId());
+
+            $items = $query->getResult();
+ 
+            if($items){
+                foreach($items as $item){
+                    if(false === $gearTypes->contains($item->getGearType())){
+                        $gearTypes->add($item->getGearType());
+                    }
+                }
+            }
+        }
+        
+        if($product->getInfo()->getGearType()){
+            $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($product->getInfo()->getBoard());
+            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+
+            $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $product->getInfo()->getGasType()->getId() . ' AND gi.gearType = ' . $product->getInfo()->getGearType()->getId());
+
+            $items = $query->getResult();
+
+            if($items){
+                foreach($items as $item){
+                    if(false === $transmittionTypes->contains($item->getTransmissionType())){
+                        $transmittionTypes->add($item->getTransmissionType());
+                    }
+                }
+            }
+        }
+        
+        if($product->getInfo()->getTransmissionType()){
+            $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($product->getInfo()->getBoard()->getId());
+            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+
+            $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $product->getInfo()->getGasType()->getId() . ' AND gi.gearType = ' . $product->getInfo()->getGearType()->getId() . ' AND gi.transmissionType = ' . $product->getInfo()->getTransmissionType()->getId());
+
+            $items = $query->getResult();
+
+            if($items){
+                foreach($items as $item){
+                    if($item->getItemModifications()){
+                        foreach($item->getItemModifications() as $modification){
+                            if(false === $modifications->contains($modification)){
+                                $modifications->add($modification);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+                    
+        $filters = array();
+        if($product->getFilters()){
+            foreach($product->getFilters() as $advertFilter){
+                $filters[$advertFilter->getId()] = 1;
+            }
+        }
+        $conditions = $manager->getRepository("DashboardCommonBundle:Shape")->findAll();
+        
+        return $this->render('DashboardCommonBundle:Product:edit/edit.html.twig', array("product" => $product, 
+                                                                                        "settings" => $settings, 
+                                                                                        "locale" => $locale,
+                                                                                        "routeName" => $request->attributes->get("_route"),
+                                                                                        "filters" => $filters,
+                                                                                        "conditions" => $conditions,
+                                                                                        "user" => $user,
+                                                                                        "boards" => $boards,
+                                                                                        "boardGenerations" => $boardGenerations,
+                                                                                        "gasTypes" => $gasTypes,
+                                                                                        "gearTypes" => $gearTypes,
+                                                                                        "transmittionTypes" => $transmittionTypes,
+                                                                                        "modifications" => $modifications,
+                                                                                        "categories" => $categories));
+    }
+    
+    /**
+     * @Route("/account/editadvert/ajax/{productId}/{action}/{data}", name="editAdvertAjax")
+     */
+    public function editAdvertAjaxAction($productId, $action, $data, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId);
+        
+        switch($action){
+            case 'boards':
+                    
+                $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $data . ' AND g.yearTo >= ' . $data);
+                    
+                $generations = $query->getResult();
+                $boards = new ArrayCollection();
+                    
+                if($generations){
+                    foreach($generations as $generation){
+                        if($generation->getBoards()){
+                            foreach($generation->getBoards() as $generationBoard){
+                                if(false === $boards->contains($generationBoard->getBoard())){
+                                    $boards->add($generationBoard);
+                                }
+                            }
+                        }
+                    }
+                }
+                    
+                return $this->render('DashboardCommonBundle:Product:edit/boards.html.twig', array("boards" => $boards, "locale" => $locale, "advertInfo" => $product));
+            break;
+            
+            case "generations":
+                    
+                    $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $data);
+                    
+                    $boards = $query->getResult();
+                    
+                    return $this->render('DashboardCommonBundle:Product:edit/generations.html.twig', array("boards" => $boards, "locale" => $locale, "advertInfo" => $product));
+            break;
+        }
+    }
  
     /**
-     * @Route("/account/ajaxloadfotos", name="ajaxloadfotos")
+     * @Route("/account/ajaxloadfotos/{productId}", name="ajaxloadfotos", defaults={"productId" : 0})
      */
-    public function ajaxLoadFotosAction(Request $request)
+    public function ajaxLoadFotosAction($productId, Request $request)
     {
+        $manager = $this->getDoctrine()->getManager();
         $fm = new Filesystem();
         $error = 0;
         $settings = $this->getDoctrine()->getRepository("DashboardCommonBundle:Settings")->find(1);
@@ -597,41 +785,98 @@ class AdvertController extends Controller
 
         if($image)
         {           
-            $extention = $image->getClientOriginalExtension();
-            $localImageName = rand(1, 99999999).'.'.$extention;
-            
-            if(in_array($extention, $extentions))
-            {
-                try
-                {
-                    $image->move('bundles/images/products',$localImageName);
-                    
-                    $simpleImage = $this->get('app.simpleimage');
-                    $simpleImage->load('bundles/images/products/' . $localImageName);
-                    $simpleImage->resizeToWidth(1024);
-                    $simpleImage->save('bundles/images/products/' . $localImageName);
-                    
-                    $newImage = new AdvertImage();
-                    $newImage->setName($localImageName);
-                    array_push($advertImages, $newImage);
-                    $advertData = $serializer->serialize($advertImages, 'json');
-                    $session->set('advertImages', $advertData);
-                    
-                }
-                catch (Symfony\Component\HttpFoundation\File\Exception\FileException $e)
-                {
-                    $error = $this->get('translator')->trans("Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.");
-                }
-            }
-            else 
-            {
-                $error = $this->get('translator')->trans("Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.");
-            }
+            if($productId){
+                $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId);
+                $extention = $image->getClientOriginalExtension();
+                $localImageName = rand(1, 99999999).'.'.$extention;
 
-            $data = $error ? array('error' => $error) : array('imageName' => $localImageName);
-            
-            return new Response(json_encode( $data ));
+                if(in_array($extention, $extentions))
+                {
+                    try
+                    {
+                        $image->move('bundles/images/products',$localImageName);
+
+                        $simpleImage = $this->get('app.simpleimage');
+                        $simpleImage->load('bundles/images/products/' . $localImageName);
+                        $simpleImage->resizeToWidth(1024);
+                        $simpleImage->save('bundles/images/products/' . $localImageName);
+
+                        $newImage = new ProductFotos();
+                        $newImage->setFoto($localImageName);
+                        $newImage->setProduct($product);
+                        
+                        $manager->persist($newImage);
+                        $manager->flush();
+                    }
+                    catch (Symfony\Component\HttpFoundation\File\Exception\FileException $e)
+                    {
+                        $error = $this->get('translator')->trans("Ошибка при загрузке файла. Попробуйте еще раз. Допустимые расширения: jpg, jpeg, png, gif.");
+                    }
+                }
+                else 
+                {
+                    $error = $this->get('translator')->trans("Ошибка при загрузке файла. Попробуйте еще раз. Допустимые расширения: jpg, jpeg, png, gif.");
+                }
+
+                $data = $error ? array('error' => $error) : array('imageName' => $localImageName, 'imageId' => $newImage->getId());
+
+                return new Response(json_encode( $data ));
+                
+            }else{
+                $extention = $image->getClientOriginalExtension();
+                $localImageName = rand(1, 99999999).'.'.$extention;
+
+                if(in_array($extention, $extentions))
+                {
+                    try
+                    {
+                        $image->move('bundles/images/products',$localImageName);
+
+                        $simpleImage = $this->get('app.simpleimage');
+                        $simpleImage->load('bundles/images/products/' . $localImageName);
+                        $simpleImage->resizeToWidth(1024);
+                        $simpleImage->save('bundles/images/products/' . $localImageName);
+
+                        $newImage = new AdvertImage();
+                        $newImage->setName($localImageName);
+                        array_push($advertImages, $newImage);
+                        $advertData = $serializer->serialize($advertImages, 'json');
+                        $session->set('advertImages', $advertData);
+
+                    }
+                    catch (Symfony\Component\HttpFoundation\File\Exception\FileException $e)
+                    {
+                        $error = $this->get('translator')->trans("Ошибка при загрузке файла. Попробуйте еще раз. Допустимые расширения: jpg, jpeg, png, gif.");
+                    }
+                }
+                else 
+                {
+                    $error = $this->get('translator')->trans("Ошибка при загрузке файла. Попробуйте еще раз. Допустимые расширения: jpg, jpeg, png, gif.");
+                }
+
+                $data = $error ? array('error' => $error) : array('imageName' => $localImageName);
+
+                return new Response(json_encode( $data ));
+            }
         }
+    }
+    
+    /**
+     * @Route("/account/ajaxdeletefoto/{fotoId}", name="ajaxDeleteFoto")
+     */
+    public function ajaxDeleteFotoAction($fotoId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $foto = $manager->getRepository("DashboardCommonBundle:ProductFotos")->find($fotoId);
+        
+        if($foto && $foto->getProduct()->getUser()->getId() == $user->getId()){
+            $foto->setProduct(null);
+            $manager->remove($foto);
+            $manager->flush();
+        }
+        
+        return new Response("OK");
     }
     
     /**
@@ -1209,60 +1454,6 @@ class AdvertController extends Controller
         }
         
         return $this->render('DashboardCommonBundle:Product:categoryfilters.html.twig', array("category" => $category,"locale" => $locale));
-    }
-    
-    /**
-     * @Route("/account/switchonproduct/{productId}", name="account_switchonproduct", defaults={"productId" : "0"})
-     * @Route("/{_locale}/account/switchonproduct/{productId}", name="account_switchonproductLocale", defaults={"productId" : "0", "_locale" : "lv"},requirements={"_locale" : "lv|ru"})
-     */
-    public function switchonProductAction($productId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $user = $this->get('security.context')->getToken()->getUser();
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        
-        if($productId)
-        {
-            $product = $manager->getRepository("DashboardCommonBundle:Product")->findOneBy(array("id" => $productId,
-                                                                                                 "user" => $user,
-                                                                                                 "isActive" => 0,
-                                                                                                 "isConfirm" => 1,
-                                                                                                 "isBlocked" => 0));
-            if($product)
-            {
-                $product->setDateAdded(new \DateTime("now"));
-                $product->setIsActive(1);
-                $manager->persist($product);
-                $manager->flush();
-                
-                $this->addFlash(
-                                'notice',
-                                '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                                $this->get('translator')->trans('<strong>Veiksmīgi!</strong> Jūsu reklāma ir atjaunota.') . '</div>'
-                            );
-            }
-            else
-               $this->addFlash(
-                    'notice',
-                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> ' .
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> Šo reklāmu nevar nodot tālāk. Varbūt tas nepastāv vai tas jums nepieder.') . '</div>'
-                ); 
-            if($locale->getIsDefault())
-            {
-                return $this->redirectToRoute('account_products_current');
-            }
-            else
-            {
-                return $this->redirectToRoute("account_products_currentLocale", array("_locale" => $locale->getCode()));
-            }
-            
-        }
-        else
-        {
-            return $this->createNotFoundException();
-        }
     }
     
     /**

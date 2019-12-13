@@ -1,0 +1,564 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Личный кабинет{% endtrans %} - {% trans %}Редактировать объявление{% endtrans %}{% endblock %}
+{% block bodyClass %}class="userAccount"{% endblock %}
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li>{% trans %}Редактировать объявление{% endtrans %}</li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+    <div class="row content-row aligned">
+        <div class="col-lg-2 col-md-2">
+            <div class="account-block-header"><h1>{% trans %}Личный кабинет{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-10 col-md-10">
+            <div class="accountBlockHeader">
+                <div class="account-block-header"><h1><b>{% trans %}Редактировать объявление{% endtrans %}</b></h1></div>
+            </div>
+        </div>
+    </div>
+    <div class="row content-row">
+        {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
+        <div class="col-lg-10 col-md-10">
+            <div class="account-advert-block-content">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div class="advertEditBigForm">
+                    <form method="POST" action="">
+                    <div class="advertHeader">
+                        <div class="advertFiltersTableHeader" style="font-size: 3rem;">{{ product.category.parent.title }} {{ product.category.title }} {{ product.info.generation.name }} {{ product.info.year }} </div>
+                    </div>
+                    <!--<div class="advertAutoMarka">
+                        <div class="advertFiltersTableHeader">{% trans %}Марка{% endtrans %}</div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {% if categories | length > settings.categoryPanelItemsNumber %}
+                                    <div class="mainPageAutoList productEdit">
+                                        <ul class="list-unstyled list-inline justLinks shortCategoryList">
+                                            {% for child in categories | slice(0, settings.categoryPanelItemsNumber )%}
+                                                {% set categoryTitle = child.title %}
+                                                <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
+                                                    <a href="javascript:void(0)" onclick="" {% if product.category.parent.id == child.id %}class="active"{% endif %}>
+                                                        {{ categoryTitle }}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <ul class="list-unstyled list-inline justLinks fullCategoryList">
+                                            {% for child in categories %}
+                                                {% set categoryTitle =  child.title %}
+                                                <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
+                                                    <a href="javascript:void(0)" onclick="" {% if product.category.parent.id == child.id %}class="active"{% endif %}>
+                                                        {{ categoryTitle }}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% else %}
+                                    <div class="mainPageAutoList">
+                                        <ul class="list-unstyled list-inline justLinks">
+                                            {% for child in categories %}
+                                                <li>
+                                                    <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" {% if product.category.parent.id == child.id %}class="active"{% endif %}>{{ child.title}}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if categories | length > settings.categoryPanelItemsNumber %}
+                                <div class="col-lg-12 addAdvertFiltersButtons">
+                                    <div class="mainPageFiltersShowResults">
+                                        <button onclick="showHideAllCategories($(this))" data-text="{% trans %}Свернуть{% endtrans %}">{% trans %}Показать все марки{% endtrans %}</button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="advertAutoMarka">
+                        <div class="advertFiltersTableHeader">{% trans %}Модель{% endtrans %}</div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {% if product.category.parent.children | length > settings.categoryPanelItemsNumber %}
+                                    <div class="mainPageAutoList productEdit">
+                                        <ul class="list-unstyled list-inline justLinks shortCategoryList">
+                                            {% for child in product.category.parent.children | slice(0, settings.categoryPanelItemsNumber )%}
+                                                {% set categoryTitle = child.title %}
+                                                <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
+                                                    <a href="javascript:void(0)" onclick="" {% if product.category.id == child.id %}class="active"{% endif %}>
+                                                        {{ categoryTitle }}
+                                                    </a>
+                                                    <input name="category[]" type="radio" class="hidden-radio-parameter" value="{{ child.id }}" {% if product.category.id == child.id %}checked="checked"{% endif %}/>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                        <ul class="list-unstyled list-inline justLinks fullCategoryList">
+                                            {% for child in product.category.parent.children %}
+                                                {% set categoryTitle =  child.title %}
+                                                <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
+                                                    <a href="javascript:void(0)" onclick="" {% if product.category.id == child.id %}class="active"{% endif %}>
+                                                        {{ categoryTitle }}
+                                                    </a>
+                                                    <input name="category[]" type="radio" class="hidden-radio-parameter" value="{{ child.id }}" {% if product.category.id == child.id %}checked="checked"{% endif %}/>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% else %}
+                                    <div class="mainPageAutoList productEdit">
+                                        <ul class="list-unstyled list-inline justLinks">
+                                            {% for child in product.category.parent.children %}
+                                                <li>
+                                                    <a href="javascript:void(0)" onclick="" {% if product.category.id == child.id %}class="active"{% endif %}>{{ child.title}}</a>
+                                                    <input name="category[]" type="radio" class="hidden-radio-parameter" value="{{ child.id }}" {% if product.category.id == child.id %}checked="checked"{% endif %}/>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            {% if product.category.parent.children | length > settings.categoryPanelItemsNumber %}
+                                <div class="col-lg-12 addAdvertFiltersButtons" style="padding-bottom:2rem">
+                                    <div class="mainPageFiltersShowResults">
+                                        <button onclick="showHideAllCategories($(this))" data-text="{% trans %}Свернуть{% endtrans %}">{% trans %}Показать все марки{% endtrans %}</button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>-->
+                    <div class="advertTechnicalInformation">
+                        <table class="table table-striped" id="advertFiltersItemsTable">
+                            <tbody>
+                                <tr>
+                                    <td><div class="advertFiltersItemName">{% trans %}Год{% endtrans %}</div></td>
+                                    <td>
+                                        <div class="advertFiltersItemValue">
+                                            {% if (product.category.yearTo - product.category.yearFrom) <= 10 %}
+                                                <ul class="list-unstyled list-inline years">
+                                                    {% for i in product.category.yearTo .. product.category.yearFrom %}
+                                                        <li onclick="radioSetActive($(this))">
+                                                            <a href="javascript:void(0" onclick="getBoardTypesByYearEdit({{ i }},{{ product.id }})"  {% if i == product.info.year %}class="active"{% endif %}>{{ i }}</a>
+                                                            <input name="year[]" type="radio" class="hidden-radio-parameter" value="{{ i }}" {% if i == product.info.year %}checked="checked"{% endif %}/>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% else %}
+                                                <ul class="list-unstyled list-inline years">
+                                                    {% for i in product.category.yearTo .. product.category.yearTo - 10 %}<li onclick="radioSetActive($(this))"><a href="javascript:void(0)" onclick="getBoardTypesByYearEdit({{ i }},{{ product.id }}, '{% trans %}Старше{% endtrans %}')" {% if i == product.info.year %}class="active"{% endif %}>{{ i }}</a>
+                                                            <input name="year[]" type="radio" class="hidden-radio-parameter" value="{{ i }}" {% if i == product.info.year %}checked="checked"{% endif %}/>
+                                                        </li>{% endfor %}
+                                                    <li class="yearsOlder">
+                                                        <a href="javascript:void(0)" onclick="showYearsOlder(event)" class="olderBloakcTrigger" >
+                                                            <span>Старше</span>
+                                                            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left: 1.4rem;">
+                                                                <path d="M11.2583 0.105469L11.9839 0.837385L5.99984 6.89426L0.0158004 0.837385L0.737626 0.105468L5.99984 5.42689L11.2583 0.105469Z" fill="#616161"/>
+                                                            </svg>
+                                                        </a>
+                                                        <div class="yearsOlderItems">
+                                                            {% for i in product.category.yearTo - 11 .. product.category.yearFrom %}
+                                                                <div class="yearsOlderItem">
+                                                                    <a href="javascript:void(0)" onclick="getBoardTypesByOldYearEdit({{ i }},{{ product.id }}, $(this))">
+                                                                        {{ i }}
+                                                                    </a>
+                                                                    <input name="year[]" type="radio" class="hidden-radio-parameter" value="{{ i }}" {% if i == product.info.year %}checked="checked"{% endif %}/>
+                                                                </div>
+                                                                {% if i == product.info.year %}
+                                                                <script>
+                                                                    $(".olderBloakcTrigger span").html({{i}});
+                                                                    $(".years").find('li').each(function(){$(this).find('a').removeClass('active');});
+                                                                    $(".olderBloakcTrigger").addClass('active');
+                                                                </script>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr id="addAdvertCarBoards">
+                                    {% include 'DashboardCommonBundle:Product:edit/boards.html.twig' with {'boards' : boards, 'locale' : locale,'advertInfo' : product} %}
+                                </tr>
+                                <tr id="addAdvertCarGenerations">
+                                    {% include 'DashboardCommonBundle:Product:edit/generations.html.twig' with {'boards' : boardGenerations, 'locale' : locale,'advertInfo' : product} %}
+                                </tr>
+                                <tr id="addAdvertCarEngines">
+                                    {% include 'DashboardCommonBundle:Product:edit/gasTypes.html.twig' with {'gasTypes' : gasTypes, 'locale' : locale,'advertInfo' : product} %}
+                                </tr>
+                                <tr id="addAdvertCarGears">
+                                    {% include 'DashboardCommonBundle:Product:edit/gearTypes.html.twig' with {'gearTypes' : gearTypes, 'locale' : locale,'advertInfo' : product} %}
+                                </tr>
+                                <tr id="addAdvertCarTransmittions">
+                                    {% include 'DashboardCommonBundle:Product:edit/transmittionTypes.html.twig' with {'transmittionTypes' : transmittionTypes, 'locale' : locale,'advertInfo' : product} %}
+                                </tr>
+                                <tr id="addAdvertCarModifications">
+                                    {% include 'DashboardCommonBundle:Product:edit/modifications.html.twig' with {'modifications' : modifications, 'locale' : locale,'advertInfo' : product} %}
+                                </tr>
+                            </tbody>
+                        </table>    
+                    </div>
+                    <div class="productFotos">
+                        <div class="advertFiltersTable">
+                            <div class="advertFiltersTableHeader">{% trans %}Внешний вид{% endtrans %}</div>
+                            <div class="advertFiltersItems">
+                                <table class="table table-striped" id="advertFiltersItemsTable">
+                                    <tbody>
+                                        {% if product.category.filters %}
+                                            {% for filter in product.category.filters %}
+                                                {% if filter.type == 'color'%}
+                                                <tr>
+                                                    <td>
+                                                        <div class="advertFiltersItemName">{{ filter.name }}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="advertFiltersItemValue">
+                                                            <ul class="list-unstyled list-inline color">
+                                                                {% if filter.values | length > 0 %}
+                                                                    {% for color in filter.values %}
+                                                                        <li>
+                                                                            <a href="javascript:void(0)" style="background-color: {{ color.additionalValue }}" title="{{ color.value }}" onclick="setColor({{ color.id }},'{{ locale.code }}',$(this))" {% if product.info.color.id == color.id %}class="active"{% endif %}></a>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        <tr class="addAdvertFotoBlock">
+                                            <td><div class="advertFiltersItemName">{% trans %}Фотографии{% endtrans %}</div></td>
+                                            <td>
+                                                <div class="advertFiltersItemValue fotos" id="advertFotos">
+                                                    <div class="advertFotosStartBg">
+                                                        <div class="addFotoIcon"><div class="addFotoIconInner"></div></div><div class="addFotoDescription">{% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}</div>
+                                                    </div>
+                                                </div>
+                                                <script>
+                                                    myDropzone = new Dropzone("div#advertFotos", {
+                                                        url: "/account/ajaxloadfotos/{{ product.id }}",
+                                                        dictDefaultMessage : '<div class="advertFotosStartBg"><div class="addFotoIcon"><div class="addFotoIconInner"></div></div><div class="addFotoDescription">{% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}</div></div>',
+                                                        maxFiles : 30,
+                                                        maxFilesize: 256,
+                                                        filesizeBase: 1024,
+                                                        previewTemplate: "<div class=\"dz-preview dz-file-preview\">\n  \n\
+                                                                                                            <div class=\"dz-image\">\n\
+                                                                                                                <img data-dz-thumbnail />\n\
+                                                                                                            </div>\n  \n\
+                                                                                                            \n\
+                                                                                                            <div class=\"dz-progress\">\n\
+                                                                                                                <span class=\"dz-upload\" data-dz-uploadprogress></span>\n\
+                                                                                                            </div>\n  \n\
+                                                                                                            <div class=\"dz-error-message\">\n\
+                                                                                                                <span data-dz-errormessage></span>\n\
+                                                                                                            </div>\n  \n\</div>",
+                                                        acceptedFiles: 'image/*',
+                                                        thumbnailWidth: 260,
+                                                        thumbnailHeight: 150,
+                                                        addRemoveLinks:true,
+                                                        dictRemoveFile: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff"/><path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+                                                        dictCancelUploadConfirmation : ' ',
+                                                        init:function() {
+                                                            {% if product.fotos | length > 0 %}
+                                                                $(".advertFotosStartBg").remove();
+                                                            {% endif%}
+                                                            var myDropzone = this;
+                                                            var existingFiles = [
+                                                                {% if product.fotos | length > 0 %}
+                                                                    {% for image in product.fotos %}
+                                                                        { name: "{{ image.foto }}", imageId: "{{ image.id }}",size: 12345678,imageUrl:'/bundles/images/products/{{ image.foto }}' },
+                                                                    {% endfor%}
+                                                                {% endif %}
+                                                            ];
+                                                            for (i = 0; i < existingFiles.length; i++) {
+                                                                myDropzone.emit("addedfile",existingFiles[i]);
+                                                                myDropzone.files.push(existingFiles[i]);
+                                                                var imageName = document.createAttribute("imageName");
+                                                                var imageId = document.createAttribute("imageId");
+                                                                imageName.value = existingFiles[i].name;
+                                                                imageId.value = existingFiles[i].imageId;
+                                                                myDropzone.files[i].previewElement.attributes.setNamedItem(imageName);
+                                                                myDropzone.files[i].previewElement.attributes.setNamedItem(imageId);
+                                                                myDropzone.createThumbnailFromUrl(existingFiles[i], existingFiles[i].imageUrl);
+                                                                myDropzone.emit("complete", existingFiles[i]);
+                                                            }
+                                                            myDropzone.options.dictCancelUploadConfirmation = '';
+                                                            var existingFileCount = existingFiles.length; 
+                                                            myDropzone.options.maxFiles = myDropzone.options.maxFiles - existingFileCount;
+                                                            var fotosNum = $(".dz-preview").length;
+                                                            if(myDropzone.options.maxFiles != 0 && fotosNum > 0){
+                                                                $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + myDropzone.options.maxFiles + '</div></div>');
+                                                                $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+                                                            }
+                                                        },
+                                                        complete: function complete(file) {
+                                                            if (file._removeLink) {
+                                                                file._removeLink.innerHTML = this.options.dictRemoveFile;
+                                                            }
+                                                            if (file.previewElement) {
+                                                                return file.previewElement.classList.add("dz-complete");
+                                                            }
+                                                        },
+                                                        success: function(file, response){
+                                                            var answer = JSON.parse(response);
+                                                            $(".advertFotosStartBg").remove();
+                                                            $(".addFotoIcon").remove();
+
+                                                            if(answer.imageName){
+                                                                var imageName = document.createAttribute("imageName");
+                                                                var imageId = document.createAttribute("imageId");
+                                                                imageName.value = answer.imageName;
+                                                                imageId.value = answer.imageId;
+                                                                file.previewElement.attributes.setNamedItem(imageName);
+                                                                file.previewElement.attributes.setNamedItem(imageId);
+                                                            }
+
+                                                            $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + (30 - $(".dz-preview").length) + '</div></div>');
+                                                            $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+                                                        },
+                                                        error: function(file){
+                                                            myDropzone.removeFile(file);
+                                                        },
+                                                        removedfile: function(file){
+                                                            $(".addFotoIcon").remove();
+                                                            var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
+                                                            $.ajax({
+                                                                url: '/account/ajaxdeletefoto/' + file.previewElement.attributes.getNamedItem("imageId").value,
+                                                                type:'get',
+                                                                dataType: 'html'
+                                                            });
+                                                            var _ref;
+                                                            var ret = (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+
+                                                            $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + (30 - $(".dz-preview").length) + '</div></div>');
+                                                            $(".addFotoIcon").click(function(){$("#advertFotos").trigger('click');});
+
+                                                            if($(".dz-preview").length === 0){
+                                                                $("div#advertFotos").html(this.options.dictDefaultMessage);
+                                                                $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
+                                                            }
+
+                                                            return ret;
+                                                        }
+                                                        });
+                                                    $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
+                                                </script>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="productFilters">
+                        {% if product.category.filters | length > 0 %}
+                            <div class="advertFiltersItems justFilter">
+                            {% for filter in  product.category.filters %}
+                                {% if filter.isRequired and filter.type != 'color' %}
+                                    <div class="advertFiltersItem justFilter">
+                                        <div class="advertFiltersItemName">{{ filter.name }}</div>
+                                        <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
+                                            {% if filter.values | length > 0 %}
+                                                {% for value in filter.values %}
+                                                <div class="filter">
+                                                    <input name="filter[]" type="checkbox" value="{{ value.id }}" class="custom-checkbox" {% if value.id in filters | keys %}checked="checked"{% endif %}/>
+                                                    {{ value.value }}
+                                                </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="productInformation">
+                        <div class="advertFiltersItems justFilter">
+                            <div class="advertFiltersItem justFilter">
+                                <div class="advertFiltersItemName">{% trans %}Состояние автомобиля{% endtrans %}</div>
+                                <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
+                                    <table class="table table-striped" id="advertFiltersItemsTable">
+                                        <tr>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %}</span></td>
+                                            <td><input type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" {% if product.info.probeg %}value="{{ product.info.probeg }}"{% endif %}/></td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %}</span></td>
+                                            <td>
+                                                <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}">
+                                                    {% if conditions %}
+                                                        {% for condition in conditions %}
+                                                            <option value="{{ condition.id }}" {% if product.info.shape.id == condition.id %}selected="selected"{% endif %}>
+                                                                {{ condition.title }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </select>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %}</span></td>
+                                            <td>
+                                                <select name="owners" class="custom-select" placeholder="{% trans %}Количество владельцев{% endtrans %}">
+                                                    <option value="Один" {% if product.info.owners == 'Один' %}selected="selected"{% endif %}>Один</option>
+                                                    <option value="Два" {% if product.info.owners == 'Два' %}selected="selected"{% endif %}>Два</option>
+                                                    <option value="Три" {% if product.info.owners == 'Три' %}selected="selected"{% endif %}>Три</option>
+                                                    <option value="Больше трех" {% if product.info.owners == 'Больше трех' %}selected="selected"{% endif %}>Больше трех</option>
+                                                </select>
+                                            </td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}VIN Номер{% endtrans %}</span></td>
+                                            <td>
+                                                <input type="text" name="vin" placeholder="{% trans %}17 знаков{% endtrans %}" class="parameterValue" {% if product.info.vin %}value="{{ product.info.vin }}"{% endif %} />
+                                            </td>
+                                            <td>
+                                                <span class="addAdvertSubParameterLabel">{% trans %}- Номер VIN на сайте не показывается{% endtrans %}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <span class="addAdvertParameterLabel">
+                                                    {% trans %}Дополнительное<br/>описание{% endtrans %}
+                                                    <span>{% trans %}Не более 3000 знаков{% endtrans %}</span>
+                                                </span>
+                                            </td>
+                                            <td colspan="3">
+                                                <textarea name="description" placeholder="{% trans %}Введите описание автомобиля{% endtrans %}" class="parameterValue">{% if product.info.description %}{{ product.info.description }}{% endif %}</textarea>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td colspan="3">
+                                                    <div class="addAdvertParameterDescription">
+                                                        <div class="addAdvertParameterDescriptionTitle">{% trans %}О чем стоит написать{% endtrans %}:</div>
+                                                        <div class="addAdvertParameterDescriptionText">
+                                                            <ul class="list-unstyled">
+                                                                <li>- регулярно ли делалось тех.обслуживание,</li>
+                                                                <li>- есть ли дефекты кузова и других частей автомобиля,</li>
+                                                                <li>- какие ремонтные работы производились,</li>
+                                                                <li>- какие расходные материалы менялись и как давно</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="advertFiltersItem justFilter">
+                                <div class="advertFiltersItemName">{% trans %}Стоимость{% endtrans %}</div>
+                                <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
+                                    <table class="table table-striped" id="advertFiltersItemsTable">
+                                        <tr>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %}</span></td>
+                                            <td>
+                                                <div class="addAdvertPriceParameters">
+                                                    <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue"  {% if product.info.price %}value="{{ product.info.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
+                                                    <div class="filter">
+                                                        <input name="NDS" type="checkbox" value="1" class="custom-checkbox"  {% if product.info.nds %}checked="checked"{% endif %} />
+                                                        {% trans %}НДС включен{% endtrans %}
+                                                    </div>
+                                                    <div class="filter">
+                                                        <input name="torg" type="checkbox" value="1" class="custom-checkbox" {% if product.info.torg %}checked="checked"{% endif %} />
+                                                        {% trans %}Торг{% endtrans %}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% if user.roles[0].role == "ROLE_DEALER" %}
+                                        <tr>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Гарантия{% endtrans %}</span></td>
+                                            <td>
+                                                <div class="addAdvertPriceGarant">
+                                                    <div class="categoryAdvertType garant {% if product.info.garant == 1 %}active{% endif %}" onclick="selectGarant($(this))">
+                                                        {% trans %}Гарантия{% endtrans %}
+                                                        <div class="categoryAdvertGarantNum">1</div>
+                                                        <input name="garant" value="1" type="radio" {% if product.info.garant == 1 %}checked="checked"{% endif %} />
+                                                    </div>
+                                                    <div class="categoryAdvertType garant {% if product.info.garant == 3 %}active{% endif %}" onclick="selectGarant($(this))">
+                                                        {% trans %}Гарантия{% endtrans %}
+                                                        <div class="categoryAdvertGarantNum">3</div>
+                                                        <input name="garant" value="3" type="radio" {% if product.info.garant == 3 %}checked="checked"{% endif %} />
+                                                    </div>
+                                                    <div class="categoryAdvertType garant {% if product.info.garant == 7 %}active{% endif %}" onclick="selectGarant($(this))">
+                                                        {% trans %}Гарантия{% endtrans %}
+                                                        <div class="categoryAdvertGarantNum">7</div>
+                                                        <input name="garant" value="7" type="radio" {% if product.info.garant == 7 %}checked="checked"{% endif %} />
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="advertFiltersItem justFilter">
+                                <div class="advertFiltersItemName">{% trans %}Контакты{% endtrans %}</div>
+                                <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
+                                    <table class="table table-striped" id="advertFiltersItemsTable">
+                                        <tr>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Имя{% endtrans %}<sup> *</sup></span></td>
+                                            <td>
+                                                <input name="contactName" class="parameterValue" required="required" type="text" {% if product.authorName %}value="{{  product.authorName }}"{% endif %} />
+                                            </td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Индекс города{% endtrans %}<sup> *</sup></span></td>
+                                            <td>
+                                                <div class="addAdvertContextParamenter">
+                                                    <input name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" onkeyup="getCityCodesByValue($(this),'{{ locale.code}}')" required="required" type="text" {% if product.cityCode %}value="{{  product.cityCode.code }}"{% endif %} />
+                                                    <div class="addAdvertContextParamenterValues"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Телефон{% endtrans %}<sup> *</sup></span></td>
+                                            <td>
+                                                <input name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue" required="required" type="text" {% if product.authorPhone %}value="{{  product.authorPhone }}"{% endif %} />
+                                            </td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
+                                            <td>
+                                                <div class="addAdvertContextParamenter">
+                                                    <input name="contactCity" placeholder="{% trans %}Город{% endtrans %}" class="parameterValue" onkeyup="getCitiesByValue($(this), '{{ locale.code }}')" required="required" type="text" {% if product.city %}value="{{  product.city.name }}"{% endif %} />
+                                                    <div class="addAdvertContextParamenterValues"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}E-mail{% endtrans %}<sup> *</sup></span></td>
+                                            <td>
+                                                <input name="contactEmail" placeholder="{% trans %}E-mail{% endtrans %}" class="parameterValue" required="required" type="text" {% if product.authorEmail %}value="{{  product.authorEmail }}"{% endif %} />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="cookieAlertButton nextStep" style="padding-bottom: 3rem;">
+                                <button type="submit">{% trans %}Сохранить{% endtrans %}</button>
+                            </div> 
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% if gasTypes | length > 0 %}
+    <td><div class="advertFiltersItemName">{% trans %}Двигатель{% endtrans %}</div></td>
+    <td>
+        <div class="advertFiltersItemValue">
+            <ul class="list-unstyled list-inline addProductFilterRadios">
+                {% for gasType in gasTypes %}
+                    <li onclick="radioSetActive($(this))">
+                        <a href="javascript:voit(0)" onclick="getGearType({{ gasType.id }},'{{ locale.code}}')" {% if gasType.id == product.info.gasType.id %}class="active"{% endif %}>{{ gasType.value }}</a>
+                        <input name="gasType[]" type="radio" class="hidden-radio-parameter" value="{{ gasType.id }}"  {% if gasType.id == product.info.gasType.id %}checked="checked"{% endif %} />
+                    </li>
+                {% endfor %}
+                <li class="static-filters"><div class="filter"><input name="isGas" type="checkbox" value="1" class="gas-checkbox" {% if product.info.isGasBaloon %}checked="checked"{% endif %}  /> {% trans %}Газобалонное оборудование{% endtrans %}</div></li>
+            </ul>
+            <script>$(document).ready(function(){$(".gas-checkbox").customCheckbox();});</script>
+        </div>
+    </td>
+{% endif %}

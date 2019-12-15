@@ -4,9 +4,9 @@
         <div class="advertFiltersItemValue">
             <ul class="list-unstyled list-inline addProductFilterRadios">
                 {% for transmittionType in transmittionTypes %}
-                    <li onclick="radioSetActive($(this))">
-                        <a href="javascript:voit(0)" onclick="" {% if transmittionType.id == product.info.transmissionType.id %}class="active"{% endif %}>{{ transmittionType.value }}</a>
-                        <input name="transmissionType[]" type="radio" class="hidden-radio-parameter" value="{{ transmittionType.id }}"  {% if transmittionType.id == product.info.transmissionType.id %}checked="checked"{% endif %}/>
+                    <li onclick="getModificationsEdit({{ transmittionType.id }}, {{ advertInfo.id }});radioSetActive($(this))">
+                        <a href="javascript:voit(0)" {% if transmittionType.id == advertInfo.info.transmissionType.id %}class="active"{% endif %}>{{ transmittionType.value }}</a>
+                        <input name="transmissionType[]" type="radio" class="hidden-radio-parameter" value="{{ transmittionType.id }}"  {% if transmittionType.id == advertInfo.info.transmissionType.id %}checked="checked"{% endif %}/>
                     </li>
                 {% endfor %}
             </ul>

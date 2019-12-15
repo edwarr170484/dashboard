@@ -34,19 +34,11 @@
             </h3>
         </div>
         <div class="addAdvertStepNavigation">
-            {% if locale.isDefault %}
                 <a href="javascript:void(0)" onclick="getStep3('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
-                <a href="{{ path('addAdvert') }}" class="clear">
+                <a href="javascript:void(0)" class="clear" onclick="removeSession()">
                 <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
                     <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
                 </svg>{% trans %}Очистить{% endtrans %}</a>
-            {% else %}
-                <a href="javascript:void(0)" onclick="getStep3('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
-                <a href="{{ path('addAdvertLocale', {'_locale' : locale.code}) }}" class="clear">
-                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:10px">
-                        <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
-                    </svg>{% trans %}Очистить{% endtrans %}</a>
-            {% endif %}
         </div>
             <div class="advertFiltersItems justFilter">
                 <div class="advertFiltersItem justFilter">
@@ -179,48 +171,7 @@
             </div>           
     </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
-            <div class="addAdvertStepsBlock">
-                <div class="addAdvertStepsBlockHeader">{% trans %}Шаги{% endtrans %} 4/5</div>
-                <div class="addAdvertStepsBlockInner">
-                    <ul class="list-unstyled addAdvertSteps">
-                        <li>
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
-                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
-                            </svg>
-                            <a href="javascript:void(0)">{% trans %}Выбор автомобиля{% endtrans %}</a>
-                        </li>
-                        <li>
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
-                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
-                            </svg>
-                            <a href="javascript:void(0)">{% trans %}Внешний вид{% endtrans %}</a>
-                        </li>
-                        <li>
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
-                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
-                            </svg>
-                            <a href="javascript:void(0)">{% trans %}Комплектация{% endtrans %}</a>
-                        </li>
-                        <li class="active">
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
-                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
-                            </svg>
-                            <a href="javascript:void(0)">{% trans %}Состояние и цена{% endtrans %}</a>
-                        </li>
-                        <li>
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 21C16.5228 21 21 16.5228 21 11C21 5.47715 16.5228 1 11 1C5.47715 1 1 5.47715 1 11C1 16.5228 5.47715 21 11 21Z" stroke="#ABABAB" stroke-linejoin="round"/>
-                                <path d="M5.66699 11L9.00033 14.3333L16.3337 7" stroke="#ABABAB" stroke-linejoin="round"/>
-                            </svg>
-                            <a href="javascript:void(0)">{% trans %}Контактные данные{% endtrans %}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+             {% include 'DashboardCommonBundle:Product:add/steps.html.twig' with {'locale' : locale, 'advertInfo' : advertInfo} %}
         </div>
     </div>
 {% endif %}

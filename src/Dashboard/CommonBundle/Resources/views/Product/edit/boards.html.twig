@@ -6,8 +6,11 @@
         <div class="advertFiltersItemValue">
             <ul class="list-unstyled list-inline addProductFilterRadios">
                 {% for board in boards %}
-                    <li onclick="radioSetActive($(this))"><a href="javascript:voit(0)" onclick="getGenerationsByBoardEdit({{ board.board.id }}, {{ product.id }})" {% if board.board.id == advertInfo.info.board.id %}class="active"{% endif %}>{{ board.board.value }}</a>
-                        <input name="board[]" type="radio" class="hidden-radio-parameter" value="{{ board.board.id }}"  {% if board.board.id == advertInfo.info.board.id %}class="active"{% endif %}/>
+                    <li onclick="getGenerationsByBoardEdit({{ board.board.id }}, {{ advertInfo.id }});radioSetActive($(this))">
+                        <a href="javascript:voit(0)" {% if board.board.id == advertInfo.info.board.id %}class="active"{% endif %}>
+                            {{ board.board.value }}
+                        </a>
+                        <input name="board[]" type="radio" class="hidden-radio-parameter" value="{{ board.board.id }}"  {% if board.board.id == advertInfo.info.board.id %}checked="checked"{% endif %}/>
                     </li>
                 {% endfor %}
                     <li class="static-filters"><div class="filter"><input name="rightWeel" type="checkbox" value="1" class="rightWeel-checkbox" {% if advertInfo.info.wheel %}checked="checked"{% endif %} /> {% trans %}Правый руль{% endtrans %}</div></li>

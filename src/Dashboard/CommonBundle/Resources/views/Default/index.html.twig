@@ -37,16 +37,9 @@
                                             <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
                                                 {{ category.image |raw }}
                                                 <span>
-                                                    {% if category.translations | length > 0 %}
-                                                        {% for translation in category.translations %}
-                                                            {% if translation.locale.id == locale.id %}
-                                                                {{ translation.value }}
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% else %}        
-                                                        {{ category.title}}
-                                                    {% endif %}
-                                                </span><div class="shadowBlock"></div></a>
+                                                    {{ category.title}}
+                                                </span><div class="shadowBlock"></div>
+                                            </a>
                                         </li>
                                         {% set i = i + 1 %}
                                     {% endfor %}
@@ -67,30 +60,10 @@
                                                 {% if category.filters %}
                                                     {% for filter in category.filters %}
                                                         <div class="col-lg-3 col-md-3">
-                                                            {% set filterName = '' %}
-                                                            {% if filter.translations | length > 0 %}
-                                                                        {% for translation in filter.translations %}
-                                                                            {% if translation.locale.id == locale.id %}
-                                                                                {% set filterName = translation.value %}
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    {% else %}    
-                                                                        {% set filterName = filter.name %}}
-                                                                    {% endif %}
-                                                            <select name="1" class="custom-select" id="filter[]" multiple="multiple" placeholder="{{ filterName }}">
+                                                            <select name="1" class="custom-select" id="filter[]" multiple="multiple" placeholder="{{ filter.name }}">
                                                                 {% if filter.values | length > 0 %}
                                                                     {% for filterValue in filter.values %}
-                                                                        <option value="{{ filterValue.id }}">
-                                                                        {% if filterValue.translations | length > 0 %}
-                                                                            {% for translation in filterValue.translations %}
-                                                                                {% if translation.locale.id == locale.id %}
-                                                                                    {{ translation.value }}
-                                                                                {% endif %}
-                                                                            {% endfor %}
-                                                                        {% else %}        
-                                                                            {{ filterValue.value}}
-                                                                        {% endif %}
-                                                                        </option>
+                                                                        <option value="{{ filterValue.id }}">{{ filterValue.value}}</option>
                                                                     {% endfor %}
                                                                 {% endif %}
                                                             </select>
@@ -165,10 +138,10 @@
                         {% trans %}Información importante sobre cookies: El sitio web de la auto28.es utiliza cookies propias para mejorar la navegación. Las cookies utilizadas no contienen ningún tipo de información de carácter personal. Si continua navegando entendemos acepta su uso{% endtrans %}.
                     </div>
                     <div class="cookieAlertLink">
-                        <a href="">{% trans %}Más información{% endtrans %}</a>
+                        <a href="">{% trans %}Больше информации{% endtrans %}</a>
                     </div>
                     <div class="cookieAlertButton">
-                        <button onclick="$('.cookieAlertBlock').remove();">{% trans %}Aceptar{% endtrans %}</button>
+                        <button onclick="$('.cookieAlertBlock').remove();">{% trans %}Закрыть{% endtrans %}</button>
                     </div>
                 </div>
             </div>
@@ -189,13 +162,9 @@
                                     <h4>{% trans %}Найти<br/>транспорт{% endtrans %}</h4>
                                 </div>
                                 <div class="siteInfoPaneFloat">
-                                    {% if  app.request.locale == 'lv' %}
-                                        <form action="{{ path('search') }}" method="post">
-                                    {% else %}
-                                        <form action="{{ path('searchLocale',{'_locale' : app.request.locale}) }}" method="post">
-                                    {% endif %}
+                                    <form action="{{ path('search') }}" method="post">
                                         <div class="header-search-box">
-                                            <input name="searchText" type="text" placeholder="{% trans %}SITE MEKLĒŠANA{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
+                                            <input name="searchText" type="text" placeholder="{% trans %}Найти{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
                                             <a data-toggle="modal" data-target="#regionModal" class="top-select-region">
                                                 {% if sessionCity %}
                                                     {{ sessionCity.name }}
@@ -203,7 +172,7 @@
                                                     {% if sessionRegion %}
                                                         {{ sessionRegion.name }}
                                                     {% else %}
-                                                        {% trans %}Вся Испания{% endtrans %}
+                                                        {% trans %}Испания{% endtrans %}
                                                     {% endif %}
                                                 {% endif %}
                                             </a>
@@ -214,7 +183,7 @@
                                                 <div class="blackCheckboxInput">
                                                     <input type="checkbox" />
                                                 </div>
-                                                Искать в названиях
+                                                {% trans %}Искать в названиях{% endtrans %}
                                             </div>
                                         </div>
                                     </form>
@@ -234,11 +203,15 @@
                                     <h4>{% trans %}Продать<br/>свой транспорт{% endtrans %}</h4>
                                 </div>
                                 <div class="siteInfoPaneFloat">
-                                    <a href="" class="siteInfoPaneAddadvert">Отправить заявку</a>
+                                    {% if app.user %}
+                                        <a href="{{path('addAdvert')}}" class="siteInfoPaneAddadvert">{% trans %}Отправить заявку{% endtrans %}</a>
+                                    {% else %}
+                                        <a href="{{path('login')}}" class="siteInfoPaneAddadvert">{% trans %}Отправить заявку{% endtrans %}</a>
+                                    {% endif %}
                                 </div>
                                 <div class="siteInfoPaneContent">
                                     <div class="description">
-                                        {% trans %}<a href="">Зарегистрируйтесь</a> и добавляйте объявления{% endtrans %}
+                                        <a href="{{path('register')}}">{% trans %}Зарегистрируйтесь</a> и добавляйте объявления{% endtrans %}
                                     </div>
                                 </div>
                             </div>
@@ -252,42 +225,17 @@
                                 </div>
                                 <div class="siteInfoPaneContent">
                                     <ul class="list-unstyled list-inline">
-                                        <li><a href="">Сервисы</a></li>
-                                        <li><a href="">Диллеры</a></li>
+                                        <li><a href="{{ path('services') }}">Сервисы</a></li>
+                                        <li><a href="{{ path('dealers') }}">Диллеры</a></li>
                                     </ul>
-                                    <div class="description">Узнайте где можно воспользоваться сервисами, взять или застраховать авто</div>
+                                    <div class="description">{% trans %}Узнайте где можно воспользоваться сервисами, взять или застраховать авто{% endtrans %}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 col-mg-6">
                         <div class="owl-carousel" id="owlMainSlider">
-                            <div class="siteInfoPane no-shadow">
-                                <div class="siteInfoPaneInner dilers">
-                                    <div class="innerHeader">
-                                        <h4>БМВ X5. Скидка -10%</h4>
-                                    </div>
-                                    <div class="siteInfoPaneContent dilers">
-                                        <div class="description">Акция! От официального дилера БМВ в Малаге "Рога и копыта".<br/>Скидки на BMW X5 до 10%. Спешите! Предложений ограничено!</div>
-                                    </div>
-                                    <div class="siteInfoPaneContentButton">
-                                        <a href="">Смотреть подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="siteInfoPane">
-                                <div class="siteInfoPaneInner dilers">
-                                    <div class="innerHeader">
-                                        <h4>БМВ X5. Скидка -10%</h4>
-                                    </div>
-                                    <div class="siteInfoPaneContent dilers">
-                                        <div class="description">Акция! От официального дилера БМВ в Малаге "Рога и копыта".<br/>Скидки на BMW X5 до 10%. Спешите! Предложений ограничено!</div>
-                                    </div>
-                                    <div class="siteInfoPaneContentButton">
-                                        <a href="">Смотреть подробнее</a>
-                                    </div>
-                                </div>
-                            </div>
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'position' : 'slider'})) }}
                         </div>
                     </div>
                 </div>

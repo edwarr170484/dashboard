@@ -31,6 +31,17 @@ class AdvertInfo
     private $services;
     private $rightWheel;
     private $isGas;
+    private $step;
+    
+    public function getStep()
+    {
+        return $this->step;
+    }
+
+    public function setStep($step)
+    {
+        $this->step = $step;
+    }
     
     public function getIsGas()
     {

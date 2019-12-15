@@ -63,11 +63,11 @@
                                         </li>
                                     </ul>
                                 {% else %}
-                                <ul class="list-unstyled footer-menu-list no-flex">
-                                    <li><a href="{{path('login')}}">{% trans %}Войти{% endtrans %}</a></li>
-                                    <li><a href="{{path('register')}}">{% trans %}Регистрация{% endtrans %}</a></li>
-                                    <li><a href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a></li>
-                                </ul>    
+                                    <ul class="list-unstyled footer-menu-list no-flex">
+                                        <li><a href="{{path('login')}}">{% trans %}Войти{% endtrans %}</a></li>
+                                        <li><a href="{{path('register')}}">{% trans %}Регистрация{% endtrans %}</a></li>
+                                        <li><a href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a></li>
+                                    </ul>    
                                 {% endif %}
                             </div>
                         </div>
@@ -81,58 +81,36 @@
         </div> 
     </div>
 </footer>
-                           
-	<div class="modal fade" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
-	  <div class="modal-dialog" role="document">
-		{{ form_start(regionForm, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal userPlaceForm'}}) }}
-                    <input name="selectFilterRegionCity" type="hidden" value="1" />
-			<div class="modal-content">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
-                                </svg>
-                            </button>
-                            <div class="modal-header">
-                                <h3 class="modal-title" id="regionModalLabel">{% trans %}Выберите Ваше местоположение{% endtrans %}</h3>
-                            </div>
-                            <div class="modal-body">
-				<div class="form-group">
-                                    <label class="col-md-4 control-label">{% trans %}Izvēlieties reģionu{% endtrans %}: </label>
-                                    <div class="col-md-8">
-                                        {{ form_widget(regionForm.region, {'id' : 'siteRegion'})}}
-                                    </div>
-                                    <script>
-                                        $('#siteRegion').change(function() {
-                                            var $form = $(".userPlaceForm");
-                                            var data = {};
-                                            data[$(this).attr('name')] = $(this).val();
-                                            $.ajax({
-                                                url : $form.attr('action'),
-                                                type: $form.attr('method'),
-                                                data : data,
-                                                    success: function(html) {
-                                                        $('#siteRegionCities').html($(html).find('#siteRegionCities').html());
-                                                        $('#siteCity').customSelect();
-                                                    }
-                                            });
-                                        });
-                                    </script>
-				</div>
-				<div class="form-group">
-                                    <label class="col-md-4 control-label">{% trans %}Pilsēta/volost{% endtrans %}:</label>
-                                    <div class="col-md-8" id="siteRegionCities">
-                                        {{ form_widget(regionForm.city,{'id' : 'siteCity'})}}
-                                    </div>
-				</div>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="col-lg-12"><button type="submit" class="btn">{% trans %}Выбрать регион{% endtrans %}</button></div>
-                            </div>
-                            {{ form_end(regionForm) }}
-			</div>
-                    </form>
+<div class="modal fade" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+    <div class="modal-dialog" role="document">
+        {{ form_start(cityForm, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal'}}) }}
+            <input name="selectFilterRegionCity" value="1" type="hidden" />
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                    </svg>
+                </button>
+                <div class="modal-header" style="border:none">
+                    <h3 class="modal-title" id="regionModalLabel">{% trans %}Выберите Ваше местоположение{% endtrans %}</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{% trans %}Город{% endtrans %}:</label>
+                        <div class="col-md-8" id="siteRegionCities">
+                            {{ form_widget(cityForm.name)}}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border:none;text-align: center;">
+                    <div class="col-lg-12">
+                        <button type="submit" class="btn">{% trans %}Выбрать город{% endtrans %}</button>
+                    </div>
                 </div>
             </div>
+        {{ form_end(cityForm) }}
+    </div>
+</div>
         <div class="modal fade" id="userAgreementModal" tabindex="-1" role="dialog" aria-labelledby="howToBuyModalLabel">
 	  <div class="modal-dialog" role="document">
 		<form class="form-horizontal region-select-form" action="" method="post">

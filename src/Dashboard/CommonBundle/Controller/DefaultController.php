@@ -31,9 +31,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Dashboard\CommonBundle\Form\Type\RegionType;
+use Dashboard\CommonBundle\Form\Type\CityType;
 use Dashboard\CommonBundle\Form\Type\RegionFilterType;
-use Dashboard\CommonBundle\Entity\Region;
+use Dashboard\CommonBundle\Entity\City;
 use Dashboard\CommonBundle\Entity\Product;
 
 class DefaultController extends Controller
@@ -70,7 +70,7 @@ class DefaultController extends Controller
             }
         }
 
-        $locales = $manager->getRepository("DashboardCommonBundle:Locale")->findAll();
+        $locales = $manager->getRepository("DashboardCommonBundle:Locale")->findBy(array("isActive" => "1"));
         $sessionRegion = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionRegion'));
         $sessionCity = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionCity'));
         
@@ -112,12 +112,6 @@ class DefaultController extends Controller
         catch(\Doctrine\ORM\NoResultException $e) {
             $footerPages = 0;
         }
-        if($session->get('sessionRegion'))
-        {
-            $region = $manager->getRepository("DashboardCommonBundle:Region")->find($session->get('sessionRegion'));
-        }
-        else
-            $region = 0;
         
         if($session->get('sessionCity'))
         {
@@ -126,8 +120,8 @@ class DefaultController extends Controller
         else
             $city = 0;
         
-        $regionForm = $this->createForm(new RegionType($locale, $region, $city), new Product());
-        $regionForm->handleRequest($request);
+        $cityForm = $this->createForm(new CityType($locale, $city), new City());
+        $cityForm->handleRequest($request);
 
         return $this->render('DashboardCommonBundle:Common:footer.html.twig', array("regions" => $regions, 
                                                                                     "cities" => $cities,
@@ -135,7 +129,7 @@ class DefaultController extends Controller
                                                                                     "footerPages" => $footerPages,
                                                                                     "textblock" => $textblock,
                                                                                     "locale" => $locale,
-                                                                                    "regionForm" => $regionForm->createView()));
+                                                                                    "cityForm" => $cityForm->createView()));
     }
     
     public function getBannersAction($page = null, $category = null, $position = null)
@@ -150,6 +144,8 @@ class DefaultController extends Controller
                 $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultright");
             if($position == 'toppage')
                 $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaulttop");
+            if($position == 'slider')
+                $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultslider");
         }
         
         if($page)
@@ -208,13 +204,14 @@ class DefaultController extends Controller
                 $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultright");
             if($position == 'toppage')
                 $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaulttop");
+            if($position == 'slider')
+                $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("slider");
         }
         
         return $this->render('DashboardCommonBundle:Common:banners.html.twig', array("banners" => $banners));
     }
     /**
      * @Route("/", name="main")
-     * @Route("/{_locale}", name="mainLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function indexAction(Request $request)
     {
@@ -321,7 +318,6 @@ class DefaultController extends Controller
     
     /**
      * @Route("/category/{categoryName}/{page}", name="category", defaults={"categoryName":null,"page":1})
-     * @Route("/{_locale}/category/{categoryName}/{page}", name="categoryLocale", defaults={"_locale" : "es","categoryName":null,"page":1}, requirements={"_locale" : "es|ru"})
      */
     public function categoryAction($categoryName, $page, Request $request)        
     {
@@ -330,31 +326,12 @@ class DefaultController extends Controller
         $products = array();
         $pagination = 0;
         $premiumCategoryProducts = 0;
-        $selltypes = $manager->getRepository("DashboardCommonBundle:Selltype")->findAll();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        $sessionCity = $this->get('session')->get('sessionCity');
         $view = ($this->get('session')->get('viewCategory')) ? $this->get('session')->get('viewCategory') : 'list';
         
-        if($this->get('session')->get('sessionRegion'))
-        {
-            $region = $manager->getRepository("DashboardCommonBundle:Region")->find($this->get('session')->get('sessionRegion'));
-        }
-        else
-            $region = 0;
-        
-        if($this->get('session')->get('sessionCity'))
-        {
-            $city = $manager->getRepository("DashboardCommonBundle:City")->find($this->get('session')->get('sessionCity'));
-        }
-        else
-            $city = 0;
-        
-        $regionFilterForm = $this->createForm(new RegionFilterType($locale, $region, $city), new Product());
-        $regionFilterForm->handleRequest($request);
-        
-        $query = $manager->createQuery("SELECT c,f FROM DashboardCommonBundle:Category c LEFT JOIN c.filters f WHERE c.name = '" . $categoryName . "' AND c.isActive = 1 ORDER BY f.type DESC");
+        $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Category c WHERE c.name = '" . $categoryName . "' AND c.isActive = 1");
         
         try{
             $category = $query->getSingleResult();
@@ -363,7 +340,7 @@ class DefaultController extends Controller
             
             throw $this->createNotFoundException();
         }
-        
+                
         array_push($categories, $category);
         $parent = $category->getParent();
         
@@ -373,6 +350,10 @@ class DefaultController extends Controller
             array_push($categories, $parent);
             $parent = $parent->getParent();
         }  
+        
+        $categories = array_reverse($categories);
+        $filters = new ArrayCollection();
+        $this->getFilters($filters, $categories[0]);
         
         $joinInstructions = '';
         
@@ -454,33 +435,6 @@ class DefaultController extends Controller
             }
             else
                 $sql .= " AND p.category = " . $category->getId();
-        }
-        
-        if(!$request->isXmlHttpRequest())
-        {
-            if($regionFilterForm['regionFilter']->getData())
-            {
-                $sql .= " AND p.region = " . $regionFilterForm['regionFilter']->getData()->getId();
-            }
-            else
-            {
-                if($this->get('session')->has('sessionRegion') && $this->get('session')->get('sessionRegion') != "")
-                {
-                    $sql .= " AND p.region = " . $this->get('session')->get('sessionRegion');
-                }
-            }
-
-            if($regionFilterForm['cityFilter']->getData())
-            {
-                $sql .= " AND p.city = " . $regionFilterForm['cityFilter']->getData()->getId();
-            }
-            else
-            {
-                if($this->get('session')->has('sessionCity') && $this->get('session')->get('sessionCity') != "")
-                {
-                    $sql .= " AND p.city = " . $this->get('session')->get('sessionCity');
-                }
-            }
         }
         
         if($request->request->get('searchText'))
@@ -703,7 +657,7 @@ class DefaultController extends Controller
 
         $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
         
-        $link = ($locale->getIsDefault()) ? '/category/' . $categoryName : '/' . $locale->getCode() . '/category/' . $categoryName;
+        $link = '/category/' . $categoryName;
         
         if($request->query->get('sortorder') && $request->query->get('order'))
         {
@@ -717,14 +671,15 @@ class DefaultController extends Controller
             $pagination = $this->get('app.helpers')->paginator($page, $productsTotalCount, $settings->getMainpageAdvertsNumber(), $link,'list-unstyled list-inline',$sort);
         
         return $this->render('DashboardCommonBundle:Default:category.html.twig', array("category" => $category,
-                                                                                       "categories" => array_reverse($categories),
+                                                                                       "categories" => $categories,
+                                                                                       "formFilters" => $filters,
                                                                                        "products" => $products,
+                                                                                       "productsTotalCount" => $productsTotalCount,
                                                                                        "pagination" => $pagination,
-                                                                                       "premiumProducts" => 0/*$premiumProducts*/,
-                                                                                       "selectedProducts" => 0/*$selectedProducts*/,
-                                                                                       "upProducts" => 0/*$upProducts*/,
-                                                                                       "allcities" => $allcities,
-                                                                                       "selltypes" => $selltypes,
+                                                                                       "premiumProducts" => new ArrayCollection(),
+                                                                                       "specialProducts" => new ArrayCollection(),
+                                                                                       "upProducts" => new ArrayCollection(),
+                                                                                       "dealerProducts" => new ArrayCollection(),
                                                                                        "filters" => $request->request->get('filter'),
                                                                                        "filtersRangeList" => $request->request->get('filterRangeList'),
                                                                                        "filterSelectable" => $request->request->get('filterSelectable'),
@@ -732,9 +687,22 @@ class DefaultController extends Controller
                                                                                        "locale" => $locale,
                                                                                        "settings" => $settings,
                                                                                        "view" => $view,
-                                                                                       "sql" => $sql,
-                                                                                       "regionFilterForm" => $regionFilterForm->createView()));
+                                                                                       "sql" => $sql));
     }
+    
+    private function getFilters(&$filters, $category){
+        if($category->getFilters()){
+            foreach($category->getFilters() as $filter){
+                $filters->add($filter);
+            }
+        }
+        if($category->getChildren()){
+            foreach($category->getChildren() as $child){
+                $this->getFilters($filters, $child);
+            }
+        }
+    }
+    
     
     private function createCategorySql($category)
     {
@@ -752,20 +720,8 @@ class DefaultController extends Controller
         return $sql;
     }
     
-    public function getTopsellersAction()
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->find(1);
-        
-        $query = $manager->createQuery("SELECT u FROM DashboardCommonBundle:User u JOIN u.userinfo ui WHERE u.isActive = 1 AND u.isConfirm = 1 ORDER BY ui.rating DESC" )->setMaxResults($settings->getTopsellerBlockNumber());
-        $topUsers = $query->getResult();
-        
-        return $this->render('DashboardCommonBundle:Common:topseller.html.twig', array("topUsers" => $topUsers));
-    }
-    
     /**
      * @Route("/product/{productId}_{productName}", name="product",defaults={"productId":null,"productName":null})
-     * @Route("/{_locale}/product/{productId}_{productName}", name="productLocale", defaults={"_locale" : "es","productId":null,"productName":null}, requirements={"_locale" : "es|ru"})
      */
     public function productAction($productId, $productName, Request $request)
     {

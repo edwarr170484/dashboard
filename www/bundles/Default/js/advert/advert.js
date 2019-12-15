@@ -1,6 +1,6 @@
 function getStep11(categoryId, locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/step11/' + categoryId,
+        url: '/account/addadvert/step11/' + categoryId,
         type:'get',
         dataType: 'html',
         beforeSend: function(){$(".modal-body-cover").show();},
@@ -18,7 +18,7 @@ function getStep11(categoryId, locale_code){
 
 function getStep12(categoryId, locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/step12/' + categoryId,
+        url: '/account/addadvert/step12/' + categoryId,
         type:'get',
         dataType: 'html',
         beforeSend: function(){$(".modal-body-cover").show();},
@@ -36,7 +36,7 @@ function getStep12(categoryId, locale_code){
 
 function getStep2(locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/step2',
+        url: '/account/addadvert/step2',
         type:'get',
         dataType: 'html',
         beforeSend: function(){$(".modal-body-cover").show();},
@@ -54,7 +54,7 @@ function getStep2(locale_code){
 
 function getStep3(locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/step3',
+        url: '/account/addadvert/step3',
         type:'get',
         dataType: 'html',
         beforeSend: function(){$(".modal-body-cover").show();},
@@ -73,7 +73,7 @@ function getStep3(locale_code){
 
 function getStep4(locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/step4',
+        url: '/account/addadvert/step4',
         type:'post',
         data: $(".advertFiltersItems input[type='checkbox']:checked"),
         dataType: 'html',
@@ -94,7 +94,7 @@ function getStep4(locale_code){
 
 function getStep5(locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/step5',
+        url: '/account/addadvert/step5',
         type:'post',
         data: $(".advertFiltersItems input[type='checkbox']:checked, .advertFiltersItems input[type='radio']:checked,.advertFiltersItems input[type='text'], .advertFiltersItems textarea, .advertFiltersItems select"),
         dataType: 'html',
@@ -153,7 +153,7 @@ function getBoardTypesByYear(year, locale_code, text){
     $(".olderBloakcTrigger span").html(text);
     
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/boards/' + year,
+        url: '/account/addadvert/boards/' + year,
         type:'get',
         dataType: 'html',
         beforeSend: function(){
@@ -183,7 +183,7 @@ function getBoardTypesByOldYear(year, locale_code, element){
     $(".olderBloakcTrigger").addClass('active');
     
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/boards/' + year,
+        url: '/account/addadvert/boards/' + year,
         type:'post',
         dataType: 'html',
         data:$("input[name=rightWeel]:checked"),
@@ -209,7 +209,7 @@ function getBoardTypesByOldYear(year, locale_code, element){
 
 function getGenerationsByBoard(boardId,locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/generations/' + boardId,
+        url: '/account/addadvert/generations/' + boardId,
         type:'post',
         dataType: 'html',
         data:$("input[name=rightWeel]:checked"),
@@ -238,7 +238,7 @@ function getGenerationEngine(generationId, locale_code, element){
     element.addClass('active');
     
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/engines/' + generationId,
+        url: '/account/addadvert/engines/' + generationId,
         type:'get',
         dataType: 'html',
         beforeSend: function(){
@@ -262,7 +262,7 @@ function getGenerationEngine(generationId, locale_code, element){
 
 function getGearType(gasTypeId, locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/gears/' + gasTypeId,
+        url: '/account/addadvert/gears/' + gasTypeId,
         type:'get',
         dataType: 'html',
         beforeSend: function(){
@@ -285,7 +285,7 @@ function getGearType(gasTypeId, locale_code){
 
 function getTransmissionType(gearType, locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/transmission/' + gearType,
+        url: '/account/addadvert/transmission/' + gearType,
         type:'get',
         dataType: 'html',
         beforeSend: function(){
@@ -307,7 +307,7 @@ function getTransmissionType(gearType, locale_code){
 
 function getModifications(transmissionId, locale_code){
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/modification/' + transmissionId,
+        url: '/account/addadvert/modification/' + transmissionId,
         type:'get',
         dataType: 'html',
         beforeSend: function(){$("#addAdvertCarModifications").html('');$(".cookieAlertButton.nextStep").addClass("hide");},
@@ -329,7 +329,7 @@ function setModification(modificationId, locale_code, element){
     element.addClass('active');
     
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/setmodification/' + modificationId,
+        url: '/account/addadvert/setmodification/' + modificationId,
         type:'get',
         dataType: 'html',
         beforeSend: function(){},
@@ -351,7 +351,7 @@ function setColor(colorId, locale_code, element){
     element.addClass('active');
     
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/setcolor/' + colorId,
+        url: '/account/addadvert/setcolor/' + colorId,
         type:'get',
         dataType: 'html',
         beforeSend: function(){},
@@ -375,7 +375,7 @@ function getCityCodesByValue(element, locale_code){
     var searchText = element.val();
     
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/getcitycodes/' + searchText,
+        url: '/account/addadvert/getcitycodes/' + searchText,
         type:'get',
         dataType: 'html',
         beforeSend: function(){},
@@ -394,7 +394,7 @@ function getCitiesByValue(element, locale_code){
     var searchText = element.val();
     
     $.ajax({
-        url: '/' + locale_code + '/account/addadvert/getcities/' + searchText,
+        url: '/account/addadvert/getcities/' + searchText,
         type:'get',
         dataType: 'html',
         beforeSend: function(){},
@@ -530,4 +530,20 @@ function toggleProductService(productId, serviceId, servicePrice, locale_code, e
                 err=xhr.responseText;
             }
         });
+}
+
+function removeSession(){
+    $.ajax({
+        url: '/account/addadvert/removesession',
+        type:'get',
+        dataType: 'html',
+        success: function(html)
+        {
+            window.location.href = "/account/addadvert";
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    });
 }

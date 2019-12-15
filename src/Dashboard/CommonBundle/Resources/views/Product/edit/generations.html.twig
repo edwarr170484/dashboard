@@ -6,7 +6,7 @@
         <div class="advertFiltersItemValue">
             <div class="addAdvertGenerations">
                 {% for board in boards %}
-                    <div class="addAdvertGeneration {% if board.generation.id == advertInfo.info.generation.id %}active{% endif %}" onclick="getGenerationEngine({{board.generation.id }},'{{ locale.code }}', $(this))">
+                    <div class="addAdvertGeneration {% if board.generation.id == advertInfo.info.generation.id %}active{% endif %}" onclick="getGenerationEngineEdit({{board.generation.id }},{{ advertInfo.id }}, $(this))">
                         <img src="{{ asset('bundles/images/category/generation/' ~ board.image) }}" alt="" title="" />
                         <div class="addAdvertGenerationName">{{ board.generation.name }}</div>
                         <div class="addAdvertGenerationYears">{{ board.generation.yearFrom }} - {{ board.generation.yearTo }}</div>

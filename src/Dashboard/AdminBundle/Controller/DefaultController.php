@@ -1223,9 +1223,11 @@ class DefaultController extends Controller
                     array('toppage' => 'A1',
                           'rightcolumn' => 'B1',
                           'centerpage' => 'C1',
+                          'slider' => 'A6',
                           'defaulttop' => 'A1 по умолчанию',
                           'defaultright' => 'B1 по умолчанию',
-                          'defaultcenter' => 'C1 по умолчанию'), 
+                          'defaultcenter' => 'C1 по умолчанию',
+                          'defaultslider' => 'A6 по умолчанию',), 
                     'data' => $banner->getPosition(), 'label' => 'Позиция баннера', 'attr' => array('class' => 'form-control')))
                 ->add('dateFrom', DateType::class, array('required' => false, 'label' => 'Дата начала отображения', 'attr' => array('class' => 'form-control')))
                 ->add('dateTo', DateType::class, array('required' => false, 'label' => 'Дата окончания отображения', 'attr' => array('class' => 'form-control')))

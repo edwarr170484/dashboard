@@ -1,0 +1,121 @@
+<form action="" method="POST" id="categoryFilterForm">
+    <div role="tabpanel" class="tab-pane active" id="home">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 static-filters hidden-sm hidden-xs">
+                <div class="filter">
+                    <input name="searchNew" type="checkbox" value="1" class="custom-checkbox"  /> {% trans %}Новые{% endtrans %}
+                </div>
+                <div class="filter">
+                    <input name="searchOld" type="checkbox" value="1" class="custom-checkbox"  /> {% trans %}С пробегом{% endtrans %}
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3">
+                        {% if category.children | length > 0 %}
+                            <select name="category" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" multiple="multiple" onchange="sendFiltersForm()">
+                                {% for child in category.children %}
+                                    <option value="{{ path('category', {'categoryName' : category.name }) }}">
+                                        {{ child.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        {% endif %}
+                    </div>
+                    {% if formFilters | length > 0 %}
+                        {% for filter in formFilters %}
+                            {% if filter.isSearch %}
+                                {% if filter.type == 'select' %}
+                                    <div class="col-lg-3 col-md-3">
+                                        <select name="filter[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
+                                            {% for value in filter.values %}
+                                                <option value="{{ value.id }}">{{ value.value }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
+                                {% if filter.type == 'color' %}
+                                    <div class="col-lg-3 col-md-3">
+                                        <select name="filter[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
+                                            {% for value in filter.values %}
+                                                <option value="{{ value.id }}">{{ value.value }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                {% endif %}
+                                {% if filter.type == 'selectable' %}
+                                    <div class="col-lg-3 col-md-3">
+                                        <div class="filtersFromTo">
+                                            <input name="filterSelectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}от{% endtrans %}" />
+                                            <input name="filterSelectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}до{% endtrans %}" />
+                                        </div>
+                                    </div>  
+                                {% endif %}
+                                {% if filter.type == 'region_select' %}
+                                    <div class="col-lg-3 col-md-3">
+                                        <div class="filtersFromTo">
+                                            <select name="filterRangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}, {% trans %}от{% endtrans %}" onchange="sendFiltersForm()">
+                                                {% for value in filter.values %}
+                                                    <option value="{{ value.id }}">{{ value.value }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <select name="filterRangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }} {% trans %}до{% endtrans %}" onchange="sendFiltersForm()">
+                                                {% for value in filter.values %}
+                                                    <option value="{{ value.id }}">{{ value.value }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>  
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if category.isShowPriceFilter %}
+                        <div class="col-lg-3 col-md-3">
+                            <div class="filtersFromTo">
+                                <input name="filterSelectablePrice[]" value="" placeholder="{% trans %}Цена от{% endtrans %}" />
+                                <input name="filterSelectablePrice[]" value="" placeholder="{% trans %}до{% endtrans %}" />
+                            </div>
+                        </div>  
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-12 mainPageFiltersButtons">
+                <div class="mainPageFiltersSettings">
+                    <button class="showAllParameters">{% trans %}Все параметры{% endtrans %}<svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#EB840B"/>
+    </svg></button>
+                    <button class="clearFilters">{% trans %}Сбросить{% endtrans %}<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"/>
+    </svg>
+                    </button>
+                </div>
+                {% if productsTotalCount > 0 %}
+                    <div class="mainPageFiltersShowResults">
+                        <button type="submit">
+                            {% trans %}Показать{% endtrans %} <span id="categoryItemsNum">{{ productsTotalCount }}</span> {% trans %}предложений{% endtrans %}</button>
+                    </div>
+                {% else %}
+                    <div class="mainPageFiltersShowResults">
+                        <button type="submit">{% trans %}Предложений не найдено{% endtrans %}</button>
+                    </div>
+                {% endif %}
+                <script>
+                    $(document).ready(function(){
+                        $(".showAllParameters").click(function(){
+                            var svg = '<svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#EB840B"/></svg>';
+                            if($(this).hasClass("active")){
+                                $(".additionalFiltersBlock").fadeOut();
+                                $(this).html("{% trans %}Все параметры{% endtrans %}" + svg);
+                            }else{
+                                $(".additionalFiltersBlock").fadeIn();
+                                $(this).html("{% trans %}Свернуть{% endtrans %}" + svg);
+                            }
+                            $(this).toggleClass("active");
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>                                  
+</form>

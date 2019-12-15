@@ -30,11 +30,7 @@
 {% endif %}
 
 {% block title %}
-    {% if product.metaTagTitle%}
-        {{ product.metaTagTitle }}
-    {% else %}
-        {{ product.name }}
-    {% endif %}
+    {{ product.name }}
 {% endblock %}
 
 {% block topbanner %}
@@ -50,7 +46,7 @@
 {% endblock %}
 
 {% block metatags %}
-    <meta content="{{ product.metaTagDescription }}" name="description" />
+    <meta content="" name="description" />
     <meta content="" name="author" />
     <meta content="" name="robots" />
     <meta content="" name="keywords" />
@@ -129,7 +125,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 price">
-                    <div class="content-block-header"><h1>{{ product.price }} &euro;</h1></div>
+                    <div class="content-block-header"><h1>{{ product.info.price }} &euro;</h1></div>
                     <div class="creditRule">от 500 &euro;/мес.</div>
                 </div>
             </div>
@@ -294,7 +290,7 @@
                                             -Кожа Dakota Слоновая кость с эксклюзивным швом/контрастной окантовкой - Черый<br>
                                             -Сопртивные сидения для водителя и переднего пассажира
                                         </p>
-                                        {{ product.description | raw }}
+                                        {{ product.info.description | raw }}
                                     </div>
                                 </div>
                                 <div class="row">
@@ -804,7 +800,7 @@
                             <div class="advertSellerInfoInner">
                                 <div class="advertSellerInfoAdvertName">{{ product.name }}</div>
                                 <div class="price">
-                                    <div class="content-block-header"><h1>{{ product.price }} &euro;</h1></div>
+                                    <div class="content-block-header"><h1>{{ product.info.price }} &euro;</h1></div>
                                     <div class="creditRule">от 500 &euro;/мес.</div>
                                 </div>
                                 <div class="advertSellerName">OcasionPlus Las Rozas</div>

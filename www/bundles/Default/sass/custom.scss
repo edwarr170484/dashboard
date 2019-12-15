@@ -138,7 +138,7 @@ header{background: #fff;}
 .tab-pane .form-group .form-control{border-radius:0;margin-bottom:0.7rem;}
 .static-filters{@include fontView("GothamProRegular",$input-black,1.3rem,100%);@include flexBox(row,flex-start,center);}
 .checkbox-cover{@include border-radius(2px);}
-.static-filters .filter{margin-right: 3rem;@include flexBox(row,flex-start,center);}
+.static-filters .filter{margin-right: 3rem;@include flexBox(row,flex-start,center);margin-bottom: 1rem;}
 .mainPageFiltersButtons{@include flexBox(row,space-between,center);padding-top: 1rem;}
 .mainPageFiltersShowResults button{background: $yellow-color;border:none;@include border-radius(3px);@include fontView("GothamProRegular",#fff,1.4rem,100%);padding: 8px 4.5rem 6px;max-width: 220px;text-align: center;transition:$aTransition;}
 .mainPageFiltersShowResults button:hover,.mainPageFiltersShowResults button:focus{background: $orange-color;}
@@ -152,6 +152,7 @@ header{background: #fff;}
 .mainPageSitHeader h2{color:$black-text;}
 .siteInfoPane{background: $yellow-color;@include border-radius(9px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding-left: 2.4rem;margin-bottom: 5rem;min-height:240px;}
 .siteInfoPane.no-shadow{@include box-shadow(none);}
+.siteInfoPane.defaultBanner{@include flexBox(row,center,center);}
 .siteInfoPane:hover{background: $orange-color;}
 .siteInfoPaneInner{background: #fff;padding: 3.5rem 4.6rem;@include border-radius(0 9px 9px 0);position: relative;min-height:240px;}
 .innerHeader h4{color:$black-text;}
@@ -1333,5 +1334,6 @@ body.userAccount{background:#F9F9F9;}
 .rateActiveTime{position: absolute;top:0.7rem;left:1rem;@include fontView("GothamProMedium",$black-text,2.4rem,4rem);width: 3rem;height: 3rem;@include flexBox(row,center,center);}
 .advertAutoMarka{padding-bottom: 2rem;}
 .advertHeader{padding-bottom: 3rem;}
-.hidden-radio-parameter{position: absolute;top: 0;left: 0;width: 100%;height: 100%;@include opacity(0);z-index:1;margin-top: 0;pointer-events: none;}
+.hidden-radio-parameter{position: absolute;top: 0;left: 0;width: 100%;height: 100%;@include opacity(0);z-index:1;margin-top: 0;}
 input[type="radio"]{margin-top: 0;}
+ul.color li{position: relative;}

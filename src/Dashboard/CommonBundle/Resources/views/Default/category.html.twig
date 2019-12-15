@@ -27,32 +27,20 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if locale.isDefault %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% else %}
-                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                    {% endif %}
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
                     {% if categories %}
+                        {% set i = 0 %}
                         {% for cat in categories %}
                             <li>
-                                {% if  locale.isDefault %}
-                                    <a href="{{ path('category', {'_locale' : locale.code,'categoryName' : cat.name }) }}">
-                                {% else %}
-                                    <a href="{{ path('categoryLocale', {'_locale' : locale.code,'categoryName' : cat.name }) }}">
-                                {% endif %}
-                                    {% if cat.translations | length > 0 %}
-                                        {% for translation in cat.translations %}
-                                            {% if translation.locale.id == locale.id %}
-                                                {{ translation.value }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% else %}        
-                                        {{ cat.title}}
-                                    {% endif %}
+                                 <a href="{{ path('category', {'categoryName' : cat.name }) }}">
+                                    {{ cat.title}}
                                 </a>
                             </li>
+                            {% if i < categories  | length - 1 %}
+                                <li>/</li>
+                            {% endif %}
+                            {% set i = i + 1 %}
                         {% endfor %}
                     {% endif %}
                 </ul>
@@ -64,260 +52,11 @@
 	<div class="row content-row">
 		<div class="col-lg-9 col-md-9 left-column">
 			<div class="content-block-header">
-                            <h1>
-                                {% if category.translations | length > 0 %}
-                                    {% for translation in category.translations %}
-                                        {% if translation.locale.id == locale.id %}
-                                            {{ translation.value }}
-                                        {% endif %}
-                                    {% endfor %}
-                                {% else %}        
-                                    {{ category.title }}
-                                {% endif %}
-                            </h1>
+                            <h1>{{ category.title }}</h1>
                         </div>
                         <div class="mainPageFiltersTabs category-filters">
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active">
-                                    <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-                                        <svg width="45" height="22" viewBox="0 0 45 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M31.5304 17.9975C31.5304 20.2151 33.1952 21.9999 35.2636 21.9999C37.332 21.9999 38.9968 20.2151 38.9968 17.9975C38.9968 15.78 37.332 13.9951 35.2636 13.9951C33.1952 13.9951 31.4799 15.8341 31.5304 17.9975ZM33.0438 18.0516C33.0438 16.7535 34.0528 15.6718 35.2636 15.6718C36.4743 15.6718 37.4833 16.7535 37.4833 18.0516C37.4833 19.3497 36.4743 20.4314 35.2636 20.4314C34.0024 20.4314 32.9934 19.3497 33.0438 18.0516Z" fill="#616161"/>
-<path d="M0 14.8607V18.0518C0 18.4845 0.353139 18.8631 0.756726 18.8631H3.73318C4.18722 18.8631 4.54036 18.5385 4.48991 18.0518C4.48991 14.9688 6.86099 12.4268 9.73655 12.4268C12.6121 12.4268 14.9832 14.9688 14.9832 18.0518C14.9832 18.4845 15.3363 18.8631 15.7399 18.8631H29.2096C29.6637 18.8631 30.0168 18.5385 29.9664 18.0518C29.9664 14.9688 32.3374 12.4268 35.213 12.4268C38.0886 12.4268 40.4596 14.9688 40.4596 18.0518C40.4596 18.4845 40.8128 18.8631 41.2164 18.8631H44.2433C44.6469 18.8631 45 18.4845 45 18.0518V14.8607C45 14.428 44.6469 14.0494 44.2433 14.0494L44.1424 12.0482C44.0919 10.7501 43.4865 9.61426 42.4776 8.91113C40.5605 7.55896 37.2814 6.85584 34.1031 6.80175C29.815 1.23083 23.1054 -0.932637 14.2769 0.365442H14.2265C9.38341 1.28491 7.21413 4.04333 5.59978 6.90992L1.36211 8.42435C1.05942 8.53252 0.857624 8.80296 0.857624 9.18156V13.9953C0.403588 13.9953 0.100897 14.3739 0 14.8607ZM21.037 6.42314L21.0874 2.09621C21.0874 1.87987 21.2892 1.66352 21.491 1.71761C25.5269 2.09621 28.8061 3.55655 31.4294 6.09863C31.6816 6.36906 31.5303 6.80175 31.1771 6.80175H21.3901C21.1883 6.80175 21.037 6.63949 21.037 6.42314ZM11.9563 2.9616C11.9563 2.79934 12.0572 2.63708 12.2085 2.58299C12.8644 2.36665 13.5706 2.1503 14.3778 1.98804C16.0426 1.71761 17.657 1.60943 19.12 1.60943C19.3217 1.60943 19.4731 1.82578 19.4731 2.04213V6.42314C19.4731 6.63949 19.3217 6.80175 19.12 6.80175H12.4103C12.2085 6.80175 12.0572 6.63949 12.0572 6.42314L11.9563 2.9616ZM7.76906 6.15271C8.37444 5.23324 9.03027 4.53011 9.83744 3.88107C10.0897 3.71881 10.4428 3.88107 10.4428 4.20559L10.4933 6.36906C10.4933 6.63949 10.3419 6.80175 10.1401 6.80175H8.1222C7.81951 6.80175 7.66816 6.42314 7.76906 6.15271Z" fill="#616161"/>
-<path d="M6.05371 17.9975C6.05371 20.2151 7.71851 21.9999 9.7869 21.9999C11.8553 21.9999 13.5201 20.2151 13.5201 17.9975C13.5201 15.78 11.8553 13.9951 9.7869 13.9951C7.71851 13.9951 6.05371 15.8341 6.05371 17.9975ZM7.56716 18.0516C7.56716 16.7535 8.57613 15.6718 9.7869 15.6718C10.9977 15.6718 12.0066 16.7535 12.0066 18.0516C12.0066 19.3497 10.9977 20.4314 9.7869 20.4314C8.57613 20.4314 7.56716 19.3497 7.56716 18.0516Z" fill="#616161"/>
-</svg>
-                                        <span>{% trans %}Легковые{% endtrans %}</span><div class="shadowBlock"></div></a>
-                                </li>
-                                <li role="presentation">
-                                    <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
-                                        <svg width="41" height="22" viewBox="0 0 41 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M5.98563 13.936C2.71617 13.936 0 16.484 0 19.864C0 23.244 2.66587 26 5.93533 26C9.20479 26 11.8707 23.244 11.8707 19.864C11.8707 19.604 11.8707 19.344 11.8204 19.084L13.3293 18.408L15.8946 21.06C16.0455 21.216 16.1964 21.268 16.3976 21.268C16.5485 21.268 16.6994 21.216 16.8 21.164L23.2383 16.692C23.2383 16.692 23.2383 16.692 23.2886 16.64C25.2 14.924 27.9162 14.56 29.8779 14.56C30.1797 14.56 30.4815 14.612 30.7329 14.612C28.3689 17.316 24.9485 17.004 24.9485 17.004L22.0814 19.24H29.3246C29.2743 19.5 29.2743 19.708 29.2743 19.968C29.2743 23.348 31.7892 26 35.0587 26C38.3282 26 40.994 23.244 40.994 19.864C40.994 18.928 40.7425 17.94 40.3401 17.108C40.994 17.42 41.1952 16.848 40.7928 16.328C40.7928 16.328 38.9318 12.844 33.8012 13.572L35.3605 12.116C35.4611 12.012 35.5114 11.856 35.5617 11.7C35.6623 11.284 35.6623 10.92 35.7126 10.556H34.4551C33.3988 8.684 35.3102 7.384 35.3102 7.384C35.4611 7.592 35.5617 7.748 35.6623 7.956C35.3102 5.512 34.1533 3.744 33.097 2.6C31.4371 0.78 29.5761 0.104 29.5258 0.0519997C29.4755 -2.98321e-07 29.3246 0 29.2743 0C29.0228 0 28.8719 0.104 28.721 0.26C28.5701 0.468 28.5198 0.832 28.6707 1.092C29.4252 2.392 29.7773 3.328 29.9282 4.004L28.8719 3.796C28.5198 3.744 28.1677 4.004 28.1174 4.368C28.0671 4.732 28.3186 5.096 28.6707 5.148L29.9785 5.356C29.9785 5.46 29.9785 5.46 29.9282 5.512C29.6264 6.084 28.8719 6.136 28.5701 6.136C28.5198 6.136 28.5198 6.136 28.4695 6.136C25.7533 5.304 23.7916 4.992 23.7413 4.992C23.3892 4.992 22.9868 4.94 22.685 4.94C21.0252 4.94 19.5162 5.616 18.4096 6.864C17.9569 7.384 17.6551 7.904 17.4539 8.268C14.5868 7.904 12.9773 6.188 12.9773 6.188C12.8264 6.032 12.6755 5.98 12.4743 5.98L4.72815 6.032C4.47665 6.032 4.22515 6.188 4.17485 6.448L3.72216 7.384C3.52096 7.696 3.67186 8.112 4.02395 8.32L4.72815 8.684H3.92336C3.62156 8.684 3.37006 8.944 3.37006 9.256C3.37006 9.568 3.62156 9.828 3.92336 9.828H4.27545L2.01198 12.636C1.81078 12.896 1.86108 13.26 2.06228 13.468C2.16288 13.572 2.31377 13.624 2.41437 13.624C2.61557 13.624 2.76647 13.572 2.86707 13.416L5.73413 9.88H6.33773L7.59521 12.844L12.424 14.924V15.912L10.8647 16.588C9.80839 14.976 7.99761 13.936 5.98563 13.936ZM12.424 13.312L8.6515 11.7L8.04791 10.296L12.424 12.428V13.312ZM35.2096 23.296C33.4994 23.296 32.091 21.84 32.091 20.02C32.091 19.396 32.2922 18.772 32.594 18.252L33.8012 20.8L36.3162 19.5L35.0084 16.744C35.0587 16.744 35.1593 16.744 35.2096 16.744C36.9701 16.744 38.3785 18.2 38.3785 20.02C38.3785 21.84 36.9701 23.296 35.2096 23.296ZM5.98563 23.296C4.22515 23.296 2.86707 21.84 2.86707 20.072C2.86707 18.252 4.27545 16.796 6.03593 16.796C6.89102 16.796 7.64551 17.16 8.24911 17.732L5.63353 18.876L6.74012 21.528L9.1042 20.488C8.903 22.048 7.59521 23.296 5.98563 23.296Z" fill="#616161"/>
-</svg>
-                                        <span>{% trans %}Мотоциклы{% endtrans %}</span>
-                                    <div class="shadowBlock"></div></a></li>
-                                <li role="presentation">
-                                    <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><svg width="42" height="22" viewBox="0 0 42 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M18.3468 17.7109C17.3445 17.7109 16.5427 18.0703 15.8411 18.7376C15.1897 19.405 14.8389 20.329 14.8389 21.3557C14.8389 22.3824 15.1395 23.2551 15.8411 23.9738C16.5427 24.6411 17.3445 25.0005 18.3468 25.0005C19.349 25.0005 20.1508 24.6925 20.8524 23.9738C21.5039 23.3064 21.8547 22.3824 21.8547 21.3557C21.8547 20.329 21.554 19.4563 20.8524 18.7376C20.1508 18.0703 19.349 17.7109 18.3468 17.7109ZM16.9937 22.7417C16.6429 22.3824 16.4425 21.9204 16.4425 21.407C16.4425 20.8937 16.6429 20.4317 16.9937 20.0723C17.3445 19.713 17.7955 19.5077 18.3468 19.5077C18.8479 19.5077 19.349 19.713 19.6998 20.0723C20.0506 20.4317 20.2511 20.8937 20.2511 21.407C20.2511 21.9204 20.0506 22.3824 19.6998 22.7417C19.349 23.1011 18.898 23.3064 18.3468 23.3064C17.8456 23.3064 17.3445 23.1011 16.9937 22.7417Z" fill="#616161"/>
-<path d="M0.907403 3.23409C0.255934 4.10678 -0.0447437 5.0308 0.00536923 6.05749V17.9158C0.00536923 18.8398 0.35616 19.6612 1.00763 20.3799C1.6591 21.0472 2.41079 21.4066 3.26271 21.4066H13.9368C13.9368 20.1232 14.3377 19.0452 15.1896 18.1725C16.0415 17.2998 17.0939 16.8891 18.3467 16.8891C19.5995 16.8891 20.6519 17.2998 21.5038 18.1725C22.3557 19.0452 22.7566 20.1232 22.7566 21.4066H42V19.6612H36.8384C37.3395 19.6612 37.5901 19.0965 37.5901 17.9158V6.62218C37.5901 5.80082 37.4898 5.0308 37.1892 4.36345C36.8885 3.6961 36.5878 3.18275 36.237 2.82341C35.8862 2.46407 35.4853 2.15606 35.0343 1.84805C34.5833 1.54004 34.2325 1.38604 34.0822 1.3347L33.581 1.1807C32.9296 1.02669 30.8248 0.770021 27.3169 0.462013C23.809 0.154005 20.8523 0 18.3968 0C15.8411 0 12.8844 0.154005 9.57694 0.462013C6.3196 0.770021 4.31508 1.07803 3.6135 1.28337C2.4609 1.69405 1.55887 2.3614 0.907403 3.23409ZM25.4126 10.1643V6.10883C25.4126 5.59548 25.6131 5.39014 26.014 5.39014H31.7269C31.8772 5.39014 32.0275 5.44148 32.1779 5.59548C32.2781 5.69815 32.3783 5.90349 32.3783 6.05749V10.2669C32.3783 10.6263 32.1278 10.7803 31.6767 10.7803H25.9138C25.5128 10.7803 25.3124 10.5749 25.3124 10.1643H25.4126ZM4.31508 6.05749C4.31508 5.54415 4.56565 5.33881 5.01666 5.33881H17.7453C18.1462 5.33881 18.3467 5.59548 18.3467 6.05749V10.2669C18.3467 10.6263 18.1462 10.7803 17.7453 10.7803H5.01666C4.51553 10.7803 4.31508 10.6263 4.31508 10.2669V6.05749Z" fill="#616161"/>
-</svg>
-                                       <span> {% trans %}Автодома{% endtrans %}</span><div class="shadowBlock"></div></a></li>
-                                <li role="presentation">
-                                    <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab"><svg width="42" height="22" viewBox="0 0 42 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M30.1408 16.8494C28.1435 16.8494 26.5249 18.4535 26.5249 20.4246C26.5249 22.4 28.1435 23.9999 30.1408 23.9999C32.1386 23.9999 33.7546 22.3997 33.7546 20.4246C33.7546 18.4536 32.1387 16.8494 30.1408 16.8494ZM30.1408 22.08C29.218 22.08 28.4717 21.341 28.4717 20.4247C28.4717 19.512 29.218 18.7735 30.1408 18.7735C31.0635 18.7735 31.8106 19.512 31.8106 20.4247C31.8108 21.341 31.0635 22.08 30.1408 22.08Z" fill="#616161"/>
-<path d="M6.032 16.8494C4.03455 16.8494 2.41748 18.4535 2.41748 20.4246C2.41748 22.4 4.03455 23.9999 6.032 23.9999C8.02543 23.9999 9.64652 22.3997 9.64652 20.4246C9.64652 18.4536 8.02543 16.8494 6.032 16.8494ZM6.032 22.08C5.10727 22.08 4.35841 21.341 4.35841 20.4247C4.35841 19.512 5.10727 18.7735 6.032 18.7735C6.95263 18.7735 7.7019 19.512 7.7019 20.4247C7.7019 21.341 6.95263 22.08 6.032 22.08Z" fill="#616161"/>
-<path d="M41.309 0H11.0808C10.7017 0 10.3935 0.304092 10.3935 0.679987V4.58685C10.3935 4.95001 10.6807 5.16729 10.8646 5.16729H17.1935C17.437 5.16729 17.6428 5.30181 17.765 5.49499L16.7646 6.46714C16.6401 6.28094 16.441 6.15072 16.1994 6.15072H10.3935V6.22634H9.79652C9.41459 6.22634 9.10919 6.53026 9.10919 6.90932L6.69871 9.42165L2.06603 9.98732C1.68212 9.98732 1.37615 10.2876 1.37615 10.6673L0.917268 13.1045V15.5847C0.917268 15.8855 0.715882 16.1425 0.435173 16.229L0 19.0893C0 19.4647 0.308272 19.7726 0.687172 19.7726H1.08535V19.832H1.54259C1.59788 19.3931 1.71067 18.9704 1.87202 18.58C2.58495 17.011 4.17463 15.9131 6.03172 15.9131C6.64277 15.9131 7.22642 16.0358 7.75789 16.2528L7.80129 16.2096C9.15767 16.8691 10.1433 18.216 10.3415 19.8319H25.4846C25.7819 17.5483 27.7529 15.7785 30.1411 15.7785C32.5296 15.7785 34.4987 17.5483 34.7939 19.8319H41.3093C41.6931 19.8319 42 19.5275 42 19.1477V0.679744C41.9998 0.304092 41.6929 0 41.309 0ZM15.3986 9.41037C15.3986 9.78927 15.1066 10.0982 14.749 10.0982H9.33871C8.95563 10.0982 8.64785 9.79357 8.64785 9.41833L10.0259 7.93665C10.0259 7.55743 10.3335 7.25747 10.7137 7.25747H14.749C15.1066 7.25747 15.3986 7.56189 15.3986 7.94062V9.41037Z" fill="#616161"/>
-</svg>
-                                        <span>{% trans %}Коммерческие{% endtrans %}</span><div class="shadowBlock"></div></a></li>
-                            </ul>
                             <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane active" id="home">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 static-filters hidden-sm hidden-xs">
-                                            <div class="filter">
-                                                <input name="searchWithFoto" type="checkbox" value="1" class="custom-checkbox"  checked="checked" /> {% trans %}Новые авто{% endtrans %}
-                                            </div>
-                                            <div class="filter">
-                                                <input name="searchWithFoto" type="checkbox" value="1" class="custom-checkbox"  /> {% trans %}С пробегом{% endtrans %}
-                                            </div>
-                                            <div class="filter">
-                                                <input name="searchWithFoto" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}С фото{% endtrans %}
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="1" class="custom-select" id="" multiple="multiple" placeholder="Марка авто">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="2" class="custom-select" id="" placeholder="Марка авто">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3">
-                                            <select name="" class="custom-select" id="">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 additionalFiltersBlock">
-                                            <select name="" id="" class="custom-select">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 additionalFiltersBlock">
-                                            <select name="" id="" class="custom-select">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 additionalFiltersBlock">
-                                            <select name="" id="" class="custom-select">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 additionalFiltersBlock">
-                                            <select name="" id="" class="custom-select">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 additionalFiltersBlock">
-                                            <select name="" id="" class="custom-select">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-3 col-md-3 additionalFiltersBlock">
-                                            <select name="" id="" class="custom-select">
-                                                <option value="0">Марка авто</option>
-                                                <option value="1">Audi</option>
-                                                <option value="2">BMW</option>
-                                                <option value="3">Mersedes</option>
-                                                <option value="4">Toyota</option>
-                                            </select>
-                                        </div>
-                                            <div class="col-lg-12 mainPageFiltersButtons">
-                                                <div class="mainPageFiltersSettings">
-                                                    <button class="showAllParameters">{% trans %}Все параметры{% endtrans %}<svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#EB840B"/>
-</svg></button>
-                                                    <button class="clearFilters">{% trans %}Сбросить{% endtrans %}<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"/>
-</svg>
-                                                    </button>
-                                                </div>
-                                                <div class="mainPageFiltersShowResults">
-                                                    <button>{% trans %}Показать 150 666 предложений{% endtrans %}</button>
-                                                </div>
-                                                <script>
-                                                    $(document).ready(function(){
-                                                        $(".showAllParameters").click(function(){
-                                                            var svg = '<svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#EB840B"/></svg>';
-                                                            if($(this).hasClass("active")){
-                                                                $(".additionalFiltersBlock").fadeOut();
-                                                                $(this).html("{% trans %}Все параметры{% endtrans %}" + svg);
-                                                            }else{
-                                                                $(".additionalFiltersBlock").fadeIn();
-                                                                $(this).html("{% trans %}Свернуть{% endtrans %}" + svg);
-                                                            }
-                                                            $(this).toggleClass("active");
-                                                        });
-                                                    });
-                                                </script>
-                                            </div>
-                                    </div>
-                                </div>
-                                <div role="tabpanel" class="tab-pane" id="profile">...</div>
-                                <div role="tabpanel" class="tab-pane" id="messages">...</div>
-                                <div role="tabpanel" class="tab-pane" id="settings">...</div>
+                                {% include 'DashboardCommonBundle:Default:filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount} %}
                             </div>
                         </div>                              
                         <div class="hidden-sm hidden-xs" style="text-align:center;">
@@ -327,22 +66,12 @@
                                     <div class="categorySortFields">
                                         <div class="categorySortParams static-filters">
                                             <select name="" id="" class="custom-select" placeholder="{% trans %}По дате{% endtrans %}">
-                                                {% if locale.isDefault %}
-                                                    <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=dateAdded&order=ASC">{% trans %}Сначала старые{% endtrans %}</option>
-                                                    <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=dateAdded&order=DESC">{% trans %}Сначала новые{% endtrans %}</option>
-                                                {% else %}
-                                                    <option value="{{ path('categoryLocale',{'_locale' : locale.code,'categoryName' : category.name}) }}?sortorder=dateAdded&order=ASC">{% trans %}Сначала старые{% endtrans %}</option>
-                                                    <option value="{{ path('categoryLocale',{'_locale' : locale.code,'categoryName' : category.name}) }}?sortorder=dateAdded&order=DESC">{% trans %}Сначала новые{% endtrans %}</option>
-                                                {% endif %}
+                                                <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=dateAdded&order=ASC">{% trans %}Сначала старые{% endtrans %}</option>
+                                                <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=dateAdded&order=DESC">{% trans %}Сначала новые{% endtrans %}</option>
                                             </select>
                                             <select name="" id="" class="custom-select" placeholder="{% trans %}По цене{% endtrans %}">
-                                                {% if locale.isDefault %}
-                                                    <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=price&order=ASC">{% trans %}Сначала дешевые{% endtrans %}</option>
-                                                    <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=price&order=DESC">{% trans %}Сначала дорогие{% endtrans %}</option>
-                                                {% else %}
-                                                    <option value="{{ path('categoryLocale',{'_locale' : locale.code,'categoryName' : category.name}) }}?sortorder=price&order=ASC">{% trans %}Сначала дешевые{% endtrans %}</option>
-                                                    <option value="{{ path('categoryLocale',{'_locale' : locale.code,'categoryName' : category.name}) }}?sortorder=price&order=DESC">{% trans %}Сначала дорогие{% endtrans %}</option>
-                                                {% endif %}
+                                                <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=price&order=ASC">{% trans %}Сначала дешевые{% endtrans %}</option>
+                                                <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=price&order=DESC">{% trans %}Сначала дорогие{% endtrans %}</option>
                                             </select>
                                             <div class="filter">
                                                 <input name="searchWithFoto" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}В кредит{% endtrans %}
@@ -380,447 +109,58 @@
                                             </a>
                                         </div>
                                     </div>
-                                    {% if not premiumProducts %}
-                                    <div class="categoryAdvert premium">
-                                        <div class="categoryAdvertTop"></div>
-                                        <a href="/" class="categoryAdvertLink"></a>
-                                        {{ block('categoryAdvertShare') }}
-                                        <div class="categoryAdvertImages">
-                                            <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
-                                        </div>
-                                        <div class="categoryAdvertInfo">
-                                            <div class="categoryAdvertCommonInfo">
-                                                <div class="categoryAdvertMainInfo">
-                                                    <div class="categoryAdvertName">Mersedes Benz S-klasse VI (W222, C217) Рестайлинг </div>
-                                                    <div class="categoryAdvertTypes">
-                                                        <div class="categoryAdvertType">Кабриолет</div>
-                                                        <div class="categoryAdvertType">Новый</div>
-                                                        <div class="categoryAdvertType garant">
-                                                            Гарантия
-                                                            <div class="categoryAdvertGarantNum">7</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoFeatures">
-                                                        <div class="categoryAdvertInfoFeature">3.0 л/245 л.с./Дизель</div>
-                                                        <div class="categoryAdvertInfoFeature">Передний привод</div>
-                                                        <div class="categoryAdvertInfoFeature">Механика</div>
-                                                        <div class="categoryAdvertInfoFeature">Белый</div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoRegion">
-                                                        <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5.5 3.37939C5.10444 3.37939 4.71776 3.49265 4.38886 3.70483C4.05996 3.91702 3.80362 4.2186 3.65224 4.57145C3.50087 4.9243 3.46126 5.31257 3.53843 5.68716C3.6156 6.06174 3.80608 6.40582 4.08579 6.67588C4.36549 6.94594 4.72186 7.12985 5.10982 7.20436C5.49778 7.27887 5.89992 7.24063 6.26537 7.09447C6.63082 6.94832 6.94318 6.70081 7.16294 6.38325C7.3827 6.0657 7.5 5.69235 7.5 5.31043C7.5 4.79829 7.28929 4.30712 6.91422 3.94498C6.53914 3.58284 6.03043 3.37939 5.5 3.37939V3.37939ZM5.5 6.27595C5.30222 6.27595 5.10888 6.21932 4.94443 6.11323C4.77998 6.00714 4.65181 5.85634 4.57612 5.67992C4.50043 5.50349 4.48063 5.30936 4.51922 5.12207C4.5578 4.93477 4.65304 4.76274 4.79289 4.62771C4.93275 4.49268 5.11093 4.40072 5.30491 4.36346C5.49889 4.32621 5.69996 4.34533 5.88269 4.41841C6.06541 4.49149 6.22159 4.61524 6.33147 4.77402C6.44135 4.9328 6.5 5.11947 6.5 5.31043C6.5 5.5665 6.39464 5.81208 6.20711 5.99315C6.01957 6.17422 5.76522 6.27595 5.5 6.27595V6.27595Z" fill="#616161"/>
-    <path d="M5.5 0C4.04131 0 2.64236 0.559481 1.61091 1.55536C0.579463 2.55125 0 3.90195 0 5.31034C0 9.8531 5 13.2855 5.215 13.4303L5.5 13.6234L5.785 13.4303C6 13.2855 11 9.8531 11 5.31034C11 3.90195 10.4205 2.55125 9.38909 1.55536C8.35764 0.559481 6.95869 0 5.5 0ZM5.5 12.431C4.465 11.649 1 8.76207 1 5.31034C1 4.15802 1.47411 3.0529 2.31802 2.23809C3.16193 1.42327 4.30653 0.965517 5.5 0.965517C6.69347 0.965517 7.83807 1.42327 8.68198 2.23809C9.52589 3.0529 10 4.15802 10 5.31034C10 8.76207 6.535 11.649 5.5 12.431Z" fill="#616161"/>
-    </svg>
-                                                        Seville
-                                                    </div>
-                                                </div>
-                                                <div class="categoryAdvertInfoPrice">
-                                                    <div class="categoryAdvertPrice">
-                                                        195 000 &euro;
-                                                    </div>
-                                                    <div class="categoryAdvertCredit">от 7 500 &euro;/мес.</div>
-                                                </div>
-                                                <div class="categoryAdvertInfoYear">2019</div>
-                                                <div class="categoryAdvertInfoProbeg">1.000 км</div>
-                                            </div>
-                                            <div class="categoryAdvertDealerInfo">
-                                                <div class="categoryAdvertDealerName">
-                                                    <div class="categoryAdvertDealerNameInfo">
-                                                        <div class="categoryAdvertDealerLogo">
-                                                            <img src="{{ asset('bundles/Default/img/dealer.png') }}" alt="" title="" />
-                                                        </div>
-                                                        <div class="categoryAdverDealerTitle">Autohaus Exclusive GmbH & Co. KG</div>
-                                                        <div class="advertSellerRating category">
-                                                                <div class="advertSellerRatingStar"></div>
-                                                                <div class="advertSellerRatingStar"></div>
-                                                                <div class="advertSellerRatingStar"></div>
-                                                                <div class="advertSellerRatingStar half"></div>
-                                                                <div class="advertSellerRatingStar empty"></div>
-                                                                <div class="advertSellerRatingValue">(90)</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="categoryAdvertDealerAll">
-                                                        <a href="">Все объявления дилера</a>
-                                                        <span>(220)</span>
-                                                    </div>
-                                                </div>
-                                                <div class="categoryAdvertDealerContact">
-                                                    <a href="">{% trans %}Показать контакты{% endtrans %}</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% if premiumProducts | length > 0 %}
+                                        {% for product in premiumProducts %}
+                                            {% include 'DashboardCommonBundle:Default:products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : 'premium'} %}
+                                        {% endfor %}
                                     {% endif %}
                                 </div>
-                                <div class="categorySpecialAdverts">
-                                    <div class="categorySpecialAdvertsHeader">
-                                        <h3>{% trans %}Спецпредложения{% endtrans %}</h3>
-                                        <div class="categorySpecialAdvertsSliderNav" id="specialDealerAdvertsNav"></div>
-                                    </div>
-                                    <div class="categorySpecialAdvertsSlider owl-carousel" id="specialDealerAdverts">
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                {% if specialProducts | length > 0 %}
+                                    <div class="categorySpecialAdverts">
+                                        <div class="categorySpecialAdvertsHeader">
+                                            <h3>{% trans %}Спецпредложения{% endtrans %}</h3>
+                                            <div class="categorySpecialAdvertsSliderNav" id="specialDealerAdvertsNav"></div>
                                         </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
+                                        <div class="categorySpecialAdvertsSlider owl-carousel" id="specialDealerAdverts">
+                                            {% for product in specialProducts %}
+                                                <div class="categorySpecialAdvert">
+                                                    <div class="categorySpecialAdvertImage">
+                                                        <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
+                                                            {% if product.fotos | length > 0 %}
+                                                                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                            {% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="categorySpecialAdvertName">
+                                                        <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
+                                                            {{ product.name }} {{ product.info.generation.name }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="categorySpecialAdvertFeatures">
+                                                        <div class="categorySpecialAdvertFeature">{{ product.info.year }}, {% if product.info.shape %}{{ product.info.shape.title }}{% endif %}</div>
+                                                        <div class="categorySpecialAdvertFeature">
+                                                            {% if product.info.modification %}{{ product.info.modification.size }} /  {{ product.info.modification.power }} {% trans %}л.с.{% endtrans %}  / {% endif %} {% if product.info.gasType %} {{ product.info.gasType.value }}{% endif %}
+                                                        </div>
+                                                    </div>
+                                                        <div class="categorySpecialAdvertPrice">
+                                                            {{ product.info.price }} {{ locale.currency.label | raw }}
+                                                        </div>
+                                                </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
-                                </div>
+                                {% endif %}
                                 <div class="categoryAdverts {{ view }}">
-                                    <div class="categoryAdvertCover">
-                                        <div class="categoryAdvert payed">
-                                            <a href="#" class="categoryAdvertLink"></a>
-                                            {{ block('categoryAdvertShare') }}
-                                            <div class="categoryAdvertImages">
-                                                <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
-                                            </div>
-                                            <div class="categoryAdvertInfo">
-                                                <div class="categoryAdvertCommonInfo">
-                                                    <div class="categoryAdvertMainInfo">
-                                                        <div class="categoryAdvertName">Mersedes Benz S-klasse VI (W222, C217) Рестайлинг </div>
-                                                        <div class="categoryAdvertTypes">
-                                                            <div class="categoryAdvertType">Кабриолет</div>
-                                                            <div class="categoryAdvertType">Новый</div>
-                                                            <div class="categoryAdvertType garant">
-                                                                Гарантия
-                                                                <div class="categoryAdvertGarantNum">7</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoFeatures">
-                                                            <div class="categoryAdvertInfoFeature grid">2019, 1000 км</div>
-                                                            <div class="categoryAdvertInfoFeature">3.0 л/245 л.с./Дизель</div>
-                                                            <div class="categoryAdvertInfoFeature">Передний привод</div>
-                                                            <div class="categoryAdvertInfoFeature">Механика</div>
-                                                            <div class="categoryAdvertInfoFeature">Белый</div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoRegion">
-                                                            <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5.5 3.37939C5.10444 3.37939 4.71776 3.49265 4.38886 3.70483C4.05996 3.91702 3.80362 4.2186 3.65224 4.57145C3.50087 4.9243 3.46126 5.31257 3.53843 5.68716C3.6156 6.06174 3.80608 6.40582 4.08579 6.67588C4.36549 6.94594 4.72186 7.12985 5.10982 7.20436C5.49778 7.27887 5.89992 7.24063 6.26537 7.09447C6.63082 6.94832 6.94318 6.70081 7.16294 6.38325C7.3827 6.0657 7.5 5.69235 7.5 5.31043C7.5 4.79829 7.28929 4.30712 6.91422 3.94498C6.53914 3.58284 6.03043 3.37939 5.5 3.37939V3.37939ZM5.5 6.27595C5.30222 6.27595 5.10888 6.21932 4.94443 6.11323C4.77998 6.00714 4.65181 5.85634 4.57612 5.67992C4.50043 5.50349 4.48063 5.30936 4.51922 5.12207C4.5578 4.93477 4.65304 4.76274 4.79289 4.62771C4.93275 4.49268 5.11093 4.40072 5.30491 4.36346C5.49889 4.32621 5.69996 4.34533 5.88269 4.41841C6.06541 4.49149 6.22159 4.61524 6.33147 4.77402C6.44135 4.9328 6.5 5.11947 6.5 5.31043C6.5 5.5665 6.39464 5.81208 6.20711 5.99315C6.01957 6.17422 5.76522 6.27595 5.5 6.27595V6.27595Z" fill="#616161"/>
-        <path d="M5.5 0C4.04131 0 2.64236 0.559481 1.61091 1.55536C0.579463 2.55125 0 3.90195 0 5.31034C0 9.8531 5 13.2855 5.215 13.4303L5.5 13.6234L5.785 13.4303C6 13.2855 11 9.8531 11 5.31034C11 3.90195 10.4205 2.55125 9.38909 1.55536C8.35764 0.559481 6.95869 0 5.5 0ZM5.5 12.431C4.465 11.649 1 8.76207 1 5.31034C1 4.15802 1.47411 3.0529 2.31802 2.23809C3.16193 1.42327 4.30653 0.965517 5.5 0.965517C6.69347 0.965517 7.83807 1.42327 8.68198 2.23809C9.52589 3.0529 10 4.15802 10 5.31034C10 8.76207 6.535 11.649 5.5 12.431Z" fill="#616161"/>
-        </svg>
-                                                            Seville
-                                                        </div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoPrice">
-                                                        <div class="categoryAdvertPrice">
-                                                            <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.16671 16.6249V4.286L4.6965 8.5325C4.37129 8.84165 3.84337 8.84165 3.51816 8.5327C3.19275 8.22355 3.19275 7.72203 3.51816 7.41289L9.41066 1.81521C9.44941 1.7784 9.49212 1.74554 9.53754 1.71665C9.55858 1.70339 9.58129 1.69409 9.60316 1.68261C9.629 1.66954 9.65358 1.6545 9.68087 1.64401C9.709 1.63273 9.73816 1.6264 9.76733 1.61848C9.79046 1.61195 9.81233 1.60344 9.83629 1.59889C9.89025 1.5886 9.94504 1.58325 9.99983 1.58325C10.0005 1.58325 10.0011 1.58345 10.0017 1.58345C10.0557 1.58365 10.1098 1.58879 10.163 1.59889C10.188 1.60364 10.2111 1.61254 10.2357 1.61947C10.2634 1.62719 10.2915 1.63313 10.3184 1.64381C10.3473 1.65529 10.3736 1.67073 10.4009 1.68498C10.4213 1.69567 10.4421 1.70418 10.4617 1.71645C10.5077 1.74535 10.5507 1.7786 10.5896 1.81561L16.4815 7.41309C16.8069 7.72223 16.8069 8.22355 16.4817 8.5327C16.1563 8.84185 15.6288 8.84185 15.303 8.5327L10.8334 4.2862V16.6249C10.8334 17.0621 10.4602 17.4166 10 17.4166C9.53983 17.4166 9.16671 17.0621 9.16671 16.6249Z" fill="#EB840B"/>
-                                                            </svg>
-                                                            195 000 &euro;
-                                                        </div>
-                                                        <div class="categoryAdvertCredit">от 7 500 &euro;/мес.</div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoYear">2019</div>
-                                                    <div class="categoryAdvertInfoProbeg">1.000 км</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="categoryAdvertCover">
-                                        <div class="categoryAdvert payed">
-                                            <a href="#" class="categoryAdvertLink"></a>
-                                            {{ block('categoryAdvertShare') }}
-                                            <div class="categoryAdvertImages">
-                                                <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
-                                            </div>
-                                            <div class="categoryAdvertInfo">
-                                                <div class="categoryAdvertCommonInfo">
-                                                    <div class="categoryAdvertMainInfo">
-                                                        <div class="categoryAdvertName">Mersedes Benz S-klasse VI (W222, C217) Рестайлинг </div>
-                                                        <div class="categoryAdvertTypes">
-                                                            <div class="categoryAdvertType">Кабриолет</div>
-                                                            <div class="categoryAdvertType">Новый</div>
-                                                            <div class="categoryAdvertType garant">
-                                                                Гарантия
-                                                                <div class="categoryAdvertGarantNum">7</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoFeatures">
-                                                            <div class="categoryAdvertInfoFeature grid">2019, 1000 км</div>
-                                                            <div class="categoryAdvertInfoFeature">3.0 л/245 л.с./Дизель</div>
-                                                            <div class="categoryAdvertInfoFeature">Передний привод</div>
-                                                            <div class="categoryAdvertInfoFeature">Механика</div>
-                                                            <div class="categoryAdvertInfoFeature">Белый</div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoRegion">
-                                                            <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5.5 3.37939C5.10444 3.37939 4.71776 3.49265 4.38886 3.70483C4.05996 3.91702 3.80362 4.2186 3.65224 4.57145C3.50087 4.9243 3.46126 5.31257 3.53843 5.68716C3.6156 6.06174 3.80608 6.40582 4.08579 6.67588C4.36549 6.94594 4.72186 7.12985 5.10982 7.20436C5.49778 7.27887 5.89992 7.24063 6.26537 7.09447C6.63082 6.94832 6.94318 6.70081 7.16294 6.38325C7.3827 6.0657 7.5 5.69235 7.5 5.31043C7.5 4.79829 7.28929 4.30712 6.91422 3.94498C6.53914 3.58284 6.03043 3.37939 5.5 3.37939V3.37939ZM5.5 6.27595C5.30222 6.27595 5.10888 6.21932 4.94443 6.11323C4.77998 6.00714 4.65181 5.85634 4.57612 5.67992C4.50043 5.50349 4.48063 5.30936 4.51922 5.12207C4.5578 4.93477 4.65304 4.76274 4.79289 4.62771C4.93275 4.49268 5.11093 4.40072 5.30491 4.36346C5.49889 4.32621 5.69996 4.34533 5.88269 4.41841C6.06541 4.49149 6.22159 4.61524 6.33147 4.77402C6.44135 4.9328 6.5 5.11947 6.5 5.31043C6.5 5.5665 6.39464 5.81208 6.20711 5.99315C6.01957 6.17422 5.76522 6.27595 5.5 6.27595V6.27595Z" fill="#616161"/>
-        <path d="M5.5 0C4.04131 0 2.64236 0.559481 1.61091 1.55536C0.579463 2.55125 0 3.90195 0 5.31034C0 9.8531 5 13.2855 5.215 13.4303L5.5 13.6234L5.785 13.4303C6 13.2855 11 9.8531 11 5.31034C11 3.90195 10.4205 2.55125 9.38909 1.55536C8.35764 0.559481 6.95869 0 5.5 0ZM5.5 12.431C4.465 11.649 1 8.76207 1 5.31034C1 4.15802 1.47411 3.0529 2.31802 2.23809C3.16193 1.42327 4.30653 0.965517 5.5 0.965517C6.69347 0.965517 7.83807 1.42327 8.68198 2.23809C9.52589 3.0529 10 4.15802 10 5.31034C10 8.76207 6.535 11.649 5.5 12.431Z" fill="#616161"/>
-        </svg>
-                                                            Seville
-                                                        </div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoPrice">
-                                                        <div class="categoryAdvertPrice">
-                                                            <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.16671 16.6249V4.286L4.6965 8.5325C4.37129 8.84165 3.84337 8.84165 3.51816 8.5327C3.19275 8.22355 3.19275 7.72203 3.51816 7.41289L9.41066 1.81521C9.44941 1.7784 9.49212 1.74554 9.53754 1.71665C9.55858 1.70339 9.58129 1.69409 9.60316 1.68261C9.629 1.66954 9.65358 1.6545 9.68087 1.64401C9.709 1.63273 9.73816 1.6264 9.76733 1.61848C9.79046 1.61195 9.81233 1.60344 9.83629 1.59889C9.89025 1.5886 9.94504 1.58325 9.99983 1.58325C10.0005 1.58325 10.0011 1.58345 10.0017 1.58345C10.0557 1.58365 10.1098 1.58879 10.163 1.59889C10.188 1.60364 10.2111 1.61254 10.2357 1.61947C10.2634 1.62719 10.2915 1.63313 10.3184 1.64381C10.3473 1.65529 10.3736 1.67073 10.4009 1.68498C10.4213 1.69567 10.4421 1.70418 10.4617 1.71645C10.5077 1.74535 10.5507 1.7786 10.5896 1.81561L16.4815 7.41309C16.8069 7.72223 16.8069 8.22355 16.4817 8.5327C16.1563 8.84185 15.6288 8.84185 15.303 8.5327L10.8334 4.2862V16.6249C10.8334 17.0621 10.4602 17.4166 10 17.4166C9.53983 17.4166 9.16671 17.0621 9.16671 16.6249Z" fill="#EB840B"/>
-                                                            </svg>
-                                                            195 000 &euro;
-                                                        </div>
-                                                        <div class="categoryAdvertCredit">от 7 500 &euro;/мес.</div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoYear">2019</div>
-                                                    <div class="categoryAdvertInfoProbeg">1.000 км</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="categoryAdvertCover">
-                                        <div class="categoryAdvert">
-                                            <a href="#" class="categoryAdvertLink"></a>
-                                            {{ block('categoryAdvertShare') }}
-                                            <div class="categoryAdvertImages">
-                                                <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
-                                            </div>
-                                            <div class="categoryAdvertInfo">
-                                                <div class="categoryAdvertCommonInfo">
-                                                    <div class="categoryAdvertMainInfo">
-                                                        <div class="categoryAdvertName">Mersedes Benz S-klasse VI (W222, C217) Рестайлинг </div>
-                                                        <div class="categoryAdvertTypes">
-                                                            <div class="categoryAdvertType">Кабриолет</div>
-                                                            <div class="categoryAdvertType">Новый</div>
-                                                            <div class="categoryAdvertType garant">
-                                                                Гарантия
-                                                                <div class="categoryAdvertGarantNum">7</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoFeatures">
-                                                            <div class="categoryAdvertInfoFeature grid">2019, 1000 км</div>
-                                                            <div class="categoryAdvertInfoFeature">3.0 л/245 л.с./Дизель</div>
-                                                            <div class="categoryAdvertInfoFeature">Передний привод</div>
-                                                            <div class="categoryAdvertInfoFeature">Механика</div>
-                                                            <div class="categoryAdvertInfoFeature">Белый</div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoRegion">
-                                                            <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5.5 3.37939C5.10444 3.37939 4.71776 3.49265 4.38886 3.70483C4.05996 3.91702 3.80362 4.2186 3.65224 4.57145C3.50087 4.9243 3.46126 5.31257 3.53843 5.68716C3.6156 6.06174 3.80608 6.40582 4.08579 6.67588C4.36549 6.94594 4.72186 7.12985 5.10982 7.20436C5.49778 7.27887 5.89992 7.24063 6.26537 7.09447C6.63082 6.94832 6.94318 6.70081 7.16294 6.38325C7.3827 6.0657 7.5 5.69235 7.5 5.31043C7.5 4.79829 7.28929 4.30712 6.91422 3.94498C6.53914 3.58284 6.03043 3.37939 5.5 3.37939V3.37939ZM5.5 6.27595C5.30222 6.27595 5.10888 6.21932 4.94443 6.11323C4.77998 6.00714 4.65181 5.85634 4.57612 5.67992C4.50043 5.50349 4.48063 5.30936 4.51922 5.12207C4.5578 4.93477 4.65304 4.76274 4.79289 4.62771C4.93275 4.49268 5.11093 4.40072 5.30491 4.36346C5.49889 4.32621 5.69996 4.34533 5.88269 4.41841C6.06541 4.49149 6.22159 4.61524 6.33147 4.77402C6.44135 4.9328 6.5 5.11947 6.5 5.31043C6.5 5.5665 6.39464 5.81208 6.20711 5.99315C6.01957 6.17422 5.76522 6.27595 5.5 6.27595V6.27595Z" fill="#616161"/>
-        <path d="M5.5 0C4.04131 0 2.64236 0.559481 1.61091 1.55536C0.579463 2.55125 0 3.90195 0 5.31034C0 9.8531 5 13.2855 5.215 13.4303L5.5 13.6234L5.785 13.4303C6 13.2855 11 9.8531 11 5.31034C11 3.90195 10.4205 2.55125 9.38909 1.55536C8.35764 0.559481 6.95869 0 5.5 0ZM5.5 12.431C4.465 11.649 1 8.76207 1 5.31034C1 4.15802 1.47411 3.0529 2.31802 2.23809C3.16193 1.42327 4.30653 0.965517 5.5 0.965517C6.69347 0.965517 7.83807 1.42327 8.68198 2.23809C9.52589 3.0529 10 4.15802 10 5.31034C10 8.76207 6.535 11.649 5.5 12.431Z" fill="#616161"/>
-        </svg>
-                                                            Seville
-                                                        </div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoPrice">
-                                                        <div class="categoryAdvertPrice">
-                                                            <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.16671 16.6249V4.286L4.6965 8.5325C4.37129 8.84165 3.84337 8.84165 3.51816 8.5327C3.19275 8.22355 3.19275 7.72203 3.51816 7.41289L9.41066 1.81521C9.44941 1.7784 9.49212 1.74554 9.53754 1.71665C9.55858 1.70339 9.58129 1.69409 9.60316 1.68261C9.629 1.66954 9.65358 1.6545 9.68087 1.64401C9.709 1.63273 9.73816 1.6264 9.76733 1.61848C9.79046 1.61195 9.81233 1.60344 9.83629 1.59889C9.89025 1.5886 9.94504 1.58325 9.99983 1.58325C10.0005 1.58325 10.0011 1.58345 10.0017 1.58345C10.0557 1.58365 10.1098 1.58879 10.163 1.59889C10.188 1.60364 10.2111 1.61254 10.2357 1.61947C10.2634 1.62719 10.2915 1.63313 10.3184 1.64381C10.3473 1.65529 10.3736 1.67073 10.4009 1.68498C10.4213 1.69567 10.4421 1.70418 10.4617 1.71645C10.5077 1.74535 10.5507 1.7786 10.5896 1.81561L16.4815 7.41309C16.8069 7.72223 16.8069 8.22355 16.4817 8.5327C16.1563 8.84185 15.6288 8.84185 15.303 8.5327L10.8334 4.2862V16.6249C10.8334 17.0621 10.4602 17.4166 10 17.4166C9.53983 17.4166 9.16671 17.0621 9.16671 16.6249Z" fill="#EB840B"/>
-                                                            </svg>
-                                                            195 000 &euro;
-                                                        </div>
-                                                        <div class="categoryAdvertCredit">от 7 500 &euro;/мес.</div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoYear">2019</div>
-                                                    <div class="categoryAdvertInfoProbeg">1.000 км</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="categoryAdvertCover">
-                                        <div class="categoryAdvert">
-                                            <a href="#" class="categoryAdvertLink"></a>
-                                            {{ block('categoryAdvertShare') }}
-                                            <div class="categoryAdvertImages">
-                                                <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
-                                            </div>
-                                            <div class="categoryAdvertInfo">
-                                                <div class="categoryAdvertCommonInfo">
-                                                    <div class="categoryAdvertMainInfo">
-                                                        <div class="categoryAdvertName">Mersedes Benz S-klasse VI (W222, C217) Рестайлинг </div>
-                                                        <div class="categoryAdvertTypes">
-                                                            <div class="categoryAdvertType">Кабриолет</div>
-                                                            <div class="categoryAdvertType">Новый</div>
-                                                            <div class="categoryAdvertType garant">
-                                                                Гарантия
-                                                                <div class="categoryAdvertGarantNum">7</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoFeatures">
-                                                            <div class="categoryAdvertInfoFeature grid">2019, 1000 км</div>
-                                                            <div class="categoryAdvertInfoFeature">3.0 л/245 л.с./Дизель</div>
-                                                            <div class="categoryAdvertInfoFeature">Передний привод</div>
-                                                            <div class="categoryAdvertInfoFeature">Механика</div>
-                                                            <div class="categoryAdvertInfoFeature">Белый</div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoRegion">
-                                                            <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5.5 3.37939C5.10444 3.37939 4.71776 3.49265 4.38886 3.70483C4.05996 3.91702 3.80362 4.2186 3.65224 4.57145C3.50087 4.9243 3.46126 5.31257 3.53843 5.68716C3.6156 6.06174 3.80608 6.40582 4.08579 6.67588C4.36549 6.94594 4.72186 7.12985 5.10982 7.20436C5.49778 7.27887 5.89992 7.24063 6.26537 7.09447C6.63082 6.94832 6.94318 6.70081 7.16294 6.38325C7.3827 6.0657 7.5 5.69235 7.5 5.31043C7.5 4.79829 7.28929 4.30712 6.91422 3.94498C6.53914 3.58284 6.03043 3.37939 5.5 3.37939V3.37939ZM5.5 6.27595C5.30222 6.27595 5.10888 6.21932 4.94443 6.11323C4.77998 6.00714 4.65181 5.85634 4.57612 5.67992C4.50043 5.50349 4.48063 5.30936 4.51922 5.12207C4.5578 4.93477 4.65304 4.76274 4.79289 4.62771C4.93275 4.49268 5.11093 4.40072 5.30491 4.36346C5.49889 4.32621 5.69996 4.34533 5.88269 4.41841C6.06541 4.49149 6.22159 4.61524 6.33147 4.77402C6.44135 4.9328 6.5 5.11947 6.5 5.31043C6.5 5.5665 6.39464 5.81208 6.20711 5.99315C6.01957 6.17422 5.76522 6.27595 5.5 6.27595V6.27595Z" fill="#616161"/>
-        <path d="M5.5 0C4.04131 0 2.64236 0.559481 1.61091 1.55536C0.579463 2.55125 0 3.90195 0 5.31034C0 9.8531 5 13.2855 5.215 13.4303L5.5 13.6234L5.785 13.4303C6 13.2855 11 9.8531 11 5.31034C11 3.90195 10.4205 2.55125 9.38909 1.55536C8.35764 0.559481 6.95869 0 5.5 0ZM5.5 12.431C4.465 11.649 1 8.76207 1 5.31034C1 4.15802 1.47411 3.0529 2.31802 2.23809C3.16193 1.42327 4.30653 0.965517 5.5 0.965517C6.69347 0.965517 7.83807 1.42327 8.68198 2.23809C9.52589 3.0529 10 4.15802 10 5.31034C10 8.76207 6.535 11.649 5.5 12.431Z" fill="#616161"/>
-        </svg>
-                                                            Seville
-                                                        </div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoPrice">
-                                                        <div class="categoryAdvertPrice">
-                                                            <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.16671 16.6249V4.286L4.6965 8.5325C4.37129 8.84165 3.84337 8.84165 3.51816 8.5327C3.19275 8.22355 3.19275 7.72203 3.51816 7.41289L9.41066 1.81521C9.44941 1.7784 9.49212 1.74554 9.53754 1.71665C9.55858 1.70339 9.58129 1.69409 9.60316 1.68261C9.629 1.66954 9.65358 1.6545 9.68087 1.64401C9.709 1.63273 9.73816 1.6264 9.76733 1.61848C9.79046 1.61195 9.81233 1.60344 9.83629 1.59889C9.89025 1.5886 9.94504 1.58325 9.99983 1.58325C10.0005 1.58325 10.0011 1.58345 10.0017 1.58345C10.0557 1.58365 10.1098 1.58879 10.163 1.59889C10.188 1.60364 10.2111 1.61254 10.2357 1.61947C10.2634 1.62719 10.2915 1.63313 10.3184 1.64381C10.3473 1.65529 10.3736 1.67073 10.4009 1.68498C10.4213 1.69567 10.4421 1.70418 10.4617 1.71645C10.5077 1.74535 10.5507 1.7786 10.5896 1.81561L16.4815 7.41309C16.8069 7.72223 16.8069 8.22355 16.4817 8.5327C16.1563 8.84185 15.6288 8.84185 15.303 8.5327L10.8334 4.2862V16.6249C10.8334 17.0621 10.4602 17.4166 10 17.4166C9.53983 17.4166 9.16671 17.0621 9.16671 16.6249Z" fill="#EB840B"/>
-                                                            </svg>
-                                                            195 000 &euro;
-                                                        </div>
-                                                        <div class="categoryAdvertCredit">от 7 500 &euro;/мес.</div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoYear">2019</div>
-                                                    <div class="categoryAdvertInfoProbeg">1.000 км</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="categoryAdvertCover">
-                                        <div class="categoryAdvert payed">
-                                            <a href="#" class="categoryAdvertLink"></a>
-                                            {{ block('categoryAdvertShare') }}
-                                            <div class="categoryAdvertImages">
-                                                <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
-                                            </div>
-                                            <div class="categoryAdvertInfo">
-                                                <div class="categoryAdvertCommonInfo">
-                                                    <div class="categoryAdvertMainInfo">
-                                                        <div class="categoryAdvertName">Mersedes Benz S-klasse VI (W222, C217) Рестайлинг </div>
-                                                        <div class="categoryAdvertTypes">
-                                                            <div class="categoryAdvertType">Кабриолет</div>
-                                                            <div class="categoryAdvertType">Новый</div>
-                                                            <div class="categoryAdvertType garant">
-                                                                Гарантия
-                                                                <div class="categoryAdvertGarantNum">7</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoFeatures">
-                                                            <div class="categoryAdvertInfoFeature grid">2019, 1000 км</div>
-                                                            <div class="categoryAdvertInfoFeature">3.0 л/245 л.с./Дизель</div>
-                                                            <div class="categoryAdvertInfoFeature">Передний привод</div>
-                                                            <div class="categoryAdvertInfoFeature">Механика</div>
-                                                            <div class="categoryAdvertInfoFeature">Белый</div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoRegion">
-                                                            <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5.5 3.37939C5.10444 3.37939 4.71776 3.49265 4.38886 3.70483C4.05996 3.91702 3.80362 4.2186 3.65224 4.57145C3.50087 4.9243 3.46126 5.31257 3.53843 5.68716C3.6156 6.06174 3.80608 6.40582 4.08579 6.67588C4.36549 6.94594 4.72186 7.12985 5.10982 7.20436C5.49778 7.27887 5.89992 7.24063 6.26537 7.09447C6.63082 6.94832 6.94318 6.70081 7.16294 6.38325C7.3827 6.0657 7.5 5.69235 7.5 5.31043C7.5 4.79829 7.28929 4.30712 6.91422 3.94498C6.53914 3.58284 6.03043 3.37939 5.5 3.37939V3.37939ZM5.5 6.27595C5.30222 6.27595 5.10888 6.21932 4.94443 6.11323C4.77998 6.00714 4.65181 5.85634 4.57612 5.67992C4.50043 5.50349 4.48063 5.30936 4.51922 5.12207C4.5578 4.93477 4.65304 4.76274 4.79289 4.62771C4.93275 4.49268 5.11093 4.40072 5.30491 4.36346C5.49889 4.32621 5.69996 4.34533 5.88269 4.41841C6.06541 4.49149 6.22159 4.61524 6.33147 4.77402C6.44135 4.9328 6.5 5.11947 6.5 5.31043C6.5 5.5665 6.39464 5.81208 6.20711 5.99315C6.01957 6.17422 5.76522 6.27595 5.5 6.27595V6.27595Z" fill="#616161"/>
-        <path d="M5.5 0C4.04131 0 2.64236 0.559481 1.61091 1.55536C0.579463 2.55125 0 3.90195 0 5.31034C0 9.8531 5 13.2855 5.215 13.4303L5.5 13.6234L5.785 13.4303C6 13.2855 11 9.8531 11 5.31034C11 3.90195 10.4205 2.55125 9.38909 1.55536C8.35764 0.559481 6.95869 0 5.5 0ZM5.5 12.431C4.465 11.649 1 8.76207 1 5.31034C1 4.15802 1.47411 3.0529 2.31802 2.23809C3.16193 1.42327 4.30653 0.965517 5.5 0.965517C6.69347 0.965517 7.83807 1.42327 8.68198 2.23809C9.52589 3.0529 10 4.15802 10 5.31034C10 8.76207 6.535 11.649 5.5 12.431Z" fill="#616161"/>
-        </svg>
-                                                            Seville
-                                                        </div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoPrice">
-                                                        <div class="categoryAdvertPrice">
-                                                            <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.16671 16.6249V4.286L4.6965 8.5325C4.37129 8.84165 3.84337 8.84165 3.51816 8.5327C3.19275 8.22355 3.19275 7.72203 3.51816 7.41289L9.41066 1.81521C9.44941 1.7784 9.49212 1.74554 9.53754 1.71665C9.55858 1.70339 9.58129 1.69409 9.60316 1.68261C9.629 1.66954 9.65358 1.6545 9.68087 1.64401C9.709 1.63273 9.73816 1.6264 9.76733 1.61848C9.79046 1.61195 9.81233 1.60344 9.83629 1.59889C9.89025 1.5886 9.94504 1.58325 9.99983 1.58325C10.0005 1.58325 10.0011 1.58345 10.0017 1.58345C10.0557 1.58365 10.1098 1.58879 10.163 1.59889C10.188 1.60364 10.2111 1.61254 10.2357 1.61947C10.2634 1.62719 10.2915 1.63313 10.3184 1.64381C10.3473 1.65529 10.3736 1.67073 10.4009 1.68498C10.4213 1.69567 10.4421 1.70418 10.4617 1.71645C10.5077 1.74535 10.5507 1.7786 10.5896 1.81561L16.4815 7.41309C16.8069 7.72223 16.8069 8.22355 16.4817 8.5327C16.1563 8.84185 15.6288 8.84185 15.303 8.5327L10.8334 4.2862V16.6249C10.8334 17.0621 10.4602 17.4166 10 17.4166C9.53983 17.4166 9.16671 17.0621 9.16671 16.6249Z" fill="#EB840B"/>
-                                                            </svg>
-                                                            195 000 &euro;
-                                                        </div>
-                                                        <div class="categoryAdvertCredit">от 7 500 &euro;/мес.</div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoYear">2019</div>
-                                                    <div class="categoryAdvertInfoProbeg">1.000 км</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                            <div class="categoryAdvertCover">
-                                        <div class="categoryAdvert">
-                                            <a href="#" class="categoryAdvertLink"></a>
-                                            {{ block('categoryAdvertShare') }}
-                                            <div class="categoryAdvertImages">
-                                                <img src="{{ asset('bundles/Default/img/auto.png') }}" alt="" title="" />
-                                            </div>
-                                            <div class="categoryAdvertInfo">
-                                                <div class="categoryAdvertCommonInfo">
-                                                    <div class="categoryAdvertMainInfo">
-                                                        <div class="categoryAdvertName">Mersedes Benz S-klasse VI (W222, C217) Рестайлинг </div>
-                                                        <div class="categoryAdvertTypes">
-                                                            <div class="categoryAdvertType">Кабриолет</div>
-                                                            <div class="categoryAdvertType">Новый</div>
-                                                            <div class="categoryAdvertType garant">
-                                                                Гарантия
-                                                                <div class="categoryAdvertGarantNum">7</div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoFeatures">
-                                                            <div class="categoryAdvertInfoFeature grid">2019, 1000 км</div>
-                                                            <div class="categoryAdvertInfoFeature">3.0 л/245 л.с./Дизель</div>
-                                                            <div class="categoryAdvertInfoFeature">Передний привод</div>
-                                                            <div class="categoryAdvertInfoFeature">Механика</div>
-                                                            <div class="categoryAdvertInfoFeature">Белый</div>
-                                                        </div>
-                                                        <div class="categoryAdvertInfoRegion">
-                                                            <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M5.5 3.37939C5.10444 3.37939 4.71776 3.49265 4.38886 3.70483C4.05996 3.91702 3.80362 4.2186 3.65224 4.57145C3.50087 4.9243 3.46126 5.31257 3.53843 5.68716C3.6156 6.06174 3.80608 6.40582 4.08579 6.67588C4.36549 6.94594 4.72186 7.12985 5.10982 7.20436C5.49778 7.27887 5.89992 7.24063 6.26537 7.09447C6.63082 6.94832 6.94318 6.70081 7.16294 6.38325C7.3827 6.0657 7.5 5.69235 7.5 5.31043C7.5 4.79829 7.28929 4.30712 6.91422 3.94498C6.53914 3.58284 6.03043 3.37939 5.5 3.37939V3.37939ZM5.5 6.27595C5.30222 6.27595 5.10888 6.21932 4.94443 6.11323C4.77998 6.00714 4.65181 5.85634 4.57612 5.67992C4.50043 5.50349 4.48063 5.30936 4.51922 5.12207C4.5578 4.93477 4.65304 4.76274 4.79289 4.62771C4.93275 4.49268 5.11093 4.40072 5.30491 4.36346C5.49889 4.32621 5.69996 4.34533 5.88269 4.41841C6.06541 4.49149 6.22159 4.61524 6.33147 4.77402C6.44135 4.9328 6.5 5.11947 6.5 5.31043C6.5 5.5665 6.39464 5.81208 6.20711 5.99315C6.01957 6.17422 5.76522 6.27595 5.5 6.27595V6.27595Z" fill="#616161"/>
-        <path d="M5.5 0C4.04131 0 2.64236 0.559481 1.61091 1.55536C0.579463 2.55125 0 3.90195 0 5.31034C0 9.8531 5 13.2855 5.215 13.4303L5.5 13.6234L5.785 13.4303C6 13.2855 11 9.8531 11 5.31034C11 3.90195 10.4205 2.55125 9.38909 1.55536C8.35764 0.559481 6.95869 0 5.5 0ZM5.5 12.431C4.465 11.649 1 8.76207 1 5.31034C1 4.15802 1.47411 3.0529 2.31802 2.23809C3.16193 1.42327 4.30653 0.965517 5.5 0.965517C6.69347 0.965517 7.83807 1.42327 8.68198 2.23809C9.52589 3.0529 10 4.15802 10 5.31034C10 8.76207 6.535 11.649 5.5 12.431Z" fill="#616161"/>
-        </svg>
-                                                            Seville
-                                                        </div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoPrice">
-                                                        <div class="categoryAdvertPrice">
-                                                            <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M9.16671 16.6249V4.286L4.6965 8.5325C4.37129 8.84165 3.84337 8.84165 3.51816 8.5327C3.19275 8.22355 3.19275 7.72203 3.51816 7.41289L9.41066 1.81521C9.44941 1.7784 9.49212 1.74554 9.53754 1.71665C9.55858 1.70339 9.58129 1.69409 9.60316 1.68261C9.629 1.66954 9.65358 1.6545 9.68087 1.64401C9.709 1.63273 9.73816 1.6264 9.76733 1.61848C9.79046 1.61195 9.81233 1.60344 9.83629 1.59889C9.89025 1.5886 9.94504 1.58325 9.99983 1.58325C10.0005 1.58325 10.0011 1.58345 10.0017 1.58345C10.0557 1.58365 10.1098 1.58879 10.163 1.59889C10.188 1.60364 10.2111 1.61254 10.2357 1.61947C10.2634 1.62719 10.2915 1.63313 10.3184 1.64381C10.3473 1.65529 10.3736 1.67073 10.4009 1.68498C10.4213 1.69567 10.4421 1.70418 10.4617 1.71645C10.5077 1.74535 10.5507 1.7786 10.5896 1.81561L16.4815 7.41309C16.8069 7.72223 16.8069 8.22355 16.4817 8.5327C16.1563 8.84185 15.6288 8.84185 15.303 8.5327L10.8334 4.2862V16.6249C10.8334 17.0621 10.4602 17.4166 10 17.4166C9.53983 17.4166 9.16671 17.0621 9.16671 16.6249Z" fill="#EB840B"/>
-                                                            </svg>
-                                                            195 000 &euro;
-                                                        </div>
-                                                        <div class="categoryAdvertCredit">от 7 500 &euro;/мес.</div>
-                                                    </div>
-                                                    <div class="categoryAdvertInfoYear">2019</div>
-                                                    <div class="categoryAdvertInfoProbeg">1.000 км</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {% if upProducts | length > 0 %}
+                                        {% for product in upProducts %}
+                                            {% include 'DashboardCommonBundle:Default:products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if products | length > 0 %}
+                                        {% for product in products %}
+                                            {% include 'DashboardCommonBundle:Default:products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                                 {% if pagination and products | length > 0 %}
                                     <div class="row">
@@ -829,83 +169,46 @@
                                         </div>
                                     </div>
                                 {% endif %}
-                                <div class="categorySpecialAdverts new">
-                                    <div class="categorySpecialAdvertsHeader">
-                                        <h3>{% trans %}Новые автомобили от дилеров{% endtrans %}</h3>
-                                        <div class="categorySpecialAdvertsHeaderNew">
-                                            <a href="">{% trans %}Все предложения{% endtrans %}</a>
-                                            <div class="categorySpecialAdvertsSliderNav" id="newDealerAdvertsNav"></div>
+                                {% if dealerProducts | length > 0 %}
+                                    <div class="categorySpecialAdverts new">
+                                        <div class="categorySpecialAdvertsHeader">
+                                            <h3>{% trans %}Новые автомобили от дилеров{% endtrans %}</h3>
+                                            <div class="categorySpecialAdvertsHeaderNew">
+                                                {% if dealerProducts | length > 10 %}
+                                                    <a href="">{% trans %}Все предложения{% endtrans %}</a>
+                                                {% endif %}
+                                                <div class="categorySpecialAdvertsSliderNav" id="newDealerAdvertsNav"></div>
+                                            </div>
+                                        </div>
+                                        <div class="categorySpecialAdvertsSlider owl-carousel" id="newDealerAdverts">
+                                            {% for product in dealerProducts %}
+                                                <div class="categorySpecialAdvert">
+                                                    <div class="categorySpecialAdvertImage">
+                                                        <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
+                                                            {% if product.fotos | length > 0 %}
+                                                                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                            {% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="categorySpecialAdvertName">
+                                                        <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
+                                                            {{ product.name }} {{ product.info.generation.name }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="categorySpecialAdvertFeatures">
+                                                        <div class="categorySpecialAdvertFeature">{{ product.info.year }}, {% if product.info.shape %}{{ product.info.shape.title }}{% endif %}</div>
+                                                        <div class="categorySpecialAdvertFeature">
+                                                            {% if product.info.modification %}{{ product.info.modification.size }} /  {{ product.info.modification.power }} {% trans %}л.с.{% endtrans %}  / {% endif %} {% if product.info.gasType %} {{ product.info.gasType.value }}{% endif %}
+                                                        </div>
+                                                    </div>
+                                                        <div class="categorySpecialAdvertPrice">
+                                                            {{ product.info.price }} {{ locale.currency.label | raw }}
+                                                        </div>
+                                                </div>
+                                            {% endfor %}
                                         </div>
                                     </div>
-                                    <div class="categorySpecialAdvertsSlider owl-carousel" id="newDealerAdverts">
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                        <div class="categorySpecialAdvert">
-                                            <div class="categorySpecialAdvertImage">
-                                                <a href=""><img src="{{ asset('bundles/Default/img/special-auto.jpg') }}" alt="" title="" /></a>
-                                            </div>
-                                            <div class="categorySpecialAdvertName"><a href>BMW X5 II (E70) 30d</a></div>
-                                            <div class="categorySpecialAdvertFeatures">
-                                                <div class="categorySpecialAdvertFeature">2019, Новый</div>
-                                                <div class="categorySpecialAdvertFeature">1,4 л/82 л.с./Бензин</div>
-                                            </div>
-                                            <div class="categorySpecialAdvertPrice">40 165 &euro;</div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {% endif %}
                                 <div class="categoryDescription">
                                     {% if category.descriptions | length > 0 %}
                                         {% for translation in category.descriptions %}
@@ -916,9 +219,8 @@
                                     {% else %}
                                         {{ category.description | raw}}
                                     {% endif %}
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta, esse maiores vitae nisi illum dolorum sequi assumenda aperiam ipsam dolorem quo aliquid numquam eligendi rerum reiciendis totam quos at et iste iure fugit laudantium sunt velit quidem consectetur nemo iusto ex atque ipsa adipisci repellat in nam quia maxime autem dignissimos accusantium. Dicta, assumenda, dolore, ipsam quia praesentium eius quisquam aut voluptatibus reiciendis quam cum hic. Cupiditate, earum, excepturi, beatae totam ut fugit aliquam dolore explicabo ad soluta quos temporibus dignissimos quae nemo animi dolorem cumque dolor enim aspernatur corporis deserunt delectus quod ratione! Inventore, corporis, sequi dicta veniam quo eaque repudiandae minus eius porro ratione eos similique aliquid consequatur quae molestiae ipsa nam perferendis quibusdam quam mollitia minima debitis magnam laborum quisquam est doloremque facere aspernatur nemo dolorem error adipisci iste nulla quaerat. Magni, maiores, voluptate sapiente voluptatem inventore laborum odit est perspiciatis non pariatur reprehenderit dolore iure in expedita quas similique possimus dicta.</p>
                                 </div>
-                                            <div class="hidden-sm hidden-xs" style="text-align:center;padding-bottom: 5.8rem;">
+                                <div class="hidden-sm hidden-xs" style="text-align:center;padding-bottom: 5.8rem;">
                                     {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
                                 </div>
 		</div>

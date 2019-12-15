@@ -22,20 +22,13 @@ class SessionListener
         
         if($request->server->get('REQUEST_METHOD') == "POST" && $request->request->get('selectFilterRegionCity'))
         {
-            if(isset($request->request->get('regionFilter')["region"]))
+            if(isset($request->request->get('regionFilter')["name"]))
             {
-                $this->session->set('sessionRegion', $request->request->get('regionFilter')["region"]);
-                
+                $this->session->set('sessionCity', $request->request->get('regionFilter')["name"]);
             }
             
-            if(isset($request->request->get('regionFilter')["city"]))
+            if(!isset($request->request->get('regionFilter')["name"]))
             {
-                $this->session->set('sessionCity', $request->request->get('regionFilter')["city"]);
-            }
-            
-            if(!isset($request->request->get('regionFilter')["region"]) && !isset($request->request->get('regionFilter')["city"]))
-            {
-                $this->session->remove('sessionRegion');
                 $this->session->remove('sessionCity');
             }
         }

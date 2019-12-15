@@ -152,15 +152,15 @@
                                             {% if (product.category.yearTo - product.category.yearFrom) <= 10 %}
                                                 <ul class="list-unstyled list-inline years">
                                                     {% for i in product.category.yearTo .. product.category.yearFrom %}
-                                                        <li onclick="radioSetActive($(this))">
-                                                            <a href="javascript:void(0" onclick="getBoardTypesByYearEdit({{ i }},{{ product.id }})"  {% if i == product.info.year %}class="active"{% endif %}>{{ i }}</a>
+                                                        <li onclick="getBoardTypesByYearEdit({{ i }},{{ product.id }});radioSetActive($(this))">
+                                                            <a href="javascript:void(0"  {% if i == product.info.year %}class="active"{% endif %}>{{ i }}</a>
                                                             <input name="year[]" type="radio" class="hidden-radio-parameter" value="{{ i }}" {% if i == product.info.year %}checked="checked"{% endif %}/>
                                                         </li>
                                                     {% endfor %}
                                                 </ul>
                                             {% else %}
                                                 <ul class="list-unstyled list-inline years">
-                                                    {% for i in product.category.yearTo .. product.category.yearTo - 10 %}<li onclick="radioSetActive($(this))"><a href="javascript:void(0)" onclick="getBoardTypesByYearEdit({{ i }},{{ product.id }}, '{% trans %}Старше{% endtrans %}')" {% if i == product.info.year %}class="active"{% endif %}>{{ i }}</a>
+                                                    {% for i in product.category.yearTo .. product.category.yearTo - 10 %}<li onclick="getBoardTypesByYearEdit({{ i }},{{ product.id }}, '{% trans %}Старше{% endtrans %}');radioSetActive($(this))"><a href="javascript:void(0)" {% if i == product.info.year %}class="active"{% endif %}>{{ i }}</a>
                                                             <input name="year[]" type="radio" class="hidden-radio-parameter" value="{{ i }}" {% if i == product.info.year %}checked="checked"{% endif %}/>
                                                         </li>{% endfor %}
                                                     <li class="yearsOlder">
@@ -172,8 +172,8 @@
                                                         </a>
                                                         <div class="yearsOlderItems">
                                                             {% for i in product.category.yearTo - 11 .. product.category.yearFrom %}
-                                                                <div class="yearsOlderItem">
-                                                                    <a href="javascript:void(0)" onclick="getBoardTypesByOldYearEdit({{ i }},{{ product.id }}, $(this))">
+                                                                <div class="yearsOlderItem" onclick="getBoardTypesByOldYearEdit({{ i }},{{ product.id }}, $(this))">
+                                                                    <a href="javascript:void(0)">
                                                                         {{ i }}
                                                                     </a>
                                                                     <input name="year[]" type="radio" class="hidden-radio-parameter" value="{{ i }}" {% if i == product.info.year %}checked="checked"{% endif %}/>
@@ -232,8 +232,9 @@
                                                             <ul class="list-unstyled list-inline color">
                                                                 {% if filter.values | length > 0 %}
                                                                     {% for color in filter.values %}
-                                                                        <li>
-                                                                            <a href="javascript:void(0)" style="background-color: {{ color.additionalValue }}" title="{{ color.value }}" onclick="setColor({{ color.id }},'{{ locale.code }}',$(this))" {% if product.info.color.id == color.id %}class="active"{% endif %}></a>
+                                                                        <li onclick="setColorEdit({{ color.id }},{{ product.id }},$(this))">
+                                                                            <a href="javascript:void(0)" style="background-color: {{ color.additionalValue }}" title="{{ color.value }}"  {% if product.info.color.id == color.id %}class="active"{% endif %}></a>
+                                                                            <input name="color[]" type="radio" class="hidden-radio-parameter" value="{{ color.id }}"  {% if color.id == product.info.color.id %}checked="checked"{% endif %}/>
                                                                         </li>
                                                                     {% endfor %}
                                                                 {% endif %}
@@ -399,7 +400,7 @@
                                     <table class="table table-striped" id="advertFiltersItemsTable">
                                         <tr>
                                             <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %}</span></td>
-                                            <td><input type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" {% if product.info.probeg %}value="{{ product.info.probeg }}"{% endif %}/></td>
+                                            <td><input type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" {% if product.info.probeg %}value="{{ product.info.probeg }}"{% endif %} /></td>
                                             <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %}</span></td>
                                             <td>
                                                 <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}">

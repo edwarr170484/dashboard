@@ -107,7 +107,7 @@
                                             {% if sessionRegion %}
                                                 {{ sessionRegion.name }}
                                             {% else %}
-                                                {% trans %}Вся Испания{% endtrans %}
+                                                {% trans %}Испания{% endtrans %}
                                             {% endif %}
                                         {% endif %}
                                     </a>            
@@ -224,13 +224,15 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
-                {% if app.user %}
-                    <a href="{{path('addAdvert')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
-                {% else %}
-                    <a href="{{path('login')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
-                {% endif %}
-            </div>
+            {% if user and user.roles[0] != "ROLE_SERVICE" %}
+                <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
+                    {% if app.user %}
+                        <a href="{{path('addAdvert')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
+                    {% else %}
+                        <a href="{{path('login')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
+                    {% endif %}
+                </div>
+            {% endif %}
             <div class="siteMenuGamburgerMenu">
                             <button onclick='$(".siteMenuGamburgerMenu").hide();'>
                                 <svg width="26" height="15" viewBox="0 0 26 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -287,11 +289,13 @@
             </div>                             
         {% endfor %}
     </div>
-    <div class="addAdvertButtonMobile hidden-lg hidden-md">
-        {% if app.user %}
-            <a href="{{path('addAdvert')}}">{{ block('svgAddAdvertMobile') }}</a>
-        {% else %}
-            <a href="{{path('login')}}">{{ block('svgAddAdvertMobile') }}</a>
-        {% endif %}
-    </div>
+    {% if user and user.roles[0] != "ROLE_SERVICE" %}
+        <div class="addAdvertButtonMobile hidden-lg hidden-md">
+            {% if app.user %}
+                <a href="{{path('addAdvert')}}">{{ block('svgAddAdvertMobile') }}</a>
+            {% else %}
+                <a href="{{path('login')}}">{{ block('svgAddAdvertMobile') }}</a>
+            {% endif %}
+        </div>
+    {% endif %}
 </header>

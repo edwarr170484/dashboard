@@ -4,11 +4,14 @@
         <div class="advertFiltersItemValue">
             <div class="addAdvertModifications">
                 {% for modification in modifications %}
-                    <div class="addAdvertModification {% if modification.id == product.info.modification.id %}active{% endif %}" onclick="$(this).parent().find('.addAdvertModification').each(function(){$(this).removeClass('active');});$(this).addClass('active');">
+                    <div class="addAdvertModification {% if modification.id == advertInfo.info.modification.id %}active{% endif %}" onclick="$(this).parent().find('.addAdvertModification').each(function(){$(this).removeClass('active');});$(this).addClass('active');$('.cookieAlertButton.nextStep').removeClass('hide');">
                         <div class="addAdvertModificationParam power">{{ modification.power }} {% trans %}л.с.{% endtrans %}</div>
                         <div class="addAdvertModificationParam size">{{ modification.size }}</div>
                         <div class="addAdvertModificationParam label">{{ modification.label }}</div>
-                        <input name="modification[]" type="radio" class="hidden-radio-parameter" value="{{ modification.id }}" {% if modification.id == product.info.modification.id %}checked="checked"{% endif %} />
+                        <input name="modification[]" type="radio" class="hidden-radio-parameter" value="{{ modification.id }}" {% if modification.id == advertInfo.info.modification.id %}checked="checked"{% endif %} />
+                        {% if modification.id == advertInfo.info.modification.id %}
+                            <script>$('.cookieAlertButton.nextStep').removeClass('hide');</script>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>

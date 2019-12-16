@@ -365,3 +365,19 @@ function addAutoserviceRate(salonId, rateId, ratePrice, element, titleText, butt
             }
         });
 }
+function getModalSearchResults(element){
+    $.ajax({
+        url: '/search/ajax',
+        dataType: 'html',
+        data: element,
+        method:"POST",
+        beforeSend: function(){},
+        success: function(data){
+            $(".modalSearchResult").remove();
+            $(".searchBlock").after(data);    
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}

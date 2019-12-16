@@ -864,14 +864,14 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-success alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Panākumi!</strong> Jūsu pasūtījums ir nosūtīts reklāmas īpašniekam. Viņš sazināsies ar tevi cik drīz vien iespējams.') . '</div>'
+                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваш заказ отправлен владельцу объявления. Он свяжется с Вами в ближайшее время.') . '</div>'
                     );
                     
                     //send information about new order to sellers email
                     if($product->getUser()->getAlerts())
                     {
                         $message = \Swift_Message::newInstance()
-                        ->setSubject('Поступил заказ на сайте gribupardot.sunweb.by')
+                        ->setSubject('Поступил заказ на сайте ' . $settings->getSiteName())
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($product->getUser()->getEmail())
                         ->setBody(
@@ -891,7 +891,7 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Kļūda! </strong> Šī reklāma pieder jums. Jūs nevarat pasūtīt sevi.') . '</div>'
+                        $this->get('translator')->trans('<strong>Ошибка!</strong> Это объявление принадлежит Вам. Вы не можете заказывать сами у себя.') . '</div>'
                     );
                 }
                 
@@ -908,7 +908,7 @@ class DefaultController extends Controller
         if($friendMessageForm->isSubmitted() && $friendMessageForm->isValid())
         {
                 $message = \Swift_Message::newInstance()
-                ->setSubject('Ссылка на объявление на сайте gribupardot.sunweb.by')
+                ->setSubject('Ссылка на объявление на сайте ' . $settings->getSiteName())
                 ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                 ->setTo(array($friendMessageForm['friendemail']->getData() => $friendMessageForm['friendname']->getData()))
                 ->setBody(
@@ -926,7 +926,7 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-success alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                        $this->get('translator')->trans('<strong>Veiksmīga!</strong> Ziņojums tika nosūtīts draugam norādītajā e-pasta adresē.') . '</div>'
+                        $this->get('translator')->trans('<strong>Успешно!</strong> Сообщение отправлено другу на указанный электронный адрес.') . '</div>'
                 );
                 
                 return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
@@ -953,7 +953,7 @@ class DefaultController extends Controller
                     $manager->flush();
                     
                     $message = \Swift_Message::newInstance()
-                    ->setSubject('Жалоба на объявление на сайте gribupardot.sunweb.by')
+                    ->setSubject('Жалоба на объявление на сайте ' . $settings->getSiteName())
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($settings->getAdminEmail())
                     ->setBody(
@@ -971,7 +971,7 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-success alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Veiksmīgi!</strong> Jūsu sūdzība ir reģistrēta un drīz tiks pārskatīta.') . '</div>'
+                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваша жалоба зарегистрирована и будет рассмотрена в ближайшее время.') . '</div>'
                     );
                     
                     $productComplaints = $manager->getRepository("DashboardCommonBundle:Complaint")->findByProduct($product);
@@ -981,7 +981,7 @@ class DefaultController extends Controller
                         $product->setIsActive(false);
                         $product->setIsConfirm(false);
                         $product->setIsCorrect(true);
-                        $product->setCorrectReason($this->get('translator')->trans("Sūdzību skaits par reklāmu ir vairāk nekā 10"));
+                        $product->setCorrectReason($this->get('translator')->trans("Количество жалоб на объявление больше 10"));
                         
                         $manager->persist($product);
                         $manager->flush();
@@ -1014,7 +1014,7 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs nevarat sūdzēties par savu reklāmu.') . '</div>'
+                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете жаловаться на свое объявление.') . '</div>'
                     );
                 }
                 
@@ -1043,7 +1043,7 @@ class DefaultController extends Controller
                                 'notice',
                                 '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                                $this->get('translator')->trans('<strong>Kļūda!</strong> Šis lietotājs ir pievienojis jūs melnajam sarakstam.') . '</div>'
+                                $this->get('translator')->trans('<strong>Ошибка!</strong> Этот пользователь добавил Вас в черный список.') . '</div>'
                             );
 
                         return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
@@ -1106,7 +1106,7 @@ class DefaultController extends Controller
                     if($product->getUser()->getAlerts())
                     {
                         $messageSent = \Swift_Message::newInstance()
-                            ->setSubject('Новое сообщение на сайте gribupardot.sunweb.by')
+                            ->setSubject('Новое сообщение на сайте ' . $settings->getSiteName())
                             ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                             ->setTo($product->getUser()->getEmail())
                             ->setBody(
@@ -1125,7 +1125,7 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-success alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                        $this->get('translator')->trans('<strong>Veiksmīga!</strong> Augstāk minēto ziņojumu nosūtīja reklāmas īpašniekam.') . '</div>'
+                        $this->get('translator')->trans('<strong>Успешно!</strong> Выше сообщение отправлено владельцу объявления.') . '</div>'
                     );
                 }
                 else
@@ -1134,7 +1134,7 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                        $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs nevarat nosūtīt ziņu sev.') . '</div>'
+                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете отправить сообщение самому себе.') . '</div>'
                     );
                 }
                 
@@ -1153,7 +1153,7 @@ class DefaultController extends Controller
                             'notice',
                             '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                                $this->get('translator')->trans('<strong>Kļūda!</strong> Šis lietotājs ir pievienojis jūs melnajam sarakstam.') . '</div>'
+                                $this->get('translator')->trans('<strong>Ошибка!</strong> Этот пользователь добавил Вас в черный список.') . '</div>'
                         );
                     
                     return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
@@ -1199,7 +1199,7 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-success alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Veiksmīga!</strong> Jūsu ziņa ir nosūtīta.') . '</div>'
+                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваше сообщение отправлено.') . '</div>'
                     );
                     
                 }
@@ -1208,7 +1208,7 @@ class DefaultController extends Controller
                         'notice',
                         '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs nevarat ziņot sev.') . '</div>'
+                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете писать сообщения себе.') . '</div>'
                     );
                 }
                 
@@ -1353,31 +1353,14 @@ class DefaultController extends Controller
     
     /**
      * @Route("/search", name="search")
-     * @Route("/{_locale}/search", name="searchLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function searchAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        $selltypes = $manager->getRepository("DashboardCommonBundle:Selltype")->findAll();
         
-        if($this->get('session')->get('sessionRegion'))
-        {
-            $region = $manager->getRepository("DashboardCommonBundle:Region")->find($this->get('session')->get('sessionRegion'));
-        }
-        else
-            $region = 0;
-        
-        if($this->get('session')->get('sessionCity'))
-        {
-            $city = $manager->getRepository("DashboardCommonBundle:City")->find($this->get('session')->get('sessionCity'));
-        }
-        else
-            $city = 0;
         $view = ($this->get('session')->get('viewCategory')) ? $this->get('session')->get('viewCategory') : 'table';
-        $regionFilterForm = $this->createForm(new RegionFilterType($locale, $region, $city), new Product());
-        $regionFilterForm->handleRequest($request);
         
         $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Page p WHERE p.locale=" . $locale->getId() . " AND p.isUserpage = 0 AND p.route = 'search'" );
 
@@ -1388,126 +1371,15 @@ class DefaultController extends Controller
             $page = 0;
         }
         
-        $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Category c WHERE c.parent IS NULL");
-        
-        try{
-            $allcategories = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $allcategories = 0;
-        }
-        
-        $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
         $searchText = '';
         
-        $sql = "SELECT p,ps,pf FROM DashboardCommonBundle:Product p LEFT JOIN p.service ps LEFT JOIN p.filters pf LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isBlocked = 0 AND p.isActive = 1 AND p.isConfirm = 1";
-        
+        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isBlocked = 0 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0";
 
         if($request->request->get('searchText'))
         {
             $sql .= " AND (p.name LIKE '%" . $request->request->get('searchText') . "%'";
             $sql .= " OR p.description LIKE '%" . $request->request->get('searchText') . "%')";
-        }
-        
-        if($request->request->get('searchCategory'))
-        {
-            $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->findOneByName($request->request->get('searchCategory'));
-            
-            if($searchCategory)
-            {
-                if($searchCategory->getChildren())
-                {
-                    $sql .= " AND (p.category = " . $searchCategory->getId();
-                    foreach($searchCategory->getChildren() as $child)
-                    {
-                        $sql .= " OR p.category = " . $child->getId();
-                        $sql .= $this->createCategorySql($child); 
-
-                    }
-                    $sql .= ")";
-                }
-                else
-                   $sql .= " AND p.category = " . $searchCategory->getId(); 
-            }
         } 
-        
-        if(!$request->isXmlHttpRequest())
-        {
-            if($regionFilterForm['regionFilter']->getData())
-            {
-                $sql .= " AND p.region = " . $regionFilterForm['regionFilter']->getData()->getId();
-            }
-            else
-            {
-                if($this->get('session')->has('sessionRegion') && $this->get('session')->get('sessionRegion') != "")
-                {
-                    $sql .= " AND p.region = " . $this->get('session')->get('sessionRegion');
-                }
-            }
-
-            if($regionFilterForm['cityFilter']->getData())
-            {
-                $sql .= " AND p.city = " . $regionFilterForm['cityFilter']->getData()->getId();
-            }
-            else
-            {
-                if($this->get('session')->has('sessionCity') && $this->get('session')->get('sessionCity') != "")
-                {
-                    $sql .= " AND p.city = " . $this->get('session')->get('sessionCity');
-                }
-            }
-        }
-
-        if($request->request->get('searchWithFoto'))
-        {
-            $sql .= " AND p.mainfoto IS NOT NULL";
-        }
-        
-        if($request->request->get('searchIsBu'))
-        {
-            $sql .= " AND p.typebu = 1";
-        }
-        
-        if($request->request->get('filter'))
-        {
-            foreach($request->request->get('filter') as $key => $value)
-            {
-                if(is_array($value))
-                {
-                    foreach($value as $key => $val)
-                    {
-                        if($val != 0)
-                            $sql .= " AND pf.id = " . $val;
-                    }
-                }
-                else
-                {
-                   if($value != 0)
-                    $sql .= " AND pf.id = " . $value;
-                }
-            }
-        }
-        
-        if($request->query->get('sortorder') && $request->query->get('order'))
-        {
-            $sqlPremium = $sql . " AND ps.service = 1 ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');
-        
-            $sqlSelected = $sql . " AND ps.service = 2 ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');
-        
-            $sqlUp = $sql . " AND ps.service = 3 ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');
-        
-            $sql .= " AND p.viewcommon = 1 ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');
-        }
-        else 
-        {
-            $sqlPremium = $sql . " AND ps.service = 1 ORDER BY ps.dateAdded DESC";
-        
-            $sqlSelected = $sql . " AND ps.service = 2 ORDER BY ps.dateAdded DESC";
-        
-            $sqlUp = $sql . " AND ps.service = 3 ORDER BY ps.dateAdded DESC";
-        
-            $sql .= " AND p.viewcommon = 1 ORDER BY p.dateAdded DESC";
-        }
         
         $query = $manager->createQuery($sql);
         
@@ -1518,46 +1390,44 @@ class DefaultController extends Controller
             $products = 0;
         }
         
-        $query = $manager->createQuery($sqlPremium);
-        
-        try{
-            $premiumProducts = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $premiumProducts = 0;
-        }
-        
-        $query = $manager->createQuery($sqlSelected);
-        
-        try{
-            $selectedProducts = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $selectedProducts = 0;
-        }
-        
-        $query = $manager->createQuery($sqlUp);
-        
-        try{
-            $upProducts = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $upProducts = 0;
-        }
-        
-        return $this->render('DashboardCommonBundle:Default:search.html.twig', array('allcategories' => $allcategories,
-                                                                                     'allcities' => $allcities,
-                                                                                     'searchText' => $searchText,
+        return $this->render('DashboardCommonBundle:Default:Search/search.html.twig', array('searchText' => $searchText,
                                                                                      'products' => $products,
-                                                                                     'premiumProducts' => $premiumProducts,
-                                                                                     'selectedProducts' => $selectedProducts,
-                                                                                     'upProducts' => $upProducts,
-                                                                                     'selltypes' => $selltypes,
                                                                                      'pagination' => 0,
                                                                                      'locale' => $locale,
                                                                                      'settings' => $settings,
                                                                                      'page' => $page,
-                                                                                     'view' => $view,
-                                                                                     'regionFilterForm' => $regionFilterForm->createView()));
+                                                                                     'view' => $view));
+    }
+    
+    /**
+     * @Route("/search/ajax", name="searchAjax")
+     */
+    public function searchAjaxAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+
+        if($request->request->get('searchText'))
+        {
+            $sql = "SELECT p,pi FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu LEFT JOIN p.info pi WHERE pu.isActive = 1 AND p.isBlocked = 0 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0";
+            
+            $sql .= " AND (p.name LIKE '%" . $request->request->get('searchText') . "%'";
+            $sql .= " OR pi.description LIKE '%" . $request->request->get('searchText') . "%')";
+            
+            $query = $manager->createQuery($sql)->setMaxResults(8);
+        
+            try{
+                $products = $query->getResult();
+            }
+            catch(\Doctrine\ORM\NoResultException $e) {
+                $products = 0;
+            }
+        }else{
+            $products = 0;
+        }
+        
+        
+        
+        return $this->render('DashboardCommonBundle:Default:Search/searchAjax.html.twig', array('products' => $products,'locale' => $locale));
     }
 }

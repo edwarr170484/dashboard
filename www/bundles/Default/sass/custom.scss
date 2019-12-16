@@ -1338,3 +1338,6 @@ body.userAccount{background:#F9F9F9;}
 input[type="radio"]{margin-top: 0;}
 ul.color li{position: relative;}
 .advertAdditionalsItemsHeader{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}
+.modalSearchResult{padding-top: 4rem;background: #E7E7E7;width: 100%;}
+.categorySpecialAdverts.modalAdverts{@include flexBox(row,flex-start,flex-start);flex-wrap:wrap;}
+.categorySpecialAdverts.modalAdverts .categorySpecialAdvert{padding-right: 3rem;} 

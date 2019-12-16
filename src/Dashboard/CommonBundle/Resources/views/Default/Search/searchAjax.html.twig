@@ -1,0 +1,33 @@
+{% if products | length > 0 %}
+    <div class="modalSearchResult">
+        <div class="container">
+            <div class="categorySpecialAdverts new modalAdverts">
+                {% for product in products %}
+                    <div class="categorySpecialAdvert">
+                            <div class="categorySpecialAdvertImage">
+                                <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
+                                    {% if product.fotos | length > 0 %}
+                                        <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="categorySpecialAdvertName">
+                                <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
+                                    {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
+                                </a>
+                            </div>
+                            <div class="categorySpecialAdvertFeatures">
+                                <div class="categorySpecialAdvertFeature">{{ product.info.year }}, {% if product.info.shape %}{{ product.info.shape.title }}{% endif %}</div>
+                                <div class="categorySpecialAdvertFeature">
+                                    {% if product.info.modification %}{{ product.info.modification.size }} /  {{ product.info.modification.power }} {% trans %}л.с.{% endtrans %}  / {% endif %} {% if product.info.gasType %} {{ product.info.gasType.value }}{% endif %}
+                                </div>
+                            </div>
+                            <div class="categorySpecialAdvertPrice">
+                                {{ product.info.price }} {{ locale.currency.label | raw }}
+                            </div>
+                        </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

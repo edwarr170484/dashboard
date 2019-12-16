@@ -1264,7 +1264,7 @@
             </trans-unit>
             <trans-unit id="316">
                 <source><![CDATA[<strong>Panākumi!</strong> Jūsu pasūtījums ir nosūtīts reklāmas īpašniekam. Viņš sazināsies ar tevi cik drīz vien iespējams.]]></source>
-                <target><![CDATA[<strong>Успешно!</strong> Ваш заказ отправлено владельцу объявления. Он свяжется с Вами в ближайшее время.]]></target>
+                <target><![CDATA[<strong>Успешно!</strong> Ваш заказ отправлен владельцу объявления. Он свяжется с Вами в ближайшее время.]]></target>
             </trans-unit>
             <trans-unit id="317">
                 <source><![CDATA[<strong>Kļūda! </strong> Šī reklāma pieder jums. Jūs nevarat pasūtīt sevi.]]></source>

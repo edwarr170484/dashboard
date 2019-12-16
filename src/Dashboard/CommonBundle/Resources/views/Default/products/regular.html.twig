@@ -13,7 +13,7 @@
             <div class="categoryAdvertCommonInfo">
                 <div class="categoryAdvertMainInfo">
                     <div class="categoryAdvertName">
-                        {{ product.name }} {{ product.info.generation.name }}
+                        {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
                     </div>
                     <div class="categoryAdvertTypes">
                         {% if product.info.board %}<div class="categoryAdvertType">{{ product.info.board.value }}</div>{% endif %}

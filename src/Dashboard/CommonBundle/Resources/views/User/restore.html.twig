@@ -7,7 +7,7 @@
     <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 {%- endblock form_widget_simple -%}
 
-{% block title %}{% trans %}Atjaunot piekļuvi{% endtrans %}{% endblock %}
+{% block title %}{% trans %}Восстановление доступа{% endtrans %}{% endblock %}
 
 {% block body %}
 <script>
@@ -26,15 +26,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if  app.request.locale == 'lv' %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                        <li><a href="">{% trans %}Восстановление доступа{% endtrans %}</a></li>
-                    {% else %}
-                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                        <li><a href="">{% trans %}Восстановление доступа{% endtrans %}</a></li>
-                    {% endif %}
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li><a href="">{% trans %}Восстановление доступа{% endtrans %}</a></li>
                 </ul>
             </div>
         </div>
@@ -45,8 +39,7 @@
         <div class="row login-blocks">
             <div class="col-lg-5 col-md-5 col-md-offset-1">
                 <div class="loginBlock">
-                    {% if  app.request.locale == 'lv' %}
-                        {% if success %}
+                    {% if success %}
                             <div class="register-block result">
                                 <h1 class="register-block-header">{% trans %}Восстановление доступа{% endtrans %}</h1>
                                 <div class="register-block-description confirm-restore">
@@ -82,46 +75,7 @@
                                 </div>
                             </div>    
                         {% endif %}
-                    {% else %}
-                        {% if success %}
-                            <div class="register-block result">
-                                <h1 class="register-block-header">{% trans %}Восстановление доступа{% endtrans %}</h1>
-                                <div class="register-block-description confirm-restore">
-                                    {% trans %}Ссылка для восстановления пароля отправлена на почту{% endtrans %}
-                                </div>
-                                <div class="resultEmail">{{ email }}</div>
-                                <div class="resultNavigation"><a href="{{path('loginLocale', {'_locale' : app.request.locale})}}">Войдите</a>, если вспомнили пароль</div>
-                            </div>    
-                        {% else %}
-                            <div class="register-block">
-                                <h1 class="register-block-header">{% trans %}Восстановить доступ{% endtrans %}</h1>
-                                <div class="register-form-forms">
-                                    {{ form_start(resotreForm, {'method':'POST'}) }}
-                                        <div class="registerInputBlock">
-                                            {{ form_widget(resotreForm.email) }}
-                                            <div class="inputMessage">
-                                                {% if error %}
-                                                    {{ error | raw }}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        {% if settings.isShowCaptcha %}
-                                            <div class="register-password-block">
-                                                <div class="g-recaptcha" id="registerCaptcha"></div>
-                                            </div>
-                                        {% endif %}
-                                        {{ form_widget(resotreForm.save,{'type' : 'submit'})}}
-                                    {{ form_end(resotreForm)}}
-                                </div>
-                                <div class="forgotPassword">
-                                    {% trans %}или{% endtrans %}
-                                    <a class="registerUserLink" href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Войти{% endtrans %}</a>
-                                </div>
-                            </div>    
-                        {% endif %}
-                    {% endif %}
                 </div>
-                
             </div>
             <div class="col-lg-5 col-md-5">
                 <div class="socialLoginBlock">

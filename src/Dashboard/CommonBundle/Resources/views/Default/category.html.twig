@@ -133,7 +133,7 @@
                                                     </div>
                                                     <div class="categorySpecialAdvertName">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                                            {{ product.name }} {{ product.info.generation.name }}
+                                                            {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
                                                         </a>
                                                     </div>
                                                     <div class="categorySpecialAdvertFeatures">
@@ -192,7 +192,7 @@
                                                     </div>
                                                     <div class="categorySpecialAdvertName">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                                            {{ product.name }} {{ product.info.generation.name }}
+                                                            {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
                                                         </a>
                                                     </div>
                                                     <div class="categorySpecialAdvertFeatures">
@@ -210,15 +210,7 @@
                                     </div>
                                 {% endif %}
                                 <div class="categoryDescription">
-                                    {% if category.descriptions | length > 0 %}
-                                        {% for translation in category.descriptions %}
-                                            {% if translation.locale.id == locale.id %}
-                                                {{ translation.description | raw }}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% else %}
-                                        {{ category.description | raw}}
-                                    {% endif %}
+                                    {{ category.description | raw}}
                                 </div>
                                 <div class="hidden-sm hidden-xs" style="text-align:center;padding-bottom: 5.8rem;">
                                     {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}

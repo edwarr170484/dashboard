@@ -137,7 +137,6 @@ class OfficeController extends Controller
     
     /**
      * @Route("/services", name="services")
-     * @Route("/{_locale}/services", name="servicesLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function dealersAction(Request $request)
     {
@@ -159,8 +158,7 @@ class OfficeController extends Controller
     }
     
     /**
-     * @Route("/servicepage/{serviceName}", name="servicePage")
-     * @Route("/{_locale}/servicepage/{serviceName}", name="servicePageLocale", defaults={"_locale" : "es","serviceName" : 0}, requirements={"_locale" : "es|ru"})
+     * @Route("/servicepage/{serviceName}", name="servicePage", defaults={"serviceName" : 0})
      */
     public function servicePageAction($serviceName,Request $request)
     {

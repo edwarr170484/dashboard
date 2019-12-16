@@ -29,17 +29,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if locale.isDefault %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                        <li><a href="">{{ page.title }}</a></li>
-                    {% else %}
-                        <li><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                        <li>
-                            <a href="{% if locale.isDefault %}{{ path('dealerRegister') }}{% else %}{{ path('dealerRegisterLocale',{'_locale' : locale.code}) }}{% endif %}">{% trans %}Регистрация дилера{% endtrans %}</a>
-                        </li>
-                    {% endif %}
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li><a href="{{ path('dealerRegister') }}">{% trans %}Регистрация дилера{% endtrans %}</a></li>
                 </ul>
             </div>
         </div>

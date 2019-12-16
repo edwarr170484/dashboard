@@ -37,7 +37,7 @@
     {%- endif -%}
 {%- endblock form_errors -%}
 
-{% block title %}{% trans %}Jauna lietotāja reģistrācija{% endtrans %}{% endblock %}
+{% block title %}{% trans %}Регистрация{% endtrans %}{% endblock %}
 
 {% block body %}
 <script>
@@ -56,15 +56,9 @@
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if  app.request.locale == 'lv' %}
-                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                        <li><a href="">{% trans %}Регистрация{% endtrans %}</a></li>
-                    {% else %}
-                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Главная{% endtrans %}</a></li>
-                        <li>/</li>
-                        <li><a href="">{% trans %}Регистрация{% endtrans %}</a></li>
-                    {% endif %}
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li><a href="">{% trans %}Регистрация{% endtrans %}</a></li>
                 </ul>
             </div>
         </div>
@@ -75,8 +69,7 @@
         <div class="row login-blocks">
             <div class="col-lg-5 col-md-5 col-md-offset-1">
                 <div class="loginBlock">
-                    {% if  app.request.locale == 'lv' %}
-                            {% if success %}   
+                    {% if success %}   
                                 {% if settings.isModerate %}
                                     <div class="register-block result">
                                         <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
@@ -127,7 +120,7 @@
                                                     <div class="g-recaptcha" id="registerCaptcha"></div>
                                                 </div>
                                             {% endif %}
-                                            <button type="submit">{% trans %}Reģistrējies{% endtrans %}</button>
+                                            <button type="submit">{% trans %}Зарегистрироваться{% endtrans %}</button>
                                         {{ form_end(registerForm)}}
                                     </div>
                                     <div class="registerDescription">
@@ -135,67 +128,6 @@
                                     </div>
                                 </div>
                             {% endif %}
-                    {% else %}
-                            {% if success %}
-                                {% if settings.isModerate %}
-                                    <div class="register-block result">
-                                        <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
-                                        <div class="register-block-description confirm-restore">
-                                            {% trans %}Ваш аккаунт зарегистрирован в системе и проходит модерацию нашими специалистами. Регистрационные данные отправлены на введенный Вами email{% endtrans %}
-                                        </div>
-                                        <div class="resultEmail">{{ email }}</div>
-                                        <div class="resultNavigation"><a href="{{path('loginLocale', {'_locale' : app.request.locale})}}">Войдите</a>, используя свои данные</div>
-                                    </div>
-                                {% else %}
-                                    <div class="register-block result">
-                                        <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
-                                        <div class="register-block-description confirm-restore">
-                                            {% trans %}Ваш аккаунт успешно зарегистрирован в системе. Регистрационные данные отправлены на введенный Вами email{% endtrans %}
-                                        </div>
-                                        <div class="resultEmail">{{ email }}</div>
-                                        <div class="resultNavigation"><a href="{{path('loginLocale', {'_locale' : app.request.locale})}}">Войдите</a>, используя свои данные</div>
-                                    </div>    
-                                {% endif %}
-                            {% else %}
-                                <div class="register-block">
-                                    <h1 class="register-block-header"><a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Войти{% endtrans %}</a> {% trans %} или Зарегистрироваться{% endtrans %}</h1>
-                                            {% for flashMessage in app.session.flashbag.get('notice') %}
-                                                <div class="notice-message">
-                                                    {{ flashMessage | raw }}
-                                                </div>                             
-                                            {% endfor %}
-                                            {{form_errors(registerForm)}}
-                                    <div class="register-form-forms">
-                                        {{ form_start(registerForm, {'method':'POST'}) }}
-                                            <div class="registerInputBlock">
-                                                {{ form_widget(registerForm.username) }}
-                                                <div class="inputMessage"></div>
-                                            </div>
-                                            <div class="registerInputBlock">
-                                                {{ form_widget(registerForm.email) }}
-                                                <div class="inputMessage"></div>
-                                            </div>
-                                            <div class="registerInputBlock">
-                                                {{ form_widget(registerForm.link) }}
-                                            </div>
-                                            <div class="registerInputBlock">
-                                                {{ form_widget(registerForm.password) }}
-                                                <div class="inputMessage">{% trans %}Пароль должен содержать не менее 6 символов{% endtrans %}</div>
-                                            </div>
-                                            {% if settings.isShowCaptcha %}
-                                            <div class="register-password-block">
-                                                <div class="g-recaptcha" id="registerCaptcha"></div>
-                                            </div>
-                                            {% endif %}
-                                            <button type="submit">{% trans %}Reģistrējies{% endtrans %}</button>
-                                        {{ form_end(registerForm)}}
-                                    </div>
-                                    <div class="registerDescription">
-                                        {% trans %}Нажимая кнопку я соглашаюсь с <a href="">Условиями обслуживания</a> и  <a href="">Политикой конфиденциальности{% endtrans %}</a>
-                                    </div>
-                                </div>
-                            {% endif %}
-                    {% endif %}
                 </div>
             </div>
             <div class="col-lg-5 col-md-5">

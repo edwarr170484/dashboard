@@ -745,7 +745,7 @@ class DefaultController extends Controller
         
         $categories = array();
         
-        $product = $manager->getRepository("DashboardCommonBundle:Product")->findOneBy(array("id" => $productId, "isActive" => "1", "isConfirm" => "1", "isBlocked" => "0"));
+        $product = $manager->getRepository("DashboardCommonBundle:Product")->findOneBy(array("id" => $productId, "isActive" => "1", "isConfirm" => "1", "isBlocked" => "0", "isDraft" => "0"));
         
         if(!$product)
             throw $this->createNotFoundException();
@@ -754,8 +754,7 @@ class DefaultController extends Controller
         
         //crate product filters massive
         $productFilters = array();
-        
-        
+
         if($product->getFilters())
         {
             foreach($product->getFilters() as $filter)
@@ -896,19 +895,12 @@ class DefaultController extends Controller
                     );
                 }
                 
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-                else
-                {
-                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
+                return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
         }
         
         $friendMessageForm = $this->get('form.factory')->createNamedBuilder('friendmessage', 'form')
-                ->add('friendemail', EmailType::class, array('required' => true, 'label' => $this->get('translator')->trans('Drauga e-pasts: *'), 'attr' => array('class' => 'form-control')))
-                ->add('friendname', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('Drauga vārds: *'), 'attr' => array('class' => 'form-control')))
+                ->add('friendemail', EmailType::class, array('required' => true, 'label' => $this->get('translator')->trans('Email друга: *'), 'attr' => array('class' => 'form-control')))
+                ->add('friendname', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('Имя друга: *'), 'attr' => array('class' => 'form-control')))
                 ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
         
         $friendMessageForm->handleRequest($request);
@@ -937,20 +929,13 @@ class DefaultController extends Controller
                         $this->get('translator')->trans('<strong>Veiksmīga!</strong> Ziņojums tika nosūtīts draugam norādītajā e-pasta adresē.') . '</div>'
                 );
                 
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-                else
-                {
-                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
+                return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
         }
         
         $complaint = new Complaint();
         $complaintMessageForm = $this->get('form.factory')->createNamedBuilder('complaint', 'form', $complaint)
-                 ->add('username', TextType::class, array('required' => true, 'mapped' => false, 'label' => $this->get('translator')->trans('Jūsu vārds: *'), 'attr' => array('class' => 'form-control')))
-                 ->add('reason', TextareaType::class, array('required' => true,'label' => $this->get('translator')->trans('Pamatojums: *'), 'attr' => array('class' => 'form-control')))
+                 ->add('username', TextType::class, array('required' => true, 'mapped' => false, 'label' => $this->get('translator')->trans('Ваше имя: *'), 'attr' => array('class' => 'form-control')))
+                 ->add('reason', TextareaType::class, array('required' => true,'label' => $this->get('translator')->trans('Причина жалобы: *'), 'attr' => array('class' => 'form-control')))
                  ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
         
         $complaintMessageForm->handleRequest($request);
@@ -1019,14 +1004,7 @@ class DefaultController extends Controller
                             $this->get('mailer')->send($messageCorrect);
                         }
                         
-                        if($locale->getIsDefault())
-                        {
-                            return $this->redirectToRoute("main");
-                        }
-                        else
-                        {
-                            return $this->redirectToRoute("mainLocale", array("_locale" => $locale->getCode()));
-                        }
+                        return $this->redirectToRoute("main");
                     }
                     
                 }
@@ -1040,14 +1018,7 @@ class DefaultController extends Controller
                     );
                 }
                 
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-                else
-                {
-                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
+                return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
         }
         
         if($this->getUser())
@@ -1075,14 +1046,7 @@ class DefaultController extends Controller
                                 $this->get('translator')->trans('<strong>Kļūda!</strong> Šis lietotājs ir pievienojis jūs melnajam sarakstam.') . '</div>'
                             );
 
-                        if($locale->getIsDefault())
-                        {
-                            return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                        }
-                        else
-                        {
-                            return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                        }
+                        return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
                     }
                     
                     //check if conversation exists
@@ -1174,14 +1138,7 @@ class DefaultController extends Controller
                     );
                 }
                 
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-                else
-                {
-                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
+                return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
             }
             
             $profileMessageForm->handleRequest($request);
@@ -1199,14 +1156,7 @@ class DefaultController extends Controller
                                 $this->get('translator')->trans('<strong>Kļūda!</strong> Šis lietotājs ir pievienojis jūs melnajam sarakstam.') . '</div>'
                         );
                     
-                    if($locale->getIsDefault())
-                    {
-                        return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                    }
-                    else
-                    {
-                        return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                    }
+                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
                 }
                 
                 if($product->getUser()->getId() != $sessionUser->getId())
@@ -1262,14 +1212,7 @@ class DefaultController extends Controller
                     );
                 }
                 
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
-                else
-                {
-                    return $this->redirectToRoute("productLocale", array("_locale" => $locale->getCode(),"productId" => $product->getId(),"productName" => $product->getTranslit()));
-                }
+                return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
             }
             
             //is favorite product for user
@@ -1296,6 +1239,7 @@ class DefaultController extends Controller
                                                                                           "categoriesBread" => array_reverse($categoriesBread),
                                                                                           "services" => $services,
                                                                                           "sameProducts" => $sameProducts,
+                                                                                          "dealerProducts" => new ArrayCollection(),
                                                                                           "locale" => $locale,
                                                                                           "settings" => $settings,
                                                                                           "productFilters" => $productFilters));
@@ -1311,6 +1255,7 @@ class DefaultController extends Controller
                                                                                           "favoriteProductIs" => 0,
                                                                                           "services" => $services,
                                                                                           "sameProducts" => $sameProducts,
+                                                                                          "dealerProducts" => new ArrayCollection(),
                                                                                           "categoriesBread" => array_reverse($categoriesBread),
                                                                                           "locale" => $locale,
                                                                                           "settings" => $settings,

@@ -182,7 +182,7 @@ class UserController extends Controller
         $user = new User();
         $restoreForm = $this->createFormBuilder($user)
                 ->add('email', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('e-pasts'), 'attr' => array('class' => 'email','placeholder' => 'email')))
-                ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Atjaunot')))->getForm();
+                ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Восстановить')))->getForm();
         
         $restoreForm->handleRequest($request);
         

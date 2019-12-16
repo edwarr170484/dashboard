@@ -165,8 +165,7 @@ class DealerController extends Controller
     }
     
     /**
-     * @Route("/dealerpage/{dealerName}", name="dealerPage")
-     * @Route("/{_locale}/dealerpage/{dealerName}", name="dealerPageLocale", defaults={"_locale" : "es","dealerName" : 0}, requirements={"_locale" : "es|ru"})
+     * @Route("/dealerpage/{dealerName}", name="dealerPage", defaults={"dealerName" : 0})
      */
     public function dealerPageAction($dealerName,Request $request)
     {

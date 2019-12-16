@@ -452,7 +452,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertFiltersValues{padding-bottom: 5rem;}
 .advertAdditionalsHeader{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}
 .advertAdditionalsItems ul li{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);display: block;background: url(../img/galka.png) 0 50% no-repeat;padding-left: 2.5rem;}
-.advertAdditionalsItems{@include column-count(3);@include column-gap(40px);}
+.advertAdditionalsItems{@include column-count(3);@include column-gap(40px);padding-bottom: 3rem;}
 .advertAdditionalsItems ul li{@include break-inside(avoid);display: block;margin-bottom: 10px;}
 .advertTextHeader h3{color:$black-text;}
 .advertAdditionals{padding-bottom: 5rem;}
@@ -513,8 +513,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .modal-body label{@include fontView("GothamProRegular",$input-black,1.3rem,1.2rem);}
 .modal-footer button.btn{@include fontView("GothamProBlack",$super-black-color,1.8rem,1.7rem);background: $yellow-color;border:none;@include border-radius(3px);padding: 12px 18px;text-align: center;}
 .modal-footer button.btn:hover,.modal-footer button.btn:focus{background:$orange-color;}
-.modal-body,.modal-footer,.modal-header{padding: 0;}
-.modal-footer{padding-top: 15px;}
+.modal-body,.modal-footer,.modal-header{padding:0;border:none;}
+.modal-footer{padding-top: 15px;text-align: center;}
 .modal-header{padding-bottom: 30px;}
 .modal-body .form-group .select-cover{margin-bottom: 0;}
 .form-horizontal .control-label{text-align: left;}
@@ -522,7 +522,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .productSliderInner .row{@include flexBox(row,flex-start,stretch);@include flex-wrap(wrap);}
 .productSliderInfo{background: #fff;}
 #productModalSlider .owl-item div{@include flexBox(row,center,center);}
-.productModalSliderIcons .advertIcons{@include flexBox(row,center,center);}
+.productModalSliderIcons .advertIcons{@include flexBox(row,center,center);padding-top: 1rem;}
 .productSliderInfo{position: relative;}
 .productSliderInfo button.close{position: absolute;top: 30px;right: 30px;border:none;background: none;width: 26px;height: 26px;}
 .productSliderInfo{padding: 2.8rem;}
@@ -534,7 +534,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .productSliderInfo .advertSellerContacts{padding-top: 3rem;}
 .productModalSliderIcons .advertIcons img{max-width:160px;}
 .productModalSliderIcons .advertIcons a{@include border-radius(0);}
-.advertSliderMainFoto{position: relative;}
+.advertSliderMainFoto{position: relative;padding-right: 0;}
 .advertSliderMainFoto button{background: none;border: none;position: absolute;height: 100%;width: 84px;z-index:9999;}
 .advertSliderMainFoto button:hover svg,.advertSliderMainFoto button:focus svg{stroke:$yellow-color;}
 .advertSliderMainFoto button.owl-prev{left: 0;top: 0;}
@@ -1337,3 +1337,4 @@ body.userAccount{background:#F9F9F9;}
 .hidden-radio-parameter{position: absolute;top: 0;left: 0;width: 100%;height: 100%;@include opacity(0);z-index:1;margin-top: 0;}
 input[type="radio"]{margin-top: 0;}
 ul.color li{position: relative;}
+.advertAdditionalsItemsHeader{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}

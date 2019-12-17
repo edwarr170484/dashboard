@@ -29,6 +29,37 @@
     {%- endif -%}
 {%- endblock form_label -%}
 
+{% block _page_blocks_widget %}
+    <table class="table table-bordered table-page-blocks">
+        <thead>
+            <tr>
+                <th>{% trans %}Текстовый блок{% endtrans %}</th>
+                <th>{% trans %}Порядок{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock _page_blocks_widget %}
+
+{% block _page_blocks_entry_row %}
+    <tr>
+        <td>
+            {{ form_widget(form.blockTitle)}}
+            {{ form_widget(form.blockContent)}}
+        </td>
+        <td>
+            {{ form_widget(form.sortorder)}}
+        </td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить блок?'))return false;else $(this).parent().parent().remove();">
+                <i class="fa fa-times" title="Удалить текстовый блок"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
 {% block title %}{% trans %} Панель управления - Редактировать страницу{% endtrans %}{% endblock %}
 
 {% block body %}
@@ -55,6 +86,9 @@
                         <ul class="nav nav-tabs">
                             <li class="active">
                                 <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#blocks">Блоки страницы</a>
                             </li>
                             <li class="">
                                 <a data-toggle="tab" href="#meta">Мета-теги</a>
@@ -107,6 +141,14 @@
                                         {{ form_widget(pageForm.text)}}
                                     </div>
                                 </div>    
+                            </div>
+                            <div id="blocks" class="tab-pane fade">
+                                <button class="btn btn-sm btn-success m-b-15" id="add-page-block" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить текстовый блок</button>
+                                {{ form_widget(pageForm.blocks)}}
+                                {% if pageForm.blocks | length <= 0 %}
+                                    Текстовых блоков не обнаружено
+                                {% endif %}
                             </div>
                             <div id="meta" class="tab-pane fade">
                                 <div class="form-group">

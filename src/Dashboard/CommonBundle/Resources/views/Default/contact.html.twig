@@ -38,98 +38,103 @@
             };
 
 </script>
-<nav class="navbar navbar-default">
+<nav class="breadscrumbsBlock">
       <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
-                    {% if  app.request.locale == 'lv' %} 
-                        <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
-                        <li><a href="">{{ page.title }}</a></li>
-                    {% else %}
-                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mājas{% endtrans %}</a></li>
-                        <li><a href="">{{ page.title }}</a></li>
-                    {% endif %}
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li><a href="{{ path('contact') }}">{{ page.title }}</a></li>
                 </ul>
             </div>
         </div>
       </div>
 </nav>
 <div class="container">
-	<div class="row content-row">
-		<div class="col-lg-9 col-md-9 left-column">
-			<div class="content-block-header">
-                            <h1>{{ page.title }}</h1>
-                        </div>
-                        {% for flashMessage in app.session.flashbag.get('notice') %}
-                            <div class="notice-message">
-                                {{ flashMessage | raw }}
-                            </div>                             
-                        {% endfor %}
-                        <div class="page-content">
-                            {{ page.text | raw }}
-                            <div class="row contact-us">
-                                {{ form_start(messageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
-                                    <div class="col-lg-6 col-md-6">
-                                        <div class="form-group">
-                                            <label class="col-lg-12 col-md-12">{{ form_label(messageForm.authorName) }}</label>
-                                            <div class="col-lg-12 col-md-12">
-                                                {{ form_widget(messageForm.authorName) }}
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-lg-12 col-md-12">{{ form_label(messageForm.authorEmail) }}</label>
-                                            <div class="col-lg-12 col-md-12">
-                                                {{ form_widget(messageForm.authorEmail) }}
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-lg-12 col-md-12">{{ form_label(messageForm.messageSubject) }}</label>
-                                            <div class="col-lg-12 col-md-12">
-                                                {{ form_widget(messageForm.messageSubject) }}
-                                            </div>
-                                        </div>
-                                    </div>   
-                                    <div class="col-lg-6 col-md-6">
-                                        <div class="form-group">
-                                            <label class="col-lg-12 col-md-12">{{ form_label(messageForm.messageText) }}</label>
-                                            <div class="col-lg-12 col-md-12">
-                                                {{ form_widget(messageForm.messageText, {'attr' : {'style' : 'height:192px'}}) }}
-                                            </div>
-                                        </div>
+    <div class="row content-row">
+        <div class="col-lg-9 col-md-9">
+            <div class="content-block-header">
+                <h1>{{ page.title }}</h1>
+            </div>
+            <div class="page-content">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div class="pageContactUs">
+                    <div class="row contact-us">
+                        {{ form_start(messageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                            <div class="col-lg-4 col-md-4">
+                                <div class="register-form-forms">
+                                    <div class="registerInputBlock">
+                                        {{ form_widget(messageForm.authorName) }}
+                                        <div class="inputMessage"></div>
                                     </div>
-                                    {% if settings.isShowCaptcha %}
-                                        <div class="col-lg-12 col-md-12">
-                                            <div class="form-group">
-                                                <div class="col-lg-6 col-md-6"></div>
-                                                <div class="col-lg-6 col-md-6 right-text">
-
-                                                    <div class="g-recaptcha pull-right" id="messageCaptcha"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
+                                    <div class="registerInputBlock">
+                                        {{ form_widget(messageForm.authorEmail) }}
+                                        <div class="inputMessage"></div>
+                                    </div>
+                                    <div class="registerInputBlock">
+                                        {{ form_widget(messageForm.messageSubject) }}
+                                        <div class="inputMessage"></div>
+                                    </div>
+                                </div>
+                            </div>   
+                            <div class="col-lg-8 col-md-8">
+                                <div class="form-group">
                                     <div class="col-lg-12 col-md-12">
-                                        <div class="form-group">
-                                            <div class="col-lg-4 col-md-4"></div>
-                                            <div class="col-lg-8 col-md-8 right-text">
-                                                {{ form_widget(messageForm.save, {'type' : 'submit'}) }}
-                                            </div>
+                                        {{ form_widget(messageForm.messageText, {'attr' : {'style' : 'height:190px'}}) }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% if settings.isShowCaptcha %}
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-lg-6 col-md-6"></div>
+                                        <div class="col-lg-6 col-md-6 right-text">
+                                            <div class="g-recaptcha pull-right" id="messageCaptcha"></div>
                                         </div>
                                     </div>
-                                {{ form_end(messageForm) }}
+                                </div>
+                            {% endif %}
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <div class="col-lg-12 col-md-12 register-form-forms right-text">
+                                        {{ form_widget(messageForm.save, {'type' : 'submit'}) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {{ form_end(messageForm) }}
+                    </div>
+                </div>
+            </div>
+            <div class="page-banner">
+                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page, 'position' : 'centerpage'})) }}
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
+                    <div class="advertise-block">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page, 'position' : 'rightcolumn'})) }}
+                    </div>
+                    <div class="advertise-block">
+                        <div class="siteInfoPane">
+                            <div class="siteInfoPaneInner dilers">
+                                <div class="innerHeader">
+                                    <h4>БМВ X5. Скидка -10%</h4>
+                                </div>
+                                <div class="siteInfoPaneContent dilers">
+                                    <div class="description">Акция! От официального дилера БМВ в Малаге "Рога и копыта".<br/>Скидки на BMW X5 до 10%. Спешите! Предложений ограничено!</div>
+                                </div>
+                                <div class="siteInfoPaneContentButton">
+                                    <a href="">Смотреть подробнее</a>
+                                </div>
                             </div>
                         </div>
+                    </div>
 		</div>
-		<div class="col-lg-3 col-md-3 right-column">
-			<div class="advertise-block hidden-sm hidden-xs" id="bannersSticky">
-                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
-			</div>
-                        <div class="advertise-block hidden-lg hidden-md">
-                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
-			</div>
-		</div>
-	</div>
-</div>
+    </div>
+</div>                
 {% endblock %}
 

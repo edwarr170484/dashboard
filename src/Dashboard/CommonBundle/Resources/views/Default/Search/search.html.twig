@@ -40,11 +40,9 @@
             <div class="content-block-header">
                 <h1>{% trans %}Поиск{% endtrans %}</h1>
             </div>
-            <div class="mainPageFiltersTabs category-filters">
-                <div class="tab-content">
-                    
-                </div>
-            </div>                              
+            <div class="mainPageFiltersTabs category-filters" style="padding-top: 0;">
+                 {% include 'DashboardCommonBundle:Default:Search/filtersForm.html.twig' with {'categories' : categories} %}
+            </div>
             <div class="hidden-sm hidden-xs" style="text-align:center;">
                 {{ render(controller('DashboardCommonBundle:Default:getBanners',{'position' : 'centerpage'})) }}
             </div>
@@ -53,6 +51,8 @@
                     {% for product in products %}
                         {% include 'DashboardCommonBundle:Default:products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
                     {% endfor %}
+                {% else %}
+                    <div class="accountNocontent">{% trans %}По Вашему запросу ничего не найдено{% endtrans %}</div>
                 {% endif %}
             </div>
         </div>

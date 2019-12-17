@@ -54,6 +54,12 @@ class Page
     private $sortorder;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\PageBlock", mappedBy="page", cascade={"persist"})
+     * @ORM\OrderBy({"sortorder" = "ASC"})
+     */
+    private $blocks;
+    
+    /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
      */
     private $metaTagTitle;
@@ -437,5 +443,38 @@ class Page
     public function getBanners()
     {
         return $this->banners;
+    }
+
+    /**
+     * Add blocks
+     *
+     * @param \Dashboard\CommonBundle\Entity\PageBlock $blocks
+     * @return Page
+     */
+    public function addBlock(\Dashboard\CommonBundle\Entity\PageBlock $blocks)
+    {
+        $this->blocks[] = $blocks;
+    
+        return $this;
+    }
+
+    /**
+     * Remove blocks
+     *
+     * @param \Dashboard\CommonBundle\Entity\PageBlock $blocks
+     */
+    public function removeBlock(\Dashboard\CommonBundle\Entity\PageBlock $blocks)
+    {
+        $this->blocks->removeElement($blocks);
+    }
+
+    /**
+     * Get blocks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBlocks()
+    {
+        return $this->blocks;
     }
 }

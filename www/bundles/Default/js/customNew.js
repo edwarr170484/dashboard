@@ -365,16 +365,29 @@ function addAutoserviceRate(salonId, rateId, ratePrice, element, titleText, butt
             }
         });
 }
+function toggleSearchModal(){
+    if($("#desktopSearchModal").hasClass("active")){
+        $('html, body').css({overflow: 'auto',height: 'auto'});
+    }else{
+        $('html, body').css({overflow: 'hidden',height: '100%'});
+    }
+    $("#desktopSearchModal").toggleClass("active");
+}
 function getModalSearchResults(element){
     $.ajax({
         url: '/search/ajax',
-        dataType: 'html',
+        dataType: 'json',
         data: element,
         method:"POST",
         beforeSend: function(){},
         success: function(data){
+            $("#modalSearchForm button.submit").removeClass("active");
+            if(data.count > 0){
+                $("#modalSearchForm button.submit").addClass("active");
+            }
+            
             $(".modalSearchResult").remove();
-            $(".searchBlock").after(data);    
+            $(".searchBlock").after(data.view);    
         },
         error: function(xhr, ajaxOptions, thrownError) {
 

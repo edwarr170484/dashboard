@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-class MarkToNumberTransformer implements DataTransformerInterface
+class QuestionToNumberTransformer implements DataTransformerInterface
 {
     private $manager;
 
@@ -15,32 +15,31 @@ class MarkToNumberTransformer implements DataTransformerInterface
         $this->manager = $manager;
     }
     
-    public function transform($mark)
+    public function transform($question)
     {
-        if (null === $mark) {
+        if (null === $question) {
             return '';
         }
 
-        return $mark->getId();
+        return $question->getId();
     }
     
-    public function reverseTransform($markId)
+    public function reverseTransform($questionId)
     {
-        if (!$markId) {
+        if (!$questionId) {
             return;
         }
 
-        $mark = $this->manager->getRepository('DashboardCommonBundle:Mark')->find($markId);
-
-        if (null === $mark) {
+        $question = $this->manager->getRepository('DashboardCommonBundle:Question')->find($questionId);
+        
+        if (null === $question) {
             
             throw new TransformationFailedException(sprintf(
-                'Mark with markId "%s" does not exist!',
-                $markId
+                'Question with questionId "%s" does not exist!',
+                $questionId
             ));
         }
 
-        return $mark;
+        return $question;
     }
 }
-

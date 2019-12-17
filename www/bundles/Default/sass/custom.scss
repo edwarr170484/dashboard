@@ -8,9 +8,10 @@ ol, ul {margin: 0;}
 h1,h2,h4{@include fontView("GothamProBlack",#fff,4.8rem,5.6rem);margin: 0;}
 .container{max-width:1660px;width:100%;}
 h3{@include fontView("GothamProBlack",#fff,3.6rem,4rem);margin: 0;}
-a,input{outline:none !important;}
-body{font-size:10px;background:$white-color;}
+a,input,textarea{outline:none !important;}
+body{font-size:10px;background:#F9F9F9;}
 header{background: #fff;}
+ul.list-inline{margin-left: 0;}
 .headerlocale{background: $gray-color;}
 .headerMenu{@include flexBox(row,space-between,center);}
 .header-locale{position: relative;@include flexBox(row,flex-start,center);}
@@ -240,6 +241,7 @@ footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;}
 .register-block-header.social{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 2rem;}
 .register-block-header a{color:$orange-color;}
 .register-form-forms{width: 100%;}
+.register-form-forms.right-text{@include flexBox(row,flex-end,center);}
 .register-form-forms input{
     display: block;
     border:none;
@@ -250,6 +252,8 @@ footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;}
 .register-form-forms input:focus{border-bottom: 1px solid $orange-color;}
 .register-form-forms input.email{background: url('../img/E-mail.svg') 0 50% no-repeat;}
 .register-form-forms input:focus.email{background: url('../img/E-mail-orange.svg') 0 50% no-repeat;}
+.register-form-forms input.phone{background: url('../img/phone.svg') 0 50% no-repeat;}
+.register-form-forms input:focus.phone{background: url('../img/phone-orange.svg') 0 50% no-repeat;}
 .register-form-forms input.password{background: url('../img/Lock.svg') 0 50% no-repeat;}
 .register-form-forms input:focus.password{background: url('../img/Lock-orange.svg') 0 50% no-repeat;}
 .register-form-forms input.user{background: url('../img/User.svg') 0 50% no-repeat;}
@@ -263,6 +267,7 @@ footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;}
     @include transition($aTransition);
     @include border-radius(3px);
 }
+.register-form-forms.right-text button[type="submit"]{width: 304px;}
 .register-form-forms button[type='submit']:hover,.register-form-forms button[type='submit']:focus{background:$orange-color;}
 .forgotPassword a{@include fontView("GothamProRegular",$yellow-color,1.6rem,2.2rem);display: block;width: 100%;text-align: center;}
 .forgotPassword a.fogotPaswordLink{margin-bottom: 2.9rem;}
@@ -280,12 +285,13 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .registerInputBlock{position: relative;margin-bottom: 3.2rem;}
 .inputMessage{@include fontView("GothamProRegular",$orange-color,1.1rem,1.1rem);text-align: right;padding-top: 0.4rem;}
 .modal{z-index:9999;}
-.searchBlock{background: #fff;padding-top: 3rem;padding-bottom: 3rem;width: 100%;position: absolute;top:0;}
+.searchBlock{background: #fff;padding-top: 3rem;padding-bottom: 3rem;width: 100%;}
 .searchBlockInner{@include flexBox(row,flex-start,center);position: relative;}
 .searchBlockInner input{display: block;@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);border:none;background: url('../img/search-left.svg') 0 50% no-repeat;padding-left: 3.8rem;margin-left: 5rem;width: 50%;border:1px solid transparent;}
 .searchBlockInner input:focus{border-bottom: 2px solid $black-text;}
 .searchBlockForm{border-left: 1px solid $gray-color;padding-top:1rem;padding-bottom:1rem;margin-left: 3rem;width: 100%;}
-.searchBlockInner button{width: 26px;height: 26px;display: block;position: absolute;top:50%;margin-top: -13px;right:30px;border:none;background: none;}
+.searchBlockForm form{@include flexBox(row,space-between,center);}
+.searchBlockInner button.close{width: 26px;height: 26px;display: block;position: absolute;top:50%;margin-top: -13px;right:30px;border:none;background: none;}
 .content-block-header h1{color:$black-text;}
 .content-row{margin-top: 4rem;@include flexBox(row,flex-start,stretch);flex-wrap: wrap}
 .nav-tabs > li{margin-bottom: 0;}
@@ -546,6 +552,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .header-search-box input[name="searchText"]:focus{border-color: $orange-color;}
 .filtersFromTo{@include flexBox(row,space-between,center);}
 .filtersFromTo input{border: 1px solid #dfe1e5;font-family: "GothamProRegular", sans-serif;color: #494949;margin-bottom: 10px;padding: 8px 15px;background: #fff;font-size: 1.3rem;width: 50%;}
+.filterInput{border: 1px solid #dfe1e5;font-family: "GothamProRegular", sans-serif;color: #494949;margin-bottom: 10px;padding: 8px 15px;background: #fff;font-size: 1.3rem;width: 100%;}
+.filterInput:focus{border: 1px solid $yellow-color;}
 .filtersFromTo .select-cover{width: 50%;}
 .filtersFromTo .select-cover:nth-child(2n){border-left:none;}
 .filtersFromTo input:nth-child(2n){border-left:none;}
@@ -1341,3 +1349,22 @@ ul.color li{position: relative;}
 .modalSearchResult{padding-top: 4rem;background: #E7E7E7;width: 100%;}
 .categorySpecialAdverts.modalAdverts{@include flexBox(row,flex-start,flex-start);flex-wrap:wrap;}
 .categorySpecialAdverts.modalAdverts .categorySpecialAdvert{padding-right: 3rem;} 
+#desktopSearchModal{display: none;position: absolute;top: 0;left: 0;right: 0;bottom:0;z-index:9999;background:#E7E7E7;}
+#desktopSearchModal.active{display: block;}
+#modalSearchForm button.submit{@include fontView("GothamProRegular",$super-white-color,1.4rem,1.3rem);background: $orange-color;@include border-radius(3px);padding: 1.3rem 3.5rem;border:none;margin-right: 10rem;display: none;}
+#modalSearchForm button.submit:hover,#modalSearchForm button.submit:focus{background: #222B2A;}
+#modalSearchForm button.submit.active{display: block;}
+.pageContactUs{background: $white-color;@include border-radius(12px);padding: 6rem;}
+.notice-message{padding-bottom: 1.5rem;}
+#message_messageText:focus{border-color:$yellow-color;}
+.pagContentTabs{@include flexBox(row,flex-start,stretch);}
+.pagContentTabsSelectors{width: 25%;}
+.pagContentTabsContent{width: 75%;}
+.pagContentTabsContent .tab-pane{display: none;}
+.pagContentTabsContent .tab-pane.active{display: block;}
+.pagContentTabsSelectors ul li{width: 100%;position: relative;}
+.pagContentTabsSelectors ul li a{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);@include border-radius(9px 0px 0px 9px);padding: 2rem 2.4rem;width: 100%;display: block;position: relative;z-index:3;}
+.pagContentTabsSelectors ul li.active a{background: #fff;@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));}
+.pagContentTabsSelectors ul li .whiteBlock{display: none;}
+.pagContentTabsSelectors ul li.active .whiteBlock{display: block;position: absolute;right: -20px;width: 40px;height: 100%;top: 0;z-index: 99;background: #fff;}
+.pagContentTabsContent .tab-pane{background: #fff;padding: 3rem 3.4rem;@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));position: relative;}

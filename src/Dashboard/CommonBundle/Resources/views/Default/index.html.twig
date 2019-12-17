@@ -28,103 +28,7 @@
                 <div class="row">
                     <div class="col-lg-7 col-md-offset-1 col-lg-offset-1 mainPageFiltersBlock">
                         <div class="mainPageFiltersHeader"><h1>{% trans %}Продажа автомобилей{% endtrans %}</h1></div>
-                        {% if categories %}
-                            <div class="mainPageFiltersTabs">
-                                <ul class="nav nav-tabs" role="tablist">
-                                    {% set i = 1 %}
-                                    {% for category in categories %}
-                                        <li role="presentation" {% if i == 1 %}class="active"{% endif %}>
-                                            <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
-                                                {{ category.image |raw }}
-                                                <span>
-                                                    {{ category.title}}
-                                                </span><div class="shadowBlock"></div>
-                                            </a>
-                                        </li>
-                                        {% set i = i + 1 %}
-                                    {% endfor %}
-                                </ul>
-                                <div class="tab-content">
-                                    {% set i = 1 %}
-                                    {% for category in categories %}
-                                        <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="categoryFilters{{ category.id }}">
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6 static-filters hidden-sm hidden-xs">
-                                                    <div class="filter">
-                                                        <input name="searchNew" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}Новые авто{% endtrans %}
-                                                    </div>
-                                                    <div class="filter">
-                                                        <input name="searchProbeg" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}С пробегом{% endtrans %}
-                                                    </div>
-                                                </div>
-                                                {% if category.filters %}
-                                                    {% for filter in category.filters %}
-                                                        <div class="col-lg-3 col-md-3">
-                                                            <select name="1" class="custom-select" id="filter[]" multiple="multiple" placeholder="{{ filter.name }}">
-                                                                {% if filter.values | length > 0 %}
-                                                                    {% for filterValue in filter.values %}
-                                                                        <option value="{{ filterValue.id }}">{{ filterValue.value}}</option>
-                                                                    {% endfor %}
-                                                                {% endif %}
-                                                            </select>
-                                                        </div>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                {% if category.isShowPriceFilter %}
-                                                    <div class="col-lg-3 col-md-3">
-                                                        <div class="filtersFromTo">
-                                                            <input name="categoryPriceStart[]" value="" placeholder="Цена от" />
-                                                            <input name="categoryPriceEnd[]" value="" placeholder="до" />
-                                                        </div>
-                                                    </div>  
-                                                {% endif %}
-                                                <div class="col-lg-3 col-md-3 additionalFiltersBlock">
-                                                    <select name="" id="" class="custom-select">
-                                                        <option value="0">Марка авто</option>
-                                                        <option value="1">Audi</option>
-                                                        <option value="2">BMW</option>
-                                                        <option value="3">Mersedes</option>
-                                                        <option value="4">Toyota</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-12 mainPageFiltersButtons">
-                                                    <div class="mainPageFiltersSettings">
-                                                        <button class="showAllParameters">{% trans %}Все параметры{% endtrans %}<svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#EB840B"/>
-    </svg></button>
-                                                        <button class="clearFilters">{% trans %}Сбросить{% endtrans %}<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"/>
-    </svg>
-                                                        </button>
-                                                    </div>
-                                                    {% if category.allProductsNumber %}
-                                                        <div class="mainPageFiltersShowResults">
-                                                            <button>{% trans %}Показать{% endtrans %} {{ category.allProductsNumber }} {% trans %}предложений{% endtrans %}</button>
-                                                        </div>
-                                                    {% endif %}
-                                                    <script>
-                                                        $(document).ready(function(){
-                                                            $(".showAllParameters").click(function(){
-                                                                var svg = '<svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#EB840B"/></svg>';
-                                                                if($(this).hasClass("active")){
-                                                                    $(".additionalFiltersBlock").fadeOut();
-                                                                    $(this).html("{% trans %}Все параметры{% endtrans %}" + svg);
-                                                                }else{
-                                                                    $(".additionalFiltersBlock").fadeIn();
-                                                                    $(this).html("{% trans %}Свернуть{% endtrans %}" + svg);
-                                                                }
-                                                                $(this).toggleClass("active");
-                                                            });
-                                                        });
-                                                    </script>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% set i = i + 1 %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        {% endif %}
+                        {% include 'DashboardCommonBundle:Default:filtersForm.html.twig' with {'categories' : categories} %}
                     </div>
                 </div>
             </div>
@@ -190,7 +94,7 @@
                                 </div>  
                                 <div class="siteInfoPaneContent">
                                     <div class="description">
-                                        {% trans %}Напишите интересующую Вас модель или воспользуйтесь <a href="">расширенным поиском</a>{% endtrans %}
+                                        {% trans %}Напишите интересующую Вас модель или воспользуйтесь{% endtrans %} <a href="{{ path('search') }}">{% trans %}расширенным поиском{% endtrans %}</a>
                                     </div>
                                 </div> 
                             </div>
@@ -203,7 +107,7 @@
                                     <h4>{% trans %}Продать<br/>свой транспорт{% endtrans %}</h4>
                                 </div>
                                 <div class="siteInfoPaneFloat">
-                                    {% if app.user %}
+                                    {% if app.user and app.user.roles[0].role != "ROLE_SERVICE"%}
                                         <a href="{{path('addAdvert')}}" class="siteInfoPaneAddadvert">{% trans %}Отправить заявку{% endtrans %}</a>
                                     {% else %}
                                         <a href="{{path('login')}}" class="siteInfoPaneAddadvert">{% trans %}Отправить заявку{% endtrans %}</a>
@@ -226,7 +130,7 @@
                                 <div class="siteInfoPaneContent">
                                     <ul class="list-unstyled list-inline">
                                         <li><a href="{{ path('services') }}">Сервисы</a></li>
-                                        <li><a href="{{ path('dealers') }}">Диллеры</a></li>
+                                        <li><a href="{{ path('dealers') }}">Дилеры</a></li>
                                     </ul>
                                     <div class="description">{% trans %}Узнайте где можно воспользоваться сервисами, взять или застраховать авто{% endtrans %}</div>
                                 </div>

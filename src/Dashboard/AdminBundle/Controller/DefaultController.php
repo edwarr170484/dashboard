@@ -39,6 +39,7 @@ use Dashboard\AdminBundle\Form\Type\UserInfoType;
 use Dashboard\CommonBundle\Form\Type\UserPurseType;
 use Dashboard\AdminBundle\Form\Type\TranslationType;
 use Dashboard\AdminBundle\Form\Type\RegionType;
+use Dashboard\AdminBundle\Form\Type\PageblockType;
 
 class DefaultController extends Controller
 {
@@ -688,10 +689,18 @@ class DefaultController extends Controller
     public function editPageAction($pageId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
+        $originalBlocks = new ArrayCollection();
         
         $page = ($pageId) ? $manager->getRepository("DashboardCommonBundle:Page")->find($pageId) : new Page();
         $isUserpage = ($pageId) ? $page->getIsUserpage() : 0;
         $route = ($pageId) ? $page->getRoute() : 0;
+        
+        if($pageId && $page)
+        {
+            foreach ($page->getBlocks() as $block) {
+                $originalBlocks->add($block);
+            }
+        }
         
         $pageForm = $this->get('form.factory')->createNamedBuilder('page', 'form', $page)
                 ->add('title', TextType::class, array('required' => true, 'label' => 'Название страницы', 'attr' => array('class' => 'form-control','placeholder' => 'Название страницы')))
@@ -699,6 +708,8 @@ class DefaultController extends Controller
                 ->add('isFooterMenu', ChoiceType::class, array('choices' => array("0" => "Нет","1" =>"Да"),'label' => 'Отображать в нижнем меню','empty_value' => false,'expanded' => true))
                 ->add('footerMenuSection', ChoiceType::class, array('choices' => array("0" => "Нет","1" =>"Информация","2" => "Услуги"),'label' => 'Секция для страницы в нижнем меню', 'attr' => array('class' => 'form-control')))
                 ->add('text', TextareaType::class, array('required' => false, 'label' => 'Содержимое', 'attr' => array('class' => 'form-control tinyeditor','placeholder' => 'Содержимое')))
+                 ->add('blocks', 'collection', array('type' => new PageblockType($manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false,
+                                               'attr' => array('class' => 'page_blocks')))
                 ->add('metaTagTitle', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Title', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Title')))
                 ->add('metaTagDescription', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Description', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Description')))
                 ->add('metaTagAuthor', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Author', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Author')))
@@ -716,6 +727,7 @@ class DefaultController extends Controller
         
         if($pageForm->isSubmitted() && $pageForm->isValid())
         {
+            
             if(!$pageId)
             {
                 if($pageForm['route']->getData())
@@ -734,6 +746,27 @@ class DefaultController extends Controller
             {
                 $page->setRoute($route);
             }
+            
+            if($originalBlocks)
+            {
+                foreach ($originalBlocks as $block) 
+                {
+                    if (false === $page->getBlocks()->contains($block)) 
+                    {
+                        $block->setPage(null);
+                        $manager->remove($block);
+                    }
+                }
+            }  
+            
+            if($page->getBlocks())
+            {
+                foreach($page->getBlocks() as $block)
+                {
+                    $block->setPage($page);
+                    $manager->persist($block);
+                }
+            }  
             
             $manager->persist($page);
             $manager->flush();

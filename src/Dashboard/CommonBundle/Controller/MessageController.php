@@ -22,7 +22,6 @@ class MessageController extends Controller
 {   
     /**
      * @Route("/contact", name="contact")
-     * @Route("/{_locale}/contact", name="contactLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
      */
     public function contactAction(Request $request)
     {
@@ -43,11 +42,11 @@ class MessageController extends Controller
         
         $message = new FormMessage();
         $messageForm = $this->get('form.factory')->createNamedBuilder('message', 'form', $message)
-                ->add('authorName', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('Jūsu vārds: *'), 'attr' => array('class' => 'form-control')))
-                ->add('authorEmail', EmailType::class, array('required' => true, 'label' => $this->get('translator')->trans('Jūsu e-pasts: *'), 'attr' => array('class' => 'form-control')))
-                ->add('messageSubject', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('Ziņojuma priekšmets: *'), 'attr' => array('class' => 'form-control')))
-                ->add('messageText', TextareaType::class, array('required' => true, 'label' => $this->get('translator')->trans('Sludinājuma teksts: *'), 'attr' => array('class' => 'form-control')))
-                ->add('save', ButtonType::class, array('label' => 'ОТПРАВИТЬ', 'attr' => array('class' => 'send-tab-form')))->getForm();
+                ->add('authorName', TextType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'user','placeholder' => 'John Doe')))
+                ->add('authorEmail', EmailType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'email', 'placeholder' => 'E-mail')))
+                ->add('messageSubject', TextType::class, array('required' => false, 'label' => '', 'attr' => array('class' => 'phone', 'placeholder' => '+37')))
+                ->add('messageText', TextareaType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'form-control', 'placeholder' => 'Текст сообщения')))
+                ->add('save', ButtonType::class, array('label' => 'Отправить сообщение', 'attr' => array('class' => 'send-tab-form')))->getForm();
         
         $messageForm->handleRequest($request);
         
@@ -71,33 +70,26 @@ class MessageController extends Controller
                         'notice',
                         '<div class="alert alert-success alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Veiksmīgi!</strong> Jūsu ziņa ir nosūtīta vietnes administrācijai un drīz tiks pārskatīta.') . '</div>'
+                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваше сообщение отправлено администрации сайта и будет рассмотрено в ближайшее время.') . '</div>'
                 );
 
                 //send an email
                 $message = \Swift_Message::newInstance()
-                ->setSubject('Вам пришло новое сообщение на сайте gribupardot.sunweb.by')
+                ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                 ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                 ->setTo($settings->getAdminEmail())
-                ->setBody('Пользователь сайта gribupardot.sunweb.by отправил для Вас сообщение из формы обратной связи.','text/html');
+                ->setBody('Пользователь сайта ' . $settings->getSiteName() . ' отправил для Вас сообщение из формы обратной связи.','text/html');
 
                 $this->get('mailer')->send($message);
 
-                if($locale->getIsDefault())
-                {
-                    return $this->redirectToRoute("contact");
-                }
-                else
-                {
-                    return $this->redirectToRoute("contactLocale", array("_locale" => $locale->getCode()));
-                }
+                return $this->redirectToRoute("contact");
             }
             else
                 $this->addFlash(
                     'notice',
                     '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> '.
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> Nederīgi formas dati. Iespējams, ka jūs nepareizi norādījāt captcha.') . '</div>'
+                    $this->get('translator')->trans('<strong>Ошибка!</strong> Неверные данные формы. Возможно вы неверно указали капчу.') . '</div>'
                 );
         }
         

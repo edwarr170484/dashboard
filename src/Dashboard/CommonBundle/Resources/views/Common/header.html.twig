@@ -148,7 +148,7 @@
                         <button onclick='$(".siteMenuGamburgerMenu").show();'>{{ block('svgGamburger') }}</button>
                     </div>
                     <div class="siteMenuSearch">
-                        <button data-toggle="modal" data-target="#desktopSearchModal">{{ block('svgSearch') }}</button>
+                        <button onclick="toggleSearchModal()" type="button">{{ block('svgSearch') }}</button>
                     </div>
                 </div>
             </div>
@@ -275,7 +275,7 @@
                                 <ul class="list-unstyled">
                                     <li><a href="{{ path('dealer') }}">{% trans %}Дилерам{% endtrans %}</a></li>
                                     <li><a href="{{ path('service') }}">{% trans %}Автосервисам{% endtrans %}</a></li>
-                                    <li style="padding-top:3rem;"><a href="" style="font-family:'GothamProBold'">Обратная связь</a></li>
+                                    <li style="padding-top:3rem;"><a href="{{ path('contact') }}" style="font-family:'GothamProBold'">Обратная связь</a></li>
                                     <li><a href="" style="font-family:'GothamProBold'">Разместить рекламу</a></li>
                                 </ul>  
                             </div>

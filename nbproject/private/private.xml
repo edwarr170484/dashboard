@@ -3,6 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Default/products/regular.html.twig</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Default/product.html.twig</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/app/Resources/translations/messages.ru.xlf</file>
             <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/AdvertController.php</file>
         </group>
     </open-files>

@@ -218,8 +218,6 @@ class DefaultController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        $sessionRegion = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionRegion'));
         $sessionCity = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionCity'));
         
         $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Page p WHERE p.locale=" . $locale->getId() . " AND p.isUserpage = 0 AND p.route = 'main'" );
@@ -240,7 +238,7 @@ class DefaultController extends Controller
             $slider = 0;
         }
         
-        $query = $manager->createQuery('SELECT c,cc FROM Dashboard\CommonBundle\Entity\Category c LEFT JOIN c.children cc WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder, cc.sortorder');
+        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder');
         
         try{
             $categories = $query->getResult();
@@ -255,44 +253,13 @@ class DefaultController extends Controller
             $category->setAllProductsNumber($productsNum);
         }
         
-        //query premium products
-        $sql = "SELECT p,ps FROM DashboardCommonBundle:Product p LEFT JOIN p.service ps LEFT JOIN p.user pu WHERE pu.isActive = 1 AND ps.service = 1";
-        
-        if($this->get('session')->has('sessionCity') && $this->get('session')->get('sessionCity') != "")
-        {
-            $sql .= " AND p.city = " . $this->get('session')->get('sessionCity');
-        }
-        
-        $sql .= " AND p.isConfirm = 1 AND p.isActive = 1 AND p.isBlocked = 0 ORDER BY ps.dateAdded DESC";
-        
-        $query = $manager->createQuery($sql)->setMaxResults($settings->getMainpageAdvertsNumber());
-        
-        try{
-            $prmiumProducts = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $prmiumProducts = 0;
-        }
-        
-        $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Category c WHERE c.parent IS NULL" );
-        
-        try{
-            $allcategories = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $allcategories = 0;
-        }
-        
         $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
         
         return $this->render('DashboardCommonBundle:Default:index.html.twig', array("slider" => $slider,
                                                                                     "categories" => $categories,
-                                                                                    "allcategories" => $allcategories,
-                                                                                    "prmiumProducts" => $prmiumProducts,
-                                                                                    "allcities" => $allcities,
                                                                                     "page" => $page,
                                                                                     "locale" => $locale,
-                                                                                    "settings" => $settings,"sessionRegion" => $sessionRegion,
+                                                                                    "settings" => $settings,
                                                                                     "sessionCity" => $sessionCity));
     }
     
@@ -670,7 +637,7 @@ class DefaultController extends Controller
         else
             $pagination = $this->get('app.helpers')->paginator($page, $productsTotalCount, $settings->getMainpageAdvertsNumber(), $link,'list-unstyled list-inline',$sort);
         
-        return $this->render('DashboardCommonBundle:Default:category.html.twig', array("category" => $category,
+        return $this->render('DashboardCommonBundle:Default:Category/category.html.twig', array("category" => $category,
                                                                                        "categories" => $categories,
                                                                                        "formFilters" => $filters,
                                                                                        "products" => $products,
@@ -1225,7 +1192,7 @@ class DefaultController extends Controller
                 $favoriteProductIs = 0;
             }
             
-            return $this->render('DashboardCommonBundle:Default:product.html.twig', array("product" => $product,
+            return $this->render('DashboardCommonBundle:Default:Products/product.html.twig', array("product" => $product,
                                                                                           "categories" => $categories,
                                                                                           "allcities" => $allcities,
                                                                                           "allcategories" => $allcategories,
@@ -1245,7 +1212,7 @@ class DefaultController extends Controller
                                                                                           "productFilters" => $productFilters));
         }
         else
-            return $this->render('DashboardCommonBundle:Default:product.html.twig', array("product" => $product,
+            return $this->render('DashboardCommonBundle:Default:Products/product.html.twig', array("product" => $product,
                                                                                           "categories" => $categories,
                                                                                           "allcities" => $allcities,
                                                                                           "allcategories" => $allcategories,
@@ -1332,7 +1299,6 @@ class DefaultController extends Controller
 
     /**
      * @Route("/404", name="notfound")
-     * @Route("/{_locale}/404", name="notfoundLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function notfoundAction(Request $request)        
     {
@@ -1371,14 +1337,23 @@ class DefaultController extends Controller
             $page = 0;
         }
         
+        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder');
+        
+        try{
+            $categories = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $categories = 0;
+        }
+        
         $searchText = '';
         
-        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isBlocked = 0 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0";
+        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu LEFT JOIN p.info pi WHERE pu.isActive = 1 AND p.isBlocked = 0 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0";
 
         if($request->request->get('searchText'))
         {
             $sql .= " AND (p.name LIKE '%" . $request->request->get('searchText') . "%'";
-            $sql .= " OR p.description LIKE '%" . $request->request->get('searchText') . "%')";
+            $sql .= " OR pi.description LIKE '%" . $request->request->get('searchText') . "%')";
         } 
         
         $query = $manager->createQuery($sql);
@@ -1392,6 +1367,7 @@ class DefaultController extends Controller
         
         return $this->render('DashboardCommonBundle:Default:Search/search.html.twig', array('searchText' => $searchText,
                                                                                      'products' => $products,
+                                                                                     'categories' => $categories,
                                                                                      'pagination' => 0,
                                                                                      'locale' => $locale,
                                                                                      'settings' => $settings,
@@ -1426,8 +1402,6 @@ class DefaultController extends Controller
             $products = 0;
         }
         
-        
-        
-        return $this->render('DashboardCommonBundle:Default:Search/searchAjax.html.twig', array('products' => $products,'locale' => $locale));
+        return new \Symfony\Component\HttpFoundation\JsonResponse(array("count" => ($products) ? count($products) : 0, "view" => $this->renderView('DashboardCommonBundle:Default:Search/searchAjax.html.twig', array('products' => $products,'locale' => $locale))));
     }
 }

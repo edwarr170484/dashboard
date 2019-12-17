@@ -56,7 +56,7 @@
                         </div>
                         <div class="mainPageFiltersTabs category-filters">
                             <div class="tab-content">
-                                {% include 'DashboardCommonBundle:Default:filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount} %}
+                                {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount} %}
                             </div>
                         </div>                              
                         <div class="hidden-sm hidden-xs" style="text-align:center;">
@@ -111,7 +111,7 @@
                                     </div>
                                     {% if premiumProducts | length > 0 %}
                                         {% for product in premiumProducts %}
-                                            {% include 'DashboardCommonBundle:Default:products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : 'premium'} %}
+                                            {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : 'premium'} %}
                                         {% endfor %}
                                     {% endif %}
                                 </div>
@@ -153,12 +153,12 @@
                                 <div class="categoryAdverts {{ view }}">
                                     {% if upProducts | length > 0 %}
                                         {% for product in upProducts %}
-                                            {% include 'DashboardCommonBundle:Default:products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
+                                            {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
                                         {% endfor %}
                                     {% endif %}
                                     {% if products | length > 0 %}
                                         {% for product in products %}
-                                            {% include 'DashboardCommonBundle:Default:products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
+                                            {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
                                         {% endfor %}
                                     {% endif %}
                                 </div>

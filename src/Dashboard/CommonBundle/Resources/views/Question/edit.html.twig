@@ -1,0 +1,159 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme rateForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block _rate_services_widget %}
+    <table class="table table-bordered table-rate-services">
+        <thead>
+            <tr>
+                <th>{% trans %}Услуга{% endtrans %}</th>
+                <th>{% trans %}Количество единиц услуги{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _rate_services_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.service)}}</td>
+        <td>{{ form_widget(form.value)}}{{ form_widget(form.rate)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить объект?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить объект"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block title %}{% trans %} Панель управления - Категория вопросов{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_rate') }}">Тарифы</a></li>
+            <li class="active">Категория вопросов</li>
+        </ol>
+        <h1 class="page-header">Категория вопросов</h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(rateForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#answers">Вопросы/ответы</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.name)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(rateForm.name)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.billId)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(rateForm.billId)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.price)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(rateForm.price)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.activeTime)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(rateForm.activeTime)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.advertNumber)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(rateForm.advertNumber)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.userRole)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(rateForm.userRole)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(rateForm.description)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(rateForm.description)}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="translations" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-translation" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить перевод</button>
+                                        {{ form_widget(rateForm.translations,{'id' : 'object_translations'})}}
+                                        {% if rateForm.translations | length <= 0 %}
+                                            Переводы не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3">{{ form_label(rateForm.save)}}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(rateForm.save,{'type' : 'submit'})}}
+                                </div>
+                            </div>        
+                        </div>
+                        {{ form_end(rateForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

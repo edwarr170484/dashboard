@@ -31,7 +31,7 @@ class QuestionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Dashboard\CommonBundle\Entity\Rate'
+            'data_class' => 'Dashboard\CommonBundle\Entity\Question'
         ));
     }
     

@@ -394,3 +394,9 @@ function getModalSearchResults(element){
         }
     });
 }
+function toggleQuestion(element){
+    element.toggleClass("active");
+    element.find(".pageFaqItemAnswer").slideToggle();
+    
+    
+}

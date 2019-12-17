@@ -1,0 +1,82 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{{ page.metaTagTitle}}{% endblock %}
+{% block metatags %}
+    <meta content="{{ page.metaTagDescription }}" name="description" />
+    <meta content="{{ page.metaTagAuthor }}" name="author" />
+    <meta content="{{ page.metaTagRobots }}" name="robots" />
+    <meta content="{{ page.metaTagKeywords }}" name="keywords" />
+{% endblock %}
+
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li><a href="{{ path('faq') }}">{{ page.title }}</a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-9 col-md-9">
+            <div class="content-block-header">
+                <h1>{{ page.title }}</h1>
+            </div>
+            <div class="page-content">
+                {{ page.text | raw }}
+                <div class="pageFaq">
+                    {% if questions | length > 0%}
+                        {% for question in questions %}
+                            <div class="pageFaqBlock">
+                                <div class="pageFaqBlockHeader">{{ question.name }}</div>
+                                <div class="pageFaqItems">
+                                    {% if question.answers | length > 0 %}
+                                        {% for answer in question.answers %}
+                                            {% if answer.isSHow %}
+                                                <div class="pageFaqItem" onclick="toggleQuestion($(this));">
+                                                    <div class="pageFaqItemQuestion">
+                                                        {{ answer.name }}
+                                                    </div>
+                                                    <div class="pageFaqItemAnswer">
+                                                        {{ answer.content | raw }}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="page-banner">
+                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page, 'position' : 'centerpage'})) }}
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
+            <div class="advertise-block">
+                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page, 'position' : 'rightcolumn'})) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -39,6 +39,11 @@ class QuestionAnswer
      */
     private $sortorder;
     
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $isShow;
+    
 
     /**
      * Get id
@@ -140,5 +145,28 @@ class QuestionAnswer
     public function getQuestion()
     {
         return $this->question;
+    }
+
+    /**
+     * Set isShow
+     *
+     * @param boolean $isShow
+     * @return QuestionAnswer
+     */
+    public function setIsShow($isShow)
+    {
+        $this->isShow = $isShow;
+
+        return $this;
+    }
+
+    /**
+     * Get isShow
+     *
+     * @return boolean 
+     */
+    public function getIsShow()
+    {
+        return $this->isShow;
     }
 }

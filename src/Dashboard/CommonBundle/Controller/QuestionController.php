@@ -12,6 +12,7 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Dashboard\CommonBundle\Entity\Question;
+use Dashboard\CommonBundle\Form\Type\QuestionType;
 
 class QuestionController extends Controller
 {
@@ -23,61 +24,24 @@ class QuestionController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $questions = $manager->getRepository("DashboardCommonBundle:Question")->findAll();
         
-        if($request->request->get('filterIds'))
+        if($request->request->get('questionIds'))
         {
-            foreach($request->request->get('filterIds') as $filterId)
+            foreach($request->request->get('questionIds') as $questionId)
             {
-                $filter = $manager->getRepository("DashboardCommonBundle:Filter")->find($filterId);
+                $question = $manager->getRepository("DashboardCommonBundle:Question")->find($questionId);
                 
-                if($filter)
+                if($question)
                 {
-                    if($filter->getTranslations())
+                    if($question->getAnswers())
                     {
-                        foreach($filter->getTranslations() as $translation)
+                        foreach($question->getAnswers() as $answer)
                         {
-                            $translation->setFilter(null);
-                            $manager->remove($translation);
+                            $answer->setQuestion(null);
+                            $manager->remove($answer);
                         }
                     }
                     
-                    if($filter->getCategories())
-                    {
-                        foreach($filter->getCategories() as $category)
-                        {
-                            $category->removeFilter($filter);
-                            $manager->persist($category);
-                        }
-                    }
-                    
-                    if($filter->getValues())
-                    {
-                        foreach($filter->getValues() as $value)
-                        {
-                            $value->setFilter(null);
-                            
-                            if($value->getTranslations())
-                            {
-                                foreach($value->getTranslations() as $translation)
-                                {
-                                    $translation->setFilter(null);
-                                    $manager->remove($translation);
-                                }
-                            }
-                            
-                            if($value->getProducts())
-                            {
-                                foreach($value->getProducts() as $product)
-                                {
-                                    $product->removeFilter($value);
-                                    $manager->persist($product);
-                                }
-                            }
-                            
-                            $manager->remove($value);
-                        }
-                    }
-                    
-                    $manager->remove($filter);
+                    $manager->remove($question);
                     $manager->flush();
                     
                     $this->addFlash(
@@ -89,7 +53,7 @@ class QuestionController extends Controller
                 }
             }
             
-            return $this->redirectToRoute("admin_filters");
+            return $this->redirectToRoute("admin_questions");
         }
         
         return $this->render('DashboardCommonBundle:Question:list.html.twig', array("questions" => $questions));
@@ -136,7 +100,7 @@ class QuestionController extends Controller
             {
                 foreach($question->getAnswers() as $item)
                 {
-                    $item->setQuestion($filter);
+                    $item->setQuestion($question);
                     $manager->persist($item);
                 }
             } 
@@ -154,7 +118,31 @@ class QuestionController extends Controller
             return $this->redirectToRoute("admin_question_edit", array("questionId" => $question->getId()));
         }
         
-        return $this->render('DashboardCommonBundle:Question:edit.html.twig', array());
+        return $this->render('DashboardCommonBundle:Question:edit.html.twig', array("questionForm" => $questionForm->createView()));
+    }
+    
+    /**
+     * @Route("/faq", name="faq")
+     */
+    public function faqAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $questions = $manager->getRepository("DashboardCommonBundle:Question")->findAll();
+        
+        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Page p WHERE p.locale=" . $locale->getId() . " AND p.isUserpage = 0 AND p.route = 'faq'" );
+        
+        try{
+            $page = $query->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $page = 0;
+        }
+        
+        return $this->render('DashboardCommonBundle:Question:faq.html.twig', array("questions" => $questions,
+                                                                                   "page" => $page,
+                                                                                   "locale" => $locale));
     }
 }
 

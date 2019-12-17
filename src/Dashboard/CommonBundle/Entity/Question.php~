@@ -34,5 +34,100 @@ class Question
      */
     private $answers;
     
-}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->answers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Question
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set sortorder
+     *
+     * @param integer $sortorder
+     * @return Question
+     */
+    public function setSortorder($sortorder)
+    {
+        $this->sortorder = $sortorder;
+    
+        return $this;
+    }
+
+    /**
+     * Get sortorder
+     *
+     * @return integer 
+     */
+    public function getSortorder()
+    {
+        return $this->sortorder;
+    }
+
+    /**
+     * Add answers
+     *
+     * @param \Dashboard\CommonBundle\Entity\QuestionAnswer $answers
+     * @return Question
+     */
+    public function addAnswer(\Dashboard\CommonBundle\Entity\QuestionAnswer $answers)
+    {
+        $this->answers[] = $answers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove answers
+     *
+     * @param \Dashboard\CommonBundle\Entity\QuestionAnswer $answers
+     */
+    public function removeAnswer(\Dashboard\CommonBundle\Entity\QuestionAnswer $answers)
+    {
+        $this->answers->removeElement($answers);
+    }
+
+    /**
+     * Get answers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAnswers()
+    {
+        return $this->answers;
+    }
+}

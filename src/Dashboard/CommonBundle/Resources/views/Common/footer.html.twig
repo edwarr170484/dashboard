@@ -25,7 +25,11 @@
                                     {% if footerPages %}
                                         {% for page in footerPages %}
                                             {% if page.footerMenuSection == 1 %}
-                                                <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
+                                                {% if page.isUserpage %}
+                                                    <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
+                                                {% else %}
+                                                    <li><a href="{{ path(page.route) }}">{{ page.title }}</a></li>
+                                                {% endif %}
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}
@@ -41,7 +45,11 @@
                                     {% if footerPages %}
                                         {% for page in footerPages %}
                                             {% if page.footerMenuSection == 2 %}
-                                                <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
+                                                {% if page.isUserpage %}
+                                                    <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
+                                                {% else %}
+                                                    <li><a href="{{ path(page.route) }}">{{ page.title }}</a></li>
+                                                {% endif %}
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}

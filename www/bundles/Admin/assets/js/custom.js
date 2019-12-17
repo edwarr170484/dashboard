@@ -137,6 +137,38 @@ $(document).ready(function(){
             });
     });
     
+    $("#add-question").click(function(){
+        
+        var prototype = $("#question_answers").data("prototype");
+        var count = $(".table-question-answers tbody tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        
+        $(".table-question-answers tbody").append(newForm);
+        
+          tinymce.init({
+                    language: "ru",
+                    valid_elements : "*[*]",
+                    cleanup : false,
+                    height:"300",
+            verify_html : false,
+            cleanup_on_startup : false,
+            forced_root_block : "",
+            validate_children : false,
+            remove_redundant_brs : false,
+            remove_linebreaks : false,
+            force_p_newlines : false,
+            force_br_newlines : false,
+            valid_children : "+a[div|p|img|br|strong],+ol[p|img|br|strong],+ul[p|img|br|strong]",
+            validate: false,
+            fix_table_elements : false,
+            fix_list_elements:false,
+            image_advtab: true,
+                    selector: "textarea.tinyeditor",
+                    plugins: "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table contextmenu paste textcolor filemanager",
+                    toolbar: "insertfile undo redo | styleselect | bold italic | forecolor | backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | filemanager"
+            });
+    });
+    
     $("#add-product-image").click(function(){
         
         var prototype = $("#product_fotos").data("prototype");

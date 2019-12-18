@@ -1050,6 +1050,7 @@ body.userAccount{background:#F9F9F9;}
 .mapListSearchBlockTabs ul li{padding-left: 0;padding-right: 3rem;}
 .mapListSearchBlockTabs ul li a{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
 .mapListSearchBlockTabs ul li a.active{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);}
+.mapListSearchBlockTabs ul li a:hover,.mapListSearchBlockTabs ul li a:focus{text-decoration: none;}
 .mapListSearchBlockForm{@include flexBox(row,flex-start,stretch);}
 .mapListSearchBlockForm .formParameterField{width: 40%;}
 .mapListSearchBlockForm .formParameterField.button{width: 20%;}
@@ -1083,6 +1084,8 @@ body.userAccount{background:#F9F9F9;}
 .mapListAuto{@include flexBox(column,flex-start,center);}
 .mapListAutoLabel{padding-top: 1.5rem;}
 .mapListAutoLabel:hover{background: #C4C4C4;}
+.mapListAutoLabel:hover a{text-decoration: none;}
+.mapListAutoLabel.active{background: #C4C4C4;}
 .mapListItems.hide{display: none;}
 .mapListServicesJobs .pageContentJobsItem,.mapListServicesJobs .pageContentJobsItem a{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
 .mapListServicesJobs .pageContentJobsItem a:hover,.mapListServicesJobs .pageContentJobsItem a:focus{text-decoration: none;}

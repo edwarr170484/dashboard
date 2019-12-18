@@ -431,3 +431,29 @@ function getDealerWorkTime(element, dealerId){
         }
     });
 }
+
+function selectDealers(element, action){
+    element.parent().parent().find("a").removeClass("active");
+    element.addClass("active");
+    $("input[name='dealerAutoType']").val(action);
+    $.ajax({
+        url: '/dealer/getlist/' + action,
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(data){
+            $("#dealersBlockList").html(data);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}
+
+function setAutoId(autoId, autoName, element){
+    $(".mapListAutoLabel").removeClass('active');
+    element.parent().addClass('active');
+    $("input[name='dealerAuto']").val(autoName);
+    $("input[name='dealerAuto']").blur();
+    $("input[name='dealerAutoId']").val(autoId);
+    $(".mapListItems").toggleClass("hide");
+}

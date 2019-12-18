@@ -9,33 +9,45 @@
             {% if dealers | length > 0 %}
                 <div class="col-lg-4 col-md-4">
                     <div class="mapListSearchBlock">
-                        <div class="mapListSearchBlockHeader">{% trans %}Список дилеров по продаже новых авто{% endtrans %}</div>
-                        <div class="mapListSearchBlockTabs">
-                            <ul class="list-unstyled list-inline">
-                                <li><a href="javascript:void(0)" class="active">{% trans %}Все{% endtrans %}</a></li>
-                                <li><a href="javascript:void(0)">{% trans %}Новые{% endtrans %}</a></li>
-                                <li><a href="javascript:void(0)">{% trans %}С пробегом{% endtrans %}</a></li>
-                            </ul>
-                        </div>
-                        <div class="mapListSearchBlockForm">
-                            <div class="formParameterField" id="selectAutoMark">
-                                <input name="dealerName" type="text" placeholder="{% trans %}Марка авто{% endtrans %}" />
+                        <form action="{{ path('dealers') }}" method="POST">
+                            <div class="mapListSearchBlockHeader">{% trans %}Список дилеров по продаже новых авто{% endtrans %}</div>
+                            <div class="mapListSearchBlockTabs">
+                                {% if app.request.get('dealerAutoType') %}
+                                    <ul class="list-unstyled list-inline">
+                                        <li><a href="javascript:void(0)" {% if app.request.get('dealerAutoType') == 'all' %}class="active"{% endif %} onclick="selectDealers($(this),'all')">{% trans %}Все{% endtrans %}</a></li>
+                                        <li><a href="javascript:void(0)" {% if app.request.get('dealerAutoType') == 'new' %}class="active"{% endif %} onclick="selectDealers($(this),'new')">{% trans %}Новые{% endtrans %}</a></li>
+                                        <li><a href="javascript:void(0)" {% if app.request.get('dealerAutoType') == 'old' %}class="active"{% endif %} onclick="selectDealers($(this),'old')">{% trans %}С пробегом{% endtrans %}</a></li>
+                                    </ul>
+                                {% else %}
+                                    <ul class="list-unstyled list-inline">
+                                        <li><a href="javascript:void(0)" class="active" onclick="selectDealers($(this),'all')">{% trans %}Все{% endtrans %}</a></li>
+                                        <li><a href="javascript:void(0)" onclick="selectDealers($(this),'new')">{% trans %}Новые{% endtrans %}</a></li>
+                                        <li><a href="javascript:void(0)" onclick="selectDealers($(this),'old')">{% trans %}С пробегом{% endtrans %}</a></li>
+                                    </ul>
+                                {% endif %}
                             </div>
-                            <div class="formParameterField">
-                                <input name="dealerName" type="text" placeholder="{% trans %}Название дилера{% endtrans %}" />
+                            <div class="mapListSearchBlockForm">
+                                <div class="formParameterField" id="selectAutoMark">
+                                    <input name="dealerAuto" type="text" placeholder="{% trans %}Марка авто{% endtrans %}" value="{% if app.request.get('dealerAuto') %}{{ app.request.get('dealerAuto') }}{% endif %}"/>
+                                </div>
+                                <div class="formParameterField">
+                                    <input name="dealerName" type="text" placeholder="{% trans %}Название дилера{% endtrans %}" value="{% if app.request.get('dealerName') %}{{ app.request.get('dealerName') }}{% endif %}"/>
+                                </div>
+                                <div class="formParameterField button">
+                                    <input name="dealerAutoType" type="hidden" value="{% if app.request.get('dealerAutoType') %}{{ app.request.get('dealerAutoType') }}{% else %}all{% endif %}" />
+                                    <input name="dealerAutoId" type="hidden" value="{% if app.request.get('dealerAutoId') %}{{ app.request.get('dealerAutoId') }}{% endif %}" />
+                                    <button type="submit" class="find">{% trans %}Найти{% endtrans %}</button>
+                                </div>
                             </div>
-                            <div class="formParameterField button">
-                                <button type="button" class="find">{% trans %}Найти{% endtrans %}</button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                     {% if autos | length > 0 %}
                         <div class="mapListItems hide">
                             <div class="col-lg-12">
                                 <div class="row">
                                     {% for auto in autos %}
-                                        <div class="col-xs-3 mapListAutoLabel">
-                                            <a href="" class="mapListAuto">
+                                        <div class="col-xs-3 mapListAutoLabel {% if app.request.get('dealerAutoId') and app.request.get('dealerAutoId') == auto.id %}active{% endif %}">
+                                            <a href="javascript:void(0)" class="mapListAuto" onclick="setAutoId({{ auto.id }},'{{ auto.title }}',$(this))">
                                                 <span class="mapListAutoLogo">
                                                     {{ auto.image | raw }}
                                                 </span>
@@ -47,7 +59,7 @@
                             </div>
                         </div>
                     {% endif %}
-                    <div class="mapListItems" role="tabpanel" id="dealersBlockAll">
+                    <div class="mapListItems" id="dealersBlockList">
                         {% for dealer in dealers %}
                             {% include 'DashboardCommonBundle:Dealer:item.html.twig' with {'dealer' : dealer} %}
                         {% endfor %}

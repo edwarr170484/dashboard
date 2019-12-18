@@ -165,13 +165,13 @@ class DealerController extends Controller
     /**
      * @Route("/dealerpage/{dealerName}", name="dealerPage", defaults={"dealerName" : 0})
      */
-    public function dealerPageAction($dealerName,Request $request)
+    public function dealerPageAction($dealerName, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        $query = $manager->createQuery('SELECT c,cc FROM Dashboard\CommonBundle\Entity\Category c LEFT JOIN c.children cc WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder, cc.sortorder');
+        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder');
         
         try{
             $categories = $query->getResult();
@@ -180,14 +180,43 @@ class DealerController extends Controller
             $categories = 0;
         }
         
+        foreach($categories as $category){
+            $productsNum = 0;
+            $this->getCategoryProducts($category, $productsNum);
+            $category->setAllProductsNumber($productsNum);
+        }
+        
+        $query = $manager->createQuery("SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud WHERE u.isActive = 1 AND r.role='ROLE_DEALER' AND ud.company = '" . $dealerName . "'");
+        
+        try{
+            $dealer = $query->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $dealer = 0;
+        }
+        
+        if(!$dealer){
+            return $this->createNotFoundException();
+        }
+        
         return $this->render('DashboardCommonBundle:Dealer:dealer.html.twig', array("locale" => $locale,
                                                                                     "settings" => $settings,
-                                                                                    "categories" => $categories));
+                                                                                    "categories" => $categories,
+                                                                                    "dealer" => $dealer));
+    }
+    
+    private function getCategoryProducts($category, &$productsNum){
+        $productsNum += count($category->getProduct());
+        
+        if($category->getChildren()){
+            foreach($category->getChildren() as $children){
+                $this->getCategoryProducts($children, $productsNum);
+            }
+        }
     }
     
     /**
      * @Route("/dealers", name="dealers")
-     * @Route("/{_locale}/dealers", name="dealersLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function dealersAction(Request $request)
     {
@@ -195,7 +224,35 @@ class DealerController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        $query = $manager->createQuery("SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r WHERE u.isActive = 1 AND r.role='ROLE_DEALER'");
+        $sql = "SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud LEFT JOIN ud.autos ua WHERE u.isActive = 1 AND r.role='ROLE_DEALER'";
+        
+        if($request->server->get("REQUEST_METHOD") == "POST"){
+            if($request->request->get("dealerAutoType")){
+                switch($request->request->get("dealerAutoType")){
+                    case 'new':
+                        $sql .= ' AND ud.isNewAuto = 1';
+                    break;
+
+                    case 'old':
+                        $sql .= ' AND ud.isOldAuto = 1';
+                    break; 
+                }
+            }
+            
+            if($request->request->get("dealerName")){
+                $sql .= ' AND ud.company LIKE \'%' . $request->request->get("dealerName") . '%\'';
+            }
+            
+            if($request->request->get("dealerAutoId")){
+                $auto = $manager->getRepository("DashboardCommonBundle:Category")->find($request->request->get("dealerAutoId"));
+                if($auto){
+                    $sql .= ' AND ua.id = ' . $auto->getId();
+                    dump($sql);
+                }
+            }
+        }
+        
+        $query = $manager->createQuery($sql);
         
         try{
             $dealers = $query->getResult();
@@ -225,14 +282,13 @@ class DealerController extends Controller
         return $this->render('DashboardCommonBundle:Dealer:dealers.html.twig', array("locale" => $locale,
                                                                                      "settings" => $settings,
                                                                                      "dealers" => $dealers,
-                                                                                     "autos" => $autos,
-                                                                                     "today" => new \DateTime("now")));
+                                                                                     "autos" => $autos));
     }
     
     /**
      * @Route("/dealer/getworkinfo/{dealerId}/{day}/{time}", name="dealerWorkinfo")
      */
-    public function geWorkinfoAction($dealerId, $day, $time, Request $request)
+    public function getWorkinfoAction($dealerId, $day, $time, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
@@ -265,6 +321,38 @@ class DealerController extends Controller
                 }
             }
         }
+    }
+    
+    /**
+     * @Route("/dealer/getlist/{action}", name="dealerList")
+     */
+    public function getListAction($action, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        
+        $sql = "SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud WHERE u.isActive = 1 AND r.role='ROLE_DEALER'";
+        
+        switch($action){ 
+            case 'new':
+                $sql .= ' AND ud.isNewAuto = 1';
+            break;
+        
+            case 'old':
+                $sql .= ' AND ud.isOldAuto = 1';
+            break;
+        }
+        
+        $query = $manager->createQuery($sql);
+        
+        try{
+            $dealers = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $dealers = 0;
+        }
+        
+        return $this->render('DashboardCommonBundle:Dealer:list.html.twig', array("dealers" => $dealers));
+        
     }
     
 }

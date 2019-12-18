@@ -1,0 +1,5 @@
+{% if dealers | length > 0 %}
+    {% for dealer in dealers %}
+        {% include 'DashboardCommonBundle:Dealer:item.html.twig' with {'dealer' : dealer} %}
+    {% endfor %}
+{% endif %}

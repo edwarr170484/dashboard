@@ -50,16 +50,6 @@ class DefaultController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        /*if(!$this->get('session')->has('sessionRegion'))
-        {
-            if($this->getUser())
-            {
-                $user = $this->get('security.context')->getToken()->getUser();
-                if($user->getUserinfo()->getRegion())
-                    $this->get('session')->set('sessionRegion', $user->getUserinfo()->getRegion()->getId());
-            }
-        }*/
-        
         if(!$this->get('session')->has('sessionCity'))
         {
             if($this->getUser())
@@ -229,15 +219,6 @@ class DefaultController extends Controller
             $page = 0;
         }
         
-        $query = $manager->createQuery("SELECT g,gi FROM DashboardGalleryBundle:Gallery g JOIN g.items gi WHERE g.translit = 'mainslider' AND g.isShow = 1 AND gi.status = 1 AND g.locale=" . $locale->getId() . " ORDER BY gi.sort" );
-        
-        try{
-            $slider = $query->getSingleResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $slider = 0;
-        }
-        
         $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder');
         
         try{
@@ -255,8 +236,7 @@ class DefaultController extends Controller
         
         $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
         
-        return $this->render('DashboardCommonBundle:Default:index.html.twig', array("slider" => $slider,
-                                                                                    "categories" => $categories,
+        return $this->render('DashboardCommonBundle:Default:index.html.twig', array("categories" => $categories,
                                                                                     "page" => $page,
                                                                                     "locale" => $locale,
                                                                                     "settings" => $settings,
@@ -1348,7 +1328,14 @@ class DefaultController extends Controller
         
         $searchText = '';
         
-        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu LEFT JOIN p.info pi WHERE pu.isActive = 1 AND p.isBlocked = 0 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0";
+        if($this->get('session')->get('sessionCity')){
+            $city = $manager->getRepository("DashboardCommonBundle:City")->find($this->get('session')->get('sessionCity'));
+            $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu LEFT JOIN p.info pi WHERE p.city = " . $city->getId() . " AND pu.isActive = 1 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0 AND p.isBlocked = 0";
+        }
+        else{
+            $city = 0;
+            $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu LEFT JOIN p.info pi WHERE pu.isActive = 1 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0 AND p.isBlocked = 0";
+        }
 
         if($request->request->get('searchText'))
         {

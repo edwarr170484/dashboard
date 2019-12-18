@@ -145,7 +145,7 @@
                         </a>
                     </div>
                     <div class="siteMenuGamburger">
-                        <button onclick='$(".siteMenuGamburgerMenu").show();'>{{ block('svgGamburger') }}</button>
+                        <button onclick='toggleGamburgerMenu(event,"show")'>{{ block('svgGamburger') }}</button>
                     </div>
                     <div class="siteMenuSearch">
                         <button onclick="toggleSearchModal()" type="button">{{ block('svgSearch') }}</button>
@@ -232,7 +232,7 @@
                 {% endif %}
             </div>
             <div class="siteMenuGamburgerMenu">
-                            <button onclick='$(".siteMenuGamburgerMenu").hide();'>
+                            <button onclick='toggleGamburgerMenu(event,"hide")'>
                                 <svg width="26" height="15" viewBox="0 0 26 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22 6.19549H0V8.20271H22V6.19549Z" fill="#EB840B"/>
                                 <path d="M26 12.2171H0V14.2244H26V12.2171Z" fill="#EB840B"/>

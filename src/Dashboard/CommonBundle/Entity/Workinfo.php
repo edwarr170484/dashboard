@@ -86,8 +86,7 @@ class Workinfo
      * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
     private $isAlldays;
-    
-    
+
     /**
      * @ORM\Column(type="time", nullable=true, options={"default": NULL})
      */

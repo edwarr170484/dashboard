@@ -1,0 +1,62 @@
+<div class="mapListItem">
+    <a href="{{ path('dealerPage',{'dealerName' : dealer.dealerinfo.company}) }}" class="mapListItemLink"></a>
+    <div class="mapListItemImage">
+    {% if dealer.dealerinfo.logotype %}
+        <div class="mapListItemImageSrc">
+            <img src="{{ asset('bundles/images/dealers/logotypes/' ~ dealer.dealerinfo.logotype) }}" alt="{{ dealer.dealerinfo.company }}" title="{{ dealer.dealerinfo.company }}" />
+        </div>
+    {% endif %}
+    <div class="mapListItemImageRating">
+        <div class="accountReviewRating">
+            {% set reviewRating = dealer.dealerinfo.rating %}
+            {% if reviewRating > 0 %}
+                {% for i in 1..reviewRating %}
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                    </svg>
+                {% endfor %}
+            {% endif %}
+            {% if reviewRating < 5 %}
+                {% for i in (reviewRating + 1)..5 %}
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                    </svg>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="accountReviewRatingNum">{{ dealer.targetReviews | length }}</div>
+    </div>
+</div>
+<div class="mapListItemInfo">
+    <div class="mapListItemInfoName">{{ dealer.dealerinfo.company }}</div>
+        {% if dealer.dealerinfo.website %}
+            <div class="mapListItemInfoText">Web: <a href="{{ dealer.dealerinfo.website }}">{{ dealer.dealerinfo.website }}</a></div>
+        {% endif %}
+        {% if dealer.dealerinfo.phones | length > 0 %}
+            <div class="mapListItemInfoText">
+                {% trans %}Teléfono{% endtrans %}:
+                {% set i = 0 %}
+                {% for phone in dealer.dealerinfo.phones %}{{ phone.phone }}{% if i < dealer.dealerinfo.phones | length - 1 %},{% endif %}
+                    {% set i = i + 1 %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="mapListItemInfoText">
+            <svg width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 1C4.58867 1 1 4.37117 1 8.51358C1 14.7178 8.46733 20.6752 8.78533 20.9258C8.84474 20.9733 8.92012 20.9995 8.99818 21C9.07624 21.0005 9.15196 20.9751 9.212 20.9283C9.53 20.682 17 14.8272 17 8.51358C17 4.37117 13.4113 1 9 1ZM9.00133 20.2733C7.774 19.2452 1.66667 13.8616 1.66667 8.51358C1.66667 4.71491 4.95667 1.62499 9 1.62499C13.0433 1.62499 16.3333 4.71491 16.3333 8.51358C16.3333 13.9522 10.232 19.259 9.00133 20.2733Z" stroke="#616161"/>
+                <path d="M9 5C6.794 5 5 6.794 5 9C5 11.206 6.794 13 9 13C11.206 13 13 11.206 13 9C13 6.794 11.206 5 9 5ZM9 12.3333C7.162 12.3333 5.66667 10.838 5.66667 9C5.66667 7.162 7.162 5.66667 9 5.66667C10.838 5.66667 12.3333 7.162 12.3333 9C12.3333 10.838 10.838 12.3333 9 12.3333Z" stroke="#616161"/>
+            </svg>
+            {% if dealer.dealerinfo.city %}{{ dealer.dealerinfo.city.name }},{% endif %}{{ dealer.dealerinfo.address }}
+        </div>
+        {% if dealer.dealerinfo.workinfo %}
+            <div class="mapListItemInfoText">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 17C13.4183 17 17 13.4183 17 9C17 4.58172 13.4183 1 9 1C4.58172 1 1 4.58172 1 9C1 13.4183 4.58172 17 9 17Z" stroke="#F5AA01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 4.19995V8.99995L11.4 11.4" stroke="#F5AA01" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span id="dealerWorktime{{ dealer.id }}"></span>
+                <script>getDealerWorkTime($("#dealerWorktime{{ dealer.id }}"), {{ dealer.id }})</script>
+            </div>
+        {% endif %}
+    </div>
+</div>

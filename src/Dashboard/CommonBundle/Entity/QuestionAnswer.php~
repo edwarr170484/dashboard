@@ -146,4 +146,27 @@ class QuestionAnswer
     {
         return $this->question;
     }
+
+    /**
+     * Set isShow
+     *
+     * @param boolean $isShow
+     * @return QuestionAnswer
+     */
+    public function setIsShow($isShow)
+    {
+        $this->isShow = $isShow;
+
+        return $this;
+    }
+
+    /**
+     * Get isShow
+     *
+     * @return boolean 
+     */
+    public function getIsShow()
+    {
+        return $this->isShow;
+    }
 }

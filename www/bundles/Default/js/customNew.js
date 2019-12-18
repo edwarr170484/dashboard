@@ -49,7 +49,21 @@ $(document).ready(function(){
     
     $(".dealerAuto").click(function(){$(this).find('.dealerAutoInner').toggleClass('active');});
     
+    $("body").click(function(){$(".siteMenuGamburgerMenu").hide();});
+    
 });
+
+function toggleGamburgerMenu(event, action){
+    event.stopPropagation();
+    
+    if(action === 'show'){
+       $(".siteMenuGamburgerMenu").show(); 
+    }
+    
+    if(action === 'hide'){
+       $(".siteMenuGamburgerMenu").hide(); 
+    }
+}
 
 function resetWorkTimes(element, area){
     element.toggleClass('active');
@@ -397,6 +411,23 @@ function getModalSearchResults(element){
 function toggleQuestion(element){
     element.toggleClass("active");
     element.find(".pageFaqItemAnswer").slideToggle();
+}
+
+function getDealerWorkTime(element, dealerId){
     
+    var today = new Date();
+    var day = today.getDay();
+    var time = today.getHours();
     
+    $.ajax({
+        url: '/dealer/getworkinfo/' + dealerId + '/' + day + '/' + time,
+        dataType: 'json',
+        beforeSend: function(){},
+        success: function(data){
+            element.html(data.message);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+
+        }
+    });
 }

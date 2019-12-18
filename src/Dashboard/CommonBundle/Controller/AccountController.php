@@ -1013,9 +1013,7 @@ class AccountController extends Controller
         $formPassword = $this->createForm(new UserPasswordType($this->getDoctrine()->getManager()), $user);
         $formAutos = $this->get('form.factory')->createNamedBuilder('autos', 'form', $user->getDealerInfo())
              ->add('autos', 'entity', array('class' => 'DashboardCommonBundle:Category',
-                                              'choice_label' => function($category){
-                                                    return $category->getTitle();
-                                              },
+                                              'choice_label' => function($category){return $category->getTitle();},
                                               'required' => false, 
                                               'label' => '',
                                               'multiple' => true,
@@ -1075,12 +1073,9 @@ class AccountController extends Controller
             $avatar = $formMain['userinfo']['avatarNew']->getData();
             $oldAvatar = $formMain['userinfo']['avatar']->getData();
             
-            if($avatar)
-            {
-                if($oldAvatar)
-                {
-                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/users/avatars/' .$oldAvatar ))
-                    {
+            if($avatar){
+                if($oldAvatar){
+                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/users/avatars/' .$oldAvatar )){
                         $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/users/avatars/' .$oldAvatar );
                     }
                 }
@@ -1106,7 +1101,6 @@ class AccountController extends Controller
         
         if($formDealer->isValid())
         {
-            
             $user->getDealerInfo()->getWorkinfo()->setDealer($user->getDealerInfo());
             
             if($originalPhones){
@@ -1127,12 +1121,9 @@ class AccountController extends Controller
             $avatar = $formDealer['logotypeNew']->getData();
             $oldAvatar = $formDealer['logotype']->getData();
             
-            if($avatar)
-            {
-                if($oldAvatar)
-                {
-                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/dealers/logotypes/' .$oldAvatar ))
-                    {
+            if($avatar){
+                if($oldAvatar){
+                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/dealers/logotypes/' .$oldAvatar )){
                         $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/dealers/logotypes/' .$oldAvatar );
                     }
                 }

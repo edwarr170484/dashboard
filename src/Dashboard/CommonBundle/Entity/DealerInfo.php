@@ -100,6 +100,11 @@ class DealerInfo
     private $isOldAuto;
     
     /**
+     * @ORM\Column(type="integer", length=3, nullable=true, options={"default": 0})
+     */
+    private $rating;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerFoto", mappedBy="dealerInfo")
      */
     private $fotos;
@@ -586,5 +591,28 @@ class DealerInfo
     public function getSalons()
     {
         return $this->salons;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param integer $rating
+     * @return DealerInfo
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+    
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return integer 
+     */
+    public function getRating()
+    {
+        return $this->rating;
     }
 }

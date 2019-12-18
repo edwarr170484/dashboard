@@ -1377,3 +1377,4 @@ ul.color li{position: relative;}
 .pageFaqItemQuestion:before{content:url('../img/faq-plus.svg');margin-right:2rem;}
 .pageFaqItem.active .pageFaqItemQuestion:before{content:url('../img/faq-black-plus.svg');margin-right:2rem;}
 .pageFaq{@include column-count(2);@include column-gap(0);}
+.topBanner{background: $yellow-color;}

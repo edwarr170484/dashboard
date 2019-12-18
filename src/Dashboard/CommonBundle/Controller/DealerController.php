@@ -34,7 +34,6 @@ class DealerController extends Controller
 {
     /**
      * @Route("/dealer", name="dealer")
-     * @Route("/{_locale}/dealer", name="dealerLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function pageAction(Request $request)
     {
@@ -67,7 +66,6 @@ class DealerController extends Controller
     
     /**
      * @Route("/dealer/register", name="dealerRegister")
-     * @Route("/{_locale}/dealer/register", name="dealerRegisterLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function registerAction(Request $request)
     {
@@ -197,8 +195,76 @@ class DealerController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
+        $query = $manager->createQuery("SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r WHERE u.isActive = 1 AND r.role='ROLE_DEALER'");
+        
+        try{
+            $dealers = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $dealers = 0;
+        }
+        
+        $autos = new ArrayCollection();
+        
+        if($dealers){
+            foreach($dealers as $dealer){
+                if($dealer->getDealerInfo()){
+                    if($dealer->getDealerInfo()->getAutos()){
+                        foreach($dealer->getDealerInfo()->getAutos() as $auto){
+                            if(!$autos->get($auto->getId())){
+                                $autos->set($auto->getId(), $auto);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+        
         return $this->render('DashboardCommonBundle:Dealer:dealers.html.twig', array("locale" => $locale,
-                                                                                      "settings" => $settings));
+                                                                                     "settings" => $settings,
+                                                                                     "dealers" => $dealers,
+                                                                                     "autos" => $autos,
+                                                                                     "today" => new \DateTime("now")));
+    }
+    
+    /**
+     * @Route("/dealer/getworkinfo/{dealerId}/{day}/{time}", name="dealerWorkinfo")
+     */
+    public function geWorkinfoAction($dealerId, $day, $time, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $dealer = $manager->getRepository("DashboardCommonBundle:User")->find($dealerId);
+        $weekDays = array("sunday","monday","tuesday","wednesday","thursday","friday","saturday");
+        
+        if($dealer){
+            if($dealer->getDealerinfo()){
+                if($dealer->getDealerinfo()->getWorkinfo()){
+                    $workInfo = $dealer->getDealerinfo()->getWorkinfo();
+                    $function = 'get' . $weekDays[$day];
+                    
+                    if($workInfo->$function()){
+                        if($workInfo->getFullDay()){
+                            return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Открыто круглосуточно")));
+                        }else{
+                            $workStart = $workInfo->getWorkStart();
+                            $workEnd = $workInfo->getWorkStop();
+                            
+                            if($time < $workStart->format("G") || $time > $workEnd->format("G")){
+                                return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Закрыто до %time%", array("%time%" => $workInfo->getWorkStart()->format("H:i")))));
+                            }
+                            if($time >= $workStart->format("G") && $time <= $workEnd->format("G")){
+                                return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Открыто до %time%", array("%time%" => $workInfo->getWorkStop()->format("H:i")))));
+                            }
+                        }
+                    }else{
+                         return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Закрыто")));
+                    }
+                }
+            }
+        }
     }
     
 }

@@ -165,7 +165,12 @@ class Settings
      */
     private $locale;
     
-
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
+     */
+    private $googleMapsKey;
+    
+    
     /**
      * Get id
      *

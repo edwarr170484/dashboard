@@ -1393,14 +1393,13 @@ class DefaultController extends Controller
             ->add('textblockHowToPrice', TextareaType::class, array('required' => false, 'label' => 'Как правильно устанавливать цену', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('textblockUserAgreement', TextareaType::class, array('required' => false, 'label' => 'Пользовательское соглашение', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('userAdvertWorkRight', TextareaType::class, array('required' => false, 'label' => 'Правила размещения и как продавать быстрее', 'attr' => array('class' => 'form-control tinyeditor'))) 
-                    
-                    
+            ->add('googleMapsKey', TextType::class, array('required' => false, 'label' => 'Ключ Google Maps API', 'attr' => array('class' => 'form-control','placeholder' => 'Ключ Google Maps API')))          
             ->add('currency', 'entity', array('class' => 'DashboardCommonBundle:Currency',
                             'choice_label' => 'name',
                             'empty_data' => null,
                             'required' => true, 
                             'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('l')->orderBy('l.sortorder', 'ASC');},
-                            'label' => 'Валюта:', 'attr' => array('class' => 'hidden-input form-control','id' => 'region','placeholder' => 'Валюта:')))  
+                            'label' => 'Валюта:', 'attr' => array('class' => 'hidden-input form-control','id' => 'region','placeholder' => 'Валюта:'))) 
             ->add('successAddAdvertText', TextareaType::class, array('required' => false, 'label' => 'Текст для сообщения об успешном добавлении объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Текст для сообщения об успешном добавлении объявления')))->getForm();
         }
         

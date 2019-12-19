@@ -55,6 +55,9 @@
                                                     <li class="">
                                                         <a data-toggle="tab" href="#settingtextblocks{{ locale.code }}">Текстовые блоки</a>
                                                     </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#settingsocials{{ locale.code }}">Социальные сети</a>
+                                                    </li>
                                                 </ul>
                                                 <div class="tab-content">
                                                     <div id="settingsmain{{ locale.code }}" class="tab-pane fade active in">
@@ -262,6 +265,14 @@
                                                             <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].userAdvertWorkRight) }}</label>
                                                             <div class="col-md-9">
                                                                 {{ form_widget(settingsForms[locale.code].userAdvertWorkRight) }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div id="settingsocials{{ locale.code }}" class="tab-pane fade">
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].googleMapsKey) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].googleMapsKey) }}
                                                             </div>
                                                         </div>
                                                     </div>

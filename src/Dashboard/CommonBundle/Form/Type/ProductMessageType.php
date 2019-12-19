@@ -26,12 +26,11 @@ class ProductMessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('userName', TextType::class, array('required' => true, 'data' => $this->user->getUserinfo()->getFirstname() . " " . $this->user->getUserinfo()->getLastname(),'mapped' => false,'label' => 'Ваше имя:*', 'attr' => array('class' => 'form-control')))     
-            ->add('userEmail', TextType::class, array('required' => true, 'data' => $this->user->getEmail(),'mapped' => false,'label' => 'Jūsu vārds: *', 'attr' => array('class' => 'form-control')))
-            ->add('userPhone', TextType::class, array('required' => true, 'data' => $this->user->getUserinfo()->getPhone() ,'mapped' => false,'label' => 'Jūsu e-pasts'.': *', 'attr' => array('class' => 'form-control')))
-            ->add('message', TextareaType::class, array('required' => true, 'label' => 'Sludinājuma teksts: *', 'attr' => array('class' => 'form-control')))
-            ->add('copytoemail', CheckboxType::class, array('mapped' => false, 'required' => false,'label' => 'Sūtiet man vēstules kopiju', 'attr' => array('class' => 'hidden-input', 'id' => 'copytoemail')) )
-            ->add('save', ButtonType::class, array('label' => 'SŪTĪT', 'attr' => array('class' => 'send-tab-form')));
+            ->add('userName', TextType::class, array('required' => false, 'data' => $this->user->getUserinfo()->getFirstname() . " " . $this->user->getUserinfo()->getLastname(),'mapped' => false,'label' => 'Ваше имя:*', 'attr' => array('class' => 'form-control')))     
+            ->add('userEmail', TextType::class, array('required' => false, 'data' => $this->user->getEmail(),'mapped' => false,'label' => 'E-mail: *', 'attr' => array('class' => 'form-control')))
+            ->add('userPhone', TextType::class, array('required' => false, 'data' => $this->user->getUserinfo()->getPhone() ,'mapped' => false,'label' => 'Phone'.': *', 'attr' => array('class' => 'form-control')))
+            ->add('message', TextareaType::class, array('required' => true, 'label' => 'Текст сообщения: *', 'attr' => array('class' => 'form-control')))
+            ->add('save', ButtonType::class, array('label' => 'Отправить', 'attr' => array('class' => 'send-tab-form')));
     }
     
     public function configureOptions(OptionsResolver $resolver)

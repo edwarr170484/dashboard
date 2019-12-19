@@ -16,9 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 use Dashboard\CommonBundle\Entity\User;
-use Dashboard\CommonBundle\Entity\DealerInfo;
-use Dashboard\CommonBundle\Entity\DealerFoto;
-use Dashboard\CommonBundle\Entity\DealerSalon;
 use Dashboard\CommonBundle\Form\Type\DealerRegisterType;
 use Dashboard\CommonBundle\Entity\Message;
 use Dashboard\CommonBundle\Entity\Conversation;
@@ -29,6 +26,8 @@ use Dashboard\CommonBundle\Form\Type\UserPasswordType;
 use Dashboard\CommonBundle\Form\Type\DealerEditType;
 use Dashboard\CommonBundle\Form\Type\DealerSalonType;
 use Dashboard\CommonBundle\Form\Type\ReviewType;
+
+use Dashboard\CommonBundle\Form\Type\ProfileMessageType;
 
 class DealerController extends Controller
 {
@@ -170,6 +169,120 @@ class DealerController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $sessionUser = $this->get('security.context')->getToken()->getUser();
+        
+        $query = $manager->createQuery("SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud WHERE u.isActive = 1 AND r.role='ROLE_DEALER' AND ud.company = '" . $dealerName . "'");
+        
+        try{
+            $dealer = $query->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $dealer = 0;
+        }
+        
+        if(!$dealer){
+            return $this->createNotFoundException();
+        }
+        
+        $profileMessageForm = null;
+        
+        if($this->getUser()){
+            
+            $profileMessage = new Message();
+            $profileMessageForm = $this->createForm(new ProfileMessageType($manager), $profileMessage);
+            
+            $profileMessageForm->handleRequest($request);
+
+            if ($profileMessageForm->isSubmitted() && $profileMessageForm->isValid())
+            {
+                $blacklistItem = $manager->getRepository("DashboardCommonBundle:Blacklist")->findOneBy(array("userAuthor" => $profileMessageForm['userTo']->getData(), "userTo" => $profileMessageForm['userFrom']->getData()));
+                
+                if($blacklistItem)
+                {
+                    $this->addFlash(
+                            'notice',
+                            '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                                $this->get('translator')->trans('<strong>Ошибка!</strong> Этот пользователь добавил Вас в черный список.') . '</div>'
+                        );
+                    
+                    return $this->redirectToRoute("dealerPage", array("dealerName" => $dealer->getDealerinfo()->getCompany()));
+                }
+                
+                if($dealer->getId() != $sessionUser->getId())
+                {
+                    //check if conversation exists
+                    $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE (c.userOne = " . $profileMessageForm['userFrom']->getData()->getId()  . " AND c.userTwo = " . $profileMessageForm['userTo']->getData()->getId() . " ) "
+                            . "OR (c.userOne = " . $profileMessageForm['userTo']->getData()->getId() . " AND c.userTwo = " . $profileMessageForm['userFrom']->getData()->getId()  . ")");
+                    
+                    try{
+                        $conversation = $query->getSingleResult();
+                    }
+                    catch(\Doctrine\ORM\NoResultException $e) {
+                        $conversation = new Conversation();
+                        $conversation->setUserOne($profileMessageForm['userTo']->getData());
+                        $conversation->setUserTwo($profileMessageForm['userFrom']->getData());
+                        $conversation->setUserDeleted(null);
+                        $manager->persist($conversation);
+                        $manager->flush();
+                    }
+
+                    $profileMessage->setUserOwner($profileMessageForm['userFrom']->getData());
+                    $profileMessage->setIsNew(1);
+                    $profileMessage->setIsDeleted(0);
+                    $profileMessage->setSentDate(new \DateTime("now"));
+                    $profileMessage->setReadedDate(new \DateTime("now"));
+                    $profileMessage->setProduct(null);
+                    $profileMessage->setConversation($conversation);
+                    
+                    $manager->persist($profileMessage);
+                    $manager->flush();
+                    
+                    $messageTwo = new Message();
+                    $messageTwo = clone $profileMessage;
+                    $messageTwo->setUserOwner($profileMessageForm['userTo']->getData());
+                    
+                    $manager->persist($messageTwo);
+                    $manager->flush();
+                    
+                    if($dealer->getIsAlertNewMessage())
+                    {
+                        $messageSent = \Swift_Message::newInstance()
+                            ->setSubject('Новое сообщение на сайте ' . $settings->getSiteName())
+                            ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                            ->setTo($dealer->getEmail())
+                            ->setBody(
+                                $this->renderView(
+                                    'Emails/productmessage.html.twig',
+                                    array('message' => $profileMessage->getMessage(),
+                                          'user' => $sessionUser)
+                                ),
+                                'text/html'
+                            );
+
+                            $this->get('mailer')->send($messageSent);
+                    }
+                    
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваше сообщение отправлено.') . '</div>'
+                    );
+                    
+                }
+                else {
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете писать сообщения себе.') . '</div>'
+                    );
+                }
+                
+                return $this->redirectToRoute("dealerPage", array("dealerName" => $dealer->getDealerinfo()->getCompany()));
+            }
+        }
         
         $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder');
         
@@ -186,23 +299,11 @@ class DealerController extends Controller
             $category->setAllProductsNumber($productsNum);
         }
         
-        $query = $manager->createQuery("SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud WHERE u.isActive = 1 AND r.role='ROLE_DEALER' AND ud.company = '" . $dealerName . "'");
-        
-        try{
-            $dealer = $query->getSingleResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $dealer = 0;
-        }
-        
-        if(!$dealer){
-            return $this->createNotFoundException();
-        }
-        
         return $this->render('DashboardCommonBundle:Dealer:dealer.html.twig', array("locale" => $locale,
                                                                                     "settings" => $settings,
                                                                                     "categories" => $categories,
-                                                                                    "dealer" => $dealer));
+                                                                                    "dealer" => $dealer,
+                                                                                    "profileMessageForm" => ($profileMessageForm) ? $profileMessageForm->createView() : null));
     }
     
     private function getCategoryProducts($category, &$productsNum){

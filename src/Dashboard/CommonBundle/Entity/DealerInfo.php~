@@ -592,4 +592,27 @@ class DealerInfo
     {
         return $this->salons;
     }
+
+    /**
+     * Set rating
+     *
+     * @param integer $rating
+     * @return DealerInfo
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+    
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return integer 
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
 }

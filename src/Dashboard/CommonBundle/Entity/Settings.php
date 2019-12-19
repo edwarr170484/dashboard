@@ -165,7 +165,12 @@ class Settings
      */
     private $locale;
     
-
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
+     */
+    private $googleMapsKey;
+    
+    
     /**
      * Get id
      *
@@ -887,5 +892,28 @@ class Settings
     public function getUserMessagesNumber()
     {
         return $this->userMessagesNumber;
+    }
+
+    /**
+     * Set googleMapsKey
+     *
+     * @param string $googleMapsKey
+     * @return Settings
+     */
+    public function setGoogleMapsKey($googleMapsKey)
+    {
+        $this->googleMapsKey = $googleMapsKey;
+
+        return $this;
+    }
+
+    /**
+     * Get googleMapsKey
+     *
+     * @return string 
+     */
+    public function getGoogleMapsKey()
+    {
+        return $this->googleMapsKey;
     }
 }

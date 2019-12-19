@@ -303,6 +303,7 @@ class DealerController extends Controller
                                                                                     "settings" => $settings,
                                                                                     "categories" => $categories,
                                                                                     "dealer" => $dealer,
+                                                                                    "pagination" => 0,
                                                                                     "profileMessageForm" => ($profileMessageForm) ? $profileMessageForm->createView() : null));
     }
     

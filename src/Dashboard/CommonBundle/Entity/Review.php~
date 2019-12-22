@@ -42,6 +42,11 @@ class Review
     private $targetUser;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
+     */
+    private $reviewReason;
+    
+    /**
      * @ORM\Column(type="text")
      */
     private $reviewText;
@@ -55,6 +60,11 @@ class Review
      * @ORM\Column(type="integer", length=4, nullable=true, options={"default":"0"})
      */
     private $status;
+    
+    /**
+     * @ORM\Column(type="integer", length=2, nullable=true, options={"default": 0})
+     */
+    private $rating;
     
 
     /**
@@ -226,5 +236,51 @@ class Review
     public function getTargetUser()
     {
         return $this->targetUser;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param integer $rating
+     * @return Review
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return integer 
+     */
+    public function getRating()
+    {
+        return $this->rating;
+    }
+
+    /**
+     * Set reviewReason
+     *
+     * @param string $reviewReason
+     * @return Review
+     */
+    public function setReviewReason($reviewReason)
+    {
+        $this->reviewReason = $reviewReason;
+
+        return $this;
+    }
+
+    /**
+     * Get reviewReason
+     *
+     * @return string 
+     */
+    public function getReviewReason()
+    {
+        return $this->reviewReason;
     }
 }

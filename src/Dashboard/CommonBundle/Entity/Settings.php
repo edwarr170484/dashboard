@@ -170,6 +170,16 @@ class Settings
      */
     private $googleMapsKey;
     
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
+     */
+    private $centerLat;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"0"})
+     */
+    private $centerLng;
+    
     
     /**
      * Get id
@@ -915,5 +925,51 @@ class Settings
     public function getGoogleMapsKey()
     {
         return $this->googleMapsKey;
+    }
+
+    /**
+     * Set centerLat
+     *
+     * @param string $centerLat
+     * @return Settings
+     */
+    public function setCenterLat($centerLat)
+    {
+        $this->centerLat = $centerLat;
+
+        return $this;
+    }
+
+    /**
+     * Get centerLat
+     *
+     * @return string 
+     */
+    public function getCenterLat()
+    {
+        return $this->centerLat;
+    }
+
+    /**
+     * Set centerLng
+     *
+     * @param string $centerLng
+     * @return Settings
+     */
+    public function setCenterLng($centerLng)
+    {
+        $this->centerLng = $centerLng;
+
+        return $this;
+    }
+
+    /**
+     * Get centerLng
+     *
+     * @return string 
+     */
+    public function getCenterLng()
+    {
+        return $this->centerLng;
     }
 }

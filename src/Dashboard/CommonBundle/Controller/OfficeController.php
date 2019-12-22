@@ -5,10 +5,9 @@ namespace Dashboard\CommonBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use Dashboard\CommonBundle\Entity\User;
-use Dashboard\CommonBundle\Entity\DealerInfo;
 
 use Dashboard\CommonBundle\Form\Type\DealerRegisterType;
 
@@ -150,11 +149,49 @@ class OfficeController extends Controller
         $allCategories = $query->getResult();
         $jobsPerList = ceil(count($allCategories) / 2);
         
+        $sql = "SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud LEFT JOIN ud.autos ua WHERE u.isActive = 1 AND r.role='ROLE_SERVICE'";
+        
+        $query = $manager->createQuery($sql);
+        
+        try{
+            $services = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $services = 0;
+        }
+        
+        $autos = new ArrayCollection();
+        $coordinates = new ArrayCollection();
+        
+        if($services){
+            foreach($services as $dealer){
+                if($dealer->getDealerInfo()){
+                    if($dealer->getDealerInfo()->getAutos()){
+                        foreach($dealer->getDealerInfo()->getAutos() as $auto){
+                            if(!$autos->get($auto->getId())){
+                                $autos->set($auto->getId(), $auto);
+                            }
+                        }
+                    }
+                    
+                    $address = $dealer->getDealerInfo()->getCity()->getName() . "," . $dealer->getDealerInfo()->getAddress();
+                    $address = str_replace(" ", "+", $address);
+                    $coords = $this->get('app.maps')->getCoordinatesByAddress($address,$settings->getGoogleMapsKey());
+                    if($coords['status'] == "OK"){
+                        $coordinates->set($dealer->getId(), $coords['results'][0]['geometry']['location']);
+                    }
+                }
+            }
+        }
+        
         return $this->render('DashboardCommonBundle:Office:services.html.twig', array("locale" => $locale,
                                                                                       "settings" => $settings,
                                                                                       "categories" => $categories,
                                                                                       "jobsPerList" => $jobsPerList,
-                                                                                      "allCategories" => $allCategories));
+                                                                                      "allCategories" => $allCategories,
+                                                                                      "services" => $services,
+                                                                                      "autos" => $autos,
+                                                                                      "coordinates" => $coordinates));
     }
     
     /**
@@ -166,7 +203,21 @@ class OfficeController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
+        $query = $manager->createQuery("SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud WHERE u.isActive = 1 AND r.role='ROLE_SERVICE' AND ud.company = '" . $serviceName . "'");
+        
+        try{
+            $service = $query->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $service = 0;
+        }
+        
+        if(!$service){
+            return $this->createNotFoundException();
+        }
+        
         return $this->render('DashboardCommonBundle:Office:service.html.twig', array("locale" => $locale,
-                                                                                     "settings" => $settings));
+                                                                                     "settings" => $settings,
+                                                                                     "service" => $service));
     }
 }

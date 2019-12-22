@@ -6,6 +6,8 @@ services:
         arguments: [ @doctrine.orm.entity_manager, @security.encoder_factory ]
     app.helpers:
         class: Dashboard\AdminBundle\Helpers
+    app.maps:
+        class: Dashboard\CommonBundle\Maps
     app.simpleimage:
         class: Dashboard\AdminBundle\SimpleImage
     dashboard_user.login_listener:

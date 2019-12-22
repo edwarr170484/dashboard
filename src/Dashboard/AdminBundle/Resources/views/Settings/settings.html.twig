@@ -275,6 +275,18 @@
                                                                 {{ form_widget(settingsForms[locale.code].googleMapsKey) }}
                                                             </div>
                                                         </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].centerLat) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].centerLat) }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-3 control-label">{{ form_label(settingsForms[locale.code].centerLng) }}</label>
+                                                            <div class="col-md-9">
+                                                                {{ form_widget(settingsForms[locale.code].centerLng) }}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div><button class="btn btn-primary m-r-5 pull-right" type="submit">Сохранить</button></div>
                                                 </div> 

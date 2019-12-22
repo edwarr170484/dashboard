@@ -1393,7 +1393,9 @@ class DefaultController extends Controller
             ->add('textblockHowToPrice', TextareaType::class, array('required' => false, 'label' => 'Как правильно устанавливать цену', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('textblockUserAgreement', TextareaType::class, array('required' => false, 'label' => 'Пользовательское соглашение', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('userAdvertWorkRight', TextareaType::class, array('required' => false, 'label' => 'Правила размещения и как продавать быстрее', 'attr' => array('class' => 'form-control tinyeditor'))) 
-            ->add('googleMapsKey', TextType::class, array('required' => false, 'label' => 'Ключ Google Maps API', 'attr' => array('class' => 'form-control','placeholder' => 'Ключ Google Maps API')))          
+            ->add('googleMapsKey', TextType::class, array('required' => false, 'label' => 'Ключ Google Maps API', 'attr' => array('class' => 'form-control','placeholder' => 'Ключ Google Maps API')))
+            ->add('centerLat', TextType::class, array('required' => false, 'label' => 'Широта для центра карты(Lat)', 'attr' => array('class' => 'form-control','placeholder' => 'Широта для центра карты(Lat)')))
+            ->add('centerLng', TextType::class, array('required' => false, 'label' => 'Долгота для центра карты(Lat)', 'attr' => array('class' => 'form-control','placeholder' => 'Долгота для центра карты(Lat)')))
             ->add('currency', 'entity', array('class' => 'DashboardCommonBundle:Currency',
                             'choice_label' => 'name',
                             'empty_data' => null,

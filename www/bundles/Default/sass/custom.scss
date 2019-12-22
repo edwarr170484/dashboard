@@ -1152,6 +1152,7 @@ body.userAccount{background:#F9F9F9;}
 .dealerPageReviews{padding-top: 6.9rem;}
 .dealerPageReviewsHeader{@include fontView("GothamProBold",$black-text,3.6rem,4rem);padding-bottom: 3rem;}
 .dealerPageReviewsBlock{border-bottom:2px solid #E7E7E7;padding: 3rem 0;}
+.dealerPageReviewsBlock.hide{display: none;}
 .dealerPageReviewsBlockUser{@include flexBox(row,flex-start,center);}
 .dealerPageReviewsBlockUserImage{padding-right: 2.4rem;}
 .dealerPageReviewsBlockUserImage img{width: 64px;height: 64px;@include border-radius(50%);}

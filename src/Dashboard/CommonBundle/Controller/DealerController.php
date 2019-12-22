@@ -5,27 +5,12 @@ namespace Dashboard\CommonBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Filesystem\Filesystem;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityRepository;
-
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Form\Type\DealerRegisterType;
 use Dashboard\CommonBundle\Entity\Message;
 use Dashboard\CommonBundle\Entity\Conversation;
-use Dashboard\CommonBundle\Entity\Review;
-
-use Dashboard\CommonBundle\Form\Type\UserType;
-use Dashboard\CommonBundle\Form\Type\UserPasswordType;
-use Dashboard\CommonBundle\Form\Type\DealerEditType;
-use Dashboard\CommonBundle\Form\Type\DealerSalonType;
-use Dashboard\CommonBundle\Form\Type\ReviewType;
 
 use Dashboard\CommonBundle\Form\Type\ProfileMessageType;
 
@@ -299,11 +284,24 @@ class DealerController extends Controller
             $category->setAllProductsNumber($productsNum);
         }
         
+        $coordinates = new ArrayCollection();
+        
+        if($dealer->getDealerinfo()->getSalons()){
+            foreach($dealer->getDealerinfo()->getSalons() as $salon){
+                $address = str_replace(" ", "+", $salon->getAddress());
+                $coords = $this->get('app.maps')->getCoordinatesByAddress($address, $settings->getGoogleMapsKey());
+                if($coords['status'] == "OK"){
+                    $coordinates->set($dealer->getId(), $coords['results'][0]['geometry']['location']);
+                }
+            }
+        }
+        
         return $this->render('DashboardCommonBundle:Dealer:dealer.html.twig', array("locale" => $locale,
                                                                                     "settings" => $settings,
                                                                                     "categories" => $categories,
                                                                                     "dealer" => $dealer,
                                                                                     "pagination" => 0,
+                                                                                    "coordinates" => $coordinates,
                                                                                     "profileMessageForm" => ($profileMessageForm) ? $profileMessageForm->createView() : null));
     }
     
@@ -364,6 +362,7 @@ class DealerController extends Controller
         }
         
         $autos = new ArrayCollection();
+        $coordinates = new ArrayCollection();
         
         if($dealers){
             foreach($dealers as $dealer){
@@ -375,6 +374,13 @@ class DealerController extends Controller
                             }
                         }
                     }
+                    
+                    $address = $dealer->getDealerInfo()->getCity()->getName() . "," . $dealer->getDealerInfo()->getAddress();
+                    $address = str_replace(" ", "+", $address);
+                    $coords = $this->get('app.maps')->getCoordinatesByAddress($address,$settings->getGoogleMapsKey());
+                    if($coords['status'] == "OK"){
+                        $coordinates->set($dealer->getId(), $coords['results'][0]['geometry']['location']);
+                    }
                 }
             }
         }
@@ -384,7 +390,8 @@ class DealerController extends Controller
         return $this->render('DashboardCommonBundle:Dealer:dealers.html.twig', array("locale" => $locale,
                                                                                      "settings" => $settings,
                                                                                      "dealers" => $dealers,
-                                                                                     "autos" => $autos));
+                                                                                     "autos" => $autos,
+                                                                                     "coordinates" => $coordinates));
     }
     
     /**
@@ -393,7 +400,6 @@ class DealerController extends Controller
     public function getWorkinfoAction($dealerId, $day, $time, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $dealer = $manager->getRepository("DashboardCommonBundle:User")->find($dealerId);
         $weekDays = array("sunday","monday","tuesday","wednesday","thursday","friday","saturday");
         
@@ -420,6 +426,41 @@ class DealerController extends Controller
                     }else{
                          return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Закрыто")));
                     }
+                }
+            }
+        }
+    }
+    
+    /**
+     * @Route("/dealer/getsalonworkinfo/{salonId}/{day}/{time}", name="dealerSalonWorkinfo")
+     */
+    public function getSalonWorkinfoAction($salonId, $day, $time, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $salon = $manager->getRepository("DashboardCommonBundle:DealerSalon")->find($salonId);
+        $weekDays = array("sunday","monday","tuesday","wednesday","thursday","friday","saturday");
+        
+        if($salon){
+            if($salon->getWorkinfo()){
+                $workInfo = $salon->getWorkinfo();
+                $function = 'get' . $weekDays[$day];
+                    
+                if($workInfo->$function()){
+                    if($workInfo->getFullDay()){
+                        return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Открыто круглосуточно")));
+                    }else{
+                        $workStart = $workInfo->getWorkStart();
+                        $workEnd = $workInfo->getWorkStop();
+                            
+                        if($time < $workStart->format("G") || $time > $workEnd->format("G")){
+                            return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Закрыто до %time%", array("%time%" => $workInfo->getWorkStart()->format("H:i")))));
+                        }
+                        if($time >= $workStart->format("G") && $time <= $workEnd->format("G")){
+                            return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Открыто до %time%", array("%time%" => $workInfo->getWorkStop()->format("H:i")))));
+                        }
+                    }
+                }else{
+                    return new \Symfony\Component\HttpFoundation\JsonResponse(array("error" => 0, "message" => $this->get('translator')->trans("Закрыто")));
                 }
             }
         }

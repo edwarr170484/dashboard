@@ -432,6 +432,25 @@ function getDealerWorkTime(element, dealerId){
     });
 }
 
+function getDealerSalonWorkTime(element, salonId){
+    
+    var today = new Date();
+    var day = today.getDay();
+    var time = today.getHours();
+    
+    $.ajax({
+        url: '/dealer/getsalonworkinfo/' + salonId + '/' + day + '/' + time,
+        dataType: 'json',
+        beforeSend: function(){},
+        success: function(data){
+            element.html(data.message);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+
+        }
+    });
+}
+
 function selectDealers(element, action){
     element.parent().parent().find("a").removeClass("active");
     element.addClass("active");
@@ -456,4 +475,16 @@ function setAutoId(autoId, autoName, element){
     $("input[name='dealerAuto']").blur();
     $("input[name='dealerAutoId']").val(autoId);
     $(".mapListItems").toggleClass("hide");
+}
+
+function setServiceAutoId(autoId, autoName, element){
+    $("input[name='serviceAuto']").val(autoName);
+    $("input[name='serviceAuto']").blur();
+    $("input[name='serviceAutoId']").val(autoId);
+}
+
+function setServiceJobId(categoryId, categoryName){
+    $("input[name='serviceJob']").val(categoryName);
+    $("input[name='serviceJob']").blur();
+    $("input[name='serviceJobId']").val(categoryId);
 }

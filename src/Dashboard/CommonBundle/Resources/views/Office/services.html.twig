@@ -102,7 +102,13 @@
                     {% endif %}
                     <div class="mapListItemsHeader">{% trans %}Популярные сервисы{% endtrans %}</div>
                     {% for service in services %}
-                        {% include 'DashboardCommonBundle:Office:item.html.twig' with {'dealer' : service} %}
+                        {% if service.dealerinfo.salons | length > 0 %}
+                            {% for salon in service.dealerinfo.salons %}
+                                {% if salon.isActive %}
+                                    {% include 'DashboardCommonBundle:Office:item.html.twig' with {'salon' : salon} %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

@@ -73,6 +73,16 @@ class DealerSalon
     private $jobs;
     
     /**
+     * @ORM\Column(type="integer", length=3, nullable=true, options={"default":"0"})
+     */
+    private $rating;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Review", mappedBy="salons")
+     */
+    private $reviews;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -362,5 +372,28 @@ class DealerSalon
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set rating
+     *
+     * @param integer $rating
+     * @return DealerSalon
+     */
+    public function setRating($rating)
+    {
+        $this->rating = $rating;
+    
+        return $this;
+    }
+
+    /**
+     * Get rating
+     *
+     * @return integer 
+     */
+    public function getRating()
+    {
+        return $this->rating;
     }
 }

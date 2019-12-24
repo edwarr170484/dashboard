@@ -42,6 +42,12 @@ class Review
     private $targetUser;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\DealerSalon", inversedBy="reviews")
+     * @ORM\JoinColumn(name="dealer_salon_id", referencedColumnName="id")
+     */
+    private $salons;
+    
+    /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
      */
     private $reviewReason;
@@ -282,5 +288,28 @@ class Review
     public function getReviewReason()
     {
         return $this->reviewReason;
+    }
+
+    /**
+     * Set salons
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalon $salons
+     * @return Review
+     */
+    public function setSalons(\Dashboard\CommonBundle\Entity\DealerSalon $salons = null)
+    {
+        $this->salons = $salons;
+    
+        return $this;
+    }
+
+    /**
+     * Get salons
+     *
+     * @return \Dashboard\CommonBundle\Entity\DealerSalon 
+     */
+    public function getSalons()
+    {
+        return $this->salons;
     }
 }

@@ -42,6 +42,12 @@ class Review
     private $targetUser;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\DealerSalon", inversedBy="reviews")
+     * @ORM\JoinColumn(name="dealer_salon_id", referencedColumnName="id")
+     */
+    private $salons;
+    
+    /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
      */
     private $reviewReason;

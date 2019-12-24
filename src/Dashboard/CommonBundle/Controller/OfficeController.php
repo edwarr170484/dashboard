@@ -174,11 +174,17 @@ class OfficeController extends Controller
                         }
                     }
                     
-                    $address = $dealer->getDealerInfo()->getCity()->getName() . "," . $dealer->getDealerInfo()->getAddress();
-                    $address = str_replace(" ", "+", $address);
-                    $coords = $this->get('app.maps')->getCoordinatesByAddress($address,$settings->getGoogleMapsKey());
-                    if($coords['status'] == "OK"){
-                        $coordinates->set($dealer->getId(), $coords['results'][0]['geometry']['location']);
+                    if($dealer->getDealerinfo()->getSalons()){
+                        foreach($dealer->getDealerinfo()->getSalons() as $salon){
+                            if($salon->getIsActive()){
+                                $address = $salon->getAddress();
+                                $address = str_replace(" ", "+", $address);
+                                $coords = $this->get('app.maps')->getCoordinatesByAddress($address,$settings->getGoogleMapsKey());
+                                if($coords['status'] == "OK"){
+                                    $coordinates->set($dealer->getId(), $coords['results'][0]['geometry']['location']);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -195,29 +201,146 @@ class OfficeController extends Controller
     }
     
     /**
-     * @Route("/servicepage/{serviceName}", name="servicePage", defaults={"serviceName" : 0})
+     * @Route("/servicepage/{serviceId}_{serviceName}", name="servicePage", defaults={"serviceId" : 0, "serviceName" : 0})
      */
-    public function servicePageAction($serviceName,Request $request)
+    public function servicePageAction($serviceId, $serviceName, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $sessionUser = $this->get('security.context')->getToken()->getUser();
         
-        $query = $manager->createQuery("SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud WHERE u.isActive = 1 AND r.role='ROLE_SERVICE' AND ud.company = '" . $serviceName . "'");
-        
-        try{
-            $service = $query->getSingleResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $service = 0;
-        }
+        $service = $manager->getRepository("DashboardCommonBundle:DealerSalon")->findOneBy(array("id" => $serviceId, "name" => $serviceName));
         
         if(!$service){
             return $this->createNotFoundException();
         }
         
+        $jobCategories = new ArrayCollection();
+        
+        if($service->getJobs()){
+            foreach($service->getJobs() as $job){
+                if(!$jobCategories->get($job->getCategory()->getId())){
+                    $jobCategories->set($job->getCategory()->getId(), $job->getCategory());
+                }
+            }
+        }
+        
+        if($jobCategories){
+            foreach($jobCategories as $category){
+                $temp = $category->getJobs();
+                if($temp){
+                    foreach($temp as $job){
+                        if(false === $service->getJobs()->contains($job)){
+                            $category->removeJob($job);
+                        }
+                    }
+                }
+            }
+        }
+        
+        $profileMessageForm = null;
+        
+        if($this->getUser()){
+            
+            $profileMessage = new Message();
+            $profileMessageForm = $this->createForm(new ProfileMessageType($manager), $profileMessage);
+            
+            $profileMessageForm->handleRequest($request);
+
+            if ($profileMessageForm->isSubmitted() && $profileMessageForm->isValid())
+            {
+                $blacklistItem = $manager->getRepository("DashboardCommonBundle:Blacklist")->findOneBy(array("userAuthor" => $profileMessageForm['userTo']->getData(), "userTo" => $profileMessageForm['userFrom']->getData()));
+                
+                if($blacklistItem){
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                            $this->get('translator')->trans('<strong>Ошибка!</strong> Этот пользователь добавил Вас в черный список.') . '</div>'
+                    );
+                    
+                    return $this->redirectToRoute("servicePage", array("serviceId" => $service->getId(),"serviceName" => $service->getName()));
+                }
+                
+                if($service->getDealerInfo()->getUser()->getId() != $sessionUser->getId())
+                {
+                    //check if conversation exists
+                    $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE (c.userOne = " . $profileMessageForm['userFrom']->getData()->getId()  . " AND c.userTwo = " . $profileMessageForm['userTo']->getData()->getId() . " ) "
+                            . "OR (c.userOne = " . $profileMessageForm['userTo']->getData()->getId() . " AND c.userTwo = " . $profileMessageForm['userFrom']->getData()->getId()  . ")");
+                    
+                    try{
+                        $conversation = $query->getSingleResult();
+                    }
+                    catch(\Doctrine\ORM\NoResultException $e) {
+                        $conversation = new Conversation();
+                        $conversation->setUserOne($profileMessageForm['userTo']->getData());
+                        $conversation->setUserTwo($profileMessageForm['userFrom']->getData());
+                        $conversation->setUserDeleted(null);
+                        $manager->persist($conversation);
+                        $manager->flush();
+                    }
+
+                    $profileMessage->setUserOwner($profileMessageForm['userFrom']->getData());
+                    $profileMessage->setIsNew(1);
+                    $profileMessage->setIsDeleted(0);
+                    $profileMessage->setSentDate(new \DateTime("now"));
+                    $profileMessage->setReadedDate(new \DateTime("now"));
+                    $profileMessage->setProduct(null);
+                    $profileMessage->setConversation($conversation);
+                    
+                    $manager->persist($profileMessage);
+                    $manager->flush();
+                    
+                    $messageTwo = new Message();
+                    $messageTwo = clone $profileMessage;
+                    $messageTwo->setUserOwner($profileMessageForm['userTo']->getData());
+                    
+                    $manager->persist($messageTwo);
+                    $manager->flush();
+                    
+                    if($service->getDealerInfo()->getUser()->getIsAlertNewMessage())
+                    {
+                        $messageSent = \Swift_Message::newInstance()
+                            ->setSubject('Новое сообщение на сайте ' . $settings->getSiteName())
+                            ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                            ->setTo($service->getDealerInfo()->getUser()->getEmail())
+                            ->setBody(
+                                $this->renderView(
+                                    'Emails/productmessage.html.twig',
+                                    array('message' => $profileMessage->getMessage(),
+                                          'user' => $sessionUser)
+                                ),
+                                'text/html'
+                            );
+
+                            $this->get('mailer')->send($messageSent);
+                    }
+                    
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваше сообщение отправлено.') . '</div>'
+                    );
+                    
+                }
+                else {
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете писать сообщения себе.') . '</div>'
+                    );
+                }
+                
+                return $this->redirectToRoute("servicePage", array("serviceId" => $service->getId(),"serviceName" => $service->getName()));
+            }
+        }
+        
         return $this->render('DashboardCommonBundle:Office:service.html.twig', array("locale" => $locale,
                                                                                      "settings" => $settings,
-                                                                                     "service" => $service));
+                                                                                     "service" => $service,
+                                                                                     "jobCategories" => $jobCategories));
     }
 }

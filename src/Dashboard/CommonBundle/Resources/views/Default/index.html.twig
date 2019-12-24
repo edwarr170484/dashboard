@@ -73,11 +73,7 @@
                                                 {% if sessionCity %}
                                                     {{ sessionCity.name }}
                                                 {% else %}
-                                                    {% if sessionRegion %}
-                                                        {{ sessionRegion.name }}
-                                                    {% else %}
-                                                        {% trans %}Испания{% endtrans %}
-                                                    {% endif %}
+                                                    {% trans %}Испания{% endtrans %}
                                                 {% endif %}
                                             </a>
                                             <input type="submit" class="header-search-button" value="" />

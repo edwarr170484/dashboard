@@ -1,6 +1,6 @@
 {% extends 'DashboardCommonBundle:Common:base.html.twig' %}
 
-{% block title %}{{ service.dealerinfo.company }}{% endblock %}
+{% block title %}{{ service.name }}{% endblock %}
 
 {% block body %}
 <div class="dealersContainer">
@@ -8,22 +8,28 @@
         <div class="row">
             <div class="col-lg-4 col-md-4 serviceInfo"> 
                 <div class="mapServiceFotos advertSliderMainFoto">
-                    <div class="mapServiceFotoSlider owl-carousel" id="productModalSlider">
+                    {% if service.logotype %}
                         <div class="mapServiceFotoSliderItem">
-                            <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
+                            <img src="{{ asset('bundles/images/dealers/salons/' ~ service.logotype) }}" alt="{{ service.name }}" title="{{ service.name }}" style="width: 100%;"/>
                         </div>
-                        <div class="mapServiceFotoSliderItem">
-                            <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
+                    {% else %}
+                        <div class="mapServiceFotoSlider owl-carousel" id="productModalSlider">
+                            <div class="mapServiceFotoSliderItem">
+                                <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
+                            </div>
+                            <div class="mapServiceFotoSliderItem">
+                                <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
+                            </div>
+                            <div class="mapServiceFotoSliderItem">
+                                <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
+                            </div>
                         </div>
-                        <div class="mapServiceFotoSliderItem">
-                            <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
-                        </div>
-                    </div>
+                    {% endif %}
                 </div>
                 <div class="mapServiceLogo">
                     <div class="mapListItemImageRating">
                         <div class="accountReviewRating">
-                            {% set reviewRating = 3 %}
+                            {% set reviewRating = service.rating %}
                             {% if reviewRating > 0 %}
                                 {% for i in 1..reviewRating %}
                                     <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,415 +45,206 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
-                        <div class="accountReviewRatingNum">90 отзывов</div>
+                        <div class="accountReviewRatingNum">{{ service.dealerInfo.user.targetReviews | length }} {% trans %}отзывов{% endtrans %}</div>
                     </div>
-                    <div class="mapServiceLogoImage">
-                        <img src="{{ asset('bundles/Default/t/serviceLogo.png') }}" alt="" title="" />
-                    </div>
+                    {% if service.dealerinfo.logotype %}
+                        <div class="mapServiceLogoImage">
+                            <img src="{{ asset('bundles/images/dealers/logotypes/' ~ service.dealerinfo.logotype) }}" alt="{{ service.name }}" title="{{ service.name }}" />
+                        </div>
+                    {% endif %}
                 </div>
                     <div class="mapServiceInfo">
-                        <div class="dealerPageHeaderUserInfoName">Taller de coches MOTOR TARRAGONA</div>
+                        <div class="dealerPageHeaderUserInfoName">{{ service.name }}</div>
                         <div class="mapListItemInfoText" style="padding-bottom: 1.5rem;">
                             <svg width="20" height="24" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9 1C4.58867 1 1 4.37117 1 8.51358C1 14.7178 8.46733 20.6752 8.78533 20.9258C8.84474 20.9733 8.92012 20.9995 8.99818 21C9.07624 21.0005 9.15196 20.9751 9.212 20.9283C9.53 20.682 17 14.8272 17 8.51358C17 4.37117 13.4113 1 9 1ZM9.00133 20.2733C7.774 19.2452 1.66667 13.8616 1.66667 8.51358C1.66667 4.71491 4.95667 1.62499 9 1.62499C13.0433 1.62499 16.3333 4.71491 16.3333 8.51358C16.3333 13.9522 10.232 19.259 9.00133 20.2733Z" stroke="#616161"/>
-                                                    <path d="M9 5C6.794 5 5 6.794 5 9C5 11.206 6.794 13 9 13C11.206 13 13 11.206 13 9C13 6.794 11.206 5 9 5ZM9 12.3333C7.162 12.3333 5.66667 10.838 5.66667 9C5.66667 7.162 7.162 5.66667 9 5.66667C10.838 5.66667 12.3333 7.162 12.3333 9C12.3333 10.838 10.838 12.3333 9 12.3333Z" stroke="#616161"/>
+                                <path d="M9 1C4.58867 1 1 4.37117 1 8.51358C1 14.7178 8.46733 20.6752 8.78533 20.9258C8.84474 20.9733 8.92012 20.9995 8.99818 21C9.07624 21.0005 9.15196 20.9751 9.212 20.9283C9.53 20.682 17 14.8272 17 8.51358C17 4.37117 13.4113 1 9 1ZM9.00133 20.2733C7.774 19.2452 1.66667 13.8616 1.66667 8.51358C1.66667 4.71491 4.95667 1.62499 9 1.62499C13.0433 1.62499 16.3333 4.71491 16.3333 8.51358C16.3333 13.9522 10.232 19.259 9.00133 20.2733Z" stroke="#616161"/>
+                                <path d="M9 5C6.794 5 5 6.794 5 9C5 11.206 6.794 13 9 13C11.206 13 13 11.206 13 9C13 6.794 11.206 5 9 5ZM9 12.3333C7.162 12.3333 5.66667 10.838 5.66667 9C5.66667 7.162 7.162 5.66667 9 5.66667C10.838 5.66667 12.3333 7.162 12.3333 9C12.3333 10.838 10.838 12.3333 9 12.3333Z" stroke="#616161"/>
                             </svg>
-                            Barcelona, Avenida de Lourdes, 18
+                            {{ service.address }}
                         </div>
-                        <div class="mapListItemInfoText">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18.9994 14.4765V17.1862C19.0005 17.4377 18.9488 17.6867 18.8479 17.9172C18.7469 18.1477 18.5988 18.3546 18.413 18.5247C18.2273 18.6947 18.008 18.8242 17.7693 18.9048C17.5305 18.9854 17.2775 19.0153 17.0265 18.9927C14.2415 18.6907 11.5664 17.7409 9.21601 16.2197C7.02929 14.8329 5.17534 12.9827 3.7858 10.8003C2.25627 8.44389 1.30442 5.76107 1.00735 2.96915C0.98473 2.71938 1.01447 2.46764 1.09468 2.22996C1.17489 1.99229 1.30381 1.77389 1.47323 1.58866C1.64265 1.40343 1.84885 1.25544 2.07872 1.15411C2.30858 1.05278 2.55707 1.00032 2.80837 1.00009H5.52347C5.96269 0.995773 6.3885 1.151 6.72152 1.43683C7.05455 1.72267 7.27207 2.11961 7.33354 2.55366C7.44814 3.42084 7.66067 4.27229 7.96707 5.09177C8.08883 5.41507 8.11519 5.76642 8.043 6.1042C7.97082 6.44198 7.80313 6.75203 7.5598 6.99761L6.41041 8.14473C7.69877 10.406 9.57482 12.2784 11.8406 13.5642L12.99 12.4171C13.2361 12.1742 13.5467 12.0069 13.8852 11.9348C14.2236 11.8628 14.5757 11.8891 14.8996 12.0106C15.7207 12.3164 16.5739 12.5285 17.4428 12.6429C17.8824 12.7048 18.2839 12.9258 18.5709 13.2639C18.858 13.6019 19.0105 14.0335 18.9994 14.4765Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            +34 920 37 08 05
-                        </div>
-                        <div class="mapListItemInfoText">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18.9994 14.4765V17.1862C19.0005 17.4377 18.9488 17.6867 18.8479 17.9172C18.7469 18.1477 18.5988 18.3546 18.413 18.5247C18.2273 18.6947 18.008 18.8242 17.7693 18.9048C17.5305 18.9854 17.2775 19.0153 17.0265 18.9927C14.2415 18.6907 11.5664 17.7409 9.21601 16.2197C7.02929 14.8329 5.17534 12.9827 3.7858 10.8003C2.25627 8.44389 1.30442 5.76107 1.00735 2.96915C0.98473 2.71938 1.01447 2.46764 1.09468 2.22996C1.17489 1.99229 1.30381 1.77389 1.47323 1.58866C1.64265 1.40343 1.84885 1.25544 2.07872 1.15411C2.30858 1.05278 2.55707 1.00032 2.80837 1.00009H5.52347C5.96269 0.995773 6.3885 1.151 6.72152 1.43683C7.05455 1.72267 7.27207 2.11961 7.33354 2.55366C7.44814 3.42084 7.66067 4.27229 7.96707 5.09177C8.08883 5.41507 8.11519 5.76642 8.043 6.1042C7.97082 6.44198 7.80313 6.75203 7.5598 6.99761L6.41041 8.14473C7.69877 10.406 9.57482 12.2784 11.8406 13.5642L12.99 12.4171C13.2361 12.1742 13.5467 12.0069 13.8852 11.9348C14.2236 11.8628 14.5757 11.8891 14.8996 12.0106C15.7207 12.3164 16.5739 12.5285 17.4428 12.6429C17.8824 12.7048 18.2839 12.9258 18.5709 13.2639C18.858 13.6019 19.0105 14.0335 18.9994 14.4765Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            +34 920 37 08 05
-                        </div>
+                        {% if service.phones | length > 0 %}
+                            {% for phone in service.phones %}
+                                <div class="mapListItemInfoText">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.9994 14.4765V17.1862C19.0005 17.4377 18.9488 17.6867 18.8479 17.9172C18.7469 18.1477 18.5988 18.3546 18.413 18.5247C18.2273 18.6947 18.008 18.8242 17.7693 18.9048C17.5305 18.9854 17.2775 19.0153 17.0265 18.9927C14.2415 18.6907 11.5664 17.7409 9.21601 16.2197C7.02929 14.8329 5.17534 12.9827 3.7858 10.8003C2.25627 8.44389 1.30442 5.76107 1.00735 2.96915C0.98473 2.71938 1.01447 2.46764 1.09468 2.22996C1.17489 1.99229 1.30381 1.77389 1.47323 1.58866C1.64265 1.40343 1.84885 1.25544 2.07872 1.15411C2.30858 1.05278 2.55707 1.00032 2.80837 1.00009H5.52347C5.96269 0.995773 6.3885 1.151 6.72152 1.43683C7.05455 1.72267 7.27207 2.11961 7.33354 2.55366C7.44814 3.42084 7.66067 4.27229 7.96707 5.09177C8.08883 5.41507 8.11519 5.76642 8.043 6.1042C7.97082 6.44198 7.80313 6.75203 7.5598 6.99761L6.41041 8.14473C7.69877 10.406 9.57482 12.2784 11.8406 13.5642L12.99 12.4171C13.2361 12.1742 13.5467 12.0069 13.8852 11.9348C14.2236 11.8628 14.5757 11.8891 14.8996 12.0106C15.7207 12.3164 16.5739 12.5285 17.4428 12.6429C17.8824 12.7048 18.2839 12.9258 18.5709 13.2639C18.858 13.6019 19.0105 14.0335 18.9994 14.4765Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    {{ phone.phone }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         <div class="mapServiceInfoSchedule">
                             <div class="mapListItemInfoText">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M10 19C14.9706 19 19 14.9706 19 10C19 5.02944 14.9706 1 10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     <path d="M10 4.6001V10.0001L12.7 12.7001" stroke="#616161" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                 </svg>
-                                <span>Открыто до 21:00</span>
+                                <span id="salonWorktime{{ service.id }}"></span>
+                                <script>getDealerSalonWorkTime($("#salonWorktime{{ service.id }}"), {{ service.id }})</script>
                             </div>
                             <div class="mapServiceInfoScheduleWrite">
-                                <a href="">
-                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M17 8.55557C17.003 9.72878 16.7289 10.8861 16.2 11.9333C15.5728 13.1882 14.6086 14.2437 13.4155 14.9816C12.2223 15.7195 10.8473 16.1106 9.44443 16.1111C8.27122 16.1142 7.11387 15.8401 6.06666 15.3111L1 17L2.68889 11.9333C2.15994 10.8861 1.88583 9.72878 1.88889 8.55557C1.88943 7.15269 2.28054 5.77766 3.01841 4.58451C3.75629 3.39135 4.81178 2.42719 6.06666 1.80002C7.11387 1.27107 8.27122 0.996966 9.44443 1.00003H9.88887C11.7416 1.10224 13.4916 1.88426 14.8037 3.19634C16.1157 4.50843 16.8978 6.25837 17 8.11113V8.55557Z" stroke="#ABABAB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    {% trans %}Написать сообщение{% endtrans %}
-                                </a>
+                                {% if app.user %}
+                                    <a href="javascript:void(0)" data-toggle="modal" data-target="#messageModal">
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17 8.55557C17.003 9.72878 16.7289 10.8861 16.2 11.9333C15.5728 13.1882 14.6086 14.2437 13.4155 14.9816C12.2223 15.7195 10.8473 16.1106 9.44443 16.1111C8.27122 16.1142 7.11387 15.8401 6.06666 15.3111L1 17L2.68889 11.9333C2.15994 10.8861 1.88583 9.72878 1.88889 8.55557C1.88943 7.15269 2.28054 5.77766 3.01841 4.58451C3.75629 3.39135 4.81178 2.42719 6.06666 1.80002C7.11387 1.27107 8.27122 0.996966 9.44443 1.00003H9.88887C11.7416 1.10224 13.4916 1.88426 14.8037 3.19634C16.1157 4.50843 16.8978 6.25837 17 8.11113V8.55557Z" stroke="#ABABAB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        {% trans %}Написать сообщение{% endtrans %}
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('login') }}">
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M17 8.55557C17.003 9.72878 16.7289 10.8861 16.2 11.9333C15.5728 13.1882 14.6086 14.2437 13.4155 14.9816C12.2223 15.7195 10.8473 16.1106 9.44443 16.1111C8.27122 16.1142 7.11387 15.8401 6.06666 15.3111L1 17L2.68889 11.9333C2.15994 10.8861 1.88583 9.72878 1.88889 8.55557C1.88943 7.15269 2.28054 5.77766 3.01841 4.58451C3.75629 3.39135 4.81178 2.42719 6.06666 1.80002C7.11387 1.27107 8.27122 0.996966 9.44443 1.00003H9.88887C11.7416 1.10224 13.4916 1.88426 14.8037 3.19634C16.1157 4.50843 16.8978 6.25837 17 8.11113V8.55557Z" stroke="#ABABAB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        {% trans %}Написать сообщение{% endtrans %}
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                     <div class="mapServiceDescription">
-                        FIT SERVICE – федеральная сеть станций послегарантийного обслуживания.
-Почему FIT SERVICE – это удобно?
-- В FIT SERVICE вас обслужат точно по времени. Можете планировать свой день, не боясь потерять много времени в автосервисе.
-- Комфортная комната ожидания. Также есть уголок для детей, чтобы им не было скучно. В FIT SERVICE есть WI-FI, поэтому если есть срочные дела по работе – вы можете решить их прямо на станции.
-- Вы знаете цену сразу. 
-
-Почему вам нужно ехать именно FIT SERVICE?
-- Квалифицированные специалисты.
-- Запчасти прямо на станции.
- - Современное оборудование.
-- FIT SERVICE дает гарантию 1 год или 20 000 км.
-- Гарантия дилера сохраняется.
-- Если у вас остались вопросы или комментарии по обслуживанию в автосервисе FIT SERVICE - позвоните в службу контроля качества работ по телефону 8-800-700-80-56, где вам помогут и найдут решение 
+                        {{ service.dealerinfo.description }} 
                     </div>
-                    <div class="mapServiceJobs">
-                        <div class="mapServiceJobsHeader">{% trans %}Обслуживаемые марки и вид работ{% endtrans %}</div>
-                        <div class="mapServiceJobsList">
-                            <ul class="list-unstyled">
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Техническое обслуживание
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
+                    {% if jobCategories | length > 0 %}
+                        <div class="mapServiceJobs">
+                            <div class="mapServiceJobsHeader">{% trans %}Обслуживаемые марки и вид работ{% endtrans %}</div>
+                            <div class="mapServiceJobsList">
+                                <ul class="list-unstyled">
+                                    {% for category in jobCategories %}
+                                        <li class="jobsSublist">
                                             <div class="mapServiceJobInfo">
                                                 <div class="mapServiceJobName">
-                                                    Замена масла
+                                                    <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
+                                                    </svg>
+                                                    {{ category.name  }}
                                                 </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
+                                                <!--<div class="mapServiceJobPrice">от 30€</div>-->
                                             </div>
+                                            {% if category.jobs %}
+                                                <ul class="list-unstyled">
+                                                    {% for job in category.jobs %}
+                                                        <li>
+                                                            <div class="mapServiceJobInfo">
+                                                                <div class="mapServiceJobName">
+                                                                    {{ job.name }}
+                                                                </div>
+                                                                <!--<div class="mapServiceJobPrice">от 30€</div>-->
+                                                            </div>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
                                         </li>
-                                    </ul>
-                                </li>
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Ремонт электрики
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Замена проводки
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Ремонт кондиционера
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Заправка кондиционера
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Ремонт двигателя
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Ремонг головки цилиндров
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Тюнинг и допоборудование
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Установка аудиосистем
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Ремонт тормозной системы
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Замена тормозных колодок
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Автостекла
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Замена лобового стекла
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Ремонт выхлопной системы
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Замена фильтров
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="jobsSublist">
-                                    <div class="mapServiceJobInfo">
-                                        <div class="mapServiceJobName">
-                                            <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.3331 -2.915e-08L11 0.646875L5.5 6L-2.82758e-08 0.646874L0.663437 -4.51826e-07L5.5 4.70312L10.3331 -2.915e-08Z" fill="#616161"/>
-                                            </svg>
-                                            Диагностика
-                                        </div>
-                                        <div class="mapServiceJobPrice">от 30€</div>
-                                    </div>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Диагностика двигателя
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="mapServiceJobInfo">
-                                                <div class="mapServiceJobName">
-                                                    Диагностика подвески
-                                                </div>
-                                                <div class="mapServiceJobPrice">от 30€</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
-                    </div>  
+                    {% endif %}  
                     <div class="mapServiceAdvancedInfo">
                         <div class="mapServiceAdvancedInfoTools">
                             <div class="dealerPageDescriptionLinks">
                                         <ul class="list-unstyled list-inline">
+                                            {% if service.website %}
                                             <li>
-                                                <a href="">
+                                                <a href="http://{{ service.website }}">
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0C4.5 0 0 4.5 0 10C0 15.5 4.5 20 10 20C15.5 20 20 15.5 20 10C20 4.5 15.5 0 10 0ZM16.9 6H14C13.7 4.7 13.2 3.6 12.6 2.4C14.4 3.1 16 4.3 16.9 6ZM10 2C10.8 3.2 11.5 4.5 11.9 6H8.1C8.5 4.6 9.2 3.2 10 2ZM2.3 12C2.1 11.4 2 10.7 2 10C2 9.3 2.1 8.6 2.3 8H5.7C5.6 8.7 5.6 9.3 5.6 10C5.6 10.7 5.7 11.3 5.7 12H2.3ZM3.1 14H6C6.3 15.3 6.8 16.4 7.4 17.6C5.6 16.9 4 15.7 3.1 14ZM6 6H3.1C4.1 4.3 5.6 3.1 7.4 2.4C6.8 3.6 6.3 4.7 6 6ZM10 18C9.2 16.8 8.5 15.5 8.1 14H11.9C11.5 15.4 10.8 16.8 10 18ZM12.3 12H7.7C7.6 11.3 7.5 10.7 7.5 10C7.5 9.3 7.6 8.7 7.7 8H12.4C12.5 8.7 12.6 9.3 12.6 10C12.6 10.7 12.4 11.3 12.3 12ZM12.6 17.6C13.2 16.5 13.7 15.3 14 14H16.9C16 15.7 14.4 16.9 12.6 17.6ZM14.4 12C14.5 11.3 14.5 10.7 14.5 10C14.5 9.3 14.4 8.7 14.4 8H17.8C18 8.6 18.1 9.3 18.1 10C18.1 10.7 18 11.4 17.8 12H14.4Z" fill="#616161"/>
                                                     </svg>
                                                 </a>
                                             </li>
+                                            {% endif %}
                                             <li>
-                                                <a href="">
-                                                    <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M3 1H19C20.1 1 21 1.9 21 3V15C21 16.1 20.1 17 19 17H3C1.9 17 1 16.1 1 15V3C1 1.9 1.9 1 3 1Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                        <path d="M21 3L11 10L1 3" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    </svg>
-                                                </a>
+                                                {% if app.user %}
+                                                    <a href="javascipt:void(0)" data-toggle="modal" data-target="#messageModal">
+                                                        <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M3 1H19C20.1 1 21 1.9 21 3V15C21 16.1 20.1 17 19 17H3C1.9 17 1 16.1 1 15V3C1 1.9 1.9 1 3 1Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M21 3L11 10L1 3" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{{ path('login') }}">
+                                                        <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M3 1H19C20.1 1 21 1.9 21 3V15C21 16.1 20.1 17 19 17H3C1.9 17 1 16.1 1 15V3C1 1.9 1.9 1 3 1Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M21 3L11 10L1 3" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+                                                    </a>
+                                                {% endif %}
                                             </li>
                                         </ul>
                                     </div>
                             <div class="mapServiceAdvancedInfoComplaint">
-                                <a href="">Пожаловаться</a>
+                                <a href="">{% trans %}Пожаловаться{% endtrans %}</a>
                             </div>
                         </div>
                         <div class="mapServiceAdvancedInfoDescription">
-                            Указанная стоимость работ является примерной и может отличаться от действительной. Точную стоимость услуг узнавайте у представителей автосервиса
+                            {% trans %}Указанная стоимость работ является примерной и может отличаться от действительной. Точную стоимость услуг узнавайте у представителей автосервиса{% endtrans %}
                         </div>
                         <div class="mapServiceReviews">
                             <div class="mapServiceReviewsHeader">
                                 <div class="mapServiceReviewsHeaderRating">
-                                    <div class="mapServiceReviewsHeaderRatingTitle">12 отзывов</div>
+                                    <div class="mapServiceReviewsHeaderRatingTitle">{{ service.dealerInfo.user.targetReviews | length }} {% trans %}отзывов{% endtrans %}</div>
                                     <div class="accountReviewRating">
-                                    {% set reviewRating = 3 %}
-                                    {% if reviewRating > 0 %}
-                                        {% for i in 1..reviewRating %}
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
-                                            </svg>
-                                        {% endfor %}
-                                    {% endif %}
-                                    {% if reviewRating < 5 %}
-                                        {% for i in (reviewRating + 1)..5 %}
-                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
-                                            </svg>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
+                                        {% set reviewRating = service.rating %}
+                                        {% if reviewRating > 0 %}
+                                            {% for i in 1..reviewRating %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if reviewRating < 5 %}
+                                            {% for i in (reviewRating + 1)..5 %}
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                                                </svg>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
                                 </div>
                                 <div class="cookieAlertButton">
                                     <button onclick="">{% trans %}Написать отзыв{% endtrans %}</button>
                                 </div>
                             </div>
-                            <div class="mapServiceReviewsItems">
-                                <div class="mapServiceReviewsItem">
-                                    <div class="mapServiceReviewsItemHeader">
-                                        <div class="mapServiceReviewsHead">
-                                            <div class="mapServiceReviewsItemTitle">Marjorie Wilson</div>
-                                            <div class="accountReviewRating">
-                                                {% set reviewRating = 3 %}
-                                                {% if reviewRating > 0 %}
-                                                    {% for i in 1..reviewRating %}
-                                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
-                                                        </svg>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                {% if reviewRating < 5 %}
-                                                    {% for i in (reviewRating + 1)..5 %}
-                                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
-                                                        </svg>
-                                                    {% endfor %}
-                                                {% endif %}
+                            {% if service.reviews | length > 0 %}
+                                <div class="mapServiceReviewsItems">
+                                    {% for review in service.reviews %}
+                                        <div class="mapServiceReviewsItem">
+                                            <div class="mapServiceReviewsItemHeader">
+                                                <div class="mapServiceReviewsHead">
+                                                    <div class="mapServiceReviewsItemTitle">{{ review.user.userinfo.firstname }} {{ review.user.userinfo.lastname }}</div>
+                                                    <div class="accountReviewRating">
+                                                        {% set reviewRating = review.rating %}
+                                                        {% if reviewRating > 0 %}
+                                                            {% for i in 1..reviewRating %}
+                                                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                                                                </svg>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        {% if reviewRating < 5 %}
+                                                            {% for i in (reviewRating + 1)..5 %}
+                                                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                                                                </svg>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="mapServiceReviewsItemDate">{{ review.dateAdded | date('d.m.Y') }}</div>
+                                            </div>
+                                            <div class="mapServiceReviewsItemText">
+                                                {{ review.reviewText }}
                                             </div>
                                         </div>
-                                        <div class="mapServiceReviewsItemDate">06.03.2020</div>
-                                    </div>
-                                    <div class="mapServiceReviewsItemText">
-                                        Отличный дилерский автосервис. Качеством оказываемых услуг и стоимостью вполне доволен. Всем рекомендую!
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% if service.reviews | length > 3 %}
+                                <div class="mapServiceReviewsItems">
+                                    <div class="mapServiceReviewsItemsButton">
+                                        <button>{% trans %}Показать еще{% endtrans %} {{ service.reviews | length - 3 }} {% trans %}отзывов{% endtrans %}</button>
                                     </div>
                                 </div>
-                                <div class="mapServiceReviewsItem">
-                                    <div class="mapServiceReviewsItemHeader">
-                                        <div class="mapServiceReviewsHead">
-                                            <div class="mapServiceReviewsItemTitle">Marjorie Wilson</div>
-                                            <div class="accountReviewRating">
-                                                {% set reviewRating = 3 %}
-                                                {% if reviewRating > 0 %}
-                                                    {% for i in 1..reviewRating %}
-                                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
-                                                        </svg>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                {% if reviewRating < 5 %}
-                                                    {% for i in (reviewRating + 1)..5 %}
-                                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
-                                                        </svg>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="mapServiceReviewsItemDate">06.03.2020</div>
-                                    </div>
-                                    <div class="mapServiceReviewsItemText">
-                                        Отличный дилерский автосервис. Качеством оказываемых услуг и стоимостью вполне доволен. Всем рекомендую!
-                                    </div>
-                                </div>
-                                <div class="mapServiceReviewsItem">
-                                    <div class="mapServiceReviewsItemHeader">
-                                        <div class="mapServiceReviewsHead">
-                                            <div class="mapServiceReviewsItemTitle">Marjorie Wilson</div>
-                                            <div class="accountReviewRating">
-                                                {% set reviewRating = 3 %}
-                                                {% if reviewRating > 0 %}
-                                                    {% for i in 1..reviewRating %}
-                                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
-                                                        </svg>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                {% if reviewRating < 5 %}
-                                                    {% for i in (reviewRating + 1)..5 %}
-                                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
-                                                        </svg>
-                                                    {% endfor %}
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                        <div class="mapServiceReviewsItemDate">06.03.2020</div>
-                                    </div>
-                                    <div class="mapServiceReviewsItemText">
-                                        Отличный дилерский автосервис. Качеством оказываемых услуг и стоимостью вполне доволен. Всем рекомендую!
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mapServiceReviewsItems">
-                                <div class="mapServiceReviewsItemsButton">
-                                    <button>{% trans %}Показать еще 9 отзывов{% endtrans %}</button>
-                                </div>
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
             </div>
@@ -457,4 +254,41 @@
         </div>
     </div>                   
 </div>
+{% if app.user %}
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                        </svg>
+                    </button>
+                    {{ form_start(profileMessageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                        <div class="modal-header">
+                            <h3>{% trans %}Написать сообщение{% endtrans %}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="col-lg-4 col-md-4 control-label">{{ form_label(profileMessageForm.subject) }}</label>
+                                <div class="col-lg-8 col-md-8">
+                                    {{ form_widget(profileMessageForm.subject) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-4 col-md-4 control-label">{{ form_label(profileMessageForm.message) }}</label>
+                                <div class="col-lg-8 col-md-8">
+                                    {{ form_widget(profileMessageForm.message) }}
+                                </div>
+                            </div>
+                            {{ form_widget(profileMessageForm.userFrom, {'value' : app.user.id }) }}
+                            {{ form_widget(profileMessageForm.userTo, {'value' : service.dealerinfo.user.id }) }}
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12">{{ form_widget(profileMessageForm.save,{'type' : 'submit'}) }}</div>
+                        </div>
+                    {{ form_end(profileMessageForm)}}
+                </div>
+            </div>
+        </div>   
+{% endif %}
 {% endblock %}    

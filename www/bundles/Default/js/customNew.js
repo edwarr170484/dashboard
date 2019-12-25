@@ -488,3 +488,12 @@ function setServiceJobId(categoryId, categoryName){
     $("input[name='serviceJob']").blur();
     $("input[name='serviceJobId']").val(categoryId);
 }
+
+function setReviewRating(element, rating, event){
+    event.stopPropagation();
+    $(".form-group-rating-star").removeClass("active");
+    for(i = 0;i < rating; i++){
+        $(".form-group-rating-star").eq(i).addClass("active");
+    }
+    $("#review_rating").val(rating);
+}

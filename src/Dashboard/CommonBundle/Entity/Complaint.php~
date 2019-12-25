@@ -29,6 +29,12 @@ class Complaint
      */
     private $product;
     
+     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\DealerSalon", inversedBy="complaints")
+     * @ORM\JoinColumn(name="salon_id", referencedColumnName="id")
+     */
+    private $salon;
+    
     /**
      * @ORM\Column(type="text")
      */
@@ -40,9 +46,10 @@ class Complaint
     private $dateAdded;
     
     /**
-     * @ORM\Column(type="boolean",nullable=true, options={"default":"0"})
+     * @ORM\Column(type="boolean",nullable=true, options={"default": 0})
      */
     private $status;
+
 
     /**
      * Get id
@@ -101,6 +108,29 @@ class Complaint
     }
 
     /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return Complaint
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
      * Set user
      *
      * @param \Dashboard\CommonBundle\Entity\User $user
@@ -147,25 +177,25 @@ class Complaint
     }
 
     /**
-     * Set status
+     * Set salon
      *
-     * @param boolean $status
+     * @param \Dashboard\CommonBundle\Entity\DealerSalon $salon
      * @return Complaint
      */
-    public function setStatus($status)
+    public function setSalon(\Dashboard\CommonBundle\Entity\DealerSalon $salon = null)
     {
-        $this->status = $status;
+        $this->salon = $salon;
 
         return $this;
     }
 
     /**
-     * Get status
+     * Get salon
      *
-     * @return boolean 
+     * @return \Dashboard\CommonBundle\Entity\DealerSalon 
      */
-    public function getStatus()
+    public function getSalon()
     {
-        return $this->status;
+        return $this->salon;
     }
 }

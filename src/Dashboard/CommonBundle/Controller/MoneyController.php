@@ -86,15 +86,19 @@ class MoneyController extends Controller
     }
     
     /**
-     * @Route("/account/payments", name="account_payments")
-     * @Route("/{_locale}/account/payments", name="account_paymentsLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
+     * @Route("/account/payments/{billId}", name="account_payments")
      */
-    public function paymentsAction(Request $request)
+    public function paymentsAction($billId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
+        
+        if(!$bill){
+            return $this->createNotFoundException();
+        }
         
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
@@ -109,6 +113,6 @@ class MoneyController extends Controller
             $totalPrice += $selectedService->getPrice();
         }
         
-        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"),"totalPrice" => $totalPrice));
+        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "totalPrice" => $totalPrice, "bill" => $bill,"back" => $request->headers->get('referer')));
     }
 }

@@ -40,7 +40,7 @@
                                 <div class="accountBillInfo">
                                     <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
                                     <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
-                                    <div class="accountBillInfoItem price">{{ bill.id }}{{ locale.currency.label | raw }}</div>
+                                    <div class="accountBillInfoItem price">{{ bill.price }} {{ locale.currency.label | raw }}</div>
                                     <div class="accountBillInfoItem status">
                                         <div class="accountBillStatus">
                                             {% if bill.isPayed %}
@@ -50,6 +50,13 @@
                                             {% endif %}
                                         </div>
                                     </div>
+                                    {% if not bill.isPayed %}
+                                    <div class="accountBillInfoItem">
+                                        <div class="accountMessageItemButton" style="width: auto;">
+                                            <a href="{{ path('account_payments',{'billId' : bill.id}) }}">{% trans %}Оплатить{% endtrans %}</a>
+                                        </div>
+                                    </div>   
+                                    {% endif %}
                                 </div>
                                 {% if bill.file %}
                                     <div class="accountBillDownload">

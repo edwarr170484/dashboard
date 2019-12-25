@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="pageContentBlock">
-                    <div class="pageContentBlockHeader">{% trans %}Ваши преимущества{% endtrans %}</div>
+                    <div class="pageContentBlockHeader" id="menuBlock1">{% trans %}Ваши преимущества{% endtrans %}</div>
                     <div class="pageContentBlockInner">
                         <div class="pageContentAdvertisment">
                             <div class="pageContentAdvertismentDescriptionText" style="padding-top: 6rem;">
@@ -221,7 +221,7 @@
                     </div>
                 </div>
                 <div class="pageContentBlock">
-                    <div class="pageContentBlockHeader">{% trans %}Стоимость размещения{% endtrans %}</div>
+                    <div class="pageContentBlockHeader" id="menuBlock2">{% trans %}Стоимость размещения{% endtrans %}</div>
                     <div class="pageContentRates">
                         <div class="categoryRate">
                             <div class="categoryRateDescription">
@@ -274,14 +274,14 @@
                 <div class="pageMenuHeader">{{ page.title }}</div>
                 <div class="pageMenuList">
                     <ul class="list-unstyled">
-                        <li><a href="">- {% trans %}Преимущества{% endtrans %}</a></li>
-                        <li><a href="">- {% trans %}Стоимость размещения{% endtrans %}</a></li>
-                        <li><a href="">{% trans %}Дилеры{% endtrans %}</a></li>
+                        <li><a href="#menuBlock1">- {% trans %}Преимущества{% endtrans %}</a></li>
+                        <li><a href="#menuBlock2">- {% trans %}Стоимость размещения{% endtrans %}</a></li>
+                        <li><a href="{{ path('dealer') }}">{% trans %}Дилеры{% endtrans %}</a></li>
                         <li><a href="">{% trans %}Медийная реклама{% endtrans %}</a></li>
                         <li><a href="">{% trans %}Правовая информация{% endtrans %}</a></li>
                         <li><a href="">{% trans %}О проекте{% endtrans %}</a></li>
-                        <li><a href="">{% trans %}FAQ{% endtrans %}</a></li>
-                        <li><a href="">{% trans %}Обратная связь{% endtrans %}</a></li>
+                        <li><a href="{{ path('faq') }}">{% trans %}FAQ{% endtrans %}</a></li>
+                        <li><a href="{{ path('contact') }}">{% trans %}Обратная связь{% endtrans %}</a></li>
                     </ul>
                 </div>
                     <div class="pageMenuButton cookieAlertButton">

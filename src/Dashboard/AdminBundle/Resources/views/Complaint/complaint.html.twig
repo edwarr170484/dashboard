@@ -39,6 +39,7 @@
                                         <th>Причина</th>
                                         <th>Пользователь</th>
                                         <th>Продукт</th>
+                                        <th>Автосервис</th>
                                         <th>Статус</th>
                                         <th>Действия</th>
                                     </tr>
@@ -51,7 +52,14 @@
                                                     <td>{{ complaint.reason }}</td>
                                                     <td><a href="{{ path('admin_user_edit', {'userId' : complaint.user.id}) }}">{{ complaint.user.userinfo.firstname }} {{ complaint.user.userinfo.lastname }}</a></td>
                                                     <td>
+                                                        {% if complaint.product %}
                                                         <a href="{{ path('admin_product_edit', {'productId' : complaint.product.id}) }}">{{ complaint.product.name }}</a>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {% if complaint.salon %}
+                                                            <a href="{{ path('servicePage',{'serviceId' : complaint.salon.id,'serviceName' : complaint.salon.name}) }}">{{ complaint.salon.name }}</a>
+                                                        {% endif %}
                                                     </td>
                                                     <td>
                                                         <select name="status" onchange="changeComplaintStatus($(this),{{ complaint.id }})" class="form-control">

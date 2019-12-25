@@ -7,8 +7,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Dashboard\CommonBundle\Entity\User;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
+use Dashboard\CommonBundle\Entity\User;
+use Dashboard\CommonBundle\Entity\Message;
+use Dashboard\CommonBundle\Entity\Conversation;
+use Dashboard\CommonBundle\Entity\Complaint;
+use Dashboard\CommonBundle\Entity\Review;
+
+use Dashboard\CommonBundle\Form\Type\ProfileMessageType;
 use Dashboard\CommonBundle\Form\Type\DealerRegisterType;
 
 class OfficeController extends Controller
@@ -338,9 +348,133 @@ class OfficeController extends Controller
             }
         }
         
+        $complaint = new Complaint();
+        $complaintMessageForm = $this->get('form.factory')->createNamedBuilder('complaint', 'form', $complaint)
+                 ->add('reason', TextareaType::class, array('required' => true,'label' => '', 'attr' => array('class' => 'form-control','placeholder' => $this->get('translator')->trans('Причина жалобы'))))
+                 ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
+        
+        $complaintMessageForm->handleRequest($request);
+        
+        if($complaintMessageForm->isSubmitted() && $complaintMessageForm->isValid()){
+            if($service->getDealerinfo()->getUser()->getId() != $sessionUser->getId()){   
+                $complaint->setUser($sessionUser);
+                $complaint->setSalon($service);
+                $complaint->setDateAdded(new \DateTime("now"));
+                $complaint->setStatus(0);
+                    
+                $manager->persist($complaint);
+                $manager->flush();
+                    
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Жалоба на сайте ' . $settings->getSiteName())
+                    ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                    ->setTo($settings->getAdminEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'Emails/complaintsalon.html.twig',
+                            array('service' => $service,
+                                  'user' => $sessionUser,
+                                  'settings' => $settings)
+                        ),
+                        'text/html'
+                );
+
+                $this->get('mailer')->send($message);
+                    
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                    $this->get('translator')->trans('<strong>Успешно!</strong> Ваша жалоба зарегистрирована и будет рассмотрена в ближайшее время.') . '</div>'
+                );
+                    
+            }
+            else {
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                    $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете жаловаться на себя.') . '</div>'
+                );
+            }
+            
+            return $this->redirectToRoute("servicePage", array("serviceId" => $service->getId(),"serviceName" => $service->getName()));
+        }
+        
+        $review = new Review();
+        $reviewForm = $this->get('form.factory')->createNamedBuilder('review', 'form', $review)
+                ->add('reviewReason', TextType::class, array('required' => true,'label' => '', 'attr' => array('class' => 'form-control')))
+                ->add('reviewText', TextareaType::class, array('required' => true,'label' => '', 'attr' => array('class' => 'form-control')))
+                ->add('rating', HiddenType::class, array('required' => false,'label' => '', 'attr' => array('class' => 'form-control')))
+                ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить отзыв'), 'attr' => array('class' => 'btn')))->getForm();
+        
+        $reviewForm->handleRequest($request);
+        
+        if($reviewForm->isSubmitted() && $reviewForm->isValid()){
+            if($service->getDealerinfo()->getUser()->getId() != $sessionUser->getId()){
+                $review->setUser($sessionUser);
+                $review->setTargetUser($service->getDealerinfo()->getUser());
+                $review->setSalons($service);
+                $review->setDateAdded(new \DateTime("now"));
+                $review->setStatus(0);
+                
+                $manager->persist($review);
+                $manager->flush();
+                                    
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                    $this->get('translator')->trans('<strong>Успешно!</strong> Ваш озыв отправлен и появится на сайте после проверки модератором.') . '</div>'
+                );
+                
+            }else{
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                    $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете оставлять отзывы на свои объекты.') . '</div>'
+                );
+            }
+            
+            return $this->redirectToRoute("servicePage", array("serviceId" => $service->getId(),"serviceName" => $service->getName()));
+        }
+        
+        $coordinates = new ArrayCollection();
+        
+        $address = str_replace(" ", "+", $service->getAddress());
+        $coords = $this->get('app.maps')->getCoordinatesByAddress($address, $settings->getGoogleMapsKey());
+        if($coords['status'] == "OK"){
+            $coordinates->set($service->getId(), $coords['results'][0]['geometry']['location']);
+        }
+        
+        if($service->getReviews()){
+            $temp = $service->getReviews();
+            foreach($temp as $review){
+                if(!$review->getStatus()){
+                    $service->removeReview($review);
+                }
+            }
+        }
+        
+        $rating = 0;
+        if(count($service->getReviews()) > 0){
+            foreach($service->getReviews() as $review){
+                $rating += $review->getRating();
+            }
+            
+            $rating = ceil($rating / count($service->getReviews()));
+        }
+        
+        $service->setRating($rating);
+        
         return $this->render('DashboardCommonBundle:Office:service.html.twig', array("locale" => $locale,
                                                                                      "settings" => $settings,
                                                                                      "service" => $service,
-                                                                                     "jobCategories" => $jobCategories));
+                                                                                     "coordinates" => $coordinates,
+                                                                                     "jobCategories" => $jobCategories,
+                                                                                     "reviewForm" => $reviewForm->createView(),
+                                                                                     "profileMessageForm" => $profileMessageForm->createView(),
+                                                                                     "complaintMessageForm" => $complaintMessageForm->createView()));
     }
 }

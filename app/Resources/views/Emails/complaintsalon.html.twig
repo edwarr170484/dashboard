@@ -1,0 +1,7 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Пользователь сайта пожаловался на автосервис.</h3>
+<p>
+    Пользователь <strong>{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</strong> пожаловался на автосервис 
+    <h3><a href="{{ absolute_url(path('servicePage', {'serviceId' : service.id,'serviceName' : service.name})) }}">{{ service.name }}</a></h3>
+    Вы можете обработать жалобу в <a href="{{  absolute_url(path("admin_complaint")) }}">системе управления сайтом</a> {{ settings.siteName }}.
+</p>

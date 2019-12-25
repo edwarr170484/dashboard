@@ -7,23 +7,26 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-4 serviceInfo"> 
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}  
                 <div class="mapServiceFotos advertSliderMainFoto">
                     {% if service.logotype %}
                         <div class="mapServiceFotoSliderItem">
                             <img src="{{ asset('bundles/images/dealers/salons/' ~ service.logotype) }}" alt="{{ service.name }}" title="{{ service.name }}" style="width: 100%;"/>
                         </div>
                     {% else %}
-                        <div class="mapServiceFotoSlider owl-carousel" id="productModalSlider">
-                            <div class="mapServiceFotoSliderItem">
-                                <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
+                        {% if service.dealerinfo.fotos | length > 0 %}
+                            <div class="mapServiceFotoSlider owl-carousel" id="productModalSlider">
+                                {% for foto in service.dealerinfo.fotos %}
+                                    <div class="mapServiceFotoSliderItem">
+                                        <img src="{{ asset('bundles/images/dealers/' ~ foto.image) }}" alt="{{ service.name }}" title="{{ service.name }}" />
+                                    </div>
+                                {% endfor %}
                             </div>
-                            <div class="mapServiceFotoSliderItem">
-                                <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
-                            </div>
-                            <div class="mapServiceFotoSliderItem">
-                                <img src="{{ asset('bundles/Default/t/service.png') }}" alt="" title="" />
-                            </div>
-                        </div>
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="mapServiceLogo">
@@ -45,7 +48,7 @@
                                 {% endfor %}
                             {% endif %}
                         </div>
-                        <div class="accountReviewRatingNum">{{ service.dealerInfo.user.targetReviews | length }} {% trans %}отзывов{% endtrans %}</div>
+                        <div class="accountReviewRatingNum">{{ service.reviews | length }} {% trans %}отзывов{% endtrans %}</div>
                     </div>
                     {% if service.dealerinfo.logotype %}
                         <div class="mapServiceLogoImage">
@@ -145,7 +148,7 @@
                                         <ul class="list-unstyled list-inline">
                                             {% if service.website %}
                                             <li>
-                                                <a href="http://{{ service.website }}">
+                                                <a href="http://{{ service.website }}" target="_blank">
                                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M10 0C4.5 0 0 4.5 0 10C0 15.5 4.5 20 10 20C15.5 20 20 15.5 20 10C20 4.5 15.5 0 10 0ZM16.9 6H14C13.7 4.7 13.2 3.6 12.6 2.4C14.4 3.1 16 4.3 16.9 6ZM10 2C10.8 3.2 11.5 4.5 11.9 6H8.1C8.5 4.6 9.2 3.2 10 2ZM2.3 12C2.1 11.4 2 10.7 2 10C2 9.3 2.1 8.6 2.3 8H5.7C5.6 8.7 5.6 9.3 5.6 10C5.6 10.7 5.7 11.3 5.7 12H2.3ZM3.1 14H6C6.3 15.3 6.8 16.4 7.4 17.6C5.6 16.9 4 15.7 3.1 14ZM6 6H3.1C4.1 4.3 5.6 3.1 7.4 2.4C6.8 3.6 6.3 4.7 6 6ZM10 18C9.2 16.8 8.5 15.5 8.1 14H11.9C11.5 15.4 10.8 16.8 10 18ZM12.3 12H7.7C7.6 11.3 7.5 10.7 7.5 10C7.5 9.3 7.6 8.7 7.7 8H12.4C12.5 8.7 12.6 9.3 12.6 10C12.6 10.7 12.4 11.3 12.3 12ZM12.6 17.6C13.2 16.5 13.7 15.3 14 14H16.9C16 15.7 14.4 16.9 12.6 17.6ZM14.4 12C14.5 11.3 14.5 10.7 14.5 10C14.5 9.3 14.4 8.7 14.4 8H17.8C18 8.6 18.1 9.3 18.1 10C18.1 10.7 18 11.4 17.8 12H14.4Z" fill="#616161"/>
                                                     </svg>
@@ -172,7 +175,11 @@
                                         </ul>
                                     </div>
                             <div class="mapServiceAdvancedInfoComplaint">
-                                <a href="">{% trans %}Пожаловаться{% endtrans %}</a>
+                                {% if app.user %}
+                                    <a href="javascript:void(0)" data-toggle="modal" data-target="#complaintModal">{% trans %}Пожаловаться{% endtrans %}</a>
+                                {% else %}
+                                    <a href="{{ path('login') }}">{% trans %}Пожаловаться{% endtrans %}</a>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="mapServiceAdvancedInfoDescription">
@@ -181,7 +188,7 @@
                         <div class="mapServiceReviews">
                             <div class="mapServiceReviewsHeader">
                                 <div class="mapServiceReviewsHeaderRating">
-                                    <div class="mapServiceReviewsHeaderRatingTitle">{{ service.dealerInfo.user.targetReviews | length }} {% trans %}отзывов{% endtrans %}</div>
+                                    <div class="mapServiceReviewsHeaderRatingTitle">{{ service.reviews | length }} {% trans %}отзывов{% endtrans %}</div>
                                     <div class="accountReviewRating">
                                         {% set reviewRating = service.rating %}
                                         {% if reviewRating > 0 %}
@@ -200,9 +207,11 @@
                                         {% endif %}
                                     </div>
                                 </div>
-                                <div class="cookieAlertButton">
-                                    <button onclick="">{% trans %}Написать отзыв{% endtrans %}</button>
-                                </div>
+                                {% if app.user %}
+                                    <div class="cookieAlertButton">
+                                        <button data-toggle="modal" data-target="#reviewModal">{% trans %}Написать отзыв{% endtrans %}</button>
+                                    </div>
+                                {% endif %}
                             </div>
                             {% if service.reviews | length > 0 %}
                                 <div class="mapServiceReviewsItems">
@@ -248,9 +257,40 @@
                         </div>
                     </div>
             </div>
-            <div class="mapImage">        
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2349.865030048467!2d27.58359641616844!3d53.91637428010246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dbcfa41ea5c939%3A0xd4acce53940bc87f!2z0KbQtdC90YLRgNCw0LvRjNC90YvQuSDQo9C90LjQstC10YDRgdCw0LvRjNC90YvQuSDQvNCw0LPQsNC30LjQvQ!5e0!3m2!1sru!2sby!4v1574246307736!5m2!1sru!2sby" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-            </div>
+            <div class="mapImage" id="map"></div>
+            <script>
+                var map;
+                {% if coordinates | length > 0 %}
+                    function initMap() {
+                        map = new google.maps.Map(document.getElementById('map'), {
+                        center: {lat: {{ coordinates[service.id].lat }}, lng: {{ coordinates[service.id].lng }} },
+                        zoom: 19
+                    });
+                {% else %}
+                    function initMap() {
+                        map = new google.maps.Map(document.getElementById('map'), {
+                        center: {lat: {{ settings.centerLat }}, lng: {{ settings.centerLng }} },
+                        zoom: 6
+                    });
+                {% endif %}
+                                              
+                {% if coordinates | length > 0 %}
+                    var markers = locations.map(function(location, i) {
+                        return new google.maps.Marker({position: location});
+                    });
+
+                    var markerCluster = new MarkerClusterer(map, markers,{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+                {% endif %}
+                }
+                {% if coordinates | length > 0 %}
+                    var locations = [
+                        {% for coordinate in coordinates %}
+                            {lat: {{ coordinate.lat}}, lng: {{ coordinate.lng }} },
+                        {% endfor %}
+                    ]
+                {% endif %} 
+            </script>
         </div>
     </div>                   
 </div>
@@ -291,4 +331,108 @@
             </div>
         </div>   
 {% endif %}
+<div class="modal fade" id="complaintModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                </svg>
+            </button>
+            {{ form_start(complaintMessageForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                <div class="modal-header">
+                    <h3>{% trans %}Подать жалобу{% endtrans %}</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-lg-12 col-md-12">
+                            {{ form_widget(complaintMessageForm.reason) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-lg-12">{{ form_widget(complaintMessageForm.save,{'type' : 'submit'}) }}</div>
+                </div>
+            {{ form_end(complaintMessageForm)}}
+        </div>
+    </div>
+</div> 
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                </svg>
+            </button>
+            {{ form_start(reviewForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+            <div class="modal-header">
+                <h3>{% trans %}Оставить отзыв{% endtrans %}</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="form-group-label">
+                        {% trans %}Отзыв о работе{% endtrans %} <span>*</span>
+                        <div class="form-group-label-sub">{% trans %}Не более 1000 знаков{% endtrans %}</div>
+                    </div>
+                    <div class="form-group-control">
+                        {{ form_widget(reviewForm.reviewText) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-label">
+                        {% trans %}Подытожьте отзыв{% endtrans %} <span>*</span>
+                    </div>
+                    <div class="form-group-control">
+                        {{ form_widget(reviewForm.reviewReason) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-label">
+                        {% trans %}Оцените работу{% endtrans %}
+                    </div>
+                    <div class="form-group-control">
+                        <div class="form-group-rating-stars" onclick="setReviewRating($(this), 0, event)">
+                            {{ form_widget(reviewForm.rating) }}
+                            <div class="form-group-rating-star" onclick="setReviewRating($(this), 1, event)">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.9944 24.2776C15.3932 23.8644 14.6068 23.8644 14.0056 24.2776L6.61221 29.3594C6.29558 29.577 5.94962 29.5257 5.69718 29.3146C5.44257 29.1016 5.31095 28.7454 5.45991 28.3615L8.66901 20.0899C8.97599 19.2987 8.70704 18.3874 8.00684 17.9062L0.856526 12.9915C0.176991 12.5244 0.541644 11.4817 1.28452 11.4817H9.00333C9.74122 11.4817 10.3932 11.019 10.6599 10.3316L14.2757 1.01182C14.5405 0.329393 15.4595 0.329394 15.7243 1.01182L19.3401 10.3316C19.6068 11.019 20.2588 11.4817 20.9967 11.4817H28.7155C29.4584 11.4817 29.823 12.5244 29.1435 12.9915L21.9932 17.9062C21.293 18.3874 21.024 19.2987 21.331 20.0899L24.5401 28.3615C24.689 28.7454 24.5574 29.1016 24.3028 29.3146C24.0504 29.5257 23.7044 29.577 23.3878 29.3594L15.9944 24.2776Z" stroke="#F5AA01"/>
+                                </svg>
+                            </div>
+                            <div class="form-group-rating-star" onclick="setReviewRating($(this), 2, event)">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.9944 24.2776C15.3932 23.8644 14.6068 23.8644 14.0056 24.2776L6.61221 29.3594C6.29558 29.577 5.94962 29.5257 5.69718 29.3146C5.44257 29.1016 5.31095 28.7454 5.45991 28.3615L8.66901 20.0899C8.97599 19.2987 8.70704 18.3874 8.00684 17.9062L0.856526 12.9915C0.176991 12.5244 0.541644 11.4817 1.28452 11.4817H9.00333C9.74122 11.4817 10.3932 11.019 10.6599 10.3316L14.2757 1.01182C14.5405 0.329393 15.4595 0.329394 15.7243 1.01182L19.3401 10.3316C19.6068 11.019 20.2588 11.4817 20.9967 11.4817H28.7155C29.4584 11.4817 29.823 12.5244 29.1435 12.9915L21.9932 17.9062C21.293 18.3874 21.024 19.2987 21.331 20.0899L24.5401 28.3615C24.689 28.7454 24.5574 29.1016 24.3028 29.3146C24.0504 29.5257 23.7044 29.577 23.3878 29.3594L15.9944 24.2776Z" stroke="#F5AA01"/>
+                                </svg>
+                            </div> 
+                            <div class="form-group-rating-star" onclick="setReviewRating($(this), 3, event)">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.9944 24.2776C15.3932 23.8644 14.6068 23.8644 14.0056 24.2776L6.61221 29.3594C6.29558 29.577 5.94962 29.5257 5.69718 29.3146C5.44257 29.1016 5.31095 28.7454 5.45991 28.3615L8.66901 20.0899C8.97599 19.2987 8.70704 18.3874 8.00684 17.9062L0.856526 12.9915C0.176991 12.5244 0.541644 11.4817 1.28452 11.4817H9.00333C9.74122 11.4817 10.3932 11.019 10.6599 10.3316L14.2757 1.01182C14.5405 0.329393 15.4595 0.329394 15.7243 1.01182L19.3401 10.3316C19.6068 11.019 20.2588 11.4817 20.9967 11.4817H28.7155C29.4584 11.4817 29.823 12.5244 29.1435 12.9915L21.9932 17.9062C21.293 18.3874 21.024 19.2987 21.331 20.0899L24.5401 28.3615C24.689 28.7454 24.5574 29.1016 24.3028 29.3146C24.0504 29.5257 23.7044 29.577 23.3878 29.3594L15.9944 24.2776Z" stroke="#F5AA01"/>
+                                </svg>
+                            </div> 
+                            <div class="form-group-rating-star" onclick="setReviewRating($(this), 4, event)">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.9944 24.2776C15.3932 23.8644 14.6068 23.8644 14.0056 24.2776L6.61221 29.3594C6.29558 29.577 5.94962 29.5257 5.69718 29.3146C5.44257 29.1016 5.31095 28.7454 5.45991 28.3615L8.66901 20.0899C8.97599 19.2987 8.70704 18.3874 8.00684 17.9062L0.856526 12.9915C0.176991 12.5244 0.541644 11.4817 1.28452 11.4817H9.00333C9.74122 11.4817 10.3932 11.019 10.6599 10.3316L14.2757 1.01182C14.5405 0.329393 15.4595 0.329394 15.7243 1.01182L19.3401 10.3316C19.6068 11.019 20.2588 11.4817 20.9967 11.4817H28.7155C29.4584 11.4817 29.823 12.5244 29.1435 12.9915L21.9932 17.9062C21.293 18.3874 21.024 19.2987 21.331 20.0899L24.5401 28.3615C24.689 28.7454 24.5574 29.1016 24.3028 29.3146C24.0504 29.5257 23.7044 29.577 23.3878 29.3594L15.9944 24.2776Z" stroke="#F5AA01"/>
+                                </svg>
+                            </div> 
+                            <div class="form-group-rating-star" onclick="setReviewRating($(this), 5, event)">
+                                <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.9944 24.2776C15.3932 23.8644 14.6068 23.8644 14.0056 24.2776L6.61221 29.3594C6.29558 29.577 5.94962 29.5257 5.69718 29.3146C5.44257 29.1016 5.31095 28.7454 5.45991 28.3615L8.66901 20.0899C8.97599 19.2987 8.70704 18.3874 8.00684 17.9062L0.856526 12.9915C0.176991 12.5244 0.541644 11.4817 1.28452 11.4817H9.00333C9.74122 11.4817 10.3932 11.019 10.6599 10.3316L14.2757 1.01182C14.5405 0.329393 15.4595 0.329394 15.7243 1.01182L19.3401 10.3316C19.6068 11.019 20.2588 11.4817 20.9967 11.4817H28.7155C29.4584 11.4817 29.823 12.5244 29.1435 12.9915L21.9932 17.9062C21.293 18.3874 21.024 19.2987 21.331 20.0899L24.5401 28.3615C24.689 28.7454 24.5574 29.1016 24.3028 29.3146C24.0504 29.5257 23.7044 29.577 23.3878 29.3594L15.9944 24.2776Z" stroke="#F5AA01"/>
+                                </svg>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group-text">{% trans %}Все отзывы проверяются модераторами. Модератор имеет право отклонить любой отзыв{% endtrans %}.</div>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-lg-12">
+                    <div class="cookieAlertButton">{{ form_widget(reviewForm.save,{'type' : 'submit'}) }}</div>
+                </div>
+            </div>
+            {{ form_end(reviewForm)}}
+        </div>
+    </div>
+</div>
 {% endblock %}    

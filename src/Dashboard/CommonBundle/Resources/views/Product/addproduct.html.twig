@@ -30,7 +30,7 @@
     
             var dz_fotos = $(".dropzone").find(".dz-preview").length;
 
-            myDropzone = new Dropzone("div.dropzone", {url: "/account/ajaxloadfotos", 
+            myDropzone = new Dropzone("div.dropzone", {url: "/account/advert/ajaxloadfotos", 
                                          dictDefaultMessage : '<div class="adv-foto-frame main-foto add-more"><div class="adv-foto"></div></div><div style="display:flex;flex-direction:column;justify-content:center">{% trans %}Noklikšķiniet, lai ielādētu attēlus, jūs varat izvēlēties vairākus. Kopējais attēlu skaits nedrīkst pārsniegt{% endtrans %} {{ role.advertFotoNumber }}.</div>',
                                          dictInvalidFileType : "{% trans %}Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.{% endtrans %}",
                                          dictFileTooBig : "{% trans %}Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.{% endtrans %}",

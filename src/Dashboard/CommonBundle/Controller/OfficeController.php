@@ -416,7 +416,7 @@ class OfficeController extends Controller
                 $review->setTargetUser($service->getDealerinfo()->getUser());
                 $review->setSalons($service);
                 $review->setDateAdded(new \DateTime("now"));
-                $review->setStatus(0);
+                $review->setStatus($settings->getNewReviewStatus());
                 
                 $manager->persist($review);
                 $manager->flush();

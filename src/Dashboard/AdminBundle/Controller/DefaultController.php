@@ -385,7 +385,6 @@ class DefaultController extends Controller
     {
         $manager = $this->getDoctrine()->getManager();
         $fm = new Filesystem();
-        $userCurrentBalanse = 0;
                  
         $user = ($userId) ? $manager->getRepository("DashboardCommonBundle:User")->find($userId) : new User();
 
@@ -393,12 +392,7 @@ class DefaultController extends Controller
         
         $userinfo = ($user) ? $user->getUserinfo() : new UserInfo();
         
-        $userpurse = ($user) ? $user->getUserpurse() : new UserPurse();
-        
-        $originalEmail = $user->getEmail();
-        
-        if($user->getId())
-            $userCurrentBalanse = $user->getUserpurse()->getBalanse();
+        $originalEmail = $user->getEmail();  
         
         $userForm = $this->get('form.factory')->createNamedBuilder('user', 'form', $user)
             ->add('email', EmailType::class, array('required' => false, 'label' => 'эл. почта', 'attr' => array('class' => 'form-control')))
@@ -407,7 +401,6 @@ class DefaultController extends Controller
             ->add('isActive', CheckboxType::class, array('required' => false, 'label' => 'Аккаунт активен', 'attr' => array('class' => 'form-control')))
             ->add('advertNumber', TextType::class, array('required' => false, 'label' => 'Количество дополнительных объявлений', 'attr' => array('class' => 'form-control')))
             ->add('userinfo', new UserInfoType($manager, $userinfo), array('data_class' => 'Dashboard\CommonBundle\Entity\UserInfo'))
-            ->add('userpurse', new UserPurseType($manager, $userpurse), array('data_class' => 'Dashboard\CommonBundle\Entity\UserPurse'))
             ->add('roles', 'entity', array('class' => 'DashboardCommonBundle:Role', 
                   'choice_label' => 'title', 'label' => 'Группа пользователей', 'data' => ($roles) ? $roles[0] : 0,'mapped' => false,'attr' => array('class' => 'form-control')))
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')))->getForm();
@@ -465,26 +458,9 @@ class DefaultController extends Controller
             
             if(!$userId)
             {
-                $userpurse = new UserPurse();
-                $user->getUserinfo()->setUser($user);
-                
-                $password = $this->get('security.password_encoder')->encodePassword($user, '1');
-                $user->setPassword($password);
-                
-                $userpurse->setUser($user);
-                $userpurse->setBalanse($userForm['userpurse']['balanse']->getData());
-
-                $userActivity = new UserActivity();
-                $userActivity->setUser($user);
-                $userActivity->setEnterCount(0);
-                $userActivity->setLastActivity(new \DateTime("now"));
-                
                 $user->setIsConfirm(1);
                 $user->setIsActive(1);
                 $user->setAlerts(1);
-                
-                $manager->persist($userpurse);
-                $manager->persist($userActivity);
             }
             
             if($userId)
@@ -494,17 +470,6 @@ class DefaultController extends Controller
                 if($confirmation)
                 {
                     $manager->remove($confirmation);
-                }
-                
-                if($userCurrentBalanse != $userForm['userpurse']['balanse']->getData())
-                {
-                    $userPurseHistory = new UserPurseHistory();
-                    $userPurseHistory->setActionDate(new \DateTime("now"));
-                    $userPurseHistory->setAction("Администратор изменил значение текущего счета. Новое значение " . $userForm['userpurse']['balanse']->getData() . " гривен.");
-                    $userPurseHistory->setCurrentBalanse($userForm['userpurse']['balanse']->getData());
-                    $userPurseHistory->setUserpurse($user->getUserpurse());
-                    
-                    $manager->persist($userPurseHistory);
                 }
             }
             
@@ -1402,6 +1367,11 @@ class DefaultController extends Controller
                             'required' => true, 
                             'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('l')->orderBy('l.sortorder', 'ASC');},
                             'label' => 'Валюта:', 'attr' => array('class' => 'hidden-input form-control','id' => 'region','placeholder' => 'Валюта:'))) 
+            ->add('newReviewStatus', 'entity', array('class' => 'DashboardCommonBundle:ReviewStatus',
+                            'choice_label' => 'name',
+                            'empty_data' => null,
+                            'required' => false, 
+                            'label' => 'Статус добавляемых отзывов:', 'attr' => array('class' => 'form-control'))) 
             ->add('successAddAdvertText', TextareaType::class, array('required' => false, 'label' => 'Текст для сообщения об успешном добавлении объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Текст для сообщения об успешном добавлении объявления')))->getForm();
         }
         

@@ -30,6 +30,7 @@ use Dashboard\CommonBundle\Entity\ProductFotos;
 use Dashboard\CommonBundle\Entity\ProductService;
 use Dashboard\CommonBundle\Entity\Bill;
 use Dashboard\CommonBundle\Entity\FilterValue;
+use Dashboard\CommonBundle\Entity\Modification;
 use Dashboard\CommonBundle\Model\AdvertInfo;
 use Dashboard\CommonBundle\Model\AdvertImage;
 use Dashboard\CommonBundle\Model\AdvertFilter;
@@ -37,6 +38,463 @@ use Dashboard\CommonBundle\Model\SelectedService;
 
 class AdvertController extends Controller
 {
+    /**
+     * @Route("/account/{categoryName}/addadvert", name="addCategoryAdvert")
+     */
+    public function addCategoryAdvertAction($categoryName, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $user = $this->get('security.context')->getToken()->getUser();
+        $helper = $this->get('app.helpers');
+        
+        $category = $manager->getRepository("DashboardCommonBundle:Category")->findOneByName($categoryName);
+        
+        if(!$category){
+            throw $this->createNotFoundException();  
+        }
+        
+        if($request->request->get('markaXmlHttp')){
+            $categoryMarka = $manager->getRepository("DashboardCommonBundle:Category")->find($request->request->get('markaXmlHttp'));
+            return $this->render('DashboardCommonBundle:Product:add/categoryModels.html.twig', array("category" => $categoryMarka));
+        }
+        
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $session = new Session();
+        $advertImages = ($session->get('advertImages')) ? $serializer->deserialize($session->get('advertImages'), 'Dashboard\CommonBundle\Model\AdvertImage[]', 'json') : array();
+        $baseCategory = $category->getParent();
+        
+        if($request->server->get("REQUEST_METHOD") == "POST"){
+            
+            $productCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($request->request->get('category'));
+            $city = $manager->getRepository("DashboardCommonBundle:City")->findOneByName($request->request->get('contactCity'));
+            $cityCode = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($request->request->get('contactCityCode'));
+            
+            //generate product name from category
+            $productName = array();
+            array_push($productName, $productCategory->getTitle());
+            array_push($productName, $productCategory->getParent()->getTitle());
+            $productTitle = implode(" ", array_reverse($productName));
+            
+            $product = new Product();
+            $product->setUser($user);
+            $product->setCategory($productCategory);
+            $product->setBaseCategory($baseCategory);
+            $product->setAuthorName($request->request->get('contactName'));
+            $product->setAuthorPhone($request->request->get('contactPhone'));
+            $product->setAuthorEmail($request->request->get('contactEmail'));
+            $product->setRegion($city->getRegion());
+            $product->setCity($city);
+            $product->setCityCode($cityCode);
+            $product->setName($productTitle);
+            $product->setTranslit($helper->translit($productTitle));
+            $product->setIsActive(1);
+            $product->setDateAdded(new \DateTime("now"));
+            $product->setDateEdited(new \DateTime("now"));
+            
+            if(count($advertImages) > 0){
+                foreach($advertImages as $image){
+                    $productImage = new ProductFotos();
+                    $productImage->setProduct($product);
+                    $productImage->setFoto($image->getName());
+                    $product->addFoto($productImage);
+                }
+            }
+            
+            if(count($request->request->get('filter')) > 0){
+                foreach($request->request->get('filter') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter, "id" => $value));
+                        if($filter){
+                            $product->addFilter($filter);
+                        }
+                    }
+                }
+            }
+            
+            $servicePack = $manager->getRepository("DashboardCommonBundle:Pack")->find($request->request->get('servicePack'));
+            if($servicePack){
+                 //add bill
+                $bill = new Bill();
+                $bill->setDateAdded(new \DateTime("now"));
+                $bill->setProduct($product);
+                $bill->setServicePack($servicePack);
+                $bill->setUser($user);
+                    
+                $price = 0;
+                    
+                if($servicePack->getPrices()){
+                    foreach($servicePack->getPrices() as $packPrice){
+                        if($packPrice->getCategory()->getId() == $baseCategory->getId()){
+                            $price = $packPrice->getPrice();
+                        }
+                    }
+                }
+                    
+                if($price == 0){
+                    $price = $servicePack->getPrice();
+                }
+                    
+                $bill->setPrice($price);
+                $manager->persist($bill);
+            }  
+            
+            if(count($request->request->get('service')) > 0){
+                $bill = new Bill();
+                $bill->setDateAdded(new \DateTime("now"));
+                $bill->setProduct($product);
+                $bill->setUser($user);
+                
+                foreach($request->request->get('service') as $serviceId){
+                    $service = $manager->getRepository("DashboardCommonBundle:Service")->find($serviceId);
+                    if($service){
+                        $productService = new ProductService();
+                        $productService->setService($service);
+                        $productService->setCount($service->getDays());
+                        $productService->setIsActive(0);
+                        $product->addService($productService);
+                        $bill->addService($productService);
+                        
+                        $price = 0;
+                    
+                        if($service->getPrices()){
+                            foreach($service->getPrices() as $servicePrice){
+                                if($servicePrice->getCategory()->getId() == $baseCategory->getId()){
+                                    $price = $servicePrice->getPrice();
+                                }
+                            }
+                        }
+
+                        if($price == 0){
+                            $price = $service->getPrice();
+                        }
+
+                        $bill->setPrice($bill->getPrice() + $price);
+                    }
+                }
+                
+                $manager->persist($bill);
+            }
+            
+            $info = new ProductInfo();
+            $info->setProduct($product);
+            $info->setDescription($request->request->get('description'));
+            $info->setPrice($request->request->get('price'));
+            $info->setProbeg($request->request->get('probeg'));
+            $info->setYear($request->request->get('year'));
+            
+            if($request->request->get('board')){
+                foreach($request->request->get('board') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $info->setBoard($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('color')){
+                foreach($request->request->get('color') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $info->setColor($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('condition')){
+                $condition = $manager->getRepository("DashboardCommonBundle:Shape")->find($request->request->get('condition'));
+                $info->setShape($condition);    
+            }
+            
+            if($request->request->get('gasType')){
+                foreach($request->request->get('gasType') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $info->setGasType($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('gearType')){
+                foreach($request->request->get('gearType') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $info->setGearType($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('transmissionType')){
+                foreach($request->request->get('transmissionType') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $info->setTransmissionType($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('size') && $request->request->get('power')){
+                $modification = new Modification();
+                $modification->setSize($request->request->get('size'));
+                $modification->setPower($request->request->get('power'));
+                $manager->persist($modification);
+                
+                $info->setModification($modification);
+            }
+            
+            $product->setInfo($info);
+            
+            if($request->request->get('isDraft') == 1){
+                $product->setIsDraft(1);
+            }else{
+                $product->setIsDraft(0);
+            }
+            
+            $product->setIsConfirm(0);
+            $product->setIsBlocked(0);
+            
+            $manager->persist($product);
+            $manager->flush();
+            
+            //clear session
+            $session->remove('advertImages');  
+            
+            if($request->request->get('isDraft') == 1){
+                return $this->render('DashboardCommonBundle:Product:add/resultCategoryDraft.html.twig', array("locale" => $locale, "settings" => $settings));
+            }else{
+                return $this->render('DashboardCommonBundle:Product:add/resultCategory.html.twig', array("locale" => $locale, "settings" => $settings));
+            }
+        }
+        
+        
+        $filters = new ArrayCollection();
+        
+        if($baseCategory->getFilters()){
+            foreach($baseCategory->getFilters() as $filter){
+                if(false === $filters->contains($filter)){
+                    $filters->add($filter);
+                }
+            }
+        }
+        
+        if($category->getFilters()){
+            foreach($category->getFilters() as $filter){
+                if(false === $filters->contains($filter)){
+                    $filters->add($filter);
+                }
+            }
+        }
+        
+        $conditions = $manager->getRepository("DashboardCommonBundle:Shape")->findAll();
+        
+        return $this->render('DashboardCommonBundle:Product:add/categoryForm.html.twig', array("baseCategory" => $baseCategory,"category" => $category,"locale" => $locale,"advertImages" => $advertImages,"role" => $user->getRoles()[0],"settings" => $settings,"filters" => $filters,"conditions" => $conditions));
+    }
+    
+    /**
+     * @Route("/account/{categoryName}/editadvert/{productId}", name="editCategoryAdvert")
+     */
+    public function editCategoryAdvertAction($categoryName, $productId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $helper = $this->get('app.helpers');
+        
+        $category = $manager->getRepository("DashboardCommonBundle:Category")->findOneByName($categoryName);
+        
+        if(!$category){
+            throw $this->createNotFoundException();  
+        }
+        
+        $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId);
+        
+        if(!$product){
+            throw $this->createNotFoundException();  
+        }
+        
+        $baseCategory = $product->getBaseCategory();
+        
+        if($request->server->get("REQUEST_METHOD") == "POST"){
+            $originalFilters = new ArrayCollection();
+            
+            if($product->getFilters()){
+                $temp = $product->getFilters();
+                foreach($temp as $filter){
+                    $product->removeFilter($filter);
+                }
+            }
+            
+            $productCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($request->request->get('category'));
+            $city = $manager->getRepository("DashboardCommonBundle:City")->findOneByName($request->request->get('contactCity'));
+            $cityCode = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($request->request->get('contactCityCode'));
+            
+            //generate product name from category
+            $productName = array();
+            array_push($productName, $productCategory->getTitle());
+            array_push($productName, $productCategory->getParent()->getTitle());
+            $productTitle = implode(" ", array_reverse($productName));
+            
+            $product->setCategory($productCategory);
+            $product->setBaseCategory($baseCategory);
+            $product->setAuthorName($request->request->get('contactName'));
+            $product->setAuthorPhone($request->request->get('contactPhone'));
+            $product->setAuthorEmail($request->request->get('contactEmail'));
+            $product->setRegion($city->getRegion());
+            $product->setCity($city);
+            $product->setCityCode($cityCode);
+            $product->setName($productTitle);
+            $product->setTranslit($helper->translit($productTitle));
+            $product->setDateEdited(new \DateTime("now"));
+
+            if(count($request->request->get('filter')) > 0){
+                foreach($request->request->get('filter') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter, "id" => $value));
+                        if($filter){
+                            $product->addFilter($filter);
+                        }
+                    }
+                }
+            }
+            
+            $product->getInfo()->setDescription($request->request->get('description'));
+            $product->getInfo()->setPrice($request->request->get('price'));
+            $product->getInfo()->setProbeg($request->request->get('probeg'));
+            $product->getInfo()->setYear($request->request->get('year'));
+            
+            if($request->request->get('board')){
+                foreach($request->request->get('board') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $product->getInfo()->setBoard($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('color')){
+                foreach($request->request->get('color') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $product->getInfo()->setColor($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('condition')){
+                $condition = $manager->getRepository("DashboardCommonBundle:Shape")->find($request->request->get('condition'));
+                $product->getInfo()->setShape($condition);    
+            }
+            
+            if($request->request->get('gasType')){
+                foreach($request->request->get('gasType') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $product->getInfo()->setGasType($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('gearType')){
+                foreach($request->request->get('gearType') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $product->getInfo()->setGearType($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('transmissionType')){
+                foreach($request->request->get('transmissionType') as $key => $value){
+                    $mainFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                    if($mainFilter){
+                        $filter = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $mainFilter,"id" => $value));
+                        if($filter){
+                            $product->getInfo()->setTransmissionType($filter);
+                        }
+                    }
+                }
+            }
+            
+            if($request->request->get('size') && $request->request->get('power')){
+                $modification = ($product->getInfo()->getModification()) ? $product->getInfo()->getModification() : new Modification();
+                $modification->setSize($request->request->get('size'));
+                $modification->setPower($request->request->get('power'));
+                $manager->persist($modification);
+                
+                $product->getInfo()->setModification($modification);
+            }
+            
+            $manager->persist($product);
+            $manager->flush();
+            
+            $this->addFlash(
+                'notice',
+                '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
+                $this->get('translator')->trans('<strong>Успешно!</strong> Информация сохранена.') . '</div>'
+            );
+            
+            return $this->redirectToRoute('editCategoryAdvert', array('categoryName' => $category->getName(), "productId" => $product->getId()));
+        }
+        
+        $filters = new ArrayCollection();
+        
+        if($baseCategory->getFilters()){
+            foreach($baseCategory->getFilters() as $filter){
+                if(false === $filters->contains($filter)){
+                    $filters->add($filter);
+                }
+            }
+        }
+        
+        if($category->getFilters()){
+            foreach($category->getFilters() as $filter){
+                if(false === $filters->contains($filter)){
+                    $filters->add($filter);
+                }
+            }
+        }
+        
+        $conditions = $manager->getRepository("DashboardCommonBundle:Shape")->findAll();
+        
+        return $this->render('DashboardCommonBundle:Product:edit/categoryEdit.html.twig', array("baseCategory" => $baseCategory,"category" => $category,"locale" => $locale,"role" => $user->getRoles()[0],"settings" => $settings,"filters" => $filters,"conditions" => $conditions,"product" => $product));
+    }
+    
     /**
      * @Route("/account/addadvert/{step}/{data}", name="addAdvert", defaults={"step" : "0", "data" : 0})
      */
@@ -1102,7 +1560,7 @@ class AdvertController extends Controller
     }
  
     /**
-     * @Route("/account/ajaxloadfotos/{productId}", name="ajaxloadfotos", defaults={"productId" : 0})
+     * @Route("/account/advert/ajaxloadfotos/{productId}", name="ajaxloadfotos", defaults={"productId" : 0})
      */
     public function ajaxLoadFotosAction($productId, Request $request)
     {
@@ -1209,6 +1667,14 @@ class AdvertController extends Controller
         $foto = $manager->getRepository("DashboardCommonBundle:ProductFotos")->find($fotoId);
         
         if($foto && $foto->getProduct()->getUser()->getId() == $user->getId()){
+            if($foto->getFoto())
+            {
+                if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto()))
+                {
+                    $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto());
+                }
+            }
+            
             $foto->setProduct(null);
             $manager->remove($foto);
             $manager->flush();
@@ -1369,7 +1835,7 @@ class AdvertController extends Controller
                             $price = $service->getPrice();
                         }
 
-                        $bill->setPrice($price);
+                        $bill->setPrice($bill->getPrice() + $price);
                     }
                 }
             }
@@ -1416,13 +1882,15 @@ class AdvertController extends Controller
             
             if($isDraft){
                 $product->setIsDraft(1);
+            }else{
+                $product->setIsDraft(0);
             }
             
             $product->setIsConfirm(0);
             $product->setIsBlocked(0);
             
             $manager->persist($product);
-            $manager->persist($bill);
+            if($bill){$manager->persist($bill);}
             $manager->flush();
             
             //clear session

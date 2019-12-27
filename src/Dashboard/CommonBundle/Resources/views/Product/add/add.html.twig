@@ -51,20 +51,36 @@
                                                 <div class="mainPageAutoList">
                                                     <ul class="list-unstyled list-inline justLinks shortCategoryList">
                                                         {% for child in category.children | slice(0, settings.categoryPanelItemsNumber )%}
+                                                            {% if category.formType == 1 %}
                                                                 <li class="categoryItem" data-title="{{ child.title | lower }}">
-                                                                <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" >
-                                                                    {{ child.title }}
-                                                                </a>
-                                                            </li>
+                                                                    <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" >
+                                                                        {{ child.title }}
+                                                                    </a>
+                                                                </li>
+                                                            {% else %}
+                                                                <li class="categoryItem" data-title="{{ child.title | lower }}">
+                                                                    <a href="{{ path('addCategoryAdvert', {'categoryName' : child.name }) }}">
+                                                                        {{ child.title }}
+                                                                    </a>
+                                                                </li>
+                                                            {% endif %}
                                                         {% endfor %}
                                                     </ul>
                                                     <ul class="list-unstyled list-inline justLinks fullCategoryList">
                                                         {% for child in category.children %}
-                                                            <li class="categoryItem" data-title="{{ child.title | lower }}">
-                                                                <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" >
-                                                                    {{ child.title }}
-                                                                </a>
-                                                            </li>
+                                                            {% if category.formType == 1 %}
+                                                                <li class="categoryItem" data-title="{{ child.title | lower }}">
+                                                                    <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" >
+                                                                        {{ child.title }}
+                                                                    </a>
+                                                                </li>
+                                                            {% else %}
+                                                                <li class="categoryItem" data-title="{{ child.title | lower }}">
+                                                                    <a href="{{ path('addCategoryAdvert', {'categoryName' : child.name }) }}">
+                                                                        {{ child.title }}
+                                                                    </a>
+                                                                </li>
+                                                            {% endif %}
                                                         {% endfor %}
                                                     </ul>
                                                 </div>
@@ -72,11 +88,19 @@
                                                     <div class="mainPageAutoList">
                                                         <ul class="list-unstyled list-inline justLinks">
                                                             {% for child in category.children %}
-                                                                <li>
-                                                                    <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')">
-                                                                    {{ child.title}}
-                                                                    </a>
-                                                                </li>
+                                                                {% if category.formType == 1 %}
+                                                                    <li>
+                                                                        <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')">
+                                                                            {{ child.title}}
+                                                                        </a>
+                                                                    </li>
+                                                                {% else %}
+                                                                    <li>
+                                                                        <a href="{{ path('addCategoryAdvert', {'categoryName' : child.name }) }}">
+                                                                            {{ child.title}}
+                                                                        </a>
+                                                                    </li>
+                                                                {% endif %}
                                                             {% endfor %}
                                                         </ul>
                                                     </div>

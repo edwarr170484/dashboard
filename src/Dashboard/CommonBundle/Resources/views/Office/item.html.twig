@@ -30,7 +30,7 @@
 <div class="mapListItemInfo">
     <div class="mapListItemInfoName">{{ salon.name }}</div>
         {% if salon.website %}
-            <div class="mapListItemInfoText">Web: <a href="{{ salon.website }}">{{ salon.website }}</a></div>
+            <div class="mapListItemInfoText">Web: <a href="http://{{ salon.website }}">{{ salon.website }}</a></div>
         {% endif %}
         {% if salon.phones | length > 0 %}
             <div class="mapListItemInfoText">

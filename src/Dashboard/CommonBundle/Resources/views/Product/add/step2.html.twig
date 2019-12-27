@@ -101,7 +101,7 @@
     </div>
     <script>
         myDropzone = new Dropzone("div#advertFotos", {
-            url: "/account/ajaxloadfotos",
+            url: "/account/advert/ajaxloadfotos",
             dictDefaultMessage : '<div class="advertFotosStartBg"><div class="addFotoIcon"><div class="addFotoIconInner"></div></div><div class="addFotoDescription">{% trans %}Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать 30.{% endtrans %}</div></div>',
             maxFiles : 30,
             maxFilesize: 256,
@@ -182,7 +182,7 @@
                 $(".addFotoIcon").remove();
                 var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
                 $.ajax({
-                    url: '/' + '{{ locale.code }}' + '/account/addadvert/deleteimage/' + imageName,
+                    url: '/account/addadvert/deleteimage/' + imageName,
                     type:'get',
                     dataType: 'html'
                 });

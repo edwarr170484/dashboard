@@ -94,7 +94,11 @@
                 <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы действительно хотите удалить объявление?{% endtrans %}','delete')">{% trans %}удалить{% endtrans %}</button>
             </div>
             <div class="accountAdvertFunction">
-                <a href="{{ path('editAdvert',{'productId' : product.id}) }}">{% trans %}редактировать{% endtrans %}</a>
+                {% if product.baseCategory.formType == 1 %}
+                    <a href="{{ path('editAdvert',{'productId' : product.id}) }}">{% trans %}редактировать{% endtrans %}</a>
+                {% else %}
+                    <a href="{{ path('editCategoryAdvert',{'categoryName' : product.category.parent.parent.name, 'productId' : product.id}) }}">{% trans %}редактировать{% endtrans %}</a>
+                {% endif %}
             </div>
         </div>
     {% else %}
@@ -107,7 +111,11 @@
                 {% endif %}
             </div>
             <div class="accountAdvertFunction">
-                <a href="{{ path('editAdvert',{'productId' : product.id}) }}">{% trans %}редактировать{% endtrans %}</a>
+                {% if product.baseCategory.formType == 1 %}
+                    <a href="{{ path('editAdvert',{'productId' : product.id}) }}">{% trans %}редактировать{% endtrans %}</a>
+                {% else %}
+                    <a href="{{ path('editCategoryAdvert',{'categoryName' : product.category.parent.parent.name, 'productId' : product.id}) }}">{% trans %}редактировать{% endtrans %}</a>
+                {% endif %}
             </div>
         </div>
     {% endif %}
@@ -121,15 +129,17 @@
         <div class="accountAdvertInfo">
             <div class="accountAdvertInfoName">
                 <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}">{{ product.name }}
-                {% if product.info.generation.translations | length > 0 %}
-                    {% for translation in product.info.generation.translations %}
-                        {% if translation.locale.id == locale.id %}
-                            {{ translation.value }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}        
-                    {{ product.info.generation.name }}
-                {% endif %} 
+                {% if product.info.generation %}
+                    {% if product.info.generation.translations | length > 0 %}
+                        {% for translation in product.info.generation.translations %}
+                            {% if translation.locale.id == locale.id %}
+                                {{ translation.value }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}        
+                        {{ product.info.generation.name }}
+                    {% endif %} 
+                {% endif %}
                 </a>
             </div>
                 <div class="accountAdvertInfoBoard">

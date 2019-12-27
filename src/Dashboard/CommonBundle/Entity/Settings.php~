@@ -180,6 +180,11 @@ class Settings
      */
     private $centerLng;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\ReviewStatus")
+     * @ORM\JoinColumn(name="review_status_id", referencedColumnName="id")
+     */
+    private $newReviewStatus;
     
     /**
      * Get id

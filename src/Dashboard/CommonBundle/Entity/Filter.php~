@@ -90,6 +90,11 @@ class Filter
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Translation", mappedBy="filter", cascade={"persist"})
      */
     private $translations;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": "filter"})
+     */
+    private $productParameter;
 
     /**
      * Constructor
@@ -472,5 +477,28 @@ class Filter
     public function getStep()
     {
         return $this->step;
+    }
+
+    /**
+     * Set productParameter
+     *
+     * @param string $productParameter
+     * @return Filter
+     */
+    public function setProductParameter($productParameter)
+    {
+        $this->productParameter = $productParameter;
+    
+        return $this;
+    }
+
+    /**
+     * Get productParameter
+     *
+     * @return string 
+     */
+    public function getProductParameter()
+    {
+        return $this->productParameter;
     }
 }

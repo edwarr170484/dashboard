@@ -60,8 +60,7 @@ class AccountController extends Controller
         $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' AND p.isActive = 1 AND p.isBlocked = 1 AND p.isDraft = 0');
         $blockedProducts = $query->getResult();
         
-        $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isDeleted <> 1 AND m.userTo = ' . $user->getId() . ' AND m.isNew = 1 AND m.userOwner = ' . $user->getId());
-            
+        $query = $manager->createQuery('SELECT m FROM Dashboard\CommonBundle\Entity\Message m WHERE m.isDeleted <> 1 AND m.userTo = ' . $user->getId() . ' AND m.isNew = 1 AND m.userOwner = ' . $user->getId());   
         $messages = $query->getResult();
         
         $query = $manager->createQuery('SELECT o FROM Dashboard\CommonBundle\Entity\ProductOrder o WHERE o.userReceived = ' . $user->getId() . ' AND o.isNew = 1');    
@@ -69,6 +68,38 @@ class AccountController extends Controller
         
         $query = $manager->createQuery('SELECT o FROM Dashboard\CommonBundle\Entity\ProductOrder o WHERE o.userSended = ' . $user->getId() . ' AND o.status = 2');
         $orderBanned = $query->getResult();
+        
+        //select admin user
+        $query = $manager->createQuery("SELECT u,ur FROM DashboardCommonBundle:User u LEFT JOIN u.roles ur WHERE ur.role='ROLE_ADMIN' AND u.isActive = 1 AND u.isConfirm = 1");
+        
+        try{
+            $admin = $query->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $admin = 0;
+        }
+        
+        //conversation with techical support
+        $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE c.userOne = " . $user->getId() . " AND c.userTwo = 1");
+               
+        try{
+            $conversation = $query->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $conversation = 0;
+        }
+        
+        if($admin && ($admin->getId() != $user->getId())){
+            if(!$conversation){
+                $conversation = new Conversation();
+                $conversation->setUserOne($user);
+                $conversation->setUserTwo($admin);
+
+                $manager->persist($conversation);
+                $manager->flush();
+            }
+        }
+        
         
         return $this->render('DashboardCommonBundle:User:account/sidebar.html.twig', 
                 array("allProducts" => $allProducts,
@@ -85,6 +116,7 @@ class AccountController extends Controller
                       "routeName" => $routeName,
                       "productType" => $productType,
                       "user" => $user,
+                      "conversation" => $conversation,
                       "userRole" => $user->getRoles()[0]));
     }
     
@@ -149,7 +181,6 @@ class AccountController extends Controller
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
         
-        
         if($productType){
             switch($productType){
                 case 'confirm':
@@ -182,8 +213,7 @@ class AccountController extends Controller
             $title = $this->get('translator')->trans('Мои объявления'); 
         }
         
-        try
-        {
+        try{
             $products = $query->getResult();
         }
         catch(\Doctrine\ORM\NoResultException $e) {
@@ -345,7 +375,6 @@ class AccountController extends Controller
     
      /**
      * @Route("/account/conversation/{conversationId}", name="account_conversation", defaults={"conversationId" : 0})
-     * @Route("/{_locale}/account/conversation/{conversationId}", name="account_conversationLocale", defaults={"_locale" : "es", "conversationId" : 0}, requirements={"_locale" : "es|ru"})
      */
     public function editMessageAction($conversationId,Request $request)
     {
@@ -487,6 +516,8 @@ class AccountController extends Controller
                                                                                        "locale" => $locale,
                                                                                        "routeName" => $request->attributes->get("_route")));
     }
+    
+    
     
     /**
      * @Route("/account/moremessages/{conversationId}/{start}", name="account_more_messages")

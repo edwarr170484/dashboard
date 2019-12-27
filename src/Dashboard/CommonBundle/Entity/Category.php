@@ -150,6 +150,11 @@ class Category
      */
     private $dealers;
     
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default": 1})
+     */
+    private $formType;
+    
     private $allProductsNumber;
     
     /**
@@ -872,5 +877,28 @@ class Category
     public function getDealers()
     {
         return $this->dealers;
+    }
+
+    /**
+     * Set formType
+     *
+     * @param integer $formType
+     * @return Category
+     */
+    public function setFormType($formType)
+    {
+        $this->formType = $formType;
+    
+        return $this;
+    }
+
+    /**
+     * Get formType
+     *
+     * @return integer 
+     */
+    public function getFormType()
+    {
+        return $this->formType;
     }
 }

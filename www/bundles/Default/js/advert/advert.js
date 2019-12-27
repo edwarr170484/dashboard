@@ -547,3 +547,21 @@ function removeSession(){
         }
     });
 }
+
+function getChildrenCategories(element, category){
+    $.ajax({
+        url: '/account/' + category + '/addadvert',
+        type:'post',
+        dataType: 'html',
+        data:"markaXmlHttp=" + element.val(),
+        success: function(html)
+        {
+           $("#advertModelCategories").html(html);
+           $(".custom-select-models").customSelect();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $(".modal-body-cover").hide();
+            err=xhr.responseText;
+        }
+    }); 
+}

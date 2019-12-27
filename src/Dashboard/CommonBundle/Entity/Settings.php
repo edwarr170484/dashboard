@@ -180,6 +180,11 @@ class Settings
      */
     private $centerLng;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\ReviewStatus")
+     * @ORM\JoinColumn(name="review_status_id", referencedColumnName="id")
+     */
+    private $newReviewStatus;
     
     /**
      * Get id
@@ -971,5 +976,28 @@ class Settings
     public function getCenterLng()
     {
         return $this->centerLng;
+    }
+
+    /**
+     * Set newReviewStatus
+     *
+     * @param \Dashboard\CommonBundle\Entity\ReviewStatus $newReviewStatus
+     * @return Settings
+     */
+    public function setNewReviewStatus(\Dashboard\CommonBundle\Entity\ReviewStatus $newReviewStatus = null)
+    {
+        $this->newReviewStatus = $newReviewStatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get newReviewStatus
+     *
+     * @return \Dashboard\CommonBundle\Entity\ReviewStatus 
+     */
+    public function getNewReviewStatus()
+    {
+        return $this->newReviewStatus;
     }
 }

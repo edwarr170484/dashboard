@@ -37,6 +37,7 @@ class ReviewController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $statuses = $manager->getRepository("DashboardCommonBundle:ReviewStatus")->findAll();
         
         if($reviewId)
         {
@@ -44,59 +45,12 @@ class ReviewController extends Controller
             return $this->redirectToRoute("account_review");
         }
         
-        $plusReviews = 0;
-        $minusReviews = 0;
-        $neitralReviews = 0;
-        $myReviews = array();
-        $targetReviews = array();
-        
-        $myReviews = array_reverse($user->getReviews()->toArray());
-        $targetReviews = array_reverse($user->getTargetReviews()->toArray());
-        
-        if($myReviews)
-        {
-            foreach($myReviews as $review)
-            {
-                if($review->getStatus() == 1)
-                {
-                    $plusReviews++;
-                }
-                if($review->getStatus() == -1)
-                {
-                    $minusReviews++;
-                }
-                if($review->getStatus() == 0)
-                {
-                    $neitralReviews++;
-                }
-            }
-        }
-        
-        if($targetReviews)
-        {
-            foreach($targetReviews as $review)
-            {
-                if($review->getStatus() == 1)
-                {
-                    $plusReviews++;
-                }
-                if($review->getStatus() == -1)
-                {
-                    $minusReviews++;
-                }
-                if($review->getStatus() == 0)
-                {
-                    $neitralReviews++;
-                }
-            }
-        }
-        
         $review = new Review();
         $reviewAnswerForm = $this->createForm(new ReviewAnswerType($manager), $review);
         
         $reviewAnswerForm->handleRequest($request);
         
-        if ($reviewAnswerForm->isSubmitted() && $reviewAnswerForm->isValid())
+        if($reviewAnswerForm->isSubmitted() && $reviewAnswerForm->isValid())
         {
             $reviewAnswer = $manager->getRepository("DashboardCommonBundle:Review")->find($reviewAnswerForm['review']->getData());
             
@@ -167,14 +121,10 @@ class ReviewController extends Controller
         }
         
         return $this->render('DashboardCommonBundle:User:account/review/reviews.html.twig', array("user" => $user,
-                                                                                   "myreviews" => $myReviews,
-                                                                                   "targetReviews" => $targetReviews,
-                                                                                   "plusReviews" => $plusReviews,
-                                                                                   "minusReviews" => $minusReviews,
-                                                                                   "neitralReviews" => $neitralReviews,
                                                                                    "reviewAnswerForm" => $reviewAnswerForm->createView(),
                                                                                    "settings" => $settings,
                                                                                    "locale" => $locale,
+                                                                                   "statuses" => $statuses,
                                                                                    "routeName" => $request->attributes->get("_route")));
     } 
     

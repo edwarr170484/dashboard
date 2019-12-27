@@ -22,16 +22,22 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Dashboard\AdminBundle\Form\Type\FilterType;
 use Dashboard\AdminBundle\Form\Type\TranslationType;
 
+use Dashboard\CommonBundle\Entity\ProductInfo;
+
 class FilterType extends AbstractType
 {   
     private $manager;
+    private $params;
     
     public function __construct($manager) {
         $this->manager = $manager;
+        $productInfo = new ProductInfo();
+        $this->params = $productInfo->getVars();
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {    
+    {
+        
         $builder
             ->add('name', TextType::class, array('required' => true,'label' => 'Название фильтра', 'attr' => array('class' => 'form-control', 'placeholder' => 'Название фильтра')))
             ->add('type', ChoiceType::class, array('choices' => array(
@@ -65,6 +71,9 @@ class FilterType extends AbstractType
             ->add('isSearch', CheckboxType::class, array('required' => false,'label' => 'Показывать в форме поиска'))
             ->add('isSelltype', CheckboxType::class, array('required' => false,'label' => 'Назначить фильтр как "Тип сделки" для категории'))
             ->add('isShowCard', CheckboxType::class, array('required' => false,'label' => 'Показывать значение фильтра в карточке объявления'))
+            ->add('productParameter', ChoiceType::class, array('choices' => $this->params, 
+                                                                    'required' => true, 
+                                                                    'label' => 'Значение фильтра соответствует параметру объявления:', 'attr' => array('class' => 'form-control')))
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')));
     }
     

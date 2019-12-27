@@ -126,9 +126,6 @@ class ProductInfo
      * @ORM\Column(type="float", length=5, nullable=true, options={"default": 0 })
      */
     private $garant;
-    
-
-   
 
     /**
      * Get id
@@ -598,5 +595,18 @@ class ProductInfo
     public function getShape()
     {
         return $this->shape;
+    }
+    
+     public function getVars(){
+        $params = array();
+        $params["filter"] = "filter";
+        
+        foreach(get_object_vars($this) as $key => $val){
+            if($key != 'id' && $key != 'object' && $key != 'user'){
+                $params[$key] = $key;
+            }
+        }
+        
+        return $params;
     }
 }

@@ -63,7 +63,8 @@ class Review
     private $dateAdded;
     
     /**
-     * @ORM\Column(type="integer", length=4, nullable=true, options={"default": 0})
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\ReviewStatus", inversedBy="reviews")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
      */
     private $status;
     
@@ -92,7 +93,7 @@ class Review
     public function setReviewReason($reviewReason)
     {
         $this->reviewReason = $reviewReason;
-
+    
         return $this;
     }
 
@@ -115,7 +116,7 @@ class Review
     public function setReviewText($reviewText)
     {
         $this->reviewText = $reviewText;
-
+    
         return $this;
     }
 
@@ -138,7 +139,7 @@ class Review
     public function setDateAdded($dateAdded)
     {
         $this->dateAdded = $dateAdded;
-
+    
         return $this;
     }
 
@@ -153,29 +154,6 @@ class Review
     }
 
     /**
-     * Set status
-     *
-     * @param integer $status
-     * @return Review
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return integer 
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
      * Set rating
      *
      * @param integer $rating
@@ -184,7 +162,7 @@ class Review
     public function setRating($rating)
     {
         $this->rating = $rating;
-
+    
         return $this;
     }
 
@@ -207,7 +185,7 @@ class Review
     public function setAnswer(\Dashboard\CommonBundle\Entity\Review $answer = null)
     {
         $this->answer = $answer;
-
+    
         return $this;
     }
 
@@ -230,7 +208,7 @@ class Review
     public function setAnswerTo(\Dashboard\CommonBundle\Entity\Review $answerTo = null)
     {
         $this->answerTo = $answerTo;
-
+    
         return $this;
     }
 
@@ -253,7 +231,7 @@ class Review
     public function setUser(\Dashboard\CommonBundle\Entity\User $user = null)
     {
         $this->user = $user;
-
+    
         return $this;
     }
 
@@ -276,7 +254,7 @@ class Review
     public function setTargetUser(\Dashboard\CommonBundle\Entity\User $targetUser = null)
     {
         $this->targetUser = $targetUser;
-
+    
         return $this;
     }
 
@@ -299,7 +277,7 @@ class Review
     public function setSalons(\Dashboard\CommonBundle\Entity\DealerSalon $salons = null)
     {
         $this->salons = $salons;
-
+    
         return $this;
     }
 
@@ -311,5 +289,28 @@ class Review
     public function getSalons()
     {
         return $this->salons;
+    }
+
+    /**
+     * Set status
+     *
+     * @param \Dashboard\CommonBundle\Entity\ReviewStatus $status
+     * @return Review
+     */
+    public function setStatus(\Dashboard\CommonBundle\Entity\ReviewStatus $status = null)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return \Dashboard\CommonBundle\Entity\ReviewStatus 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

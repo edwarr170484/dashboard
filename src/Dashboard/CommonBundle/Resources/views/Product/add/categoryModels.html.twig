@@ -1,0 +1,10 @@
+<div class="addAdvertForm-Group">
+    <div class="addAdvertFormGroupLabel">{% trans %}Модель{% endtrans %}</div>
+    <div class="addAdvertFormGroupControl">
+        <select name="category" class="custom-select-models">
+            {% for child in category.children %}
+                <option value="{{ child.id }}">{{ child.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>

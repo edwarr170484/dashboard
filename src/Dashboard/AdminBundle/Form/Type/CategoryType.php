@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 use Dashboard\AdminBundle\Form\Type\TranslationType;
 use Dashboard\AdminBundle\Form\Type\GenerationType;
@@ -55,6 +56,7 @@ class CategoryType extends AbstractType
             ->add('generations', 'collection', array('type' => new GenerationType($this->em, $this->category->getGenerations()), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('descriptions', 'collection', array('type' => new DescriptionType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('rates', 'collection', array('type' => new CategoryRateType($this->em), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
+            ->add('formType', ChoiceType::class, array('choices' => array("1" => "По шагам", "2" => "Одной формой"),'required' => false, 'label' => 'Форма при добавлении объявления в категорию', 'attr' => array('class' => 'form-control')))
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')));
     }
     

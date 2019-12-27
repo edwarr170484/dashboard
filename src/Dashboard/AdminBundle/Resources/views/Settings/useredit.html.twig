@@ -58,9 +58,6 @@
                             <li class="">
                                 <a data-toggle="tab" href="#useradverts">Объявления ({{ user.products | length }})</a>
                             </li>
-                            <li class="">
-                                <a data-toggle="tab" href="#userfriends">Друзья ({{ user.friends | length }})</a>
-                            </li>
                         </ul>
                         <div class="tab-content">
                             <div id="maininfo" class="tab-pane fade active in">
@@ -100,21 +97,9 @@
                                                 </div>
                                             </div> 
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.midname)}}</label>
-                                                <div class="col-md-9">
-                                                    {{ form_widget(userForm.userinfo.midname)}}
-                                                </div>
-                                            </div> 
-                                            <div class="form-group">
                                                 <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.lastname)}}</label>
                                                 <div class="col-md-9">
                                                     {{ form_widget(userForm.userinfo.lastname)}}
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label">{{ form_label(userForm.userinfo.sex)}}</label>
-                                                <div class="col-md-9">
-                                                    {{ form_widget(userForm.userinfo.sex)}}
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -136,31 +121,9 @@
                                                 </div>
                                             </div> 
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">{{ form_label(userForm.userpurse.balanse)}}</label>
-                                                <div class="col-md-9">
-                                                    {{ form_widget(userForm.userpurse.balanse)}}
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <label class="col-md-3 control-label">{{ form_label(userForm.advertNumber)}}</label>
                                                 <div class="col-md-9">
                                                     {{ form_widget(userForm.advertNumber)}}
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-3 control-label">День рождения</label>
-                                                <div class="col-md-9">
-                                                    <div class="row">
-                                                        <div class="col-lg-4 col-md-4">
-                                                            {{ form_widget(userForm.userinfo.birthdayday, {'id':'birthdayday'})}}
-                                                        </div>
-                                                        <div class="col-lg-4 col-md-4">
-                                                            {{ form_widget(userForm.userinfo.birthdaymonth, {'id':'birthdaymonth'})}}
-                                                        </div>
-                                                        <div class="col-lg-4 col-md-4">
-                                                            {{ form_widget(userForm.userinfo.birthdayyear, {'id':'birthdayyear'})}}
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div> 
                                             <div class="form-group">
@@ -235,37 +198,6 @@
                                                 </form>
                                             {% else %}
                                                 Это пользователь еще не добавил ни одного объявления
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="userfriends" class="tab-pane fade">
-                                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
-                                    <div class="panel-heading ui-sortable-handle">
-                                        <h4 class="panel-title">Друзья</h4>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="table-responsive">
-                                            {% if user.friends | length > 0 %}
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Пользователь</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {% for friend in user.friends %}
-                                                                <tr>
-                                                                    <td>
-                                                                        <a href="{{ path('admin_user_edit', {'userId' : friend.user.id}) }}">{{ friend.user.userinfo.firstname }} {{ friend.user.userinfo.lastname }}</a>
-                                                                    </td>
-                                                                </tr>
-                                                            {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                            {% else %}
-                                                Это пользователь еще не привел друзей
                                             {% endif %}
                                         </div>
                                     </div>

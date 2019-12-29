@@ -795,9 +795,9 @@ class DefaultController extends Controller
 
         if ($orderForm->isSubmitted() && $orderForm->isValid())
         {
-                if($product->getUser()->getId() != $sessionUser->getId())
-                {
-                    $order->setDateAdded(new \DateTime("now"));
+            if($product->getUser()->getId() != $sessionUser->getId())
+            {
+                $order->setDateAdded(new \DateTime("now"));
                     $order->setUserReceived($product->getUser());
                     $order->setUserSended($sessionUser);
                     $order->setProduct($product);
@@ -815,7 +815,7 @@ class DefaultController extends Controller
                     );
                     
                     //send information about new order to sellers email
-                    if($product->getUser()->getAlerts())
+                    if($product->getUser()->getIsAlertNewOrder())
                     {
                         $message = \Swift_Message::newInstance()
                         ->setSubject('Поступил заказ на сайте ' . $settings->getSiteName())
@@ -966,6 +966,22 @@ class DefaultController extends Controller
                 }
                 
                 return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
+        }
+        
+        $rating = 0;
+        if($product->getUser()->getTargetReviews()){
+            $temp = $product->getUser()->getTargetReviews();
+            foreach($temp as $review){
+                if($review->getStatus()->getId() != $settings->getPublicReviewStatus()->getId()){
+                    $product->getUser()->removeTargetReview($review);
+                }else{
+                    $rating += $review->getRating();
+                }
+            }
+        }
+        
+        if(count($product->getUser()->getTargetReviews()) > 0){
+            $product->getUser()->getDealerinfo()->setRating(ceil($rating / count($product->getUser()->getTargetReviews())));
         }
         
         if($this->getUser())

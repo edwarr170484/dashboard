@@ -34,7 +34,7 @@
         {% endif %}
         {% if dealer.dealerinfo.phones | length > 0 %}
             <div class="mapListItemInfoText">
-                {% trans %}Teléfono{% endtrans %}:
+                {% trans %}Телефоны{% endtrans %}:
                 {% set i = 0 %}
                 {% for phone in dealer.dealerinfo.phones %}{{ phone.phone }}{% if i < dealer.dealerinfo.phones | length - 1 %},{% endif %}
                     {% set i = i + 1 %}

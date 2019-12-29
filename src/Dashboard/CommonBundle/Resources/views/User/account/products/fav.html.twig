@@ -1,4 +1,4 @@
-<div class="accountAdvert cube">
+<div class="accountAdvert cube" id="favoriteProduct{{ product.id }}">
     <div class="accountAdvertLikeButton">
         <button>
             <svg width="23" height="20" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -53,7 +53,7 @@
     </div>
     <div class="accountAdvertBottomFunctions">
         <div class="accountAdvertBottomFunction">
-            <button onclick="deleteFavoriteProduct({{ product.id }}, {{ user.id }}, '{% trans %}Удалить объявление из избранных?{% endtrans %}')">
+            <button onclick="deleteFavoriteProduct({{ product.id }}, '{% trans %}Удалить объявление из избранных?{% endtrans %}')">
                 {% trans %}Убрать из избранных{% endtrans %}
                 <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-left:1.5rem">
                     <path d="M11 0.613989L10.3855 -0.000488281L5.5 4.88936L0.614477 -0.000488281L0 0.613989L4.88985 5.49951L0 10.385L0.614477 10.9995L5.5 6.10966L10.3855 10.9995L11 10.385L6.11015 5.49951L11 0.613989Z" fill="#494949"/>

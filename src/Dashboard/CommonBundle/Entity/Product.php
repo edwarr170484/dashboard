@@ -165,20 +165,12 @@ class Product
      */
     private $info;
     
-    private $daysLeft;
-    
     /**
-     * Constructor
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="products")
      */
-    public function __construct()
-    {
-        $this->fotos = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->orders = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->complaint = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->filters = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->service = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $bills;
+    
+    private $daysLeft;
     
     public function getDaysLeft(){
         
@@ -191,6 +183,20 @@ class Product
         }else{
             return $interval->d + 1;
         }
+    }
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->fotos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->orders = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->complaint = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->filters = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->service = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bills = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -212,7 +218,7 @@ class Product
     public function setAuthorName($authorName)
     {
         $this->authorName = $authorName;
-    
+
         return $this;
     }
 
@@ -235,7 +241,7 @@ class Product
     public function setAuthorEmail($authorEmail)
     {
         $this->authorEmail = $authorEmail;
-    
+
         return $this;
     }
 
@@ -258,7 +264,7 @@ class Product
     public function setAuthorPhone($authorPhone)
     {
         $this->authorPhone = $authorPhone;
-    
+
         return $this;
     }
 
@@ -281,7 +287,7 @@ class Product
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -304,7 +310,7 @@ class Product
     public function setTranslit($translit)
     {
         $this->translit = $translit;
-    
+
         return $this;
     }
 
@@ -327,7 +333,7 @@ class Product
     public function setMainfoto($mainfoto)
     {
         $this->mainfoto = $mainfoto;
-    
+
         return $this;
     }
 
@@ -350,7 +356,7 @@ class Product
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
@@ -373,7 +379,7 @@ class Product
     public function setIsConfirm($isConfirm)
     {
         $this->isConfirm = $isConfirm;
-    
+
         return $this;
     }
 
@@ -396,7 +402,7 @@ class Product
     public function setIsBlocked($isBlocked)
     {
         $this->isBlocked = $isBlocked;
-    
+
         return $this;
     }
 
@@ -411,6 +417,29 @@ class Product
     }
 
     /**
+     * Set isDraft
+     *
+     * @param boolean $isDraft
+     * @return Product
+     */
+    public function setIsDraft($isDraft)
+    {
+        $this->isDraft = $isDraft;
+
+        return $this;
+    }
+
+    /**
+     * Get isDraft
+     *
+     * @return boolean 
+     */
+    public function getIsDraft()
+    {
+        return $this->isDraft;
+    }
+
+    /**
      * Set correctReason
      *
      * @param string $correctReason
@@ -419,7 +448,7 @@ class Product
     public function setCorrectReason($correctReason)
     {
         $this->correctReason = $correctReason;
-    
+
         return $this;
     }
 
@@ -442,7 +471,7 @@ class Product
     public function setDateAdded($dateAdded)
     {
         $this->dateAdded = $dateAdded;
-    
+
         return $this;
     }
 
@@ -465,7 +494,7 @@ class Product
     public function setDateEdited($dateEdited)
     {
         $this->dateEdited = $dateEdited;
-    
+
         return $this;
     }
 
@@ -488,7 +517,7 @@ class Product
     public function setViews($views)
     {
         $this->views = $views;
-    
+
         return $this;
     }
 
@@ -511,7 +540,7 @@ class Product
     public function setViewsPerDate($viewsPerDate)
     {
         $this->viewsPerDate = $viewsPerDate;
-    
+
         return $this;
     }
 
@@ -534,7 +563,7 @@ class Product
     public function setCategory(\Dashboard\CommonBundle\Entity\Category $category = null)
     {
         $this->category = $category;
-    
+
         return $this;
     }
 
@@ -549,6 +578,29 @@ class Product
     }
 
     /**
+     * Set baseCategory
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $baseCategory
+     * @return Product
+     */
+    public function setBaseCategory(\Dashboard\CommonBundle\Entity\Category $baseCategory = null)
+    {
+        $this->baseCategory = $baseCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get baseCategory
+     *
+     * @return \Dashboard\CommonBundle\Entity\Category 
+     */
+    public function getBaseCategory()
+    {
+        return $this->baseCategory;
+    }
+
+    /**
      * Set user
      *
      * @param \Dashboard\CommonBundle\Entity\User $user
@@ -557,7 +609,7 @@ class Product
     public function setUser(\Dashboard\CommonBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -580,7 +632,7 @@ class Product
     public function setRegion(\Dashboard\CommonBundle\Entity\Region $region = null)
     {
         $this->region = $region;
-    
+
         return $this;
     }
 
@@ -603,7 +655,7 @@ class Product
     public function setCity(\Dashboard\CommonBundle\Entity\City $city = null)
     {
         $this->city = $city;
-    
+
         return $this;
     }
 
@@ -626,7 +678,7 @@ class Product
     public function setCityCode(\Dashboard\CommonBundle\Entity\CityCode $cityCode = null)
     {
         $this->cityCode = $cityCode;
-    
+
         return $this;
     }
 
@@ -649,7 +701,7 @@ class Product
     public function addFoto(\Dashboard\CommonBundle\Entity\ProductFotos $fotos)
     {
         $this->fotos[] = $fotos;
-    
+
         return $this;
     }
 
@@ -682,7 +734,7 @@ class Product
     public function addOrder(\Dashboard\CommonBundle\Entity\ProductOrder $orders)
     {
         $this->orders[] = $orders;
-    
+
         return $this;
     }
 
@@ -715,7 +767,7 @@ class Product
     public function addComplaint(\Dashboard\CommonBundle\Entity\Complaint $complaint)
     {
         $this->complaint[] = $complaint;
-    
+
         return $this;
     }
 
@@ -748,7 +800,7 @@ class Product
     public function addMessage(\Dashboard\CommonBundle\Entity\Message $messages)
     {
         $this->messages[] = $messages;
-    
+
         return $this;
     }
 
@@ -781,7 +833,7 @@ class Product
     public function addFilter(\Dashboard\CommonBundle\Entity\FilterValue $filters)
     {
         $this->filters[] = $filters;
-    
+
         return $this;
     }
 
@@ -814,7 +866,7 @@ class Product
     public function addService(\Dashboard\CommonBundle\Entity\ProductService $service)
     {
         $this->service[] = $service;
-    
+
         return $this;
     }
 
@@ -847,7 +899,7 @@ class Product
     public function setInfo(\Dashboard\CommonBundle\Entity\ProductInfo $info = null)
     {
         $this->info = $info;
-    
+
         return $this;
     }
 
@@ -862,48 +914,35 @@ class Product
     }
 
     /**
-     * Set isDraft
+     * Add bills
      *
-     * @param boolean $isDraft
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
      * @return Product
      */
-    public function setIsDraft($isDraft)
+    public function addBill(\Dashboard\CommonBundle\Entity\Bill $bills)
     {
-        $this->isDraft = $isDraft;
-    
+        $this->bills[] = $bills;
+
         return $this;
     }
 
     /**
-     * Get isDraft
+     * Remove bills
      *
-     * @return boolean 
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
      */
-    public function getIsDraft()
+    public function removeBill(\Dashboard\CommonBundle\Entity\Bill $bills)
     {
-        return $this->isDraft;
+        $this->bills->removeElement($bills);
     }
 
     /**
-     * Set baseCategory
+     * Get bills
      *
-     * @param \Dashboard\CommonBundle\Entity\Category $baseCategory
-     * @return Product
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setBaseCategory(\Dashboard\CommonBundle\Entity\Category $baseCategory = null)
+    public function getBills()
     {
-        $this->baseCategory = $baseCategory;
-    
-        return $this;
-    }
-
-    /**
-     * Get baseCategory
-     *
-     * @return \Dashboard\CommonBundle\Entity\Category 
-     */
-    public function getBaseCategory()
-    {
-        return $this->baseCategory;
+        return $this->bills;
     }
 }

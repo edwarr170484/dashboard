@@ -6,6 +6,15 @@ class SelectedService
     private $product;
     private $service;
     private $price;
+    private $bill;
+    
+    public function getBill(){
+        return $this->bill;
+    }
+
+    public function setBill($bill){
+        $this->bill = $bill;
+    }
     
     public function getProduct(){
         return $this->product;

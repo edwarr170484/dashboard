@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table()
  * @ORM\Entity()
  */
-class Bill 
+class RateBill 
 {
     /**
      * @ORM\Column(type="integer")
@@ -33,7 +33,7 @@ class Bill
     private $price;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\User", inversedBy="bills")
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\User", inversedBy="rateBills")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
@@ -44,34 +44,27 @@ class Bill
     private $file;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Product", inversedBy="bills")
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Rate")
+     * @ORM\JoinColumn(name="rate_id", referencedColumnName="id")
      */
-    private $products;
+    private $rate;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Pack")
-     * @ORM\JoinColumn(name="service_pack_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    private $servicePack;
-    
-    /**
-     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\ProductService", inversedBy="bills", cascade={"persist"})
-     */
-    private $services;
+    private $category;
     
     /**
      * @ORM\Column(type="boolean", nullable=true, options={"default":0})
      */
     private $isPayed;
-
+    
     /**
-     * Constructor
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
      */
-    public function __construct()
-    {
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $billId;
+    
 
     /**
      * Get id
@@ -87,7 +80,7 @@ class Bill
      * Set dateAdded
      *
      * @param \DateTime $dateAdded
-     * @return Bill
+     * @return RateBill
      */
     public function setDateAdded($dateAdded)
     {
@@ -110,7 +103,7 @@ class Bill
      * Set datePayed
      *
      * @param \DateTime $datePayed
-     * @return Bill
+     * @return RateBill
      */
     public function setDatePayed($datePayed)
     {
@@ -133,7 +126,7 @@ class Bill
      * Set price
      *
      * @param float $price
-     * @return Bill
+     * @return RateBill
      */
     public function setPrice($price)
     {
@@ -156,7 +149,7 @@ class Bill
      * Set file
      *
      * @param string $file
-     * @return Bill
+     * @return RateBill
      */
     public function setFile($file)
     {
@@ -179,7 +172,7 @@ class Bill
      * Set isPayed
      *
      * @param boolean $isPayed
-     * @return Bill
+     * @return RateBill
      */
     public function setIsPayed($isPayed)
     {
@@ -202,7 +195,7 @@ class Bill
      * Set user
      *
      * @param \Dashboard\CommonBundle\Entity\User $user
-     * @return Bill
+     * @return RateBill
      */
     public function setUser(\Dashboard\CommonBundle\Entity\User $user = null)
     {
@@ -222,91 +215,71 @@ class Bill
     }
 
     /**
-     * Add products
+     * Set rate
      *
-     * @param \Dashboard\CommonBundle\Entity\Product $products
-     * @return Bill
+     * @param \Dashboard\CommonBundle\Entity\Rate $rate
+     * @return RateBill
      */
-    public function addProduct(\Dashboard\CommonBundle\Entity\Product $products)
+    public function setRate(\Dashboard\CommonBundle\Entity\Rate $rate = null)
     {
-        $this->products[] = $products;
+        $this->rate = $rate;
 
         return $this;
     }
 
     /**
-     * Remove products
+     * Get rate
      *
-     * @param \Dashboard\CommonBundle\Entity\Product $products
+     * @return \Dashboard\CommonBundle\Entity\Rate 
      */
-    public function removeProduct(\Dashboard\CommonBundle\Entity\Product $products)
+    public function getRate()
     {
-        $this->products->removeElement($products);
+        return $this->rate;
     }
 
     /**
-     * Get products
+     * Set category
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @param \Dashboard\CommonBundle\Entity\Category $category
+     * @return RateBill
      */
-    public function getProducts()
+    public function setCategory(\Dashboard\CommonBundle\Entity\Category $category = null)
     {
-        return $this->products;
-    }
-
-    /**
-     * Set servicePack
-     *
-     * @param \Dashboard\CommonBundle\Entity\Pack $servicePack
-     * @return Bill
-     */
-    public function setServicePack(\Dashboard\CommonBundle\Entity\Pack $servicePack = null)
-    {
-        $this->servicePack = $servicePack;
+        $this->category = $category;
 
         return $this;
     }
 
     /**
-     * Get servicePack
+     * Get category
      *
-     * @return \Dashboard\CommonBundle\Entity\Pack 
+     * @return \Dashboard\CommonBundle\Entity\Category 
      */
-    public function getServicePack()
+    public function getCategory()
     {
-        return $this->servicePack;
+        return $this->category;
     }
 
     /**
-     * Add services
+     * Set billId
      *
-     * @param \Dashboard\CommonBundle\Entity\ProductService $services
-     * @return Bill
+     * @param integer $billId
+     * @return RateBill
      */
-    public function addService(\Dashboard\CommonBundle\Entity\ProductService $services)
+    public function setBillId($billId)
     {
-        $this->services[] = $services;
+        $this->billId = $billId;
 
         return $this;
     }
 
     /**
-     * Remove services
+     * Get billId
      *
-     * @param \Dashboard\CommonBundle\Entity\ProductService $services
+     * @return integer 
      */
-    public function removeService(\Dashboard\CommonBundle\Entity\ProductService $services)
+    public function getBillId()
     {
-        $this->services->removeElement($services);
-    }
-
-    /**
-     * Get services
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getServices()
-    {
-        return $this->services;
+        return $this->billId;
     }
 }

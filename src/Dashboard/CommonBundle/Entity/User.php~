@@ -156,6 +156,17 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $bills;  
     
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\RateBill", mappedBy="user")
+     */
+    private $rateBills; 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\UserRate", mappedBy="user")
+     */
+    private $rates;
+    
+    
     private $favoriteProducts;
     
     public function isAccountNonExpired()
@@ -988,5 +999,71 @@ class User implements AdvancedUserInterface, \Serializable
     public function getBills()
     {
         return $this->bills;
+    }
+
+    /**
+     * Add rateBills
+     *
+     * @param \Dashboard\CommonBundle\Entity\RateBill $rateBills
+     * @return User
+     */
+    public function addRateBill(\Dashboard\CommonBundle\Entity\RateBill $rateBills)
+    {
+        $this->rateBills[] = $rateBills;
+
+        return $this;
+    }
+
+    /**
+     * Remove rateBills
+     *
+     * @param \Dashboard\CommonBundle\Entity\RateBill $rateBills
+     */
+    public function removeRateBill(\Dashboard\CommonBundle\Entity\RateBill $rateBills)
+    {
+        $this->rateBills->removeElement($rateBills);
+    }
+
+    /**
+     * Get rateBills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRateBills()
+    {
+        return $this->rateBills;
+    }
+
+    /**
+     * Add rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\UserRate $rates
+     * @return User
+     */
+    public function addRate(\Dashboard\CommonBundle\Entity\UserRate $rates)
+    {
+        $this->rates[] = $rates;
+
+        return $this;
+    }
+
+    /**
+     * Remove rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\UserRate $rates
+     */
+    public function removeRate(\Dashboard\CommonBundle\Entity\UserRate $rates)
+    {
+        $this->rates->removeElement($rates);
+    }
+
+    /**
+     * Get rates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRates()
+    {
+        return $this->rates;
     }
 }

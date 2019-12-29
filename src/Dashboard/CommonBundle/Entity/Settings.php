@@ -98,8 +98,10 @@ class Settings
      * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"0"})
      */
     private $aditionalAdvertPrice;
+    
     /**
-     * @ORM\Column(type="integer", length=15)
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\OrderStatus")
+     * @ORM\JoinColumn(name="default_orderstatus_id", referencedColumnName="id")
      */
     private $dafaultOrderStatus;
     /**
@@ -187,6 +189,13 @@ class Settings
     private $newReviewStatus;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\ReviewStatus")
+     * @ORM\JoinColumn(name="review_status_id", referencedColumnName="id")
+     */
+    private $publicReviewStatus;
+    
+
+    /**
      * Get id
      *
      * @return integer 
@@ -205,7 +214,7 @@ class Settings
     public function setUserDefaultGroup($userDefaultGroup)
     {
         $this->userDefaultGroup = $userDefaultGroup;
-    
+
         return $this;
     }
 
@@ -228,7 +237,7 @@ class Settings
     public function setUserAdvertLimitText($userAdvertLimitText)
     {
         $this->userAdvertLimitText = $userAdvertLimitText;
-    
+
         return $this;
     }
 
@@ -251,7 +260,7 @@ class Settings
     public function setSiteName($siteName)
     {
         $this->siteName = $siteName;
-    
+
         return $this;
     }
 
@@ -274,7 +283,7 @@ class Settings
     public function setSiteDescription($siteDescription)
     {
         $this->siteDescription = $siteDescription;
-    
+
         return $this;
     }
 
@@ -297,7 +306,7 @@ class Settings
     public function setAdminEmail($adminEmail)
     {
         $this->adminEmail = $adminEmail;
-    
+
         return $this;
     }
 
@@ -320,7 +329,7 @@ class Settings
     public function setCategoryProductNumber($categoryProductNumber)
     {
         $this->categoryProductNumber = $categoryProductNumber;
-    
+
         return $this;
     }
 
@@ -343,7 +352,7 @@ class Settings
     public function setCategoryPanelItemsNumber($categoryPanelItemsNumber)
     {
         $this->categoryPanelItemsNumber = $categoryPanelItemsNumber;
-    
+
         return $this;
     }
 
@@ -366,7 +375,7 @@ class Settings
     public function setMainpageAdvertsNumber($mainpageAdvertsNumber)
     {
         $this->mainpageAdvertsNumber = $mainpageAdvertsNumber;
-    
+
         return $this;
     }
 
@@ -381,6 +390,29 @@ class Settings
     }
 
     /**
+     * Set userMessagesNumber
+     *
+     * @param integer $userMessagesNumber
+     * @return Settings
+     */
+    public function setUserMessagesNumber($userMessagesNumber)
+    {
+        $this->userMessagesNumber = $userMessagesNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get userMessagesNumber
+     *
+     * @return integer 
+     */
+    public function getUserMessagesNumber()
+    {
+        return $this->userMessagesNumber;
+    }
+
+    /**
      * Set advertDaysShowNumber
      *
      * @param integer $advertDaysShowNumber
@@ -389,7 +421,7 @@ class Settings
     public function setAdvertDaysShowNumber($advertDaysShowNumber)
     {
         $this->advertDaysShowNumber = $advertDaysShowNumber;
-    
+
         return $this;
     }
 
@@ -412,7 +444,7 @@ class Settings
     public function setSiteLogo($siteLogo)
     {
         $this->siteLogo = $siteLogo;
-    
+
         return $this;
     }
 
@@ -435,7 +467,7 @@ class Settings
     public function setWatermark($watermark)
     {
         $this->watermark = $watermark;
-    
+
         return $this;
     }
 
@@ -458,7 +490,7 @@ class Settings
     public function setCatpagePremiumNumber($catpagePremiumNumber)
     {
         $this->catpagePremiumNumber = $catpagePremiumNumber;
-    
+
         return $this;
     }
 
@@ -481,7 +513,7 @@ class Settings
     public function setSelectedAdvPrice($selectedAdvPrice)
     {
         $this->selectedAdvPrice = $selectedAdvPrice;
-    
+
         return $this;
     }
 
@@ -504,7 +536,7 @@ class Settings
     public function setPremiumAdvPrice($premiumAdvPrice)
     {
         $this->premiumAdvPrice = $premiumAdvPrice;
-    
+
         return $this;
     }
 
@@ -527,7 +559,7 @@ class Settings
     public function setUpAdvPrice($upAdvPrice)
     {
         $this->upAdvPrice = $upAdvPrice;
-    
+
         return $this;
     }
 
@@ -550,7 +582,7 @@ class Settings
     public function setConversationIndex($conversationIndex)
     {
         $this->conversationIndex = $conversationIndex;
-    
+
         return $this;
     }
 
@@ -573,7 +605,7 @@ class Settings
     public function setAditionalAdvertPrice($aditionalAdvertPrice)
     {
         $this->aditionalAdvertPrice = $aditionalAdvertPrice;
-    
+
         return $this;
     }
 
@@ -588,29 +620,6 @@ class Settings
     }
 
     /**
-     * Set dafaultOrderStatus
-     *
-     * @param integer $dafaultOrderStatus
-     * @return Settings
-     */
-    public function setDafaultOrderStatus($dafaultOrderStatus)
-    {
-        $this->dafaultOrderStatus = $dafaultOrderStatus;
-    
-        return $this;
-    }
-
-    /**
-     * Get dafaultOrderStatus
-     *
-     * @return integer 
-     */
-    public function getDafaultOrderStatus()
-    {
-        return $this->dafaultOrderStatus;
-    }
-
-    /**
      * Set successAddAdvertText
      *
      * @param string $successAddAdvertText
@@ -619,7 +628,7 @@ class Settings
     public function setSuccessAddAdvertText($successAddAdvertText)
     {
         $this->successAddAdvertText = $successAddAdvertText;
-    
+
         return $this;
     }
 
@@ -642,7 +651,7 @@ class Settings
     public function setCopyright($copyright)
     {
         $this->copyright = $copyright;
-    
+
         return $this;
     }
 
@@ -665,7 +674,7 @@ class Settings
     public function setIsModerate($isModerate)
     {
         $this->isModerate = $isModerate;
-    
+
         return $this;
     }
 
@@ -688,7 +697,7 @@ class Settings
     public function setIsShowCaptcha($isShowCaptcha)
     {
         $this->isShowCaptcha = $isShowCaptcha;
-    
+
         return $this;
     }
 
@@ -711,7 +720,7 @@ class Settings
     public function setIsShowType($isShowType)
     {
         $this->isShowType = $isShowType;
-    
+
         return $this;
     }
 
@@ -734,7 +743,7 @@ class Settings
     public function setTextblockHowToPrice($textblockHowToPrice)
     {
         $this->textblockHowToPrice = $textblockHowToPrice;
-    
+
         return $this;
     }
 
@@ -757,7 +766,7 @@ class Settings
     public function setTextblockUserAgreement($textblockUserAgreement)
     {
         $this->textblockUserAgreement = $textblockUserAgreement;
-    
+
         return $this;
     }
 
@@ -780,7 +789,7 @@ class Settings
     public function setUserAdvertWorkRight($userAdvertWorkRight)
     {
         $this->userAdvertWorkRight = $userAdvertWorkRight;
-    
+
         return $this;
     }
 
@@ -792,52 +801,6 @@ class Settings
     public function getUserAdvertWorkRight()
     {
         return $this->userAdvertWorkRight;
-    }
-
-    /**
-     * Set currency
-     *
-     * @param \Dashboard\CommonBundle\Entity\Currency $currency
-     * @return Settings
-     */
-    public function setCurrency(\Dashboard\CommonBundle\Entity\Currency $currency = null)
-    {
-        $this->currency = $currency;
-    
-        return $this;
-    }
-
-    /**
-     * Get currency
-     *
-     * @return \Dashboard\CommonBundle\Entity\Currency 
-     */
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    /**
-     * Set locale
-     *
-     * @param \Dashboard\CommonBundle\Entity\Locale $locale
-     * @return Settings
-     */
-    public function setLocale(\Dashboard\CommonBundle\Entity\Locale $locale = null)
-    {
-        $this->locale = $locale;
-    
-        return $this;
-    }
-
-    /**
-     * Get locale
-     *
-     * @return \Dashboard\CommonBundle\Entity\Locale 
-     */
-    public function getLocale()
-    {
-        return $this->locale;
     }
 
     /**
@@ -861,52 +824,6 @@ class Settings
     public function getServiceTabText()
     {
         return $this->serviceTabText;
-    }
-
-    /**
-     * Set mainPageDefaultCategory
-     *
-     * @param \Dashboard\CommonBundle\Entity\Category $mainPageDefaultCategory
-     * @return Settings
-     */
-    public function setMainPageDefaultCategory(\Dashboard\CommonBundle\Entity\Category $mainPageDefaultCategory = null)
-    {
-        $this->mainPageDefaultCategory = $mainPageDefaultCategory;
-    
-        return $this;
-    }
-
-    /**
-     * Get mainPageDefaultCategory
-     *
-     * @return \Dashboard\CommonBundle\Entity\Category 
-     */
-    public function getMainPageDefaultCategory()
-    {
-        return $this->mainPageDefaultCategory;
-    }
-
-    /**
-     * Set userMessagesNumber
-     *
-     * @param integer $userMessagesNumber
-     * @return Settings
-     */
-    public function setUserMessagesNumber($userMessagesNumber)
-    {
-        $this->userMessagesNumber = $userMessagesNumber;
-    
-        return $this;
-    }
-
-    /**
-     * Get userMessagesNumber
-     *
-     * @return integer 
-     */
-    public function getUserMessagesNumber()
-    {
-        return $this->userMessagesNumber;
     }
 
     /**
@@ -979,6 +896,98 @@ class Settings
     }
 
     /**
+     * Set dafaultOrderStatus
+     *
+     * @param \Dashboard\CommonBundle\Entity\OrderStatus $dafaultOrderStatus
+     * @return Settings
+     */
+    public function setDafaultOrderStatus(\Dashboard\CommonBundle\Entity\OrderStatus $dafaultOrderStatus = null)
+    {
+        $this->dafaultOrderStatus = $dafaultOrderStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get dafaultOrderStatus
+     *
+     * @return \Dashboard\CommonBundle\Entity\OrderStatus 
+     */
+    public function getDafaultOrderStatus()
+    {
+        return $this->dafaultOrderStatus;
+    }
+
+    /**
+     * Set mainPageDefaultCategory
+     *
+     * @param \Dashboard\CommonBundle\Entity\Category $mainPageDefaultCategory
+     * @return Settings
+     */
+    public function setMainPageDefaultCategory(\Dashboard\CommonBundle\Entity\Category $mainPageDefaultCategory = null)
+    {
+        $this->mainPageDefaultCategory = $mainPageDefaultCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get mainPageDefaultCategory
+     *
+     * @return \Dashboard\CommonBundle\Entity\Category 
+     */
+    public function getMainPageDefaultCategory()
+    {
+        return $this->mainPageDefaultCategory;
+    }
+
+    /**
+     * Set currency
+     *
+     * @param \Dashboard\CommonBundle\Entity\Currency $currency
+     * @return Settings
+     */
+    public function setCurrency(\Dashboard\CommonBundle\Entity\Currency $currency = null)
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return \Dashboard\CommonBundle\Entity\Currency 
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set locale
+     *
+     * @param \Dashboard\CommonBundle\Entity\Locale $locale
+     * @return Settings
+     */
+    public function setLocale(\Dashboard\CommonBundle\Entity\Locale $locale = null)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return \Dashboard\CommonBundle\Entity\Locale 
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
      * Set newReviewStatus
      *
      * @param \Dashboard\CommonBundle\Entity\ReviewStatus $newReviewStatus
@@ -987,7 +996,7 @@ class Settings
     public function setNewReviewStatus(\Dashboard\CommonBundle\Entity\ReviewStatus $newReviewStatus = null)
     {
         $this->newReviewStatus = $newReviewStatus;
-    
+
         return $this;
     }
 
@@ -999,5 +1008,28 @@ class Settings
     public function getNewReviewStatus()
     {
         return $this->newReviewStatus;
+    }
+
+    /**
+     * Set publicReviewStatus
+     *
+     * @param \Dashboard\CommonBundle\Entity\ReviewStatus $publicReviewStatus
+     * @return Settings
+     */
+    public function setPublicReviewStatus(\Dashboard\CommonBundle\Entity\ReviewStatus $publicReviewStatus = null)
+    {
+        $this->publicReviewStatus = $publicReviewStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get publicReviewStatus
+     *
+     * @return \Dashboard\CommonBundle\Entity\ReviewStatus 
+     */
+    public function getPublicReviewStatus()
+    {
+        return $this->publicReviewStatus;
     }
 }

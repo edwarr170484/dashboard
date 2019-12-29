@@ -1297,8 +1297,8 @@ body.userAccount{background:#F9F9F9;}
 .accountRatesInformationList.dealerAccountRates{padding-bottom: 7rem;}
 .dealerAccountRates .categoryRateDescription{width: 60%;}
 .categoryRateOrderButton{width: 20%;}
-.categoryRateOrderButton button{background: none;border:1px solid #222B2A;@include border-radius(3px);@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);padding: 1.2rem 1.1rem;width: 18rem;text-align: center;}
-.categoryRateOrderButton button:hover,.categoryRateOrderButton button:focus{background: $yellow-color;border:1px solid #AAAAAA;}
+.categoryRateOrderButton a{display: block;background: none;border:1px solid #222B2A;@include border-radius(3px);@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);padding: 1.2rem 1.1rem;width: 18rem;text-align: center;}
+.categoryRateOrderButton a:hover,.categoryRateOrderButton a:focus{background: $yellow-color;border:1px solid #AAAAAA;text-decoration: none;}
 .dealerAccountRates .tab-content{padding: 3rem 4rem;padding-top: 0;}
 .dealerAccountRatesDescription{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-top: 7rem;padding-bottom: 6rem;}
 .nav-tabs{border:none;}
@@ -1395,3 +1395,25 @@ ul.color li{position: relative;}
 .addAdvertFormGroupControl{position: relative;}
 .addAdvertFormGroupControl .form-control{@include border-radius(0);outline: none;}
 .addAdvertFormGroupControl .form-control:focus{border-color:$yellow-color;outline: none;}
+.reviewDateAdded{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.reviewAnswerForm .answerButton{@include flexBox(row,flex-start,center);background: none;border:none;@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding: 0;}
+.reviewAnswerForm .answerButton svg{margin-right: 1rem;}
+.reviewAnswerForm{padding-top: 1.5rem;}
+.reviewAnswerFormInner{background: #E7E7E7;@include border-radius(5px);padding: 15px;display: none;}
+.reviewAnswerFormInner button{margin-left: 1.5rem;}
+.reviewAnswerFormInner.active{@include flexBox(row,flex-start,center);}
+.reviewAnswerFormTextHeader{@include flexBox(row,space-between,center);}
+.reviewAnswerFormTextHeaderTitle{@include fontView("GothamProBold",$black-text,1.4rem,2.4rem)}
+.reviewAnswerFormTextHeaderEdit button{background: none;border:none;padding: 0;@include fontView("GothamProRegular",$orange-color,1.4rem,1.8rem);text-decoration: underline;}
+.reviewAnswerFormText{padding-top: 1.5rem;}
+.objectStatusSelect{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);position: relative;min-width: 170px;}
+.objectStatusSelectMainSelect{background: $black-text;padding-left: 1rem;padding-right: 1rem;@include border-radius(0 5px 5px 0);}
+.objectStatusSelectMain{;@include flexBox(row,space-between,stretch);}
+.objectStatusSelectMainText{padding-left: 2rem;padding-right: 2rem;padding-top: .2rem;padding-bottom: 0.3rem;@include border-radius(5px 0 0 5px);flex-grow: 2;text-align: center;}
+.objectStatusSelectSublist{position: absolute;left: 0;top: 100%;right: 0;border:1px solid #DFE1E5;border-top:none;@include border-radius(0 0 5px 5px);padding: 1rem;display: none;background: #fff;}
+.objectStatusSelectSublistItem{@include flexBox(row,flex-start,center);}
+.objectStatusSelectSublistItem span{display: block;width: 10px;height: 10px;border:1px solid #AAAAAA;@include border-radius(2px);margin-right: 10px;}
+.objectStatusSelectSublist.active{display: block;}
+.categoryRateInner{@include flexBox(row,flex-start,stretch);}
+.notAllowedCategory{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem); text-align: center;padding-top: 7.9rem;padding-bottom: 7.9rem;}
+

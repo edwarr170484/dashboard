@@ -99,20 +99,25 @@ class MoneyController extends Controller
         if(!$bill){
             return $this->createNotFoundException();
         }
+                
+        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "totalPrice" => $totalPrice, "bill" => $bill,"back" => $request->headers->get('referer')));
+    }
+    
+    /**
+     * @Route("/account/dealer/payments/{billId}", name="account_dealer_payments")
+     */
+    public function paymentsDealerAction($billId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $bill = $manager->getRepository("DashboardCommonBundle:RateBill")->find($billId);
         
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        
-        $session = new Session();
-        $selectedServices = ($session->get('selectedServices')) ? $serializer->deserialize($session->get('selectedServices'), 'Dashboard\CommonBundle\Model\SelectedService[]', 'json') : array();
-        
-        $totalPrice = 0;
-                    
-        foreach($selectedServices as $selectedService){
-            $totalPrice += $selectedService->getPrice();
+        if(!$bill){
+            return $this->createNotFoundException();
         }
         
-        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "totalPrice" => $totalPrice, "bill" => $bill,"back" => $request->headers->get('referer')));
+        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill,"back" => $request->headers->get('referer')));
     }
 }

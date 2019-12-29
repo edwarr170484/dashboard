@@ -51,7 +51,7 @@ class ProductService
     private $isActive;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="services")
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="services", cascade={"persist"})
      */
     private $bills;
 

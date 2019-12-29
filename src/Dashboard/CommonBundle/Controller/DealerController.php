@@ -296,6 +296,15 @@ class DealerController extends Controller
             }
         }
         
+        if($dealer->getTargetReviews()){
+            $temp = $dealer->getTargetReviews();
+            foreach($temp as $review){
+                if($review->getStatus()->getId() != $settings->getPublicReviewStatus()->getId()){
+                    $dealer->removeTargetReview($review);
+                }
+            }
+        }
+        
         return $this->render('DashboardCommonBundle:Dealer:dealer.html.twig', array("locale" => $locale,
                                                                                     "settings" => $settings,
                                                                                     "categories" => $categories,
@@ -385,7 +394,26 @@ class DealerController extends Controller
             }
         }
         
-        
+        if($dealers){
+            foreach($dealers as $dealer){
+                $rating = 0;
+                if($dealer->getTargetReviews()){
+                    $temp = $dealer->getTargetReviews();
+                    foreach($temp as $review){
+                        if($review->getStatus()->getId() != $settings->getPublicReviewStatus()->getId()){
+                            $dealer->removeTargetReview($review);
+                        }else{
+                            $rating += $review->getRating();
+                        }
+                    }
+                }
+                
+                $dealer->getDealerinfo()->setRating(0);
+                if(count($dealer->getTargetReviews()) > 0){
+                    $dealer->getDealerinfo()->setRating(ceil($rating / count($dealer->getTargetReviews())));
+                }
+            }
+        }
         
         return $this->render('DashboardCommonBundle:Dealer:dealers.html.twig', array("locale" => $locale,
                                                                                      "settings" => $settings,
@@ -472,6 +500,8 @@ class DealerController extends Controller
     public function getListAction($action, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
         $sql = "SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud WHERE u.isActive = 1 AND r.role='ROLE_DEALER'";
         
@@ -492,6 +522,27 @@ class DealerController extends Controller
         }
         catch(\Doctrine\ORM\NoResultException $e) {
             $dealers = 0;
+        }
+        
+        if($dealers){
+            foreach($dealers as $dealer){
+                $rating = 0;
+                if($dealer->getTargetReviews()){
+                    $temp = $dealer->getTargetReviews();
+                    foreach($temp as $review){
+                        if($review->getStatus()->getId() != $settings->getPublicReviewStatus()->getId()){
+                            $dealer->removeTargetReview($review);
+                        }else{
+                            $rating += $review->getRating();
+                        }
+                    }
+                }
+                
+                $dealer->getDealerinfo()->setRating(0);
+                if(count($dealer->getTargetReviews()) > 0){
+                    $dealer->getDealerinfo()->setRating(ceil($rating / count($dealer->getTargetReviews())));
+                }
+            }
         }
         
         return $this->render('DashboardCommonBundle:Dealer:list.html.twig', array("dealers" => $dealers));

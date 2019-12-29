@@ -115,25 +115,10 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
-                    <div class="advertise-block">
-                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page, 'position' : 'rightcolumn'})) }}
-                    </div>
-                    <div class="advertise-block">
-                        <div class="siteInfoPane">
-                            <div class="siteInfoPaneInner dilers">
-                                <div class="innerHeader">
-                                    <h4>БМВ X5. Скидка -10%</h4>
-                                </div>
-                                <div class="siteInfoPaneContent dilers">
-                                    <div class="description">Акция! От официального дилера БМВ в Малаге "Рога и копыта".<br/>Скидки на BMW X5 до 10%. Спешите! Предложений ограничено!</div>
-                                </div>
-                                <div class="siteInfoPaneContentButton">
-                                    <a href="">Смотреть подробнее</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-		</div>
+            <div class="advertise-block">
+                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page, 'position' : 'rightcolumn'})) }}
+            </div>       
+        </div>
     </div>
 </div>                
 {% endblock %}

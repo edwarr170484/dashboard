@@ -1,0 +1,22 @@
+<div class="objectStatusSelect">
+    <div class="objectStatusSelectMain" onclick="showSublist($(this), event)">
+        <div class="objectStatusSelectMainText" style="background: {{ order.status.color }};">{{ order.status.name }}</div>
+        <div class="objectStatusSelectMainSelect">
+            <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.515 3.05536e-05L8 0.757894L4 4.86316L3.87291e-06 0.757894L0.482503 3.1076e-05L4 3.5645L7.515 3.05536e-05Z" fill="white"/>
+            </svg>
+        </div>
+    </div>
+    {% if statuses | length > 0 %}
+        <div class="objectStatusSelectSublist">
+            {% for status in statuses %}
+                {% if status.id != order.status.id %}
+                    <div class="objectStatusSelectSublistItem" onclick="changeOrderStatus({{ order.id }}, {{ status.id }})">
+                        <span style="background: {{ status.color }};"></span>
+                        {{ status.name }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

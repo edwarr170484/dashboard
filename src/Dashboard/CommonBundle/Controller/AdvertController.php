@@ -122,7 +122,7 @@ class AdvertController extends Controller
                  //add bill
                 $bill = new Bill();
                 $bill->setDateAdded(new \DateTime("now"));
-                $bill->setProduct($product);
+                $bill->addProduct($product);
                 $bill->setServicePack($servicePack);
                 $bill->setUser($user);
                     
@@ -147,7 +147,7 @@ class AdvertController extends Controller
             if(count($request->request->get('service')) > 0){
                 $bill = new Bill();
                 $bill->setDateAdded(new \DateTime("now"));
-                $bill->setProduct($product);
+                $bill->addProduct($product);
                 $bill->setUser($user);
                 
                 foreach($request->request->get('service') as $serviceId){
@@ -157,7 +157,7 @@ class AdvertController extends Controller
                         $productService->setService($service);
                         $productService->setCount($service->getDays());
                         $productService->setIsActive(0);
-                        $product->addService($productService);
+                        //$product->addService($productService);
                         $bill->addService($productService);
                         
                         $price = 0;
@@ -273,11 +273,41 @@ class AdvertController extends Controller
             $product->setIsConfirm(0);
             $product->setIsBlocked(0);
             
-            $manager->persist($product);
-            $manager->flush();
+            $error = 0;
+            //check user rate
+            if($user->getRoles()[0]->getRole() == 'ROLE_DEALER'){
+                if(count($user->getRates()) > 0){
+                    foreach($user->getRates() as $rate){
+                        $error = 0;
+                        if($rate->getCategory()->getid() == $product->getBaseCategory()->getId() && $rate->getAdvertNumber() > 0 && $rate->getIsActive()){
+                            $manager->persist($product);
+                            $manager->flush();
+
+                            if(!$product->getIsDraft()){
+                                $rate->setAdvertNumber($rate->getAdvertNumber() - 1);
+                            }
+                        }else{
+                            $error = 1;
+                        }
+                    }
+                }else{
+                    $error = 1;
+                }
+            }else{
+                if((count($user->getProducts()) + 1) <= $user->getRoles()[0]->getAdvertNumber()){
+                    $manager->persist($product);
+                    $manager->flush();
+                }else{
+                    $error = 1;
+                }
+            }
             
             //clear session
             $session->remove('advertImages');  
+            
+            if($error){
+                return $this->render('DashboardCommonBundle:Product:add/resultError.html.twig', array("locale" => $locale, "settings" => $settings));
+            }
             
             if($request->request->get('isDraft') == 1){
                 return $this->render('DashboardCommonBundle:Product:add/resultCategoryDraft.html.twig', array("locale" => $locale, "settings" => $settings));
@@ -307,7 +337,7 @@ class AdvertController extends Controller
         
         $conditions = $manager->getRepository("DashboardCommonBundle:Shape")->findAll();
         
-        return $this->render('DashboardCommonBundle:Product:add/categoryForm.html.twig', array("baseCategory" => $baseCategory,"category" => $category,"locale" => $locale,"advertImages" => $advertImages,"role" => $user->getRoles()[0],"settings" => $settings,"filters" => $filters,"conditions" => $conditions));
+        return $this->render('DashboardCommonBundle:Product:add/categoryForm.html.twig', array("baseCategory" => $baseCategory,"category" => $category,"locale" => $locale,"advertImages" => $advertImages,"role" => $user->getRoles()[0],"user" => $user,"settings" => $settings,"filters" => $filters,"conditions" => $conditions));
     }
     
     /**
@@ -503,6 +533,11 @@ class AdvertController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $fm = new Filesystem();
         $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user->getRoles()[0]->getRole() == 'ROLE_SERVICE'){
+            throw $this->createAccessDeniedException();
+        }
+        
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL' );
@@ -1079,7 +1114,7 @@ class AdvertController extends Controller
             }
         }
         
-        return $this->render('DashboardCommonBundle:Product:add/add.html.twig', array("categories" => $categories, "settings" => $settings, "locale" => $locale, "advertInfo" => $advertInfo));
+        return $this->render('DashboardCommonBundle:Product:add/add.html.twig', array("categories" => $categories, "settings" => $settings, "locale" => $locale, "advertInfo" => $advertInfo,"user" => $user));
     }
     
     /**
@@ -1685,7 +1720,6 @@ class AdvertController extends Controller
     
     /**
      * @Route("/account/createadvert/{isDraft}", name="createAdvert", defaults={"isDraft" : 0})
-     * @Route("/{_locale}/account/createadvert/{isDraft}", name="createAdvertLocale", defaults={"_locale" : "es", "isDraft" : 0}, requirements={"_locale" : "es|ru"})
      */
     public function createAdvertAction($isDraft,Request $request)
     {
@@ -1769,21 +1803,10 @@ class AdvertController extends Controller
             if($advertInfo->getServicePack()){
                 $servicePack = $manager->getRepository("DashboardCommonBundle:Pack")->find($advertInfo->getServicePack());
                 if($servicePack){
-                    if($servicePack->getServices()){
-                        foreach($servicePack->getServices() as $service){
-                            $productService = new ProductService();
-                            $productService->setProduct($product);
-                            $productService->setService($service->getService());
-                            $productService->setCount($service->getValue());
-                            $productService->setIsActive(0);
-                            $product->addService($productService);
-                        }
-                    }
-                    
                     //add bill
                     $bill = new Bill();
                     $bill->setDateAdded(new \DateTime("now"));
-                    $bill->setProduct($product);
+                    $bill->addProduct($product);
                     $bill->setServicePack($servicePack);
                     $bill->setUser($user);
                     
@@ -1808,7 +1831,7 @@ class AdvertController extends Controller
             if(count($advertInfo->getServices()) > 0){
                 $bill = new Bill();
                 $bill->setDateAdded(new \DateTime("now"));
-                $bill->setProduct($product);
+                $bill->addProduct($product);
                 $bill->setUser($user);
                 
                 foreach($advertInfo->getServices() as $serviceId){
@@ -1818,7 +1841,7 @@ class AdvertController extends Controller
                         $productService->setService($service);
                         $productService->setCount($service->getDays());
                         $productService->setIsActive(0);
-                        $product->addService($productService);
+                        //$product->addService($productService);
                         $bill->addService($productService);
                         
                         $price = 0;
@@ -1889,14 +1912,45 @@ class AdvertController extends Controller
             $product->setIsConfirm(0);
             $product->setIsBlocked(0);
             
-            $manager->persist($product);
-            if($bill){$manager->persist($bill);}
-            $manager->flush();
+            $error = 0;
+            //check user rate
+            if($user->getRoles()[0]->getRole() == 'ROLE_DEALER'){
+                if(count($user->getRates()) > 0){
+                    foreach($user->getRates() as $rate){
+                        $error = 0;
+                        if($rate->getCategory()->getid() == $product->getBaseCategory()->getId() && $rate->getAdvertNumber() > 0 && $rate->getIsActive()){
+                            $manager->persist($product);
+                            if($bill){$manager->persist($bill);}
+                            $manager->flush();
+
+                            if(!$product->getIsDraft()){
+                                $rate->setAdvertNumber($rate->getAdvertNumber() - 1);
+                            }
+                        }else{
+                            $error = 1;
+                        }
+                    }
+                }else{
+                    $error = 1;
+                }
+            }else{
+                if((count($user->getProducts()) + 1) <= $user->getRoles()[0]->getAdvertNumber()){
+                    $manager->persist($product);
+                    if($bill){$manager->persist($bill);}
+                    $manager->flush();
+                }else{
+                    $error = 1;
+                }
+            }
             
             //clear session
             $session->remove('advertInfo');
             $session->remove('advertImages');
             $session->remove('advertFilters');    
+            
+            if($error){
+                return $this->render('DashboardCommonBundle:Product:add/resultError.html.twig', array("locale" => $locale, "settings" => $settings));
+            }
             
             if($isDraft){
                 return $this->render('DashboardCommonBundle:Product:add/resultDraft.html.twig', array("locale" => $locale, "settings" => $settings));
@@ -2034,11 +2088,30 @@ class AdvertController extends Controller
                     $serializer = new Serializer($normalizers, $encoders);
                     
                     $selectedServices = ($session->get('selectedServices')) ? $serializer->deserialize($session->get('selectedServices'), 'Dashboard\CommonBundle\Model\SelectedService[]', 'json') : array();
+                    $billId = 0;
+                    
+                    if(count($selectedServices) > 0){
+                        foreach($selectedServices as $selectedService){
+                            $billId = $selectedService->getBill();
+                        }
+                    }
+                    
+                    $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
+                    
+                    if(!$bill){
+                        $bill = new Bill();
+                        $bill->setUser($user);
+                        $bill->setDateAdded(new \DateTime("now"));
+                        $bill->setIsPayed(0);
+                        $manager->persist($bill);
+                        $manager->flush();
+                    }
                     
                     $newService = new SelectedService();
                     $newService->setProduct($data[0]);
                     $newService->setService($data[1]);
                     $newService->setPrice($data[2]);
+                    $newService->setBill($bill->getId());
                     
                     array_push($selectedServices, $newService);
                                         
@@ -2051,7 +2124,38 @@ class AdvertController extends Controller
                         $totalPrice += $selectedService->getPrice();
                     }
                     
-                    return new Response($totalPrice);
+                    if(count($selectedServices) > 0){
+                        foreach($selectedServices as $selectedService){
+                            $service = $manager->getRepository("DashboardCommonBundle:Service")->find($selectedService->getService());
+                            $product = $manager->getRepository("DashboardCommonBundle:Product")->find($selectedService->getProduct());
+                            
+                            if($service && $product){
+                                $productServiceIs = 0;
+                                if(count($bill->getServices()) > 0){
+                                    foreach($bill->getServices() as $billService){
+                                        if(($billService->getService()->getId() == $service->getId()) && ($billService->getProduct()->getId() == $product->getId())){
+                                            $productServiceIs = 1;
+                                        }
+                                    }
+                                }
+                                if(!$productServiceIs){
+                                    $productService = new ProductService();
+                                    $productService->setService($service);
+                                    $productService->setProduct($product);
+                                    $productService->setCount($service->getDays());
+                                    $productService->setIsActive(0);
+                                    
+                                    $bill->addService($productService);
+                                }
+                            }
+                        }
+                        
+                        $bill->setPrice($totalPrice);
+                        $manager->persist($bill);
+                        $manager->flush();
+                    }
+                    
+                    return new \Symfony\Component\HttpFoundation\JsonResponse(array("totalPrice" => $totalPrice, "billId" => $bill->getId()));
                     
                 break;
                 
@@ -2064,12 +2168,38 @@ class AdvertController extends Controller
                     $serializer = new Serializer($normalizers, $encoders);
                     
                     $selectedServices = ($session->get('selectedServices')) ? $serializer->deserialize($session->get('selectedServices'), 'Dashboard\CommonBundle\Model\SelectedService[]', 'json') : array();
+                    $billId = 0;
+                    
+                    if(count($selectedServices) > 0){
+                        foreach($selectedServices as $selectedService){
+                            $billId = $selectedService->getBill();
+                        }
+                    }
+                    
+                    $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
                     
                     $tmpSelectedServices = new ArrayCollection();
                     
                     foreach($selectedServices as $selectedService){
                         if($selectedService->getProduct() == $data[0] && $selectedService->getService() == $data[1]){
-                            continue;
+                            $service = $manager->getRepository("DashboardCommonBundle:Service")->find($selectedService->getService());
+                            $product = $manager->getRepository("DashboardCommonBundle:Product")->find($selectedService->getProduct());
+                            
+                            if($service && $product){
+                                $productServiceIs = 0;
+                                if(count($bill->getServices()) > 0){
+                                    foreach($bill->getServices() as $billService){
+                                        if(($billService->getService()->getId() == $service->getId()) && ($billService->getProduct()->getId() == $product->getId())){
+                                            $productServiceIs = 1;
+                                        }
+                                    }
+                                    
+                                    if($productServiceIs){
+                                        $bill->removeService($billService);
+                                    }
+                                }
+                            }
+                            $manager->flush();
                         }else{
                             $tmpSelectedServices->add($selectedService);
                         }
@@ -2087,9 +2217,26 @@ class AdvertController extends Controller
                         
                     }else{
                         $session->remove('selectedServices');
+                        if($bill->getServices()){
+                            $temp = $bill->getServices();
+                            foreach($temp as $service){
+                                $bill->removeService($service);
+                            }
+                        }
+                        if($bill->getProducts()){
+                            $temp = $bill->getProducts();
+                            foreach($temp as $product){
+                                $bill->removeProduct($product);
+                            }
+                        }
+                        
+                        $manager->remove($bill);
+                        $manager->flush();
+                        
+                        return new \Symfony\Component\HttpFoundation\JsonResponse(array("totalPrice" => 0, "billId" => 0));
                     }
                                         
-                    return new Response($totalPrice);
+                    return new \Symfony\Component\HttpFoundation\JsonResponse(array("totalPrice" => $totalPrice, "billId" => $bill->getId()));
                     
                 break;
             }

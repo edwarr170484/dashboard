@@ -623,49 +623,6 @@ function deleteMainProductFoto(button)
     button.remove();
 }
 
-function changeOrderStatus(element, orderId, locale)
-{
-    var orderStatus = element.val();
-    var spinner = element.next(".change-order-status-result");
-    
-    if(orderStatus == 2)
-    {
-        element.parent().find(".reviewStatusCommentBlock").show();
-        spinner.hide();
-        return 0;
-    }
-    
-    element.parent().find(".statusComment").remove();
-    
-    $.ajax({
-            url: '/' + locale + '/account/changeorderstatus/' + orderId + '/' + orderStatus,
-            type:'get',
-            dataType: 'html',
-            beforeSend: function(){
-                element.parent().find(".reviewStatusCommentBlock").hide();
-                spinner.html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
-                spinner.show();
-            },
-            success: function(html)
-            {
-                if(orderStatus == 7)
-                {
-                    element.remove();
-                    spinner.parent().html(html);
-                    spinner.remove();
-                }
-                else
-                {
-                    spinner.html(html);
-                }
-                
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                err=xhr.responseText;
-            }
-    });
-}
-
 function changeOrderCommentStatus(element, orderId, locale)
 {
     var orderStatus = 2;
@@ -740,34 +697,7 @@ function showUserNumer(userId)
     });
 }
 
-function addFavoriteProduct(productId,locale,element)
-{
-    $.ajax({
-            url: '/' + locale + '/addfavorite/' + productId,
-            type:'get',
-            dataType: 'json',
-            success: function(data)
-            {
-                if(data.error == 'ok')
-                {
-                    $(".fa-star-o").each(function(){
-                        $(this).removeClass("fa-star-o");
-                        $(this).addClass("fa-star");
-                    });
-                    
-                    if(element)
-                    {
-                        element.html('<i class="fa fa-heart" aria-hidden="true"></i>');
-                    }
-                }
-                else
-                    alert(data.message);
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                err=xhr.responseText;
-            }
-    });
-}
+
 
 function selectReviews(reviewStatus, element)
 {

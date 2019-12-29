@@ -171,7 +171,7 @@
                                 </div>
                             </div>
                             <div class="pageContentServiceMessage">
-                                <span>*</span> - {% trans %}Este campo es obligatorio{% endtrans %}
+                                {% trans %}<span>*</span> - Este campo es obligatorio{% endtrans %}
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">
@@ -196,7 +196,7 @@
                                     <div class="register-form-forms">
                                         <button type="submit">{% trans %}Зарегистрироваться{% endtrans %}</button>
                                         <div class="registerDescription">
-                                            {% trans %}Нажимая кнопку я соглашаюсь с <a href="">Условиями обслуживания</a> и  <a href="">Политикой конфиденциальности{% endtrans %}</a>
+                                            {% trans with {'%link%': '', '%link1%' : ''} %}Нажимая кнопку я соглашаюсь с <a href="">Условиями обслуживания</a> и  <a href="">Политикой конфиденциальности{% endtrans %}</a>
                                         </div>
                                     </div>
                                 </div>

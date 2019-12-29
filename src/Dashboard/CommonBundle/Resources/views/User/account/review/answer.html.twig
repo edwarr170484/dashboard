@@ -1,0 +1,15 @@
+<div class="reviewAnswerExists">
+    <div class="reviewAnswerFormTextHeader">
+        <div class="reviewAnswerFormTextHeaderTitle">{% trans %}Ответ{% endtrans %}</div>
+        <div class="reviewAnswerFormTextHeaderEdit">
+            <button onclick="showReviewAnswerForm($(this).parent().parent().parent())">{% trans %}редактировать ответ{% endtrans %}</button>
+        </div>
+    </div>
+    <div class="reviewAnswerFormText accountOrderInfoProductDescriptionFeatures">
+        {{ review.answer.reviewText }}
+    </div>
+</div>
+<div class="reviewAnswerFormInner cookieAlertButton">
+    <textarea name="reviewAnswer" class="form-control" id="reviewAnswerText{{ review.id }}" placeholder="{% trans %}Ответить на отзыв{% endtrans %}">{{ review.answer.reviewText }}</textarea>
+    <button onclick="sendReviewAnswer({{ review.id }})">Ответить</button>
+</div>

@@ -41,15 +41,7 @@
                                 {% for orderStatus in orderStatuses %}
                                     <li class="nav-item {% if i == 1 %}active{% endif %}">
                                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#orderStatus{{ orderStatus.id }}" role="tab" aria-controls="orderStatus{{ orderStatus.id }}" aria-selected="true" >
-                                            {% if orderStatus.translations | length > 0 %}
-                                                    {% for translation in orderStatus.translations %}
-                                                        {% if translation.locale.id == locale.id %}
-                                                            {{ translation.value }}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                            {% else %}        
-                                                {{ orderStatus.name}}
-                                            {% endif %}
+                                            {{ orderStatus.name}}
                                         </a>
                                     </li>
                                     {% set i = i + 1 %}
@@ -62,7 +54,7 @@
                                 <div class="tab-pane fade {% if i == 1 %}active in{% endif %}" id="orderStatus{{ orderStatus.id }}" role="tabpanel">
                                     {% if orderStatus.orders | length > 0 %}
                                         {% for order in orderStatus.orders %}
-                                            <div class="accountOrders">
+                                            <div class="accountOrders" id="userOrder{{ order.id }}">
                                                 <div class="accountOrder">
                                                     <div class="accountOrderUser">
                                                         <div class="accountOrderUserAvatar">
@@ -81,7 +73,7 @@
                                                         </div>
                                                         <div class="accountOrderUserInfo">
                                                             <ul class="list-unstyled list-inline">
-                                                                <li><a href="javascript:void(0)">{% trans %}Написать покупателю{% endtrans %}</a></li>
+                                                                <li><a href="{{ path('account_start_conversation',{'companionId' : order.userSended.id}) }}">{% trans %}Написать покупателю{% endtrans %}</a></li>
                                                                 <li><a href="tel:{{ order.userSended.userinfo.phone }}">
                                                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                             <path d="M2.81556 6.05889C3.93556 8.26 5.74 10.0567 7.94111 11.1844L9.65222 9.47333C9.86222 9.26333 10.1733 9.19333 10.4456 9.28667C11.3167 9.57444 12.2578 9.73 13.2222 9.73C13.65 9.73 14 10.08 14 10.5078V13.2222C14 13.65 13.65 14 13.2222 14C5.91889 14 0 8.08111 0 0.777778C0 0.35 0.35 0 0.777778 0H3.5C3.92778 0 4.27778 0.35 4.27778 0.777778C4.27778 1.75 4.43333 2.68333 4.72111 3.55444C4.80667 3.82667 4.74444 4.13 4.52667 4.34778L2.81556 6.05889Z" fill="#616161"/>
@@ -90,7 +82,7 @@
                                                                     </a>
                                                                 </li>
                                                                 <li>
-                                                                    <a href="javascript:void(0)">
+                                                                    <a href="javascript:void(0)" onclick="deleteOrder({{ order.id }},'{% trans%}Действительно удалить заказ?{% endtrans %}')">
                                                                         <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                             <path d="M3 6.44775H5H21" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                                             <path d="M8 6.44785V4.4207C8 3.88307 8.21071 3.36746 8.58579 2.98729C8.96086 2.60713 9.46957 2.39355 10 2.39355H14C14.5304 2.39355 15.0391 2.60713 15.4142 2.98729C15.7893 3.36746 16 3.88307 16 4.4207V6.44785M19 6.44785V20.6379C19 21.1755 18.7893 21.6911 18.4142 22.0713C18.0391 22.4515 17.5304 22.665 17 22.665H7C6.46957 22.665 5.96086 22.4515 5.58579 22.0713C5.21071 21.6911 5 21.1755 5 20.6379V6.44785H19Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -109,7 +101,7 @@
                                                                 <div class="accountOrderInfoProductImage">
                                                                     <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">
                                                                         {% if order.product.fotos | length > 0 %}
-                                                                            <img src="{{ asset('bundles/images/products/' ~ order.product.fotos[0].foto) }}" alt="{{ order.product.fotos[0].alt }}" title="{{ order.product.fotos[0].title }}" />
+                                                                            <img src="{{ asset('bundles/images/products/' ~ order.product.fotos[0].foto) }}" alt="" title="" />
                                                                         {% else %}
                                                                             <img src="{{ asset('bundles/images/products/bez-foto.png') }}" alt="" title="" />
                                                                         {% endif %}
@@ -120,23 +112,42 @@
                                                                         <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">{{ order.product.name }}</a>
                                                                     </div>
                                                                     <div class="accountOrderInfoProductDescriptionFeatures">
-                                                                        {{ order.info.board.board.value }}, 
-                                                                        {{ order.info.modification.size }} {% trans %}л {% endtrans %}/ {{ order.info.modification.power }} {% trans %}л.с.{% endtrans %} /
-                                                                        {{ order.info.gasType.value }}, 
-                                                                        {{ order.info.gearType.value }}, 
-                                                                        {{ order.info.transmissionType.value }} {% trans %}привод{% endtrans %}
+                                                                        {{ order.product.info.board.value}}, 
+                                                                        {{ order.product.info.modification.size }} {% trans %}л {% endtrans %}/ {{ order.product.info.modification.power }} {% trans %}л.с.{% endtrans %} /
+                                                                        {{ order.product.info.gasType.value }}, 
+                                                                        {{ order.product.info.gearType.value }}, 
+                                                                        {{ order.product.info.transmissionType.value }} {% trans %}привод{% endtrans %}
                                                                     </div>
                                                                 </div>
                                                                 <div class="accountOrderInfoProductNumbers">
-                                                                    <div class="accountOrderInfoProductNumbersPrice number">{{ order.product.price }} {{ locale.currency.label | raw }}</div>
-                                                                    <div class="number"> {{ order.info.year }}</div>
-                                                                    <div class="number">{{ order.info.probeg }} {% trans %}км{% endtrans %}</div>
+                                                                    <div class="accountOrderInfoProductNumbersPrice number">{{ order.product.info.price }} {{ locale.currency.label | raw }}</div>
+                                                                    <div class="number"> {{ order.product.info.year }}</div>
+                                                                    <div class="number">{{ order.product.info.probeg }} {% trans %}км{% endtrans %}</div>
                                                                 </div>
                                                             </div>
-                                                            <div class="accountOrderInfoProductStatus">
-                                                                <button class="inprocess" style="background: {{ order.color }};{% if order.status == 7 %}color:#fff;{% endif %}">
-                                                                    {{ orderStatus.name}}
-                                                                </button>
+                                                            <div class="accountOrderInfoProductStatus" id="orderStatusSelect{{ order.id }}">
+                                                                <div class="objectStatusSelect">
+                                                                    <div class="objectStatusSelectMain" onclick="showSublist($(this), event)">
+                                                                        <div class="objectStatusSelectMainText" style="background: {{ order.status.color }};">{{ order.status.name }}</div>
+                                                                        <div class="objectStatusSelectMainSelect" >
+                                                                            <svg width="8" height="5" viewBox="0 0 8 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M7.515 3.05536e-05L8 0.757894L4 4.86316L3.87291e-06 0.757894L0.482503 3.1076e-05L4 3.5645L7.515 3.05536e-05Z" fill="white"/>
+                                                                            </svg>
+                                                                        </div>
+                                                                    </div>
+                                                                    {% if statuses | length > 0 %}
+                                                                        <div class="objectStatusSelectSublist">
+                                                                            {% for status in statuses %}
+                                                                                {% if status.id != order.status.id %}
+                                                                                    <div class="objectStatusSelectSublistItem" onclick="changeOrderStatus({{ order.id }}, {{ status.id }})">
+                                                                                        <span style="background: {{ status.color }};"></span>
+                                                                                        {{ status.name }}
+                                                                                    </div>
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     {% endif %}

@@ -40,11 +40,46 @@
                 {% endfor %}
                 <div class="account-advert-block-content">
                     <div class="row advert-category-adverts">
+                        {% if user.rates | length > 0 and user.roles[0].role == 'ROLE_DEALER'%}
+                            {% for rate in user.rates %}
+                                {% if rate.isActive %}
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="accountRatesInformation">
+                                            <div class="accountRatesInformationHeader">{% trans with {'%ratename%' : rate.rate.name } %}В рамках вашего тарифа %ratename% доступно:{% endtrans %}</div>
+                                            <div class="accountRatesInformationList dealerAccountRates">
+                                                <div class="accountRatesInformationListItem">{{ rate.advertNumber }} {% trans %}размещений{% endtrans %}</div>
+                                                {% if rate.items | length > 0 %}
+                                                    {% for item in rate.tems %}
+                                                        <div class="accountRatesInformationListItem">
+                                                            {{ item.service.service.iconGray | raw }}
+                                                            {{ item.count }} {{ item.service.service.name }}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                <div class="accountRatesInformationListItem">
+                                                    <a href="{{ path('account_rates') }}">
+                                                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                            <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="#EB840B"/>
+                                                            <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="#EB840B"/>
+                                                            <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                            <path d="M20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                            <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="white"/>
+                                                            <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="white"/>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                         <div class="col-lg-12 col-md-12">
                             <div class="accountAdverts">
                             {% if products | length > 0 %}
                                 {% for product in products %}
-                                    {{ include ('DashboardCommonBundle:User:account/products/product.html.twig', {product : product, user : user, locale : locale}) }}
+                                    {{ include ('DashboardCommonBundle:User:account/products/product.html.twig', {product : product, user : user, locale : locale, selectedServices : selectedServices}) }}
                                 {% endfor %}
                             {% else %}
                                 <div class="accountNocontent">{% trans %}Нет ни одного объявления{% endtrans %}</div>
@@ -57,4 +92,15 @@
         </div>
     </div>
 </div>
+{% if productType == 'current' %}                            
+    {% set totalPrice = 0 %}
+    {% if selectedServices | length > 0 %}
+        {% for selectedService in selectedServices %}
+            {% set totalPrice = totalPrice + selectedService.price %}
+        {% endfor %}
+    {% endif %}
+    {% if totalPrice > 0 %}
+        <script>$("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">{% trans %}Общая сумма{% endtrans %}:</div><div class="accoutnProductServicesTotalSumma">{{ totalPrice }} {{ locale.currency.label | raw }}</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments">{% trans %}Оплатить{% endtrans %}</a></div></div></div></div></div></div>');</script>
+    {% endif %}
+{% endif %}
 {% endblock%}

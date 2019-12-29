@@ -1352,7 +1352,11 @@ class DefaultController extends Controller
             ->add('siteLogo', HiddenType::class, array('required' => false))
             ->add('watermarkNew', FileType::class, array('required' => false, 'mapped' => false,'label' => 'Водяной знак', 'attr' => array('class' => 'form-control','placeholder' => 'Водяной знак')))
             ->add('watermark', HiddenType::class, array('required' => false))
-            ->add('dafaultOrderStatus', ChoiceType::class, array('choices' => $statuses, 'data' => $locale->getSettings()->getDafaultOrderStatus(),'required' => false, 'label' => 'Статус заказов при добавлении', 'attr' => array('class' => 'form-control','placeholder' => 'Статус заказов при добавлении')))
+            ->add('dafaultOrderStatus', 'entity', array('class' => 'DashboardCommonBundle:OrderStatus',
+                            'choice_label' => 'name',
+                            'empty_data' => null,
+                            'required' => false, 
+                            'label' => 'Статус заказов при добавлении:', 'attr' => array('class' => 'form-control')))                        
             ->add('copyright', TextType::class, array('required' => false, 'label' => 'Копирайт', 'attr' => array('class' => 'form-control','placeholder' => 'Копирайт'))) 
             ->add('serviceTabText', TextareaType::class, array('required' => false, 'label' => 'Описание для вкладки услуг', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('textblockHowToPrice', TextareaType::class, array('required' => false, 'label' => 'Как правильно устанавливать цену', 'attr' => array('class' => 'form-control tinyeditor'))) 
@@ -1372,6 +1376,11 @@ class DefaultController extends Controller
                             'empty_data' => null,
                             'required' => false, 
                             'label' => 'Статус добавляемых отзывов:', 'attr' => array('class' => 'form-control'))) 
+            ->add('publicReviewStatus', 'entity', array('class' => 'DashboardCommonBundle:ReviewStatus',
+                            'choice_label' => 'name',
+                            'empty_data' => null,
+                            'required' => false, 
+                            'label' => 'Публиковать только отзывы со статусом:', 'attr' => array('class' => 'form-control')))
             ->add('successAddAdvertText', TextareaType::class, array('required' => false, 'label' => 'Текст для сообщения об успешном добавлении объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Текст для сообщения об успешном добавлении объявления')))->getForm();
         }
         

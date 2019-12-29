@@ -10,34 +10,43 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-
-use Dashboard\CommonBundle\Entity\User;
-use Dashboard\CommonBundle\Entity\UserInfo;
-use Dashboard\CommonBundle\Entity\UserPurse;
-use Dashboard\CommonBundle\Entity\Product;
-use Dashboard\CommonBundle\Entity\ProductFotos;
-use Dashboard\CommonBundle\Entity\ProductOptions;
-use Dashboard\CommonBundle\Entity\Message;
-
-use Dashboard\CommonBundle\Form\Type\UserType;
-use Dashboard\CommonBundle\Form\Type\MessageType;
-
-use Dashboard\CommonBundle\Form\DataTransformer\ProductToNumberTransformer;
+use Dashboard\CommonBundle\Entity\RateBill;
 
 class OrderController extends Controller
 {
     /**
-     * @Route("/account/addorder", name="account_addorder")
+     * @Route("/account/order/delaerrate/{rateId}", name="account_order_dealerrate")
      */
-    public function addorderAction(Request $request)
+    public function orderDealerRateAction($rateId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
+        
+        if($user->getRoles()[0]->getRole() == 'ROLE_DEALER'){
+            $rate = $manager->getRepository("DashboardCommonBundle:CategoryRate")->find($rateId);
+            
+            if(!$rate){
+                throw $this->createNotFoundException();
+            }
+            
+            $bill = new RateBill();
+            $bill->setDateAdded(new \DateTime("now"));
+            if($rate->getPrice()){
+                $bill->setPrice($rate->getPrice());
+            }else{
+                $bill->setPrice($rate->getRate()->getPrice());
+            }
+            $bill->setUser($user);
+            $bill->setRate($rate->getRate());
+            $bill->setCategory($rate->getCategory());
+            $bill->setBillId($rate->getBillId());
+            $bill->setIsPayed(0);
+            
+            $manager->persist($bill);
+            $manager->flush();
+            
+            return $this->redirectToRoute('account_dealer_payments', array('billId' => $bill->getId()));
+        }
     }
 }
 

@@ -49,7 +49,10 @@ $(document).ready(function(){
     
     $(".dealerAuto").click(function(){$(this).find('.dealerAutoInner').toggleClass('active');});
     
-    $("body").click(function(){$(".siteMenuGamburgerMenu").hide();});
+    $("body").click(function(){
+        $(".siteMenuGamburgerMenu").hide();
+        $(".objectStatusSelectSublist").removeClass("active");
+    });
     
 });
 
@@ -496,4 +499,115 @@ function setReviewRating(element, rating, event){
         $(".form-group-rating-star").eq(i).addClass("active");
     }
     $("#review_rating").val(rating);
+}
+
+function addFavoriteProduct(productId)
+{
+    $.ajax({
+        url: '/addfavorite/' + productId,
+        type:'get',
+        dataType: 'json',
+        success: function(data)
+        {
+            alert(data.message);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            err=xhr.responseText;
+        }
+    });
+}
+
+function deleteFavoriteProduct(productId, text){
+    if(confirm(text)){
+        $.ajax({
+            url: '/deletefavorite/' + productId,
+            type:'get',
+            dataType: 'json',
+            success: function(data)
+            {
+                if(data.error === 0){
+                    $("#favoriteProduct" + productId).remove();
+                    window.location.reload();
+                }
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                err=xhr.responseText;
+            }
+        });
+    }
+}
+
+function showReviewAnswerForm(element){
+    element.parent().find(".reviewAnswerFormInner").addClass("active");
+    element.remove();
+}
+
+function sendReviewAnswer(reviewId){
+    $.ajax({
+        url: '/account/review/answer/' + reviewId,
+        type:'post',
+        data: $("#reviewAnswerText" + reviewId),
+        dataType: 'json',
+        success: function(data)
+        {
+           $("#reviewAnswerForm" + reviewId).html(data.message);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            err=xhr.responseText;
+        }
+    });
+}
+
+function showSublist(element, event){
+    event.stopPropagation();
+    $(".objectStatusSelectSublist").removeClass("active");
+    element.next(".objectStatusSelectSublist").addClass("active");
+}
+
+function changeReviewStatus(reviewId, statusId){
+    $.ajax({
+        url: '/account/review/status/' + reviewId + '/' + statusId,
+        type:'get',
+        dataType: 'json',
+        success: function(data)
+        {
+           $("#reviewStatusSelect" + reviewId).html(data.message);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            err=xhr.responseText;
+        }
+    });
+}
+
+function changeOrderStatus(orderId, statusId){
+    $.ajax({
+        url: '/account/order/status/' + orderId + '/' + statusId,
+        type:'get',
+        dataType: 'json',
+        success: function(data)
+        {
+           $("#orderStatusSelect" + orderId).html(data.message);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            err=xhr.responseText;
+        }
+    });
+}
+
+function deleteOrder(orderId, text){
+    if(confirm(text)){
+        $.ajax({
+            url: '/account/orders/' + orderId,
+            type:'get',
+            dataType: 'json',
+            success: function(data)
+            {
+               $("#userOrder" + orderId).remove();
+               window.location.reload();
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                err=xhr.responseText;
+            }
+        });
+    }
 }

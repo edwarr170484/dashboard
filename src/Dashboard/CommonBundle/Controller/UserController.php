@@ -505,7 +505,7 @@ class UserController extends Controller
     }
     
     /**
-     * @Route("/{_locale}/addfavorite/{productId}", name="addfavorite", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
+     * @Route("/addfavorite/{productId}", name="addfavorite")
      */
     public function addFavoriteProduct($productId, Request $request)
     {
@@ -514,7 +514,7 @@ class UserController extends Controller
       
         if(!$this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY'))
         {
-             return new Response(json_encode(array("error" => "error", "message" => $this->get('translator')->trans("Lai pievienotu reklāmu saviem favorītiem, jums jāievada jūsu personiskais kabinets"))));
+             return new Response(json_encode(array("message" => $this->get('translator')->trans("Для добавления объявления в избранные необходимо войти в личный кабинет"))));
         }
         
         if($productId)
@@ -530,7 +530,7 @@ class UserController extends Controller
 
             if($favoriteProductIs)
             {
-                return new Response(json_encode(array("error" => "error", "message" => $this->get('translator')->trans("Šī reklāma jau ir pievienota jūsu favorites"))));
+                return new Response(json_encode(array("message" => $this->get('translator')->trans("Это объявление уже добавлено к Вам в Избранные"))));
             }
             else
             {
@@ -541,138 +541,42 @@ class UserController extends Controller
                $manager->persist($favoriteProduct);
                $manager->flush();
                
-               return new Response(json_encode(array("error" => "ok", "message" => $this->get('translator')->trans("Reklāma ir pievienota favorītiem"))));
+               return new Response(json_encode(array("message" => $this->get('translator')->trans("Объявление добавлено в избранные"))));
             }
         }
-        
-    }
+    }    
     
     /**
-     * @Route("/account/friends/{friendId}", name="account_friends", defaults={"friendId" : 0})
-     * @Route("/{_locale}/account/friends/{friendId}", name="account_friendsLocale", defaults={"_locale" : "lv","friendId" : 0}, requirements={"_locale" : "lv|ru"})
+     * @Route("/deletefavorite/{productId}", name="deletefavorite")
      */
-    public function friendsAction($friendId, Request $request)
+    public function deleteFavoriteProduct($productId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Page p WHERE p.locale=" . $locale->getId() . " AND p.isUserpage = 0 AND p.route = 'account_friends'" );
-
-        try{
-            $page = $query->getSingleResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $page = 0;
-        }
-        
-        if($friendId)
-        {
-            $friend = $manager->getRepository("DashboardCommonBundle:Friend")->findOneBy(array('user' => $friendId, "referrer" => $user->getId()));
-            
-            if($friend)
-            {
-                $manager->remove($friend);
-                $manager->flush();
-                
-                $this->addFlash(
-                    'notice',
-                    '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Veiksmīga!</strong> Lietotājs ir noņemts no saviem draugiem.') . '</div>'
-                );
-            }
-            else
-                $this->addFlash(
-                    'notice',
-                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs nevarat izdzēst draugu no saviem draugiem.') . '</div>'
-                );
-                
-            if($locale->getIsDefault())
-            {
-                $this->redirectToRoute("account_friends");
-            }
-            else
-            {
-                return $this->redirectToRoute("account_friendsLocale", array("_locale" => $locale->getCode()));
-            }
-        }
-        
-        if(!$user->getInvite())
-        {
-            $link = base64_encode(serialize(array("user" => $user->getId(), "randomize" => rand(1, 999999999))));
-            $invite = new Invite();
-            $invite->setUser($user);
-            $invite->setDateAdded(new \DateTime("now"));    
-            $invite->setInviteCode($link);   
-            $manager->persist($invite);
-            $manager->flush();
-        }
-        else
-        {
-            $link = $user->getInvite()->getInviteCode();
-        }
-            
-        $friendForm = $this->get('form.factory')->createNamedBuilder('friend', 'form')
-                ->add('name', TextType::class, array('required' => true,'label' => $this->get('translator')->trans('Drauga vārds: *'), 'attr' => array('class' => 'form-control')))
-                ->add('email', EmailType::class, array('required' => true,'label' => $this->get('translator')->trans('Drauga e-pasts: *'), 'attr' => array('class' => 'form-control')))
-                ->add('link', HiddenType::class, array('required' => true,'data' => $link))
-                ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('SŪTĪT'), 'attr' => array('class' => 'send-tab-form')))->getForm();
-        
-        $friendForm->handleRequest($request);
-
-        if ($friendForm->isSubmitted() && $friendForm->isValid() && $friendForm['link']->getData())
-        {
-            //check if email exists
-            $query = $manager->createQuery("SELECT u FROM Dashboard\CommonBundle\Entity\User u WHERE u.username = '" . $friendForm['email']->getData() . "' OR u.email = '" . $friendForm['email']->getData() . "'");
+        if($productId){
+            $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\FavoriteProducts p WHERE p.productId = ' . $productId . ' AND p.userId = ' . $user->getId());
 
             try{
-                $userIs = $query->getSingleResult();
+                $product = $query->getSingleResult();
             }
             catch(\Doctrine\ORM\NoResultException $e) {
-                $userIs = 0;
+                $product = 0;
             }
-            
-            $message = \Swift_Message::newInstance()
-                    ->setSubject('Вы получили приглашение с сайта gribupardot.sunweb.by')
-                    ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-                    ->setTo($friendForm['email']->getData())
-                    ->setBody(
-                        $this->renderView(
-                            'Emails/referrer.html.twig',
-                            array("link" => $friendForm['link']->getData())
-                        ),
-                        'text/html'
-                    );
 
-            $this->get('mailer')->send($message);   
-            
-            $this->addFlash(
-                'notice',
-                '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                $this->get('translator')->trans('<strong>Veiksmīga!</strong> Uzaicinājums tika veiksmīgi nosūtīts uz norādīto pastkasti.') . '</div>'
-            );
-            
-            if($locale->getIsDefault())
-            {
-                $this->redirectToRoute("account_friends");
+            if($product){
+                $manager->remove($product);
+                $manager->flush();
+                
+                return new Response(json_encode(array("error" => 0)));
             }
-            else
-            {
-                return $this->redirectToRoute("account_friendsLocale", array("_locale" => $locale->getCode()));
+            else{
+               return new Response(json_encode(array("error" => 1)));
             }
         }
         
-        return $this->render('DashboardCommonBundle:User:friends.html.twig', array("user" => $user, "page" => $page,
-                                                                                   "friendForm" => $friendForm->createView(),
-                                                                                   "link" => $link,
-                                                                                   "settings" => $settings,
-                                                                                   "locale" => $locale));
-    }
+        return new Response(json_encode(array("error" => 1)));
+    } 
     
     private function deleteAdvert($productId, $request)
     {

@@ -225,7 +225,7 @@
                 </ul>
             </div>
             <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
-                {% if app.user and app.user.roles[0] != "ROLE_SERVICE"%}
+                {% if app.user and app.user.roles[0].role != "ROLE_SERVICE" %}
                     <a href="{{path('addAdvert')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
                 {% else %}
                     <a href="{{path('login')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>

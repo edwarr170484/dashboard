@@ -208,8 +208,16 @@
                     {% else %}
                         {% set servicePrice = service.price %}
                     {% endif %}
+                    {% set buttonClass = '' %}
+                    {% if selectedServices | length > 0 %}
+                        {% for selectedService in selectedServices %}
+                            {% if selectedService.service == service.id and selectedService.product == product.id %}
+                                {% set buttonClass = 'active' %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                     <div class="accountAdvertServiceButton">
-                        <button onclick="toggleProductService({{ product.id }}, {{ service.id }}, {{ servicePrice }}, '{{ locale.code }}', $(this), '{% trans %}Общая сумма{% endtrans %}','{% trans %}Оплатить{% endtrans %}')">
+                        <button onclick="toggleProductService({{ product.id }}, {{ service.id }}, {{ servicePrice }}, '{{ locale.code }}', $(this), '{% trans %}Общая сумма{% endtrans %}','{% trans %}Оплатить{% endtrans %}')" class="{{ buttonClass }}">
                             {{ service.iconGray | raw }}
                             <span class="buttonServiceName">
                                 <span class="buttonServiceNameTitle">{{ service.title }}</span>

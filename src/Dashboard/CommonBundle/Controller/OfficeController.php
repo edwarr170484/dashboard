@@ -193,6 +193,23 @@ class OfficeController extends Controller
                                 if($coords['status'] == "OK"){
                                     $coordinates->set($dealer->getId(), $coords['results'][0]['geometry']['location']);
                                 }
+                                
+                                $rating = 0;
+                                if($salon->getReviews()){
+                                    $temp = $salon->getReviews();
+                                    foreach($temp as $review){
+                                        if($review->getStatus()->getId() != $settings->getPublicReviewStatus()->getId()){
+                                            $salon->removeReview($review);
+                                        }else{
+                                            $rating += $review->getRating();
+                                        }
+                                    }
+                                }
+                                
+                                $salon->setRating(0);
+                                if(count($salon->getReviews()) > 0){
+                                    $salon->setRating(ceil($rating / count($salon->getReviews())));
+                                }
                             }
                         }
                     }
@@ -247,6 +264,23 @@ class OfficeController extends Controller
                     }
                 }
             }
+        }
+        
+        $rating = 0;
+        if($service->getReviews()){
+            $temp = $service->getReviews();
+            foreach($temp as $review){
+                if($review->getStatus()->getId() != $settings->getPublicReviewStatus()->getId()){
+                    $service->removeReview($review);
+                }else{
+                    $rating += $review->getRating();
+                }
+            }
+        }
+                                
+        $service->setRating(0);
+        if(count($service->getReviews()) > 0){
+            $service->setRating(ceil($rating / count($service->getReviews())));
         }
         
         $profileMessageForm = null;

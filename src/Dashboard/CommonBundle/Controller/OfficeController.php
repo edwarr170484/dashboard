@@ -48,7 +48,6 @@ class OfficeController extends Controller
     
     /**
      * @Route("/service/register", name="serviceRegister")
-     * @Route("/{_locale}/service/register", name="serviceRegisterLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
     public function registerAction(Request $request)
     {

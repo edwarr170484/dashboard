@@ -10,7 +10,8 @@
 {% block title %}{% trans %}Восстановление доступа{% endtrans %}{% endblock %}
 
 {% block body %}
-<script>
+{% if settings.isShowCaptcha %} 
+    <script>
             
             var loginCaptcha;
             
@@ -20,7 +21,8 @@
               });
             };
 
-</script>
+    </script>
+{% endif %}
 <nav class="breadscrumbsBlock">
       <div class="container">
         <div class="row">

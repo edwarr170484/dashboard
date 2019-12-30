@@ -57,7 +57,7 @@
                         {% if products | length > 0 %}
                             <div class="mainPageFiltersTabs category-filters">
                                 <div class="tab-content">
-                                    {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount} %}
+                                    {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount, 'request' : app.request} %}
                                 </div>
                             </div>                              
                             <div class="hidden-sm hidden-xs" style="text-align:center;">

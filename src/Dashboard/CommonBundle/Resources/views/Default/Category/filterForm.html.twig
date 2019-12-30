@@ -3,19 +3,27 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 static-filters hidden-sm hidden-xs">
                 <div class="filter">
-                    <input name="searchNew" type="checkbox" value="1" class="custom-checkbox"  /> {% trans %}Новые{% endtrans %}
+                    <input name="searchNew" type="checkbox" value="1" class="custom-checkbox" {% if request.request.get('searchNew') %}checked="checked"{% endif %} /> {% trans %}Новые{% endtrans %}
                 </div>
                 <div class="filter">
-                    <input name="searchOld" type="checkbox" value="1" class="custom-checkbox"  /> {% trans %}С пробегом{% endtrans %}
+                    <input name="searchOld" type="checkbox" value="1" class="custom-checkbox" {% if request.request.get('searchOld') %}checked="checked"{% endif %} /> {% trans %}С пробегом{% endtrans %}
                 </div>
             </div>
             <div class="col-lg-12 col-md-12">
                 <div class="row">
                     {% if category.children | length > 0 %}
                         <div class="col-lg-3 col-md-3">
-                            <select name="category[]" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" multiple="multiple" onchange="sendFiltersForm()">
+                            <select name="categoryChild[]" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" multiple="multiple" onchange="sendFiltersForm()">
                                 {% for child in category.children %}
-                                    <option value="{{ child.id}}">
+                                    {% set selected = '' %}
+                                    {% if request.request.get('categoryChild') %}
+                                        {% for key,value in request.request.get('categoryChild') %}
+                                            {% if child.id == value %}
+                                                {% set selected = 'selected=selected' %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <option value="{{ child.id}}" {{ selected }}>
                                         {{ child.title }}
                                     </option>
                                 {% endfor %}
@@ -29,7 +37,17 @@
                                     <div class="col-lg-3 col-md-3">
                                         <select name="{{ filter.productParameter }}[{{ filter.id }}][]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
                                             {% for value in filter.values %}
-                                                <option value="{{ value.id }}">{{ value.value }}</option>
+                                                {% set selected = '' %}
+                                                {% if request.request.get(filter.productParameter) %}
+                                                    {% for val in request.request.get(filter.productParameter) %}
+                                                        {% for id in val %}
+                                                            {% if value.id == id %}
+                                                                {% set selected = 'selected=selected' %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                <option value="{{ value.id }}" {{ selected }}>{{ value.value }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -38,7 +56,17 @@
                                     <div class="col-lg-3 col-md-3">
                                         <select name="{{ filter.productParameter }}[{{ filter.id }}][]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
                                             {% for value in filter.values %}
-                                                <option value="{{ value.id }}">{{ value.value }}</option>
+                                                {% set selected = '' %}
+                                                {% if request.request.get(filter.productParameter) %}
+                                                    {% for val in request.request.get(filter.productParameter) %}
+                                                        {% for id in val %}
+                                                            {% if value.id == id %}
+                                                                {% set selected = 'selected=selected' %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                <option value="{{ value.id }}" {{ selected }}>{{ value.value }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -46,8 +74,8 @@
                                 {% if filter.type == 'selectable' %}
                                     <div class="col-lg-3 col-md-3">
                                         <div class="filtersFromTo">
-                                            <input name="filterSelectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}от{% endtrans %}" />
-                                            <input name="filterSelectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}до{% endtrans %}" />
+                                            <input name="filterSelectable[{{ filter.id }}]" value="{% if request.request.get('filterSelectable') %}{{ request.request.get('filterSelectable')[0] }}{% endif %}" placeholder="{{ filter.name}}, {% trans %}от{% endtrans %}" />
+                                            <input name="filterSelectable[{{ filter.id }}]" value="{% if request.request.get('filterSelectable') %}{{ request.request.get('filterSelectable')[1] }}{% endif %}" placeholder="{{ filter.name}}, {% trans %}до{% endtrans %}" />
                                         </div>
                                     </div>  
                                 {% endif %}
@@ -56,12 +84,24 @@
                                         <div class="filtersFromTo">
                                             <select name="filterRangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}, {% trans %}от{% endtrans %}" onchange="sendFiltersForm()">
                                                 {% for value in filter.values %}
-                                                    <option value="{{ value.id }}">{{ value.value }}</option>
+                                                    {% set selected = '' %}
+                                                    {% if request.request.get('filterRangeList') %}
+                                                        {% if value.id == request.request.get('filterRangeList')[filter.id] %}
+                                                            {% set selected = 'selected=selected' %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    <option value="{{ value.id }}" {{ selected }}>{{ value.value }}</option>
                                                 {% endfor %}
                                             </select>
                                             <select name="filterRangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }} {% trans %}до{% endtrans %}" onchange="sendFiltersForm()">
                                                 {% for value in filter.values %}
-                                                    <option value="{{ value.id }}">{{ value.value }}</option>
+                                                    {% set selected = '' %}
+                                                    {% if request.request.get('filterRangeList') %}
+                                                        {% if value.id == request.request.get('filterRangeList')[filter.id] %}
+                                                            {% set selected = 'selected=selected' %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    <option value="{{ value.id }}" {{ selected }}>{{ value.value }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -73,8 +113,8 @@
                     {% if category.isShowPriceFilter %}
                         <div class="col-lg-3 col-md-3">
                             <div class="filtersFromTo">
-                                <input name="filterSelectablePrice[]" value="" placeholder="{% trans %}Цена от{% endtrans %}" />
-                                <input name="filterSelectablePrice[]" value="" placeholder="{% trans %}до{% endtrans %}" />
+                                <input name="filterSelectablePrice[]" value="{% if request.request.get('filterSelectablePrice') %}{{ request.request.get('filterSelectablePrice')[0] }}{% endif %}" placeholder="{% trans %}Цена от{% endtrans %}" />
+                                <input name="filterSelectablePrice[]" value="{% if request.request.get('filterSelectablePrice') %}{{ request.request.get('filterSelectablePrice')[1] }}{% endif %}" placeholder="{% trans %}до{% endtrans %}" />
                             </div>
                         </div>  
                     {% endif %}
@@ -82,10 +122,10 @@
             </div>
             <div class="col-lg-12 mainPageFiltersButtons">
                 <div class="mainPageFiltersSettings">
-                    <button class="showAllParameters">{% trans %}Все параметры{% endtrans %}<svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <button type="button" class="showAllParameters">{% trans %}Все параметры{% endtrans %}<svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#EB840B"/>
     </svg></button>
-                    <button class="clearFilters">{% trans %}Сбросить{% endtrans %}<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <button type="button" class="clearFilters">{% trans %}Сбросить{% endtrans %}<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"/>
     </svg>
                     </button>

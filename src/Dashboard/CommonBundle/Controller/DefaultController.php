@@ -342,9 +342,12 @@ class DefaultController extends Controller
         if($productInfo->getVars()){
             foreach($productInfo->getVars() as $var){
                 if($request->request->get($var)){
-                    foreach($request->request->get($var) as $key => $value){
-                        if($value != 0)
-                            $joinInstructions .= " LEFT JOIN pi." . $var . " pi" . $var;
+                    if($var != 'filter'){
+                        foreach($request->request->get($var) as $key => $value){
+                            if($value != 0){
+                                $joinInstructions .= " LEFT JOIN pi." . $var . " pi" . $var;
+                            }
+                        }
                     }
                 }
             }
@@ -352,10 +355,10 @@ class DefaultController extends Controller
         
         $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.info pi" . $joinInstructions . " LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0 AND p.isActive = 1";
         
-        if($request->request->get('category'))
+        if($request->request->get('categoryChild'))
         {
             $sql .= " AND (";
-            foreach($request->request->get('category') as $key => $categoryId){
+            foreach($request->request->get('categoryChild') as $key => $categoryId){
                 $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
                 
                 if($searchCategory){
@@ -408,33 +411,33 @@ class DefaultController extends Controller
             $sql .= " OR p.description LIKE '%" . $request->request->get('searchText') . "%')";
         }
         
-        if($request->request->get('searchNew'))
-        {
+        if($request->request->get('searchNew') && $request->request->get('searchOld')){
+            $sql .= " AND (pi.probeg <= 0 or pi.probeg > 0)";
+        }elseif($request->request->get('searchNew')){
             $sql .= " AND pi.probeg <= 0";
-        }
-        
-        if($request->request->get('searchOld'))
-        {
-            $sql .= " OR pi.probeg > 0";
+        }elseif($request->request->get('searchOld')){
+            $sql .= " AND pi.probeg > 0";
         }
         
         if($productInfo->getVars()){
             foreach($productInfo->getVars() as $var){
                 if($request->request->get($var)){
-                    foreach($request->request->get($var) as $key => $value){
-                        if(is_array($value)){
-                            $sql .= " AND (";
-                            
-                            foreach($value as $key => $val){
-                                if($val != 0){
-                                    if($key == 0){
-                                        $sql .= "pi" . $var . ".id = " . $val;
-                                    }else{
-                                        $sql .= " OR pi" . $var . ".id = " . $val;
+                    if($var != 'filter'){
+                        foreach($request->request->get($var) as $key => $value){
+                            if(is_array($value)){
+                                $sql .= " AND (";
+
+                                foreach($value as $key => $val){
+                                    if($val != 0){
+                                        if($key == 0){
+                                            $sql .= "pi" . $var . ".id = " . $val;
+                                        }else{
+                                            $sql .= " OR pi" . $var . ".id = " . $val;
+                                        }
                                     }
                                 }
+                                $sql .= ")";
                             }
-                            $sql .= ")";
                         }
                     }
                 }
@@ -462,7 +465,7 @@ class DefaultController extends Controller
             }
         }
         
-        if($request->request->get('filterRangeList'))
+        /*if($request->request->get('filterRangeList'))
         {
             foreach($request->request->get('filterRangeList') as $key => $value)
             {
@@ -509,7 +512,7 @@ class DefaultController extends Controller
                     }
                 }
             }
-        }
+        }*/
         
         if(null !== $request->request->get('filterSelectable'))
         {
@@ -618,18 +621,6 @@ class DefaultController extends Controller
             $productsTotalCount = 0;
             $products = 0;
         }
-        
-        /*if($category->getChildren())
-            $query = $manager->createQuery($sqlPremium)->setMaxResults($settings->getCatpagePremiumNumber());
-        else
-            $query = $manager->createQuery($sqlPremium);
-        
-        try{
-            $premiumProducts = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $premiumProducts = 0;
-        }*/
 
         $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
         
@@ -662,8 +653,7 @@ class DefaultController extends Controller
                                                                                        "filterSelectablePrice" => $request->request->get('filterSelectablePrice'),
                                                                                        "locale" => $locale,
                                                                                        "settings" => $settings,
-                                                                                       "view" => $view,
-                                                                                       "sql" => $sql));
+                                                                                       "view" => $view));
     }
     
     private function getFilters(&$filters, $category){

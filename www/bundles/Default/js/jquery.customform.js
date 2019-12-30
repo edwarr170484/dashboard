@@ -40,14 +40,22 @@
 					var groupOptionsList = '';
 					
 					groupOptions.each(function(){
-                                                groupOptionsList += "<div class='select-option' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>";
+                                            var active = '';
+                                            if($(this).attr("selected") === 'selected'){
+                                                active = 'active';
+                                            }
+                                            groupOptionsList += "<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>";
 					
 					});
 					cover.find(".select-options").append("<div class='select-option-group'><div class='select-option-group-label'>" + $(this).attr("label") + "</div>" + groupOptionsList + "</div>");
 				});
 			}else{
 				selectOptions.each(function(){
-					cover.find(".select-options").append("<div class='select-option' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>");
+                                    var active = '';
+                                    if($(this).attr("selected") === 'selected'){
+                                        active = 'active';
+                                    }
+                                    cover.find(".select-options").append("<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>");
 				});
 			}
 			

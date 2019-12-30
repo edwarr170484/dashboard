@@ -40,7 +40,8 @@
 {% block title %}{% trans %}Регистрация{% endtrans %}{% endblock %}
 
 {% block body %}
-<script>
+{% if settings.isShowCaptcha %}    
+    <script>
             
             var registerCaptcha;
             
@@ -50,7 +51,8 @@
               });
             };
 
-</script>
+    </script>
+{% endif %}
 <nav class="breadscrumbsBlock">
       <div class="container">
         <div class="row">

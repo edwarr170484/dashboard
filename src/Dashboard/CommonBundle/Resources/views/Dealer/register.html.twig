@@ -174,24 +174,26 @@
                                 {% trans %}<span>*</span> - Este campo es obligatorio{% endtrans %}
                             </div>
                             <div class="formParemetersItem">
-                                <div class="formParameter">
-                                    <div class="formParameterLabel"></div>
-                                    <div class="formParameterField">
-                                        {% if settings.isShowCaptcha %}
-                                            <script>
-                                                var registerCaptcha;
-                                                var onloadCallback = function() {
-                                                registerCaptcha = grecaptcha.render('registerCaptcha', {
-                                                        'sitekey' : '6Lc6wCkTAAAAAHoOUvGPxIsIVZ67R09ZYGhmILND'
-                                                    });
-                                                };
-                                            </script>
-                                            <div class="register-password-block">
-                                                <div class="g-recaptcha" id="registerCaptcha"></div>
-                                            </div>
-                                        {% endif %}
+                                {% if settings.isShowCaptcha %} 
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel"></div>
+                                        <div class="formParameterField">
+                                            {% if settings.isShowCaptcha %}
+                                                <script>
+                                                    var registerCaptcha;
+                                                    var onloadCallback = function() {
+                                                    registerCaptcha = grecaptcha.render('registerCaptcha', {
+                                                            'sitekey' : '6Lc6wCkTAAAAAHoOUvGPxIsIVZ67R09ZYGhmILND'
+                                                        });
+                                                    };
+                                                </script>
+                                                <div class="register-password-block">
+                                                    <div class="g-recaptcha" id="registerCaptcha"></div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
+                                {% endif %}
                                 <div class="formParameter">
                                     <div class="register-form-forms">
                                         <button type="submit">{% trans %}Зарегистрироваться{% endtrans %}</button>

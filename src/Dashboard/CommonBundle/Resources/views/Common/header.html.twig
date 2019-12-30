@@ -13,9 +13,9 @@
                                         {% for item in locales %}
                                             {% if item.id == locale.id %}
                                                 {% if item.isDefault %}
-                                                    <a href="javascript:void(0)" class="locale-change" style="background:url('{{ asset('bundles/Default/img/flags/' ~ item.country)}}') 0 50% no-repeat;-webkit-background-size: 30px auto;background-size: 30px auto;">{{ item.name }} {{ block('arrow') }}</a>
+                                                    <a href="javascript:void(0)" class="locale-change" style="background:url('{{ asset('bundles/Default/img/flags/' ~ item.country)}}') 0 50% no-repeat;-webkit-background-size: 30px auto;background-size: 30px auto;">{{ item.name }} {% if locales | length > 1 %}{{ block('arrow') }}{% endif %}</a>
                                                 {% else %}
-                                                    <a href="javascript:void(0)" class="locale-change" style="background:url('{{ asset('bundles/Default/img/flags/' ~ item.country)}}') 0 50% no-repeat;-webkit-background-size: 30px auto;background-size: 30px auto;">{{ item.name }} {{ block('arrow') }}</a>
+                                                    <a href="javascript:void(0)" class="locale-change" style="background:url('{{ asset('bundles/Default/img/flags/' ~ item.country)}}') 0 50% no-repeat;-webkit-background-size: 30px auto;background-size: 30px auto;">{{ item.name }} {% if locales | length > 1 %}{{ block('arrow') }}{% endif %}</a>
                                                 {% endif %}
                                             {% endif %}
                                         {% endfor %}
@@ -77,9 +77,9 @@
                                             {% for item in locales %}
                                                 {% if item.id == locale.id %}
                                                     {% if item.isDefault %}
-                                                        <a href="javascript:void(0)" class="locale-change" style="background:url('{{ asset('bundles/Default/img/flags/' ~ item.country)}}') 0 50% no-repeat;-webkit-background-size: 30px auto;background-size: 30px auto;">{{ item.name }} {{ block('arrow') }}</a>
+                                                        <a href="javascript:void(0)" class="locale-change" style="background:url('{{ asset('bundles/Default/img/flags/' ~ item.country)}}') 0 50% no-repeat;-webkit-background-size: 30px auto;background-size: 30px auto;">{{ item.name }} {% if locales | length > 1 %}{{ block('arrow') }}{% endif %}</a>
                                                     {% else %}
-                                                        <a href="javascript:void(0)" class="locale-change" style="background:url('{{ asset('bundles/Default/img/flags/' ~ item.country)}}') 0 50% no-repeat;-webkit-background-size: 30px auto;background-size: 30px auto;">{{ item.name }} {{ block('arrow') }}</a>
+                                                        <a href="javascript:void(0)" class="locale-change" style="background:url('{{ asset('bundles/Default/img/flags/' ~ item.country)}}') 0 50% no-repeat;-webkit-background-size: 30px auto;background-size: 30px auto;">{{ item.name }} {% if locales | length > 1 %}{{ block('arrow') }}{% endif %}</a>
                                                     {% endif %}
                                                 {% endif %}
                                             {% endfor %}

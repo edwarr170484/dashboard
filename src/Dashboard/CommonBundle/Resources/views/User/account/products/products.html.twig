@@ -94,13 +94,15 @@
 </div>
 {% if productType == 'current' %}                            
     {% set totalPrice = 0 %}
+    {% set billId = 0 %}
     {% if selectedServices | length > 0 %}
         {% for selectedService in selectedServices %}
             {% set totalPrice = totalPrice + selectedService.price %}
+            {% set billId = selectedService.bill %}
         {% endfor %}
     {% endif %}
     {% if totalPrice > 0 %}
-        <script>$("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">{% trans %}Общая сумма{% endtrans %}:</div><div class="accoutnProductServicesTotalSumma">{{ totalPrice }} {{ locale.currency.label | raw }}</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments">{% trans %}Оплатить{% endtrans %}</a></div></div></div></div></div></div>');</script>
+        <script>$("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">{% trans %}Общая сумма{% endtrans %}:</div><div class="accoutnProductServicesTotalSumma">{{ totalPrice }} {{ locale.currency.label | raw }}</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments/{{ billId }}">{% trans %}Оплатить{% endtrans %}</a></div></div></div></div></div></div>');</script>
     {% endif %}
 {% endif %}
 {% endblock%}

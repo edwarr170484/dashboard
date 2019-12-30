@@ -1,0 +1,54 @@
+<?php
+namespace Dashboard\CommonBundle\Entity;
+
+use Symfony\Component\Security\Core\Role\RoleInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Table()
+ * @ORM\Entity()
+ */
+class DealerSalonRate
+{
+    /**
+     * @ORM\Column(type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\DealerSalon", inversedBy="rates")
+     * @ORM\JoinColumn(name="salon_id", referencedColumnName="id")
+     */
+    private $salon;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Rate")
+     * @ORM\JoinColumn(name="rate_id", referencedColumnName="id")
+     */
+    private $rate;
+    
+    /**
+     * @ORM\Column(type="datetime", nullable=true, options={"default": NULL})
+     */
+    private $dateAdded;
+    
+    /**
+     * @ORM\Column(type="datetime", nullable=true, options={"default": NULL})
+     */
+    private $dateEnd;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
+     */
+    private $isActive;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="rates", cascade={"persist"})
+     */
+    private $bills;
+    
+}
+

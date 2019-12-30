@@ -76,7 +76,7 @@
                     <li>/</li>
                     {% if categoriesBread %}
                         {% for cat in categoriesBread %}
-                            <li><a href="{{ path('category', {'categoryName' : cat.name }) }}">{{ cat.title}}</a></li>
+                            <li><a href="{{ path('category',{'categoryId' : cat.id, 'categoryName' : cat.name}) }}">{{ cat.title}}</a></li>
                             <li>/</li>
                         {% endfor %}
                     {% endif %}

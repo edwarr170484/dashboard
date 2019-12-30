@@ -6,24 +6,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-
-use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\ProductOrder;
-use Dashboard\CommonBundle\Entity\Review;
 use Dashboard\CommonBundle\Entity\Message;
 use Dashboard\CommonBundle\Entity\Conversation;
 use Dashboard\CommonBundle\Entity\Complaint;
 
 use Dashboard\CommonBundle\Form\Type\OrderType;
-use Dashboard\CommonBundle\Form\Type\ReviewType;
 use Dashboard\CommonBundle\Form\Type\ProductMessageType;
 use Dashboard\CommonBundle\Form\Type\ProfileMessageType;
 
@@ -32,9 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Dashboard\CommonBundle\Form\Type\CityType;
-use Dashboard\CommonBundle\Form\Type\RegionFilterType;
 use Dashboard\CommonBundle\Entity\City;
-use Dashboard\CommonBundle\Entity\Product;
+use Dashboard\CommonBundle\Entity\ProductInfo;
 
 class DefaultController extends Controller
 { 
@@ -244,8 +233,13 @@ class DefaultController extends Controller
     }
     
     private function getCategoryProducts($category, &$productsNum){
-        $productsNum += count($category->getProduct());
-        
+        if($category->getProduct()){
+            foreach($category->getProduct() as $product){
+                if($product->getIsActive() && $product->getIsConfirm()){
+                    $productsNum += 1;
+                }
+            }
+        }
         if($category->getChildren()){
             foreach($category->getChildren() as $children){
                 $this->getCategoryProducts($children, $productsNum);
@@ -264,21 +258,20 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Route("/category/{categoryName}/{page}", name="category", defaults={"categoryName":null,"page":1})
+     * @Route("/category/{categoryId}_{categoryName}/{page}", name="category", defaults={"page":1})
      */
-    public function categoryAction($categoryName, $page, Request $request)        
+    public function categoryAction($categoryId, $categoryName, $page, Request $request)        
     {
         $manager = $this->getDoctrine()->getManager();
         $categories = array();
         $products = array();
         $pagination = 0;
-        $premiumCategoryProducts = 0;
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
         $view = ($this->get('session')->get('viewCategory')) ? $this->get('session')->get('viewCategory') : 'list';
         
-        $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Category c WHERE c.name = '" . $categoryName . "' AND c.isActive = 1");
+        $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Category c WHERE c.id = " . $categoryId . " AND c.name = '" . $categoryName . "' AND c.isActive = 1");
         
         try{
             $category = $query->getSingleResult();
@@ -344,28 +337,53 @@ class DefaultController extends Controller
             }
         }
         
-        $sql = "SELECT p,ps FROM DashboardCommonBundle:Product p LEFT JOIN p.service ps " . $joinInstructions . " LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0 AND p.isActive = 1";
+        $productInfo = new ProductInfo();
         
-        if($request->request->get('searchCategory'))
-        {
-            $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->findOneByName($request->request->get('searchCategory'));
-            
-            if($searchCategory)
-            {
-                if($searchCategory->getChildren())
-                {
-                    $sql .= " AND (p.category = " . $searchCategory->getId();
-                    foreach($searchCategory->getChildren() as $child)
-                    {
-                        $sql .= " OR p.category = " . $child->getId();
-                        $sql .= $this->createCategorySql($child); 
-
+        if($productInfo->getVars()){
+            foreach($productInfo->getVars() as $var){
+                if($request->request->get($var)){
+                    foreach($request->request->get($var) as $key => $value){
+                        if($value != 0)
+                            $joinInstructions .= " LEFT JOIN pi." . $var . " pi" . $var;
                     }
-                    $sql .= ")";
                 }
-                else
-                   $sql .= " AND p.category = " . $searchCategory->getId(); 
             }
+        }
+        
+        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.info pi" . $joinInstructions . " LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0 AND p.isActive = 1";
+        
+        if($request->request->get('category'))
+        {
+            $sql .= " AND (";
+            foreach($request->request->get('category') as $key => $categoryId){
+                $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+                
+                if($searchCategory){
+                    if($searchCategory->getChildren()){
+                        if($key == 0){
+                            $sql .= "p.category = " . $searchCategory->getId();
+                            foreach($searchCategory->getChildren() as $child){
+                                $sql .= " OR p.category = " . $child->getId();
+                                $sql .= $this->createCategorySql($child); 
+                            }
+                        }else{
+                            $sql .= " OR p.category = " . $searchCategory->getId();
+                            foreach($searchCategory->getChildren() as $child){
+                                $sql .= " OR p.category = " . $child->getId();
+                                $sql .= $this->createCategorySql($child); 
+                            }
+                        }
+                    }
+                    else{
+                        if($key == 0){
+                            $sql .= "p.category = " . $searchCategory->getId();
+                        }else{
+                            $sql .= " OR p.category = " . $searchCategory->getId();
+                        }
+                    }
+                }
+            }
+            $sql .= ")";
         } 
         else
         {
@@ -390,14 +408,37 @@ class DefaultController extends Controller
             $sql .= " OR p.description LIKE '%" . $request->request->get('searchText') . "%')";
         }
         
-        if($request->request->get('searchWithFoto'))
+        if($request->request->get('searchNew'))
         {
-            $sql .= " AND p.mainfoto IS NOT NULL";
+            $sql .= " AND pi.probeg <= 0";
         }
         
-        if($request->request->get('searchIsBu'))
+        if($request->request->get('searchOld'))
         {
-            $sql .= " AND p.typebu = 1";
+            $sql .= " OR pi.probeg > 0";
+        }
+        
+        if($productInfo->getVars()){
+            foreach($productInfo->getVars() as $var){
+                if($request->request->get($var)){
+                    foreach($request->request->get($var) as $key => $value){
+                        if(is_array($value)){
+                            $sql .= " AND (";
+                            
+                            foreach($value as $key => $val){
+                                if($val != 0){
+                                    if($key == 0){
+                                        $sql .= "pi" . $var . ".id = " . $val;
+                                    }else{
+                                        $sql .= " OR pi" . $var . ".id = " . $val;
+                                    }
+                                }
+                            }
+                            $sql .= ")";
+                        }
+                    }
+                }
+            }
         }
         
         if($request->request->get('filter'))
@@ -543,11 +584,11 @@ class DefaultController extends Controller
                                                 
                             if($valueStart < $valueEnd)
                             {
-                                $sql .= "p.price >='" . $valueStart . "' AND p.price <='" . $valueEnd . "'";
+                                $sql .= "pi.price >='" . $valueStart . "' AND pi.price <='" . $valueEnd . "'";
                             }
                             else
                             {
-                                $sql .= "p.price >='" . $valueStart . "'";
+                                $sql .= "pi.price >='" . $valueStart . "'";
                             }
                             $sql .= ")";
                         }
@@ -558,25 +599,13 @@ class DefaultController extends Controller
         
         if($request->query->get('sortorder') && $request->query->get('order'))
         {
-            /*$sqlPremium = $sql . " AND ps.service = 1 ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');
-        
-            $sqlSelected = $sql . " AND ps.service = 2 ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');
-        
-            $sqlUp = $sql . " AND ps.service = 3 ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');*/
-        
             $sql .= " ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');
         }
         else 
         {
-            /*$sqlPremium = $sql . " AND ps.service = 1 ORDER BY ps.dateAdded DESC";
-        
-            $sqlSelected = $sql . " AND ps.service = 2 ORDER BY ps.dateAdded DESC";
-        
-            $sqlUp = $sql . " AND ps.service = 3 ORDER BY ps.dateAdded DESC";*/
-        
             $sql .= " ORDER BY p.dateAdded DESC";
         }
-                
+        
         $query = $manager->createQuery($sql);
         
         try{
@@ -604,7 +633,7 @@ class DefaultController extends Controller
 
         $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
         
-        $link = '/category/' . $categoryName;
+        $link = '/category/' . $categoryId . '_' . $categoryName;
         
         if($request->query->get('sortorder') && $request->query->get('order'))
         {
@@ -1226,52 +1255,6 @@ class DefaultController extends Controller
     } 
     
     /**
-     * @Route("/getsellerphone/{productId}", name="getsellerphone",defaults={"productId":"0"})
-     */
-    public function getSellerPhoneAction($productId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $sessionUser = $this->get('security.context')->getToken()->getUser();
-        
-        if($this->getUser())
-        {
-            $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId);
-            
-            if($product)
-            {
-                return ($product->getUser()->getUserinfo()->getPhone()) ? new Response($product->getUser()->getUserinfo()->getPhone()) : new Response('XXX-XXX-XXX');
-            }
-            else
-                return new Response("XXX-XXX-XXX");
-        }
-        else
-            return new Response("XXX-XXX-XXX");
-    }
-    
-    /**
-     * @Route("/getuserphone/{userId}", name="getuserphone",defaults={"userId":"0"})
-     */
-    public function getUserPhoneAction($userId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $sessionUser = $this->get('security.context')->getToken()->getUser();
-        
-        if($this->getUser())
-        {
-            $user = $manager->getRepository("DashboardCommonBundle:User")->find($userId);
-            
-            if($user)
-            {
-                return ($user->getUserinfo()->getPhone()) ? new Response($user->getUserinfo()->getPhone()) : new Response('XXX-XXX-XXX');
-            }
-            else
-                return new Response("XXX-XXX-XXX");
-        }
-        else
-            return new Response("XXX-XXX-XXX");
-    }
-    
-    /**
      * @Route("/pages/{route}", name="pages")
      * @Route("/{_locale}/pages/{route}", name="pagesLocale", defaults={"_locale" : "es"}, requirements={"_locale" : "es|ru"})
      */
@@ -1313,98 +1296,4 @@ class DefaultController extends Controller
         return $this->render('DashboardCommonBundle:Common:notfound.html.twig', array("page" => $page));
     } 
     
-    /**
-     * @Route("/search", name="search")
-     */
-    public function searchAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        $view = ($this->get('session')->get('viewCategory')) ? $this->get('session')->get('viewCategory') : 'table';
-        
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Page p WHERE p.locale=" . $locale->getId() . " AND p.isUserpage = 0 AND p.route = 'search'" );
-
-        try{
-            $page = $query->getSingleResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $page = 0;
-        }
-        
-        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder');
-        
-        try{
-            $categories = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $categories = 0;
-        }
-        
-        $searchText = '';
-        
-        if($this->get('session')->get('sessionCity')){
-            $city = $manager->getRepository("DashboardCommonBundle:City")->find($this->get('session')->get('sessionCity'));
-            $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu LEFT JOIN p.info pi WHERE p.city = " . $city->getId() . " AND pu.isActive = 1 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0 AND p.isBlocked = 0";
-        }
-        else{
-            $city = 0;
-            $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu LEFT JOIN p.info pi WHERE pu.isActive = 1 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0 AND p.isBlocked = 0";
-        }
-
-        if($request->request->get('searchText'))
-        {
-            $sql .= " AND (p.name LIKE '%" . $request->request->get('searchText') . "%'";
-            $sql .= " OR pi.description LIKE '%" . $request->request->get('searchText') . "%')";
-        } 
-        
-        $query = $manager->createQuery($sql);
-        
-        try{
-            $products = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $products = 0;
-        }
-        
-        return $this->render('DashboardCommonBundle:Default:Search/search.html.twig', array('searchText' => $searchText,
-                                                                                     'products' => $products,
-                                                                                     'categories' => $categories,
-                                                                                     'pagination' => 0,
-                                                                                     'locale' => $locale,
-                                                                                     'settings' => $settings,
-                                                                                     'page' => $page,
-                                                                                     'view' => $view));
-    }
-    
-    /**
-     * @Route("/search/ajax", name="searchAjax")
-     */
-    public function searchAjaxAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-
-        if($request->request->get('searchText'))
-        {
-            $sql = "SELECT p,pi FROM DashboardCommonBundle:Product p LEFT JOIN p.user pu LEFT JOIN p.info pi WHERE pu.isActive = 1 AND p.isBlocked = 0 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isDraft = 0";
-            
-            $sql .= " AND (p.name LIKE '%" . $request->request->get('searchText') . "%'";
-            $sql .= " OR pi.description LIKE '%" . $request->request->get('searchText') . "%')";
-            
-            $query = $manager->createQuery($sql)->setMaxResults(8);
-        
-            try{
-                $products = $query->getResult();
-            }
-            catch(\Doctrine\ORM\NoResultException $e) {
-                $products = 0;
-            }
-        }else{
-            $products = 0;
-        }
-        
-        return new \Symfony\Component\HttpFoundation\JsonResponse(array("count" => ($products) ? count($products) : 0, "view" => $this->renderView('DashboardCommonBundle:Default:Search/searchAjax.html.twig', array('products' => $products,'locale' => $locale))));
-    }
 }

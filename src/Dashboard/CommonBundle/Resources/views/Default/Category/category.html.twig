@@ -33,7 +33,7 @@
                         {% set i = 0 %}
                         {% for cat in categories %}
                             <li>
-                                 <a href="{{ path('category', {'categoryName' : cat.name }) }}">
+                                 <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
                                     {{ cat.title}}
                                 </a>
                             </li>
@@ -54,27 +54,28 @@
 			<div class="content-block-header">
                             <h1>{{ category.title }}</h1>
                         </div>
-                        <div class="mainPageFiltersTabs category-filters">
-                            <div class="tab-content">
-                                {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount} %}
+                        {% if products | length > 0 %}
+                            <div class="mainPageFiltersTabs category-filters">
+                                <div class="tab-content">
+                                    {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount} %}
+                                </div>
+                            </div>                              
+                            <div class="hidden-sm hidden-xs" style="text-align:center;">
+                                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
                             </div>
-                        </div>                              
-                        <div class="hidden-sm hidden-xs" style="text-align:center;">
-                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
-			</div>
-                        <div class="categorySorts">
+                            <div class="categorySorts">
                                     <div class="categorySortFields">
                                         <div class="categorySortParams static-filters">
                                             <select name="" id="" class="custom-select" placeholder="{% trans %}По дате{% endtrans %}">
-                                                <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=dateAdded&order=ASC">{% trans %}Сначала старые{% endtrans %}</option>
-                                                <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=dateAdded&order=DESC">{% trans %}Сначала новые{% endtrans %}</option>
+                                                <option value="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}?sortorder=dateAdded&order=ASC">{% trans %}Сначала старые{% endtrans %}</option>
+                                                <option value="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}?sortorder=dateAdded&order=DESC">{% trans %}Сначала новые{% endtrans %}</option>
                                             </select>
                                             <select name="" id="" class="custom-select" placeholder="{% trans %}По цене{% endtrans %}">
-                                                <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=price&order=ASC">{% trans %}Сначала дешевые{% endtrans %}</option>
-                                                <option value="{{ path('category',{'categoryName' : category.name}) }}?sortorder=price&order=DESC">{% trans %}Сначала дорогие{% endtrans %}</option>
+                                                <option value="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}?sortorder=pi.price&order=ASC">{% trans %}Сначала дешевые{% endtrans %}</option>
+                                                <option value="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}?sortorder=pi.price&order=DESC">{% trans %}Сначала дорогие{% endtrans %}</option>
                                             </select>
                                             <div class="filter">
-                                                <input name="searchWithFoto" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}В кредит{% endtrans %}
+                                                <input name="creditProducts" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}В кредит{% endtrans %}
                                             </div>
                                         </div>
                                         <div class="categoryViewButtons">
@@ -114,8 +115,8 @@
                                             {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : 'premium'} %}
                                         {% endfor %}
                                     {% endif %}
-                                </div>
-                                {% if specialProducts | length > 0 %}
+                            </div>
+                            {% if specialProducts | length > 0 %}
                                     <div class="categorySpecialAdverts">
                                         <div class="categorySpecialAdvertsHeader">
                                             <h3>{% trans %}Спецпредложения{% endtrans %}</h3>
@@ -149,8 +150,8 @@
                                             {% endfor %}
                                         </div>
                                     </div>
-                                {% endif %}
-                                <div class="categoryAdverts {{ view }}">
+                            {% endif %}
+                            <div class="categoryAdverts {{ view }}">
                                     {% if upProducts | length > 0 %}
                                         {% for product in upProducts %}
                                             {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
@@ -161,15 +162,18 @@
                                             {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
                                         {% endfor %}
                                     {% endif %}
-                                </div>
-                                {% if pagination and products | length > 0 %}
+                            </div> 
+                            {% if pagination and products | length > 0 %}
                                     <div class="row">
                                         <div class="col-lg-12 padination">
                                             {{ pagination | raw }}
                                         </div>
                                     </div>
-                                {% endif %}
-                                {% if dealerProducts | length > 0 %}
+                            {% endif %}
+                        {% else %}
+                            <div class="accountNocontent">{% trans %}Объявлений не найдено{% endtrans %}</div>
+                        {% endif %}
+                        {% if dealerProducts | length > 0 %}
                                     <div class="categorySpecialAdverts new">
                                         <div class="categorySpecialAdvertsHeader">
                                             <h3>{% trans %}Новые автомобили от дилеров{% endtrans %}</h3>
@@ -212,9 +216,9 @@
                                 <div class="categoryDescription">
                                     {{ category.description | raw}}
                                 </div>
-                                <div class="hidden-sm hidden-xs" style="text-align:center;padding-bottom: 5.8rem;">
-                                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
-                                </div>
+                    <div class="hidden-sm hidden-xs" style="text-align:center;padding-bottom: 5.8rem;">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
+                    </div>
 		</div>
 		<div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
                     <div class="advertise-block">

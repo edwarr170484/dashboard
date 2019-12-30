@@ -41,7 +41,7 @@
                 {% else %}
                     {% if product.service | length > 0 %}
                         {% for service in product.service %}
-                            {% if not service.service.isButton %}
+                            {% if not service.service.isButton and service.isActive %}
                                 <div class="accountAdvertFunction">
                                     <div class="button">
                                         {{ service.service.iconGray | raw }}
@@ -52,7 +52,7 @@
                         {% endfor %}
                         {% if product.isActive and product.isConfirm %}
                             {% for service in product.service %}
-                                {% if service.service.isButton %}
+                                {% if service.service.isButton and service.isActive %}
                                     <div class="accountAdvertFunction">
                                         <button>
                                             {{ service.service.iconGray | raw }}

@@ -60,6 +60,11 @@ class Bill
     private $services;
     
     /**
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerSalonRate", inversedBy="bills", cascade={"persist"})
+     */
+    private $rates;
+    
+    /**
      * @ORM\Column(type="boolean", nullable=true, options={"default":0})
      */
     private $isPayed;
@@ -308,5 +313,38 @@ class Bill
     public function getServices()
     {
         return $this->services;
+    }
+
+    /**
+     * Add rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalonRate $rates
+     * @return Bill
+     */
+    public function addRate(\Dashboard\CommonBundle\Entity\DealerSalonRate $rates)
+    {
+        $this->rates[] = $rates;
+    
+        return $this;
+    }
+
+    /**
+     * Remove rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalonRate $rates
+     */
+    public function removeRate(\Dashboard\CommonBundle\Entity\DealerSalonRate $rates)
+    {
+        $this->rates->removeElement($rates);
+    }
+
+    /**
+     * Get rates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRates()
+    {
+        return $this->rates;
     }
 }

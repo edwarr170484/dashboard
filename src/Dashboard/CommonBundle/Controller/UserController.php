@@ -111,33 +111,32 @@ class UserController extends Controller
                     $this->get('translator')->trans('<strong>Kļūda!</strong> E-pasts %message% jau ir reģistrēts sistēmā. Ja aizmirsāt savu paroli, varat to <a href="/restore">atjaunot</a>.',array("%message%" => $registerForm['email']->getData())) . '</div>'
                 );
                 
-                if($locale->getIsDefault())
-                {
-                     return $this->redirectToRoute("register");
-                }
-                else
-                {
-                     return $this->redirectToRoute("registerLocale", array("_locale" => $locale->getCode()));
-                }
+                return $this->redirectToRoute("register");
             }
             
             $mailPassword = $user->getPassword();
             $role = $this->getDoctrine()->getRepository("DashboardCommonBundle:Role")->findOneByRole("ROLE_INDIVIDUAL");
             $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
             
-            $user->getUserinfo()->setUser($user);
+            $userinfo = new UserInfo();
+            $userinfo->setUser($user);
+            
+            $user->setUserinfo($userinfo);
             $user->setUsername($user->getEmail()); 
             $user->setIsActive(1);
+            
             if($settings->getIsModerate()){
                 $user->setIsConfirm(0);
             }else{
                 $user->setIsConfirm(1);
             }
+            
             $user->addRole($role);
             $role->addUser($user);
             $user->setAdvertNumber(0);
             $user->setPassword($password);
             
+            $manager->persist($userinfo);
             $manager->persist($user);
             $manager->persist($role);
             $manager->flush();

@@ -80,8 +80,8 @@
                                         </div>
                                         <div class="infoPaneCheckbox">
                                             <div class="blackCheckbox">
-                                                <div class="blackCheckboxInput">
-                                                    <input type="checkbox" />
+                                                <div class="blackCheckboxInput checked">
+                                                    <input type="checkbox" name="searchInNames" checked="checked" value="1" />
                                                 </div>
                                                 {% trans %}Искать в названиях{% endtrans %}
                                             </div>
@@ -158,54 +158,30 @@
                                 {% if settings.mainPageDefaultCategory.children | length > settings.categoryPanelItemsNumber %}
                                     <ul class="list-unstyled list-inline shortCategoryList">
                                         {% for child in settings.mainPageDefaultCategory.children | slice(0, settings.categoryPanelItemsNumber )%}
-                                            {% set categoryTitle = '' %}
-                                            {% if child.translations | length > 0 %}
-                                                {% for translation in child.translations %}
-                                                    {% if translation.locale.id == locale.id %}
-                                                        {% set categoryTitle =  translation.value %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% else %}        
-                                                {% set categoryTitle = child.title %}
+                                            {% if child.isActive %}
+                                                <li>
+                                                    <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title }}</a>
+                                                </li>
                                             {% endif %}
-                                            <li>
-                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : child.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : child.name,'_locale' : locale.code}) }}{% endif %}">{{ categoryTitle }}</a>
-                                            </li>
                                         {% endfor %}
                                     </ul>
                                     <ul class="list-unstyled list-inline fullCategoryList">
                                         {% for child in settings.mainPageDefaultCategory.children %}
-                                            {% set categoryTitle = '' %}
-                                            {% if child.translations | length > 0 %}
-                                                {% for translation in child.translations %}
-                                                    {% if translation.locale.id == locale.id %}
-                                                        {% set categoryTitle =  translation.value %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% else %}        
-                                                {% set categoryTitle =  child.title %}
+                                            {% if child.isActive %}
+                                                <li>
+                                                    <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title }}</a>
+                                                </li>
                                             {% endif %}
-                                            <li>
-                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : child.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : child.name,'_locale' : locale.code}) }}{% endif %}">{{ categoryTitle }}</a>
-                                            </li>
                                         {% endfor %}
                                     </ul>
                                 {% else %}
                                     <ul class="list-unstyled list-inline">
                                         {% for child in settings.mainPageDefaultCategory.children %}
-                                            {% set categoryTitle = '' %}
-                                            {% if child.translations | length > 0 %}
-                                                {% for translation in child.translations %}
-                                                    {% if translation.locale.id == locale.id %}
-                                                        {% set categoryTitle =  translation.value %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% else %}        
-                                                {% set categoryTitle =  child.title %}
+                                            {% if child.isActive %}
+                                                <li>
+                                                    <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title }}</a>
+                                                </li>
                                             {% endif %}
-                                            <li>
-                                                <a href="{% if locale.isDefault %}{{ path('category',{'categoryName' : child.name}) }}{% else %}{{ path('categoryLocale',{'categoryName' : child.name,'_locale' : locale.code}) }}{% endif %}">{{ categoryTitle }}</a>
-                                            </li>
                                         {% endfor %}
                                     </ul>
                                 {% endif %}

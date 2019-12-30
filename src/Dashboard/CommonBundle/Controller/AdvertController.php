@@ -2130,15 +2130,17 @@ class AdvertController extends Controller
                             $product = $manager->getRepository("DashboardCommonBundle:Product")->find($selectedService->getProduct());
                             
                             if($service && $product){
-                                $productServiceIs = 0;
-                                if(count($bill->getServices()) > 0){
-                                    foreach($bill->getServices() as $billService){
-                                        if(($billService->getService()->getId() == $service->getId()) && ($billService->getProduct()->getId() == $product->getId())){
-                                            $productServiceIs = 1;
+                                $productService = $manager->getRepository("DashboardCommonBundle:ProductService")->findOneBy(array("product" => $product, "service" => $service));
+                                
+                                if($productService){
+                                    if($bill->getServices()){
+                                        if(false === $bill->getServices()->contains($productService)){
+                                            $bill->addService($productService);
                                         }
+                                    }else{
+                                        $bill->addService($productService);
                                     }
-                                }
-                                if(!$productServiceIs){
+                                }else{
                                     $productService = new ProductService();
                                     $productService->setService($service);
                                     $productService->setProduct($product);

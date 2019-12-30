@@ -355,7 +355,6 @@ function addAutoserviceRate(salonId, rateId, ratePrice, element, titleText, butt
     $("body").find('.accountBottomPaymentSumm').remove();
     var serviceAction = '';
     var data = salonId + ";" + rateId + ";" + ratePrice;
-    var totalPrice = 0;
     
     if(element.hasClass("active")){
         serviceAction = 'removerate'; 
@@ -366,14 +365,14 @@ function addAutoserviceRate(salonId, rateId, ratePrice, element, titleText, butt
     $.ajax({
             url: '/account/dealer/ajax/' + serviceAction + '/' + data,
             type:'get',
-            dataType: 'html',
+            dataType: 'json',
             beforeSend: function(){},
             success: function(data)
             {
                 element.toggleClass("active");
-                totalPrice = data;
-                if(totalPrice > 0){
-                    $("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">' + titleText + ':</div><div class="accoutnProductServicesTotalSumma">' + totalPrice + ' &euro;</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments">' + buttonText + '</a></div></div></div></div></div></div>');
+
+                if(data.totalPrice > 0){
+                    $("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">' + titleText + ':</div><div class="accoutnProductServicesTotalSumma">' + data.totalPrice + ' &euro;</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments/' + data.billId + '">' + buttonText + '</a></div></div></div></div></div></div>');
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {
@@ -382,6 +381,7 @@ function addAutoserviceRate(salonId, rateId, ratePrice, element, titleText, butt
             }
         });
 }
+
 function toggleSearchModal(){
     if($("#desktopSearchModal").hasClass("active")){
         $('html, body').css({overflow: 'auto',height: 'auto'});

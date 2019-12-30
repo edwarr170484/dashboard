@@ -457,8 +457,16 @@
                                                     {% if user.roles[0].rates | length > 0 %}
                                                         <div class="accountAdvertServiceButtons rateButtons">
                                                             {% for rate in user.roles[0].rates %}
+                                                                {% set buttonClass = '' %}
+                                                                {% if selectedSalons | length > 0 %}
+                                                                    {% for selectedSalon in selectedSalons %}
+                                                                        {% if selectedSalon.salon == salon.id and selectedSalon.rate == rate.id %}
+                                                                            {% set buttonClass = 'active' %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %}
                                                                 <div class="accountAdvertServiceButton rateButton">
-                                                                    <button onclick="addAutoserviceRate({{ salon.id }}, {{ rate.id }}, {{ rate.price }}, $(this),'{% trans %}Общая сумма{% endtrans %}','{% trans %}Оплатить{% endtrans %}')">
+                                                                    <button onclick="addAutoserviceRate({{ salon.id }}, {{ rate.id }}, {{ rate.price }}, $(this),'{% trans %}Общая сумма{% endtrans %}','{% trans %}Оплатить{% endtrans %}')" class="{{ buttonClass }}">
                                                                         <div class="rateActiveTime">{{ rate.activeTime }}</div>
                                                                         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                             <circle cx="15" cy="15" r="14.5" fill="#F5AA01" stroke="#222B2A"/>
@@ -1011,4 +1019,15 @@
             });
         $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
     </script>
+    {% set totalPrice = 0 %}
+    {% set billId = 0 %}
+    {% if selectedSalons | length > 0 %}
+        {% for selectedSalon in selectedSalons %}
+            {% set totalPrice = totalPrice + selectedSalon.price %}
+            {% set billId = selectedSalon.bill %}
+        {% endfor %}
+    {% endif %}
+    {% if totalPrice > 0 %}
+        <script>$("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">{% trans %}Общая сумма{% endtrans %}:</div><div class="accoutnProductServicesTotalSumma">{{ totalPrice }} {{ locale.currency.label | raw }}</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments/{{ billId }}">{% trans %}Оплатить{% endtrans %}</a></div></div></div></div></div></div>');</script>
+    {% endif %}
 {% endblock%}

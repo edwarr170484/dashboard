@@ -88,6 +88,11 @@ class DealerSalon
     private $complaints;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerSalonRate", mappedBy="salon")
+     */
+    private $rates;
+    
+    /**
      * Constructor
      */
     public function __construct()

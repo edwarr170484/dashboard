@@ -27,12 +27,16 @@ use Dashboard\CommonBundle\Entity\DealerFoto;
 use Dashboard\CommonBundle\Entity\DealerSalon;
 use Dashboard\CommonBundle\Entity\Conversation;
 use Dashboard\CommonBundle\Entity\Review;
+use Dashboard\CommonBundle\Entity\DealerSalonRate;
+use Dashboard\CommonBundle\Entity\Bill;
 
 use Dashboard\CommonBundle\Form\Type\UserType;
 use Dashboard\CommonBundle\Form\Type\UserPasswordType;
 use Dashboard\CommonBundle\Form\Type\ReviewType;
 use Dashboard\CommonBundle\Form\Type\DealerEditType;
 use Dashboard\CommonBundle\Form\Type\DealerSalonType;
+
+use Dashboard\CommonBundle\Model\SelectedSalon;
 
 class AccountController extends Controller
 {
@@ -134,7 +138,14 @@ class AccountController extends Controller
 
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-
+        
+        $session = new Session();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+        
+        $selectedServices = ($session->get('selectedServices')) ? $serializer->deserialize($session->get('selectedServices'), 'Dashboard\CommonBundle\Model\SelectedService[]', 'json') : array();
+        
         //current products
         $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Product p WHERE p.user = ' . $user->getId() . ' ORDER BY p.isActive DESC')->setMaxResults(4);
 
@@ -169,7 +180,8 @@ class AccountController extends Controller
                                                                                    "favProducts" => $favProducts,
                                                                                    "locale" => $locale,
                                                                                    "routeName" => $request->attributes->get("_route"),
-                                                                                   "settings" => $settings));
+                                                                                   "settings" => $settings,
+                                                                                   "selectedServices" => $selectedServices));
     }
 
     /**
@@ -1428,6 +1440,13 @@ class AccountController extends Controller
                 }
             }
         }
+        
+        $session = new Session();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
+        $serializer = new Serializer($normalizers, $encoders);
+                    
+        $selectedSalons = ($session->get('selectedSalons')) ? $serializer->deserialize($session->get('selectedSalons'), 'Dashboard\CommonBundle\Model\SelectedSalon[]', 'json') : array();
 
         $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
         $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale), $user->getDealerInfo());
@@ -1703,6 +1722,7 @@ class AccountController extends Controller
                                                                                     "user" => $user,
                                                                                     "settings" => $settings,
                                                                                     "locale" => $locale,
+                                                                                    "selectedSalons" => $selectedSalons,
                                                                                     "dealerImages" => $user->getDealerInfo()->getFotos(),
                                                                                     "routeName" => $request->attributes->get("_route")));
     }
@@ -2039,9 +2059,9 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/account/dealer/ajax/{action}/{objectId}", name="dealerActions")
+     * @Route("/account/dealer/ajax/{action}/{object}", name="dealerActions")
      */
-    public function dealerActionsAction($action, $objectId, Request $request)
+    public function dealerActionsAction($action, $object, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
@@ -2050,10 +2070,160 @@ class AccountController extends Controller
 
         switch($action){
             case 'addrate':
-                    $data = explode(";", $objectId);
-
-                    return new Response($data[2]);
-
+                $session = new Session();
+                $data = explode(";", $object);
+                
+                $encoders = [new JsonEncoder()];
+                $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
+                $serializer = new Serializer($normalizers, $encoders);
+                    
+                $selectedSalons = ($session->get('selectedSalons')) ? $serializer->deserialize($session->get('selectedSalons'), 'Dashboard\CommonBundle\Model\SelectedSalon[]', 'json') : array();
+                
+                $billId = 0;
+                    
+                if(count($selectedSalons) > 0){
+                    foreach($selectedSalons as $selectedSalon){
+                        $billId = $selectedSalon->getBill();
+                    }
+                }
+                    
+                $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
+                    
+                if(!$bill){
+                    $bill = new Bill();
+                    $bill->setUser($user);
+                    $bill->setDateAdded(new \DateTime("now"));
+                    $bill->setIsPayed(0);
+                    $manager->persist($bill);
+                    $manager->flush();
+                }
+                
+                $newSalon = new SelectedSalon();
+                $newSalon->setSalon($data[0]);
+                $newSalon->setRate($data[1]);
+                $newSalon->setPrice($data[2]);
+                $newSalon->setBill($bill->getId());
+                    
+                array_push($selectedSalons, $newSalon);
+                                        
+                $servicesData = $serializer->serialize($selectedSalons, 'json');
+                $session->set('selectedSalons', $servicesData);
+                
+                $totalPrice = 0;
+                    
+                foreach($selectedSalons as $selectedSalon){
+                    $totalPrice += $selectedSalon->getPrice();
+                }
+                
+                if(count($selectedSalons) > 0){
+                    foreach($selectedSalons as $selectedSalon){
+                        $salon = $manager->getRepository("DashboardCommonBundle:DealerSalon")->find($selectedSalon->getSalon());
+                        $rate = $manager->getRepository("DashboardCommonBundle:Rate")->find($selectedSalon->getRate());
+                        
+                        if($salon && $rate){
+                            $salonRate = $manager->getRepository("DashboardCommonBundle:DealerSalonRate")->findOneBy(array("salon" => $salon, "rate" => $rate));
+                                
+                            if($salonRate){
+                                if($bill->getRates()){
+                                    if(false === $bill->getRates()->contains($salonRate)){
+                                        $bill->addRate($salonRate);
+                                    }
+                                }else{
+                                    $bill->addRate($salonRate);
+                                }
+                            }else{
+                                $salonRate = new DealerSalonRate();
+                                $salonRate->setSalon($salon);
+                                $salonRate->setRate($rate);
+                                $salonRate->setIsActive(0);
+                                    
+                                $bill->addRate($salonRate);
+                            }
+                        }
+                    }
+                    
+                    $bill->setPrice($totalPrice);
+                    $manager->persist($bill);
+                    $manager->flush();
+                }
+                
+                 return new \Symfony\Component\HttpFoundation\JsonResponse(array("totalPrice" => $totalPrice, "billId" => $bill->getId()));
+                 
+            break;
+        
+            case 'removerate':
+                $session = new Session();
+                $data = explode(";", $object);
+                   
+                $encoders = [new JsonEncoder()];
+                $normalizers = [new ObjectNormalizer(), new GetSetMethodNormalizer(), new ArrayDenormalizer()];
+                $serializer = new Serializer($normalizers, $encoders);
+                    
+                $selectedSalons = ($session->get('selectedSalons')) ? $serializer->deserialize($session->get('selectedSalons'), 'Dashboard\CommonBundle\Model\SelectedSalon[]', 'json') : array();
+                $billId = 0;
+                    
+                if(count($selectedSalons) > 0){
+                    foreach($selectedSalons as $selectedSalon){
+                        $billId = $selectedSalon->getBill();
+                    }
+                }
+                
+                $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
+                
+                $tmpSelectedSalons = new ArrayCollection();
+                foreach($selectedSalons as $selectedSalon){
+                    if($selectedSalon->getSalon() == $data[0] && $selectedSalon->getRate() == $data[1]){
+                        $salon = $manager->getRepository("DashboardCommonBundle:DealerSalon")->find($selectedSalon->getSalon());
+                        $rate = $manager->getRepository("DashboardCommonBundle:Rate")->find($selectedSalon->getRate());
+                        
+                        if($salon && $rate){
+                            $rateIs = 0;
+                            if(count($bill->getRates()) > 0){
+                                foreach($bill->getRates() as $billRate){
+                                    if(($billRate->getSalon()->getId() == $salon->getId()) && ($billRate->getRate()->getId() == $rate->getId())){
+                                        $rateIs = 1;
+                                    }
+                                }
+                                    
+                                if($rateIs){
+                                    $bill->removeRate($billRate);
+                                }
+                            }
+                        }
+                        $manager->flush();
+                        
+                    }else{
+                        $tmpSelectedSalons->add($selectedSalon); 
+                    }
+                }
+                
+                $totalPrice = 0;
+                    
+                if(count($tmpSelectedSalons) > 0){
+                    $servicesData = $serializer->serialize($tmpSelectedSalons->toArray(), 'json');
+                    $session->set('selectedSalons', $servicesData);
+                        
+                    foreach($tmpSelectedSalons as $tmpSelectedSalon){
+                        $totalPrice += $tmpSelectedSalon->getPrice();
+                    }
+                        
+                }else{
+                    $session->remove('selectedSalons');
+                    if($bill->getRates()){
+                        $temp = $bill->getRates();
+                        foreach($temp as $rate){
+                            $bill->removeRate($rate);
+                        }
+                    }
+                        
+                    $manager->remove($bill);
+                    $manager->flush();
+                        
+                    return new \Symfony\Component\HttpFoundation\JsonResponse(array("totalPrice" => 0, "billId" => 0));
+                }
+                                        
+                return new \Symfony\Component\HttpFoundation\JsonResponse(array("totalPrice" => $totalPrice, "billId" => $bill->getId()));
+                    
             break;
         }
     }

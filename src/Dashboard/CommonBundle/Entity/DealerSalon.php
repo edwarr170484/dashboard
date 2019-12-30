@@ -88,6 +88,11 @@ class DealerSalon
     private $complaints;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\DealerSalonRate", mappedBy="salon")
+     */
+    private $rates;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -466,5 +471,38 @@ class DealerSalon
     public function getComplaints()
     {
         return $this->complaints;
+    }
+
+    /**
+     * Add rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalonRate $rates
+     * @return DealerSalon
+     */
+    public function addRate(\Dashboard\CommonBundle\Entity\DealerSalonRate $rates)
+    {
+        $this->rates[] = $rates;
+    
+        return $this;
+    }
+
+    /**
+     * Remove rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\DealerSalonRate $rates
+     */
+    public function removeRate(\Dashboard\CommonBundle\Entity\DealerSalonRate $rates)
+    {
+        $this->rates->removeElement($rates);
+    }
+
+    /**
+     * Get rates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRates()
+    {
+        return $this->rates;
     }
 }

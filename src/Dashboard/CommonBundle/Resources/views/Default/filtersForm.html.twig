@@ -20,7 +20,7 @@
             {% for category in categories %}
                 {% if category.allProductsNumber > 0 %}
                     <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="categoryFilters{{ category.id }}">
-                        <form action="{{ path('main') }}" method="POST">
+                        <form action="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}" method="POST">
                         <input name="category" type="hidden" value="{{ category.id }}" />
                         <div class="row">
                             <div class="col-lg-6 col-md-6 static-filters hidden-sm hidden-xs">
@@ -36,9 +36,9 @@
                                     {% if category.filters %}
                                         {% for filter in category.filters %}
                                             {% if filter.isSearch %}
-                                                {% if filter.type == 'select' %}
+                                                {% if filter.type == 'select' or filter.type == 'checkbox' or filter.type == 'radio' %}
                                                     <div class="col-lg-3 col-md-3">
-                                                        <select name="filter[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
+                                                        <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
                                                             {% for value in filter.values %}
                                                                 <option value="{{ value.id }}">{{ value.value }}</option>
                                                             {% endfor %}
@@ -47,7 +47,7 @@
                                                 {% endif %}
                                                 {% if filter.type == 'color' %}
                                                     <div class="col-lg-3 col-md-3">
-                                                        <select name="filter[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
+                                                        <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
                                                             {% for value in filter.values %}
                                                                 <option value="{{ value.id }}">{{ value.value }}</option>
                                                             {% endfor %}

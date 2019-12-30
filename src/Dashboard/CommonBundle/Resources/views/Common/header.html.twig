@@ -158,21 +158,21 @@
                         {% for category in categories %}
                             {% if category.id == 27 %}
                                 <li class="submenu">
-                                    <a href="{{ path('category',{'categoryName' : category.name}) }}">
+                                    <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
                                         {{ category.title}}
                                         <div class="shadowBlock"></div>
                                     </a>
                                     <div class="hover-border"></div>
                                     <div class="siteMainSubmenu">
                                         <ul class="list-unstyled">
-                                            <li><a href="">{% trans %}С&nbsp;пробегом{% endtrans %}</a></li>
-                                            <li><a href="">{% trans %}Новые{% endtrans %}</a></li>
+                                            <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'old'}) }}">{% trans %}С&nbsp;пробегом{% endtrans %}</a></li>
+                                            <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'new'}) }}">{% trans %}Новые{% endtrans %}</a></li>
                                         </ul>
                                     </div>
                                 </li>
                             {% else %}
                                 <li class="{% if category.children | length > 0 %}submenu{% endif %}">
-                                    <a href="{{ path('category',{'categoryName' : category.name}) }}">
+                                    <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
                                         {{ category.title}}
                                         <div class="shadowBlock"></div>
                                     </a>
@@ -188,7 +188,7 @@
                                                     <ul class="list-unstyled">
                                                         {% for i in start..end %}
                                                             <li>
-                                                                <a href="{{ path('category',{'categoryName' : category.children[i].name}) }}">
+                                                                <a href="{{ path('category',{'categoryId' : category.children[i].id, 'categoryName' : category.children[i].name}) }}">
                                                                     {{ category.children[i].title}}
                                                                 </a>
                                                             </li>
@@ -201,7 +201,7 @@
                                                 <ul class="list-unstyled">
                                                     {% for child in category.children %}
                                                         <li>
-                                                            <a href="{{ path('category',{'categoryName' : child.name}) }}">{{ child.title}}</a>
+                                                            <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title}}</a>
                                                         </li>
                                                     {% endfor %}
                                                 </ul>
@@ -225,8 +225,10 @@
                 </ul>
             </div>
             <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
-                {% if app.user and app.user.roles[0].role != "ROLE_SERVICE" %}
-                    <a href="{{path('addAdvert')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
+                {% if app.user %}
+                    {% if app.user.roles[0].role != "ROLE_SERVICE" %}
+                        <a href="{{path('addAdvert')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
+                    {% endif %}
                 {% else %}
                     <a href="{{path('login')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
                 {% endif %}
@@ -244,24 +246,24 @@
                                     {% if category.id == 27 %}
                                         <div class="siteMenuGamburgerItem">
                                             <div class="siteMenuGamburgerHeader">
-                                                <a href="{{ path('category',{'categoryName' : category.name}) }}">{{ category.title}}</a>
+                                                <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
                                             </div>
                                             <ul class="list-unstyled">
-                                                <li><a href="">{% trans %}С пробегом{% endtrans %}</a></li>
-                                                <li><a href="">{% trans %}Новые{% endtrans %}</a></li>
-                                                <li><a href="">{% trans %}Дилеры{% endtrans %}</a></li>
+                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'old'}) }}">{% trans %}С пробегом{% endtrans %}</a></li>
+                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'new'}) }}">{% trans %}Новые{% endtrans %}</a></li>
+                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'dealer'}) }}">{% trans %}Дилеры{% endtrans %}</a></li>
                                             </ul>
                                         </div>
                                     {% else %}
                                         <div class="siteMenuGamburgerItem">
                                             <div class="siteMenuGamburgerHeader">
-                                                <a href="{{ path('category',{'categoryName' : category.name}) }}">{{ category.title}}</a>
+                                                <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
                                             </div>
                                             {% if category.children | length > 0 %}
                                                 <ul class="list-unstyled">
                                                     {% for child in category.children %}
                                                         <li>
-                                                            <a href="{{ path('category',{'categoryName' : child.name}) }}">{{ child.title}}</a>
+                                                            <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title}}</a>
                                                         </li>
                                                     {% endfor %}
                                                 </ul>
@@ -288,8 +290,10 @@
         {% endfor %}
     </div>
     <div class="addAdvertButtonMobile hidden-lg hidden-md">
-        {% if app.user and app.user.roles[0] != "ROLE_SERVICE" %}
-            <a href="{{path('addAdvert')}}">{{ block('svgAddAdvertMobile') }}</a>
+        {% if app.user %}
+            {% if app.user.roles[0] != "ROLE_SERVICE" %}
+                <a href="{{path('addAdvert')}}">{{ block('svgAddAdvertMobile') }}</a>
+            {% endif %}
         {% else %}
             <a href="{{path('login')}}">{{ block('svgAddAdvertMobile') }}</a>
         {% endif %}

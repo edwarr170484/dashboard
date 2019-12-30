@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity()
  */
-class ProductService
+class DealerSalonRate
 {
     /**
      * @ORM\Column(type="integer")
@@ -17,18 +17,18 @@ class ProductService
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\DealerSalon", inversedBy="rates")
+     * @ORM\JoinColumn(name="salon_id", referencedColumnName="id")
+     */
+    private $salon;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Product", inversedBy="service")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Rate")
+     * @ORM\JoinColumn(name="rate_id", referencedColumnName="id")
      */
-    private $product;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Service")
-     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
-     */
-    private $service;
+    private $rate;
     
     /**
      * @ORM\Column(type="datetime", nullable=true, options={"default": NULL})
@@ -41,20 +41,15 @@ class ProductService
     private $dateEnd;
     
     /**
-     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
-     */
-    private $count;
-    
-    /**
      * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
     private $isActive;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="services", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="rates", cascade={"persist"})
      */
     private $bills;
-
+    
     /**
      * Constructor
      */
@@ -77,7 +72,7 @@ class ProductService
      * Set dateAdded
      *
      * @param \DateTime $dateAdded
-     * @return ProductService
+     * @return DealerSalonRate
      */
     public function setDateAdded($dateAdded)
     {
@@ -100,7 +95,7 @@ class ProductService
      * Set dateEnd
      *
      * @param \DateTime $dateEnd
-     * @return ProductService
+     * @return DealerSalonRate
      */
     public function setDateEnd($dateEnd)
     {
@@ -120,33 +115,10 @@ class ProductService
     }
 
     /**
-     * Set count
-     *
-     * @param integer $count
-     * @return ProductService
-     */
-    public function setCount($count)
-    {
-        $this->count = $count;
-    
-        return $this;
-    }
-
-    /**
-     * Get count
-     *
-     * @return integer 
-     */
-    public function getCount()
-    {
-        return $this->count;
-    }
-
-    /**
      * Set isActive
      *
      * @param boolean $isActive
-     * @return ProductService
+     * @return DealerSalonRate
      */
     public function setIsActive($isActive)
     {
@@ -166,56 +138,56 @@ class ProductService
     }
 
     /**
-     * Set product
+     * Set salon
      *
-     * @param \Dashboard\CommonBundle\Entity\Product $product
-     * @return ProductService
+     * @param \Dashboard\CommonBundle\Entity\DealerSalon $salon
+     * @return DealerSalonRate
      */
-    public function setProduct(\Dashboard\CommonBundle\Entity\Product $product = null)
+    public function setSalon(\Dashboard\CommonBundle\Entity\DealerSalon $salon = null)
     {
-        $this->product = $product;
+        $this->salon = $salon;
     
         return $this;
     }
 
     /**
-     * Get product
+     * Get salon
      *
-     * @return \Dashboard\CommonBundle\Entity\Product 
+     * @return \Dashboard\CommonBundle\Entity\DealerSalon 
      */
-    public function getProduct()
+    public function getSalon()
     {
-        return $this->product;
+        return $this->salon;
     }
 
     /**
-     * Set service
+     * Set rate
      *
-     * @param \Dashboard\CommonBundle\Entity\Service $service
-     * @return ProductService
+     * @param \Dashboard\CommonBundle\Entity\Rate $rate
+     * @return DealerSalonRate
      */
-    public function setService(\Dashboard\CommonBundle\Entity\Service $service = null)
+    public function setRate(\Dashboard\CommonBundle\Entity\Rate $rate = null)
     {
-        $this->service = $service;
+        $this->rate = $rate;
     
         return $this;
     }
 
     /**
-     * Get service
+     * Get rate
      *
-     * @return \Dashboard\CommonBundle\Entity\Service 
+     * @return \Dashboard\CommonBundle\Entity\Rate 
      */
-    public function getService()
+    public function getRate()
     {
-        return $this->service;
+        return $this->rate;
     }
 
     /**
      * Add bills
      *
      * @param \Dashboard\CommonBundle\Entity\Bill $bills
-     * @return ProductService
+     * @return DealerSalonRate
      */
     public function addBill(\Dashboard\CommonBundle\Entity\Bill $bills)
     {

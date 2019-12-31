@@ -5,7 +5,7 @@
                 <div class="footerLogo">
                     {% if settings.siteLogo %}
                         <a href="{{ path('main') }}">
-                            <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                            <img src="/logo.svg" alt="" title="" />
                         </a>
                     {% endif %}
                 </div>
@@ -85,7 +85,6 @@
         </div>
         <div class="row footerCopyrights">
             <div class="col-lg-6 col-md-6 hidden-sm hidden-xs">{{ settings.copyright | raw }}</div>
-            <div class="col-lg-6 col-md-6 footer-developer">{% trans %}Разработка{% endtrans %} <a href="https://sunweb-it.com/" target=”_blank”>Sunweb-it.com</a></div> 
         </div> 
     </div>
 </footer>

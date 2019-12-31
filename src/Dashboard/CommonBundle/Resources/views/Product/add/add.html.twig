@@ -42,12 +42,16 @@
                             {% for category in categories %}
                                 <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="category{{ category.id }}">
                                     {% set allowCategory = 0 %}
-                                    {% if user.rates | length > 0 %}
-                                        {% for userRate in user.rates %}
-                                            {% if userRate.category.id == category.id and userRate.isActive %}
-                                                {% set allowCategory = 1 %}
-                                            {% endif %}
-                                        {% endfor %}
+                                    {% if user.roles[0].role == 'ROLE_DEALER' %}
+                                        {% if user.rates | length > 0 %}
+                                            {% for userRate in user.rates %}
+                                                {% if userRate.category.id == category.id and userRate.isActive %}
+                                                    {% set allowCategory = 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% else %}
+                                        {% set allowCategory = 1 %}
                                     {% endif %}
                                     {% if allowCategory %}
                                         {% if category.children %}

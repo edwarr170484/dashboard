@@ -465,6 +465,16 @@ class DefaultController extends Controller
             }
         }
         
+        if($productInfo->getVars()){
+            foreach($productInfo->getVars() as $var){
+                if($request->request->get($var . "RangeList")){
+                    if($var != 'filter'){
+                        
+                    }
+                }
+            }
+        }
+        
         /*if($request->request->get('filterRangeList'))
         {
             foreach($request->request->get('filterRangeList') as $key => $value)

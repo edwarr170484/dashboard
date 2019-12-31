@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/AccountController.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/www/bundles/Default/js/customNew.js</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/OfficeController.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/DealerController.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/User/account/products/product.html.twig</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/AdvertController.php</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Default/index.html.twig</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Entity/ProductInfo.php</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Default/Category/filterForm.html.twig</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/DefaultController.php</file>
         </group>
     </open-files>
 </project-private>

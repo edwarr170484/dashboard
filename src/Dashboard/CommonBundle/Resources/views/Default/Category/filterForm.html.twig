@@ -82,22 +82,24 @@
                                 {% if filter.type == 'region_select' %}
                                     <div class="col-lg-3 col-md-3">
                                         <div class="filtersFromTo">
-                                            <select name="filterRangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}, {% trans %}от{% endtrans %}" onchange="sendFiltersForm()">
+                                            <select name="{{ filter.productParameter }}RangeList[{{ filter.id }}][]" class="custom-select" placeholder="{{ filter.name  }}, {% trans %}от{% endtrans %}" onchange="sendFiltersForm()">
+                                                <option value="0"></option>
                                                 {% for value in filter.values %}
                                                     {% set selected = '' %}
-                                                    {% if request.request.get('filterRangeList') %}
-                                                        {% if value.id == request.request.get('filterRangeList')[filter.id] %}
+                                                    {% if request.request.get(filter.productParameter ~ 'RangeList') %}
+                                                        {% if value.id == request.request.get(filter.productParameter ~ 'RangeList')[filter.id][0] %}
                                                             {% set selected = 'selected=selected' %}
                                                         {% endif %}
                                                     {% endif %}
                                                     <option value="{{ value.id }}" {{ selected }}>{{ value.value }}</option>
                                                 {% endfor %}
                                             </select>
-                                            <select name="filterRangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }} {% trans %}до{% endtrans %}" onchange="sendFiltersForm()">
+                                            <select name="{{ filter.productParameter }}RangeList[{{ filter.id }}][]" class="custom-select" placeholder="{% trans %}до{% endtrans %}" onchange="sendFiltersForm()">
+                                                <option value="0"></option>
                                                 {% for value in filter.values %}
                                                     {% set selected = '' %}
-                                                    {% if request.request.get('filterRangeList') %}
-                                                        {% if value.id == request.request.get('filterRangeList')[filter.id] %}
+                                                    {% if request.request.get(filter.productParameter ~ 'RangeList') %}
+                                                        {% if value.id == request.request.get(filter.productParameter ~ 'RangeList')[filter.id][1] %}
                                                             {% set selected = 'selected=selected' %}
                                                         {% endif %}
                                                     {% endif %}

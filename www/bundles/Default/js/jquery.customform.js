@@ -14,7 +14,7 @@
 			var cover = selectElement.parent(".select-cover");
 			
 			selectOptions.each(function(){
-                            if($(this).attr("value") === selectValue){
+                            if($(this).attr("value") === selectValue && $(this).attr("value") !== "0"){
                                 cover.append("<div class='select-value'>" + $(this).html() + "</div>");
                                 if(selectOptions.length > 0){
                                     cover.append("<div class='select-options'></div>");
@@ -26,14 +26,11 @@
 			if(selected === 0){
                             cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div>");
                             if(selectOptions.length > 0){
-                                    cover.append("<div class='select-options'></div>");
-                                }
+                                cover.append("<div class='select-options'></div>");
+                            }
                         }
                         
-                        if(multiple === 1){
-                            cover.find(".select-options").append("<div class='clear-selects'>Сбросить</div>");
-                        }
-			
+			cover.find(".select-options").append("<div class='clear-selects'>Сбросить</div>");
                         if(typeof(selectOptionGroups.html()) != 'undefined'){
 				selectOptionGroups.each(function(){
 					var groupOptions = $(this).find("option");
@@ -44,7 +41,9 @@
                                             if($(this).attr("selected") === 'selected'){
                                                 active = 'active';
                                             }
-                                            groupOptionsList += "<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>";
+                                            if($(this).attr("value") !== "0"){
+                                                groupOptionsList += "<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>";
+                                            }
 					
 					});
 					cover.find(".select-options").append("<div class='select-option-group'><div class='select-option-group-label'>" + $(this).attr("label") + "</div>" + groupOptionsList + "</div>");
@@ -55,9 +54,27 @@
                                     if($(this).attr("selected") === 'selected'){
                                         active = 'active';
                                     }
-                                    cover.find(".select-options").append("<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>");
+                                    if($(this).attr("value") !== "0"){
+                                        cover.find(".select-options").append("<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>");
+                                    }
 				});
 			}
+                        
+                        var params = '';
+                        if(cover.find(".select-option.active").length > 0){
+                            cover.find(".select-option.active").each(function(){
+                                if(multiple == 1){
+                                    params+=$(this).html()+";";
+                                }else{
+                                    params+=$(this).html();
+                                }
+                                 
+                            });
+                            cover.addClass("selected");
+                        }else{
+                            params = cover.find("select").attr("placeholder");
+                        }
+                        cover.find(".select-value").html(params);
 			
 			selectElement.css("display", "none");
 			selectElement.css( "width", "100%" );
@@ -83,16 +100,14 @@
 				}
                             
 			});
-			
-                        if(multiple === 1){
-                            selectOptions.find(".clear-selects").click(function(e){
-                                e.stopPropagation();
-                                $(this).parent().parent().find("select").find("option").each(function(){$(this).attr("selected",null);});
-                                $(this).parent().find(".select-option").each(function(){$(this).removeClass("active");});
-                                $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
-                            });
-                        }
                         
+                        selectOptions.find(".clear-selects").click(function(e){
+                            e.stopPropagation();
+                            $(this).parent().parent().find("select").find("option").each(function(){$(this).attr("selected",null);});
+                            $(this).parent().find(".select-option").each(function(){$(this).removeClass("active");});
+                            $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
+                            $(this).parent().parent().find("select").val(0);
+                        });
 			selectOptions.find(".select-option").each(function(){
 				$(this).click(function(e){
 					e.stopPropagation();
@@ -108,7 +123,22 @@
                                                    }
                                                } 
                                             });
+                                            
                                             $(this).toggleClass("active");
+                                            
+                                            var params = '';
+                                            
+                                            if(cover.find(".select-option.active").length > 0){
+                                                cover.find(".select-option.active").each(function(){
+                                                   params += $(this).html() + ";"; 
+                                                });
+                                                cover.addClass("selected");
+                                            }else{
+                                                params = cover.find("select").attr("placeholder");
+                                                cover.removeClass("selected");
+                                            }
+                                            cover.find(".select-value").html(params);
+                                            
                                         }else{
                                             var value = $(this).data("value");
                                             $(this).parent().find(".select-option").removeClass("active");
@@ -123,6 +153,12 @@
                                             $(this).parent().parent().toggleClass('active');
                                             $(this).toggleClass("active");
                                             selectOptions.slideUp();
+                                            
+                                            if(cover.find(".select-option.active").length > 0){
+                                                cover.addClass("selected");
+                                            }else{
+                                                cover.removeClass("selected");
+                                            }
                                         }
                                         
                                         selectElement.trigger("change");

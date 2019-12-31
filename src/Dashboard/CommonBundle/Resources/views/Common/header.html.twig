@@ -56,6 +56,8 @@
                                          <a href="{{path('account')}}">{{ app.user.userinfo.firstname }} {{app.user.userinfo.lastname}}</a>
                                     {% elseif app.user.fbID %} 
                                         <a href="{{path('account')}}">{{ app.user.fbID }}</a>
+                                    {% elseif app.user.email %}
+                                        <a href="{{path('account')}}">{{ app.user.email }}</a>
                                     {% endif %}
                                 </li>
                                 <li>
@@ -132,7 +134,7 @@
                 <div class="siteLogoImage">
                     {% if settings.siteLogo %}
                         <a href="{{ path('main') }}">
-                            <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                            <img src="/logo.svg" alt="" title="" />
                         </a>
                     {% endif %}
                 </div>

@@ -265,7 +265,7 @@ class ProductController extends Controller
             return $this->redirectToRoute('admin_product_confirm');
         }
         
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isConfirm = 0 AND p.isCorrect = 0 AND p.isActive = 0 AND p.isBlocked = 0 ORDER BY p.dateAdded DESC" );
+        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isActive = 1 AND p.isConfirm = 0 AND p.isBlocked = 0 ORDER BY p.dateAdded DESC" );
 
         try{
             $products = $query->getResult();
@@ -276,7 +276,7 @@ class ProductController extends Controller
         
         $totalProducts = count($products);
         
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isConfirm = 0 AND p.isCorrect = 0 AND p.isActive = 0 AND p.isBlocked = 0 ORDER BY p.dateAdded DESC" )->setFirstResult((($page > 0) ? ($page - 1) : 0) * 10)->setMaxResults(10);
+        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isActive = 1 AND p.isConfirm = 0 AND p.isBlocked = 0 ORDER BY p.dateAdded DESC" )->setFirstResult((($page > 0) ? ($page - 1) : 0) * 10)->setMaxResults(10);
 
         try{
             $products = $query->getResult();
@@ -289,58 +289,6 @@ class ProductController extends Controller
         $pagination = $helper->paginator(($page > 0) ? (int)$page : 1, $totalProducts, 10, "/admin/confirmproduct");
         
         return $this->render('DashboardAdminBundle:Product:productconfirm.html.twig', array("products" => $products,
-                                                                                            "pagination" => $pagination));
-    }
-    
-    /**
-     * @Route("/admin/correctproduct/{page}", name="admin_product_correct", defaults={"page" : 0})
-     */
-    public function productCorrectAction($page, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        
-        if($request->request->get('action'))
-        {
-            switch($request->request->get('action'))
-            {
-                case 'delete':
-                    if($request->request->get('productIds'))
-                    {
-                        foreach($request->request->get('productIds') as $productId)
-                        {
-                            $this->deleteAdvert($productId, $request);
-                        }
-                    }
-                break; 
-            }  
-            
-            return $this->redirectToRoute('admin_product_correct');
-        }
-        
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isConfirm = 0 AND p.isCorrect = 1 AND p.isActive = 0 AND p.isBlocked = 0 ORDER BY p.dateAdded DESC" );
-
-        try{
-            $products = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $products = 0;
-        }
-        
-        $totalProducts = count($products);
-        
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isConfirm = 0 AND p.isCorrect = 1 AND p.isActive = 0 AND p.isBlocked = 0 ORDER BY p.dateAdded DESC" )->setFirstResult((($page > 0) ? ($page - 1) : 0) * 10)->setMaxResults(10);
-
-        try{
-            $products = $query->getResult();
-        }
-        catch(\Doctrine\ORM\NoResultException $e) {
-            $products = 0;
-        }
-        
-        $helper = $this->get("app.helpers");
-        $pagination = $helper->paginator(($page > 0) ? (int)$page : 1, $totalProducts, 10, "/admin/correctproduct");
-        
-        return $this->render('DashboardAdminBundle:Product:productcorrect.html.twig', array("products" => $products,
                                                                                             "pagination" => $pagination));
     }
     
@@ -369,7 +317,7 @@ class ProductController extends Controller
             return $this->redirectToRoute('admin_product_blocked');
         }
         
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isConfirm = 0 AND p.isCorrect = 0 AND p.isActive = 0 AND p.isBlocked = 1 ORDER BY p.dateAdded DESC" );
+        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isConfirm = 0 AND p.isActive = 1 AND p.isBlocked = 1 ORDER BY p.dateAdded DESC" );
 
         try{
             $products = $query->getResult();
@@ -380,7 +328,7 @@ class ProductController extends Controller
         
         $totalProducts = count($products);
         
-        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isConfirm = 0 AND p.isCorrect = 0 AND p.isActive = 0 AND p.isBlocked = 1 ORDER BY p.dateAdded DESC" )->setFirstResult((($page > 0) ? ($page - 1) : 0) * 10)->setMaxResults(10);
+        $query = $manager->createQuery("SELECT p FROM DashboardCommonBundle:Product p WHERE p.isConfirm = 0 AND p.isActive = 1 AND p.isBlocked = 1 ORDER BY p.dateAdded DESC" )->setFirstResult((($page > 0) ? ($page - 1) : 0) * 10)->setMaxResults(10);
 
         try{
             $products = $query->getResult();
@@ -411,7 +359,6 @@ class ProductController extends Controller
     /**
      * @Route("/admin/editproduct/{productId}/{confirm}", name="admin_product_edit", defaults={"productId" : 0, "confirm" : 0})
      */
-    
     public function editProductAction($productId, $confirm, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
@@ -420,10 +367,6 @@ class ProductController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $product = new Product();
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->find(1);
-        
-        //get all categories from database  
-        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL' );
-        $categories = $query->getResult();
         
         if($productId)
         {
@@ -451,48 +394,22 @@ class ProductController extends Controller
         $validator = $this->get('validator');
         $errors = $validator->validate($product);
             
-        if (count($errors) > 0) 
+        if(count($errors) > 0) 
         {
-            foreach($errors as $error)
-                    $this->addFlash(
-                           'notice',
-                           $this->get('translator')->trans('<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                           <strong>Ошибка!</strong> ' . $error->getMessage() . '.</div>')
-                   );
+            foreach($errors as $error){
+                $this->addFlash(
+                    'notice',
+                    $this->get('translator')->trans('<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>Ошибка!</strong> ' . $error->getMessage() . '.</div>')
+                );
+            }
                  
             return $this->redirectToRoute("admin_product_edit", array("productId" => $product->getId()));
         }
         
         if($productForm->isSubmitted() && $productForm->isValid())
         {
-            
-            $category = $manager->getRepository("DashboardCommonBundle:Category")->findOneById($productForm['category']->getData());
-            
-            if($category)
-            {
-                $product->setCategory($category);
-            }
-            
-            $image = $productForm['mainfotoNew']->getData();
-            $oldImage = $productForm['mainfoto']->getData();
-                    
-            if($image)
-            {
-                if($oldImage)
-                {
-                    if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $oldImage ))
-                    {
-                        $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $oldImage );
-                    }
-                }
-                    
-                $extention = $image->getClientOriginalExtension();
-                $localImageName = rand(1, 99999).'.'.$extention;
-                $image->move('bundles/images/products',$localImageName);
-                $product->setMainfoto($localImageName);
-            }
-            
             if($originalFotos)
             {
                 foreach ($originalFotos as $foto) 
@@ -512,33 +429,19 @@ class ProductController extends Controller
                 }
             } 
             
-            if($product->getFotos())
-            {
-                foreach($product->getFotos() as $key => $item)
-                {
+            if($product->getFotos()){
+                foreach($product->getFotos() as $key => $item){
                     $item->setProduct($product);
                     $foto = $productForm['fotos'][$key]['fotoNew']->getData();
                         
-                    if($foto )
-                    {
+                    if($foto ){
                         $extention = $foto->getClientOriginalExtension();
                         $localFotoName = rand(1, 99999).'.'.$extention;
-                        $foto->move('bundles/images/products',$localFotoName);
-                            
+                        $foto->move('bundles/images/products',$localFotoName); 
                         $item->setFoto($localFotoName);
-                        /*$item->setAlt($product->getName());
-                        $item->setTitle($product->getName());*/
                     }
                         
                     $manager->persist($item);
-                }
-            }
-            
-            if($productId)
-            {
-                if($product->getIsBlocked())
-                {
-                    $product->setIsActive (0);
                 }
             }
             
@@ -549,105 +452,25 @@ class ProductController extends Controller
                 $product->setUser($user);
                 $product->setDateAdded(new \DateTime("now"));
                 $product->setDateEdited(new \DateTime("now"));
-                $product->setShowTime($settings->getAdvertDaysShowNumber());
                 $product->setIsActive(1);
-                $product->setIsBlocked(0);
             }
             
             $helpers = $this->get('app.helpers');
             $product->setTranslit($helpers->translit($product->getName()));
             
-            $product->setDateEdited(new \DateTime("now"));
-            
             $manager->persist($product);
             $manager->flush();
-            
-            if($productForm['viewpremium']->getData())
-                {
-                    $service = $manager->getRepository("DashboardCommonBundle:Service")->find(1);
-
-                    if($service && ($product->getIsBlocked() == 0))
-                    {
-                            $premiumService = $manager->getRepository("DashboardCommonBundle:ProductService")->findOneBy(array("product" => $product));
-                            
-                            if(!$premiumService)
-                                $premiumService = new ProductService();
-                            $date = new \DateTime("now");
-                            $premiumService->setProduct($product);
-                            $premiumService->setService($service);
-                            $premiumService->setDateAdded($date);
-                            $dateEnd = clone $date;
-                            $dateEnd->add(new \DateInterval('P' . $service->getDays() . 'D'));
-                            $premiumService->setDateEnd($dateEnd);
-                            $premiumService->setIsActive(true);
-
-                            $manager->persist($premiumService);
-
-                            $product->setViewpremium(true);
-                            $product->setViewcommon(false);
-                            $product->setViewselected(false);
-                    }
-                }
-                elseif($productForm['viewselected']->getData())
-                {
-                    $service = $manager->getRepository("DashboardCommonBundle:Service")->find(2);
-
-                    if($service && ($product->getIsBlocked() == 0))
-                    {
-                            $selectedService = $manager->getRepository("DashboardCommonBundle:ProductService")->findOneBy(array("product" => $product));
-                            
-                            if(!$selectedService)
-                                $selectedService = new ProductService();
-                            $date = new \DateTime("now");
-                            $selectedService->setProduct($product);
-                            $selectedService->setService($service);
-                            $selectedService->setDateAdded($date);
-                            $dateEnd = clone $date;
-                            $dateEnd->add(new \DateInterval('P' . $service->getDays() . 'D'));
-                            $selectedService->setDateEnd($dateEnd);
-                            $selectedService->setIsActive(true);
-
-                            $manager->persist($selectedService);
-
-                            $product->setViewpremium(false);
-                            $product->setViewcommon(false);
-                            $product->setViewselected(true);
-                    }
-                }
-                else
-                {
-                    $product->setViewpremium(false);
-                    $product->setViewcommon(true);
-                    $product->setViewselected(false);
-
-                    $isService = $manager->getRepository("DashboardCommonBundle:ProductService")->findOneBy(array("product" => $product));
-                    
-                    if($isService)
-                    {
-                        if($isService->getService()->getId() != 3)
-                        {
-                            $isService->setProduct(null);
-                            $isService->setService(null);
-                            $product->setService(null);
-                            $manager->remove($isService);
-                        }
-                    }
-                    
-                }
-            
-            if($productForm['isCorrect']->getData())
+                      
+            if($productForm['isBlocked']->getData())
             {
                 $correctReason = $productForm['correctReason']->getData();
                 $settings = $manager->getRepository("DashboardCommonBundle:Settings")->find(1);
                 
-                $product->setIsActive(false);
-                $product->setIsConfirm(false);
+                $product->setIsConfirm(0);
                 
-                //send confirmation link to email
-                if($product->getUser()->getAlerts())
-                {
+                if($product->getUser()->getIsAlertChangeOrderStatus()){
                     $message = \Swift_Message::newInstance()
-                    ->setSubject('Ваше объявление не прошло модерацию на сайте gribupardot.sunweb.by')
+                    ->setSubject('Ваше объявление не прошло модерацию на сайте ' . $settings->getSiteName())
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($product->getUser()->getEmail())
                     ->setBody(
@@ -666,134 +489,17 @@ class ProductController extends Controller
             $manager->persist($product);
             $manager->flush();
             
-            if($productForm['isCorrect']->getData())
-                $this->addFlash(
-                        'notice',
-                        $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>Выполнено!</strong> Объявление отправлено на корректировку.</div>')
-                );
-            else
-                $this->addFlash(
-                        'notice',
-                        $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>Выполнено!</strong> Изменения сохранены.</div>')
-                );
-            
-            if($confirm)
-                return $this->redirectToRoute("admin_product_confirm");
-            else
-                return $this->redirectToRoute("admin_product_edit", array("productId" => $product->getId()));
-        }
-        
-        return $this->render('DashboardAdminBundle:Product:editproduct.html.twig', array("productForm" => $productForm->createView(),
-                                                                                         "categories" => $categories));
-    }
-    
-    /**
-     * @Route("/admin/mark", name="admin_settings_mark")
-     */
-    public function markAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $marks = $manager->getRepository("DashboardCommonBundle:Mark")->findAll();
-        
-        if($request->request->get('markId'))
-        {
-            foreach($request->request->get('markId') as $id)
-            {
-                $mark = $manager->getRepository("DashboardCommonBundle:Mark")->find($id);
-            
-                if($mark)
-                {
-                    if($mark->getTranslations())
-                    {
-                        foreach($mark->getTranslations() as $translation)
-                        {
-                            $translation->setMark(null);
-                            $manager->remove($translation);
-                        }
-                    }
-                    $manager->remove($mark);
-                    $manager->flush();
-
-                    $this->addFlash(
-                        'notice',
-                        $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <strong>Успешно!</strong> Оценка удалена. </div>')
-                    );
-                }
-            }
-            
-            return $this->redirectToRoute('admin_settings_mark');
-        }
-        
-        return $this->render('DashboardAdminBundle:Settings:mark.html.twig', array("marks" => $marks));
-    }
-    
-    /**
-     * @Route("/admin/edit/mark/{markId}", name="admin_settings_mark_edit", defaults={"markId" : 0})
-     */
-    public function markEditAction($markId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $originalTranslations = new ArrayCollection();
-        
-        $mark = ($markId) ? $manager->getRepository("DashboardCommonBundle:Mark")->find($markId) : new Mark();
-        
-        if($markId)
-        {
-            foreach ($mark->getTranslations() as $item) {
-                $originalTranslations->add($item);
-            }
-        }
-
-        $markForm = $this->get('form.factory')->createNamedBuilder('mark', 'form', $mark)
-                ->add('title', TextType::class, array('required' => true, 'label' => 'Название оценки товара', 'attr' => array('class' => 'form-control','placeholder' => 'Название оценки товара')))
-                ->add('translations', 'collection', array('type' => new TranslationType($manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
-                ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success')))->getForm();
-        
-        $markForm->handleRequest($request);
-        
-        if($markForm->isSubmitted() && $markForm->isValid())
-        {
-            if($originalTranslations)
-            {
-                foreach ($originalTranslations as $item) 
-                {
-                    if (false === $mark->getTranslations()->contains($item)) 
-                    {
-                        $item->setMark(null);
-                        $manager->remove($item);
-                    }
-                }
-            }
-
-            if($mark->getTranslations())
-            {
-                foreach($mark->getTranslations() as $item)
-                {
-                    $item->setMark($mark);
-                    $manager->persist($item);
-                }
-            } 
-                
-            $manager->persist($mark);
-            $manager->flush();
-                
             $this->addFlash(
                 'notice',
                 $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Успешно!</strong> Оценка товара добавлена. </div>')
+                <strong>Выполнено!</strong> Изменения сохранены.</div>')
             );
-            
-            return $this->redirectToRoute('admin_settings_mark');
+                
+            return $this->redirectToRoute("admin_product_edit", array("productId" => $product->getId()));
         }
         
-        return $this->render('DashboardAdminBundle:Settings:markedit.html.twig', array("markForm" => $markForm->createView()));
+        return $this->render('DashboardAdminBundle:Product:editproduct.html.twig', array("productForm" => $productForm->createView()));
     }
     
     private function deleteAdvert($productId, $request)

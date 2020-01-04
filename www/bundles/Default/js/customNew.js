@@ -611,3 +611,8 @@ function deleteOrder(orderId, text){
         });
     }
 }
+
+function accceptCookieInfo(element){
+    $.cookie('cookieInfoAccepted', '1');
+    $('.cookieAlertBlock').remove();
+}

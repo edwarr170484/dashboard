@@ -88,6 +88,25 @@
         </div> 
     </div>
 </footer>
+{% if not app.request.cookies.get('cookieInfoAccepted') %}
+    <div class="cookieAlertBlock">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 cookieAlerts">
+                    <div class="cookieAlertMessage">
+                        {% trans %}Información importante sobre cookies: El sitio web de la auto28.es utiliza cookies propias para mejorar la navegación. Las cookies utilizadas no contienen ningún tipo de información de carácter personal. Si continua navegando entendemos acepta su uso{% endtrans %}.
+                    </div>
+                    <div class="cookieAlertLink">
+                        <a href="/pages/cookie-information">{% trans %}Больше информации{% endtrans %}</a>
+                    </div>
+                    <div class="cookieAlertButton">
+                        <button onclick="accceptCookieInfo($(this))">{% trans %}Закрыть{% endtrans %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
 <div class="modal fade" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
     <div class="modal-dialog" role="document">
         {{ form_start(cityForm, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal'}}) }}
@@ -103,16 +122,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-md-4 control-label">{% trans %}Город{% endtrans %}:</label>
-                        <div class="col-md-8" id="siteRegionCities">
+                        <div class="col-md-12" id="siteRegionCities">
                             {{ form_widget(cityForm.name)}}
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="border:none;text-align: center;">
-                    <div class="col-lg-12">
-                        <button type="submit" class="btn">{% trans %}Выбрать город{% endtrans %}</button>
-                    </div>
+                    <button type="submit" class="btn" style='width: 100%;'>{% trans %}Выбрать город{% endtrans %}</button>
                 </div>
             </div>
         {{ form_end(cityForm) }}

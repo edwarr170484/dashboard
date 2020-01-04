@@ -64,7 +64,7 @@
                         if(cover.find(".select-option.active").length > 0){
                             cover.find(".select-option.active").each(function(){
                                 if(multiple == 1){
-                                    params+=$(this).html()+";";
+                                    params+=$(this).html().trim()+", ";
                                 }else{
                                     params+=$(this).html();
                                 }
@@ -130,7 +130,7 @@
                                             
                                             if(cover.find(".select-option.active").length > 0){
                                                 cover.find(".select-option.active").each(function(){
-                                                   params += $(this).html() + ";"; 
+                                                   params += $(this).html().trim() + ", "; 
                                                 });
                                                 cover.addClass("selected");
                                             }else{

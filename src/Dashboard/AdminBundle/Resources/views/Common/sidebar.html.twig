@@ -42,11 +42,8 @@
                     {% if settings.isModerate %}
                         <li><a href="{{ path('admin_product_confirm') }}">Объявления на модерацию</a></li>
                     {% endif %}
-                    <li><a href="{{ path('admin_product_correct') }}">Объявления на корректировке</a></li>
                     <li><a href="{{ path('admin_product_blocked') }}">Заблокированные объявления</a></li>
                     <li><a href="{{ path('admin_filters') }}">Фильтры</a></li>
-                    <!--<li><a href="{{ path('admin_settings_selltype') }}">Типы объявлений</a></li>-->
-                    <li><a href="{{ path('admin_settings_mark') }}">Оценки объявлениям</a></li>
                 </ul>
             </li>
             <li class="has-sub">

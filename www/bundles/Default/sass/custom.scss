@@ -113,7 +113,7 @@ ul.list-inline{margin-left: 0;}
 .siteMainMenu ul li.submenu:hover>a,.siteMainMenu ul li.submenu:focus>a{@include box-shadow(0px -6px 22px rgba(0, 0, 0, 0.19));@include border-radius(12px 12px 0px 0px);background: $white-color;}
 .siteMainMenu ul li.submenu:hover .siteMainSubmenu,.siteMainMenu ul li.submenu:focus .siteMainSubmenu{@include flexBox(row,flex-start,flex-start);}
 .siteMainMenu ul li:hover .hover-border,.siteMainMenu ul li:focus .hover-border{display: block;}
-.siteMainSubmenu{position: absolute;top:100%;margin-top: -2px;left: 0;background: $white-color;z-index:999;@include border-radius(0 12px 12px 12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 2rem;padding-top: 11px;display: none;}
+.siteMainSubmenu{position: absolute;top:100%;margin-top: -2px;left: 0;background: $white-color;z-index:999;@include border-radius(0 12px 12px 12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 2rem;padding-top: 11px;display: none;white-space: nowrap;}
 .siteMainSubmenu ul{display: block;margin-right: 4.5rem;width:50%;}
 .siteMainSubmenu ul:last-child{margin-right: 0;}
 .siteMainSubmenu > ul > li{width:100%;}
@@ -347,6 +347,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdverts.grid:after{content:" ";display: block;clear: both;}
 .categoryAdverts.grid .categoryAdvertImages{width: 100%;}
 .categoryAdverts.grid .categoryAdvertInfo{width: 100%;padding-left: 0;display: block;}
+.categoryAdverts.grid .categoryAdvertInfo .categoryAdvertCommonInfo{display: block;}
 .categoryAdverts.grid .categoryAdvertMainInfo{width: 100%;}
 .categoryAdverts.grid .categoryAdvertName{@include fontView("GothamProBlack",$black-text,1.8rem,2.6rem);padding-top: 15px;}
 .categoryAdverts.grid .categoryAdvertTypes{@include flex-wrap(wrap);}
@@ -513,7 +514,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertSellerRatingStar.half{background: url('../img/star-half.svg') 0 0 no-repeat;}
 
 /*modals style*/
-.modal-content{background: #fff;@include border-radius(12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;padding: 5% 15%;}
+.modal-content{background: #fff;@include border-radius(12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;padding: 6rem 13rem;}
 .modal-header h3{@include fontView("GothamProBlack",$gray-color-1,3.6rem,4rem);text-align: center;}
 .modal-content button.close{position: absolute;top:-30px;right:-30px;z-index:999;@include opacity(1);}
 .modal-body label{@include fontView("GothamProRegular",$input-black,1.3rem,1.2rem);}
@@ -565,7 +566,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 #owlMainSlider .owl-dots{width: 100%;margin-left: auto;@include flexBox(row,center,center);}
 .mainPageSiteSubheader{@include fontView("GothamProRegular",$black-text,3.2rem,100%);padding-bottom: 6rem;}
 .cookieAlerts{@include flexBox(row,space-between,center);}
-.cookieAlertBlock{background: $super-white-color;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 3rem 0;}
+.cookieAlertBlock{background: $super-white-color;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 3rem 0;position: fixed;bottom:0;left:0;right:0;z-index:999;}
 .cookieAlertButton button{border:none;background:$yellow-color;@include fontView("GothamProBlack",$super-black-color,1.8rem,100%);text-align: center;padding: 1.3rem 1.5rem;width: 270px;@include border-radius(3px);}
 .cookieAlertButton button:hover,.cookieAlertButton button:focus{background: $orange-color;}
 .cookieAlertMessage{@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);width: 65%;}
@@ -759,7 +760,8 @@ ul.justLinks li{position: relative;}
 .account-menu-list li.list-divider{height:20px;}
 .account-menu-list li a{@include fontView("GothamProMedium",$black-text,1.5rem,1.4rem);padding-bottom: 1.5rem;display: block;}
 .account-menu-list li ul li a{@include fontView("GothamProMedium",#747474,1.3rem,1.2rem);text-transform: uppercase;padding-bottom: 1.4rem;}
-.account-menu-list li ul{padding-left:4.5rem}
+.account-menu-list li ul{padding-left:4.5rem;display: none;}
+.account-menu-list li ul.active{display: block;}
 .accountMenuItem{@include flexBox(row,flex-start,center);padding-bottom: 1.5rem;}
 .account-menu-list li .accountMenuItem a{padding-bottom: 0;padding-left: 2rem;}
 .account-menu-list li .accountMenuItem a.logout{padding-left: 3.8rem;}
@@ -973,7 +975,6 @@ body.userAccount{background:#F9F9F9;}
 .accountBillInfoItem.price{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountBillDownload a{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
 .accountBillDownload svg{margin-right: 1.5rem;}
-.modal-content{@include border-radius(0);}
 .accountConversationMessageText button{display: block;width: 100%;text-align: center;background: #E7E7E7;padding: 1.3rem 4rem 1.5rem;@include border-radius(3px);border:none;@include fontView("GothamProMedium",#747474,1.8rem,1.7rem);}
 .accountConversationMessageText button:hover,.accountConversationMessageText button:focus{color:$black-text;background: $yellow-color;;@include fontView("GothamProMedium",$black-text,1.8rem,1.7rem);}
 .pageLeftMenu{border:2px solid $yellow-color;@include border-radius(5px);padding: 3rem 2.5rem;}
@@ -1416,4 +1417,9 @@ ul.color li{position: relative;}
 .objectStatusSelectSublist.active{display: block;}
 .categoryRateInner{@include flexBox(row,flex-start,stretch);}
 .notAllowedCategory{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem); text-align: center;padding-top: 7.9rem;padding-bottom: 7.9rem;}
+.error404{background:url('../img/404back.png') 50% 50% no-repeat $yellow-color;padding-top: 24rem;padding-bottom: 24rem;@include fontView("GothamProBlack",$black-text,4.8rem,5.6rem);@include flexBox(row,center,center);flex-wrap:wrap;}
+.error404 .errorCode{font-size: 18.9rem;padding-right: 8rem;}
+.error404 .errorCodeDescriptionLink{font-size: 3.6rem;line-height: 4rem;padding-top: 4rem;}
+.error404 .errorCodeDescriptionLink a{color:$black-text;text-decoration: underline;}
+
 

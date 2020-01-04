@@ -6,6 +6,8 @@
             <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Default/index.html.twig</file>
             <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Entity/ProductInfo.php</file>
             <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Default/Category/filterForm.html.twig</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Common/footer.html.twig</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Common/header.html.twig</file>
             <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/DefaultController.php</file>
         </group>
     </open-files>

@@ -24,7 +24,6 @@ class ProductFotoType extends AbstractType
     {    
         $builder
             ->add('foto', HiddenType::class, array('required' => false, 'label' => ''))
-            ->add('sortorder', HiddenType::class, array('required' => false, 'label' => ''))
             ->add('fotoNew', FileType::class, array('required' => false, 'mapped' => false, 'label' => ''))
             ->add($builder->create('product', 'hidden')->addModelTransformer(new ProductToNumberTransformer($this->em)));
     }

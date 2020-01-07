@@ -1040,7 +1040,7 @@ class AdvertController extends Controller
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
-                    return $this->render('DashboardCommonBundle:Product:add/step4.html.twig', array("category" => $category, "generation" => $generation, "conditions" => $conditions,"locale" => $locale, "settings" => $settings, "advertInfo" => $advertInfo));
+                    return $this->render('DashboardCommonBundle:Product:add/step4.html.twig', array("category" => $category, "generation" => $generation, "conditions" => $conditions,"locale" => $locale, "settings" => $settings, "advertInfo" => $advertInfo,"user" => $user));
                 break;
             
                 case "step5":

@@ -85,7 +85,7 @@ class UserController extends Controller
                     'notice',
                     '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs neesat aizpildījis e-pasta adresi.') . '</div>'
+                    $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не заполнили поле email.') . '</div>'
                 );
                 
                 return $this->render('DashboardCommonBundle:User:register.html.twig', array('registerForm' => $registerForm->createView(),
@@ -108,7 +108,7 @@ class UserController extends Controller
                     'notice',
                     '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> E-pasts %message% jau ir reģistrēts sistēmā. Ja aizmirsāt savu paroli, varat to <a href="/restore">atjaunot</a>.',array("%message%" => $registerForm['email']->getData())) . '</div>'
+                    $this->get('translator')->trans('<strong>Ошибка!</strong> Email %message% уже зарегистрирован в системе. Если Вы забыли пароль, Вы можете его <a href="/restore">восстановить</a>.',array("%message%" => $registerForm['email']->getData())) . '</div>'
                 );
                 
                 return $this->redirectToRoute("register");

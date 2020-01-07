@@ -105,11 +105,12 @@ ul.list-inline{margin-left: 0;}
 .header-add-button i{margin-right:7px;}
 .siteMainMenu ul{@include flexBox(row,space-between,center);background:$white-color;}
 .siteMainMenu ul li a{@include fontView("GothamProRegular", $black-text, 1.6rem, 100%);display: block;padding: 1.5rem;z-index:1000;position: relative;}
-.shadowBlock{position:absolute;top: 100%;left: 0;width:100%;height:15px;background: $white-color;}
+.shadowBlock{position:absolute;top: 100%;left: 0;right:0;height:15px;background: $white-color;display: none;}
 .siteMainMenu ul li{position: relative;padding: 0;}
 .siteMainMenu ul li.active .hover-border{display: block;}
 .siteMainMenu ul li:last-child{margin-right: 0;}
 .siteMainMenu ul li a:hover,.siteMainMenu ul li a:focus{text-decoration: none;}
+.siteMainMenu ul li a:hover .shadowBlock,.siteMainMenu ul li a:focus .shadowBlock{display: block;}
 .siteMainMenu ul li.submenu:hover>a,.siteMainMenu ul li.submenu:focus>a{@include box-shadow(0px -6px 22px rgba(0, 0, 0, 0.19));@include border-radius(12px 12px 0px 0px);background: $white-color;}
 .siteMainMenu ul li.submenu:hover .siteMainSubmenu,.siteMainMenu ul li.submenu:focus .siteMainSubmenu{@include flexBox(row,flex-start,flex-start);}
 .siteMainMenu ul li:hover .hover-border,.siteMainMenu ul li:focus .hover-border{display: block;}
@@ -127,13 +128,13 @@ ul.list-inline{margin-left: 0;}
 .mainPageFiltersTabs.category-filters{padding-top: 4rem;padding-bottom: 6rem;}
 .mainPageFiltersTabs ul li a{@include fontView("GothamProRegular",$black-text,1.4rem,100%);text-transform: uppercase;padding: 2rem 1.8rem 1.7rem 1.8rem;background: $gray-color;@include border-radius(12px 12px 0px 0px);@include flexBox(row,flex-start,center);}
 .mainPageFiltersTabs ul li a{@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));}
-.mainPageFiltersTabs ul li a .shadowBlock{background: #fdfdfd;}
+.mainPageFiltersTabs ul li a .shadowBlock{background: #fdfdfd;display: block;}
 .mainPageFiltersTabs ul li a svg{margin-right: 1.6rem;}
 .mainPageFiltersTabs ul li.active a{color:$black-text;background: $gray-light-color;z-index:999}
 .mainPageFiltersTabs ul li a:hover,.mainPageFiltersTabs ul li a:focus{color:$super-black-color;background:$white-color;}
 .mainPageFiltersTabs ul li a:hover svg path,.mainPageFiltersTabs ul li a:focus svg path{fill: $super-black-color;}
 .mainPageFiltersTabs ul li.active a:hover,.mainPageFiltersTabs ul li.active a:focus{color:$black-text;background: $gray-light-color;}
-.tab-content{background: $gray-light-color;@include border-radius(0px 12px 12px 12px);padding: 3rem 2rem;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;}
+.tab-content{background: #fff;@include border-radius(0px 12px 12px 12px);padding: 3rem 2rem;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;}
 .tab-pane{padding: 0;}
 .tab-pane .form-group{margin-bottom: 0;}
 .tab-pane .form-group .form-control{border-radius:0;margin-bottom:0.7rem;}
@@ -606,7 +607,7 @@ ul.justLinks li{position: relative;}
 .addAdvertStepsBlockInner{padding-top: 3.8rem;padding-left: 3rem;padding-bottom: 4.2rem;padding-right: 3rem;}
 .searchCategoryFiled input{width: 100%;max-width: 290px;background: url(../img/add-search.png) 0 50% no-repeat;border:none;border-bottom: 2px solid #DFE1E5;padding:1.5rem;padding-left: 33px;@include fontView("GothamProRegular",#747474,1.8rem,100%);}
 .searchCategoryFiled {padding-bottom: 4.4rem;}
-.mainPageFiltersTabs.category-filters.addAdvert{padding-top: 8.6rem;}
+.mainPageFiltersTabs.category-filters.addProduct{padding-top: 8.6rem;}
 .content-block-header h3{color:$black-text;}
 .tab-content.justTab{@include border-radius(12px);}
 .no-result{@include fontView("GothamProRegular",$light-black-color,1.8rem,100%);}
@@ -1351,10 +1352,13 @@ body.userAccount{background:#F9F9F9;}
 input[type="radio"]{margin-top: 0;}
 ul.color li{position: relative;}
 .advertAdditionalsItemsHeader{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}
-.modalSearchResult{padding-top: 4rem;background: #E7E7E7;width: 100%;}
-.categorySpecialAdverts.modalAdverts{@include flexBox(row,flex-start,flex-start);flex-wrap:wrap;}
-.categorySpecialAdverts.modalAdverts .categorySpecialAdvert{padding-right: 3rem;} 
-#desktopSearchModal{display: none;position: absolute;top: 0;left: 0;right: 0;bottom:0;z-index:9999;background:#E7E7E7;}
+.modalSearchResult{padding-top: 4rem;background:none;width: 100%;}
+.categorySpecialAdverts.modalAdverts{@include flexBox(row,flex-start,flex-start);flex-wrap:wrap;margin-left: -1.5rem;margin-right: -1.5rem;}
+.categorySpecialAdverts.modalAdverts .categorySpecialAdvert{padding-right: 1.5rem;padding-left: 1.5rem;width: 297px;} 
+.categorySpecialAdverts.modalAdverts .categorySpecialAdvert .categorySpecialAdvertImage{margin-bottom: 0;background: #fff;@include border-radius(5px 5px 0 0);}
+.categorySpecialAdverts.modalAdverts .categorySpecialAdvert .categorySpecialAdvertImage img{@include border-radius(5px);}
+.categorySpecialAdverts.modalAdverts .categorySpecialAdvert .categorySpecialAdvertInner{background: #fff;padding-bottom: 3rem;padding-left: 1rem;padding-right: 1rem;padding-top: 1rem;}
+#desktopSearchModal{display: none;position: absolute;top: 0;left: 0;right: 0;bottom:0;z-index:9999;background:rgba(0,0,0,0.6);}
 #desktopSearchModal.active{display: block;}
 #modalSearchForm button.submit{@include fontView("GothamProRegular",$super-white-color,1.4rem,1.3rem);background: $orange-color;@include border-radius(3px);padding: 1.3rem 3.5rem;border:none;margin-right: 10rem;display: none;}
 #modalSearchForm button.submit:hover,#modalSearchForm button.submit:focus{background: #222B2A;}
@@ -1421,5 +1425,7 @@ ul.color li{position: relative;}
 .error404 .errorCode{font-size: 18.9rem;padding-right: 8rem;}
 .error404 .errorCodeDescriptionLink{font-size: 3.6rem;line-height: 4rem;padding-top: 4rem;}
 .error404 .errorCodeDescriptionLink a{color:$black-text;text-decoration: underline;}
-
+.topBannerBlock .banner-link img{max-width: 100%;}
+.userSettingsError{position: fixed;top:0;left: 0;right: 0;background: #fff;@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 3rem;padding-bottom: 3rem;text-align: center;z-index:1000;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
+.userSettingsError a{@include fontView("GothamProRegular",$yellow-color,1.4rem,1.8rem);}
 

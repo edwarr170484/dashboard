@@ -34,7 +34,7 @@ class CityType extends AbstractType
                     'placeholder' => 'Выберите город', 
                     'required' => false,
                     'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
-                    'attr' => array('class' => 'custom-select')));
+                    'attr' => array('class' => 'custom-select','placeholder' => 'Город','data-write' => "1")));
     }
     
     public function configureOptions(OptionsResolver $resolver)

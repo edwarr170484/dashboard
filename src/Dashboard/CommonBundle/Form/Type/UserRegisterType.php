@@ -29,8 +29,7 @@ class UserRegisterType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
-        $builder
-            ->add('username', TextType::class, array('required' => true, 'label' => 'User', 'attr' => array('class' => 'user','placeholder' => 'Логин')))    
+        $builder  
             ->add('email', EmailType::class, array('required' => true, 'label' => 'E-mail', 'attr' => array('class' => 'email','placeholder' => 'E-mail')))
             ->add('link', HiddenType::class, array('required' => false,'data' => $this->link,'mapped' => false))
             ->add('password', PasswordType::class, array(

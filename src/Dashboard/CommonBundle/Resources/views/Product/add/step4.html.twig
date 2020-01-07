@@ -140,28 +140,30 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td><span class="addAdvertParameterLabel">{% trans %}Гарантия{% endtrans %}</span></td>
-                                <td>
-                                    <div class="addAdvertPriceGarant">
-                                        <div class="categoryAdvertType garant {% if advertInfo.garant == 1 %}active{% endif %}" onclick="selectGarant($(this))">
-                                            {% trans %}Гарантия{% endtrans %}
-                                            <div class="categoryAdvertGarantNum">1</div>
-                                            <input name="garant" value="1" type="radio" {% if advertInfo.garant == 1 %}checked="checked"{% endif %} />
+                            {% if user.roles[0].role == 'ROLE_DEALER' %}
+                                <tr>
+                                    <td><span class="addAdvertParameterLabel">{% trans %}Гарантия{% endtrans %}</span></td>
+                                    <td>
+                                        <div class="addAdvertPriceGarant">
+                                            <div class="categoryAdvertType garant {% if advertInfo.garant == 1 %}active{% endif %}" onclick="selectGarant($(this))">
+                                                {% trans %}Гарантия{% endtrans %}
+                                                <div class="categoryAdvertGarantNum">1</div>
+                                                <input name="garant" value="1" type="radio" {% if advertInfo.garant == 1 %}checked="checked"{% endif %} />
+                                            </div>
+                                            <div class="categoryAdvertType garant {% if advertInfo.garant == 3 %}active{% endif %}" onclick="selectGarant($(this))">
+                                                {% trans %}Гарантия{% endtrans %}
+                                                <div class="categoryAdvertGarantNum">3</div>
+                                                <input name="garant" value="3" type="radio" {% if advertInfo.garant == 3 %}checked="checked"{% endif %} />
+                                            </div>
+                                            <div class="categoryAdvertType garant {% if advertInfo.garant == 7 %}active{% endif %}" onclick="selectGarant($(this))">
+                                                {% trans %}Гарантия{% endtrans %}
+                                                <div class="categoryAdvertGarantNum">7</div>
+                                                <input name="garant" value="7" type="radio" {% if advertInfo.garant == 7 %}checked="checked"{% endif %} />
+                                            </div>
                                         </div>
-                                        <div class="categoryAdvertType garant {% if advertInfo.garant == 3 %}active{% endif %}" onclick="selectGarant($(this))">
-                                            {% trans %}Гарантия{% endtrans %}
-                                            <div class="categoryAdvertGarantNum">3</div>
-                                            <input name="garant" value="3" type="radio" {% if advertInfo.garant == 3 %}checked="checked"{% endif %} />
-                                        </div>
-                                        <div class="categoryAdvertType garant {% if advertInfo.garant == 7 %}active{% endif %}" onclick="selectGarant($(this))">
-                                            {% trans %}Гарантия{% endtrans %}
-                                            <div class="categoryAdvertGarantNum">7</div>
-                                            <input name="garant" value="7" type="radio" {% if advertInfo.garant == 7 %}checked="checked"{% endif %} />
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         </table>
                     </div>
                 </div>

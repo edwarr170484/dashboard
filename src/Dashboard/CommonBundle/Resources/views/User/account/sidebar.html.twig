@@ -111,13 +111,13 @@
                 <a href="{{ path('account_userblacklist') }}"  {% if routeName == 'account_userblacklist' %}class="active"{% endif %}>{% trans %}Черный список{% endtrans %}</a>
             </div>
         </li>
-        {% if conversation %}
+        {% if admin %}
             <li>
                 <div class="accountMenuItem">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1.15795 10.5897H5.55316M1.16847 7.35897H5.57732M12.4468 10.5898H16.842M12.4227 7.35897H16.8315M10.5898 5.55316V1.15796M7.35897 5.57732C7.35897 3.86846 7.35897 1.16847 7.35897 1.16847M10.5898 16.842V12.4468M7.35897 16.8315V12.4227M17 9C17 13.4183 13.4183 17 9 17C4.58172 17 1 13.4183 1 9C1 4.58172 4.58172 1 9 1C13.4183 1 17 4.58172 17 9ZM12.7949 9C12.7949 11.0958 11.0958 12.7949 9 12.7949C6.90415 12.7949 5.20513 11.0958 5.20513 9C5.20513 6.90415 6.90415 5.20513 9 5.20513C11.0958 5.20513 12.7949 6.90415 12.7949 9Z" stroke="#616161"/>
                     </svg>
-                    <a href="{{ path('account_conversation', {'conversationId' : conversation.id}) }}">{% trans %}Тех. поддержка{% endtrans %}</a>
+                    <a href="{{ path('account_start_conversation', {'companionId' : admin.id}) }}">{% trans %}Тех. поддержка{% endtrans %}</a>
                 </div>
             </li>
         {% endif %}

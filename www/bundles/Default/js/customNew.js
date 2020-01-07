@@ -52,6 +52,7 @@ $(document).ready(function(){
     $("body").click(function(){
         $(".siteMenuGamburgerMenu").hide();
         $(".objectStatusSelectSublist").removeClass("active");
+        $("#gamburgerModal").modal('hide');
     });
     
 });
@@ -61,10 +62,12 @@ function toggleGamburgerMenu(event, action){
     
     if(action === 'show'){
        $(".siteMenuGamburgerMenu").show(); 
+       $("#gamburgerModal").modal('show');
     }
     
     if(action === 'hide'){
        $(".siteMenuGamburgerMenu").hide(); 
+       $("#gamburgerModal").modal('hide');
     }
 }
 
@@ -247,11 +250,14 @@ function getMessages(conversationId, element){
     
     $.ajax({
         url: '/account/moremessages/' + conversationId + '/' + messages,
-        dataType: 'html',
+        dataType: 'json',
         beforeSend: function(){},
         success: function(data){
             if(data){
-                parent.after(data);
+                parent.after(data.view);
+                if(!data.all){
+                    parent.remove();
+                }
             }else{
                 parent.remove();
             }
@@ -382,7 +388,8 @@ function addAutoserviceRate(salonId, rateId, ratePrice, element, titleText, butt
         });
 }
 
-function toggleSearchModal(){
+function toggleSearchModal(event){
+    event.stopPropagation();
     if($("#desktopSearchModal").hasClass("active")){
         $('html, body').css({overflow: 'auto',height: 'auto'});
     }else{

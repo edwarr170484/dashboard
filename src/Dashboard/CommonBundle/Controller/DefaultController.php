@@ -64,6 +64,14 @@ class DefaultController extends Controller
         $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL ORDER BY c.sortorder ASC');
         $categories = $query->getResult();
         
+        $isSettingsError = 0;
+        
+        if($user){
+            if(!$user->getUserinfo()->getCity() || !$user->getUserinfo()->getCityCode()){
+                $isSettingsError = 1;
+            }
+        }
+        
         return $this->render('DashboardCommonBundle:Common:header.html.twig', array("user" => $user,
                                                                                     "settings" => $settings,
                                                                                     "categories" => $categories,
@@ -71,6 +79,7 @@ class DefaultController extends Controller
                                                                                     "sessionCity" => $sessionCity,
                                                                                     "locales" => $locales,
                                                                                     "locale" => $locale,
+                                                                                    "isSettingsError" => $isSettingsError,
                                                                                     "uri" => $uri));
     }
     

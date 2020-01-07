@@ -9,13 +9,21 @@
 			var selectValue = selectElement.val();
 			var selectOptions = selectElement.find("option");
 			var selectOptionGroups = selectElement.find("optgroup");
-			
+                        var isWrite = (selectElement.data('write')) ? 1 : 0;
+
 			selectElement.wrap("<div class='select-cover'></div>");
 			var cover = selectElement.parent(".select-cover");
 			
 			selectOptions.each(function(){
                             if($(this).attr("value") === selectValue && $(this).attr("value") !== "0"){
-                                cover.append("<div class='select-value'>" + $(this).html() + "</div>");
+                                
+                                if(isWrite){
+                                    cover.append("<div class='select-value'><input name='select-writable' value='"+ $(this).html() +"'></div>");
+                                }else{
+                                    cover.append("<div class='select-value'>" + $(this).html() + "</div>");
+                                }
+                                
+                                
                                 if(selectOptions.length > 0){
                                     cover.append("<div class='select-options'></div>");
                                 }
@@ -24,7 +32,12 @@
 			});
                         
 			if(selected === 0){
-                            cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div>");
+                            if(isWrite){
+                                cover.append("<div class='select-value'><input name='select-writable' value='"+ selectElement.attr("placeholder") +"'></div>");
+                            }else{
+                                cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div>");
+                            }
+                            
                             if(selectOptions.length > 0){
                                 cover.append("<div class='select-options'></div>");
                             }
@@ -66,15 +79,19 @@
                                 if(multiple == 1){
                                     params+=$(this).html().trim()+", ";
                                 }else{
-                                    params+=$(this).html();
+                                    params+=$(this).html() + "  ";
                                 }
                                  
                             });
                             cover.addClass("selected");
                         }else{
-                            params = cover.find("select").attr("placeholder");
+                            params = cover.find("select").attr("placeholder") + "  ";
                         }
-                        cover.find(".select-value").html(params);
+                        if(isWrite){
+                            cover.find(".select-value").html("<input name='select-writable' value='"+ params.slice(0,-2) +"'>");
+                        }else{
+                            cover.find(".select-value").html(params.slice(0,-2));
+                        }
 			
 			selectElement.css("display", "none");
 			selectElement.css( "width", "100%" );
@@ -105,7 +122,13 @@
                             e.stopPropagation();
                             $(this).parent().parent().find("select").find("option").each(function(){$(this).attr("selected",null);});
                             $(this).parent().find(".select-option").each(function(){$(this).removeClass("active");});
-                            $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
+                            
+                            if(isWrite){
+                                $(this).parent().parent().find(".select-value").html("<input name='select-writable' value='"+ $(this).parent().parent().find("select").attr("placeholder") +"'>");
+                            }else{
+                                $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
+                            }
+                            
                             $(this).parent().parent().find("select").val(0);
                         });
 			selectOptions.find(".select-option").each(function(){
@@ -134,10 +157,15 @@
                                                 });
                                                 cover.addClass("selected");
                                             }else{
-                                                params = cover.find("select").attr("placeholder");
+                                                params = cover.find("select").attr("placeholder") + "  ";
                                                 cover.removeClass("selected");
                                             }
-                                            cover.find(".select-value").html(params);
+                                            
+                                            if(isWrite){
+                                                cover.find(".select-value").html("<input name='select-writable' value='"+ params.slice(0,-2) +"'>");
+                                            }else{
+                                                cover.find(".select-value").html(params.slice(0,-2));
+                                            }
                                             
                                         }else{
                                             var value = $(this).data("value");
@@ -148,7 +176,13 @@
                                                     $(this).attr("selected","selected");
                                                 } 
                                             });
-                                            cover.find(".select-value").html($(this).html());
+                                            
+                                            if(isWrite){
+                                                cover.find(".select-value").html("<input name='select-writable' value='" + $(this).html() + "'>");
+                                            }else{
+                                                cover.find(".select-value").html($(this).html());
+                                            }
+                                            
                                             selectOptions.removeClass("opened");
                                             $(this).parent().parent().toggleClass('active');
                                             $(this).toggleClass("active");
@@ -172,6 +206,19 @@
                             $(".select-options").removeClass("opened");
                             $(".select-options").slideUp();
 			});
+                        
+                        $("input[name='select-writable']").keyup(function(){
+                            var optionsList = $(this).parent().next(".select-options").find(".select-option");
+                            var controlVal = $(this).val();
+                            optionsList.each(function(){
+                               var val = $(this).html();
+                               if(val.includes(controlVal)){
+                                   $(this).removeClass("hide");
+                               }else{
+                                   $(this).addClass("hide");
+                               }
+                            });
+                        });
 		}
 		
 		this.each(make);

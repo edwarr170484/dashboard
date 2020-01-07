@@ -76,11 +76,13 @@
                                     <div class="accountConversationMessagesWindow">
                                         <div class="accountConversationMessage">
                                             <div class="accountConversationMessageUser"></div>
-                                            <div class="accountConversationMessageText" style="padding-right: 0;">
-                                                <button onclick="getMessages({{ conversation.id }}, $(this))">{% trans %}Загрузить еще{% endtrans %}</button>
-                                            </div>
+                                            {% if conversation.messages | length > settings.userMessagesNumber %}
+                                                <div class="accountConversationMessageText" style="padding-right: 0;">
+                                                    <button onclick="getMessages({{ conversation.id }}, $(this))">{% trans %}Загрузить еще{% endtrans %}</button>
+                                                </div>
+                                            {% endif %}
                                         </div>
-                                    {% for message in messages %}
+                                        {% for message in messages %}
                                         <div class="accountConversationMessage {% if message.userFrom.id != user.id %}oppoMessage{% endif %}">
                                             {% if message.userFrom %}
                                                 <div class="accountConversationMessageUser">

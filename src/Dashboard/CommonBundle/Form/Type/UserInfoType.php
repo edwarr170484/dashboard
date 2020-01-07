@@ -28,7 +28,7 @@ class UserInfoType extends AbstractType
         $builder
             ->add('firstname', TextType::class, array('required' => true, 'label' => 'vārds', 'attr' => array('class' => 'form-control','placeholder' => 'Имя')))
             ->add('lastname', TextType::class, array('required' => false, 'label' => 'uzvārds', 'attr' => array('class' => 'form-control','placeholder' => 'Фамилия')))
-            ->add('phone', TextType::class, array('required' => false, 'label' => 'Телефон', 'attr' => array('class' => 'form-control','placeholder' => 'Телефон')));
+            ->add('phone', TextType::class, array('required' => false, 'label' => 'Телефон', 'attr' => array('class' => 'form-control','placeholder' => '+34')));
             if($this->user){
                $builder->add('avatarNew', FileType::class, array('required' => false, 'label' => '','mapped' => false, 'attr' => array('class' => 'change-avatar-input')))
                        ->add('avatar', HiddenType::class, array('required' => false, 'label' => ''));
@@ -53,7 +53,7 @@ class UserInfoType extends AbstractType
                     'placeholder' => 'Город',
                     'required' => false,
                     'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
-                    'attr' => array('class' => 'custom-select')));
+                    'attr' => array('class' => 'custom-select','placeholder' => 'Город','data-write' => '1')));
                     
             $formModifier = function (FormInterface $form, City $city = null) {
                    $codes = null === $city ? array() : $city->getCodes();
@@ -62,8 +62,7 @@ class UserInfoType extends AbstractType
                                              'choice_label' => 'code',
                                              'choices' => $codes,
                                              'required' => true,
-                                             'placeholder' => 'Индекс',
-                                             'label' => 'Pilsēta/volost', 'attr' => array('class' => 'custom-select','id' => 'cityCode','placeholder' => 'Индекс')));
+                                             'label' => 'Индекс', 'attr' => array('class' => 'custom-select','id' => 'cityCode','placeholder' => 'Индекс')));
                };
 
                $builder->addEventListener(

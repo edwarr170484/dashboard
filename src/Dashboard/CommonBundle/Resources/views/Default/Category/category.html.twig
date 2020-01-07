@@ -54,7 +54,6 @@
 			<div class="content-block-header">
                             <h1>{{ category.title }}</h1>
                         </div>
-                        {% if products | length > 0 %}
                             <div class="mainPageFiltersTabs category-filters">
                                 <div class="tab-content">
                                     {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount, 'request' : app.request} %}
@@ -63,6 +62,7 @@
                             <div class="hidden-sm hidden-xs" style="text-align:center;">
                                 {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
                             </div>
+                            {% if products | length > 0 %}
                             <div class="categorySorts">
                                     <div class="categorySortFields">
                                         <div class="categorySortParams static-filters">

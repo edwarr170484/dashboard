@@ -1,4 +1,15 @@
 {% use 'DashboardCommonBundle:Common:icons.html.twig' %}
+{% if isSettingsError %}
+    <div class="userSettingsError">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    {% trans with {'%link%' : path('account_settings')} %}Ваш профиль не заполнен до конца. Перейдите в <a href="%link%">настройки</a> и заполниете обязательные поля.{% endtrans %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
 <header>
     <div class="headerlocale">
         <div class="container">
@@ -134,7 +145,7 @@
                 <div class="siteLogoImage">
                     {% if settings.siteLogo %}
                         <a href="{{ path('main') }}">
-                            <img src="/logo.svg" alt="" title="" />
+                            <img src="{{ asset('bundles/images/site/' ~ settings.siteLogo) }}" alt="{{ settings.siteName }}" title="{{ settings.siteName }}" />
                         </a>
                     {% endif %}
                 </div>
@@ -149,8 +160,9 @@
                     <div class="siteMenuGamburger">
                         <button onclick='toggleGamburgerMenu(event,"show")'>{{ block('svgGamburger') }}</button>
                     </div>
+                    <div id="gamburgerModal" tabindex="-1" role="dialog"></div>
                     <div class="siteMenuSearch">
-                        <button onclick="toggleSearchModal()" type="button">{{ block('svgSearch') }}</button>
+                        <button onclick="toggleSearchModal(event)" type="button">{{ block('svgSearch') }}</button>
                     </div>
                 </div>
             </div>

@@ -87,7 +87,7 @@ class AccountController extends Controller
         }
 
         //conversation with techical support
-        $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE (c.userOne = " . $user->getId() . " AND c.userTwo = 1) OR (c.userOne = 1 AND c.userTwo = " . $user->getId() .")");
+       /* $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE (c.userOne = " . $user->getId() . " AND c.userTwo = 1) OR (c.userOne = 1 AND c.userTwo = " . $user->getId() .")");
         
         try{
             $conversation = $query->getSingleResult();
@@ -105,7 +105,7 @@ class AccountController extends Controller
                 $manager->persist($conversation);
                 $manager->flush();
             }
-        }
+        }*/
 
 
         return $this->render('DashboardCommonBundle:User:account/sidebar.html.twig',
@@ -123,7 +123,7 @@ class AccountController extends Controller
                       "routeName" => $routeName,
                       "productType" => $productType,
                       "user" => $user,
-                      "conversation" => $conversation,
+                      "admin" => $admin,
                       "userRole" => $user->getRoles()[0]));
     }
 
@@ -521,7 +521,7 @@ class AccountController extends Controller
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($userTo->getEmail())
                     ->setBody('Вы получили новое сообщение на сайте gribupardot.sunweb.by. '
-                            . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_messages', array(), true) . '">личном кабинете</a>.','text/html');
+                            . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_conversations', array(), true) . '">личном кабинете</a>.','text/html');
 
                     $this->get('mailer')->send($message);
                 }
@@ -562,12 +562,12 @@ class AccountController extends Controller
         catch(\Doctrine\ORM\NoResultException $e) {
             $messages = 0;
         }
-
-        return $this->render('DashboardCommonBundle:User:account/message/items.html.twig', array(
-                                                                                       "user" => $user,
-                                                                                       "messages" => $messages,
-                                                                                       "conversation" => $conversation));
-
+        
+        $all = (count($messages) > $settings->getUserMessagesNumber()) ? 1 : 0;
+        
+        
+        return new \Symfony\Component\HttpFoundation\JsonResponse(array("all" => $all, "view" => $this->renderView('DashboardCommonBundle:User:account/message/items.html.twig', array("user" => $user,"messages" => $messages,"conversation" => $conversation))));
+        
     }
 
     /**

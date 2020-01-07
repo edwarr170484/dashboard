@@ -56,7 +56,16 @@
                     <li><a href="{{ path('admin_settings_orderstatus') }}">Статусы заказов</a></li>
                 </ul>
             </li>
-            
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-list"></i>
+                    <span>Реклама</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_settings_banners') }}">Баннеры</a></li>
+                </ul>
+            </li>
             <li class="has-sub">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>
@@ -64,7 +73,6 @@
                     <span>Модули</span>
                 </a>
                 <ul class="sub-menu">
-                    <li><a href="{{ path('admin_settings_banners') }}">Баннеры</a></li>
                     <li><a href="{{ path('admin_questions') }}">FAQ</a></li>
                 </ul>
             </li>

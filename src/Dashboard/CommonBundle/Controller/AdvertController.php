@@ -641,7 +641,7 @@ class AdvertController extends Controller
                     
                     //select all parameters if they are
                     if($advertInfo->getYear()){
-                        $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
+                        $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.category = ' . $advertInfo->getCategory() . ' AND g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
                     
                         $generations = $query->getResult();
                         
@@ -659,13 +659,14 @@ class AdvertController extends Controller
                     }
                     
                     if($advertInfo->getBoard()){
-                        $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $advertInfo->getBoard());
+                        $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.generation = ' . $advertInfo->getGeneration() . ' AND gb.board = ' . $advertInfo->getBoard());
                         $boardGenerations = $query->getResult();
                     }
                     
                     if($advertInfo->getGeneration()){
                         $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                        $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
 
                         $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId());
 
@@ -682,7 +683,8 @@ class AdvertController extends Controller
                     
                     if($advertInfo->getGasType()){
                         $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                        $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
 
                         $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType());
 
@@ -699,7 +701,8 @@ class AdvertController extends Controller
                     
                     if($advertInfo->getGearType()){
                         $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                        $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
 
                         $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType());
 
@@ -716,7 +719,8 @@ class AdvertController extends Controller
                      
                     if($advertInfo->getTransmissionType()){
                         $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                        $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                        $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
 
                         $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType() . ' AND gi.transmissionType = ' . $advertInfo->getTransmissionType());
 
@@ -765,7 +769,7 @@ class AdvertController extends Controller
                     $session->set('advertInfo', $advertData);
                     $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
-                    $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
+                    $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.category = ' . $advertInfo->getCategory() . ' AND g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
                     
                     $generations = $query->getResult();
                     $boards = new ArrayCollection();
@@ -799,7 +803,7 @@ class AdvertController extends Controller
                     $session->set('advertInfo', $advertData);
                     $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
-                    $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $advertInfo->getBoard());
+                    $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb LEFT JOIN gb.generation gbg WHERE gbg.category = ' . $advertInfo->getCategory()  . ' AND gb.board = ' . $advertInfo->getBoard());
                     
                     $boards = $query->getResult();
                     
@@ -819,7 +823,8 @@ class AdvertController extends Controller
                     $session->set('advertImages', $serializer->serialize(array(), 'json'));
 
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
                     
                     $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId());
                     
@@ -849,7 +854,8 @@ class AdvertController extends Controller
                     $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
                     
                     $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType());
                     
@@ -878,7 +884,8 @@ class AdvertController extends Controller
                     $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
                     
                     $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType());
                     
@@ -905,7 +912,8 @@ class AdvertController extends Controller
                     $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                    $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                    $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
                     
                     $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType() . ' AND gi.transmissionType = ' . $advertInfo->getTransmissionType());
                     
@@ -1257,7 +1265,7 @@ class AdvertController extends Controller
         $modifications = new ArrayCollection();
         
         if($product->getInfo()->getYear()){
-            $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $product->getInfo()->getYear() . ' AND g.yearTo >= ' . $product->getInfo()->getYear());
+            $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.category = ' . $product->getCategory()->getId() . ' AND g.yearFrom <= ' . $product->getInfo()->getYear() . ' AND g.yearTo >= ' . $product->getInfo()->getYear());
                     
             $generations = $query->getResult();
                         
@@ -1275,13 +1283,14 @@ class AdvertController extends Controller
         }
         
         if($product->getInfo()->getBoard()){
-            $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $product->getInfo()->getBoard()->getId());
+            $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gb.board = ' . $product->getInfo()->getBoard()->getId());
             $boardGenerations = $query->getResult();
         }
         
         if($product->getInfo()->getGeneration()){
             $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($product->getInfo()->getBoard()->getId());
-            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+            $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($product->getInfo()->getGeneration()->getId());
+            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
 
             $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gi.board = ' . $board->getId());
 
@@ -1298,7 +1307,8 @@ class AdvertController extends Controller
         
         if($product->getInfo()->getGasType()){
             $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($product->getInfo()->getBoard());
-            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+            $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($product->getInfo()->getGeneration()->getId());
+            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
 
             $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $product->getInfo()->getGasType()->getId());
 
@@ -1315,7 +1325,8 @@ class AdvertController extends Controller
         
         if($product->getInfo()->getGearType()){
             $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($product->getInfo()->getBoard());
-            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+            $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($product->getInfo()->getGeneration()->getId());
+            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
 
             $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $product->getInfo()->getGasType()->getId() . ' AND gi.gearType = ' . $product->getInfo()->getGearType()->getId());
 
@@ -1332,7 +1343,8 @@ class AdvertController extends Controller
         
         if($product->getInfo()->getTransmissionType()){
             $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($product->getInfo()->getBoard()->getId());
-            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+            $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($product->getInfo()->getGeneration()->getId());
+            $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
 
             $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $product->getInfo()->getGeneration()->getId() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $product->getInfo()->getGasType()->getId() . ' AND gi.gearType = ' . $product->getInfo()->getGearType()->getId() . ' AND gi.transmissionType = ' . $product->getInfo()->getTransmissionType()->getId());
 
@@ -1421,7 +1433,7 @@ class AdvertController extends Controller
                 $session->set('advertInfo', $advertData);
                 $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
-                $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
+                $query = $manager->createQuery('SELECT g FROM Dashboard\CommonBundle\Entity\Generation g WHERE g.category = ' . $advertInfo->getCategory() . ' AND g.yearFrom <= ' . $advertInfo->getYear() . ' AND g.yearTo >= ' . $advertInfo->getYear());
                     
                 $generations = $query->getResult();
                 $boards = new ArrayCollection();
@@ -1455,7 +1467,7 @@ class AdvertController extends Controller
                 $session->set('advertInfo', $advertData);
                 $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
-                $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb WHERE gb.board = ' . $advertInfo->getBoard());
+                $query = $manager->createQuery('SELECT gb FROM Dashboard\CommonBundle\Entity\GenerationBoard gb LEFT JOIN gb.generation gbg WHERE gbg.category = ' . $advertInfo->getCategory()  . ' AND gb.board = ' . $advertInfo->getBoard());
                     
                 $boards = $query->getResult();
                 return $this->render('DashboardCommonBundle:Product:edit/generations.html.twig', array("boards" => $boards, "locale" => $locale, "advertInfo" => $product));
@@ -1474,7 +1486,8 @@ class AdvertController extends Controller
                 $session->set('advertImages', $serializer->serialize(array(), 'json'));
 
                 $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
                     
                 $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId());
                     
@@ -1504,7 +1517,8 @@ class AdvertController extends Controller
                 $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                 $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
                     
                 $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType());
                     
@@ -1533,7 +1547,8 @@ class AdvertController extends Controller
                 $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                 $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
                     
                 $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType());
                     
@@ -1561,7 +1576,8 @@ class AdvertController extends Controller
                 $session->set('advertImages', $serializer->serialize(array(), 'json'));
                     
                 $boardFilter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneByBoard($boardFilter->getId());
+                $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
+                $board = $manager->getRepository("DashboardCommonBundle:GenerationBoard")->findOneBy(array("generation" => $generation, "board" => $boardFilter));
                     
                 $query = $manager->createQuery('SELECT gi FROM Dashboard\CommonBundle\Entity\GenerationItem gi WHERE gi.generation = ' . $advertInfo->getGeneration() . ' AND gi.board = ' . $board->getId() . ' AND gi.gasType = ' . $advertInfo->getGasType() . ' AND gi.gearType = ' . $advertInfo->getGearType() . ' AND gi.transmissionType = ' . $advertInfo->getTransmissionType());
                     

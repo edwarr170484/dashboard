@@ -166,6 +166,11 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $rates;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Note", mappedBy="user")
+     */
+    private $notes;
+    
     
     private $favoriteProducts;
     

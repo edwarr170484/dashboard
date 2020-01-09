@@ -272,6 +272,13 @@ class DefaultController extends Controller
     public function categoryAction($categoryId, $categoryName, $page, Request $request)        
     {
         $manager = $this->getDoctrine()->getManager();
+        
+        $securityContext = $this->container->get('security.authorization_checker');
+        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
+            $user = $this->get('security.context')->getToken()->getUser();
+        else
+            $user = 0;
+        
         $categories = array();
         $products = array();
         $pagination = 0;
@@ -672,7 +679,8 @@ class DefaultController extends Controller
                                                                                        "filterSelectablePrice" => $request->request->get('filterSelectablePrice'),
                                                                                        "locale" => $locale,
                                                                                        "settings" => $settings,
-                                                                                       "view" => $view));
+                                                                                       "view" => $view,
+                                                                                       "user" => $user));
     }
     
     private function getFilters(&$filters, $category){

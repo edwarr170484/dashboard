@@ -98,7 +98,7 @@ class MessageController extends Controller
                 {
                     //send an email
                     $messageEmail = \Swift_Message::newInstance()
-                    ->setSubject('Администратор сайта gribupardot.sunweb.by ответил на Ваше сообщение')
+                    ->setSubject('Администратор сайта ' . $settings->getSiteName() . ' ответил на Ваше сообщение')
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($message->getAuthorEmail())
                     ->setBody(

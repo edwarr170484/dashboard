@@ -100,6 +100,11 @@ class Product
     private $complaint;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Note", mappedBy="product")
+     */
+    private $notes;
+    
+    /**
      * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
     private $isActive;
@@ -944,5 +949,38 @@ class Product
     public function getBills()
     {
         return $this->bills;
+    }
+
+    /**
+     * Add notes
+     *
+     * @param \Dashboard\CommonBundle\Entity\Note $notes
+     * @return Product
+     */
+    public function addNote(\Dashboard\CommonBundle\Entity\Note $notes)
+    {
+        $this->notes[] = $notes;
+    
+        return $this;
+    }
+
+    /**
+     * Remove notes
+     *
+     * @param \Dashboard\CommonBundle\Entity\Note $notes
+     */
+    public function removeNote(\Dashboard\CommonBundle\Entity\Note $notes)
+    {
+        $this->notes->removeElement($notes);
+    }
+
+    /**
+     * Get notes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 }

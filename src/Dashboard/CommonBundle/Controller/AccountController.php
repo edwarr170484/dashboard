@@ -29,6 +29,7 @@ use Dashboard\CommonBundle\Entity\Conversation;
 use Dashboard\CommonBundle\Entity\Review;
 use Dashboard\CommonBundle\Entity\DealerSalonRate;
 use Dashboard\CommonBundle\Entity\Bill;
+use Dashboard\CommonBundle\Entity\Note;
 
 use Dashboard\CommonBundle\Form\Type\UserType;
 use Dashboard\CommonBundle\Form\Type\UserPasswordType;
@@ -252,9 +253,58 @@ class AccountController extends Controller
                                                                                     "selectedServices" => $selectedServices,
                                                                                     "routeName" => $request->attributes->get("_route")));
     }
+    
+    /**
+     * @Route("/account/note/{action}/{productId}", name="account_product_note")
+     */
+    public function productNoteAction($action, $productId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $securityContext = $this->container->get('security.authorization_checker');
+        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
+            $user = $this->get('security.context')->getToken()->getUser();
+        else
+            $user = 0;
+        $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId);
+        
+        if($product && $user){
+            switch($action){
+                case 'add':
+                    $note = $manager->getRepository("DashboardCommonBundle:Note")->findOneBy(array("product" => $product, "user" => $user));
+
+                    if($note){
+                        $note->setText($request->request->get("productNoteText" . $productId));
+                        $manager->persist($note);
+                        $manager->flush();
+                    }else{
+                        $note = new Note();
+                        $note->setUser($user);
+                        $note->setProduct($product);
+                        $note->setText($request->request->get("productNoteText" . $productId));
+                        $manager->persist($note);
+                        $manager->flush();
+                    }
+
+                    return new \Symfony\Component\HttpFoundation\JsonResponse(array("form" => $this->renderView('DashboardCommonBundle:Default:Products/noteForm.html.twig', array("note" => $note,"product" => $product))));
+                break;
+                
+                case 'delete':
+                    
+                    $note = $manager->getRepository("DashboardCommonBundle:Note")->findOneBy(array("product" => $product, "user" => $user));
+                    
+                    if($note){
+                        $manager->remove($note);
+                        $manager->flush();
+                        
+                        return new \Symfony\Component\HttpFoundation\JsonResponse(array("form" => $this->renderView('DashboardCommonBundle:Default:Products/noteForm.html.twig', array("note" => null,"product" => $product))));
+                    }
+                break;
+            }
+        }
+    }
 
     /**
-     * @Route("/account/favorite", name="account_favorite_products", defaults={"productId" : 0})
+     * @Route("/account/favorite", name="account_favorite_products")
      */
     public function favoriteProductsAction(Request $request)
     {
@@ -287,6 +337,36 @@ class AccountController extends Controller
                                                                                     "locale" => $locale,
                                                                                     "routeName" => $request->attributes->get("_route")));
 
+    }
+    
+    /**
+     * @Route("/account/notes", name="account_note_products")
+     */
+    public function notesProductsAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+
+        $noteProducts = new ArrayCollection();
+
+        if($user->getNotes())
+        {
+            foreach($user->getNotes() as $note)
+            {
+                $noteProducts->add($note->getProduct());
+            }
+        }
+
+        return $this->render('DashboardCommonBundle:User:account/products/notes.html.twig', array("products" => $noteProducts,
+                                                                                    "user" => $user,
+                                                                                    "services" => $services,
+                                                                                    "settings" => $settings,
+                                                                                    "title" => $this->get('translator')->trans('Мои заметки'),
+                                                                                    "locale" => $locale,
+                                                                                    "routeName" => $request->attributes->get("_route")));
     }
 
     /**

@@ -508,20 +508,25 @@ function setReviewRating(element, rating, event){
     $("#review_rating").val(rating);
 }
 
-function addFavoriteProduct(productId)
+function addFavoriteProduct(productId, user)
 {
-    $.ajax({
-        url: '/addfavorite/' + productId,
-        type:'get',
-        dataType: 'json',
-        success: function(data)
-        {
-            alert(data.message);
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            err=xhr.responseText;
-        }
-    });
+    if(user){
+        $.ajax({
+            url: '/addfavorite/' + productId,
+            type:'get',
+            dataType: 'json',
+            success: function(data)
+            {
+                alert(data.message);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                err=xhr.responseText;
+            }
+        });
+    }else{
+        $("#productNoteFormContainer" + productId).find("#productNoteText" + productId).addClass("hide");
+        $("#productNoteFormContainer" + productId).find("#productFavoriteText" + productId).removeClass("hide");
+    }
 }
 
 function deleteFavoriteProduct(productId, text){
@@ -622,4 +627,71 @@ function deleteOrder(orderId, text){
 function accceptCookieInfo(element){
     $.cookie('cookieInfoAccepted', '1');
     $('.cookieAlertBlock').remove();
+}
+
+function showNoteForm(productId, user){
+    $("#productNoteFormContainer" + productId).find(".productNoteForm").addClass("active");
+    
+    if(user){
+        $("#productNoteFormContainer" + productId).find(".productNoteText").addClass("hide");
+    }else{
+        $("#productNoteFormContainer" + productId).find("#productFavoriteText" + productId).addClass("hide");
+        $("#productNoteFormContainer" + productId).find("#productNoteText" + productId).removeClass("hide");
+    }
+}
+
+function saveProductNote(productId, message){
+    var text = $("input[name='productNoteText" + productId + "']").val();
+    if(text){
+        $.ajax({
+            url: '/account/note/add/' + productId,
+            type: 'post',
+            data: $("input[name='productNoteText" + productId + "']"),
+            dataType: 'json',
+            success: function(data)
+            {
+                $("#productNoteFormContainer" + productId).html(data.form);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                err=xhr.responseText;
+            }
+        });
+    }else{
+        alert(message);
+    }
+}
+
+function deleteProductNote(productId, text){
+    if(confirm(text)){
+        $.ajax({
+            url: '/account/note/delete/' + productId,
+            type: 'post',
+            data: $("input[name='productNoteText" + productId + "']"),
+            dataType: 'json',
+            success: function(data)
+            {
+                $("#productNoteFormContainer" + productId).html(data.form);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                err=xhr.responseText;
+            }
+        });
+    }
+}
+
+function clearFormFilters(formElement){
+    formElement.find("input[type='checkbox']").each(function(){
+        $(this).parent().removeClass("active");
+        $(this).prop("checked", false);
+        $(this).next(".checkbox-cover-inner").removeClass("active");
+    });
+    
+    formElement.find("input[type='text']").each(function(){
+        $(this).val(null);
+    });
+    
+    formElement.find("select").each(function(){
+        $(this).parent().find('.clear-selects').trigger('click');
+        $(this).parent().removeClass("selected");
+    });
 }

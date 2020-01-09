@@ -308,7 +308,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryViewButtons a.active svg path,.categoryViewButtons a.active svg path,{fill:$yellow-color;stroke:$yellow-color;}
 
 /*adverts list view*/
-.categoryAdvert{border: 3px solid transparent;@include border-radius(9px);padding: 2rem;width: 100%;@include flexBox(fow,flex-start,stretch);margin-bottom: 3.4rem;position: relative;}
+.categoryAdvert{border: 3px solid transparent;@include border-radius(9px);padding: 2rem;width: 100%;@include flexBox(fow,flex-start,stretch);margin-bottom: 3.4rem;position: relative;flex-wrap:wrap;}
 .categoryAdvert a.categoryAdvertLink{position: absolute;display: block;width: 0;height: 0;top: 0;left: 0;}
 .categoryAdvert:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;background: #FFFFFF;}
 .categoryAdvert.addAdvert{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;background: #FFFFFF;}
@@ -1426,6 +1426,37 @@ ul.color li{position: relative;}
 .error404 .errorCodeDescriptionLink{font-size: 3.6rem;line-height: 4rem;padding-top: 4rem;}
 .error404 .errorCodeDescriptionLink a{color:$black-text;text-decoration: underline;}
 .topBannerBlock .banner-link img{max-width: 100%;}
-.userSettingsError{position: fixed;top:0;left: 0;right: 0;background: #fff;@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 3rem;padding-bottom: 3rem;text-align: center;z-index:1000;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
+.userSettingsError{position: fixed;top:0;left: 0;right: 0;background: #fff;@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 3rem;padding-bottom: 3rem;text-align: center;z-index:1002;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
 .userSettingsError a{@include fontView("GothamProRegular",$yellow-color,1.4rem,1.8rem);}
+.productNoteForm{background: #E7E7E7;@include border-radius(5px);width: 100%;padding: 1.5rem;display: none;}
+.productNoteForm svg{margin-right: 1.5rem;}
+.productNoteForm input{background:#fff;border: 1px solid #AAAAAA;@include border-radius(2px);flex-grow: 2;margin-right: 1.5rem;padding: 1.4rem 1rem;@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);}
+.productNoteForm.active{@include flexBox(row,space-between,center);}
+.productNoteText{background: #E7E7E7;@include border-radius(5px);width: 100%;padding: 1.5rem;@include flexBox(row,space-between,center);position: relative;}
+.productNoteText.hide{display: none;}
+.productNoteText.nouser.hide{display: block;}
+.productNoteText svg{margin-right: 2.5rem;}
+.productNoteText .productNoteTextInner{@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);flex-grow: 2;}
+.productNoteText .productNoteTextInner a{color: $orange-color;}
+.productNoteText button{background: none;border:none;width: 26px;height: 26px;padding: 0;}
+.productNoteFormContainer{width: 100%;padding-top: 1.5rem;position: relative;z-index:9;}
+.categoryAdverts.grid .productNoteForm.active{display: block;}
+.categoryAdverts.grid .productNoteForm svg{display: none;}
+.categoryAdverts.grid .productNoteForm input{display: block;width: 100%;margin-bottom: 1.5rem;}
+.categoryAdverts.grid .productNoteForm .cookieAlertButton button{width: 100%;}
+.categoryAdverts.grid .productNoteText{@include flexBox(row,space-between,flex-start);@include fontView("GothamProRegular",$black-text,1.3rem,2rem);}
+.categoryAdverts.grid .productNoteText .productNoteTextInner{@include fontView("GothamProRegular",$black-text,1.3rem,2rem);}
+.categoryAdverts.grid .productNoteText.hide{display: none;}
+.categoryAdverts.grid .productNoteText > svg{display: none;}
+.categoryAdverts.grid .productNoteText button{width: 18px;height:18px;}
+.categoryAdverts.grid .productNoteText button > svg{width: 18px;height:18px;}
+.accountAdvert.cube .productNoteText{@include flexBox(row,space-between,flex-start);@include fontView("GothamProRegular",$black-text,1.3rem,2rem);}
+.accountAdvert.cube .productNoteText .productNoteTextInner{@include fontView("GothamProRegular",$black-text,1.3rem,2rem);}
+.accountAdvert.cube .productNoteText.hide{display: none;}
+.accountAdvert.cube .productNoteText > svg{display: none;}
+.accountAdvert.cube .productNoteText button > svg{width: 18px;height:18px;}
+.accountAdvert.cube .productNoteForm.active{display: block;}
+.accountAdvert.cube .productNoteForm svg{display: none;}
+.accountAdvert.cube .productNoteForm input{display: block;width: 100%;margin-bottom: 1.5rem;}
+.accountAdvert.cube .productNoteForm .cookieAlertButton button{width: 100%;}
 

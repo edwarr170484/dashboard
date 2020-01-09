@@ -135,26 +135,26 @@
     </div>
 </div>
         <div class="modal fade" id="userAgreementModal" tabindex="-1" role="dialog" aria-labelledby="howToBuyModalLabel">
-	  <div class="modal-dialog" role="document">
+            <div class="modal-dialog" role="document">
 		<form class="form-horizontal region-select-form" action="" method="post">
-			<div class="modal-content">
-			  <div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
-				<h4 class="modal-title" id="regionModalLabel">{% trans %}Пользовательское соглашение{% endtrans %}</h4>
-			  </div>
-			  <div class="modal-body">
-                                {{ textblock.userAgreement | raw}}
-			  </div>
-			  <div class="modal-footer">
-				<div class="col-sm-4"></div>
-				<div class="col-sm-4">
-                                    <button type="submit" class="btn" data-dismiss="modal" aria-label="Close">{% trans %}Закрыть{% endtrans %}</button>
-                                </div>
-				<div class="col-sm-4"></div>
-			  </div>
-			</div>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                            <h4 class="modal-title" id="regionModalLabel">{% trans %}Пользовательское соглашение{% endtrans %}</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{ textblock.userAgreement | raw}}
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <button type="submit" class="btn" data-dismiss="modal" aria-label="Close">{% trans %}Закрыть{% endtrans %}</button>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+                    </div>
 		</form>
-	  </div>
+            </div>
         </div>
         <div id="desktopSearchModal" tabindex="-1" role="dialog" onclick="toggleSearchModal(event)">
             <div class="searchBlock">

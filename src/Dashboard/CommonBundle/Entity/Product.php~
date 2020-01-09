@@ -100,6 +100,11 @@ class Product
     private $complaint;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Note", mappedBy="product")
+     */
+    private $notes;
+    
+    /**
      * @ORM\Column(type="boolean", nullable=true, options={"default": 0})
      */
     private $isActive;

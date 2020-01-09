@@ -207,7 +207,7 @@ function getBoardTypesByOldYear(year, locale_code, element){
     });
 }
 
-function getGenerationsByBoard(boardId,locale_code){
+function getGenerationsByBoard(boardId, locale_code){
     $.ajax({
         url: '/account/addadvert/generations/' + boardId,
         type:'post',

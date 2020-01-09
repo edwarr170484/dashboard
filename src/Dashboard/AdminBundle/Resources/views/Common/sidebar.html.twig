@@ -135,6 +135,17 @@
                 </ul>
             </li>
             <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-envelope"></i>
+                    <span>Сообщения</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_messages') }}">Обратная связь</a></li>
+                    <li><a href="">Тех. поддежка</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
                 <a href="{{ path('admin_jobs_categories') }}">
                     <i class="fa fa-cogs"></i>
                     <span>Работы</span>
@@ -144,12 +155,6 @@
                 <a href="{{ path('admin_complaint') }}">
                     <i class="fa fa-file-text-o"></i>
                     <span>Жалобы</span>
-                </a>
-            </li>
-            <li class="has-sub">
-                <a href="{{ path('admin_messages') }}">
-                    <i class="fa fa-envelope"></i>
-                    <span>Сообщения</span>
                 </a>
             </li>
             <li class="has-sub">

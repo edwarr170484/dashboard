@@ -166,6 +166,11 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $rates;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Note", mappedBy="user")
+     */
+    private $notes;
+    
     
     private $favoriteProducts;
     
@@ -1065,5 +1070,38 @@ class User implements AdvancedUserInterface, \Serializable
     public function getRates()
     {
         return $this->rates;
+    }
+
+    /**
+     * Add notes
+     *
+     * @param \Dashboard\CommonBundle\Entity\Note $notes
+     * @return User
+     */
+    public function addNote(\Dashboard\CommonBundle\Entity\Note $notes)
+    {
+        $this->notes[] = $notes;
+    
+        return $this;
+    }
+
+    /**
+     * Remove notes
+     *
+     * @param \Dashboard\CommonBundle\Entity\Note $notes
+     */
+    public function removeNote(\Dashboard\CommonBundle\Entity\Note $notes)
+    {
+        $this->notes->removeElement($notes);
+    }
+
+    /**
+     * Get notes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNotes()
+    {
+        return $this->notes;
     }
 }

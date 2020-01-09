@@ -20,17 +20,17 @@ class UserInfo
     private $id;
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
      */
     private $firstname;
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
      */
     private $lastname;
     
     /**
-     * @ORM\Column(type="string", length=50, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=50, nullable=true, options={"default":null})
      */
     private $phone;
     
@@ -58,17 +58,17 @@ class UserInfo
     private $cityCode;
     
     /**
-     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
+     * @ORM\Column(type="boolean", nullable=true, options={"default":0})
      */
     private $emailmessagesalerts;
     
     /**
-     * @ORM\Column(type="boolean", nullable=true, options={"default":"0"})
+     * @ORM\Column(type="boolean", nullable=true, options={"default":0})
      */
     private $emailmessagesreminders;
     
     /**
-     * @ORM\Column(type="integer", length=3, nullable=true, options={"default":"0"})
+     * @ORM\Column(type="integer", length=3, nullable=true, options={"default":0})
      */
     private $rating;
     

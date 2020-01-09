@@ -110,8 +110,8 @@
             <tr>
                 <th>{% trans %}Тип кузова{% endtrans %}</th>
                 <th>{% trans %}Двигатель{% endtrans %}</th>
-                <th>{% trans %}Коробка передач{% endtrans %}</th>
                 <th>{% trans %}Привод{% endtrans %}</th>
+                <th>{% trans %}Коробка передач{% endtrans %}</th>
                 <th>{% trans %}Модификации{% endtrans %}</th>
                 <th>{% trans %}Действия{% endtrans %}</th>
             </tr>
@@ -126,8 +126,8 @@
     <tr>
         <td>{{ form_widget(form.board)}}</td>
         <td>{{ form_widget(form.gasType)}}</td>
-        <td>{{ form_widget(form.gearType)}}</td>
         <td>{{ form_widget(form.transmissionType)}}{{ form_widget(form.generation)}}</td>
+        <td>{{ form_widget(form.gearType)}}</td>
         <td>{{ form_widget(form.itemModifications)}}</td>
         <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить пункт?'))return false;else $(this).parent().parent().remove()">
                 <i class="fa fa-times" title="Удалить"></i>

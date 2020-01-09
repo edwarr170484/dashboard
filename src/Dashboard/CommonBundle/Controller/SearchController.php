@@ -15,6 +15,11 @@ class SearchController extends Controller{
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $securityContext = $this->container->get('security.authorization_checker');
+        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
+            $user = $this->get('security.context')->getToken()->getUser();
+        else
+            $user = 0;
         
         $view = ($this->get('session')->get('viewCategory')) ? $this->get('session')->get('viewCategory') : 'table';
         
@@ -69,7 +74,8 @@ class SearchController extends Controller{
                                                                                      'locale' => $locale,
                                                                                      'settings' => $settings,
                                                                                      'page' => $page,
-                                                                                     'view' => $view));
+                                                                                     'view' => $view,
+                                                                                     'user' => $user));
     }
     
     /**

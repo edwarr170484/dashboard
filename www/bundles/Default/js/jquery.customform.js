@@ -15,7 +15,7 @@
 			var cover = selectElement.parent(".select-cover");
 			
 			selectOptions.each(function(){
-                            if($(this).attr("value") === selectValue && $(this).attr("value") !== "0"){
+                            if($(this).attr("value") === selectValue && $(this).attr("value") !== "0" && $(this).attr("value") !== ""){
                                 
                                 if(isWrite){
                                     cover.append("<div class='select-value'><input name='select-writable' value='"+ $(this).html() +"'></div>");
@@ -54,7 +54,7 @@
                                             if($(this).attr("selected") === 'selected'){
                                                 active = 'active';
                                             }
-                                            if($(this).attr("value") !== "0"){
+                                            if($(this).attr("value") !== "0" && $(this).attr("value") !== ""){
                                                 groupOptionsList += "<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>";
                                             }
 					
@@ -67,7 +67,7 @@
                                     if($(this).attr("selected") === 'selected'){
                                         active = 'active';
                                     }
-                                    if($(this).attr("value") !== "0"){
+                                    if($(this).attr("value") !== "0" && $(this).attr("value") !== ""){
                                         cover.find(".select-options").append("<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>");
                                     }
 				});

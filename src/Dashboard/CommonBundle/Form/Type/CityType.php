@@ -31,8 +31,8 @@ class CityType extends AbstractType
                         return $city->getName();
                     }, 
                     'data' => $this->city,
-                    'placeholder' => 'Выберите город', 
                     'required' => false,
+                    'empty_data' => 0,
                     'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
                     'attr' => array('class' => 'custom-select','placeholder' => 'Город','data-write' => "1")));
     }

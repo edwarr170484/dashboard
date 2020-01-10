@@ -391,10 +391,8 @@ class AccountController extends Controller
 
         return $this->render('DashboardCommonBundle:User:account/message/conversations.html.twig', array("user" =>$user,
                                                                                     "conversations" => $conversations,
-                                                                                    "pagination" => 0,
                                                                                     "locale" => $locale,
-                                                                                    "settings" => $settings,
-                                                                                    "routeName" => $request->attributes->get("_route")));
+                                                                                    "settings" => $settings));
     }
 
     /**
@@ -439,7 +437,7 @@ class AccountController extends Controller
                     $this->addFlash(
                         'notice',
                         '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .                         $this->get('translator')->trans('<strong>Veiksmīga!</strong> Saruna tika dzēsta.') . '</div>'
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . $this->get('translator')->trans('<strong>Успешно!</strong> Беседа удалена.') . '</div>'
                     );
                 }
             }
@@ -559,7 +557,7 @@ class AccountController extends Controller
                             'notice',
                             '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                            $this->get('translator')->trans('<strong>Kļūda!</strong> Attēls neatbilst prasībām. Derīgi paplašinājumi: jpg, jpeg, png, gif. Maksimālais izmērs ir 2 MB. Ziņojums tika nosūtīts bez attēla.') . '</div>'
+                            $this->get('translator')->trans('<strong>Ошибка!</strong> Изображение не соответствует требованиям. Допустимые расширения: jpg, jpeg, png, gif. Максимальный размер - 2Мб. Сообщение отправлено без изображения.') . '</div>'
                     );
                 }
             }
@@ -597,7 +595,7 @@ class AccountController extends Controller
                 if($userTo->getIsAlertNewMessage())
                 {
                     $message = \Swift_Message::newInstance()
-                    ->setSubject('Вам пришло новое сообщение на сайте gribupardot.sunweb.by')
+                    ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($userTo->getEmail())
                     ->setBody('Вы получили новое сообщение на сайте gribupardot.sunweb.by. '
@@ -1136,7 +1134,7 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
-                $user->setAvatar($localAvatarName);
+                $user->getUserinfo()->setAvatar($localAvatarName);
             }
 
             $user->setUsername($user->getEmail());
@@ -1307,7 +1305,7 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
-                $user->setAvatar($localAvatarName);
+                $user->getUserinfo()->setAvatar($localAvatarName);
             }
 
             $user->setUsername($user->getEmail());
@@ -1606,7 +1604,7 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
-                $user->setAvatar($localAvatarName);
+                $user->getUserinfo()->setAvatar($localAvatarName);
             }
 
             $user->setUsername($user->getEmail());

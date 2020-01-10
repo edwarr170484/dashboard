@@ -113,6 +113,7 @@ ul.list-inline{margin-left: 0;}
 .siteMainMenu ul li a:hover .shadowBlock,.siteMainMenu ul li a:focus .shadowBlock{display: block;}
 .siteMainMenu ul li.submenu:hover>a,.siteMainMenu ul li.submenu:focus>a{@include box-shadow(0px -6px 22px rgba(0, 0, 0, 0.19));@include border-radius(12px 12px 0px 0px);background: $white-color;}
 .siteMainMenu ul li.submenu:hover .siteMainSubmenu,.siteMainMenu ul li.submenu:focus .siteMainSubmenu{@include flexBox(row,flex-start,flex-start);}
+.siteMainMenu ul li.submenu:hover a .shadowBlock,.siteMainMenu ul li.submenu:focus a .shadowBlock{display: block;}
 .siteMainMenu ul li:hover .hover-border,.siteMainMenu ul li:focus .hover-border{display: block;}
 .siteMainSubmenu{position: absolute;top:100%;margin-top: -2px;left: 0;background: $white-color;z-index:999;@include border-radius(0 12px 12px 12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 2rem;padding-top: 11px;display: none;white-space: nowrap;}
 .siteMainSubmenu ul{display: block;margin-right: 4.5rem;width:50%;}
@@ -124,7 +125,8 @@ ul.list-inline{margin-left: 0;}
 .mainPageAutolayer{background: url('../img/car.png') 100% 50% no-repeat;}
 .mainPageFiltersBlock{background: url('../img/rings.png') 30% -210px no-repeat;padding-top: 9.9rem;padding-bottom: 20rem;}
 .mainPageFiltersHeader h1{color:#fff;}
-.mainPageFiltersTabs{padding-top: 5rem;}
+.mainPageFiltersTabs{padding-top: 5rem;display: none;}
+.mainPageFiltersTabs.active{display: block;}
 .mainPageFiltersTabs.category-filters{padding-top: 4rem;padding-bottom: 6rem;}
 .mainPageFiltersTabs ul li a{@include fontView("GothamProRegular",$black-text,1.4rem,100%);text-transform: uppercase;padding: 2rem 1.8rem 1.7rem 1.8rem;background: $gray-color;@include border-radius(12px 12px 0px 0px);@include flexBox(row,flex-start,center);}
 .mainPageFiltersTabs ul li a{@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));}

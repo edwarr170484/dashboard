@@ -14,9 +14,6 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\UserInfo;
-use Dashboard\CommonBundle\Entity\UserPurse;
-use Dashboard\CommonBundle\Entity\UserPurseHistory;
-use Dashboard\CommonBundle\Entity\UserActivity;
 
 class OAuthUserProvider implements OAuthAwareUserProviderInterface, UserProviderInterface
 {
@@ -43,7 +40,7 @@ class OAuthUserProvider implements OAuthAwareUserProviderInterface, UserProvider
         
         $fs = new Filesystem();
         $settings = $this->entityManager->getRepository("DashboardCommonBundle:Settings")->find(1);
-        $role = $this->entityManager->getRepository("DashboardCommonBundle:Role")->findOneById($settings->getUserDefaultGroup());
+        $role = $this->entityManager->getRepository("DashboardCommonBundle:Role")->findOneByRole("ROLE_INDIVIDUAL");
 
         $user = new User();
         
@@ -98,28 +95,9 @@ class OAuthUserProvider implements OAuthAwareUserProviderInterface, UserProvider
                 $user->setVkID(null);
             break;
         }
-
-        $userpurse = new UserPurse();
-        $userpurse->setUser($user);
-        $userpurse->setBalanse(10);
-        
-        $userPurseHistory = new UserPurseHistory();
-        $userPurseHistory->setActionDate(new \DateTime("now"));
-        $userPurseHistory->setAction("Зачисление средств за регистрацию. Зачислено 10 гривен.");
-        $userPurseHistory->setCurrentBalanse(10);
-        $userPurseHistory->setUserpurse($userpurse);
-        
-        $userActivity = new UserActivity();
-        $userActivity->setUser($user);
-        $userActivity->setEnterCount(1);
-        $userActivity->setLastActivity(new \DateTime("now"));
         
         $this->entityManager->persist($user);
         $this->entityManager->persist($userinfo);
-        $this->entityManager->persist($userpurse);
-        $this->entityManager->persist($userPurseHistory);
-        $this->entityManager->persist($userActivity);
-        
         $this->entityManager->flush();
         
         return $user;

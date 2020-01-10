@@ -1,5 +1,5 @@
 parameters:
-        hwi_oauth.authentication.provider.oauth.class: Dashboard\CommonBundle\Security\Core\User\OAuthProvider
+    hwi_oauth.authentication.provider.oauth.class: Dashboard\CommonBundle\Security\Core\User\OAuthProvider
 services:
     my_project.oauth.user_provider:
         class: Dashboard\CommonBundle\Security\Core\User\OAuthUserProvider
@@ -12,7 +12,7 @@ services:
         class: Dashboard\AdminBundle\SimpleImage
     dashboard_user.login_listener:
       class: Dashboard\CommonBundle\Listener\LoginListener
-      arguments: ['@security.context', '@session']
+      arguments: ['@security.context', '@session', '@doctrine.orm.entity_manager', '@event_dispatcher', '@router']
       tags:
           - { name: kernel.event_listener, event: security.interactive_login }
     dashboard_session.session_listener:

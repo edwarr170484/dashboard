@@ -719,7 +719,11 @@ class DefaultController extends Controller
     public function productAction($productId, $productName, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
-        $sessionUser = $this->get('security.context')->getToken()->getUser();
+        $securityContext = $this->container->get('security.authorization_checker');
+        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
+            $sessionUser = $this->get('security.context')->getToken()->getUser();
+        else
+            $sessionUser = 0;
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
@@ -1263,6 +1267,7 @@ class DefaultController extends Controller
                                                                                           "complaintMessageForm" => $complaintMessageForm->createView(),
                                                                                           "favoriteProductIs" => 0,
                                                                                           "services" => $services,
+                                                                                          "user" => $sessionUser,
                                                                                           "sameProducts" => $sameProducts,
                                                                                           "dealerProducts" => new ArrayCollection(),
                                                                                           "categoriesBread" => array_reverse($categoriesBread),

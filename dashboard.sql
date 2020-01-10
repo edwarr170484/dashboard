@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Янв 09 2020 г., 15:52
+-- Время создания: Янв 10 2020 г., 16:33
 -- Версия сервера: 10.1.9-MariaDB
 -- Версия PHP: 5.6.15
 
@@ -34,8 +34,8 @@ CREATE TABLE `banner` (
   `date_added` datetime NOT NULL,
   `position` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `code` longtext COLLATE utf8_unicode_ci,
-  `date_from` datetime DEFAULT NULL,
-  `date_to` datetime DEFAULT NULL,
+  `date_from` datetime DEFAULT CURRENT_TIMESTAMP,
+  `date_to` datetime DEFAULT CURRENT_TIMESTAMP,
   `clicks` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -15210,8 +15210,7 @@ CREATE TABLE `conversation` (
 
 INSERT INTO `conversation` (`id`, `user_deleted`, `conversation_userone_id`, `conversation_usertwo_id`) VALUES
 (1, NULL, 1, 2),
-(3, NULL, 6, 1),
-(8, NULL, 9, 1);
+(3, NULL, 6, 1);
 
 -- --------------------------------------------------------
 
@@ -15445,7 +15444,8 @@ CREATE TABLE `favorite_products` (
 --
 
 INSERT INTO `favorite_products` (`id`, `user_id`, `product_id`) VALUES
-(10, 6, 3);
+(10, 6, 3),
+(11, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -15975,8 +15975,8 @@ CREATE TABLE `message` (
 --
 
 INSERT INTO `message` (`id`, `user_from_id`, `user_to_id`, `subject`, `message`, `image`, `is_new`, `is_deleted`, `sent_date`, `readed_date`, `product_id`, `user_owner_id`, `conversation_id`) VALUES
-(1, 2, 1, 'Это тема сообщения', 'Это текст сообщения', NULL, 0, 0, '2018-09-20 09:38:56', '2020-01-04 21:58:09', NULL, 2, 1),
-(2, 2, 1, 'Это тема сообщения', 'Это текст сообщения', NULL, 0, 0, '2018-09-20 09:38:56', '2020-01-04 21:58:09', NULL, 1, 1),
+(1, 2, 1, 'Это тема сообщения', 'Это текст сообщения', NULL, 0, 0, '2018-09-20 09:38:56', '2020-01-10 12:56:29', NULL, 2, 1),
+(2, 2, 1, 'Это тема сообщения', 'Это текст сообщения', NULL, 0, 0, '2018-09-20 09:38:56', '2020-01-10 12:56:30', NULL, 1, 1),
 (3, 1, 2, NULL, 'Это ответ на сообщение', NULL, 0, 0, '2018-09-20 11:12:56', '2019-12-28 18:20:02', NULL, 1, 1),
 (4, 1, 2, NULL, 'Это ответ на сообщение', NULL, 0, 0, '2018-09-20 11:12:56', '2019-12-28 18:20:02', NULL, 2, 1),
 (5, 1, 2, NULL, 'Это еще одно сообщение с картинкой', '5219.jpg', 0, 0, '2019-11-12 16:52:33', '2019-12-28 18:20:02', NULL, 1, 1),
@@ -15989,12 +15989,12 @@ INSERT INTO `message` (`id`, `user_from_id`, `user_to_id`, `subject`, `message`,
 (12, 1, 2, NULL, 'Это еще одно спамовое собщение', NULL, 0, 0, '2019-11-16 12:54:56', '2019-12-28 18:20:02', NULL, 2, 1),
 (17, 1, 6, 'Это мое сообщение', 'Это текст моего сообщения', NULL, 0, 0, '2019-12-25 13:32:09', '2020-01-07 12:08:18', NULL, 1, 3),
 (18, 1, 6, 'Это мое сообщение', 'Это текст моего сообщения', NULL, 0, 0, '2019-12-25 13:32:09', '2020-01-07 12:08:18', NULL, 6, 3),
-(19, 6, 1, NULL, 'Я хотел бы задать вопрос', NULL, 1, 0, '2020-01-07 12:06:27', '2020-01-07 12:06:27', NULL, 6, 3),
-(20, 6, 1, NULL, 'Я хотел бы задать вопрос', NULL, 1, 0, '2020-01-07 12:06:27', '2020-01-07 12:06:27', NULL, 1, 3),
-(21, 6, 1, NULL, 'Я хотел бы задать вопрос', NULL, 1, 0, '2020-01-07 12:08:02', '2020-01-07 12:08:02', NULL, 6, 3),
-(22, 6, 1, NULL, 'Я хотел бы задать вопрос', NULL, 1, 0, '2020-01-07 12:08:02', '2020-01-07 12:08:02', NULL, 1, 3),
-(23, 9, 1, NULL, 'czxc', NULL, 1, 0, '2020-01-09 17:03:53', '2020-01-09 17:03:53', NULL, 9, 8),
-(24, 9, 1, NULL, 'czxc', NULL, 1, 0, '2020-01-09 17:03:53', '2020-01-09 17:03:53', NULL, 1, 8);
+(19, 6, 1, NULL, 'Я хотел бы задать вопрос', NULL, 0, 0, '2020-01-07 12:06:27', '2020-01-10 12:55:23', NULL, 6, 3),
+(20, 6, 1, NULL, 'Я хотел бы задать вопрос', NULL, 0, 0, '2020-01-07 12:06:27', '2020-01-10 12:55:23', NULL, 1, 3),
+(21, 6, 1, NULL, 'Я хотел бы задать вопрос', NULL, 0, 0, '2020-01-07 12:08:02', '2020-01-10 12:55:23', NULL, 6, 3),
+(22, 6, 1, NULL, 'Я хотел бы задать вопрос', NULL, 0, 0, '2020-01-07 12:08:02', '2020-01-10 12:55:23', NULL, 1, 3),
+(25, 1, 6, NULL, 'На заданный вопрос я дам Вам ответ', '86697.jpg', 1, 0, '2020-01-10 12:50:34', '2020-01-10 12:50:34', NULL, 1, 3),
+(26, 1, 6, NULL, 'На заданный вопрос я дам Вам ответ', '86697.jpg', 1, 0, '2020-01-10 12:50:34', '2020-01-10 12:50:34', NULL, 6, 3);
 
 -- --------------------------------------------------------
 
@@ -16308,7 +16308,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `category_id`, `user_id`, `region_id`, `city_id`, `author_name`, `author_email`, `author_phone`, `name`, `mainfoto`, `is_active`, `date_added`, `date_edited`, `views`, `views_per_date`, `is_blocked`, `is_confirm`, `correct_reason`, `translit`, `city_code_id`, `is_draft`, `base_category_id`) VALUES
-(3, 251, 1, 1, 41, 'Sunweb Sunweb', 'sales@sunweb.by', '+3721234567845', 'Ford Focus', NULL, 1, '2019-12-06 15:56:56', '2019-12-14 14:41:34', 14, 14, 0, 1, NULL, 'Ford_Focus', 2, 0, 27),
+(3, 251, 1, 1, 41, 'Sunweb Sunweb', 'sales@sunweb.by', '+3721234567845', 'Ford Focus', NULL, 1, '2019-12-06 15:56:56', '2019-12-14 14:41:34', 15, 15, 0, 1, NULL, 'Ford_Focus', 2, 0, 27),
 (5, 291, 1, 1, 41, 'Ivan', '', '+37525222222222', 'BMW F 800 GS', NULL, 1, '2019-12-26 17:37:14', '2019-12-27 14:34:17', NULL, NULL, 0, 0, NULL, 'BMW_F_800_GS', 1, 0, 248),
 (6, 282, 1, 1, 41, 'Ivan', '', '+37525222222222', 'Dirtmax DTX1', NULL, 1, '2019-12-26 17:47:50', '2019-12-27 14:40:29', NULL, NULL, 0, 0, NULL, 'Dirtmax_DTX1', 3, 1, 248),
 (7, 287, 1, 1, 41, 'Ivan', '', '+37525222222222', 'Suzuki Bandit GSF 1250', NULL, 1, '2019-12-26 17:51:53', '2019-12-27 14:36:17', NULL, NULL, 0, 0, NULL, 'Suzuki_Bandit_GSF_1250', 4, 0, 248);
@@ -17183,20 +17183,21 @@ CREATE TABLE `users` (
   `is_alert_broadcast` tinyint(1) DEFAULT '0',
   `is_alert_new_message` tinyint(1) DEFAULT '0',
   `is_alert_new_order` tinyint(1) DEFAULT '0',
-  `is_alert_change_order_status` tinyint(1) DEFAULT '0'
+  `is_alert_change_order_status` tinyint(1) DEFAULT '0',
+  `entires` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_active`, `is_confirm`, `advert_number`, `fb_id`, `is_hide_email`, `is_alert_broadcast`, `is_alert_new_message`, `is_alert_new_order`, `is_alert_change_order_status`) VALUES
-(1, 'tech@auto28.es', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'tech@auto28.es', 1, 1, 3, NULL, 0, 1, 1, 1, 0),
-(2, 'host@sunweb.by', '$2y$13$vtSH86/tdpg2PTsPbqweNurffISvjjHnNJgvB.YtgoSPgt2BHNQXi', 'host@sunweb.by', 1, 1, 0, NULL, 0, 1, 1, 1, 1),
-(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL),
-(7, 'google@mail.com', '$2y$13$XfC5uOWJ5LBPHE1I7KYiJ.PLi.AxxnRyn8xdn6ePd2TevHBFIwsJC', 'google@mail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL),
-(8, 'edwarr170484@gmail.com', '$2y$13$eyuCxfhoYVf3jQ6MyGO94OH805uQAx2ZPamznSaq1EnWNHi2/KMCW', 'edwarr170484@gmail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL),
-(9, 'info@sunweb-it.com', '$2y$13$E8h6aHFxjOfuqeREcclJLux6p4kakrXKEgyJnA.aVvShVormZJPI2', 'info@sunweb-it.com', 1, 0, 0, NULL, 0, 0, 0, 0, 0);
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_active`, `is_confirm`, `advert_number`, `fb_id`, `is_hide_email`, `is_alert_broadcast`, `is_alert_new_message`, `is_alert_new_order`, `is_alert_change_order_status`, `entires`) VALUES
+(1, 'tech@auto28.es', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'tech@auto28.es', 1, 1, 3, NULL, 0, 1, 1, 1, 0, 11),
+(2, 'host@sunweb.by', '$2y$13$vtSH86/tdpg2PTsPbqweNurffISvjjHnNJgvB.YtgoSPgt2BHNQXi', 'host@sunweb.by', 1, 1, 0, NULL, 0, 1, 1, 1, 1, 0),
+(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL, 0),
+(7, 'google@mail.com', '$2y$13$XfC5uOWJ5LBPHE1I7KYiJ.PLi.AxxnRyn8xdn6ePd2TevHBFIwsJC', 'google@mail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0),
+(8, 'edwarr170484@gmail.com', '$2y$13$eyuCxfhoYVf3jQ6MyGO94OH805uQAx2ZPamznSaq1EnWNHi2/KMCW', 'edwarr170484@gmail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0),
+(9, 'info@sunweb-it.com', '$2y$13$E8h6aHFxjOfuqeREcclJLux6p4kakrXKEgyJnA.aVvShVormZJPI2', 'info@sunweb-it.com', 1, 0, 0, NULL, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -17224,7 +17225,7 @@ CREATE TABLE `user_info` (
 --
 
 INSERT INTO `user_info` (`id`, `user_id`, `emailmessagesalerts`, `emailmessagesreminders`, `region_id`, `city_id`, `rating`, `city_code_id`, `firstname`, `lastname`, `phone`, `avatar`) VALUES
-(2732, 1, 0, 0, 1, 2, 0, 134, 'Technical', 'Support', NULL, NULL),
+(2732, 1, 0, 0, 1, 40, 0, 11559, 'Technical', 'Support', NULL, '83899.jpg'),
 (2733, 2, NULL, NULL, 1, 20, NULL, 5040, 'Sun', 'Marino', '+375277777777', NULL),
 (2734, 6, NULL, NULL, NULL, 41, NULL, 11840, 'John', 'Doe', '+375251234567', NULL),
 (2735, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
@@ -18075,7 +18076,7 @@ ALTER TABLE `dealer_salon_rate`
 -- AUTO_INCREMENT для таблицы `favorite_products`
 --
 ALTER TABLE `favorite_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT для таблицы `filter`
 --
@@ -18135,7 +18136,7 @@ ALTER TABLE `locale`
 -- AUTO_INCREMENT для таблицы `message`
 --
 ALTER TABLE `message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT для таблицы `modification`
 --
@@ -18145,7 +18146,7 @@ ALTER TABLE `modification`
 -- AUTO_INCREMENT для таблицы `note`
 --
 ALTER TABLE `note`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT для таблицы `order_status`
 --
@@ -18533,6 +18534,274 @@ ALTER TABLE `generation_item_modification`
 --
 ALTER TABLE `job`
   ADD CONSTRAINT `FK_FBD8E0F812469DE2` FOREIGN KEY (`category_id`) REFERENCES `job_category` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `locale`
+--
+ALTER TABLE `locale`
+  ADD CONSTRAINT `FK_4180C69838248176` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `message`
+--
+ALTER TABLE `message`
+  ADD CONSTRAINT `FK_B6BD307F20C3C701` FOREIGN KEY (`user_from_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_B6BD307F4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `FK_B6BD307F9AC0396` FOREIGN KEY (`conversation_id`) REFERENCES `conversation` (`id`),
+  ADD CONSTRAINT `FK_B6BD307F9EB185F9` FOREIGN KEY (`user_owner_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_B6BD307FD2F7B13D` FOREIGN KEY (`user_to_id`) REFERENCES `users` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `modification`
+--
+ALTER TABLE `modification`
+  ADD CONSTRAINT `FK_EF6425D2553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `note`
+--
+ALTER TABLE `note`
+  ADD CONSTRAINT `FK_CFBDFA144584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `FK_CFBDFA14A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `pack_price`
+--
+ALTER TABLE `pack_price`
+  ADD CONSTRAINT `FK_783CA8A812469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_783CA8A81919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `pack_service`
+--
+ALTER TABLE `pack_service`
+  ADD CONSTRAINT `FK_DAD40AAF1919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`),
+  ADD CONSTRAINT `FK_DAD40AAFED5CA9E6` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `page`
+--
+ALTER TABLE `page`
+  ADD CONSTRAINT `FK_140AB620E559DFD1` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `pages_banners`
+--
+ALTER TABLE `pages_banners`
+  ADD CONSTRAINT `FK_B51DB282684EC833` FOREIGN KEY (`banner_id`) REFERENCES `banner` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_B51DB282C4663E4` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `page_block`
+--
+ALTER TABLE `page_block`
+  ADD CONSTRAINT `FK_E59A68F4C4663E4` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `FK_D34A04AD12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_D34A04AD1B636B1A` FOREIGN KEY (`base_category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_D34A04AD8BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
+  ADD CONSTRAINT `FK_D34A04AD98260155` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
+  ADD CONSTRAINT `FK_D34A04AD9A924045` FOREIGN KEY (`city_code_id`) REFERENCES `city_code` (`id`),
+  ADD CONSTRAINT `FK_D34A04ADA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `product_filters`
+--
+ALTER TABLE `product_filters`
+  ADD CONSTRAINT `FK_A9AE7C3D4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_A9AE7C3DC44FBE02` FOREIGN KEY (`filter_value_id`) REFERENCES `filter_value` (`id`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `product_fotos`
+--
+ALTER TABLE `product_fotos`
+  ADD CONSTRAINT `FK_6AD87E9B4584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `product_info`
+--
+ALTER TABLE `product_info`
+  ADD CONSTRAINT `FK_466113F62DBF1AFE` FOREIGN KEY (`gas_transmission_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_466113F63145108E` FOREIGN KEY (`gas_type_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_466113F632CA4F08` FOREIGN KEY (`gear_type_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_466113F64584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `FK_466113F64A605127` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`),
+  ADD CONSTRAINT `FK_466113F650266CBB` FOREIGN KEY (`shape_id`) REFERENCES `shape` (`id`),
+  ADD CONSTRAINT `FK_466113F6553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
+  ADD CONSTRAINT `FK_466113F67ADA1FB5` FOREIGN KEY (`color_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_466113F6E7EC5785` FOREIGN KEY (`board_id`) REFERENCES `filter_value` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `product_options`
+--
+ALTER TABLE `product_options`
+  ADD CONSTRAINT `FK_1ECE1374584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `product_order`
+--
+ALTER TABLE `product_order`
+  ADD CONSTRAINT `FK_5475E8C4113A2C60` FOREIGN KEY (`user_received_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_5475E8C44584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `FK_5475E8C46BF700BD` FOREIGN KEY (`status_id`) REFERENCES `order_status` (`id`),
+  ADD CONSTRAINT `FK_5475E8C483B6363A` FOREIGN KEY (`user_sended_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_5475E8C48BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
+  ADD CONSTRAINT `FK_5475E8C49A924045` FOREIGN KEY (`city_code_id`) REFERENCES `city_code` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `product_order_info`
+--
+ALTER TABLE `product_order_info`
+  ADD CONSTRAINT `FK_151F546B2DBF1AFE` FOREIGN KEY (`gas_transmission_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_151F546B3145108E` FOREIGN KEY (`gas_type_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_151F546B32CA4F08` FOREIGN KEY (`gear_type_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_151F546B4A605127` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`),
+  ADD CONSTRAINT `FK_151F546B553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
+  ADD CONSTRAINT `FK_151F546B8D9F6D38` FOREIGN KEY (`order_id`) REFERENCES `product_order` (`id`),
+  ADD CONSTRAINT `FK_151F546BE7EC5785` FOREIGN KEY (`board_id`) REFERENCES `generation_board` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `product_service`
+--
+ALTER TABLE `product_service`
+  ADD CONSTRAINT `FK_304481624584665A` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  ADD CONSTRAINT `FK_30448162ED5CA9E6` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `question_answer`
+--
+ALTER TABLE `question_answer`
+  ADD CONSTRAINT `FK_DD80652D1E27F6BF` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `rate`
+--
+ALTER TABLE `rate`
+  ADD CONSTRAINT `FK_DFEC3F398E0E3CA6` FOREIGN KEY (`user_role_id`) REFERENCES `role` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `rate_bill`
+--
+ALTER TABLE `rate_bill`
+  ADD CONSTRAINT `FK_8525ABEC12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_8525ABECA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_8525ABECBC999F9F` FOREIGN KEY (`rate_id`) REFERENCES `rate` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `rate_service`
+--
+ALTER TABLE `rate_service`
+  ADD CONSTRAINT `FK_3B5FD533BC999F9F` FOREIGN KEY (`rate_id`) REFERENCES `rate` (`id`),
+  ADD CONSTRAINT `FK_3B5FD533ED5CA9E6` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `review`
+--
+ALTER TABLE `review`
+  ADD CONSTRAINT `FK_794381C6156E8682` FOREIGN KEY (`user_target_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_794381C66BF700BD` FOREIGN KEY (`status_id`) REFERENCES `review_status` (`id`),
+  ADD CONSTRAINT `FK_794381C6A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_794381C6AA334807` FOREIGN KEY (`answer_id`) REFERENCES `review` (`id`),
+  ADD CONSTRAINT `FK_794381C6AB0FA336` FOREIGN KEY (`answer_to_id`) REFERENCES `review` (`id`),
+  ADD CONSTRAINT `FK_794381C6BEB56384` FOREIGN KEY (`dealer_salon_id`) REFERENCES `dealer_salon` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `role_pack`
+--
+ALTER TABLE `role_pack`
+  ADD CONSTRAINT `FK_29612CB71919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_29612CB7D60322AC` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `role_payment`
+--
+ALTER TABLE `role_payment`
+  ADD CONSTRAINT `FK_D1E521F64C3A3BB` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_D1E521F6D60322AC` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `role_service`
+--
+ALTER TABLE `role_service`
+  ADD CONSTRAINT `FK_5D503F29D60322AC` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_5D503F29ED5CA9E6` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `service_price`
+--
+ALTER TABLE `service_price`
+  ADD CONSTRAINT `FK_63BACF3E12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_63BACF3EED5CA9E6` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `settings`
+--
+ALTER TABLE `settings`
+  ADD CONSTRAINT `FK_E545A0C52047C72E` FOREIGN KEY (`default_orderstatus_id`) REFERENCES `order_status` (`id`),
+  ADD CONSTRAINT `FK_E545A0C538248176` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`),
+  ADD CONSTRAINT `FK_E545A0C5C6B58E54` FOREIGN KEY (`default_category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_E545A0C5E559DFD1` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`),
+  ADD CONSTRAINT `FK_E545A0C5FC069BBC` FOREIGN KEY (`review_status_id`) REFERENCES `review_status` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `translation`
+--
+ALTER TABLE `translation`
+  ADD CONSTRAINT `FK_B469456F12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_B469456F1919B217` FOREIGN KEY (`pack_id`) REFERENCES `pack` (`id`),
+  ADD CONSTRAINT `FK_B469456F4A605127` FOREIGN KEY (`modification_id`) REFERENCES `modification` (`id`),
+  ADD CONSTRAINT `FK_B469456F50266CBB` FOREIGN KEY (`shape_id`) REFERENCES `shape` (`id`),
+  ADD CONSTRAINT `FK_B469456F553A6EC4` FOREIGN KEY (`generation_id`) REFERENCES `generation` (`id`),
+  ADD CONSTRAINT `FK_B469456F8BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
+  ADD CONSTRAINT `FK_B469456F98260155` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
+  ADD CONSTRAINT `FK_B469456FBC999F9F` FOREIGN KEY (`rate_id`) REFERENCES `rate` (`id`),
+  ADD CONSTRAINT `FK_B469456FC44FBE02` FOREIGN KEY (`filter_value_id`) REFERENCES `filter_value` (`id`),
+  ADD CONSTRAINT `FK_B469456FD395B25E` FOREIGN KEY (`filter_id`) REFERENCES `filter` (`id`),
+  ADD CONSTRAINT `FK_B469456FD7707B45` FOREIGN KEY (`order_status_id`) REFERENCES `order_status` (`id`),
+  ADD CONSTRAINT `FK_B469456FE559DFD1` FOREIGN KEY (`locale_id`) REFERENCES `locale` (`id`),
+  ADD CONSTRAINT `FK_B469456FED5CA9E6` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `user_info`
+--
+ALTER TABLE `user_info`
+  ADD CONSTRAINT `FK_B1087D9E8BAC62AF` FOREIGN KEY (`city_id`) REFERENCES `city` (`id`),
+  ADD CONSTRAINT `FK_B1087D9E98260155` FOREIGN KEY (`region_id`) REFERENCES `region` (`id`),
+  ADD CONSTRAINT `FK_B1087D9E9A924045` FOREIGN KEY (`city_code_id`) REFERENCES `city_code` (`id`),
+  ADD CONSTRAINT `FK_B1087D9EA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `user_rate`
+--
+ALTER TABLE `user_rate`
+  ADD CONSTRAINT `FK_A56D73F012469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_A56D73F0A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `FK_A56D73F0BC999F9F` FOREIGN KEY (`rate_id`) REFERENCES `rate` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `user_rate_item`
+--
+ALTER TABLE `user_rate_item`
+  ADD CONSTRAINT `FK_E0FF1AF547F7E3FD` FOREIGN KEY (`rate_service_id`) REFERENCES `rate_service` (`id`),
+  ADD CONSTRAINT `FK_E0FF1AF5E4948195` FOREIGN KEY (`user_rate_id`) REFERENCES `user_rate` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `user_role`
+--
+ALTER TABLE `user_role`
+  ADD CONSTRAINT `FK_2DE8C6A3A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_2DE8C6A3D60322AC` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `workinfo`
+--
+ALTER TABLE `workinfo`
+  ADD CONSTRAINT `FK_FC8C7F31249E6EA1` FOREIGN KEY (`dealer_id`) REFERENCES `dealer_info` (`id`),
+  ADD CONSTRAINT `FK_FC8C7F31BEB56384` FOREIGN KEY (`dealer_salon_id`) REFERENCES `dealer_salon` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

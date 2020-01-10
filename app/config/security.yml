@@ -35,7 +35,7 @@ security:
                 provider: admin_db_provider 
                 login_path: /admin/login
                 check_path: /admin/login
-                default_target_path: /admin
+                default_target_path: /admin/settings
             logout:
                 path:   /admin/logout
                 target: /  

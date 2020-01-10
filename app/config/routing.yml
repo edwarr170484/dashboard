@@ -21,7 +21,7 @@ dashboard_common:
     prefix:   /
 dashboard_gallery:
     resource: "@DashboardGalleryBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix: /
 
 
 

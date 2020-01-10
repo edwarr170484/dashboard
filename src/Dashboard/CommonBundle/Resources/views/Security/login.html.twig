@@ -42,25 +42,25 @@
                                     </div>
                                 {% endif %}
                                 <div class="register-form-forms">
-                                        <form action="{{path('login')}}" method="post">
-                                            <div class="registerInputBlock">
-                                                <input class="email" name="_username" value="{{ last_username }}" placeholder="{% trans %}E-mail{% endtrans %}" required />
-                                                <div class="inputMessage"></div>
-                                            </div>
-                                            <div class="registerInputBlock">
-                                                <input class="password" name="_password" type="password" value="" placeholder="{% trans %}Пароль{% endtrans %}" required />
-                                                <div class="inputMessage"></div>
-                                            </div>
-                                            {% if settings.isShowCaptcha %}
-                                                {% if app.session.get('loginerror') %}
-                                                    <div class="g-recaptcha" id="loginCaptcha"></div>
-                                                {% endif %}
+                                    <form action="{{path('login')}}" method="post">
+                                        <div class="registerInputBlock">
+                                            <input class="email" name="_username" value="{{ last_username }}" placeholder="{% trans %}E-mail{% endtrans %}" required />
+                                            <div class="inputMessage"></div>
+                                        </div>
+                                        <div class="registerInputBlock">
+                                            <input class="password" name="_password" type="password" value="" placeholder="{% trans %}Пароль{% endtrans %}" required />
+                                            <div class="inputMessage"></div>
+                                        </div>
+                                        {% if settings.isShowCaptcha %}
+                                            {% if app.session.get('loginerror') %}
+                                                <div class="g-recaptcha" id="loginCaptcha"></div>
                                             {% endif %}
-                                            <input type="hidden" name="_failure_path" value="{{path('login')}}" />
-                                            <input type="hidden" name="_target_path" value="{{ path('account') }}" />
-                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-                                            <button type="submit">{% trans %}Войти{% endtrans %}</button>
-                                        </form>
+                                        {% endif %}
+                                        <input type="hidden" name="_failure_path" value="{{path('login')}}" />
+                                        <input type="hidden" name="_target_path" value="{{ path('account') }}" />
+                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                                        <button type="submit">{% trans %}Войти{% endtrans %}</button>
+                                    </form>
                                 </div>
                                 <div class="forgotPassword">
                                     <a class="fogotPaswordLink" href="{{path('restore')}}">{% trans %}Забыли пароль?{% endtrans %}</a>

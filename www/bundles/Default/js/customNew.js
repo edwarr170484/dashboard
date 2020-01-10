@@ -55,6 +55,8 @@ $(document).ready(function(){
         $("#gamburgerModal").modal('hide');
     });
     
+    $(".masked-phone").mask("+34 99 999 99 99");
+    $(".mainPageFiltersTabs").addClass("active");
 });
 
 function toggleGamburgerMenu(event, action){

@@ -33,7 +33,7 @@
                         
 			if(selected === 0){
                             if(isWrite){
-                                cover.append("<div class='select-value'><input name='select-writable' value='"+ selectElement.attr("placeholder") +"'></div>");
+                                cover.append("<div class='select-value'><input name='select-writable' placeholder='" + selectElement.attr("placeholder") + "'></div>");
                             }else{
                                 cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div>");
                             }
@@ -53,6 +53,7 @@
                                             var active = '';
                                             if($(this).attr("selected") === 'selected'){
                                                 active = 'active';
+                                                
                                             }
                                             if($(this).attr("value") !== "0" && $(this).attr("value") !== ""){
                                                 groupOptionsList += "<div class='select-option " + active + "' data-value='" + $(this).attr("value") + "'>" + $(this).html() + "</div>";
@@ -88,7 +89,11 @@
                             params = cover.find("select").attr("placeholder") + "  ";
                         }
                         if(isWrite){
-                            cover.find(".select-value").html("<input name='select-writable' value='"+ params.slice(0,-2) +"'>");
+                            if(cover.find(".select-option.active").length > 0){
+                                cover.find(".select-value").html("<input name='select-writable' value='"+ params.slice(0,-2) +"'>");
+                            }else{
+                                cover.find(".select-value").html("<input name='select-writable' placeholder='"+ params.slice(0,-2) +"'>");
+                            }
                         }else{
                             cover.find(".select-value").html(params.slice(0,-2));
                         }
@@ -122,14 +127,14 @@
                             e.stopPropagation();
                             $(this).parent().parent().find("select").find("option").each(function(){$(this).attr("selected",null);});
                             $(this).parent().find(".select-option").each(function(){$(this).removeClass("active");});
+                            selectElement.val(null);
                             
                             if(isWrite){
-                                $(this).parent().parent().find(".select-value").html("<input name='select-writable' value='"+ $(this).parent().parent().find("select").attr("placeholder") +"'>");
+                                $(this).parent().parent().find(".select-value").find("input").val(null);
+                                $(this).parent().parent().find(".select-value").find("input").attr('placeholder',($(this).parent().parent().find("select").attr("placeholder")));
                             }else{
                                 $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
                             }
-                            
-                            $(this).parent().parent().find("select").val(0);
                         });
 			selectOptions.find(".select-option").each(function(){
 				$(this).click(function(e){
@@ -211,12 +216,12 @@
                             var optionsList = $(this).parent().next(".select-options").find(".select-option");
                             var controlVal = $(this).val();
                             optionsList.each(function(){
-                               var val = $(this).html();
-                               if(val.includes(controlVal)){
-                                   $(this).removeClass("hide");
-                               }else{
-                                   $(this).addClass("hide");
-                               }
+                                var val = $(this).html();
+                                if(val.includes(controlVal)){
+                                    $(this).removeClass("hide");
+                                }else{
+                                    $(this).addClass("hide");
+                                }
                             });
                         });
 		}

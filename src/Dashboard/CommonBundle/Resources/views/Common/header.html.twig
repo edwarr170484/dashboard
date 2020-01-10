@@ -179,8 +179,8 @@
                                     <div class="hover-border"></div>
                                     <div class="siteMainSubmenu">
                                         <ul class="list-unstyled">
-                                            <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'old'}) }}">{% trans %}С&nbsp;пробегом{% endtrans %}</a></li>
-                                            <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'new'}) }}">{% trans %}Новые{% endtrans %}</a></li>
+                                            <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchOld' : '1'}) }}">{% trans %}С&nbsp;пробегом{% endtrans %}</a></li>
+                                            <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchNew' : '1'}) }}">{% trans %}Новые{% endtrans %}</a></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -263,9 +263,9 @@
                                                 <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
                                             </div>
                                             <ul class="list-unstyled">
-                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'old'}) }}">{% trans %}С пробегом{% endtrans %}</a></li>
-                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'new'}) }}">{% trans %}Новые{% endtrans %}</a></li>
-                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'type' : 'dealer'}) }}">{% trans %}Дилеры{% endtrans %}</a></li>
+                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchOld' : '1'}) }}">{% trans %}С пробегом{% endtrans %}</a></li>
+                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchNew' : '1'}) }}">{% trans %}Новые{% endtrans %}</a></li>
+                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'dealer' : '1'}) }}">{% trans %}Дилеры{% endtrans %}</a></li>
                                             </ul>
                                         </div>
                                     {% else %}

@@ -532,7 +532,7 @@
                                         <tr>
                                             <td><span class="addAdvertParameterLabel">{% trans %}Телефон{% endtrans %}<sup> *</sup></span></td>
                                             <td>
-                                                <input name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue" required="required" type="text" {% if product.authorPhone %}value="{{  product.authorPhone }}"{% endif %} />
+                                                <input name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue masked-phone" required="required" type="text" {% if product.authorPhone %}value="{{  product.authorPhone }}"{% endif %} />
                                             </td>
                                             <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
                                             <td>

@@ -171,6 +171,11 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $notes;
     
+    /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
+     */
+    private $entires;
+    
     
     private $favoriteProducts;
     
@@ -1103,5 +1108,28 @@ class User implements AdvancedUserInterface, \Serializable
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * Set entires
+     *
+     * @param integer $entires
+     * @return User
+     */
+    public function setEntires($entires)
+    {
+        $this->entires = $entires;
+    
+        return $this;
+    }
+
+    /**
+     * Get entires
+     *
+     * @return integer 
+     */
+    public function getEntires()
+    {
+        return $this->entires;
     }
 }

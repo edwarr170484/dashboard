@@ -20,7 +20,7 @@ class DealerSalonPhoneType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
         $builder
-            ->add('phone', TextType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'form-control','placeholder' => '+34')))
+            ->add('phone', TextType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'form-control masked-phone','placeholder' => '+34')))
             ->add($builder->create('dealerSalon', 'hidden')->addModelTransformer(new DealerSalonToNumberTransformer($this->manager)));
     }
     

@@ -66,11 +66,11 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Телефон{% endtrans %}<sup> *</sup></span></td>
                                 <td>
                                     {% if user %}
-                                        <input value="{{ user.userinfo.phone }}" name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue" required="required" type="text"/>
+                                        <input value="{{ user.userinfo.phone }}" name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue masked-phone" required="required" type="text"/>
                                     {% else %}
-                                        <input name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue" required="required" type="text" />
+                                        <input name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue masked-phone" required="required" type="text" />
                                     {% endif %}
-                                    
+                                    <script>$(".masked-phone").mask("+34 99 999 99 99");</script>
                                 </td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
                                 <td>

@@ -950,4 +950,37 @@ class Product
     {
         return $this->bills;
     }
+
+    /**
+     * Add notes
+     *
+     * @param \Dashboard\CommonBundle\Entity\Note $notes
+     * @return Product
+     */
+    public function addNote(\Dashboard\CommonBundle\Entity\Note $notes)
+    {
+        $this->notes[] = $notes;
+    
+        return $this;
+    }
+
+    /**
+     * Remove notes
+     *
+     * @param \Dashboard\CommonBundle\Entity\Note $notes
+     */
+    public function removeNote(\Dashboard\CommonBundle\Entity\Note $notes)
+    {
+        $this->notes->removeElement($notes);
+    }
+
+    /**
+     * Get notes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNotes()
+    {
+        return $this->notes;
+    }
 }

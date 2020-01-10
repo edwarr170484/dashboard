@@ -1092,7 +1092,6 @@ class UserController extends Controller
         
     /**
      * @Route("/{route}", name="pagesCheck")
-     * @Route("/{_locale}/{route}", name="pagesCheckLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
      */
     public function pagesCheckAction($route, Request $request)        
     {

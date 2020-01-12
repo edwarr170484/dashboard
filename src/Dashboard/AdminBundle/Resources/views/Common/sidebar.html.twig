@@ -43,9 +43,20 @@
                         <li><a href="{{ path('admin_product_confirm') }}">Объявления на модерацию</a></li>
                     {% endif %}
                     <li><a href="{{ path('admin_product_blocked') }}">Заблокированные объявления</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-filter"></i>
+                    <span>Фильтры и типы</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_filter_types') }}">Типы фильтров</a></li>
                     <li><a href="{{ path('admin_filters') }}">Фильтры</a></li>
                 </ul>
             </li>
+            
             <li class="has-sub">
                 <a href="javascript:;">
                     <b class="caret pull-right"></b>

@@ -25,10 +25,18 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6 static-filters hidden-sm hidden-xs">
                                 <div class="filter">
-                                    <input name="searchNew" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}Новые{% endtrans %}
+                                    {% set checked = 0 %}
+                                    {% if request.request.get('searchNew') or request.query.get('searchNew') %}
+                                        {% set checked = 'checked=checked' %}
+                                    {% endif %}
+                                    <input name="searchNew" type="checkbox" value="1" class="custom-checkbox" {{ checked }} /> {% trans %}Новые{% endtrans %}
                                 </div>
                                 <div class="filter">
-                                    <input name="searchOld" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}С пробегом{% endtrans %}
+                                    {% set checked = 0 %}
+                                    {% if request.request.get('searchOld') or request.query.get('searchOld') %}
+                                        {% set checked = 'checked=checked' %}
+                                    {% endif %}
+                                    <input name="searchOld" type="checkbox" value="1" class="custom-checkbox" {{ checked }} /> {% trans %}С пробегом{% endtrans %}
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -36,9 +44,9 @@
                                     {% if category.filters %}
                                         {% for filter in category.filters %}
                                             {% if filter.isSearch %}
-                                                {% if filter.type == 'select' or filter.type == 'checkbox' or filter.type == 'radio' %}
+                                                {% if filter.type.name == 'select' or filter.type.name == 'checkbox' or filter.type.name == 'radio' or filter.type.name == 'multiselect'%}
                                                     <div class="col-lg-3 col-md-3">
-                                                        <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
+                                                        <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" {% if filter.type.name == 'multiselect' %}multiple="multiple"{% endif %} onchange="sendFiltersForm()">
                                                             {% for value in filter.values %}
                                                                 <option value="{{ value.id }}">{{ value.value }}</option>
                                                             {% endfor %}

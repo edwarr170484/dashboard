@@ -177,6 +177,8 @@ class Product
     
     private $daysLeft;
     
+    private $isFavorite;
+    
     public function getDaysLeft(){
         
         $today = new \DateTime("now");
@@ -188,6 +190,16 @@ class Product
         }else{
             return $interval->d + 1;
         }
+    }
+    
+    public function getIsFavorite(){
+        return $this->isFavorite;
+    }
+    
+    public function setIsFavorite($isFavorite){
+        $this->isFavorite = $isFavorite;
+
+        return $this;
     }
     
     /**

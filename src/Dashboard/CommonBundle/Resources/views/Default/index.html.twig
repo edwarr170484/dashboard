@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="col-lg-7 col-md-offset-1 col-lg-offset-1 mainPageFiltersBlock">
                         <div class="mainPageFiltersHeader"><h1>{% trans %}Продажа автомобилей{% endtrans %}</h1></div>
-                        {% include 'DashboardCommonBundle:Default:filtersForm.html.twig' with {'categories' : categories} %}
+                        {% include 'DashboardCommonBundle:Default:filtersForm.html.twig' with {'categories' : categories, 'request' : app.request} %}
                     </div>
                 </div>
             </div>

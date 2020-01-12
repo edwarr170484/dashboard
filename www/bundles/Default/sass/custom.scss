@@ -1432,7 +1432,7 @@ ul.color li{position: relative;}
 .userSettingsError a{@include fontView("GothamProRegular",$yellow-color,1.4rem,1.8rem);}
 .productNoteForm{background: #E7E7E7;@include border-radius(5px);width: 100%;padding: 1.5rem;display: none;}
 .productNoteForm svg{margin-right: 1.5rem;}
-.productNoteForm input{background:#fff;border: 1px solid #AAAAAA;@include border-radius(2px);flex-grow: 2;margin-right: 1.5rem;padding: 1.4rem 1rem;@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);}
+.productNoteForm textarea{background:#fff;border: 1px solid #AAAAAA;@include border-radius(2px);flex-grow: 2;margin-right: 1.5rem;padding: 1.4rem 1rem;@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);}
 .productNoteForm.active{@include flexBox(row,space-between,center);}
 .productNoteText{background: #E7E7E7;@include border-radius(5px);width: 100%;padding: 1.5rem;@include flexBox(row,space-between,center);position: relative;}
 .productNoteText.hide{display: none;}
@@ -1444,7 +1444,7 @@ ul.color li{position: relative;}
 .productNoteFormContainer{width: 100%;padding-top: 1.5rem;position: relative;z-index:9;}
 .categoryAdverts.grid .productNoteForm.active{display: block;}
 .categoryAdverts.grid .productNoteForm svg{display: none;}
-.categoryAdverts.grid .productNoteForm input{display: block;width: 100%;margin-bottom: 1.5rem;}
+.categoryAdverts.grid .productNoteForm textarea{display: block;width: 100%;margin-bottom: 1.5rem;}
 .categoryAdverts.grid .productNoteForm .cookieAlertButton button{width: 100%;}
 .categoryAdverts.grid .productNoteText{@include flexBox(row,space-between,flex-start);@include fontView("GothamProRegular",$black-text,1.3rem,2rem);}
 .categoryAdverts.grid .productNoteText .productNoteTextInner{@include fontView("GothamProRegular",$black-text,1.3rem,2rem);}
@@ -1459,6 +1459,6 @@ ul.color li{position: relative;}
 .accountAdvert.cube .productNoteText button > svg{width: 18px;height:18px;}
 .accountAdvert.cube .productNoteForm.active{display: block;}
 .accountAdvert.cube .productNoteForm svg{display: none;}
-.accountAdvert.cube .productNoteForm input{display: block;width: 100%;margin-bottom: 1.5rem;}
+.accountAdvert.cube .productNoteForm textarea{display: block;width: 100%;margin-bottom: 1.5rem;}
 .accountAdvert.cube .productNoteForm .cookieAlertButton button{width: 100%;}
 

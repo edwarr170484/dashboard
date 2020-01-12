@@ -24,7 +24,7 @@ use Dashboard\AdminBundle\Form\Type\TranslationType;
 
 use Dashboard\CommonBundle\Entity\ProductInfo;
 
-class FilterType extends AbstractType
+class FiltersType extends AbstractType
 {   
     private $manager;
     private $params;
@@ -40,24 +40,20 @@ class FilterType extends AbstractType
         
         $builder
             ->add('name', TextType::class, array('required' => true,'label' => 'Название фильтра', 'attr' => array('class' => 'form-control', 'placeholder' => 'Название фильтра')))
-            ->add('type', ChoiceType::class, array('choices' => array(
-                                                                      "select" => "Список", 
-                                                                      "radio" => "Радиокнопка", 
-                                                                      "checkbox" => "Чекбокс",
-                                                                      "region_select" => "Диапазон с выбором из списков",
-                                                                      "selectable" => "Выборка по значению",
-                                                                      "input" => "Ввод от руки",
-                                                                      "color" => "Цвет"), 
-                                                                      'required' => true, 
-                                                                      'label' => 'Тип фильтра', 'attr' => array('class' => 'form-control', 'placeholder' => 'Тип фильтра')))
+            ->add('type', 'entity', array( 'class' => 'DashboardCommonBundle:FilterType',
+                                                 'choice_label' => 'title',
+                                                 'required' => true,
+                                                 'label' => 'Тип фильтра',
+                                                 'placeholder' => 'Нет',
+                                                 'attr' => array('class' => 'form-control')))
              ->add('step', ChoiceType::class, array('choices' => array(
-                                                                      "1" => "Шаг 1", 
-                                                                      "2" => "Шаг 2", 
-                                                                      "3" => "Шаг 3",
-                                                                      "4" => "Шаг 4",
-                                                                      "5" => "Шаг 5"),
-                                                                      'required' => false,
-                                                                      'label' => 'На каком шаге добавления отображать значения', 'attr' => array('class' => 'form-control')))
+                                                            "1" => "Шаг 1", 
+                                                            "2" => "Шаг 2", 
+                                                            "3" => "Шаг 3",
+                                                            "4" => "Шаг 4",
+                                                            "5" => "Шаг 5"),
+                                                            'required' => false,
+                                                            'label' => 'На каком шаге добавления отображать значения', 'attr' => array('class' => 'form-control')))
             ->add('values', CollectionType::class, array('type' => new FilterValueType($this->manager), 'label' => ' ','allow_add' => true, 'allow_delete' => true, 'by_reference' => false,'attr' => array('class' => 'filter_values')))
             ->add('categories', 'entity', array( 'class' => 'DashboardCommonBundle:Category',
                                                  'choice_label' => 'title',

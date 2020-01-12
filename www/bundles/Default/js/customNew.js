@@ -510,7 +510,7 @@ function setReviewRating(element, rating, event){
     $("#review_rating").val(rating);
 }
 
-function addFavoriteProduct(productId, user)
+function addFavoriteProduct(productId, user, element)
 {
     if(user){
         $.ajax({
@@ -519,7 +519,7 @@ function addFavoriteProduct(productId, user)
             dataType: 'json',
             success: function(data)
             {
-                alert(data.message);
+                element.html(data.view);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 err=xhr.responseText;
@@ -643,12 +643,12 @@ function showNoteForm(productId, user){
 }
 
 function saveProductNote(productId, message){
-    var text = $("input[name='productNoteText" + productId + "']").val();
+    var text = $("textarea[name='productNoteText" + productId + "']").val();
     if(text){
         $.ajax({
             url: '/account/note/add/' + productId,
             type: 'post',
-            data: $("input[name='productNoteText" + productId + "']"),
+            data: $("textarea[name='productNoteText" + productId + "']"),
             dataType: 'json',
             success: function(data)
             {
@@ -664,11 +664,9 @@ function saveProductNote(productId, message){
 }
 
 function deleteProductNote(productId, text){
-    if(confirm(text)){
-        $.ajax({
+    $.ajax({
             url: '/account/note/delete/' + productId,
             type: 'post',
-            data: $("input[name='productNoteText" + productId + "']"),
             dataType: 'json',
             success: function(data)
             {
@@ -678,7 +676,6 @@ function deleteProductNote(productId, text){
                 err=xhr.responseText;
             }
         });
-    }
 }
 
 function clearFormFilters(formElement){

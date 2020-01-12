@@ -11,13 +11,59 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Dashboard\CommonBundle\Entity\Filter;
-use Dashboard\CommonBundle\Entity\FilterValue;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
-use Dashboard\AdminBundle\Form\Type\FilterType;
+use Dashboard\CommonBundle\Entity\FilterType;
+use Dashboard\AdminBundle\Form\Type\FiltersType;
 
 class FilterController extends Controller
 {
+    /**
+     * @Route("/admin/filter/types", name="admin_filter_types")
+     */
+    public function filterTypeListAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $types = $manager->getRepository("DashboardCommonBundle:FilterType")->findAll();
+        
+        return $this->render('DashboardAdminBundle:Filter:type.html.twig', array("types" => $types));
+    }
+    
+    /**
+     * @Route("/admin/filter/type/edit/{typeId}", name="admin_filter_type_edit", defaults={"typeId" : "0"})
+     */
+    public function filterTypeEditAction($typeId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        
+        $type = ($typeId) ? $manager->getRepository("DashboardCommonBundle:FilterType")->find($typeId) : new FilterType();
+        
+        $typeForm = $this->get('form.factory')->createNamedBuilder('filterType', 'form', $type)
+                ->add('title', TextType::class, array('required' => true, 'label' => 'Название типа:', 'attr' => array('class' => 'form-control')))
+                ->add('name', TextType::class, array('required' => true, 'label' => 'Имя параметра типа:', 'attr' => array('class' => 'form-control')))
+                ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')))->getForm();
+        
+        $typeForm->handleRequest($request);
+        
+        if($typeForm->isValid())
+        {
+            $manager->persist($type);
+            $manager->flush();
+            
+            $this->addFlash(
+                'notice',
+                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Успешно!</strong> Информация сохранена.</div>')
+            );
+            
+            return $this->redirectToRoute("admin_filter_type_edit", array("typeId" => $type->getId()));
+        }
+        
+        return $this->render('DashboardAdminBundle:Filter:typeEdit.html.twig', array("typeForm" => $typeForm->createView()));
+    }
+    
     /**
      * @Route("/admin/filters/{filterId}", name="admin_filters", defaults={"filterId" : "0"})
      */
@@ -130,7 +176,7 @@ class FilterController extends Controller
             return $this->redirectToRoute("admin_filters");
         }
         
-        return $this->render('DashboardAdminBundle:Settings:filter.html.twig', array("filters" => $filters));
+        return $this->render('DashboardAdminBundle:Filter:list.html.twig', array("filters" => $filters));
     }
     
     /**
@@ -173,7 +219,7 @@ class FilterController extends Controller
             }
         }
         
-        $filterForm = $this->createForm(new FilterType($manager), $filter);
+        $filterForm = $this->createForm(new FiltersType($manager), $filter);
         
         $filterForm->handleRequest($request);
         
@@ -272,7 +318,7 @@ class FilterController extends Controller
             return $this->redirectToRoute("admin_filters_edit", array("filterId" => $filter->getId()));
         }
         
-        return $this->render('DashboardAdminBundle:Settings:editfilter.html.twig', array("filterForm" => $filterForm->createView(),
+        return $this->render('DashboardAdminBundle:Filter:edit.html.twig', array("filterForm" => $filterForm->createView(),
                                                                                          "categories" => $categories,"filter" => $filter));
     }
 }

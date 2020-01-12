@@ -1109,4 +1109,27 @@ class User implements AdvancedUserInterface, \Serializable
     {
         return $this->notes;
     }
+
+    /**
+     * Set entires
+     *
+     * @param integer $entires
+     * @return User
+     */
+    public function setEntires($entires)
+    {
+        $this->entires = $entires;
+    
+        return $this;
+    }
+
+    /**
+     * Get entires
+     *
+     * @return integer 
+     */
+    public function getEntires()
+    {
+        return $this->entires;
+    }
 }

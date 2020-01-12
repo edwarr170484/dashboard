@@ -1,0 +1,60 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme typeForm _self %}
+
+{% block title %}{% trans %} Панель управления - Редактировать фильтр{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_filter_types') }}">Типы фильтров</a></li>
+            <li class="active">Редактировать тип</li>
+        </ol>
+        <h1 class="page-header">Редактировать тип</h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация о типе фильтра</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(typeForm, {'attr' : {'id' : 'filterForm', 'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(typeForm.title)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(typeForm.title)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(typeForm.name)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(typeForm.name)}}
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-group">
+                            <label class="col-md-3 ">{{ form_label(typeForm.save)}}</label>
+                            <div class="col-md-9">
+                                {{ form_widget(typeForm.save,{'type' : 'submit'})}}
+                            </div>
+                        </div> 
+                        {{ form_end(typeForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

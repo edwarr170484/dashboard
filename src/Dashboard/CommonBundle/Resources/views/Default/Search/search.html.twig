@@ -41,7 +41,7 @@
                 <h1>{% trans %}Поиск{% endtrans %}</h1>
             </div>
             <div class="mainPageFiltersTabs category-filters" style="padding-top: 0;">
-                 {% include 'DashboardCommonBundle:Default:Search/filtersForm.html.twig' with {'categories' : categories} %}
+                 {% include 'DashboardCommonBundle:Default:Search/filtersForm.html.twig' with {'categories' : categories, 'request' : app.request} %}
             </div>
             <div class="hidden-sm hidden-xs" style="text-align:center;">
                 {{ render(controller('DashboardCommonBundle:Default:getBanners',{'position' : 'centerpage'})) }}

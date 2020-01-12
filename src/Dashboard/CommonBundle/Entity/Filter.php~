@@ -36,7 +36,8 @@ class Filter
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\FilterType", inversedBy="filters")
+     * @ORM\JoinColumn(name="filter_type_id", referencedColumnName="id")
      */
     private $type;
 

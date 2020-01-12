@@ -6,6 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Dashboard\CommonBundle\Entity\ProductInfo;
+
 class SearchController extends Controller{
     /**
      * @Route("/search", name="search")
@@ -106,6 +108,68 @@ class SearchController extends Controller{
         }
         
         return new \Symfony\Component\HttpFoundation\JsonResponse(array("count" => ($products) ? count($products) : 0, "view" => $this->renderView('DashboardCommonBundle:Default:Search/searchAjax.html.twig', array('products' => $products,'locale' => $locale))));
+    }
+    
+    public function createSearchSqlAction($request, $category)
+    {
+        $joinInstructions = '';
+        if($request->request->get('filter'))
+        {
+            foreach($request->request->get('filter') as $key => $value)
+            {
+                if(is_array($value))
+                {
+                    foreach($value as $key => $val)
+                    {
+                        if($val != 0)
+                            $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
+                    }
+                }
+                else
+                {
+                    if($value != 0)
+                        $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
+                }
+            }
+        }
+        
+        if($request->request->get('filterRangeList'))
+        {
+            foreach($request->request->get('filterRangeList') as $key => $value)
+            {
+                if($value[0] != 0 || $value[1] != 0)
+                {
+                    $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
+                }
+            }
+        }
+        
+        if($request->request->get('filterSelectable'))
+        {
+            foreach($request->request->get('filterSelectable') as $key => $value)
+            {
+                if(count($request->request->get('filterSelectable')) > 0)
+                {
+                    $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
+                }
+            }
+        }
+        
+        $productInfo = new ProductInfo();
+        
+        if($productInfo->getVars()){
+            foreach($productInfo->getVars() as $var){
+                if($request->request->get($var)){
+                    if($var != 'filter'){
+                        foreach($request->request->get($var) as $key => $value){
+                            if($value != 0){
+                                $joinInstructions .= " LEFT JOIN pi." . $var . " pi" . $var;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

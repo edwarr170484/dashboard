@@ -383,8 +383,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .at-share-btn-elements{@include flexBox(row,flex-start,center);}
 .at-resp-share-element a.at-share-btn{margin-bottom: 0;}
 .categoryAdvertShareLinks ul li button > svg:nth-child(2){display: none;}
-.categoryAdvertShareLinks ul li button:hover > svg:nth-child(2),.categoryAdvertShareLinks ul li button:focus > svg:nth-child(2){display: block;}
-.categoryAdvertShareLinks ul li button:hover > svg:first-child,.categoryAdvertShareLinks ul li button:focus > svg:first-child{display: none;}
+.categoryAdvertShareLinks ul li button:hover > svg:nth-child(2){display: block;}
+.categoryAdvertShareLinks ul li button:hover > svg:first-child{display: none;}
 .categorySpecialAdverts{background:$black-text;@include border-radius(15px);padding: 3.5rem 2rem 0;@include box-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));margin-bottom: 3.4rem;}
 .categorySpecialAdverts.new{background: none;@include box-shadow(none);padding-left: 0;padding-right: 0;}
 .categorySpecialAdvertsHeader{padding-left: 3.2rem;background: url(../img/spec.png) 0 50% no-repeat;position: relative;@include flexBox(row,space-between,center)}

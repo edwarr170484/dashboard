@@ -1461,4 +1461,6 @@ ul.color li{position: relative;}
 .accountAdvert.cube .productNoteForm svg{display: none;}
 .accountAdvert.cube .productNoteForm textarea{display: block;width: 100%;margin-bottom: 1.5rem;}
 .accountAdvert.cube .productNoteForm .cookieAlertButton button{width: 100%;}
-
+.formParameterField.dealerSearchFormItem{position: relative;}
+.formParameterField.dealerSearchFormItem button{background: none;border:none;width: 11px;height: 11px;position: absolute;right: 11px;top: 50%;margin: 0;margin-top: -6px;display: none;}
+.formParameterField.dealerSearchFormItem.active button{display: block;}

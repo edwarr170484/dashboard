@@ -34,7 +34,11 @@ class CategoryType extends AbstractType
             ->add('name', TextType::class, array('required' => true,'label' => 'Транслит(SEO)', 'attr' => array('class' => 'form-control')))
             ->add('description', TextareaType::class, array('required' => false, 'label' => 'Описание', 'attr' => array('class' => 'form-control tinyeditor')))
             ->add('isShowFilters', CheckboxType::class, array('required' => false, 'label' => 'Показывать фильтры', 'attr' => array('class' => 'form-control')))
-            ->add('isShowBu', CheckboxType::class, array('required' => false, 'label' => 'Показывать выбор "Б/У"', 'attr' => array('class' => 'form-control')))
+            ->add('isUseChildrensLikeMark', CheckboxType::class, array('required' => false, 'label' => 'Использовать дочерние категории как фильтр по маркам', 'attr' => array('class' => 'form-control')))
+            ->add('isUseChildrensLikeModel', CheckboxType::class, array('required' => false, 'label' => 'Использовать дочерние категории как фильтр по моделям', 'attr' => array('class' => 'form-control')))
+            ->add('isUseChildrensLikeType', CheckboxType::class, array('required' => false, 'label' => 'Использовать дочерние категории как фильтр по типам', 'attr' => array('class' => 'form-control')))    
+            ->add('isShowGenerationFilter', CheckboxType::class, array('required' => false, 'label' => 'Показывать фильтр "Поколение" для категории', 'attr' => array('class' => 'form-control')))
+            ->add('isBreakRedirect', CheckboxType::class, array('required' => false, 'label' => 'Не переходить на страницу категории из главного меню', 'attr' => array('class' => 'form-control')))
             ->add('isShowPriceFilter', CheckboxType::class, array('required' => false, 'label' => 'Включить фильтр по цене', 'attr' => array('class' => 'form-control')))
             ->add('image', TextareaType::class, array('required' => false, 'label' => 'Код изображения SVG', 'attr' => array('class' => 'form-control')))
             ->add('parent', 'entity', array('class' => 'DashboardCommonBundle:Category', 
@@ -44,8 +48,8 @@ class CategoryType extends AbstractType
                                             'group_by' => 'parent.title',
                                             'required' => false,
                                             'attr' => array('class' => 'form-control')))
-            ->add('yearFrom', TextType::class, array('required' => true,'label' => 'Год начала выпуска', 'attr' => array('class' => 'form-control')))
-            ->add('yearTo', TextType::class, array('required' => true,'label' => 'Год окончания выпуска', 'attr' => array('class' => 'form-control')))
+            ->add('yearFrom', TextType::class, array('required' => false,'label' => 'Год начала выпуска', 'attr' => array('class' => 'form-control')))
+            ->add('yearTo', TextType::class, array('required' => false,'label' => 'Год окончания выпуска', 'attr' => array('class' => 'form-control')))
             ->add('metaTagTitle', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Title', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Title')))
             ->add('metaTagDescription', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Description', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Description')))
             ->add('metaTagAuthor', TextareaType::class, array('required' => false, 'label' => 'Мета-тег Author', 'attr' => array('class' => 'form-control','placeholder' => 'Мета-тег Author')))

@@ -467,8 +467,36 @@ function selectDealers(element, action){
     element.parent().parent().find("a").removeClass("active");
     element.addClass("active");
     $("input[name='dealerAutoType']").val(action);
+    getDelaerListByForm();
+}
+
+function setAutoId(autoId, autoName, element){
+    $(".mapListAutoLabel").removeClass('active');
+    element.parent().addClass('active');
+    $("input[name='dealerAuto']").val(autoName);
+    $("input[name='dealerAuto']").blur();
+    $("input[name='dealerAutoId']").val(autoId);
+    $(".mapListItems").toggleClass("hide");
+    if(!$(".dealerSearchFormItem").hasClass("active")){
+        $(".dealerSearchFormItem").addClass("active");
+    }
+    getDelaerListByForm();
+}
+
+function clearDealerAuto(element, event){
+    event.stopPropagation();
+    element.parent().removeClass("active");
+    $("input[name='dealerAutoId']").val(null);
+    $("input[name='dealerAuto']").val(null);
+    $(".mapListAutoLabel").removeClass('active');
+    getDelaerListByForm();
+}
+
+function getDelaerListByForm(){
     $.ajax({
-        url: '/dealer/getlist/' + action,
+        url: '/dealer/getlist',
+        type: 'post',
+        data: $("#findDealersForm input"),
         dataType: 'html',
         beforeSend: function(){},
         success: function(data){
@@ -480,14 +508,6 @@ function selectDealers(element, action){
     });
 }
 
-function setAutoId(autoId, autoName, element){
-    $(".mapListAutoLabel").removeClass('active');
-    element.parent().addClass('active');
-    $("input[name='dealerAuto']").val(autoName);
-    $("input[name='dealerAuto']").blur();
-    $("input[name='dealerAutoId']").val(autoId);
-    $(".mapListItems").toggleClass("hide");
-}
 
 function setServiceAutoId(autoId, autoName, element){
     $("input[name='serviceAuto']").val(autoName);
@@ -693,4 +713,26 @@ function clearFormFilters(formElement){
         $(this).parent().find('.clear-selects').trigger('click');
         $(this).parent().removeClass("selected");
     });
+}
+
+function getSubCategories(element, targetElement, type){
+    var val = element.val();
+    $.ajax({
+        url: '/category/subcategories/' + type + '/' + val,
+        type: 'get',
+        dataType: 'html',
+        success: function(data)
+        {
+            targetElement.html(data);
+            targetElement.find("select").customSelect();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            err=xhr.responseText;
+        }
+    });
+}
+
+function selectDealerAutoMark(element){
+    element.find("input").blur();
+    $(".mapListItems").toggleClass("hide");
 }

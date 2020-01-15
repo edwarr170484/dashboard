@@ -19,17 +19,86 @@
             </div>
             <div class="col-lg-12 col-md-12">
                 <div class="row">
-                    {% if category.children | length > 0 %}
-                        <div class="col-lg-3 col-md-3">
-                            <select name="categoryChild[]" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" multiple="multiple" onchange="sendFiltersForm()">
-                                {% for child in category.children %}
+                    {% if categories | length > 0 %}
+                        {% if categories[0].isUseChildrensLikeType %}
+                            {% if categories[0].children | length > 0 %}
+                                <div class="col-lg-3 col-md-3" id="categoryType">
+                                    <select name="categoryFilter[type]" class="custom-select" placeholder="{% trans %}Тип{% endtrans %}" onchange="getSubCategories($(this), $('#categoryMark'), 'mark')">
+                                        {% for child in categories[0].children %}
+                                            {% set selected = '' %}
+                                            {% if request.request.get('categoryFilter') and request.request.get('categoryFilter')['type'] is defined %}
+                                                {% if child.id == request.request.get('categoryFilter')['type'] %}
+                                                    {% set selected = 'selected=selected' %}
+                                                {% endif %}
+                                            {% endif %}
+                                            <option value="0"></option>
+                                            <option value="{{ child.id}}" {{ selected }}>
+                                                {{ child.title }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {% if categories[0].children | length > 0 %}
+                                <div class="col-lg-3 col-md-3" id="categoryMark">
+                                    <select name="categoryFilter[mark]" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel'), 'model')">
+                                        {% for child in categories[0].children %}
+                                            {% set selected = '' %}
+                                            {% if request.request.get('categoryFilter') and request.request.get('categoryFilter')['mark'] is defined %}
+                                                {% if child.id == request.request.get('categoryFilter')['mark'] %}
+                                                    {% set selected = 'selected=selected' %}
+                                                {% endif %}
+                                            {% elseif categories[1] is defined %}
+                                                {% if child.id == categories[1].id %}
+                                                    {% set selected = 'selected=selected' %}
+                                                {% endif %}
+                                            {% endif %}
+                                            <option value="0"></option>
+                                            <option value="{{ child.id}}" {{ selected }}>
+                                                {{ child.title }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% if categories[0].isUseChildrensLikeType %}
+                        <div class="col-lg-3 col-md-3" id="categoryMark">
+                            <select name="categoryFilter[mark]" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel'), 'model')">
+                                {% for child in categoryMarks %}
                                     {% set selected = '' %}
-                                    {% if request.request.get('categoryChild') %}
-                                        {% for key,value in request.request.get('categoryChild') %}
+                                    {% if request.request.get('categoryFilter') and request.request.get('categoryFilter')['mark'] is defined %}
+                                        {% if child.id == request.request.get('categoryFilter')['mark'] %}
+                                            {% set selected = 'selected=selected' %}
+                                        {% endif %}
+                                    {% elseif categories[2] is defined %}
+                                        {% if child.id == categories[2].id %}
+                                            {% set selected = 'selected=selected' %}
+                                        {% endif %}
+                                    {% endif %}
+                                    <option value="0"></option>
+                                    <option value="{{ child.id}}" {{ selected }}>
+                                        {{ child.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-3" id="categoryModel">
+                            <select name="categoryFilter[model][]" class="custom-select" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
+                                {% for child in categoryModels %}
+                                    {% set selected = '' %}
+                                    {% if request.request.get('categoryFilter') and request.request.get('categoryFilter')['model'] is defined %}
+                                        {% for key,value in request.request.get('categoryFilter')['model'] %}
                                             {% if child.id == value %}
                                                 {% set selected = 'selected=selected' %}
                                             {% endif %}
                                         {% endfor %}
+                                    {% elseif categories[3] is defined %}
+                                        {% if child.id == categories[3].id %}
+                                            {% set selected = 'selected=selected' %}
+                                        {% endif %}
                                     {% endif %}
                                     <option value="{{ child.id}}" {{ selected }}>
                                         {{ child.title }}
@@ -37,7 +106,29 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    {% endif %}        
+                    {% else %}
+                        <div class="col-lg-3 col-md-3" id="categoryModel">
+                            <select name="categoryFilter[model][]" class="custom-select" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
+                                {% for child in categoryModels %}
+                                    {% set selected = '' %}
+                                    {% if request.request.get('categoryFilter') and request.request.get('categoryFilter')['model'] is defined %}
+                                        {% for key,value in request.request.get('categoryFilter')['model'] %}
+                                            {% if child.id == value %}
+                                                {% set selected = 'selected=selected' %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% elseif categories[2] is defined %}
+                                        {% if child.id == categories[2].id %}
+                                            {% set selected = 'selected=selected' %}
+                                        {% endif %}
+                                    {% endif %}
+                                    <option value="{{ child.id}}" {{ selected }}>
+                                        {{ child.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div> 
+                    {% endif %}
                     {% if formFilters | length > 0 %}
                         {% for filter in formFilters %}
                             {% if filter.isSearch %}
@@ -82,8 +173,8 @@
                                 {% if filter.type.name == 'selectable' %}
                                     <div class="col-lg-3 col-md-3">
                                         <div class="filtersFromTo">
-                                            <input name="filterSelectable[{{ filter.id }}]" value="{% if request.request.get('filterSelectable') %}{{ request.request.get('filterSelectable')[0] }}{% endif %}" placeholder="{{ filter.name}}, {% trans %}от{% endtrans %}" />
-                                            <input name="filterSelectable[{{ filter.id }}]" value="{% if request.request.get('filterSelectable') %}{{ request.request.get('filterSelectable')[1] }}{% endif %}" placeholder="{{ filter.name}}, {% trans %}до{% endtrans %}" />
+                                            <input name="{{ filter.productParameter }}Selectable[{{ filter.id }}]" value="{% if request.request.get('filterSelectable') %}{{ request.request.get('filterSelectable')[0] }}{% endif %}" placeholder="{{ filter.name}}, {% trans %}от{% endtrans %}" />
+                                            <input name="{{ filter.productParameter }}Selectable[{{ filter.id }}]" value="{% if request.request.get('filterSelectable') %}{{ request.request.get('filterSelectable')[1] }}{% endif %}" placeholder="{{ filter.name}}, {% trans %}до{% endtrans %}" />
                                         </div>
                                     </div>  
                                 {% endif %}
@@ -94,7 +185,7 @@
                                                 <option value="0"></option>
                                                 {% for value in filter.values %}
                                                     {% set selected = '' %}
-                                                    {% if request.request.get(filter.productParameter ~ 'RangeList') %}
+                                                    {% if request.request.get(filter.productParameter ~ 'RangeList') and request.request.get(filter.productParameter ~ 'RangeList')[filter.id][0] is defined %}
                                                         {% if value.id == request.request.get(filter.productParameter ~ 'RangeList')[filter.id][0] %}
                                                             {% set selected = 'selected=selected' %}
                                                         {% endif %}
@@ -106,7 +197,7 @@
                                                 <option value="0"></option>
                                                 {% for value in filter.values %}
                                                     {% set selected = '' %}
-                                                    {% if request.request.get(filter.productParameter ~ 'RangeList') %}
+                                                    {% if request.request.get(filter.productParameter ~ 'RangeList') and request.request.get(filter.productParameter ~ 'RangeList')[filter.id][1] is defined %}
                                                         {% if value.id == request.request.get(filter.productParameter ~ 'RangeList')[filter.id][1] %}
                                                             {% set selected = 'selected=selected' %}
                                                         {% endif %}

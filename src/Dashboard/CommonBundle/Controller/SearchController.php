@@ -113,47 +113,6 @@ class SearchController extends Controller{
     public function createSearchSqlAction($request, $category)
     {
         $joinInstructions = '';
-        if($request->request->get('filter'))
-        {
-            foreach($request->request->get('filter') as $key => $value)
-            {
-                if(is_array($value))
-                {
-                    foreach($value as $key => $val)
-                    {
-                        if($val != 0)
-                            $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
-                    }
-                }
-                else
-                {
-                    if($value != 0)
-                        $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
-                }
-            }
-        }
-        
-        if($request->request->get('filterRangeList'))
-        {
-            foreach($request->request->get('filterRangeList') as $key => $value)
-            {
-                if($value[0] != 0 || $value[1] != 0)
-                {
-                    $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
-                }
-            }
-        }
-        
-        if($request->request->get('filterSelectable'))
-        {
-            foreach($request->request->get('filterSelectable') as $key => $value)
-            {
-                if(count($request->request->get('filterSelectable')) > 0)
-                {
-                    $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
-                }
-            }
-        }
         
         $productInfo = new ProductInfo();
         
@@ -166,10 +125,117 @@ class SearchController extends Controller{
                                 $joinInstructions .= " LEFT JOIN pi." . $var . " pi" . $var;
                             }
                         }
+                    }else{
+                        foreach($request->request->get($var) as $key => $value){
+                            if(is_array($value)){
+                                foreach($value as $key => $val){
+                                    if($val != 0){
+                                        $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
+                                    } 
+                                }
+                            }else{
+                                 if($value != 0){
+                                     $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
+                                 }
+                            }
+                        }
+                    }
+                }
+                
+                if($request->request->get($var . 'RangeList')){
+                    foreach($request->request->get($var . 'RangeList') as $key => $value){
+                        if($value[0] != 0 || $value[1] != 0){
+                            if($var != 'filter'){
+                                $joinInstructions .= " LEFT JOIN pi." . $var . " pi" . $var;
+                            }else{
+                                $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
+                            }
+                        }
+                    }
+                }
+                
+                if($request->request->get($var . 'Selectable')){
+                    foreach($request->request->get($var . 'Selectable') as $key => $value){
+                        if(count($request->request->get($var . 'Selectable')) > 0){
+                            if($var != 'filter'){
+                                $joinInstructions .= " LEFT JOIN pi." . $var . " pi" . $var;
+                            }else{
+                                $joinInstructions .= " LEFT JOIN p.filters pf" . $key . " ";
+                            }
+                        }
                     }
                 }
             }
         }
+        
+        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.info pi" . $joinInstructions . " LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0";
+        
+        if($request->request->get('searchText')){
+            $sql .= " AND (p.name LIKE '%" . $request->request->get('searchText') . "%'";
+            $sql .= " OR p.description LIKE '%" . $request->request->get('searchText') . "%')";
+        }
+        
+        if($request->request->get('searchNew') && $request->request->get('searchOld')){
+            $sql .= " AND (pi.probeg <= 0 or pi.probeg > 0)";
+        }elseif($request->request->get('searchNew')){
+            $sql .= " AND pi.probeg <= 0";
+        }elseif($request->request->get('searchOld')){
+            $sql .= " AND pi.probeg > 0";
+        }elseif($request->query->get('searchNew')){
+            $sql .= " AND pi.probeg <= 0";
+        }elseif($request->query->get('searchOld')){
+            $sql .= " AND pi.probeg > 0";
+        }
+        
+        if($request->request->get('categoryChild')){
+            $sql .= " AND (";
+            foreach($request->request->get('categoryChild') as $key => $categoryId){
+                $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+                
+                if($searchCategory){
+                    if($searchCategory->getChildren()){
+                        if($key == 0){
+                            $sql .= "p.category = " . $searchCategory->getId();
+                            foreach($searchCategory->getChildren() as $child){
+                                $sql .= " OR p.category = " . $child->getId();
+                                $sql .= $this->createCategorySql($child); 
+                            }
+                        }else{
+                            $sql .= " OR p.category = " . $searchCategory->getId();
+                            foreach($searchCategory->getChildren() as $child){
+                                $sql .= " OR p.category = " . $child->getId();
+                                $sql .= $this->createCategorySql($child); 
+                            }
+                        }
+                    }
+                    else{
+                        if($key == 0){
+                            $sql .= "p.category = " . $searchCategory->getId();
+                        }else{
+                            $sql .= " OR p.category = " . $searchCategory->getId();
+                        }
+                    }
+                }
+            }
+            $sql .= ")";
+        } 
+        else
+        {
+            if($category->getChildren())
+            {
+                $sql .= " AND (p.category = " . $category->getId();
+                foreach($category->getChildren() as $child)
+                {
+                    $sql .= " OR p.category = " . $child->getId();
+                    $sql .= $this->createCategorySql($child); 
+                    
+                }
+                $sql .= ")";
+            }
+            else
+                $sql .= " AND p.category = " . $category->getId();
+        }
+        
     }
 }
 

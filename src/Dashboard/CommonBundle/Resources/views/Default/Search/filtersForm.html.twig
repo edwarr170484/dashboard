@@ -65,20 +65,20 @@
                                             {% if filter.type == 'selectable' %}
                                                 <div class="col-lg-3 col-md-3">
                                                     <div class="filtersFromTo">
-                                                        <input name="filterSelectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}от{% endtrans %}" />
-                                                        <input name="filterSelectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}до{% endtrans %}" />
+                                                        <input name="{{ filter.productParameter }}Selectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}от{% endtrans %}" />
+                                                        <input name="{{ filter.productParameter }}Selectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}до{% endtrans %}" />
                                                     </div>
                                                 </div>
                                             {% endif %}
                                             {% if filter.type == 'region_select' %}
                                                 <div class="col-lg-3 col-md-3">
                                                     <div class="filtersFromTo">
-                                                        <select name="filterRangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}, {% trans %}от{% endtrans %}" onchange="sendFiltersForm()">
+                                                        <select name="{{ filter.productParameter }}RangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}, {% trans %}от{% endtrans %}" onchange="sendFiltersForm()">
                                                             {% for value in filter.values %}
                                                                 <option value="{{ value.id }}">{{ value.value }}</option>
                                                             {% endfor %}
                                                         </select>
-                                                        <select name="filterRangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }} {% trans %}до{% endtrans %}" onchange="sendFiltersForm()">
+                                                        <select name="{{ filter.productParameter }}RangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }} {% trans %}до{% endtrans %}" onchange="sendFiltersForm()">
                                                             {% for value in filter.values %}
                                                                 <option value="{{ value.id }}">{{ value.value }}</option>
                                                             {% endfor %}

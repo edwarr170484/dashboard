@@ -2,19 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/xampp/htdocs/auto.local/www/bundles/Default/js/customNew.js</file>
-            <file>file:/C:/xampp/htdocs/auto.local/www/bundles/Default/sass/custom.scss</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/CommonBundle/Resources/views/Default/Products/regular.html.twig</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/CommonBundle/Resources/views/Default/Category/filterForm.html.twig</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/CommonBundle/Entity/FilterType.php</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/CommonBundle/Controller/SearchController.php</file>
-            <file>file:/C:/xampp/htdocs/auto.local/app/Resources/translations/messages.es.xlf</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/AdminBundle/Form/Type/FilterType.php</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/CommonBundle/Resources/views/Default/Category/category.html.twig</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/CommonBundle/Entity/Filter.php</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/CommonBundle/Controller/CategoryController.php</file>
-            <file>file:/C:/xampp/htdocs/auto.local/src/Dashboard/CommonBundle/Controller/AccountController.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -172,7 +172,11 @@
                         {% for category in categories %}
                             {% if category.id == 27 %}
                                 <li class="submenu">
-                                    <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
+                                    {% if category.isUseChildrensLikeModel %}
+                                        <a href="javascript:void(0)">
+                                    {% else %}
+                                        <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
+                                    {% endif %}
                                         {{ category.title}}
                                         <div class="shadowBlock"></div>
                                     </a>
@@ -186,7 +190,11 @@
                                 </li>
                             {% else %}
                                 <li class="{% if category.children | length > 0 %}submenu{% endif %}">
-                                    <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
+                                    {% if category.isUseChildrensLikeModel %}
+                                        <a href="javascript:void(0)">
+                                    {% else %}
+                                        <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
+                                    {% endif %}
                                         {{ category.title}}
                                         <div class="shadowBlock"></div>
                                     </a>
@@ -260,7 +268,11 @@
                                     {% if category.id == 27 %}
                                         <div class="siteMenuGamburgerItem">
                                             <div class="siteMenuGamburgerHeader">
-                                                <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
+                                                {% if category.isUseChildrensLikeModel %}
+                                                    <a href="javascript:void(0)">{{ category.title}}</a>
+                                                {% else %}
+                                                    <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
+                                                {% endif %}
                                             </div>
                                             <ul class="list-unstyled">
                                                 <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchOld' : '1'}) }}">{% trans %}С пробегом{% endtrans %}</a></li>
@@ -271,7 +283,11 @@
                                     {% else %}
                                         <div class="siteMenuGamburgerItem">
                                             <div class="siteMenuGamburgerHeader">
-                                                <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
+                                                {% if category.isUseChildrensLikeModel %}
+                                                    <a href="javascript:void(0)">{{ category.title}}</a>
+                                                {% else %}
+                                                    <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
+                                                {% endif %}
                                             </div>
                                             {% if category.children | length > 0 %}
                                                 <ul class="list-unstyled">

@@ -9,7 +9,7 @@
             {% if dealers | length > 0 %}
                 <div class="col-lg-4 col-md-4">
                     <div class="mapListSearchBlock">
-                        <form action="{{ path('dealers') }}" method="POST">
+                        <form action="{{ path('dealers') }}" method="POST" id="findDealersForm">
                             <div class="mapListSearchBlockHeader">{% trans %}Список дилеров по продаже новых авто{% endtrans %}</div>
                             <div class="mapListSearchBlockTabs">
                                 {% if app.request.get('dealerAutoType') %}
@@ -27,11 +27,16 @@
                                 {% endif %}
                             </div>
                             <div class="mapListSearchBlockForm">
-                                <div class="formParameterField" id="selectAutoMark">
+                                <div class="formParameterField dealerSearchFormItem {% if app.request.get('dealerAuto') %}active{% endif %}" id="selectAutoMark">
                                     <input name="dealerAuto" type="text" placeholder="{% trans %}Марка авто{% endtrans %}" value="{% if app.request.get('dealerAuto') %}{{ app.request.get('dealerAuto') }}{% endif %}"/>
+                                    <button type="button" onclick="clearDealerAuto($(this), event)">
+                                        <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"/>
+                                        </svg>
+                                    </button>
                                 </div>
                                 <div class="formParameterField">
-                                    <input name="dealerName" type="text" placeholder="{% trans %}Название дилера{% endtrans %}" value="{% if app.request.get('dealerName') %}{{ app.request.get('dealerName') }}{% endif %}"/>
+                                    <input name="dealerName" type="text" placeholder="{% trans %}Название дилера{% endtrans %}" value="{% if app.request.get('dealerName') %}{{ app.request.get('dealerName') }}{% endif %}" />
                                 </div>
                                 <div class="formParameterField button">
                                     <input name="dealerAutoType" type="hidden" value="{% if app.request.get('dealerAutoType') %}{{ app.request.get('dealerAutoType') }}{% else %}all{% endif %}" />

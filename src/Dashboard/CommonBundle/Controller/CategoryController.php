@@ -59,6 +59,39 @@ class CategoryController extends Controller
         $filters = new ArrayCollection();
         $this->getFilters($filters, $categories[0]);
         
+        $categoryModels = new ArrayCollection();
+        $categoryMarks = new ArrayCollection();
+        
+        if($request->request->get('categoryFilter')){
+            $categoryFilters = $request->request->get('categoryFilter');
+            if(isset($categoryFilters['type'])){
+                $categoryType = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryFilters['type']);
+                if($categoryType){
+                    $categoryMarks = $categoryType->getChildren();
+                }
+            }
+            
+            if(isset($categoryFilters['mark'])){
+                $categoryMark = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryFilters['mark']);
+                if($categoryMark){
+                    $categoryModels = $categoryMark->getChildren();
+                }
+            }
+        }else{
+            if($categories[0]->getIsUseChildrensLikeType()){
+                if(isset($categories[1])){
+                    $categoryMarks = $categories[1]->getChildren();
+                }
+                if(isset($categories[2])){
+                    $categoryModels = $categories[2]->getChildren();
+                }
+            }else{
+                if(isset($categories[1])){
+                    $categoryModels = $categories[1]->getChildren();
+                }
+            }
+        }
+        
         $joinInstructions = '';
         
         if($request->request->get('filter'))
@@ -120,41 +153,75 @@ class CategoryController extends Controller
         
         $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.info pi" . $joinInstructions . " LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0 AND p.isActive = 1";
         
-        if($request->request->get('categoryChild'))
-        {
-            $sql .= " AND (";
-            foreach($request->request->get('categoryChild') as $key => $categoryId){
-                $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
-                
-                if($searchCategory){
-                    if($searchCategory->getChildren()){
-                        if($key == 0){
-                            $sql .= "p.category = " . $searchCategory->getId();
-                            foreach($searchCategory->getChildren() as $child){
-                                $sql .= " OR p.category = " . $child->getId();
-                                $sql .= $this->createCategorySql($child); 
-                            }
-                        }else{
-                            $sql .= " OR p.category = " . $searchCategory->getId();
-                            foreach($searchCategory->getChildren() as $child){
-                                $sql .= " OR p.category = " . $child->getId();
-                                $sql .= $this->createCategorySql($child); 
+        if($this->get('session')->has('sessionCity')){
+            $sql .= " AND p.city = " . $this->get('session')->get('sessionCity');
+        }
+        
+        if($request->request->get('categoryFilter')){
+            if(isset($categoryFilters['model']) && $categoryFilters['model'] != 0){
+                $sql .= " AND (";
+                foreach($categoryFilters['model'] as $key => $categoryId){
+                    $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+                    if($searchCategory){
+                        if($searchCategory->getChildren()){
+                            if($key == 0){
+                                $sql .= "p.category = " . $searchCategory->getId();
+                                foreach($searchCategory->getChildren() as $child){
+                                    $sql .= " OR p.category = " . $child->getId();
+                                    $sql .= $this->createCategorySql($child); 
+                                }
+                            }else{
+                                $sql .= " OR p.category = " . $searchCategory->getId();
+                                foreach($searchCategory->getChildren() as $child){
+                                    $sql .= " OR p.category = " . $child->getId();
+                                    $sql .= $this->createCategorySql($child); 
+                                }
                             }
                         }
-                    }
-                    else{
-                        if($key == 0){
-                            $sql .= "p.category = " . $searchCategory->getId();
-                        }else{
-                            $sql .= " OR p.category = " . $searchCategory->getId();
+                        else{
+                            if($key == 0){
+                                $sql .= "p.category = " . $searchCategory->getId();
+                            }else{
+                                $sql .= " OR p.category = " . $searchCategory->getId();
+                            }
                         }
                     }
                 }
+                $sql .= ")";
+            }elseif(isset($categoryFilters['mark']) && $categoryFilters['mark'] != 0){
+                $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryFilters['mark']);
+                if($searchCategory->getChildren())
+                {
+                    $sql .= " AND (p.category = " . $searchCategory->getId();
+                    foreach($searchCategory->getChildren() as $child)
+                    {
+                        $sql .= " OR p.category = " . $child->getId();
+                        $sql .= $this->createCategorySql($child); 
+
+                    }
+                    $sql .= ")";
+                }
+                else{
+                    $sql .= " AND p.category = " . $searchCategory->getId();
+                }
+            }elseif(isset($categoryFilters['type']) && $categoryFilters['type'] != 0){
+                $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryFilters['type']);
+                if($searchCategory->getChildren())
+                {
+                    $sql .= " AND (p.category = " . $searchCategory->getId();
+                    foreach($searchCategory->getChildren() as $child)
+                    {
+                        $sql .= " OR p.category = " . $child->getId();
+                        $sql .= $this->createCategorySql($child); 
+
+                    }
+                    $sql .= ")";
+                }
+                else{
+                    $sql .= " AND p.category = " . $searchCategory->getId();
+                }
             }
-            $sql .= ")";
-        } 
-        else
-        {
+        }else{
             if($category->getChildren())
             {
                 $sql .= " AND (p.category = " . $category->getId();
@@ -166,8 +233,9 @@ class CategoryController extends Controller
                 }
                 $sql .= ")";
             }
-            else
+            else{
                 $sql .= " AND p.category = " . $category->getId();
+            }
         }
         
         if($request->request->get('searchText'))
@@ -181,6 +249,10 @@ class CategoryController extends Controller
         }elseif($request->request->get('searchNew')){
             $sql .= " AND pi.probeg <= 0";
         }elseif($request->request->get('searchOld')){
+            $sql .= " AND pi.probeg > 0";
+        }elseif($request->query->get('searchNew')){
+            $sql .= " AND pi.probeg <= 0";
+        }elseif($request->query->get('searchOld')){
             $sql .= " AND pi.probeg > 0";
         }
         
@@ -204,142 +276,152 @@ class CategoryController extends Controller
                                 $sql .= ")";
                             }
                         }
-                    }
-                }
-            }
-        }
-        
-        if($request->request->get('filter'))
-        {
-            foreach($request->request->get('filter') as $key => $value)
-            {
-                $filterId = $key;
-                if(is_array($value))
-                {
-                    foreach($value as $key => $val)
-                    {
-                        if($val != 0)
-                            $sql .= " AND pf" . $key . ".id = " . $val;
-                    }
-                }
-                else
-                {
-                    if($value != 0)
-                        $sql .= " AND pf" . $filterId . ".id = " . $value;
-                }
-            }
-        }
-        
-        if($productInfo->getVars()){
-            foreach($productInfo->getVars() as $var){
-                if($request->request->get($var . "RangeList")){
-                    if($var != 'filter'){
-                        
-                    }
-                }
-            }
-        }
-        
-        /*if($request->request->get('filterRangeList'))
-        {
-            foreach($request->request->get('filterRangeList') as $key => $value)
-            {
-                $filterId = $key;
-                if($value[0] != 0 || $value[1] != 0)
-                {
-                    $valueStart = ($manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[0])) ? $manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[0])->getValue() : 0;
-                    $valueEnd = ($manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[1])) ? $manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[1])->getValue() : 0;
-
-                    if($valueStart < $valueEnd)
-                    {
-                        $filterValues = $manager->createQuery("SELECT fv,f FROM DashboardCommonBundle:FilterValue fv LEFT JOIN fv.filter f WHERE f.id = " . $key . " AND (fv.value >= " . (int)$valueStart . " AND fv.value <= " . (int)$valueEnd . ")")->getResult();
-                    }
-                    else
-                    {
-                        $filterValues = $manager->createQuery("SELECT fv,f FROM DashboardCommonBundle:FilterValue fv LEFT JOIN fv.filter f WHERE f.id = " . $key . " AND fv.value >= " . (int)$valueStart)->getResult();
-                    }
-
-                    if($filterValues)
-                    {
-                        $sql .= " AND (";
-
-                        if(count($filterValues) > 1)
-                        {
-                            $marker = count($filterValues);
-                            foreach($filterValues as $filterValue)
+                    }else{
+                        foreach($request->request->get($var) as $key => $value){
+                            $filterId = $key;
+                            if(is_array($value))
                             {
-                                $sql .= "pf" . $filterId . ".id = " . $filterValue->getId();
-                                if($marker != 1)
+                                foreach($value as $key => $val)
                                 {
-                                    $sql .= " OR ";
+                                    if($val != 0)
+                                        $sql .= " AND pf" . $key . ".id = " . $val;
                                 }
-                                $marker--;
-                            }
-                        }
-                        else
-                        {
-                            foreach($filterValues as $filterValue)
-                            {
-                                $sql .= "pf" . $filterId . ".id = " . $filterValue->getId();
-                            }
-                        }
-                        $sql .= ")";
-                    }
-                }
-            }
-        }*/
-        
-        if(null !== $request->request->get('filterSelectable'))
-        {
-            if(count($request->request->get('filterSelectable')) > 0)
-            {
-                foreach($request->request->get('filterSelectable') as $key => $value)
-                {
-                    $filterId = $key;
-                    if(count($value) > 0)
-                    {
-                        $valueStart = (isset($value[0])) ? $value[0] : 0;
-                        $valueEnd = (isset($value[1])) ? $value[1] : 0;
-                        
-                        if($valueStart != 0 || $valueEnd != 0)
-                        {
-                            if($valueStart < $valueEnd)
-                            {
-                                $filterValues = $manager->createQuery("SELECT fv,f FROM DashboardCommonBundle:FilterValue fv LEFT JOIN fv.filter f WHERE f.id = " . $key . " AND (fv.value >= " . (int)$valueStart . " AND fv.value <= " . (int)$valueEnd . ")")->getResult();
                             }
                             else
                             {
-                                $filterValues = $manager->createQuery("SELECT fv,f FROM DashboardCommonBundle:FilterValue fv LEFT JOIN fv.filter f WHERE f.id = " . $key . " AND fv.value >= " . (int)$valueStart)->getResult();
+                                if($value != 0)
+                                    $sql .= " AND pf" . $filterId . ".id = " . $value;
                             }
-
-                            if($filterValues)
+                        }
+                    }
+                }
+                
+                if($request->request->get($var . "RangeList")){
+                    if($var != 'filter'){
+                       foreach($request->request->get($var . 'RangeList') as $key => $value){
+                            if((isset($value[0]) && $value[0] != 0) || (isset($value[1]) && $value[1] != 0)){
+                                if(isset($value[0]) && $value[0] != 0){
+                                    $parameter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[0]);
+                                    $sql .= " AND pi." . $var ." >= " . $parameter->getValue();
+                                }
+                                if(isset($value[1]) && $value[1] != 0){
+                                    $parameter = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[1]);
+                                    $sql .= " AND pi." . $var ." <= " . $parameter->getValue();
+                                }
+                            }
+                       } 
+                    }else{
+                        foreach($request->request->get($var . 'RangeList') as $key => $value)
+                        {
+                            $filterId = $key;
+                            if($value[0] != 0 || $value[1] != 0)
                             {
-                                $sql .= " AND (";
+                                $valueStart = ($manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[0])) ? $manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[0])->getValue() : 0;
+                                $valueEnd = ($manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[1])) ? $manager->getRepository("DashboardCommonBundle:FilterValue")->find($value[1])->getValue() : 0;
 
-                                if(count($filterValues) > 1)
+                                if($valueStart < $valueEnd)
                                 {
-                                    $marker = count($filterValues);
-                                    foreach($filterValues as $filterValue)
-                                    {
-                                        $sql .= "pf" . $filterId . ".id = " . $filterValue->getId();
-                                        if($marker != 1)
-                                        {
-                                            $sql .= " OR ";
-                                        }
-                                        $marker--;
-                                    }
+                                    $filterValues = $manager->createQuery("SELECT fv,f FROM DashboardCommonBundle:FilterValue fv LEFT JOIN fv.filter f WHERE f.id = " . $key . " AND (fv.value >= " . (int)$valueStart . " AND fv.value <= " . (int)$valueEnd . ")")->getResult();
                                 }
                                 else
                                 {
-                                    foreach($filterValues as $filterValue)
-                                    {
-                                        $sql .= "pf" . $filterId . ".id = " . $filterValue->getId();
-                                    }
+                                    $filterValues = $manager->createQuery("SELECT fv,f FROM DashboardCommonBundle:FilterValue fv LEFT JOIN fv.filter f WHERE f.id = " . $key . " AND fv.value >= " . (int)$valueStart)->getResult();
                                 }
-                                $sql .= ")";
+
+                                if($filterValues)
+                                {
+                                    $sql .= " AND (";
+
+                                    if(count($filterValues) > 1)
+                                    {
+                                        $marker = count($filterValues);
+                                        foreach($filterValues as $filterValue)
+                                        {
+                                            $sql .= "pf" . $filterId . ".id = " . $filterValue->getId();
+                                            if($marker != 1)
+                                            {
+                                                $sql .= " OR ";
+                                            }
+                                            $marker--;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach($filterValues as $filterValue)
+                                        {
+                                            $sql .= "pf" . $filterId . ".id = " . $filterValue->getId();
+                                        }
+                                    }
+                                    $sql .= ")";
+                                }
                             }
                         }
+                    }
+                }
+                
+                if($request->request->get($var . "Selectable")){
+                    if($var != 'filter'){
+                        if((isset($value[0]) && $value[0] != 0) || (isset($value[1]) && $value[1] != 0)){
+                            if(isset($value[0]) && $value[0] != 0){
+                                $sql .= " AND pi." . $var ." >= " . $value[0];
+                            }
+                            if(isset($value[1]) && $value[1] != 0){
+                                $sql .= " AND pi." . $var ." <= " . $value[1];
+                            }
+                        }
+                    }else{
+                        if(count($request->request->get($var . 'Selectable')) > 0)
+                        {
+                            foreach($request->request->get($var . 'Selectable') as $key => $value)
+                            {
+                                $filterId = $key;
+                                if(count($value) > 0)
+                                {
+                                    $valueStart = (isset($value[0])) ? $value[0] : 0;
+                                    $valueEnd = (isset($value[1])) ? $value[1] : 0;
 
+                                    if($valueStart != 0 || $valueEnd != 0)
+                                    {
+                                        if($valueStart < $valueEnd)
+                                        {
+                                            $filterValues = $manager->createQuery("SELECT fv,f FROM DashboardCommonBundle:FilterValue fv LEFT JOIN fv.filter f WHERE f.id = " . $key . " AND (fv.value >= " . (int)$valueStart . " AND fv.value <= " . (int)$valueEnd . ")")->getResult();
+                                        }
+                                        else
+                                        {
+                                            $filterValues = $manager->createQuery("SELECT fv,f FROM DashboardCommonBundle:FilterValue fv LEFT JOIN fv.filter f WHERE f.id = " . $key . " AND fv.value >= " . (int)$valueStart)->getResult();
+                                        }
+
+                                        if($filterValues)
+                                        {
+                                            $sql .= " AND (";
+
+                                            if(count($filterValues) > 1)
+                                            {
+                                                $marker = count($filterValues);
+                                                foreach($filterValues as $filterValue)
+                                                {
+                                                    $sql .= "pf" . $filterId . ".id = " . $filterValue->getId();
+                                                    if($marker != 1)
+                                                    {
+                                                        $sql .= " OR ";
+                                                    }
+                                                    $marker--;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                foreach($filterValues as $filterValue)
+                                                {
+                                                    $sql .= "pf" . $filterId . ".id = " . $filterValue->getId();
+                                                }
+                                            }
+                                            $sql .= ")";
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -433,6 +515,8 @@ class CategoryController extends Controller
         
         return $this->render('DashboardCommonBundle:Default:Category/category.html.twig', array("category" => $category,
                                                                                        "categories" => $categories,
+                                                                                       "categoryMarks" => $categoryMarks,
+                                                                                       "categoryModels" => $categoryModels,
                                                                                        "formFilters" => $filters,
                                                                                        "products" => $products,
                                                                                        "productsTotalCount" => $productsTotalCount,
@@ -479,6 +563,17 @@ class CategoryController extends Controller
         }
         
         return $sql;
+    }
+    
+    /**
+     * @Route("/category/subcategories/{type}/{categoryId}", name="category_subcategories")
+     */
+    public function subcategoriesAction($type, $categoryId, Request $request)        
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+        
+         return $this->render('DashboardCommonBundle:Default:Category/filterItems.html.twig', array("category" => $category, "type" => $type));
     }
 }
 

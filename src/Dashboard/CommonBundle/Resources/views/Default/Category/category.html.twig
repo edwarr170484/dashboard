@@ -33,7 +33,7 @@
                         {% set i = 0 %}
                         {% for cat in categories %}
                             <li>
-                                 <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
+                                 <a href="{{ path('category',{'categoryId' : cat.id, 'categoryName' : cat.name}) }}">
                                     {{ cat.title}}
                                 </a>
                             </li>
@@ -56,7 +56,7 @@
                         </div>
                             <div class="mainPageFiltersTabs category-filters">
                                 <div class="tab-content">
-                                    {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount, 'request' : app.request} %}
+                                    {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'categories' : categories, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount, 'request' : app.request} %}
                                 </div>
                             </div>                              
                             <div class="hidden-sm hidden-xs" style="text-align:center;">

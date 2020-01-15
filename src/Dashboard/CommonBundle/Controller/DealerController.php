@@ -495,24 +495,36 @@ class DealerController extends Controller
     }
     
     /**
-     * @Route("/dealer/getlist/{action}", name="dealerList")
+     * @Route("/dealer/getlist", name="dealerList")
      */
-    public function getListAction($action, Request $request)
+    public function getListAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        $sql = "SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud WHERE u.isActive = 1 AND r.role='ROLE_DEALER'";
+        $joinInstructions = '';
         
-        switch($action){ 
-            case 'new':
-                $sql .= ' AND ud.isNewAuto = 1';
-            break;
+        if($request->request->get('dealerAutoId')){
+            $joinInstructions .= " LEFT JOIN ud.autos uda";
+        }
         
-            case 'old':
-                $sql .= ' AND ud.isOldAuto = 1';
-            break;
+        $sql = "SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud" . $joinInstructions . " WHERE u.isActive = 1 AND r.role='ROLE_DEALER'";
+        
+        if($request->request->get('dealerAutoType')){
+            switch($request->request->get('dealerAutoType')){ 
+                case 'new':
+                    $sql .= ' AND ud.isNewAuto = 1';
+                break;
+
+                case 'old':
+                    $sql .= ' AND ud.isOldAuto = 1';
+                break;
+            }
+        }
+        
+        if($request->request->get('dealerAutoId')){
+            $sql .= ' AND uda.id = ' . (int)$request->request->get('dealerAutoId');
         }
         
         $query = $manager->createQuery($sql);

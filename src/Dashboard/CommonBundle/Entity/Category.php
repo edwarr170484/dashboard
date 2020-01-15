@@ -41,22 +41,22 @@ class Category
     private $title;
     
     /**
-     * @ORM\Column(type="text", nullable=true, options={"default":"null"})
+     * @ORM\Column(type="text", nullable=true, options={"default":null})
      */
     private $description;
     
     /**
-     * @ORM\Column(type="text", nullable=true, options={"default":"null"})
+     * @ORM\Column(type="text", nullable=true, options={"default":null})
      */
     private $image;
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
      */
     private $yearFrom;
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
      */
     private $yearTo;
     
@@ -66,47 +66,67 @@ class Category
     private $sortorder;
     
     /**
-     * @ORM\Column(type="boolean",nullable=true, options={"default":"1"})
+     * @ORM\Column(type="boolean",nullable=true, options={"default":1})
      */
     private $isActive;
     
     /**
-     * @ORM\Column(type="boolean",nullable=true, options={"default":"1"})
+     * @ORM\Column(type="boolean",nullable=true, options={"default":1})
      */
     private $isShowFilters;
     
     /**
-     * @ORM\Column(type="boolean",nullable=true, options={"default":"0"})
+     * @ORM\Column(type="boolean",nullable=true, options={"default": 0})
      */
-    private $isShowBu;
+    private $isUseChildrensLikeMark;
     
     /**
-     * @ORM\Column(type="boolean",nullable=true, options={"default":"1"})
+     * @ORM\Column(type="boolean",nullable=true, options={"default": 0})
+     */
+    private $isUseChildrensLikeModel;
+    
+    /**
+     * @ORM\Column(type="boolean",nullable=true, options={"default": 0})
+     */
+    private $isUseChildrensLikeType;
+    
+    /**
+     * @ORM\Column(type="boolean",nullable=true, options={"default": 0})
+     */
+    private $isShowGenerationFilter;
+    
+    /**
+     * @ORM\Column(type="boolean",nullable=true, options={"default": 0})
+     */
+    private $isBreakRedirect;
+    
+    /**
+     * @ORM\Column(type="boolean",nullable=true, options={"default":1})
      */
     private $isShowPriceFilter;
     
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
      */
     private $metaTagTitle;
     
     /**
-     * @ORM\Column(type="string", length=512, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=512, nullable=true, options={"default":null})
      */
     private $metaTagDescription;
     
     /**
-     * @ORM\Column(type="string", length=512, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=512, nullable=true, options={"default":null})
      */
     private $metaTagAuthor;
     
     /**
-     * @ORM\Column(type="string", length=512, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=512, nullable=true, options={"default":null})
      */
     private $metaTagRobots;
     
     /**
-     * @ORM\Column(type="string", length=512, nullable=true, options={"default":"null"})
+     * @ORM\Column(type="string", length=512, nullable=true, options={"default":null})
      */
     private $metaTagKeywords;
     
@@ -157,6 +177,7 @@ class Category
     
     private $allProductsNumber;
     
+    
     /**
      * Constructor
      */
@@ -169,6 +190,8 @@ class Category
         $this->banners = new \Doctrine\Common\Collections\ArrayCollection();
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->generations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rates = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dealers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -190,7 +213,7 @@ class Category
     public function setName($name)
     {
         $this->name = $name;
-
+    
         return $this;
     }
 
@@ -213,7 +236,7 @@ class Category
     public function setTitle($title)
     {
         $this->title = $title;
-
+    
         return $this;
     }
 
@@ -236,7 +259,7 @@ class Category
     public function setDescription($description)
     {
         $this->description = $description;
-
+    
         return $this;
     }
 
@@ -251,6 +274,75 @@ class Category
     }
 
     /**
+     * Set image
+     *
+     * @param string $image
+     * @return Category
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set yearFrom
+     *
+     * @param string $yearFrom
+     * @return Category
+     */
+    public function setYearFrom($yearFrom)
+    {
+        $this->yearFrom = $yearFrom;
+    
+        return $this;
+    }
+
+    /**
+     * Get yearFrom
+     *
+     * @return string 
+     */
+    public function getYearFrom()
+    {
+        return $this->yearFrom;
+    }
+
+    /**
+     * Set yearTo
+     *
+     * @param string $yearTo
+     * @return Category
+     */
+    public function setYearTo($yearTo)
+    {
+        $this->yearTo = $yearTo;
+    
+        return $this;
+    }
+
+    /**
+     * Get yearTo
+     *
+     * @return string 
+     */
+    public function getYearTo()
+    {
+        return $this->yearTo;
+    }
+
+    /**
      * Set sortorder
      *
      * @param integer $sortorder
@@ -259,7 +351,7 @@ class Category
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-
+    
         return $this;
     }
 
@@ -282,7 +374,7 @@ class Category
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-
+    
         return $this;
     }
 
@@ -305,7 +397,7 @@ class Category
     public function setIsShowFilters($isShowFilters)
     {
         $this->isShowFilters = $isShowFilters;
-
+    
         return $this;
     }
 
@@ -320,26 +412,49 @@ class Category
     }
 
     /**
-     * Set isShowBu
+     * Set isUseChildrensLikeMark
      *
-     * @param boolean $isShowBu
+     * @param boolean $isUseChildrensLikeMark
      * @return Category
      */
-    public function setIsShowBu($isShowBu)
+    public function setIsUseChildrensLikeMark($isUseChildrensLikeMark)
     {
-        $this->isShowBu = $isShowBu;
-
+        $this->isUseChildrensLikeMark = $isUseChildrensLikeMark;
+    
         return $this;
     }
 
     /**
-     * Get isShowBu
+     * Get isUseChildrensLikeMark
      *
      * @return boolean 
      */
-    public function getIsShowBu()
+    public function getIsUseChildrensLikeMark()
     {
-        return $this->isShowBu;
+        return $this->isUseChildrensLikeMark;
+    }
+
+    /**
+     * Set isUseChildrensLikeModel
+     *
+     * @param boolean $isUseChildrensLikeModel
+     * @return Category
+     */
+    public function setIsUseChildrensLikeModel($isUseChildrensLikeModel)
+    {
+        $this->isUseChildrensLikeModel = $isUseChildrensLikeModel;
+    
+        return $this;
+    }
+
+    /**
+     * Get isUseChildrensLikeModel
+     *
+     * @return boolean 
+     */
+    public function getIsUseChildrensLikeModel()
+    {
+        return $this->isUseChildrensLikeModel;
     }
 
     /**
@@ -351,7 +466,7 @@ class Category
     public function setIsShowPriceFilter($isShowPriceFilter)
     {
         $this->isShowPriceFilter = $isShowPriceFilter;
-
+    
         return $this;
     }
 
@@ -374,7 +489,7 @@ class Category
     public function setMetaTagTitle($metaTagTitle)
     {
         $this->metaTagTitle = $metaTagTitle;
-
+    
         return $this;
     }
 
@@ -397,7 +512,7 @@ class Category
     public function setMetaTagDescription($metaTagDescription)
     {
         $this->metaTagDescription = $metaTagDescription;
-
+    
         return $this;
     }
 
@@ -420,7 +535,7 @@ class Category
     public function setMetaTagAuthor($metaTagAuthor)
     {
         $this->metaTagAuthor = $metaTagAuthor;
-
+    
         return $this;
     }
 
@@ -443,7 +558,7 @@ class Category
     public function setMetaTagRobots($metaTagRobots)
     {
         $this->metaTagRobots = $metaTagRobots;
-
+    
         return $this;
     }
 
@@ -466,7 +581,7 @@ class Category
     public function setMetaTagKeywords($metaTagKeywords)
     {
         $this->metaTagKeywords = $metaTagKeywords;
-
+    
         return $this;
     }
 
@@ -481,6 +596,29 @@ class Category
     }
 
     /**
+     * Set formType
+     *
+     * @param integer $formType
+     * @return Category
+     */
+    public function setFormType($formType)
+    {
+        $this->formType = $formType;
+    
+        return $this;
+    }
+
+    /**
+     * Get formType
+     *
+     * @return integer 
+     */
+    public function getFormType()
+    {
+        return $this->formType;
+    }
+
+    /**
      * Add children
      *
      * @param \Dashboard\CommonBundle\Entity\Category $children
@@ -489,7 +627,7 @@ class Category
     public function addChild(\Dashboard\CommonBundle\Entity\Category $children)
     {
         $this->children[] = $children;
-
+    
         return $this;
     }
 
@@ -522,7 +660,7 @@ class Category
     public function setParent(\Dashboard\CommonBundle\Entity\Category $parent = null)
     {
         $this->parent = $parent;
-
+    
         return $this;
     }
 
@@ -545,7 +683,7 @@ class Category
     public function addProduct(\Dashboard\CommonBundle\Entity\Product $product)
     {
         $this->product[] = $product;
-
+    
         return $this;
     }
 
@@ -578,7 +716,7 @@ class Category
     public function addDescription(\Dashboard\CommonBundle\Entity\CategoryDescription $descriptions)
     {
         $this->descriptions[] = $descriptions;
-
+    
         return $this;
     }
 
@@ -611,7 +749,7 @@ class Category
     public function addFilter(\Dashboard\CommonBundle\Entity\Filter $filters)
     {
         $this->filters[] = $filters;
-
+    
         return $this;
     }
 
@@ -644,7 +782,7 @@ class Category
     public function addBanner(\Dashboard\CommonBundle\Entity\Banner $banners)
     {
         $this->banners[] = $banners;
-
+    
         return $this;
     }
 
@@ -677,7 +815,7 @@ class Category
     public function addTranslation(\Dashboard\CommonBundle\Entity\Translation $translations)
     {
         $this->translations[] = $translations;
-
+    
         return $this;
     }
 
@@ -710,7 +848,7 @@ class Category
     public function addGeneration(\Dashboard\CommonBundle\Entity\Generation $generations)
     {
         $this->generations[] = $generations;
-
+    
         return $this;
     }
 
@@ -732,85 +870,6 @@ class Category
     public function getGenerations()
     {
         return $this->generations;
-    }
-
-    /**
-     * Set yearFrom
-     *
-     * @param string $yearFrom
-     * @return Category
-     */
-    public function setYearFrom($yearFrom)
-    {
-        $this->yearFrom = $yearFrom;
-
-        return $this;
-    }
-
-    /**
-     * Get yearFrom
-     *
-     * @return string 
-     */
-    public function getYearFrom()
-    {
-        return $this->yearFrom;
-    }
-
-    /**
-     * Set yearTo
-     *
-     * @param string $yearTo
-     * @return Category
-     */
-    public function setYearTo($yearTo)
-    {
-        $this->yearTo = $yearTo;
-
-        return $this;
-    }
-
-    /**
-     * Get yearTo
-     *
-     * @return string 
-     */
-    public function getYearTo()
-    {
-        return $this->yearTo;
-    }
-
-    /**
-     * Set image
-     *
-     * @param string $image
-     * @return Category
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-    
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return string 
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-    
-    public function getAllProductsNumber(){
-        return $this->allProductsNumber;
-    }
-    
-    public function setAllProductsNumber($allProductsNumber){
-        $this->allProductsNumber = $allProductsNumber;
-        
-        return $this;
     }
 
     /**
@@ -878,27 +937,83 @@ class Category
     {
         return $this->dealers;
     }
+    
+    public function getAllProductsNumber(){
+        return $this->allProductsNumber;
+    }
+    
+    public function setAllProductsNumber($allProductsNumber){
+        $this->allProductsNumber = $allProductsNumber;
+        
+        return $this;
+    }
 
     /**
-     * Set formType
+     * Set isUseChildrensLikeType
      *
-     * @param integer $formType
+     * @param boolean $isUseChildrensLikeType
      * @return Category
      */
-    public function setFormType($formType)
+    public function setIsUseChildrensLikeType($isUseChildrensLikeType)
     {
-        $this->formType = $formType;
+        $this->isUseChildrensLikeType = $isUseChildrensLikeType;
     
         return $this;
     }
 
     /**
-     * Get formType
+     * Get isUseChildrensLikeType
      *
-     * @return integer 
+     * @return boolean 
      */
-    public function getFormType()
+    public function getIsUseChildrensLikeType()
     {
-        return $this->formType;
+        return $this->isUseChildrensLikeType;
+    }
+
+    /**
+     * Set isShowGenerationFilter
+     *
+     * @param boolean $isShowGenerationFilter
+     * @return Category
+     */
+    public function setIsShowGenerationFilter($isShowGenerationFilter)
+    {
+        $this->isShowGenerationFilter = $isShowGenerationFilter;
+    
+        return $this;
+    }
+
+    /**
+     * Get isShowGenerationFilter
+     *
+     * @return boolean 
+     */
+    public function getIsShowGenerationFilter()
+    {
+        return $this->isShowGenerationFilter;
+    }
+
+    /**
+     * Set isBreakRedirect
+     *
+     * @param boolean $isBreakRedirect
+     * @return Category
+     */
+    public function setIsBreakRedirect($isBreakRedirect)
+    {
+        $this->isBreakRedirect = $isBreakRedirect;
+    
+        return $this;
+    }
+
+    /**
+     * Get isBreakRedirect
+     *
+     * @return boolean 
+     */
+    public function getIsBreakRedirect()
+    {
+        return $this->isBreakRedirect;
     }
 }

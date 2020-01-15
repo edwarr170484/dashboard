@@ -416,9 +416,33 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 ">{{ form_label(categoryForm.isShowBu)}}</label>
+                                    <label class="col-md-3 ">{{ form_label(categoryForm.isUseChildrensLikeMark)}}</label>
                                     <div class="col-md-9">
-                                        {{ form_widget(categoryForm.isShowBu)}}
+                                        {{ form_widget(categoryForm.isUseChildrensLikeMark)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(categoryForm.isUseChildrensLikeModel)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(categoryForm.isUseChildrensLikeModel)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(categoryForm.isUseChildrensLikeType)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(categoryForm.isUseChildrensLikeType)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(categoryForm.isShowGenerationFilter)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(categoryForm.isShowGenerationFilter)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(categoryForm.isBreakRedirect)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(categoryForm.isBreakRedirect)}}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -467,7 +491,7 @@
                                                     {% for filter in category.filters %}
                                                         <tr>
                                                             <td>{{ filter.name }}</td>
-                                                            <td>{{ filter.type }}</td>
+                                                            <td>{{ filter.type.title }}</td>
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>

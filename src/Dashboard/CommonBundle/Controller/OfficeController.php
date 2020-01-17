@@ -458,7 +458,7 @@ class OfficeController extends Controller
                     'notice',
                     '<div class="alert alert-success alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Успешно!</strong> Ваш озыв отправлен и появится на сайте после проверки модератором.') . '</div>'
+                    $this->get('translator')->trans('<strong>Успешно!</strong> Ваш отзыв отправлен и появится на сайте после проверки модератором.') . '</div>'
                 );
                 
             }else{

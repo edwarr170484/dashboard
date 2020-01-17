@@ -356,7 +356,6 @@ class DealerController extends Controller
                 $auto = $manager->getRepository("DashboardCommonBundle:Category")->find($request->request->get("dealerAutoId"));
                 if($auto){
                     $sql .= ' AND ua.id = ' . $auto->getId();
-                    dump($sql);
                 }
             }
         }

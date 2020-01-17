@@ -11,21 +11,86 @@
                 <div class="mapListSearchBlock">
                     <form action="{{ path('services') }}" method="POST">
                         <div class="mapListSearchBlockForm">
-                            <div class="formParameterField" id="selectAutoMark">
+                            <div class="formParameterField dealerSearchFormItem {% if app.request.get('serviceAuto') %}active{% endif %}" id="selectServiceAuto">
                                 <input name="serviceAuto" type="text" placeholder="{% trans %}Марка авто{% endtrans %}" value="{% if app.request.get('serviceAuto') %}{{ app.request.get('serviceAuto') }}{% endif %}"/>
+                                <button type="button" onclick="clearServiceAuto($(this), event)">
+                                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"/>
+                                    </svg>
+                                </button>
                             </div>
-                            <div class="formParameterField">
-                                 <input name="serviceJob" type="text" placeholder="{% trans %}Тип работ{% endtrans %}" value="{% if app.request.get('serviceJob') %}{{ app.request.get('serviceJob') }}{% endif %}"/>
+                            <div class="formParameterField dealerSearchFormItem {% if app.request.get('serviceJob') %}active{% endif %}" id="selectServiceJob">
+                                <input name="serviceJob" type="text" placeholder="{% trans %}Тип работ{% endtrans %}" value="{% if app.request.get('serviceJob') %}{{ app.request.get('serviceJob') }}{% endif %}"  />
+                                <button type="button" onclick="clearServiceJob($(this), event)">
+                                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"/>
+                                    </svg>
+                                </button>
                             </div>
                             <div class="formParameterField button">
                                 <input name="serviceAutoId" type="hidden" value="{% if app.request.get('serviceAutoId') %}{{ app.request.get('serviceAutoId') }}{% endif %}" />
-                                <input name="serviceJobId" type="hidden" value="{% if app.request.get('serviceJobId') %}{{ app.request.get('serviceJobId') }}{% endif %}" />
+                                <input name="serviceJobCategoryId" type="hidden" value="{% if app.request.get('serviceJobCategoryId') %}{{ app.request.get('serviceJobCategoryId') }}{% endif %}" />
                                 <button type="submit" class="find" id="formFindButton">{% trans %}Найти{% endtrans %}</button>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="mapListItems">
+                {% if autos | length > 0 %}
+                    <div class="mapListItems hide" id="serviceAutosList">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                {% for auto in autos %}
+                                    <div class="col-xs-3 mapListAutoLabel {% if app.request.get('dealerAutoId') and app.request.get('dealerAutoId') == auto.id %}active{% endif %}">
+                                        <a href="javascript:void(0)" class="mapListAuto" onclick="selectServiceAuto({{ auto.id }},'{{ auto.title }}',$(this))">
+                                            <span class="mapListAutoLogo">{{ auto.image | raw }}</span>
+                                            <span class="mapListAutoName">{{ auto.title }}</span>
+                                        </a>
+                                    </div>
+                                {% endfor %}    
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if categories | length > 0 %}
+                    <div class="mapListItems hide" id="serviceJobsList">
+                        <div class="col-lg-12">
+                            <div class="servicesPageJobsList">
+                                {% for jobCategory in categories %}
+                                    <div class="servicesPageServiceBlock" onclick="$(this).toggleClass('active')">
+                                        <div class="servicesPageServiceName">
+                                            <div class="servicesPageServiceNameIcon">
+                                                <div class="servicesPageServiceNameIconImage">{{ jobCategory.icon | raw }}</div>
+                                                <div class="servicesPageServiceMainCheckbox">
+                                                    <div class="style-checkbox" onclick="$(this).toggleClass('checked');event.stopPropagation();">
+                                                        <input type="checkbox" name="jobCategory[]" value="{{ jobCategory.id }}" onclick="selectServiceJobCategory('{{ jobCategory.name }}', {{ jobCategory.id }})" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="servicesPageServiceNameTitle">
+                                                {{ jobCategory.name }}
+                                            </div>
+                                        </div>
+                                        {% if jobCategory.jobs | length > 0 %}
+                                            <div class="servicesPageServiceSubBlock">
+                                                {% for job in jobCategory.jobs %}
+                                                    <div class="servicesPageServiceSubBlockItem">
+                                                        <div class="servicesPageServiceNameIcon">
+                                                            <div class="style-checkbox" onclick="$(this).toggleClass('checked');event.stopPropagation();">
+                                                                <input type="checkbox" name="job[]" value="{{ job.id }}" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="servicesPageServiceSubBlockItemName">{{ job.name }}</div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div> 
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="mapListItems" id="mainServicesList">
                     <div class="row">
                         {% if categories %}
                             {% for category in categories %}
@@ -54,7 +119,7 @@
                                         {% for i in 1..2 %}
                                             <div class="pageContentJobsList">
                                                 {% for j in jobsPerList*i - jobsPerList..jobsPerList*i - 1 %}
-                                                    <div class="pageContentJobsItem" onclick="setServiceJobId({{ allCategories[j].id }},'{{ allCategories[j].name }}')">
+                                                    <div class="pageContentJobsItem" onclick="selectServiceJobCategory('{{ allCategories[j].name }}', {{ allCategories[j].id }})">
                                                         <div class="pageContentJobsItemIcon">
                                                             {{ allCategories[j].icon | raw }}
                                                         </div>
@@ -76,14 +141,14 @@
                                 <div class="mapAutoNamesList">
                                     {% for child in autos | slice(0, settings.categoryPanelItemsNumber )%}
                                         <div class="mapAutoName">
-                                            <a href="javascript:void(0)" onclick="setServiceAutoId({{ child.id }},'{{ child.title }}',$(this))">{{ child.title }}</a>
+                                            <a href="javascript:void(0)" onclick="selectServiceAuto({{ child.id }},'{{ child.title }}',$(this))">{{ child.title }}</a>
                                         </div>
                                     {% endfor %}
                                 </div>
                                 <div class="mapAutoNamesList hide">
                                     {% for child in autos %}
                                         <div class="mapAutoName">
-                                            <a href="javascript:void(0)" onclick="setServiceAutoId({{ child.id }},'{{ child.title }}',$(this))">{{ child.title }}</a>
+                                            <a href="javascript:void(0)" onclick="selectServiceAuto({{ child.id }},'{{ child.title }}',$(this))">{{ child.title }}</a>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -94,7 +159,7 @@
                                 <div class="mapAutoNamesList">
                                     {% for child in autos %}
                                         <div class="mapAutoName">
-                                            <a href="javascript:void(0)" onclick="setServiceAutoId({{ child.id }},'{{ child.title }}',$(this))">{{ child.title }}</a>
+                                            <a href="javascript:void(0)" onclick="selectServiceAuto({{ child.id }},'{{ child.title }}',$(this))">{{ child.title }}</a>
                                         </div>
                                     {% endfor %}
                                 </div>

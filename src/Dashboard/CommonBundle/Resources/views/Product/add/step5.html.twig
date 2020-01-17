@@ -161,9 +161,11 @@
                                                             <div class="categoryAdvertInfoFeature">{{ modification.size }} / {{ modification.power }} {% trans %}л.с.{% endtrans %} / {{ gas.value }}</div>
                                                             <div class="categoryAdvertInfoFeature">{{ transmission.value }} {% trans %}привод{% endtrans %}</div>
                                                             <div class="categoryAdvertInfoFeature">{{ gear.value }}</div>
-                                                            <div class="categoryAdvertInfoFeature">
-                                                                {{ color.value }}
-                                                            </div>
+                                                            {% if color %}
+                                                                <div class="categoryAdvertInfoFeature">
+                                                                    {{ color.value }}
+                                                                </div>
+                                                            {% endif %}
                                                         </div>
                                                         <div class="categoryAdvertInfoRegion">
                                                             <svg width="11" height="14" viewBox="0 0 11 14" fill="none" xmlns="http://www.w3.org/2000/svg">

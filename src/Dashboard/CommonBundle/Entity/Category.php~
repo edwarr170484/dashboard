@@ -947,4 +947,73 @@ class Category
         
         return $this;
     }
+
+    /**
+     * Set isUseChildrensLikeType
+     *
+     * @param boolean $isUseChildrensLikeType
+     * @return Category
+     */
+    public function setIsUseChildrensLikeType($isUseChildrensLikeType)
+    {
+        $this->isUseChildrensLikeType = $isUseChildrensLikeType;
+    
+        return $this;
+    }
+
+    /**
+     * Get isUseChildrensLikeType
+     *
+     * @return boolean 
+     */
+    public function getIsUseChildrensLikeType()
+    {
+        return $this->isUseChildrensLikeType;
+    }
+
+    /**
+     * Set isShowGenerationFilter
+     *
+     * @param boolean $isShowGenerationFilter
+     * @return Category
+     */
+    public function setIsShowGenerationFilter($isShowGenerationFilter)
+    {
+        $this->isShowGenerationFilter = $isShowGenerationFilter;
+    
+        return $this;
+    }
+
+    /**
+     * Get isShowGenerationFilter
+     *
+     * @return boolean 
+     */
+    public function getIsShowGenerationFilter()
+    {
+        return $this->isShowGenerationFilter;
+    }
+
+    /**
+     * Set isBreakRedirect
+     *
+     * @param boolean $isBreakRedirect
+     * @return Category
+     */
+    public function setIsBreakRedirect($isBreakRedirect)
+    {
+        $this->isBreakRedirect = $isBreakRedirect;
+    
+        return $this;
+    }
+
+    /**
+     * Get isBreakRedirect
+     *
+     * @return boolean 
+     */
+    public function getIsBreakRedirect()
+    {
+        return $this->isBreakRedirect;
+    }
 }

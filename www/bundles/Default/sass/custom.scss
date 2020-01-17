@@ -517,7 +517,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertSellerRatingStar.half{background: url('../img/star-half.svg') 0 0 no-repeat;}
 
 /*modals style*/
-.modal-content{background: #fff;@include border-radius(12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;padding: 6rem 13rem;}
+.modal-content{background: #fff;@include border-radius(12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;padding: 6rem 10rem;}
 .modal-header h3{@include fontView("GothamProBlack",$gray-color-1,3.6rem,4rem);text-align: center;}
 .modal-content button.close{position: absolute;top:-30px;right:-30px;z-index:999;@include opacity(1);}
 .modal-body label{@include fontView("GothamProRegular",$input-black,1.3rem,1.2rem);}
@@ -922,6 +922,7 @@ ul.justLinks li{position: relative;}
 .accountOrderUser{@include flexBox(row,space-between,center);padding-top: 1.2rem;padding-bottom: 0.8rem;padding-left: 3rem;padding-right: 3rem;border-bottom: 1px solid #DFE1E5;}
 .accountOrderUserAvatar{@include flexBox(row,flex-start,center);}
 .accountOrderUserAvatarImage{padding-right: 2rem;}
+.accountOrderUserAvatarImage img{max-width:5rem;}
 .accountOrderUserAvatarName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
 .accountOrderUserInfo ul{@include flexBox(row,flex-start,center);}
 .accountOrderUserInfo ul li{display: block;}
@@ -942,7 +943,7 @@ ul.justLinks li{position: relative;}
 .accountOrderInfoProductStatus{text-align: right;align-self: flex-start;padding-top: 1.5rem;}
 .accountOrderInfoProductStatus button{border:none;@include border-radius(5px);@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);width: 148px;padding: 0 1.2rem;text-align: center;}
 .accountOrderInfoProductStatus button.break{background: #DFE1E5;}
-.accountOrderInfoProductStatus a.edit{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);display: block;padding-top: 2rem;text-decoration: underline;@include flexBox(row,flex-start,center);}
+.accountOrderInfoProductStatus a.edit{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);display: block;padding-top: 2rem;text-decoration: none;@include flexBox(row,flex-start,center);}
 .accountOrderInfoProductStatus a.edit:hover,.accountOrderInfoProductStatus a.edit:focus{text-decoration: none;}
 .accountOrderInfoProductStatus a.edit:hover svg,.accountOrderInfoProductStatus a.edit:focus svg{fill:$yellow-color;}
 .accountOrderInfo.order .accountOrderInfoProduct{@include flexBox(row,flex-start,flex-start);}
@@ -971,7 +972,7 @@ body.userAccount{background:#F9F9F9;}
 .accountBill{@include flexBox(row,space-between,stretch);border-bottom: 1px solid #DFE1E5;padding:1.4rem 3rem;}
 .accountBill:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
 .accountBillDownload{width: 20%;@include flexBox(row,flex-start,center);}
-.accountBillInfo{width: 80%;@include flexBox(row,space-between,center);}
+.accountBillInfo{width: 100%;@include flexBox(row,space-between,center);}
 .accountBillInfoItem{width: 25%;}
 .accountBillInfoItem.date{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
 .accountBillInfoItem.title{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
@@ -1464,3 +1465,31 @@ ul.color li{position: relative;}
 .formParameterField.dealerSearchFormItem{position: relative;}
 .formParameterField.dealerSearchFormItem button{background: none;border:none;width: 11px;height: 11px;position: absolute;right: 11px;top: 50%;margin: 0;margin-top: -6px;display: none;}
 .formParameterField.dealerSearchFormItem.active button{display: block;}
+#selectAutoMark,#selectServiceJob,#selectServiceAuto {background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAHCAYAAAA8sqwkAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACLSURBVHgBfZBNDYUwEITftgqeAyTUAkpoagAcAAqQQFFAUMCVIzgBAy2zhANZfubS7ew3zaTknGtCCJ33fv59yFprlFKZArwQUQ8j+YATZpjVM2SM2WC0OAdc1wd4jDHWaOE1m28hCbNH4jULoASQHksB3wJnqACY8wyYP6O67rUMoM6EWn+Mi4RZO45WVFBZ19w8AAAAAElFTkSuQmCC') 95% 50% no-repeat;cursor:pointer;}
+#selectAutoMark.active,#selectServiceJob.active,#selectServiceAuto.active{background: none;}
+#selectAutoMark input, #selectServiceAuto input{border-right:none;}
+.mapListSearchBlockForm .formParameterField input{width: 100%;background: none;}
+.addReviewPage .form-group{margin-bottom: 2rem;@include flexBox(row, flex-start, center);}
+.addReviewPage .form-group .form-group-label{padding-right: 4rem;width: 30%;padding-bottom: 0;}
+.addReviewPage .form-group .form-group-control{width: 70%;}
+.addReviewPage .form-group .form-group-control textarea{height:19.5rem;}
+.sellerCompany{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
+.reviewRulesBlock{padding-bottom: 3rem;}
+.reviewRulesBlockHeader{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);padding-bottom: 2rem;}
+.reviewRulesBlockText{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
+.servicesPageServiceName{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);@include flexBox(row,flex-start,center);}
+.servicesPageServiceNameTitle{padding-left: 1.7rem;}
+.servicesPageServiceNameIcon{width: 24px;@include flexBox(row,center,center);}
+.servicesPageServiceBlock{padding-bottom: 1.8rem;cursor:pointer;}
+.servicesPageServiceSubBlockItemName{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-left: 1rem;}
+.servicesPageServiceSubBlockItem{padding-top: 1.6rem;}
+.servicesPageServiceSubBlock{padding-top: 0.4rem;padding-left: 4.2rem;display: none;}
+.servicesPageServiceSubBlockItem{@include flexBox(row,flex-start,center);}
+.servicesPageServiceBlock.active .servicesPageServiceSubBlock{display: block;}
+.servicesPageServiceNameIcon .style-checkbox{position: relative;border:1px solid $orange-color;@include border-radius(2px);width: 22px;height: 22px;}
+.style-checkbox input{position: absolute;top: 0;left: 0;display: block;width: 100%;height: 100%;@include opacity(0);}
+.servicesPageServiceNameIcon .style-checkbox.checked{background: url('../img/check.svg') 50% 50% no-repeat $orange-color;}
+.servicesPageServiceBlock.active .servicesPageServiceNameTitle{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);}
+.servicesPageServiceBlock .servicesPageServiceMainCheckbox{display: none;}
+.servicesPageServiceBlock.active .servicesPageServiceMainCheckbox{display: block;}
+.servicesPageServiceBlock.active .servicesPageServiceNameIconImage{display: none;}

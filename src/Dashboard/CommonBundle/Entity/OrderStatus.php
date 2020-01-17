@@ -29,6 +29,11 @@ class OrderStatus
     private $color;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":0})
+     */
+    private $fontColor;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\ProductOrder", mappedBy="status")
      */
     private $orders;
@@ -165,5 +170,28 @@ class OrderStatus
     public function getColor()
     {
         return $this->color;
+    }
+
+    /**
+     * Set fontColor
+     *
+     * @param string $fontColor
+     * @return OrderStatus
+     */
+    public function setFontColor($fontColor)
+    {
+        $this->fontColor = $fontColor;
+    
+        return $this;
+    }
+
+    /**
+     * Get fontColor
+     *
+     * @return string 
+     */
+    public function getFontColor()
+    {
+        return $this->fontColor;
     }
 }

@@ -11,6 +11,22 @@ $(document).ready(function(){
         $(".mapListItems").toggleClass("hide");
     });
     
+    $("#selectServiceAuto").click(function(){
+        $(this).find("input").blur();
+        $(this).addClass("active");
+        $(".mapListItems").addClass("hide");
+        $("#serviceAutosList").removeClass("hide");
+        $("#selectServiceJob").removeClass("active");
+    });
+    
+    $("#selectServiceJob").click(function(){
+        $(this).find("input").blur();
+        $(this).addClass("active");
+        $(".mapListItems").addClass("hide");
+        $("#serviceJobsList").removeClass("hide");
+        $("#selectServiceAuto").removeClass("active");
+    });
+    
     $("#productModalSlider").owlCarousel({
         items:1,
         center:true,
@@ -58,6 +74,23 @@ $(document).ready(function(){
     $(".masked-phone").mask("+34 99 999 99 99");
     $(".mainPageFiltersTabs").addClass("active");
 });
+
+function clearServiceAuto(element, event){
+    event.stopPropagation();
+    element.parent().find("input").val(null);
+    element.parent().removeClass("active");
+    $("input[name='serviceAutoId']").val(null);
+    $("#serviceAutosList").addClass("hide");
+    $("#mainServicesList").removeClass("hide");
+}
+
+function clearServiceJob(element, event){
+    event.stopPropagation();
+    element.parent().find("input").val(null);
+    element.parent().removeClass("active");
+    $("#serviceJobsList").addClass("hide");
+    $("#mainServicesList").removeClass("hide");
+}
 
 function toggleGamburgerMenu(event, action){
     event.stopPropagation();
@@ -508,17 +541,22 @@ function getDelaerListByForm(){
     });
 }
 
-
-function setServiceAutoId(autoId, autoName, element){
+function selectServiceAuto(autoId, autoName, element){
+    $(".mapListAutoLabel").removeClass('active');
+    element.parent().addClass('active');
     $("input[name='serviceAuto']").val(autoName);
     $("input[name='serviceAuto']").blur();
     $("input[name='serviceAutoId']").val(autoId);
+    if(!$("#selectServiceAuto").hasClass("active")){
+        $("#selectServiceAuto").addClass("active");
+    }
+    $("#serviceAutosList").addClass("hide");
+    $("#mainServicesList").removeClass("hide");
 }
 
-function setServiceJobId(categoryId, categoryName){
-    $("input[name='serviceJob']").val(categoryName);
-    $("input[name='serviceJob']").blur();
-    $("input[name='serviceJobId']").val(categoryId);
+function selectServiceJobCategory(jobCategoryName, jobCategoryId){
+    $("input[name='serviceJobCategoryId']").val(jobCategoryId);
+    $("input[name='serviceJob']").val(jobCategoryName);
 }
 
 function setReviewRating(element, rating, event){
@@ -529,6 +567,8 @@ function setReviewRating(element, rating, event){
     }
     $("#review_rating").val(rating);
 }
+
+
 
 function addFavoriteProduct(productId, user, element)
 {

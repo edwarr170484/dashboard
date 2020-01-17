@@ -1072,7 +1072,11 @@ class AdvertController extends Controller
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($advertInfo->getCategory());
                     $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($advertInfo->getGeneration());
                     $board = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
-                    $color = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getColor());
+                    if($advertInfo->getColor()){
+                        $color = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getColor());
+                    }else{
+                        $color = 0;
+                    }
                     $gas = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getGasType());
                     $gear = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getGearType());
                     $transmission = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getTransmissionType());
@@ -1816,6 +1820,8 @@ class AdvertController extends Controller
                 }
             }
             
+            $bill = 0;
+            
             if($advertInfo->getServicePack()){
                 $servicePack = $manager->getRepository("DashboardCommonBundle:Pack")->find($advertInfo->getServicePack());
                 if($servicePack){
@@ -1896,8 +1902,12 @@ class AdvertController extends Controller
             $board = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getBoard());
             $info->setBoard($board);
             
-            $color = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getColor());
-            $info->setColor($color);
+            if($advertInfo->getColor()){
+                $color = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($advertInfo->getColor());
+                $info->setColor($color);
+            }else{
+                $info->setColor(null);
+            }
             
             $condition = $manager->getRepository("DashboardCommonBundle:Shape")->find($advertInfo->getCondition());
             $info->setShape($condition);

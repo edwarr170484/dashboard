@@ -47,7 +47,7 @@
 {% block _status_translations_entry_row %}
     <tr>
         <td>{{ form_widget(form.locale)}}</td>
-        <td>{{ form_widget(form.value)}}{{ form_widget(form.mark)}}</td>
+        <td>{{ form_widget(form.value)}}</td>
         <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
                 <i class="fa fa-times" title="Удалить перевод для языка"></i>
             </button> 
@@ -95,6 +95,10 @@
                                 <div class="form-group">
                                     <label>{{ form_label(statusForm.color)}}</label>
                                     {{ form_widget(statusForm.color)}}
+                                </div>
+                                <div class="form-group">
+                                    <label>{{ form_label(statusForm.fontColor)}}</label>
+                                    {{ form_widget(statusForm.fontColor)}}
                                 </div>
                             </div>
                             <div id="translations" class="tab-pane fade">

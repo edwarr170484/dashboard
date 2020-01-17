@@ -826,6 +826,7 @@ class DefaultController extends Controller
         $statusForm = $this->get('form.factory')->createNamedBuilder('status', 'form', $status)
                 ->add('name', TextType::class, array('required' => true, 'label' => 'Статус заказа', 'attr' => array('class' => 'form-control','placeholder' => 'Статус заказа')))
                 ->add('color', TextType::class, array('required' => false, 'label' => 'Цвет для статуса', 'attr' => array('class' => 'form-control','placeholder' => 'Цвет для статуса')))
+                ->add('fontColor', TextType::class, array('required' => false, 'label' => 'Цвет шрифта для статуса', 'attr' => array('class' => 'form-control','placeholder' => 'Цвет шрифта для статуса')))
                 ->add('translations', 'collection', array('type' => new TranslationType($manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
                 ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success')))->getForm();
         
@@ -1359,7 +1360,7 @@ class DefaultController extends Controller
                             'label' => 'Статус заказов при добавлении:', 'attr' => array('class' => 'form-control')))                        
             ->add('copyright', TextType::class, array('required' => false, 'label' => 'Копирайт', 'attr' => array('class' => 'form-control','placeholder' => 'Копирайт'))) 
             ->add('serviceTabText', TextareaType::class, array('required' => false, 'label' => 'Описание для вкладки услуг', 'attr' => array('class' => 'form-control tinyeditor'))) 
-            ->add('textblockHowToPrice', TextareaType::class, array('required' => false, 'label' => 'Как правильно устанавливать цену', 'attr' => array('class' => 'form-control tinyeditor'))) 
+            ->add('textblockHowToPrice', TextareaType::class, array('required' => false, 'label' => 'Блок для страницы добавления отзыва', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('textblockUserAgreement', TextareaType::class, array('required' => false, 'label' => 'Пользовательское соглашение', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('userAdvertWorkRight', TextareaType::class, array('required' => false, 'label' => 'Правила размещения и как продавать быстрее', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('googleMapsKey', TextType::class, array('required' => false, 'label' => 'Ключ Google Maps API', 'attr' => array('class' => 'form-control','placeholder' => 'Ключ Google Maps API')))
@@ -1381,6 +1382,11 @@ class DefaultController extends Controller
                             'empty_data' => null,
                             'required' => false, 
                             'label' => 'Публиковать только отзывы со статусом:', 'attr' => array('class' => 'form-control')))
+            ->add('orderReviewStatus', 'entity', array('class' => 'DashboardCommonBundle:OrderStatus',
+                            'choice_label' => 'name',
+                            'empty_data' => null,
+                            'required' => false, 
+                            'label' => 'Добавлять отзывы, если заказ со статусом:', 'attr' => array('class' => 'form-control')))
             ->add('successAddAdvertText', TextareaType::class, array('required' => false, 'label' => 'Текст для сообщения об успешном добавлении объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Текст для сообщения об успешном добавлении объявления')))->getForm();
         }
         

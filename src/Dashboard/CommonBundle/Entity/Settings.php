@@ -190,9 +190,15 @@ class Settings
     
     /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\ReviewStatus")
-     * @ORM\JoinColumn(name="review_status_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="review_public_status_id", referencedColumnName="id")
      */
     private $publicReviewStatus;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\OrderStatus")
+     * @ORM\JoinColumn(name="review_order_status_id", referencedColumnName="id")
+     */
+    private $orderReviewStatus;
     
 
     /**
@@ -1031,5 +1037,29 @@ class Settings
     public function getPublicReviewStatus()
     {
         return $this->publicReviewStatus;
+    }
+
+
+    /**
+     * Set orderReviewStatus
+     *
+     * @param \Dashboard\CommonBundle\Entity\OrderStatus $orderReviewStatus
+     * @return Settings
+     */
+    public function setOrderReviewStatus(\Dashboard\CommonBundle\Entity\OrderStatus $orderReviewStatus = null)
+    {
+        $this->orderReviewStatus = $orderReviewStatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get orderReviewStatus
+     *
+     * @return \Dashboard\CommonBundle\Entity\OrderStatus 
+     */
+    public function getOrderReviewStatus()
+    {
+        return $this->orderReviewStatus;
     }
 }

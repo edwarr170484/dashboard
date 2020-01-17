@@ -52,6 +52,72 @@ class ReviewController extends Controller
     } 
     
     /**
+     * @Route("/account/review/add/{sellerId}", name="account_add_review")
+     */
+    public function addReviewAction($sellerId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $seller = $manager->getRepository("DashboardCommonBundle:User")->find($sellerId);
+        
+        if(!$seller){
+            throw $this->createNotFoundException();
+        }
+        
+        if($seller->getRoles()[0]->getRole() != 'ROLE_DEALER'){
+            throw $this->createNotFoundException();
+        }
+        
+        $review = new Review();
+        $reviewForm = $this->get('form.factory')->createNamedBuilder('review', 'form', $review)
+                ->add('reviewReason', TextType::class, array('required' => true,'label' => '', 'attr' => array('class' => 'form-control','placeholder' => $this->get('translator')->trans('Будет использовано в качестве заголовка'))))
+                ->add('reviewText', TextareaType::class, array('required' => true,'label' => '', 'attr' => array('class' => 'form-control')))
+                ->add('rating', HiddenType::class, array('required' => false,'label' => '', 'attr' => array('class' => 'form-control')))
+                ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить отзыв'), 'attr' => array('class' => 'btn')))->getForm();
+        
+        $reviewForm->handleRequest($request);
+        
+        if($reviewForm->isSubmitted() && $reviewForm->isValid()){
+            if($seller->getId() != $user->getId()){
+                $review->setUser($user);
+                $review->setTargetUser($seller);
+                $review->setDateAdded(new \DateTime("now"));
+                $review->setStatus($settings->getNewReviewStatus());
+                
+                $manager->persist($review);
+                $manager->flush();
+                                    
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                    $this->get('translator')->trans('<strong>Успешно!</strong> Ваш отзыв отправлен и появится на сайте после проверки модератором.') . '</div>'
+                );
+                
+            }else{
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                    $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете оставлять отзывы на самого себя.') . '</div>'
+                );
+            }
+            
+            return $this->redirectToRoute("account_review");
+        }
+        
+        return $this->render('DashboardCommonBundle:User:account/review/add.html.twig', array("user" => $user,
+                                                                                              "seller" => $seller,
+                                                                                              "settings" => $settings,
+                                                                                              "reviewForm" => $reviewForm->createView(),
+                                                                                              "routeName" => $request->attributes->get("_route")));
+    }
+    
+    
+    /**
      * @Route("/account/review/answer/{reviewId}", name="account_answer_review")
      */
     public function reviewAnswerAction($reviewId, Request $request)
@@ -163,6 +229,8 @@ class ReviewController extends Controller
             return false;
         }
     }
+    
+    
     
 }
 

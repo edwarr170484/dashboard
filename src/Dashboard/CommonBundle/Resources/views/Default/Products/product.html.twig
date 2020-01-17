@@ -491,7 +491,7 @@
                                 <div class="advertSellerName">{{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}</div>
                             {% endif %}
                             {% if product.user.roles[0].role == "ROLE_DEALER" %}
-                                <div class="advertSellerStatus">{{ product.user.delaerinfo.company }}</div>
+                                <div class="advertSellerStatus">{{ product.user.dealerinfo.company }}</div>
                                 <div class="advertSellerRating">
                                     {% set reviewRating = product.user.dealerinfo.rating %}
                                     {% if reviewRating > 0 %}

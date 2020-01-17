@@ -29,6 +29,11 @@ class OrderStatus
     private $color;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":0})
+     */
+    private $fontColor;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\ProductOrder", mappedBy="status")
      */
     private $orders;

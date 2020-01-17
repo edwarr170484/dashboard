@@ -161,11 +161,11 @@
                                                                 </div>
                                                             </div>
                                                             <div class="accountOrderInfoProductStatus">
-                                                                <button class="inprocess" style="background: {{ order.status.color }};">
+                                                                <button class="inprocess" style="background: {{ order.status.color }};color: {{ order.status.fontColor }}">
                                                                     {{ orderStatus.name}}
                                                                 </button>
-                                                                {% if order.status.id == 7 %}
-                                                                    <a class="edit">
+                                                                {% if order.status.id == settings.orderReviewStatus.id and order.userReceived.roles[0].role == 'ROLE_DEALER' %}
+                                                                    <a class="edit" href="{{ path('account_add_review', {'sellerId' : order.userReceived.id}) }}">
                                                                         <svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 9px;">
                                                                             <path d="M21 11.3854C21.0038 12.8519 20.6612 14.2986 20 15.6076C19.216 17.1762 18.0108 18.4956 16.5194 19.4179C15.0279 20.3402 13.3091 20.8291 11.5555 20.8298C10.089 20.8336 8.64234 20.491 7.33332 19.8298L1 21.9409L3.11111 15.6076C2.44992 14.2986 2.10729 12.8519 2.11111 11.3854C2.11179 9.63178 2.60068 7.913 3.52302 6.42155C4.44536 4.93011 5.76472 3.72491 7.33332 2.94095C8.64234 2.27976 10.089 1.93713 11.5555 1.94095H12.1111C14.427 2.06872 16.6145 3.04624 18.2546 4.68634C19.8947 6.32645 20.8722 8.51389 21 10.8298V11.3854Z" stroke="#616161" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                                         </svg>

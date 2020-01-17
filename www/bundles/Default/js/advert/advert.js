@@ -130,7 +130,7 @@ function addAdvert(locale_code,text, isDraft){
     
     if(!error){
         $.ajax({
-            url: '/' + locale_code + '/account/createadvert' + draftParameter,
+            url: '/account/createadvert' + draftParameter,
             type:'post',
             data: $(".advertFiltersItems input[type='text'], .advertFiltersItems input[type='checkbox']:checked, .advertFiltersItems input[type='hidden']"),
             dataType: 'html',

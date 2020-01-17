@@ -554,9 +554,14 @@ function selectServiceAuto(autoId, autoName, element){
     $("#mainServicesList").removeClass("hide");
 }
 
-function selectServiceJobCategory(jobCategoryName, jobCategoryId){
-    $("input[name='serviceJobCategoryId']").val(jobCategoryId);
-    $("input[name='serviceJob']").val(jobCategoryName);
+function selectServiceJobCategory(jobCategoryName, jobCategoryId, element){
+    if(element.prop("checked") == true){
+        $("input[name='serviceJobCategoryId']").val(jobCategoryId);
+        $("input[name='serviceJob']").val(jobCategoryName);
+    }else{
+        $("input[name='serviceJobCategoryId']").val(null);
+        $("input[name='serviceJob']").val(null);
+    }
 }
 
 function setReviewRating(element, rating, event){

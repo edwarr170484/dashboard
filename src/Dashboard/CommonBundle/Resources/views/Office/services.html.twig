@@ -62,7 +62,7 @@
                                                 <div class="servicesPageServiceNameIconImage">{{ jobCategory.icon | raw }}</div>
                                                 <div class="servicesPageServiceMainCheckbox">
                                                     <div class="style-checkbox" onclick="$(this).toggleClass('checked');event.stopPropagation();">
-                                                        <input type="checkbox" name="jobCategory[]" value="{{ jobCategory.id }}" onclick="selectServiceJobCategory('{{ jobCategory.name }}', {{ jobCategory.id }})" />
+                                                        <input type="checkbox" name="jobCategory[]" value="{{ jobCategory.id }}" onclick="selectServiceJobCategory('{{ jobCategory.name }}', {{ jobCategory.id }}, $(this))" />
                                                     </div>
                                                 </div>
                                             </div>

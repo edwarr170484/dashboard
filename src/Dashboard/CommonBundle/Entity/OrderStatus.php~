@@ -171,4 +171,27 @@ class OrderStatus
     {
         return $this->color;
     }
+
+    /**
+     * Set fontColor
+     *
+     * @param string $fontColor
+     * @return OrderStatus
+     */
+    public function setFontColor($fontColor)
+    {
+        $this->fontColor = $fontColor;
+    
+        return $this;
+    }
+
+    /**
+     * Get fontColor
+     *
+     * @return string 
+     */
+    public function getFontColor()
+    {
+        return $this->fontColor;
+    }
 }

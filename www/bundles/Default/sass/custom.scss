@@ -1487,9 +1487,13 @@ ul.color li{position: relative;}
 .servicesPageServiceSubBlockItem{@include flexBox(row,flex-start,center);}
 .servicesPageServiceBlock.active .servicesPageServiceSubBlock{display: block;}
 .servicesPageServiceNameIcon .style-checkbox{position: relative;border:1px solid $orange-color;@include border-radius(2px);width: 22px;height: 22px;}
-.style-checkbox input{position: absolute;top: 0;left: 0;display: block;width: 100%;height: 100%;@include opacity(0);}
+.style-checkbox input{position: absolute;top: 0;left: 0;display: block;width: 100%;height: 100%;@include opacity(0);z-index:3;}
 .servicesPageServiceNameIcon .style-checkbox.checked{background: url('../img/check.svg') 50% 50% no-repeat $orange-color;}
 .servicesPageServiceBlock.active .servicesPageServiceNameTitle{@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);}
 .servicesPageServiceBlock .servicesPageServiceMainCheckbox{display: none;}
 .servicesPageServiceBlock.active .servicesPageServiceMainCheckbox{display: block;}
 .servicesPageServiceBlock.active .servicesPageServiceNameIconImage{display: none;}
+.serviceSearchNotFound{@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);}
+.searchReturnBlock a{display: block;@include flexBox(row, flex-start,center);text-decoration: none;@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
+.searchReturnBlock a:hover,.searchReturnBlock a:focus{text-decoration: none;}
+.searchReturnBlock{background: #fff;padding-top: 1.5rem;padding-bottom: 1.5rem;}

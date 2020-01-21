@@ -158,7 +158,33 @@ class OfficeController extends Controller
         $allCategories = $query->getResult();
         $jobsPerList = ceil(count($allCategories) / 2);
         
-        $sql = "SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud LEFT JOIN ud.autos ua WHERE u.isActive = 1 AND r.role='ROLE_SERVICE'";
+        $sql = "SELECT u,r FROM DashboardCommonBundle:User u LEFT JOIN u.roles r LEFT JOIN u.dealerinfo ud LEFT JOIN ud.autos ua LEFT JOIN ud.salons uds LEFT JOIN uds.jobs udsj WHERE u.isActive = 1 AND r.role='ROLE_SERVICE'";
+        
+        if($request->request->get('serviceAutoId')){
+            $sql .= ' AND ua.id = ' . $request->request->get('serviceAutoId');
+        }
+        
+        if($request->request->get('jobCategory')){
+            $sql .= ' AND (';
+            foreach($request->request->get('jobCategory') as $key => $jobCategoryId){
+                if($key == 0){
+                    $sql .= 'udsj.category = ' . $jobCategoryId;
+                }else{
+                    $sql .= ' OR udsj.category = ' . $jobCategoryId;
+                }
+            }
+            $sql .= ')';
+        }elseif($request->request->get('job')){
+            $sql .= ' AND (';
+            foreach($request->request->get('job') as $key => $jobId){
+                if($key == 0){
+                    $sql .= 'udsj.id = ' . $jobId;
+                }else{
+                    $sql .= ' OR udsj.id = ' . $jobId;
+                }
+            }
+            $sql .= ')';
+        }
         
         $query = $manager->createQuery($sql);
         

@@ -100,7 +100,7 @@ class MoneyController extends Controller
             return $this->createNotFoundException();
         }
                 
-        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "totalPrice" => $totalPrice, "bill" => $bill,"back" => $request->headers->get('referer')));
+        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill, "back" => $request->headers->get('referer')));
     }
     
     /**
@@ -119,5 +119,44 @@ class MoneyController extends Controller
         }
         
         return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill,"back" => $request->headers->get('referer')));
+    }
+    
+    /**
+     * @Route("/account/payment/success", name="account_payment_success")
+     */
+    public function paymentSuccessAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $session = new Session();
+        
+        $billId = 6;
+        $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
+        
+        if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
+            if($bill->getRates()){
+                foreach($bill->getRates() as $rate){
+                    if(!$rate->getDateAdded()){
+                        $rate->setDateAdded(new \DateTime("now"));
+                    }
+                    $currentDate = ($rate->getDateEnd()) ? $rate->getDateEnd() : new \DateTime("now");
+                    $rate->setDateEnd($currentDate->add(new \DateInterval('P' . $rate->getRate()->getActiveTime() . 'Y')));
+                    $rate->setIsActive(1);
+                    $manager->persist($rate);
+                }
+                
+                $manager->flush();
+                $session->remove('selectedSalons');
+            }
+            
+            
+            
+            $bill->setIsClosed(1);
+            $manager->flush();
+        }
+        
+        return new Response("OK");
     }
 }

@@ -90,6 +90,16 @@ function clearServiceJob(element, event){
     element.parent().removeClass("active");
     $("#serviceJobsList").addClass("hide");
     $("#mainServicesList").removeClass("hide");
+    
+    $("#serviceJobsList").find("input[name='jobCategory[]']").each(function(){
+        $(this).parent().removeClass("checked");
+        $(this).prop("checked", false);
+    });
+    $("#serviceJobsList").find("input[name='job[]']").each(function(){
+        $(this).parent().removeClass("checked");
+        $(this).prop("checked", false);
+    });
+    $(".servicesPageServiceBlock").removeClass("active");
 }
 
 function toggleGamburgerMenu(event, action){
@@ -554,14 +564,48 @@ function selectServiceAuto(autoId, autoName, element){
     $("#mainServicesList").removeClass("hide");
 }
 
-function selectServiceJobCategory(jobCategoryName, jobCategoryId, element){
-    if(element.prop("checked") == true){
-        $("input[name='serviceJobCategoryId']").val(jobCategoryId);
-        $("input[name='serviceJob']").val(jobCategoryName);
-    }else{
-        $("input[name='serviceJobCategoryId']").val(null);
-        $("input[name='serviceJob']").val(null);
+function setServiceJobCategoryId(jobCategoryId){
+    //$("#jobCategoryId" + jobCategoryId).trigger('click');
+    $("#jobCategoryId" + jobCategoryId).find("input").trigger('click');
+}
+
+function setJobCategory(element, event){
+    event.stopPropagation();
+    element.toggleClass('checked');
+    
+    var val = '';
+    
+    $("#serviceJobsList").find("input[name='jobCategory[]']").each(function(){
+        if($(this).parent().hasClass("checked")){
+            val += $(this).data('value') + ';';
+        }
+    });
+    
+    $("input[name='serviceJob']").val(val);
+}
+
+function setJob(element, event){
+    event.stopPropagation();
+    element.toggleClass('checked');
+    
+    var val = '';
+    
+    $("#serviceJobsList").find("input[name='job[]']").each(function(){
+        if($(this).parent().hasClass("checked")){
+            val += $(this).data('value') + ';';
+        }
+    });
+    
+    if(val === ''){
+        $("#serviceJobsList").find("input[name='jobCategory[]']").each(function(){
+            if($(this).parent().hasClass("checked")){
+                val += $(this).data('value') + ';';
+            }
+        });
     }
+    
+    $("input[name='serviceJob']").val(val);
+    
 }
 
 function setReviewRating(element, rating, event){

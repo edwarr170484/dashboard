@@ -68,6 +68,11 @@ class Bill
      * @ORM\Column(type="boolean", nullable=true, options={"default":0})
      */
     private $isPayed;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":0})
+     */
+    private $isClosed;
 
     /**
      * Constructor
@@ -346,5 +351,28 @@ class Bill
     public function getRates()
     {
         return $this->rates;
+    }
+
+    /**
+     * Set isClosed
+     *
+     * @param boolean $isClosed
+     * @return Bill
+     */
+    public function setIsClosed($isClosed)
+    {
+        $this->isClosed = $isClosed;
+    
+        return $this;
+    }
+
+    /**
+     * Get isClosed
+     *
+     * @return boolean 
+     */
+    public function getIsClosed()
+    {
+        return $this->isClosed;
     }
 }

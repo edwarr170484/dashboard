@@ -68,6 +68,11 @@ class Bill
      * @ORM\Column(type="boolean", nullable=true, options={"default":0})
      */
     private $isPayed;
+    
+    /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":0})
+     */
+    private $isClosed;
 
     /**
      * Constructor

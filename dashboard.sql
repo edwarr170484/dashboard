@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Янв 17 2020 г., 16:16
+-- Время создания: Янв 21 2020 г., 15:28
 -- Версия сервера: 10.1.9-MariaDB
 -- Версия PHP: 5.6.15
 
@@ -63,15 +63,16 @@ CREATE TABLE `bill` (
   `file` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
   `service_pack_id` int(11) DEFAULT NULL,
   `date_payed` datetime DEFAULT NULL,
-  `is_payed` tinyint(1) DEFAULT '0'
+  `is_payed` tinyint(1) DEFAULT '0',
+  `is_closed` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `bill`
 --
 
-INSERT INTO `bill` (`id`, `user_id`, `date_added`, `price`, `file`, `service_pack_id`, `date_payed`, `is_payed`) VALUES
-(6, 6, '2019-12-30 12:33:13', 51.98, NULL, NULL, NULL, 0);
+INSERT INTO `bill` (`id`, `user_id`, `date_added`, `price`, `file`, `service_pack_id`, `date_payed`, `is_payed`, `is_closed`) VALUES
+(6, 6, '2019-12-30 12:33:13', 51.98, NULL, NULL, NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -15429,7 +15430,8 @@ CREATE TABLE `dealer_salon_rate` (
 INSERT INTO `dealer_salon_rate` (`id`, `salon_id`, `rate_id`, `date_added`, `date_end`, `is_active`) VALUES
 (1, 6, 1, NULL, NULL, 0),
 (2, 6, 2, NULL, NULL, 0),
-(3, 7, 1, NULL, NULL, 0);
+(3, 7, 1, NULL, NULL, 0),
+(4, 6, 3, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -17225,9 +17227,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_active`, `is_confirm`, `advert_number`, `fb_id`, `is_hide_email`, `is_alert_broadcast`, `is_alert_new_message`, `is_alert_new_order`, `is_alert_change_order_status`, `entires`) VALUES
-(1, 'tech@auto28.es', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'tech@auto28.es', 1, 1, 3, NULL, 0, 1, 1, 1, 0, 18),
+(1, 'tech@auto28.es', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'tech@auto28.es', 1, 1, 3, NULL, 0, 1, 1, 1, 0, 22),
 (2, 'host@sunweb.by', '$2y$13$vtSH86/tdpg2PTsPbqweNurffISvjjHnNJgvB.YtgoSPgt2BHNQXi', 'host@sunweb.by', 1, 1, 0, NULL, 0, 1, 1, 1, 1, 0),
-(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL, 4),
+(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL, 5),
 (7, 'google@mail.com', '$2y$13$XfC5uOWJ5LBPHE1I7KYiJ.PLi.AxxnRyn8xdn6ePd2TevHBFIwsJC', 'google@mail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0),
 (8, 'edwarr170484@gmail.com', '$2y$13$eyuCxfhoYVf3jQ6MyGO94OH805uQAx2ZPamznSaq1EnWNHi2/KMCW', 'edwarr170484@gmail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0),
 (9, 'info@sunweb-it.com', '$2y$13$E8h6aHFxjOfuqeREcclJLux6p4kakrXKEgyJnA.aVvShVormZJPI2', 'info@sunweb-it.com', 1, 0, 0, NULL, 0, 0, 0, 0, 0, 0);
@@ -18038,7 +18040,7 @@ ALTER TABLE `banner`
 -- AUTO_INCREMENT для таблицы `bill`
 --
 ALTER TABLE `bill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT для таблицы `blacklist`
 --
@@ -18078,7 +18080,7 @@ ALTER TABLE `complaint`
 -- AUTO_INCREMENT для таблицы `conversation`
 --
 ALTER TABLE `conversation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `currency`
 --
@@ -18113,12 +18115,12 @@ ALTER TABLE `dealer_salon_phone`
 -- AUTO_INCREMENT для таблицы `dealer_salon_rate`
 --
 ALTER TABLE `dealer_salon_rate`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `favorite_products`
 --
 ALTER TABLE `favorite_products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT для таблицы `filter`
 --
@@ -18138,7 +18140,7 @@ ALTER TABLE `filter_value`
 -- AUTO_INCREMENT для таблицы `form_message`
 --
 ALTER TABLE `form_message`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `gallery`
 --
@@ -18193,7 +18195,7 @@ ALTER TABLE `modification`
 -- AUTO_INCREMENT для таблицы `note`
 --
 ALTER TABLE `note`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `order_status`
 --
@@ -18253,7 +18255,7 @@ ALTER TABLE `product_options`
 -- AUTO_INCREMENT для таблицы `product_order`
 --
 ALTER TABLE `product_order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `product_order_info`
 --

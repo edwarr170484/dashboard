@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Serializer;
 
 use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\ProductOrder;
+use Dashboard\CommonBundle\Entity\ProductService;
 use Dashboard\CommonBundle\Entity\Payment;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -151,7 +152,89 @@ class MoneyController extends Controller
                 $session->remove('selectedSalons');
             }
             
+            if($bill->getServicePack()){
+                $servicePack = $bill->getServicePack();
+                $product = $bill->getProducts()[0];
+                
+                if($servicePack->getServices()){
+                    foreach($servicePack->getServices() as $packService){
+                        $service = $packService->getService();
+                        
+                        if($packService->getValue()){
+                            $serviceCount = $packService->getValue();
+                        }else{
+                            $serviceCount = $service->getDays();
+                        }
+                        
+                        $productService = new ProductService();
+                        $productService->setProduct($product);
+                        $productService->setService($service);
+                        $productService->setIsActive(1);
+                        $productService->setDateAdded(new \DateTime("now"));
+                        $productService->setCount($serviceCount);
+                            
+                        $serviceCountParameter = $service->getParameter();
+                            
+                        switch($serviceCountParameter){
+                            case 'days':
+                                $currentDate = new \DateTime("now");
+                                $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
+                            break;
+                                
+                            case 'count':
+                                $productService->setDateEnd(new \DateTime("now"));
+                            break;
+                        }
+                        
+                        $manager->persist($productService);
+                    }
+                }
+                
+                $manager->flush();
+            }
             
+            if(count($bill->getServices()) > 0){
+                foreach($bill->getServices() as $productService){
+                    $serviceCount = $productService->getService()->getDays();
+                    $serviceCountParameter = $productService->getService()->getParameter();
+                    
+                    if($productService->getProduct()){
+                        $productService->setIsActive(1);
+                        $productService->setCount($productService->getCount() + $serviceCount);
+                        
+                        switch($serviceCountParameter){
+                            case 'days':
+                                $currentDate = ($productService->getDateEnd()) ? $productService->getDateEnd() : new \DateTime("now");
+                                $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
+                            break;
+                                
+                            case 'count':
+                                $productService->setDateEnd(new \DateTime("now"));
+                            break;
+                        }
+                    }else{
+                        $productService->setProduct($bill->getProducts()[0]);
+                        $productService->setIsActive(1);
+                        $productService->setDateAdded(new \DateTime("now"));
+                        $productService->setCount($productService->getCount() + $serviceCount);
+                        
+                        switch($serviceCountParameter){
+                            case 'days':
+                                $currentDate = new \DateTime("now");
+                                $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
+                            break;
+                                
+                            case 'count':
+                                $productService->setDateEnd(new \DateTime("now"));
+                            break;
+                        }
+                    }
+                    
+                    $manager->persist($productService);
+                }
+                
+                $session->remove('selectedServices');
+            }
             
             $bill->setIsClosed(1);
             $manager->flush();

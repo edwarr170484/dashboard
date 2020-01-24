@@ -352,4 +352,27 @@ class Bill
     {
         return $this->rates;
     }
+
+    /**
+     * Set isClosed
+     *
+     * @param boolean $isClosed
+     * @return Bill
+     */
+    public function setIsClosed($isClosed)
+    {
+        $this->isClosed = $isClosed;
+    
+        return $this;
+    }
+
+    /**
+     * Get isClosed
+     *
+     * @return boolean 
+     */
+    public function getIsClosed()
+    {
+        return $this->isClosed;
+    }
 }

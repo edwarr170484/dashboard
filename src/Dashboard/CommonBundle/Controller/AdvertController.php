@@ -155,7 +155,7 @@ class AdvertController extends Controller
                     if($service){
                         $productService = new ProductService();
                         $productService->setService($service);
-                        $productService->setCount($service->getDays());
+                        $productService->setCount(0);
                         $productService->setIsActive(0);
                         //$product->addService($productService);
                         $bill->addService($productService);
@@ -1861,7 +1861,7 @@ class AdvertController extends Controller
                     if($service){
                         $productService = new ProductService();
                         $productService->setService($service);
-                        $productService->setCount($service->getDays());
+                        $productService->setCount(0);
                         $productService->setIsActive(0);
                         //$product->addService($productService);
                         $bill->addService($productService);
@@ -2170,7 +2170,7 @@ class AdvertController extends Controller
                                     $productService = new ProductService();
                                     $productService->setService($service);
                                     $productService->setProduct($product);
-                                    $productService->setCount($service->getDays());
+                                    $productService->setCount(0);
                                     $productService->setIsActive(0);
                                     
                                     $bill->addService($productService);

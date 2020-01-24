@@ -140,6 +140,16 @@ class Product
     private $dateEdited;
     
     /**
+     * @ORM\Column(type="datetime", nullable=true, options={"default": null})
+     */
+    private $dateStart;
+    
+    /**
+     * @ORM\Column(type="datetime", nullable=true, options={"default": null})
+     */
+    private $dateEnd;
+    
+    /**
      * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
      */
     private $views;
@@ -994,5 +1004,51 @@ class Product
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * Set dateStart
+     *
+     * @param \DateTime $dateStart
+     * @return Product
+     */
+    public function setDateStart($dateStart)
+    {
+        $this->dateStart = $dateStart;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateStart
+     *
+     * @return \DateTime 
+     */
+    public function getDateStart()
+    {
+        return $this->dateStart;
+    }
+
+    /**
+     * Set dateEnd
+     *
+     * @param \DateTime $dateEnd
+     * @return Product
+     */
+    public function setDateEnd($dateEnd)
+    {
+        $this->dateEnd = $dateEnd;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateEnd
+     *
+     * @return \DateTime 
+     */
+    public function getDateEnd()
+    {
+        return $this->dateEnd;
     }
 }

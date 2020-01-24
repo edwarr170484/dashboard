@@ -140,6 +140,16 @@ class Product
     private $dateEdited;
     
     /**
+     * @ORM\Column(type="datetime", nullable=true, options={"default": null})
+     */
+    private $dateStart;
+    
+    /**
+     * @ORM\Column(type="datetime", nullable=true, options={"default": null})
+     */
+    private $dateEnd;
+    
+    /**
      * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
      */
     private $views;

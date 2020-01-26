@@ -53,6 +53,8 @@
     #navbar-bottom .footer-menu{padding-bottom: 20px;}
     .categorySpecialAdvertsHeader{@include flex-wrap(wrap);}
     .categoryAdvertCommonInfo{@include flex-wrap(wrap);}
+    .footer-menu-list, .footer-menu-list li{display: block;}
+    .footer-menu-list li:nth-child(2n){text-align: left;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
@@ -96,9 +98,13 @@
     .advertFilersDescription ul li div{padding-right: 30px;}
     .advertFilersDescription ul li div.advertFilterValue{padding-right: 30px;}
     .advertFilersDescription{@include flex-wrap(wrap);}
+    .modal-content button.close{top:1.5rem;right:1.5rem;}
+    .modal-content button.close svg path {fill:$yellow-color;}
+    .modal.fade.in{display: block;}
 }
 @media (max-width: 650px) 
 {
+    body{font-size:8px;}
     .mainPageAutoList ul li{width:50%}
     .mainPageContentText{columns:1}
     .siteMenuGamburgerMenu{@include column-count(2);}
@@ -112,15 +118,33 @@
     .categoryAdvertPrice{width: auto;}
     .categoryAdvertCredit{margin: 0;}
     .categoryAdvertInfoYear{padding: 15px 0;}
-    .categorySpecialAdvertsHeader h3{font-size: 2.6rem;}
+    .categorySpecialAdvertsHeader h3{font-size: 2.6rem;line-height: 3.2rem;}
     
     .advertFotos {@include flex-wrap(wrap);}
     .advertFotoIcons{width: 100%;padding-top: 12px;}
     .advertAdditionalsItems{@include column-count(2);}
+    .modal-content{padding: 3rem 5rem;}
+    .searchBlockInner{display: block;padding-top: 2rem;padding-bottom: 2rem;}
+    .searchBlockInner button.close{position: absolute;top: 2.5rem;right: 1.5rem;}
+    .searchBlockInner > div{text-align: center;}
+    .searchBlockForm{border-left:none;margin-left: 0;padding-top: 2rem;}
+    .searchBlock{padding: 0;}
+    .searchBlockInner input{width: 100%;margin-left: 0;}
+    
+    
+}
+@media (max-width: 560px) 
+{
+    .cookieAlerts{display: block;}
+    .cookieAlerts .cookieAlertLink, .cookieAlerts .cookieAlertButton{text-align: center;}
+    .cookieAlerts .cookieAlertLink{padding-bottom: 2.5rem;}
+    .modal-header h3{font-size: 2.6rem;line-height: 3.2rem;}
+    .modal-header{padding-bottom: 1.5rem;}
 }
 @media (max-width: 490px) 
 {
     .mainPageAutoList ul li{width:100%}
+    
     
 }
 @media (max-width: 475px) 
@@ -133,6 +157,8 @@
     .categorySpecialAdvertsHeader h3{font-size: 1.8rem;}
     .categoryAdvertShareLinks{padding-top: 10px;top:2rem;}
     .advertAdditionalsItems{@include column-count(1);}
+    .modal-content{padding: 3rem;}
+    .modal-header h3{font-size: 2.2rem;line-height: 2.8rem;}
 }
 @media (max-width: 340px) 
 {

@@ -192,7 +192,7 @@ class Product
     public function getDaysLeft(){
         
         $today = new \DateTime("now");
-        $endDate = $this->getDateAdded()->add(new \DateInterval('P30D'));
+        $endDate = $this->getDateEnd();
         $interval = $today->diff($endDate);        
         
         if($interval->invert){

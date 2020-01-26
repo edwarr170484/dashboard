@@ -102,8 +102,15 @@ $(document).ready(function(){
     });
     
     $(".footer-menu-header").click(function(){
-        $(this).toggleClass("active");
-        $(this).next(".footer-menu-list-block").toggleClass("active");
+        if($(this).hasClass("active")){
+            $(this).removeClass("active");
+            $(this).next(".footer-menu-list-block").removeClass("active");
+        }else{
+            $(".footer-menu-header").removeClass("active");
+            $(".footer-menu-header").next(".footer-menu-list-block").removeClass("active");
+            $(this).addClass("active");
+            $(this).next(".footer-menu-list-block").addClass("active");
+        }
     });
     
     $(".dz-hidden-input").attr("multiple", "multiple");

@@ -122,10 +122,12 @@ class MoneyController extends Controller
         return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill,"back" => $request->headers->get('referer')));
     }
     
+    
+    
     /**
-     * @Route("/account/payment/success", name="account_payment_success")
+     * @Route("/account/payment/success/{billId}", name="account_payment_success")
      */
-    public function paymentSuccessAction(Request $request)
+    public function paymentSuccessAction($billId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
@@ -133,7 +135,6 @@ class MoneyController extends Controller
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         $session = new Session();
         
-        $billId = 6;
         $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
         
         if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
@@ -154,7 +155,7 @@ class MoneyController extends Controller
             
             if($bill->getServicePack()){
                 $servicePack = $bill->getServicePack();
-                $product = $bill->getProducts()[0];
+                $product = $bill->getProducts()->first();
                 
                 if($servicePack->getServices()){
                     foreach($servicePack->getServices() as $packService){
@@ -201,11 +202,32 @@ class MoneyController extends Controller
                     if($productService->getProduct()){
                         $productService->setIsActive(1);
                         $productService->setCount($productService->getCount() + $serviceCount);
+                        $product = $productService->getProduct();
                         
+                        $advancedDays = 0;
+                        foreach($bill->getServices() as $productService){
+                            if($productService->getProduct()->getId() == $product->getId()){
+                                if($productService->getService()->getDays() > $advancedDays){
+                                    $advancedDays = $productService->getService()->getDays();
+                                }
+                            }
+                        }
+
                         switch($serviceCountParameter){
                             case 'days':
                                 $currentDate = ($productService->getDateEnd()) ? $productService->getDateEnd() : new \DateTime("now");
                                 $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
+                                
+                                $daysLeft = $productService->getProduct()->getDaysLeft();
+                                
+                                if($advancedDays == $serviceCount){
+                                    if($serviceCount > $daysLeft){
+                                        $diffDays = $serviceCount - $daysLeft;
+                                        $endDate = $product->getDateEnd()->add(new \DateInterval('P' . $diffDays . 'D'));
+                                        $product->setDateEnd($endDate);
+                                        $manager->persist($product);
+                                    }
+                                }
                             break;
                                 
                             case 'count':
@@ -213,7 +235,7 @@ class MoneyController extends Controller
                             break;
                         }
                     }else{
-                        $productService->setProduct($bill->getProducts()[0]);
+                        $productService->setProduct($bill->getProducts()->first());
                         $productService->setIsActive(1);
                         $productService->setDateAdded(new \DateTime("now"));
                         $productService->setCount($productService->getCount() + $serviceCount);
@@ -240,6 +262,6 @@ class MoneyController extends Controller
             $manager->flush();
         }
         
-        return new Response("OK");
+        return $this->render('DashboardCommonBundle:Money:result.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => "account_payments", "bill" => $bill,"back" => "/account/bills"));
     }
 }

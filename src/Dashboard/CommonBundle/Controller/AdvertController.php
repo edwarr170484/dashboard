@@ -95,6 +95,9 @@ class AdvertController extends Controller
             $product->setIsActive(1);
             $product->setDateAdded(new \DateTime("now"));
             $product->setDateEdited(new \DateTime("now"));
+            $product->setDateStart(new \DateTime("now"));
+            $endDate = $product->getDateStart()->add(new \DateInterval('P30D'));
+            $product->setDateEnd($endDate);
             
             if(count($advertImages) > 0){
                 foreach($advertImages as $image){
@@ -1801,6 +1804,9 @@ class AdvertController extends Controller
             $product->setIsActive(1);
             $product->setDateAdded(new \DateTime("now"));
             $product->setDateEdited(new \DateTime("now"));
+            $product->setDateStart(new \DateTime("now"));
+            $endDate = $product->getDateStart()->add(new \DateInterval('P30D'));
+            $product->setDateEnd($endDate);
             
             if(count($advertImages) > 0){
                 foreach($advertImages as $image){

@@ -192,7 +192,7 @@ class Product
     public function getDaysLeft(){
         
         $today = new \DateTime("now");
-        $endDate = $this->getDateAdded()->add(new \DateInterval('P30D'));
+        $endDate = $this->getDateEnd();
         $interval = $today->diff($endDate);        
         
         if($interval->invert){
@@ -1004,5 +1004,51 @@ class Product
     public function getNotes()
     {
         return $this->notes;
+    }
+
+    /**
+     * Set dateStart
+     *
+     * @param \DateTime $dateStart
+     * @return Product
+     */
+    public function setDateStart($dateStart)
+    {
+        $this->dateStart = $dateStart;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateStart
+     *
+     * @return \DateTime 
+     */
+    public function getDateStart()
+    {
+        return $this->dateStart;
+    }
+
+    /**
+     * Set dateEnd
+     *
+     * @param \DateTime $dateEnd
+     * @return Product
+     */
+    public function setDateEnd($dateEnd)
+    {
+        $this->dateEnd = $dateEnd;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateEnd
+     *
+     * @return \DateTime 
+     */
+    public function getDateEnd()
+    {
+        return $this->dateEnd;
     }
 }

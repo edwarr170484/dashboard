@@ -44,6 +44,16 @@ class Payment
     private $userRoles;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
+     */
+    private $controller;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
+     */
+    private $code;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -184,5 +194,51 @@ class Payment
     public function getUserRoles()
     {
         return $this->userRoles;
+    }
+
+    /**
+     * Set controller
+     *
+     * @param string $controller
+     * @return Payment
+     */
+    public function setController($controller)
+    {
+        $this->controller = $controller;
+    
+        return $this;
+    }
+
+    /**
+     * Get controller
+     *
+     * @return string 
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * Set code
+     *
+     * @param string $code
+     * @return Payment
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+    
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return string 
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 }

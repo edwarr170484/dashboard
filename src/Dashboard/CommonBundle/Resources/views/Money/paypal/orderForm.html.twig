@@ -1,0 +1,29 @@
+<script src="https://www.paypal.com/sdk/js?client-id=ARHqrGn9c4PA9cEg95xNHB1__2wyefjN7Vy_0cg5gKlgN4_-aI3ak0j-dJv4rxmX2F65H3CSg773j9l-&currency={{ locale.currency.code }}"></script>
+<div class="accountBottomPaymentSummValueButton" id="paypalButtonContainer"></div>
+<script>
+    paypal.Buttons({
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    currency_code:'{{locale.currency.code }}',
+                    value: '{{ bill.price }}'
+                }      
+            }]
+        });
+    },
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            return fetch('/paypal-transaction-verify', {
+                method: 'post',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    orderID: data.orderID
+                })
+            });
+        });
+    }
+  }).render('#paypalButtonContainer');
+</script>

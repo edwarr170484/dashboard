@@ -76,9 +76,15 @@
                                                                 <div class="paymentTabTieser">{{ payment.tieser | raw }}</div>
                                                             </div>
                                                         </div>
-                                                        <div class="paymentInfoLink">
-                                                            <div class="accountBottomPaymentSummValueButton" id=""><a href="">{% trans %}Оплатить{% endtrans %}</a></div>
-                                                        </div>
+                                                        {% if payment.code == 'paypal' %}
+                                                            <div class="paymentInfoLink">
+                                                                {{ render(controller('DashboardCommonBundle:' ~ payment.controller ~ ':orderForm', {'request' : app.request, 'billId' : bill.id, 'paymentId' : payment.id})) }}
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="paymentInfoLink">
+                                                                <div class="accountBottomPaymentSummValueButton" id=""><a href="">{% trans %}Оплатить{% endtrans %}</a></div>
+                                                            </div>
+                                                        {% endif %}
                                                     </div>
                                                     {% set i = i + 1 %}
                                                 {% endfor %}

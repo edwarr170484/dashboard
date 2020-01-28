@@ -239,7 +239,7 @@ footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;}
 .resultNavigation{@include fontView("GothamProRegular",#71798A,1.6rem,2.2rem);}
 .resultNavigation a{@include fontView("GothamProRegular",$orange-color,1.6rem,2.2rem);text-decoration: underline;}
 
-.register-block-header{@include fontView("GothamProBold",$gray-color-1,1.6rem,2.2rem);padding-bottom: 3.6rem;}
+.register-block-header{@include fontView("GothamProBold",$gray-color-1,1.6rem,2.2rem);padding-bottom: 3.6rem;width: 100%;text-align: center;}
 .register-block.result .register-block-header{color:$orange-color;}
 .register-block-header.social{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 2rem;}
 .register-block-header a{color:$orange-color;}
@@ -319,7 +319,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvertTop{position: absolute;top:-3px;left: -3px;background: url(../img/top.png) 50% 50% no-repeat;width: 112px;height: 151px;}
 .categoryAdvert.premium{border: 3px solid #F5AA01;background: #FFFFFF;}
 .categoryAdvert.payed{border: 3px solid #F5AA01;background: #FFFFFF;}
-.categoryAdvertImages{width: 20%;}
+.categoryAdvertImages{width: 20%;height: 135px;overflow:hidden;}
 .categoryAdvertImages img{width: 100%;max-width:260px;}
 .categoryAdvertInfo{width: 80%;padding-left: 3rem;}
 .categoryAdvertCommonInfo{@include flexBox(row,flex-start,stretch);}

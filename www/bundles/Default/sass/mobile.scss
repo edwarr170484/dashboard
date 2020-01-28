@@ -9,8 +9,8 @@
     .categoryAdvertInfo{@include justify-content(space-between);@include flex-wrap(wrap);}
     .categoryAdvertMainInfo{width: 100%;}
     .categoryAdvertInfoPrice{width: 33%;}
-    .categoryAdvertInfoYear{width: 33%;@include flexBox(row,center,center);}
-    .categoryAdvertInfoProbeg{width: 33%;@include flexBox(row,center,center);}
+    .categoryAdvertInfoYear{width: 33%;}
+    .categoryAdvertInfoProbeg{width: 33%;}
     .categoryAdvertMainInfo{padding-bottom: 25px;}
 } 
 @media (max-width: 1200px) 
@@ -37,11 +37,12 @@
     .footer-menu-list-block{display: none;}
     .footer-menu-list-block.active{display: block;}
     .login-blocks{display: block;padding-top: 5rem;padding-bottom: 5rem;}
-    .socialLoginBlock{padding-left: 0;padding-top: 3rem;}
+    .socialLoginBlock{padding-left: 0;padding-top: 4rem;text-align: center;}
+    .oauth-link{@include flexBox(row,center,center);}
+    .register-block-description{padding-top: 2rem;padding-bottom:5rem;}
     .siteMenuGamburgerMenu{top:28px;right:0;left:auto;padding-left: 4rem;width: 100%;}
     .siteMenuGamburgerMenu button{top:15px;right: 10px;left:auto;}
     .searchBlockInner input{width: 80%;}
-    .categorySortParams{@include flex-wrap(wrap);}
     .categorySortParams .select-cover{width: 250px;}
     .categorySortParams .filter{width: 110px;}
     .categoryAdvertShareLinks ul li button.share .shareLinks{left: auto;right: -12px;}
@@ -55,17 +56,48 @@
     .categoryAdvertCommonInfo{@include flex-wrap(wrap);}
     .footer-menu-list, .footer-menu-list li{display: block;}
     .footer-menu-list li:nth-child(2n){text-align: left;}
+    .mainPageFiltersBlock{padding-top: 3rem;padding-bottom: 4.5rem;}
+    .innerHeader h4{margin-bottom: 1.5rem;}
+    .siteInfoPaneAddadvert{text-align: center;}
+    .categorySorts{margin-top: 0;}
+    .categoryViewButtons{display: none;}
+    .categorySortParams{justify-content: space-between;}
+    .categoryAdverts{margin-left: -7px;margin-right: -7px;width: auto;}
+    .categoryAdverts .categoryAdvert{width: 288px;display:block;margin-bottom: 25px;}
+    .categoryAdverts .categoryAdvertCover{float:left;padding-left: 7px;padding-right: 7px;}
+    .categoryAdverts:after{content:" ";display: block;clear: both;}
+    .categoryAdverts .categoryAdvertImages{width: 100%;}
+    .categoryAdverts .categoryAdvertInfo{width: 100%;padding-left: 0;display: block;}
+    .categoryAdverts .categoryAdvertInfo .categoryAdvertCommonInfo{display: block;}
+    .categoryAdverts .categoryAdvertMainInfo{width: 100%;}
+    .categoryAdverts .categoryAdvertName{@include fontView("GothamProBlack",$black-text,1.8rem,2.6rem);padding-top: 15px;}
+    .categoryAdverts .categoryAdvertTypes{@include flex-wrap(wrap);}
+    .categoryAdverts .categoryAdvertTypes .categoryAdvertType{margin-bottom: 10px;}
+    .categoryAdverts .categoryAdvertInfoFeature{width: 100%;}
+    .categoryAdverts .categoryAdvertInfoFeatures{padding-top: 22px;}
+    .categoryAdverts .categoryAdvertInfoYear,.categoryAdverts.grid .categoryAdvertInfoProbeg{display: none;}
+    .categoryAdverts .categoryAdvertInfoPrice{@include flexBox(row,space-between,center);width: 100%;padding-top: 15px;}
+    .categoryAdverts .categoryAdvertInfoPrice .categoryAdvertPrice{padding: 0;font-size: 1.8rem;@include flexBox(row,center,center);width: 100%;}
+    .categoryAdverts .categoryAdvertInfoPrice .categoryAdvertCredit{margin: 0;font-size: 1.4rem;}
+    .categoryAdvertInfoFeature{display: none;}
+    .categoryAdverts .categoryAdvertInfoFeature{display: block;}
+    .categoryAdverts .categoryAdvertShareLinks{top: -18px;right: 0;@include border-radius(25px);padding: 5px 10px;border:2px solid $yellow-color;}
+    .categoryAdverts .categoryAdvertShareLinks ul{@include flexBox(row,flex-start,center);}
+    .categoryAdverts .categoryAdvertShareLinks ul li button{margin-bottom: 0;}
+    .categoryAdvertInfoPrice{width: 100%;}
+    .categoryAdvertInfoYear{width: 100%;}
+    .categoryAdvertInfoProbeg{width: 100%;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
 }
 @media (max-width: 768px) 
 {
-    h1{font-size: 2.2rem;}
-    h2{font-size: 2rem;line-height: 2.4rem;}
-    .mainPageSitHeader{padding-top: 3.5rem;padding-bottom: 3.5rem;}
-    .mainPageFiltersTabs{padding-top: 0rem;}
-    .mainPageFiltersBlock{padding-top: 4.5rem;}
+    h1{font-size: 3.2rem;}
+    h2{font-size: 3.2rem;line-height: 3.8rem;}
+    .page-content{padding-top: 1.5rem;}
+    .mainPageSiteSubheader{font-size:2.8rem;line-height: 3.2rem;padding-bottom: 3rem;}
+    .mainPageSitHeader{padding-top: 3rem;padding-bottom: 3rem;}
     .mainPageAutoList ul li{width:33.33333%}
     .innerHeader h4{font-size: 2.7rem;line-height: 100%;}
     .siteInfoPane{padding-left: 0;padding-top: 1rem;height: auto;}
@@ -74,13 +106,11 @@
     .header-search-box input[type="submit"]{display: none;}
     .header-search-box a.top-select-region{border: 2px solid #222B2A;}
     .header-search-box{height: auto;display: block;}
-    .header-search-box input[name="searchText"]{height: 40px;margin-bottom: 1rem;width: 100%;margin-top: 1.5rem;}
+    .header-search-box input[name="searchText"]{margin-bottom: 1rem;width: 100%;margin-top: 1.5rem;padding-top: 1.2rem;padding-bottom: 1.2rem;}
     .top-select-region{padding-top: 12px;padding-bottom: 12px;}
     .header-search-box a.top-select-region{width: 100%;}
     .infoPaneCheckbox{@include justify-content(flex-start);margin-top: 1rem;}
     .siteInfoPane{margin-bottom: 3rem;}
-    .innerHeader h4{margin-bottom: 1.5rem;}
-    .siteInfoPaneAddadvert{text-align: center;}
     .siteInfoPaneContent .description{padding-top: 1.5rem;}
     .siteInfoPaneContentButton{display: block;}
     .mainPageContentHeader h3{font-size: 1.4rem;line-height: 2rem;}
@@ -101,6 +131,13 @@
     .modal-content button.close{top:1.5rem;right:1.5rem;}
     .modal-content button.close svg path {fill:$yellow-color;}
     .modal.fade.in{display: block;}
+    .categorySortFields{padding:1.5rem;padding-top: 0;padding-bottom: 0;margin-bottom: 1.5rem;}
+    .categorySortParams{@include flex-wrap(wrap);}
+    .categorySortParams .select-cover{width: 100%;margin-right: 0;margin-bottom: 0;}
+    .categorySortParams .filter{width: 100%;}
+    .mainPageFiltersTabs.category-filters{padding-bottom: 2rem;padding-top: 1rem;}
+    .mainPageFiltersTabs{padding-top: 2rem;}
+    .content-row{margin-top: 1.5rem;}
 }
 @media (max-width: 650px) 
 {
@@ -130,9 +167,16 @@
     .searchBlockForm{border-left:none;margin-left: 0;padding-top: 2rem;}
     .searchBlock{padding: 0;}
     .searchBlockInner input{width: 100%;margin-left: 0;}
-    
-    
+    .pageContactUs{padding: 2rem;}
 }
+
+@media (max-width: 630px) 
+{
+    .categoryAdverts .categoryAdvert{width: 100%;}
+    .categoryAdvertImages img{max-width: 100%;}
+    .categoryAdvertImages{height: auto;max-height:250px;}
+}
+
 @media (max-width: 560px) 
 {
     .cookieAlerts{display: block;}
@@ -159,6 +203,17 @@
     .advertAdditionalsItems{@include column-count(1);}
     .modal-content{padding: 3rem;}
     .modal-header h3{font-size: 2.2rem;line-height: 2.8rem;}
+    h1{font-size: 2.8rem;}
+    h2{font-size: 2.8rem;line-height: 3.2rem;}
+    .mainPageSiteSubheader{font-size:2.4rem;line-height: 2.8rem;}
+    .register-form-forms.right-text button[type="submit"]{width: 100%;}
+}
+
+@media (max-width: 450px) 
+{
+    .siteInfoPaneContent ul li{display: block;padding-bottom: 1rem;}
+    .siteInfoPaneContent ul li:after{clear:both;display: table;content:" ";}
+    .siteInfoPaneContent ul li a{float:left;}
 }
 @media (max-width: 340px) 
 {
@@ -167,11 +222,9 @@
 	.category-premium-adverts .premium-advert{margin-left:0;margin-right:0;}
         .message-message-text img{width:100%;}
         .categorySpecialAdvertsHeader h3{font-size: 1.4rem;}
-        
 }
 @media (max-width:310px){
     .categoryAdverts.grid .categoryAdvert{width: 100%;}
-    
 }
 @media (max-width: 270px){
     .categorySpecialAdvert{width: 100%;}

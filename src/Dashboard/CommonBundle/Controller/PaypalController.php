@@ -11,6 +11,9 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Dashboard\CommonBundle\Model\PayPalClient;
+use PayPalCheckoutSdk\Orders\OrdersGetRequest;
+
 class PaypalController extends Controller
 {
     public function orderFormAction($billId, $paymentId,Request $request)
@@ -32,6 +35,11 @@ class PaypalController extends Controller
     public function paypalTransactionVerifycationAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
+        
+        $client = PayPalClient::client();
+        $response = $client->execute(new OrdersGetRequest($request->request->get('orderId')));
+        
+        return new Response();
     }
 }
 

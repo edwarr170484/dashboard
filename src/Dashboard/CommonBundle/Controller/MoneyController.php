@@ -100,8 +100,6 @@ class MoneyController extends Controller
         if(!$bill){
             return $this->createNotFoundException();
         }
-        
-        
                 
         return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill, "back" => $request->headers->get('referer')));
     }

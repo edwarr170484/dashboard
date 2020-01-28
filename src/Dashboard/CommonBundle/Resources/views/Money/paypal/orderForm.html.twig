@@ -14,14 +14,20 @@
     },
     onApprove: function(data, actions) {
         return actions.order.capture().then(function(details) {
-            return fetch('/paypal-transaction-verify', {
-                method: 'post',
-                headers: {
-                    'content-type': 'application/json'
+            
+            $.ajax({
+                url: '/paypal-transaction-verify',
+                type:'post',
+                data: 'orderId=' + data.orderID,
+                dataType: 'json',
+                beforeSend: function(){},
+                success: function(data)
+                {
+                    
                 },
-                body: JSON.stringify({
-                    orderId: data.orderID
-                })
+                error: function(xhr, ajaxOptions, thrownError) {
+
+                }
             });
         });
     }

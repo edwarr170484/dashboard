@@ -8,25 +8,38 @@
                 amount: {
                     currency_code:'{{locale.currency.code }}',
                     value: '{{ bill.price }}'
-                }      
+                },
+                description: '{{ bill.id }}'
             }]
         });
     },
     onApprove: function(data, actions) {
-        return actions.order.capture().then(function(details) {
+        $(".accountSettingsTabsProcess").addClass('active');
+        actions.order.capture().then(function(details) {
             
             $.ajax({
                 url: '/paypal-transaction-verify',
                 type:'post',
-                data: 'orderId=' + data.orderID,
+                data: 'billClass=Bill&orderId=' + data.orderID,
                 dataType: 'json',
-                beforeSend: function(){},
-                success: function(data)
-                {
+                beforeSend: function(){
                     
                 },
+                success: function(data){
+                    $(".accountSettingsTabsProcess").removeClass('active');
+                    if(data.statusCode === 200){
+                        if(data.result.status === 'COMPLETED'){
+                            window.location.href = '/account/payment/success/{{ bill.id }}';
+                        }else{
+                            alert('В процессе оплаты возникли ошибки. Попробуйте повторить оплату позже.');
+                        }   
+                    }else{
+                        alert('В процессе оплаты возникли ошибки. Попробуйте повторить оплату позже.');
+                    }
+                },
                 error: function(xhr, ajaxOptions, thrownError) {
-
+                    $(".accountSettingsTabsProcess").removeClass('active');
+                    alert('В процессе оплаты возникли ошибки. Попробуйте повторить оплату позже.');
                 }
             });
         });

@@ -61,6 +61,11 @@ class RateBill
     private $isPayed;
     
     /**
+     * @ORM\Column(type="boolean", nullable=true, options={"default":0})
+     */
+    private $isClosed;
+    
+    /**
      * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
      */
     private $billId;
@@ -281,5 +286,28 @@ class RateBill
     public function getBillId()
     {
         return $this->billId;
+    }
+
+    /**
+     * Set isClosed
+     *
+     * @param boolean $isClosed
+     * @return RateBill
+     */
+    public function setIsClosed($isClosed)
+    {
+        $this->isClosed = $isClosed;
+    
+        return $this;
+    }
+
+    /**
+     * Get isClosed
+     *
+     * @return boolean 
+     */
+    public function getIsClosed()
+    {
+        return $this->isClosed;
     }
 }

@@ -41,22 +41,23 @@ class PaypalController extends Controller
         $response = $client->execute(new OrdersGetRequest($request->request->get('orderId')));
         
         if($response->statusCode == '200'){
-            if($response->result->status == 'COMPLETED'){
-                $invoice = $response->result->purchase_units[0]->amount;
-                $billId = $response->result->purchase_units[0]->invoice_id;
-                $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
-                
-                $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
-
-                if($invoice->currency_code == $locale->getCurrency()->getCode() && $bill){
-                    if($bill->getPrice() == $invoice->value){
-                        $bill->setDatePayed(new \DateTime($response->result->update_time));
-                        $bill->setIsPayed(1);
-                        $manager->persist($bill);
-                        //$manager->flush();
-                        return new JsonResponse(array("error" => 0, "redirect" => "/account/payment/success/" . $billId));
+            switch($response->result->status){
+                case 'COMPLETED':
+                    $invoice = $response->result->purchase_units[0]->amount;
+                    $billId = $response->result->purchase_units[0]->description; //invoice_id
+                    $bill = $manager->getRepository("DashboardCommonBundle:" . $request->request->get('billClass'))->find($billId);
+                    $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+                    
+                    if($bill && !$bill->getIsPayed()){
+                        if(($invoice->currency_code == $locale->getCurrency()->getCode()) && ($bill->getPrice() == $invoice->value)){
+                            $bill->setDatePayed(new \DateTime($response->result->update_time));
+                            $bill->setIsPayed(1);
+                            $manager->persist($bill);
+                            $manager->flush();
+                        }
                     }
-                }
+                    
+                break;
             }
         }
         

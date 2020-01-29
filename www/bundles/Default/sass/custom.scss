@@ -769,6 +769,9 @@ ul.justLinks li{position: relative;}
 .account-menu-list li .accountMenuItem a{padding-bottom: 0;padding-left: 2rem;}
 .account-menu-list li .accountMenuItem a.logout{padding-left: 3.8rem;}
 .account-menu-list li a.active{color:$orange-color;}
+.accountSettingsTabs{position: relative;}
+.accountSettingsTabsProcess{position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(255,255,255,0.8);display: none;z-index:444;}
+.accountSettingsTabsProcess.active{@include flexBox(row,center,center);}
 .accountSettingsTabs ul li a{@include fontView("GothamProRegular",$black-text,2.2rem,3rem);}
 .nav-tabs.settingsTabs > li > a{@include border-radius(0);border:none;@include flexBox(row, flex-start, center);}
 .nav-tabs.settingsTabs > li > a > .numberNewItems{display: block;background: rgba(240,153,75,0.5);padding: 4px;@include fontView("GothamProMedium",$super-white-color,1.2rem,1.1rem);@include border-radius(50%);margin-left: 1rem;padding: 9px 4px;}

@@ -73,6 +73,15 @@ class Bill
      * @ORM\Column(type="boolean", nullable=true, options={"default":0})
      */
     private $isClosed;
+    
+    private $className;
+    
+    public function getClassName()
+    {
+        $className = get_class($this);
+        if ($pos = strrpos($className, '\\')) return substr($className, $pos + 1);
+        return $pos;
+    }
 
     /**
      * Constructor

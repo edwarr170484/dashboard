@@ -27,6 +27,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
+use Dashboard\CommonBundle\Model\CustomPdf;
+
 class MoneyController extends Controller
 {
     /**
@@ -137,7 +139,7 @@ class MoneyController extends Controller
         
         $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
         
-        if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
+        /*if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
             if($bill->getRates()){
                 foreach($bill->getRates() as $rate){
                     if(!$rate->getDateAdded()){
@@ -260,8 +262,148 @@ class MoneyController extends Controller
             
             $bill->setIsClosed(1);
             $manager->flush();
-        }
+        }*/
         
         return $this->render('DashboardCommonBundle:Money:result.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => "account_payments", "bill" => $bill,"back" => "/account/bills"));
+    }
+    
+    /**
+     * @Route("/account/pdf/{billId}", name="account_bill_pdf")
+     */
+    public function generateBillPdfAction($billId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
+        $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
+        
+        if($bill)
+        {
+            $pdf = new CustomPdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false, false, $settings);
+            $pdf->SetCreator($settings->getSiteName());
+            $pdf->SetAuthor($settings->getSiteName());
+            $pdf->SetTitle('Invoice-#' . $bill->getId());
+            $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, $settings->getSiteName(), '', array(0,64,255), array(0,64,128));
+            $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+            $pdf->setFontSubsetting(true);
+            $pdf->SetFont('dejavusans', '', 9);
+            $pdf->AddPage();
+            
+            $pdf->SetXY(PDF_MARGIN_LEFT, 45);
+            $html = '<dl style="color:#fff"><dt><b>ANDREA SEGORO RADRIGEZ D.N.I./N.I.E.</b> N33333333<br/></dt><dt>Avenida Valencia 37, Atico 2, 03088 Madrid</dt><dt>romashka@gmail.com</dt></dl>';
+            $pdf->writeHTMLCell(0, 0, '', '', $html, 'L', 1, 0, true, 'L', true);
+            $html = '<dl><dt><b>ANDREA SEGORO RADRIGEZ D.N.I./N.I.E.</b> N33333333<br/></dt><dt>Avenida Valencia 37, Atico 2, 03088 Madrid</dt><dt>romashka@gmail.com</dt></dl>';
+            $pdf->SetXY(PDF_MARGIN_LEFT + 1, 43);
+            $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
+            $pdf->SetFont('dejavusans', '', 10);
+            $pdf->SetXY(PDF_MARGIN_LEFT, 75);
+            $html = '<table>'
+                    . '<tr><td><b>№ Cliente</b></td><td><b>Número de FACTURA</b></td><td><b>Fecha</b></td><td><b>Tipo Documento</b></td></tr>'
+                    . '<tr><td>1202</td><td>103</td><td>01/05/2019</td><td>FACTURA</td></tr>'
+                    . '<tr><td><br/></td><td><br/></td><td><br/></td><td><br/></td></tr>'
+                    . '<tr><td><b>Modo de pago</b></td><td></td><td></td><td></td></tr>'
+                    . '<tr><td>PayPal</td><td></td><td></td><td></td></tr>'
+                    . '</table>';
+            $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
+            
+            $pdf->SetFont('dejavusans', '', 9);
+            $pdf->SetXY(PDF_MARGIN_LEFT, 103);
+            $html = '<table border="1" cellpadding="4">'
+                    . '<tr>'
+                    . '<th><b>Referencia</b></th>'
+                    . '<th><b>Descripción</b></th>'
+                    . '<th><b>Cantidad</b></th>'
+                    . '<th><b>Precio unitario</b></th>'
+                    . '<th><b>Total</b></th>'
+                    . '<th><b>IVA</b></th>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<th>102</th>'
+                    . '<td>Publicación de la  Premium</td>'
+                    . '<td>1</td>'
+                    . '<td>5,99</td>'
+                    . '<td>5,99</td>'
+                    . '<td>21,0%</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td>109</td>'
+                    . '<td>Levantar anuncio</td>'
+                    . '<td>1</td>'
+                    . '<td>1,99</td>'
+                    . '<td>1,99</td>'
+                    . '<td>21,0%</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td>107</td>'
+                    . '<td>Colocación especial de anuncios</td>'
+                    . '<td>1</td>'
+                    . '<td>3,99</td>'
+                    . '<td>3,99</td>'
+                    . '<td>21,0%</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td>108</td>'
+                    . '<td>Destacando un anuncio en color</td>'
+                    . '<td>1</td>'
+                    . '<td>2,99</td>'
+                    . '<td>2,99</td>'
+                    . '<td>21,0%</td>'
+                    . '</tr>'
+                    . '</table>'
+                    . '<table cellpadding="4">'
+                    . '<tr>'
+                    . '<th></th>'
+                    . '<th><b>Total BI.</b></th>'
+                    . '<th><b>IVA</b></th>'
+                    . '<th><b>Total Imp.</b></th>'
+                    . '<th><b>Importe Neto</b></th>'
+                    . '<th style="text-align:right">12,96</th>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td></td>'
+                    . '<td>12,36</td>'
+                    . '<td>21,00%</td>'
+                    . '<td>2,60</td>'
+                    . '<td>IVA</td>'
+                    . '<td style="text-align:right">2,60</td>'
+                    . '</tr>'
+                    . '<tr>'
+                    . '<td></td>'
+                    . '<td></td>'
+                    . '<td></td>'
+                    . '<td></td>'
+                    . '<td style="border-top:1"><b>TOTAL EUR.</b></td>'
+                    . '<td style="text-align:right;border-top:1">14,96</td>'
+                    . '</tr>'
+                    . '</table>';
+            $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
+            
+            
+            $pdfString = $pdf->Output(null, 'S');
+            /*$fp = fopen("docs/invoice-#" . $bill->getId() . ".pdf", "w");
+            fwrite($fp, $pdfString);
+            fclose($fp);*/
+		
+            header('Content-Type: application/pdf');
+            header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0, max-age=1');
+            header('Pragma: public');
+            header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+            header('Content-Disposition: inline; filename="invoice-#' . $bill->getId() . '.pdf'.'"');
+            echo $pdfString;
+            
+            //return $this->redirect("docs/invoice-#" . $bill->getId() . ".pdf");
+        }
+        else
+        {
+            throw $this->createNotFoundException();
+        }
     }
 }

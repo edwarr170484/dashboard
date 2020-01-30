@@ -373,4 +373,27 @@ class Role implements RoleInterface
     {
         return $this->payments;
     }
+
+    /**
+     * Set invoiceText
+     *
+     * @param string $invoiceText
+     * @return Role
+     */
+    public function setInvoiceText($invoiceText)
+    {
+        $this->invoiceText = $invoiceText;
+    
+        return $this;
+    }
+
+    /**
+     * Get invoiceText
+     *
+     * @return string 
+     */
+    public function getInvoiceText()
+    {
+        return $this->invoiceText;
+    }
 }

@@ -12,7 +12,7 @@
                     <li>/</li>
                     <li><a href="{{ path('account', {'_locale' : locale.code}) }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
                     <li>/</li>
-                    <li><a href="{{path('account_payments',{'billId' : bill.id})}}">{% trans %}Оплата{% endtrans %}</a></li>
+                    <li><a href="javascript:void(0)">{% trans %}Оплата{% endtrans %}</a></li>
                 </ul>
             </div>
         </div>
@@ -49,7 +49,7 @@
                                     {% trans %}Сумма к оплате:{% endtrans %} <span>{{ bill.price }} {{ locale.currency.label | raw }}</span>
                                 </div>
                             </div>
-                            {% if bill.isClosed %}
+                            {% if bill.isPayed %}
                                 <div class="paymentsMethodsBlock">
                                     <div class="paymentsMethodsBlockHeader">{% trans %}Этот счет оплачен сполна!{% endtrans %}</div>
                                     <div class="paymentsMethodsBlockInner">

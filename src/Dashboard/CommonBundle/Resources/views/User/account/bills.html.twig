@@ -38,7 +38,7 @@
                         {% for bill in user.bills %}
                             <div class="accountBill">
                                 <div class="accountBillInfo">
-                                    <a href="{% if not bill.isPayed %}{{ path('account_payments', {'billId' : bill.id})}}{% else %}javascript:void(0){% endif %}">
+                                    <a href="{% if not bill.isPayed %}{{ path('account_payments', {'billId' : bill.id, 'className' : bill.className})}}{% else %}javascript:void(0){% endif %}">
                                         <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
                                         <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
                                         <div class="accountBillInfoItem price">{{ bill.price }} {{ locale.currency.label | raw }}</div>
@@ -55,9 +55,9 @@
                                 </div>
                                 <div class="accountBillDownload">
                                     {% if bill.isPayed %}
-                                        <a href="{{ path('account_bill_pdf', {'billId' : bill.id}) }}" target="_blank">
+                                        <a href="{{ path('account_bill_pdf', {'billId' : bill.id, 'className' : 'Bill'}) }}" target="_blank">
                                     {% else %}
-                                        <a href="{{ path('account_payments', {'billId' : bill.id})}}">
+                                        <a href="{{ path('account_payments', {'billId' : bill.id, 'className' : 'Bill'})}}">
                                     {% endif %}
                                         <svg width="29" height="33" viewBox="0 0 29 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M7.52979 16.4889C7.52979 15.6225 6.92784 15.105 5.86645 15.105C5.43323 15.105 5.14024 15.1472 4.98633 15.1882V17.9709C5.16874 18.012 5.39219 18.0268 5.69886 18.0268C6.83093 18.0268 7.52979 17.4534 7.52979 16.4889Z" fill="#616161"/>
@@ -72,7 +72,7 @@
                         {% for bill in user.rateBills %}
                             <div class="accountBill">
                                 <div class="accountBillInfo">
-                                    <a href="{% if not bill.isPayed %}{{ path('account_dealer_payments', {'billId' : bill.id})}}{% else %}javascript:void(0){% endif %}">
+                                    <a href="{% if not bill.isPayed %}{{ path('account_payments', {'billId' : bill.id, 'className' : bill.className})}}{% else %}javascript:void(0){% endif %}">
                                         <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
                                         <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
                                         <div class="accountBillInfoItem price">{{ bill.price }} {{ locale.currency.label | raw }}</div>
@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="accountBillDownload">
                                     {% if bill.isPayed %}
-                                        <a href="{{ path('account_bill_pdf', {'billId' : bill.id}) }}" target="_blank">
+                                        <a href="{{ path('account_bill_pdf', {'billId' : bill.id, 'className' : 'RateBill'}) }}" target="_blank">
                                     {% else %}
                                         <a href="{{ path('account_dealer_payments', {'billId' : bill.id})}}">
                                     {% endif %}

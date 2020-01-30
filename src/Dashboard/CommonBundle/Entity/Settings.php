@@ -83,7 +83,7 @@ class Settings
      */
     private $selectedAdvPrice;
     /**
-     * @ORM\Column(type="integer", length=15, nullable=true, options={"default":"0"})
+     * @ORM\Column(type="float", length=15, nullable=true, options={"default":"0"})
      */
     private $premiumAdvPrice;
     /**
@@ -199,7 +199,7 @@ class Settings
      * @ORM\JoinColumn(name="review_order_status_id", referencedColumnName="id")
      */
     private $orderReviewStatus;
-    
+
 
     /**
      * Get id
@@ -536,7 +536,7 @@ class Settings
     /**
      * Set premiumAdvPrice
      *
-     * @param integer $premiumAdvPrice
+     * @param float $premiumAdvPrice
      * @return Settings
      */
     public function setPremiumAdvPrice($premiumAdvPrice)
@@ -549,7 +549,7 @@ class Settings
     /**
      * Get premiumAdvPrice
      *
-     * @return integer 
+     * @return float 
      */
     public function getPremiumAdvPrice()
     {
@@ -1039,7 +1039,6 @@ class Settings
         return $this->publicReviewStatus;
     }
 
-
     /**
      * Set orderReviewStatus
      *
@@ -1049,7 +1048,7 @@ class Settings
     public function setOrderReviewStatus(\Dashboard\CommonBundle\Entity\OrderStatus $orderReviewStatus = null)
     {
         $this->orderReviewStatus = $orderReviewStatus;
-    
+
         return $this;
     }
 

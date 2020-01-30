@@ -28,7 +28,7 @@
                     $(".accountSettingsTabsProcess").removeClass('active');
                     if(data.statusCode === 200){
                         if(data.result.status === 'COMPLETED'){
-                            window.location.href = '/account/payment/success/{{ bill.id }}/{{ payment.id }}';
+                            window.location.href = '/account/payment/success/{{ bill.id }}/{{ payment.id }}/{{ bill.className}}';
                         }else{
                             alert('В процессе оплаты возникли ошибки. Попробуйте повторить оплату позже.');
                         }   

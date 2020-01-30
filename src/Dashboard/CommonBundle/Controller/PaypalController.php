@@ -17,14 +17,14 @@ use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 
 class PaypalController extends Controller
 {
-    public function orderFormAction($billId, $paymentId,Request $request)
+    public function orderFormAction($billId, $paymentId, $className, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         
-        $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);    
+        $bill = $manager->getRepository("DashboardCommonBundle:" . $className)->find($billId);    
         $payment = $manager->getRepository("DashboardCommonBundle:Payment")->find($paymentId);
         
         return $this->render('DashboardCommonBundle:Money/paypal:orderForm.html.twig', array("bill" => $bill,"payment" => $payment, "settings" => $settings, "locale" => $locale));

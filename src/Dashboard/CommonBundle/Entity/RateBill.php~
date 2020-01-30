@@ -70,6 +70,20 @@ class RateBill
      */
     private $billId;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Payment", inversedBy="rateBills")
+     * @ORM\JoinColumn(name="payment_id", referencedColumnName="id")
+     */
+    private $payment;
+    
+    private $className;
+    
+    public function getClassName()
+    {
+        $className = get_class($this);
+        if ($pos = strrpos($className, '\\')) return substr($className, $pos + 1);
+        return $pos;
+    }
 
     /**
      * Get id
@@ -286,5 +300,51 @@ class RateBill
     public function getBillId()
     {
         return $this->billId;
+    }
+
+    /**
+     * Set isClosed
+     *
+     * @param boolean $isClosed
+     * @return RateBill
+     */
+    public function setIsClosed($isClosed)
+    {
+        $this->isClosed = $isClosed;
+    
+        return $this;
+    }
+
+    /**
+     * Get isClosed
+     *
+     * @return boolean 
+     */
+    public function getIsClosed()
+    {
+        return $this->isClosed;
+    }
+
+    /**
+     * Set payment
+     *
+     * @param \Dashboard\CommonBundle\Entity\Payment $payment
+     * @return RateBill
+     */
+    public function setPayment(\Dashboard\CommonBundle\Entity\Payment $payment = null)
+    {
+        $this->payment = $payment;
+    
+        return $this;
+    }
+
+    /**
+     * Get payment
+     *
+     * @return \Dashboard\CommonBundle\Entity\Payment 
+     */
+    public function getPayment()
+    {
+        return $this->payment;
     }
 }

@@ -71,6 +71,11 @@ class Role implements RoleInterface
      */
     private $rates;
     
+    /**
+     * @ORM\Column(type="text", nullable=true, options={"default":0})
+     */
+    private $invoiceText;
+    
 
     public function __construct()
     {
@@ -367,5 +372,28 @@ class Role implements RoleInterface
     public function getPayments()
     {
         return $this->payments;
+    }
+
+    /**
+     * Set invoiceText
+     *
+     * @param string $invoiceText
+     * @return Role
+     */
+    public function setInvoiceText($invoiceText)
+    {
+        $this->invoiceText = $invoiceText;
+    
+        return $this;
+    }
+
+    /**
+     * Get invoiceText
+     *
+     * @return string 
+     */
+    public function getInvoiceText()
+    {
+        return $this->invoiceText;
     }
 }

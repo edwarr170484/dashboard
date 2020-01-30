@@ -105,7 +105,7 @@
                                                         </div>
                                                         {% if payment.code == 'paypal' %}
                                                             <div class="paymentInfoLink">
-                                                                {{ render(controller('DashboardCommonBundle:' ~ payment.controller ~ ':orderForm', {'request' : app.request, 'billId' : bill.id, 'paymentId' : payment.id})) }}
+                                                                {{ render(controller('DashboardCommonBundle:' ~ payment.controller ~ ':orderForm', {'className' : bill.className, 'request' : app.request, 'billId' : bill.id, 'paymentId' : payment.id})) }}
                                                             </div>
                                                         {% else %}
                                                             <div class="paymentInfoLink">

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Янв 27 2020 г., 15:40
+-- Время создания: Янв 30 2020 г., 16:23
 -- Версия сервера: 10.1.9-MariaDB
 -- Версия PHP: 5.6.15
 
@@ -64,15 +64,16 @@ CREATE TABLE `bill` (
   `service_pack_id` int(11) DEFAULT NULL,
   `date_payed` datetime DEFAULT NULL,
   `is_payed` tinyint(1) DEFAULT '0',
-  `is_closed` tinyint(1) DEFAULT '0'
+  `is_closed` tinyint(1) DEFAULT '0',
+  `payment_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `bill`
 --
 
-INSERT INTO `bill` (`id`, `user_id`, `date_added`, `price`, `file`, `service_pack_id`, `date_payed`, `is_payed`, `is_closed`) VALUES
-(6, 6, '2019-12-30 12:33:13', 51.98, NULL, NULL, NULL, 0, 0);
+INSERT INTO `bill` (`id`, `user_id`, `date_added`, `price`, `file`, `service_pack_id`, `date_payed`, `is_payed`, `is_closed`, `payment_id`) VALUES
+(6, 6, '2019-12-30 12:33:13', 51.98, NULL, NULL, NULL, 0, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -16632,7 +16633,9 @@ CREATE TABLE `rate_bill` (
   `price` double DEFAULT '0',
   `file` varchar(255) COLLATE utf8_unicode_ci DEFAULT '0',
   `is_payed` tinyint(1) DEFAULT '0',
-  `bill_id` int(11) DEFAULT '0'
+  `bill_id` int(11) DEFAULT '0',
+  `is_closed` tinyint(1) DEFAULT '0',
+  `payment_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -16771,18 +16774,19 @@ CREATE TABLE `role` (
   `role` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `advert_number` int(11) DEFAULT NULL,
   `advert_foto_number` int(11) DEFAULT NULL,
-  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null'
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT 'null',
+  `invoice_text` longtext COLLATE utf8_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `role`
 --
 
-INSERT INTO `role` (`id`, `name`, `role`, `advert_number`, `advert_foto_number`, `title`) VALUES
-(1, 'admin', 'ROLE_ADMIN', 30, 30, 'Администратор'),
-(2, 'dealer', 'ROLE_DEALER', 30, 25, 'Дилер'),
-(3, 'individual', 'ROLE_INDIVIDUAL', 30, 30, 'Физическое лицо'),
-(4, 'service', 'ROLE_SERVICE', 30, 30, 'Сервис');
+INSERT INTO `role` (`id`, `name`, `role`, `advert_number`, `advert_foto_number`, `title`, `invoice_text`) VALUES
+(1, 'admin', 'ROLE_ADMIN', 30, 30, 'Администратор', NULL),
+(2, 'dealer', 'ROLE_DEALER', 30, 25, 'Дилер', '<b>Importante:</b>\r\n<p>No se aceptar&aacute;n cheques ni pagos en efectivo ni ingresos en efectivo por ventanilla. Recuerde indicar en el concepto de la transferencia el <b>n&uacute;mero de factura</b></p>\r\nque aparece m&aacute;s arriba. En caso contrario, el pedido no podr&aacute; ser identificado y, por tanto, el anuncio no puede ser colocado. Su anuncio se colocar&aacute; tan pronto como el pago se haya efectuado. Agradecemos su confianza en <b>auto28.es</b>'),
+(3, 'individual', 'ROLE_INDIVIDUAL', 30, 30, 'Физическое лицо', 'Agradecemos su confianza en <b>auto28.es</b>'),
+(4, 'service', 'ROLE_SERVICE', 30, 30, 'Сервис', '<b>Importante:</b>\r\n<p>No se aceptar&aacute;n cheques ni pagos en efectivo ni ingresos en efectivo por ventanilla. Recuerde indicar en el concepto de la transferencia el <b>n&uacute;mero de factura</b></p>\r\nque aparece m&aacute;s arriba. En caso contrario, el pedido no podr&aacute; ser identificado y, por tanto, el anuncio no puede ser colocado. Su anuncio se colocar&aacute; tan pronto como el pago se haya efectuado. Agradecemos su confianza en <b>auto28.es</b>');
 
 -- --------------------------------------------------------
 
@@ -16982,7 +16986,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`id`, `user_default_group`, `user_advert_limit_text`, `site_name`, `site_description`, `admin_email`, `category_product_number`, `category_panel_items_number`, `mainpage_adverts_number`, `site_logo`, `catpage_premium_number`, `selected_adv_price`, `premium_adv_price`, `conversation_index`, `advert_days_show_number`, `up_adv_price`, `success_add_advert_text`, `watermark`, `aditional_advert_price`, `is_moderate`, `locale_id`, `currency_id`, `copyright`, `textblock_how_to_price`, `textblock_user_agreement`, `user_advert_work_right`, `is_show_captcha`, `is_show_type`, `service_tab_text`, `default_category_id`, `user_messages_number`, `google_maps_key`, `center_lat`, `center_lng`, `review_status_id`, `default_orderstatus_id`, `review_public_status_id`, `review_order_status_id`) VALUES
-(1, 2, 'Вы исчерпали доступный Вам лимит бесплатных объявлений. В данном случае Вы можете <a href="../account/buyslots">купить дополнительные слоты</a> для объявлений, либо удалить старые объявления для освобождения места для новых.', 'Auto28.es', NULL, 'admin@gribupardot.sunweb.by', NULL, 15, 100, '63715575.svg', 9, 30, 50, 1, 30, 20, '<strong>Выполнено!</strong> Ваше объявление успешно добавлено и опубликовано.', '17220519.png', 10, 1, 1, 1, '&copy; Auto28.es - доска объявлений в Испании', '<div class="reviewRulesBlock">\r\n<div class="reviewRulesBlockHeader">О чем писать</div>\r\n<div class="reviewRulesBlockText">Подробно расскажите о своих впечатлениях от работы продавца: начиная с этапа консультации (оформления заказа) и заканчивая работой службы доставки. Не забудьте указать, что именно вы купили. Обратите внимание на то, что малоинформативные отзывы подлежат удалению.</div>\r\n</div>\r\n<div class="reviewRulesBlock">\r\n<div class="reviewRulesBlockHeader">Правила публикации</div>\r\n<div class="reviewRulesBlockText">Жалобы на несоответствие цены или отсутствие заявленных продавцом позиций публикуются или удаляются модератором на основании результатов проведенной проверки без звонка их авторам. Подтвержденная и опубликованная жалоба не может быть удалена даже по просьбе ее автора.</div>\r\n</div>', NULL, '<div class="block-rules-faster first">\r\n<div class="block-rules-faster-header rules">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>1. Не подавайте одно и то же объявление повторно. Почему?</li>\r\n<li>2. Не телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class="rules-link"><a href="../pages/Pravila-razmescheniya">Подробнее о правилах</a></div>\r\n</div>\r\n<div class="block-rules-faster">\r\n<div class="block-rules-faster-header faster">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет "премиум размещение" или "выделить объявление".</li>\r\n</ul>\r\n</div>\r\n</div>', 0, 0, '<div class="addAdvertServiceDescriptionTitle">VENTA EST&Aacute;NDAR</div>\r\n<div class="addAdvertServiceDescriptionText">Вы можете разместить объявление на Авто.ру бесплатно, но дополнительные способы продвижения помогут продать автомобиль быстрее.</div>', 27, 5, 'AIzaSyCi2nSNNHbSUbbwlY1yZkkTAkRIVIh_HVY', '40.1023046', '-5.0877925', 1, 1, 1, 7),
+(1, 2, 'Вы исчерпали доступный Вам лимит бесплатных объявлений. В данном случае Вы можете <a href="../account/buyslots">купить дополнительные слоты</a> для объявлений, либо удалить старые объявления для освобождения места для новых.', 'Auto28.es', NULL, 'admin@gribupardot.sunweb.by', NULL, 15, 100, '95697021.png', 9, 30, 50, 1, 30, 20, '<strong>Выполнено!</strong> Ваше объявление успешно добавлено и опубликовано.', '17220519.png', 10, 1, 1, 1, '&copy; Auto28.es - доска объявлений в Испании', '<div class="reviewRulesBlock">\r\n<div class="reviewRulesBlockHeader">О чем писать</div>\r\n<div class="reviewRulesBlockText">Подробно расскажите о своих впечатлениях от работы продавца: начиная с этапа консультации (оформления заказа) и заканчивая работой службы доставки. Не забудьте указать, что именно вы купили. Обратите внимание на то, что малоинформативные отзывы подлежат удалению.</div>\r\n</div>\r\n<div class="reviewRulesBlock">\r\n<div class="reviewRulesBlockHeader">Правила публикации</div>\r\n<div class="reviewRulesBlockText">Жалобы на несоответствие цены или отсутствие заявленных продавцом позиций публикуются или удаляются модератором на основании результатов проведенной проверки без звонка их авторам. Подтвержденная и опубликованная жалоба не может быть удалена даже по просьбе ее автора.</div>\r\n</div>', NULL, '<div class="block-rules-faster first">\r\n<div class="block-rules-faster-header rules">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>1. Не подавайте одно и то же объявление повторно. Почему?</li>\r\n<li>2. Не телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class="rules-link"><a href="../pages/Pravila-razmescheniya">Подробнее о правилах</a></div>\r\n</div>\r\n<div class="block-rules-faster">\r\n<div class="block-rules-faster-header faster">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет "премиум размещение" или "выделить объявление".</li>\r\n</ul>\r\n</div>\r\n</div>', 0, 0, '<div class="addAdvertServiceDescriptionTitle">VENTA EST&Aacute;NDAR</div>\r\n<div class="addAdvertServiceDescriptionText">Вы можете разместить объявление на Авто.ру бесплатно, но дополнительные способы продвижения помогут продать автомобиль быстрее.</div>', 27, 5, 'AIzaSyCi2nSNNHbSUbbwlY1yZkkTAkRIVIh_HVY', '40.1023046', '-5.0877925', 1, 1, 1, 7),
 (2, 2, 'Вы исчерпали доступный Вам лимит бесплатных объявлений. В данном случае Вы можете <a href="../account/buyslots">купить дополнительные слоты</a> для объявлений, либо удалить старые объявления для освобождения места для новых.', 'Auto28.es', NULL, 'admin@gribupardot.sunweb.by', NULL, 15, 100, '6289673.png', 9, 30, 50, 1, 30, 20, '<strong>Выполнено!</strong> Ваше объявление успешно добавлено и опубликовано.', '17220519.png', 10, 1, 2, 1, '&copy; Auto28.es - доска объявлений в Испании', 'Как правильно указать цену?', '<strong>Правила размещения объявлений на gribupardot.sunweb.by</strong><br /><br />Все перечисленные ниже правила распространяются на всех пользователей и рекламодателей без исключения. Администрация имеет право удалять объявление без предупреждения, если оно нарушает любое из Правил.&nbsp;<br />За правдивость всей предоставленной в объявлении информации и за возможные последствия, возникшие в результате размещения объявления на сайте gribupardot.sunweb.by, ответственность несет автор объявления.&nbsp;<br />Систематические нарушения любого из нижеперечисленных Правил приводят к блокированию учетной записи.<br />Администрация оставляет за собой право потребовать от пользователя дополнительную информацию (фото, описание и т.д.) о его товара или услугах.<br />Администрация gribupardot.sunweb.by оставляет за собой право на изменение и/или обновление данных Правил в любое время без предварительного предупреждения.<br /><br />После подачи объявления оно отправляется на модерацию. После модерации оно будет опубликовано или отправлено на правку. Модерация может занимать от 1 минуты до 6 часов (в зависимости от времени суток).<br /><br />1. Название объявления.<br />Данная строка объявления должна быть краткой, информативной и привлекательной, желательно с указанием наименования предлагаемого товара, услуги. Это первое, на что обращает внимание потенциальный покупатель. Постарайтесь сделать его точным и лаконичным.<br />Запрещается:<br />- использование заглавных букв;<br />- использование разнообразных символов для украшения;<br />- использование набора повторяющихся ключевых слов и фраз.<br /><br />2. Раздел и Рубрика.<br />Советуем выбирать раздел и рубрику, которые максимально приближены к содержанию вашего объявления. Это позволит, увеличит его шансы быть найденными клиентами или поисковыми системами.<br />Объявления, помещенные в неверный раздел или рубрику могут быть удалены или перемещены в верный раздел.<br /><br /><br />3. Цена.<br />В каждом объявление должна быть выставлена актуальная цена. Если цена изменяется, по каким, либо причинам, её необходимо изменять и в объявлении. Если в объявлении несколько товаров, то в описании должны быть перечисленны все цены на продаваемые позиции.<br /><br />4. Описание.<br />Описание должно соответствовать полностью названию объявления. Первые строчки должны быть наиболее привлекательными и раскрывать все достоинства предоставляемого товара или услуги. Описание не должно содержать ошибок и опечаток. Все детали, характеристики и особенности должны быть указаны в описании. Запрещается размещение ссылок на конкурирующие ресурсы.<br /><br />5. Фотографии.<br />Для повышения спроса на размещенное объявление следует добавлять фотографии. Фотография, демонстрирующая товар или услугу, должна соответствовать названию и тексту объявления. На размещенной фотографии должен быть изображен только предаваемый товар.<br />Запрещается:<br />- добавление фотографий плохого качества;&nbsp;<br />- размещение фотографии эротического или порнографического содержания;<br />- размещение фотографий со ссылками на конкурирующие ресурсы.<br /><br />6. Электронный адрес.<br />Одному пользователю на сайте gribupardot.sunweb.by доступна только одна учетная запись. Учетные записи, принадлежащие одному автору (определяется при помощи технического анализа) отмечаются системой как дублированные и блокируются автоматически.<br /><br />7. Телефон.<br />Не забывайте указывать вашу контактную информацию: телефон, данное действие увеличит шансы на совершение быстрой и успешной сделки.<br />Не забывайте, что указание чужого номера запрещено и приводит к блокировке учетной записи без права восстановления.<br /><br />Запрещается:<br />- размещение объявлений предлагающих "лёгкий заработок" в интернете;<br />- размещение объявлений с предложением перечисления куда-либо денег;<br />- давать ссылки в переписке под чужим объявлением с целью саморекламы в чужом объявлении;<br />- создание объявлений, рекламирующие конкурирующие ресурсы;<br />- создание однотипных объявлений с одним и тем же товаром;<br />- размещать объявления, а также рекламировать ресурсы, содержащие информацию о товарах и услугах, расцениваемых действующим законодательством Украины как незаконные либо требующие специального разрешения, либо содержащие контент для взрослых.<br /><br />Использование данного сайта означает согласие пользователя с лицензионным соглашением об условиях использования gribupardot.sunweb.by', '<div class="block-rules-faster first">\r\n<div class="block-rules-faster-header rules">\r\n<h1>Правила размещения</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>1. Не подавайте одно и то же объявление повторно. Почему?</li>\r\n<li>2. Не телефон, email или адрес сайта в описании или на фото.</li>\r\n<li>3. Не пишите цену в названии, для этого есть отдельное поле.</li>\r\n<li>4. Не продавайте запрещенные товары.</li>\r\n</ul>\r\n</div>\r\n<div class="rules-link"><a href="../pages/Pravila-razmescheniya">Подробнее о правилах</a></div>\r\n</div>\r\n<div class="block-rules-faster">\r\n<div class="block-rules-faster-header faster">\r\n<h1>Как продать быстрее?</h1>\r\n</div>\r\n<div class="block-rules-faster-list">\r\n<ul class="list-unstyled">\r\n<li>Устанавливайте разумную цену - недорогие товары продаются гораздо быстрее. Как это?</li>\r\n<li>Добавляете фотографии - хорошие фото привлекают больше внимания.</li>\r\n<li>Подробно описывайте товар - это поможет будущему покупателю.</li>\r\n<li>Выберите пакет "премиум размещение" или "выделить объявление".</li>\r\n</ul>\r\n</div>\r\n</div>', 1, 0, '<div class="addAdvertServiceDescriptionTitle">VENTA EST&Aacute;NDAR</div>\r\n<div class="addAdvertServiceDescriptionText">Вы можете разместить объявление на Авто.ру бесплатно, но дополнительные способы продвижения помогут продать автомобиль быстрее.</div>', 27, 5, '0', '0', '0', 2, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -17231,9 +17235,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_active`, `is_confirm`, `advert_number`, `fb_id`, `is_hide_email`, `is_alert_broadcast`, `is_alert_new_message`, `is_alert_new_order`, `is_alert_change_order_status`, `entires`) VALUES
-(1, 'tech@auto28.es', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'tech@auto28.es', 1, 1, 3, NULL, 0, 1, 1, 1, 0, 22),
+(1, 'tech@auto28.es', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'tech@auto28.es', 1, 1, 3, NULL, 0, 1, 1, 1, 0, 23),
 (2, 'host@sunweb.by', '$2y$13$vtSH86/tdpg2PTsPbqweNurffISvjjHnNJgvB.YtgoSPgt2BHNQXi', 'host@sunweb.by', 1, 1, 0, NULL, 0, 1, 1, 1, 1, 0),
-(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL, 5),
+(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL, 6),
 (7, 'google@mail.com', '$2y$13$XfC5uOWJ5LBPHE1I7KYiJ.PLi.AxxnRyn8xdn6ePd2TevHBFIwsJC', 'google@mail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0),
 (8, 'edwarr170484@gmail.com', '$2y$13$eyuCxfhoYVf3jQ6MyGO94OH805uQAx2ZPamznSaq1EnWNHi2/KMCW', 'edwarr170484@gmail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0),
 (9, 'info@sunweb-it.com', '$2y$13$E8h6aHFxjOfuqeREcclJLux6p4kakrXKEgyJnA.aVvShVormZJPI2', 'info@sunweb-it.com', 1, 0, 0, NULL, 0, 0, 0, 0, 0, 0);
@@ -17383,7 +17387,8 @@ ALTER TABLE `banner`
 ALTER TABLE `bill`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_7A2119E3A76ED395` (`user_id`),
-  ADD KEY `IDX_7A2119E3D69DE08B` (`service_pack_id`);
+  ADD KEY `IDX_7A2119E3D69DE08B` (`service_pack_id`),
+  ADD KEY `IDX_7A2119E34C3A3BB` (`payment_id`);
 
 --
 -- Индексы таблицы `bill_dealer_salon_rate`
@@ -17852,7 +17857,8 @@ ALTER TABLE `rate_bill`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_8525ABECA76ED395` (`user_id`),
   ADD KEY `IDX_8525ABECBC999F9F` (`rate_id`),
-  ADD KEY `IDX_8525ABEC12469DE2` (`category_id`);
+  ADD KEY `IDX_8525ABEC12469DE2` (`category_id`),
+  ADD KEY `IDX_8525ABEC4C3A3BB` (`payment_id`);
 
 --
 -- Индексы таблицы `rate_service`
@@ -18383,6 +18389,7 @@ ALTER TABLE `workinfo`
 -- Ограничения внешнего ключа таблицы `bill`
 --
 ALTER TABLE `bill`
+  ADD CONSTRAINT `FK_7A2119E34C3A3BB` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`),
   ADD CONSTRAINT `FK_7A2119E3A76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `FK_7A2119E3D69DE08B` FOREIGN KEY (`service_pack_id`) REFERENCES `pack` (`id`);
 
@@ -18742,6 +18749,7 @@ ALTER TABLE `rate`
 --
 ALTER TABLE `rate_bill`
   ADD CONSTRAINT `FK_8525ABEC12469DE2` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `FK_8525ABEC4C3A3BB` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`),
   ADD CONSTRAINT `FK_8525ABECA76ED395` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `FK_8525ABECBC999F9F` FOREIGN KEY (`rate_id`) REFERENCES `rate` (`id`);
 

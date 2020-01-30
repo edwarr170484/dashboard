@@ -201,6 +201,7 @@ class DefaultController extends Controller
                 ->add('name', TextType::class, array('required' => true, 'label' => 'Название группы пользователей', 'attr' => array('class' => 'form-control','placeholder' => 'Название группы пользователей')))
                 ->add('advertNumber', TextType::class, array('required' => false, 'label' => 'Максимальное количество объявлений', 'attr' => array('class' => 'form-control','placeholder' => 'Максимальное количество объявлений')))
                 ->add('advertFotoNumber', TextType::class, array('required' => false, 'label' => 'Максимальное количество фото для одного объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Максимальное количество фото для одного объявления')))
+                ->add('invoiceText', TextareaType::class, array('required' => false, 'label' => 'Текст для счет-фактур', 'attr' => array('class' => 'form-control tinyeditor','placeholder' => 'Текст для счет-фактур')))
                 ->add('services', 'entity', array('class' => 'DashboardCommonBundle:Service',
                             'choice_label' => 'title',
                             'required' => false, 

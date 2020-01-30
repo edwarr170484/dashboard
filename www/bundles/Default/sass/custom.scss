@@ -974,14 +974,17 @@ body.userAccount{background:#F9F9F9;}
 .accountBills{background: #fff;}
 .accountBill{@include flexBox(row,space-between,stretch);border-bottom: 1px solid #DFE1E5;padding:1.4rem 3rem;}
 .accountBill:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
-.accountBillDownload{width: 20%;@include flexBox(row,flex-start,center);}
-.accountBillInfo{width: 100%;@include flexBox(row,space-between,center);}
+.accountBillDownload{width: 20%;}
+.accountBillInfo{width: 100%;@include flexBox(row,flex-start,center);}
+.accountBillInfo a{@include flexBox(row,space-between,center);width: 100%;}
+.accountBillInfo a:hover,.accountBillInfo a:focus{text-decoration: none;}
 .accountBillInfoItem{width: 25%;}
 .accountBillInfoItem.date{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
 .accountBillInfoItem.title{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountBillInfoItem.price{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
-.accountBillDownload a{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);}
-.accountBillDownload svg{margin-right: 1.5rem;}
+.accountBillDownload a{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);@include flexBox(row,flex-start,center);}
+.accountBillDownload a:hover,.accountBillDownload a:focus{text-decoration: none;}
+.accountBillDownload a svg{margin-right: 1.5rem;}
 .accountConversationMessageText button{display: block;width: 100%;text-align: center;background: #E7E7E7;padding: 1.3rem 4rem 1.5rem;@include border-radius(3px);border:none;@include fontView("GothamProMedium",#747474,1.8rem,1.7rem);}
 .accountConversationMessageText button:hover,.accountConversationMessageText button:focus{color:$black-text;background: $yellow-color;;@include fontView("GothamProMedium",$black-text,1.8rem,1.7rem);}
 .pageLeftMenu{border:2px solid $yellow-color;@include border-radius(5px);padding: 3rem 2.5rem;}
@@ -1335,8 +1338,8 @@ body.userAccount{background:#F9F9F9;}
 .paymentInfoLink{@include flexBox(row,center,center);padding-top: 7rem;padding-bottom: 6rem;}
 .paymentsMethodsBlockInner ul{@include flexBox(row,center,center);}
 .accountBillStatus span{@include border-radius(3px);@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);padding: 0.7rem;text-transform:lowercase;}
-.accountBillStatus span.inprocess{background: #DFE1E5;}
-.accountBillStatus span.complete{background: $yellow-color;}
+.accountBillStatus span.inprocess{background: $yellow-color;}
+.accountBillStatus span.complete{background: #DFE1E5;}
 .dealerSalonJobsItems{@include flexBox(row,flex-start,stretch);flex-wrap:wrap;}
 .dealerSalonJobItem{width: 50%;padding-bottom: 3rem;}
 .dealerSalonJobItemTitle{@include flexBox(row,flex-start,center);@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);padding-bottom: 2rem;cursor:pointer;}

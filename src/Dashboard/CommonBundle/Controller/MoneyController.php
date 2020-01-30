@@ -121,15 +121,13 @@ class MoneyController extends Controller
             return $this->createNotFoundException();
         }
         
-        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill,"back" => $request->headers->get('referer')));
+        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill, "back" => $request->headers->get('referer')));
     }
     
-    
-    
     /**
-     * @Route("/account/payment/success/{billId}", name="account_payment_success")
+     * @Route("/account/payment/success/{billId}/{paymentId}", name="account_payment_success")
      */
-    public function paymentSuccessAction($billId, Request $request)
+    public function paymentSuccessAction($billId, $paymentId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
@@ -138,6 +136,7 @@ class MoneyController extends Controller
         $session = new Session();
         
         $bill = $manager->getRepository("DashboardCommonBundle:Bill")->find($billId);
+        $payment = $manager->getRepository("DashboardCommonBundle:Payment")->find($paymentId);
         
         /*if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
             if($bill->getRates()){
@@ -259,7 +258,7 @@ class MoneyController extends Controller
                 
                 $session->remove('selectedServices');
             }
-            
+            $bill->setPayment($payment);
             $bill->setIsClosed(1);
             $manager->flush();
         }*/
@@ -307,15 +306,41 @@ class MoneyController extends Controller
             $pdf->SetXY(PDF_MARGIN_LEFT, 75);
             $html = '<table>'
                     . '<tr><td><b>№ Cliente</b></td><td><b>Número de FACTURA</b></td><td><b>Fecha</b></td><td><b>Tipo Documento</b></td></tr>'
-                    . '<tr><td>1202</td><td>103</td><td>01/05/2019</td><td>FACTURA</td></tr>'
-                    . '<tr><td><br/></td><td><br/></td><td><br/></td><td><br/></td></tr>'
-                    . '<tr><td><b>Modo de pago</b></td><td></td><td></td><td></td></tr>'
-                    . '<tr><td>PayPal</td><td></td><td></td><td></td></tr>'
-                    . '</table>';
-            $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
+                    . '<tr><td>' . $user->getId() . '</td><td>' . $bill->getId() . '</td><td>' . $bill->getDateAdded()->format("d/m/Y") . '</td><td>FACTURA</td></tr>'
+                    . '<tr><td><br/></td><td><br/></td><td><br/></td><td><br/></td></tr>';
+                  
+            if($bill->getPayment()){
+                $html .= '<tr><td><b>Modo de pago</b></td><td></td><td></td><td></td></tr>'
+                        . '<tr><td>' . $bill->getPayment()->getTitle() . '</td><td></td><td></td><td></td></tr>';
+            }
             
+            $html .= '</table>';
+            $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
             $pdf->SetFont('dejavusans', '', 9);
-            $pdf->SetXY(PDF_MARGIN_LEFT, 103);
+            
+            $services = '';
+            $totalServicePrice = 0;
+            $totalPrice = 0;
+            $totalPriceNds = 0;
+            
+            if($bill->getRates()){
+                foreach($bill->getRates() as $rate){
+                    $services .= '<tr>'
+                    . '<td>' . $rate->getRate()->getBillId() . '</td>'
+                    . '<td>' . $rate->getRate()->getName() . '</td>'
+                    . '<td>1</td>'
+                    . '<td>' . $rate->getRate()->getPrice() . '</td>'
+                    . '<td>' . $rate->getRate()->getPrice() * 0.21 . '</td>'
+                    . '<td>21,0%</td>'
+                    . '</tr>';
+                    
+                    $totalServicePrice += $rate->getRate()->getPrice(); 
+                }
+                
+                $totalPriceNds = $totalServicePrice * 0.21 ;
+                $totalPrice = $totalServicePrice + $totalPriceNds;
+            }
+            
             $html = '<table border="1" cellpadding="4">'
                     . '<tr>'
                     . '<th><b>Referencia</b></th>'
@@ -325,38 +350,7 @@ class MoneyController extends Controller
                     . '<th><b>Total</b></th>'
                     . '<th><b>IVA</b></th>'
                     . '</tr>'
-                    . '<tr>'
-                    . '<th>102</th>'
-                    . '<td>Publicación de la  Premium</td>'
-                    . '<td>1</td>'
-                    . '<td>5,99</td>'
-                    . '<td>5,99</td>'
-                    . '<td>21,0%</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td>109</td>'
-                    . '<td>Levantar anuncio</td>'
-                    . '<td>1</td>'
-                    . '<td>1,99</td>'
-                    . '<td>1,99</td>'
-                    . '<td>21,0%</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td>107</td>'
-                    . '<td>Colocación especial de anuncios</td>'
-                    . '<td>1</td>'
-                    . '<td>3,99</td>'
-                    . '<td>3,99</td>'
-                    . '<td>21,0%</td>'
-                    . '</tr>'
-                    . '<tr>'
-                    . '<td>108</td>'
-                    . '<td>Destacando un anuncio en color</td>'
-                    . '<td>1</td>'
-                    . '<td>2,99</td>'
-                    . '<td>2,99</td>'
-                    . '<td>21,0%</td>'
-                    . '</tr>'
+                    . $services
                     . '</table>'
                     . '<table cellpadding="4">'
                     . '<tr>'
@@ -365,30 +359,31 @@ class MoneyController extends Controller
                     . '<th><b>IVA</b></th>'
                     . '<th><b>Total Imp.</b></th>'
                     . '<th><b>Importe Neto</b></th>'
-                    . '<th style="text-align:right">12,96</th>'
+                    . '<th style="text-align:right">' . $totalServicePrice . '</th>'
                     . '</tr>'
                     . '<tr>'
                     . '<td></td>'
-                    . '<td>12,36</td>'
+                    . '<td>' . $totalServicePrice . '</td>'
                     . '<td>21,00%</td>'
-                    . '<td>2,60</td>'
+                    . '<td>' . $totalPriceNds . '</td>'
                     . '<td>IVA</td>'
-                    . '<td style="text-align:right">2,60</td>'
+                    . '<td style="text-align:right">' . $totalPriceNds . '</td>'
                     . '</tr>'
                     . '<tr>'
                     . '<td></td>'
                     . '<td></td>'
                     . '<td></td>'
                     . '<td></td>'
-                    . '<td style="border-top:1"><b>TOTAL EUR.</b></td>'
-                    . '<td style="text-align:right;border-top:1">14,96</td>'
+                    . '<td style="border-top:1"><b>TOTAL ' . $locale->getCUrrency()->getCode(). '.</b></td>'
+                    . '<td style="text-align:right;border-top:1">' . $totalPrice . '</td>'
                     . '</tr>'
                     . '</table>';
+            
+            $html .= '<div></div><div></div><div></div>' . $user->getRoles()[0]->getInvoiceText();
             $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
             
-            
             $pdfString = $pdf->Output(null, 'S');
-            /*$fp = fopen("docs/invoice-#" . $bill->getId() . ".pdf", "w");
+            /*$fp = fopen("bundles/images/bills/invoice-#" . $bill->getId() . ".pdf", "w");
             fwrite($fp, $pdfString);
             fclose($fp);*/
 		
@@ -399,7 +394,6 @@ class MoneyController extends Controller
             header('Content-Disposition: inline; filename="invoice-#' . $bill->getId() . '.pdf'.'"');
             echo $pdfString;
             
-            //return $this->redirect("docs/invoice-#" . $bill->getId() . ".pdf");
         }
         else
         {

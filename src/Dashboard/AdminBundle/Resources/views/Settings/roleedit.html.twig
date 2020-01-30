@@ -110,6 +110,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-3 ">{{ form_label(roleForm.invoiceText)}}</label>
+                            <div class="col-md-9">
+                                {{ form_widget(roleForm.invoiceText)}}
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-3 ">{{ form_label(roleForm.save)}}</label>
                             <div class="col-md-9">
                                 {{ form_widget(roleForm.save,{'type' : 'submit'})}}

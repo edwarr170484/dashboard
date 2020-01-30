@@ -71,6 +71,11 @@ class Role implements RoleInterface
      */
     private $rates;
     
+    /**
+     * @ORM\Column(type="text", nullable=true, options={"default":0})
+     */
+    private $invoiceText;
+    
 
     public function __construct()
     {

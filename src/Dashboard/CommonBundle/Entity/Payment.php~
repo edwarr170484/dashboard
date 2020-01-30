@@ -54,6 +54,16 @@ class Payment
     private $code;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Bill", mappedBy="payment")
+     */
+    private $bills;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\RateBill", mappedBy="payment")
+     */
+    private $rateBills;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -240,5 +250,71 @@ class Payment
     public function getCode()
     {
         return $this->code;
+    }
+
+    /**
+     * Add bills
+     *
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
+     * @return Payment
+     */
+    public function addBill(\Dashboard\CommonBundle\Entity\Bill $bills)
+    {
+        $this->bills[] = $bills;
+    
+        return $this;
+    }
+
+    /**
+     * Remove bills
+     *
+     * @param \Dashboard\CommonBundle\Entity\Bill $bills
+     */
+    public function removeBill(\Dashboard\CommonBundle\Entity\Bill $bills)
+    {
+        $this->bills->removeElement($bills);
+    }
+
+    /**
+     * Get bills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBills()
+    {
+        return $this->bills;
+    }
+
+    /**
+     * Add rateBills
+     *
+     * @param \Dashboard\CommonBundle\Entity\RateBill $rateBills
+     * @return Payment
+     */
+    public function addRateBill(\Dashboard\CommonBundle\Entity\RateBill $rateBills)
+    {
+        $this->rateBills[] = $rateBills;
+    
+        return $this;
+    }
+
+    /**
+     * Remove rateBills
+     *
+     * @param \Dashboard\CommonBundle\Entity\RateBill $rateBills
+     */
+    public function removeRateBill(\Dashboard\CommonBundle\Entity\RateBill $rateBills)
+    {
+        $this->rateBills->removeElement($rateBills);
+    }
+
+    /**
+     * Get rateBills
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRateBills()
+    {
+        return $this->rateBills;
     }
 }

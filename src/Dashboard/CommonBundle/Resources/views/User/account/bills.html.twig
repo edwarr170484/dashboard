@@ -38,75 +38,69 @@
                         {% for bill in user.bills %}
                             <div class="accountBill">
                                 <div class="accountBillInfo">
-                                    <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
-                                    <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
-                                    <div class="accountBillInfoItem price">{{ bill.price }} {{ locale.currency.label | raw }}</div>
-                                    <div class="accountBillInfoItem status">
-                                        <div class="accountBillStatus">
-                                            {% if bill.isPayed %}
-                                                <span class="complete">{% trans %}Оплачен{% endtrans %}</span>
-                                            {% else %}
-                                                <span class="inprocess">{% trans %}Не оплачен{% endtrans %}</span>
-                                            {% endif %}
+                                    <a href="{% if not bill.isPayed %}{{ path('account_payments', {'billId' : bill.id})}}{% else %}javascript:void(0){% endif %}">
+                                        <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
+                                        <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
+                                        <div class="accountBillInfoItem price">{{ bill.price }} {{ locale.currency.label | raw }}</div>
+                                        <div class="accountBillInfoItem status">
+                                            <div class="accountBillStatus">
+                                                {% if bill.isPayed %}
+                                                    <span class="complete">{% trans %}Оплачен{% endtrans %}</span>
+                                                {% else %}
+                                                    <span class="inprocess">{% trans %}Не оплачен{% endtrans %}</span>
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    </div>
-                                    {% if not bill.isPayed %}
-                                    <div class="accountBillInfoItem">
-                                        <div class="accountMessageItemButton" style="width: auto;">
-                                            <a href="{{ path('account_payments',{'billId' : bill.id}) }}">{% trans %}Оплатить{% endtrans %}</a>
-                                        </div>
-                                    </div>   
-                                    {% endif %}
+                                    </a>
                                 </div>
-                                {% if bill.file %}
-                                    <div class="accountBillDownload">
-                                        <svg width="26" height="32" viewBox="0 0 26 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M7 1L1 7V31H25V1H7Z" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M7 1V7H1" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M20 14H6V26H20V14Z" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M6 19H20" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M11 14V26" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
+                                <div class="accountBillDownload">
+                                    {% if bill.isPayed %}
+                                        <a href="{{ path('account_bill_pdf', {'billId' : bill.id}) }}" target="_blank">
+                                    {% else %}
+                                        <a href="{{ path('account_payments', {'billId' : bill.id})}}">
+                                    {% endif %}
+                                        <svg width="29" height="33" viewBox="0 0 29 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7.52979 16.4889C7.52979 15.6225 6.92784 15.105 5.86645 15.105C5.43323 15.105 5.14024 15.1472 4.98633 15.1882V17.9709C5.16874 18.012 5.39219 18.0268 5.69886 18.0268C6.83093 18.0268 7.52979 17.4534 7.52979 16.4889Z" fill="#616161"/>
+                                            <path d="M14.1033 15.1323C13.6279 15.1323 13.3201 15.1745 13.1377 15.2167V21.3818C13.3201 21.424 13.6131 21.424 13.8787 21.424C15.8076 21.4377 17.0661 20.3752 17.0661 18.1248C17.081 16.1674 15.9341 15.1323 14.1033 15.1323Z" fill="#616161"/>
+                                            <path d="M26.6965 11.5106H25.9236V7.78164C25.923 7.75795 25.9207 7.73433 25.9168 7.71096C25.918 7.56099 25.865 7.41562 25.7674 7.3017L19.5624 0.21546L19.5578 0.2109C19.479 0.12539 19.3786 0.0627625 19.2671 0.02964L19.2329 0.0182398C19.1856 0.00643052 19.137 0.000307583 19.0882 0H3.83838C3.14184 0 2.5764 0.56658 2.5764 1.26198V11.5106H1.80348C0.80712 11.5106 0 12.3177 0 13.3141V22.694C0 23.6892 0.80826 24.4975 1.80348 24.4975H2.5764V30.9191C2.5764 31.6145 3.14184 32.1811 3.83838 32.1811H24.6616C25.357 32.1811 25.9236 31.6145 25.9236 30.9191V24.4975H26.6965C27.6929 24.4975 28.5 23.6892 28.5 22.694V13.3141C28.5 12.3177 27.6917 11.5106 26.6965 11.5106ZM3.83838 1.26198H18.4566V7.71894C18.4566 8.06778 18.7393 8.34936 19.0882 8.34936H24.6628V11.5106H3.83838V1.26198ZM19.331 18.0542C19.331 19.8577 18.6743 21.1025 17.7635 21.8709C16.7717 22.6951 15.2623 23.0873 13.4167 23.0873C12.312 23.0873 11.53 23.0166 10.9976 22.9482V13.6925C11.7808 13.5671 12.8011 13.4976 13.8784 13.4976C15.667 13.4976 16.8275 13.8191 17.7361 14.5042C18.7154 15.2304 19.331 16.3909 19.331 18.0542ZM2.87394 22.9904V13.6925C3.53058 13.5808 4.45398 13.4976 5.75358 13.4976C7.068 13.4976 8.00508 13.7495 8.63322 14.2523C9.234 14.7277 9.6387 15.5108 9.6387 16.4331C9.6387 17.3565 9.33204 18.1385 8.7723 18.6698C8.04498 19.3549 6.96882 19.6627 5.71026 19.6627C5.43096 19.6627 5.17902 19.649 4.98408 19.6205V22.9904H2.87394ZM24.6616 30.5771H3.83838V24.4975H24.6616V30.5771ZM26.4902 15.3148H22.8684V17.4682H26.2519V19.2022H22.8684V22.9904H20.7309V13.5671H26.4902V15.3148Z" fill="#616161"/>
                                         </svg>
-                                        <a href="{{ asset('bundles/images/bills/' ~ bill.file) }}">{% trans %}Скачать счет{% endtrans %}</a>
-                                    </div>
-                                {% endif %}        
+                                        {% trans %}Счет-фактура{% endtrans %}
+                                    </a>
+                                </div>        
                             </div>
                         {% endfor %}
                         {% for bill in user.rateBills %}
                             <div class="accountBill">
                                 <div class="accountBillInfo">
-                                    <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
-                                    <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
-                                    <div class="accountBillInfoItem price">{{ bill.price }} {{ locale.currency.label | raw }}</div>
-                                    <div class="accountBillInfoItem status">
-                                        <div class="accountBillStatus">
-                                            {% if bill.isPayed %}
-                                                <span class="complete">{% trans %}Оплачен{% endtrans %}</span>
-                                            {% else %}
-                                                <span class="inprocess">{% trans %}Не оплачен{% endtrans %}</span>
-                                            {% endif %}
+                                    <a href="{% if not bill.isPayed %}{{ path('account_dealer_payments', {'billId' : bill.id})}}{% else %}javascript:void(0){% endif %}">
+                                        <div class="accountBillInfoItem date">{{ bill.dateAdded | date('d.m.Y H:i') }}</div>
+                                        <div class="accountBillInfoItem title">{% trans %}Счет{% endtrans %} №{{ bill.id }}</div>
+                                        <div class="accountBillInfoItem price">{{ bill.price }} {{ locale.currency.label | raw }}</div>
+                                        <div class="accountBillInfoItem status">
+                                            <div class="accountBillStatus">
+                                                {% if bill.isPayed %}
+                                                    <span class="complete">{% trans %}Оплачен{% endtrans %}</span>
+                                                {% else %}
+                                                    <span class="inprocess">{% trans %}Не оплачен{% endtrans %}</span>
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    </div>
-                                    {% if not bill.isPayed %}
-                                    <div class="accountBillInfoItem">
-                                        <div class="accountMessageItemButton" style="width: auto;">
-                                            <a href="{{ path('account_dealer_payments',{'billId' : bill.id}) }}">{% trans %}Оплатить{% endtrans %}</a>
-                                        </div>
-                                    </div>   
-                                    {% endif %}
+                                    </a>
                                 </div>
-                                {% if bill.file %}
-                                    <div class="accountBillDownload">
-                                        <svg width="26" height="32" viewBox="0 0 26 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M7 1L1 7V31H25V1H7Z" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M7 1V7H1" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M20 14H6V26H20V14Z" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M6 19H20" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
-                                            <path d="M11 14V26" stroke="#616161" stroke-width="2" stroke-linejoin="round"/>
+                                <div class="accountBillDownload">
+                                    {% if bill.isPayed %}
+                                        <a href="{{ path('account_bill_pdf', {'billId' : bill.id}) }}" target="_blank">
+                                    {% else %}
+                                        <a href="{{ path('account_dealer_payments', {'billId' : bill.id})}}">
+                                    {% endif %}
+                                        <svg width="29" height="33" viewBox="0 0 29 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7.52979 16.4889C7.52979 15.6225 6.92784 15.105 5.86645 15.105C5.43323 15.105 5.14024 15.1472 4.98633 15.1882V17.9709C5.16874 18.012 5.39219 18.0268 5.69886 18.0268C6.83093 18.0268 7.52979 17.4534 7.52979 16.4889Z" fill="#616161"/>
+                                            <path d="M14.1033 15.1323C13.6279 15.1323 13.3201 15.1745 13.1377 15.2167V21.3818C13.3201 21.424 13.6131 21.424 13.8787 21.424C15.8076 21.4377 17.0661 20.3752 17.0661 18.1248C17.081 16.1674 15.9341 15.1323 14.1033 15.1323Z" fill="#616161"/>
+                                            <path d="M26.6965 11.5106H25.9236V7.78164C25.923 7.75795 25.9207 7.73433 25.9168 7.71096C25.918 7.56099 25.865 7.41562 25.7674 7.3017L19.5624 0.21546L19.5578 0.2109C19.479 0.12539 19.3786 0.0627625 19.2671 0.02964L19.2329 0.0182398C19.1856 0.00643052 19.137 0.000307583 19.0882 0H3.83838C3.14184 0 2.5764 0.56658 2.5764 1.26198V11.5106H1.80348C0.80712 11.5106 0 12.3177 0 13.3141V22.694C0 23.6892 0.80826 24.4975 1.80348 24.4975H2.5764V30.9191C2.5764 31.6145 3.14184 32.1811 3.83838 32.1811H24.6616C25.357 32.1811 25.9236 31.6145 25.9236 30.9191V24.4975H26.6965C27.6929 24.4975 28.5 23.6892 28.5 22.694V13.3141C28.5 12.3177 27.6917 11.5106 26.6965 11.5106ZM3.83838 1.26198H18.4566V7.71894C18.4566 8.06778 18.7393 8.34936 19.0882 8.34936H24.6628V11.5106H3.83838V1.26198ZM19.331 18.0542C19.331 19.8577 18.6743 21.1025 17.7635 21.8709C16.7717 22.6951 15.2623 23.0873 13.4167 23.0873C12.312 23.0873 11.53 23.0166 10.9976 22.9482V13.6925C11.7808 13.5671 12.8011 13.4976 13.8784 13.4976C15.667 13.4976 16.8275 13.8191 17.7361 14.5042C18.7154 15.2304 19.331 16.3909 19.331 18.0542ZM2.87394 22.9904V13.6925C3.53058 13.5808 4.45398 13.4976 5.75358 13.4976C7.068 13.4976 8.00508 13.7495 8.63322 14.2523C9.234 14.7277 9.6387 15.5108 9.6387 16.4331C9.6387 17.3565 9.33204 18.1385 8.7723 18.6698C8.04498 19.3549 6.96882 19.6627 5.71026 19.6627C5.43096 19.6627 5.17902 19.649 4.98408 19.6205V22.9904H2.87394ZM24.6616 30.5771H3.83838V24.4975H24.6616V30.5771ZM26.4902 15.3148H22.8684V17.4682H26.2519V19.2022H22.8684V22.9904H20.7309V13.5671H26.4902V15.3148Z" fill="#616161"/>
                                         </svg>
-                                        <a href="{{ asset('bundles/images/bills/' ~ bill.file) }}">{% trans %}Скачать счет{% endtrans %}</a>
-                                    </div>
-                                {% endif %}        
+                                        {% trans %}Счет-фактура{% endtrans %}
+                                    </a>
+                                </div>        
                             </div>
                         {% endfor %}
                     </div>

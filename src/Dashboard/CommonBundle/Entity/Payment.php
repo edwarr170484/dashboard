@@ -64,6 +64,11 @@ class Payment
     private $rateBills;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
+     */
+    private $clientId;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -316,5 +321,28 @@ class Payment
     public function getRateBills()
     {
         return $this->rateBills;
+    }
+
+    /**
+     * Set clientId
+     *
+     * @param string $clientId
+     * @return Payment
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+    
+        return $this;
+    }
+
+    /**
+     * Get clientId
+     *
+     * @return string 
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
     }
 }

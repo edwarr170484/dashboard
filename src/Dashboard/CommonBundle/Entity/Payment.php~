@@ -64,6 +64,11 @@ class Payment
     private $rateBills;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default": 0})
+     */
+    private $clientId;
+    
+    /**
      * Constructor
      */
     public function __construct()

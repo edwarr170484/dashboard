@@ -56,6 +56,9 @@
                             <li class="active">
                                 <a data-toggle="tab" href="#maininfo">Основная информация</a>
                             </li>
+                            <li>
+                                <a data-toggle="tab" href="#params">Параметры</a>
+                            </li>
                         </ul>
                         <div class="tab-content">
                             <div id="maininfo" class="tab-pane fade active in">
@@ -83,7 +86,15 @@
                                         {{ form_widget(paymentForm.info)}}
                                     </div>
                                 </div>
-                            </div>                            
+                            </div> 
+                            <div id="params" class="tab-pane fade">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(paymentForm.clientId)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(paymentForm.clientId)}}
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-md-3">{{ form_label(paymentForm.save)}}</label>
                                 <div class="col-md-9">

@@ -66,6 +66,7 @@ class MoneyController extends Controller
             ->add('icon', TextareaType::class, array('required' => false, 'label' => 'Изображение(svg-код):', 'attr' => array('class' => 'form-control')))    
             ->add('tieser', TextareaType::class, array('required' => false, 'label' => 'Краткое описание:', 'attr' => array('class' => 'form-control tinyeditor'))) 
             ->add('info', TextareaType::class, array('required' => false, 'label' => 'Дополнительная информация:', 'attr' => array('class' => 'form-control tinyeditor'))) 
+            ->add('clientId', TextType::class, array('required' => false, 'label' => 'Client ID:', 'attr' => array('class' => 'form-control')))    
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')))
             ->getForm();
         
@@ -148,7 +149,7 @@ class MoneyController extends Controller
             $manager->persist($bill);
             $manager->flush();
         }else{
-            /*if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
+            if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
                 if($bill->getRates()){
                     foreach($bill->getRates() as $rate){
                         if(!$rate->getDateAdded()){
@@ -272,7 +273,7 @@ class MoneyController extends Controller
                 $bill->setIsClosed(1);
                 $manager->persist($bill);
                 $manager->flush();
-            }*/
+            }
         }
         
         return $this->render('DashboardCommonBundle:Money:result.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => "account_payments", "bill" => $bill,"back" => "/account/bills"));
@@ -308,13 +309,22 @@ class MoneyController extends Controller
             $pdf->SetFont('dejavusans', '', 9);
             $pdf->AddPage();
             
-            $pdf->SetXY(PDF_MARGIN_LEFT, 45);
-            $html = '<dl style="color:#fff"><dt><b>ANDREA SEGORO RADRIGEZ D.N.I./N.I.E.</b> N33333333<br/></dt><dt>Avenida Valencia 37, Atico 2, 03088 Madrid</dt><dt>romashka@gmail.com</dt></dl>';
-            $pdf->writeHTMLCell(0, 0, '', '', $html, 'L', 1, 0, true, 'L', true);
-            $html = '<dl><dt><b>ANDREA SEGORO RADRIGEZ D.N.I./N.I.E.</b> N33333333<br/></dt><dt>Avenida Valencia 37, Atico 2, 03088 Madrid</dt><dt>romashka@gmail.com</dt></dl>';
-            $pdf->SetXY(PDF_MARGIN_LEFT + 1, 43);
-            $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
-            $pdf->SetFont('dejavusans', '', 10);
+            if($user->getRoles()[0]->getRole() == 'ROLE_DEALER' || $user->getRoles()[0]->getRole() == 'ROLE_SERVICE'){
+                $pdf->SetXY(PDF_MARGIN_LEFT, 45);
+                $html = '<dl style="color:#fff"><dt><b>' . $user->getDealerinfo()->getCompany() . ' C.I.F. / N.I.F.</b> N33333333<br/></dt><dt>' . $user->getDealerinfo()->getAddress() . ', ' . $user->getDealerinfo()->getCityCode()->getCode() . ' ' . $user->getDealerinfo()->getCity()->getName() . '</dt><dt>' . $user->getEmail() . '</dt></dl>';
+                $pdf->writeHTMLCell(0, 0, '', '', $html, 'L', 1, 0, true, 'L', true);
+                $html = '<dl><dt><b>' . $user->getDealerinfo()->getCompany() . ' C.I.F. / N.I.F.</b> N33333333<br/></dt><dt>' . $user->getDealerinfo()->getAddress() . ', ' . $user->getDealerinfo()->getCityCode()->getCode() . ' ' . $user->getDealerinfo()->getCity()->getName() . '</dt><dt>' . $user->getEmail() . '</dt></dl>';
+                $pdf->SetXY(PDF_MARGIN_LEFT + 1, 43);
+                $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
+            }else{
+                $pdf->SetXY(PDF_MARGIN_LEFT, 45);
+                $html = '<dl style="color:#fff"><dt><b>' . $user->getFirstname() . ' ' . $user->getLastname() . ' D.N.I./N.I.E.</b> N33333333<br/></dt><dt>' . $user->getUserinfo()->getCityCode()->getCode() . ' ' . $user->getUserinfo()->getCity()->getName() . '</dt><dt>' . $user->getEmail() . '</dt></dl>';
+                $pdf->writeHTMLCell(0, 0, '', '', $html, 'L', 1, 0, true, 'L', true);
+                $html = '<dl><dt><b>' . $user->getFirstname() . ' ' . $user->getLastname() . ' D.N.I./N.I.E.</b> N33333333<br/></dt><dt>' . $user->getUserinfo()->getCityCode()->getCode() . ' ' . $user->getUserinfo()->getCity()->getName() . '</dt><dt>' . $user->getEmail() . '</dt></dl>';
+                $pdf->SetXY(PDF_MARGIN_LEFT + 1, 43);
+                $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
+            }
+            
             $pdf->SetXY(PDF_MARGIN_LEFT, 75);
             $html = '<table>'
                     . '<tr><td><b>№ Cliente</b></td><td><b>Número de FACTURA</b></td><td><b>Fecha</b></td><td><b>Tipo Documento</b></td></tr>'
@@ -322,13 +332,20 @@ class MoneyController extends Controller
                     . '<tr><td><br/></td><td><br/></td><td><br/></td><td><br/></td></tr>';
                   
             if($bill->getPayment()){
-                $html .= '<tr><td><b>Modo de pago</b></td><td></td><td></td><td></td></tr>'
-                        . '<tr><td>' . $bill->getPayment()->getTitle() . '</td><td></td><td></td><td></td></tr>';
+                $html .= '<tr><td> </td><td></td><td></td><td></td></tr>'
+                        . '<tr><td><b>Modo de pago</b></td><td></td><td></td><td></td></tr>'
+                        . '<tr><td>' . $bill->getPayment()->getTitle() . '</td><td></td><td></td><td></td></tr>'
+                        . '<tr><td> </td><td></td><td></td><td></td></tr>';
             }
             
-            $html .= '</table>';
+            if($user->getRoles()[0]->getRole() == 'ROLE_DEALER' || $user->getRoles()[0]->getRole() == 'ROLE_SERVICE'){
+                $html .= '<tr><td><b>Banco Sabadell</b></td><td></td><td></td><td></td></tr>'
+                        . '<tr><td colspan="3"><b>IBAN:</b> ES93 0081 0105 1300 0252 5055</td><td></td></tr>'
+                        . '<tr><td colspan="3"><b>SWIFT (BIC):</b> BSABESBB</td><td></td></tr>';
+            }
+            
+            $html .= '</table><br/>';
             $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
-            $pdf->SetFont('dejavusans', '', 9);
             
             $services = '';
             $totalServicePrice = 0;

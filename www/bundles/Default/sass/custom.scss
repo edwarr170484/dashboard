@@ -1505,3 +1505,6 @@ ul.color li{position: relative;}
 .searchReturnBlock{background: #fff;padding-top: 1.5rem;padding-bottom: 1.5rem;}
 .paymentResultSubtext{@include fontView("GothamProRegular",$black-text,2.2rem,3.2rem);text-align: center;}
 .paymentResultIcon{padding-top: 3rem;padding-bottom: 5rem;@include flexBox(row, center, center);}
+.accountRatesInformationListCategories{@include flexBox(row,flex-start,center);}
+.accountRatesInformationListCategory{@include flexBox(row,flex-start,center);}
+.accountRatesInformationListCategory svg{width: 26px;}

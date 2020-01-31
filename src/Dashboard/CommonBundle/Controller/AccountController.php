@@ -911,6 +911,24 @@ class AccountController extends Controller
         }
         
         $rates = $manager->getRepository("DashboardCommonBundle:Rate")->findAll();
+        
+        $totalAdvertsCount = 0;
+        $services = new ArrayCollection();
+        
+        if(count($user->getRates()) > 0){
+            foreach($user->getRates() as $rate){
+                if($rate->getIsActive()){
+                    $totalAdvertsCount += $rate->getAdvertNumber();
+                    if(count($rate->getItems()) > 0){
+                        foreach($rate->getItems() as $item){
+                            if(false === $services->contains($item->getService()->getService())){
+                                $services->add($item->getService()->getService());
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         return $this->render('DashboardCommonBundle:User:account/rates.html.twig', array(
                                                                                         "user" => $user,
@@ -919,6 +937,8 @@ class AccountController extends Controller
                                                                                         "categories" => $categories,
                                                                                         "userRate" => 0,
                                                                                         "rates" => $rates,
+                                                                                        "totalAdvertsCount" => $totalAdvertsCount,
+                                                                                        "services" => $services,
                                                                                         "routeName" => $request->attributes->get("_route")));
     }
 

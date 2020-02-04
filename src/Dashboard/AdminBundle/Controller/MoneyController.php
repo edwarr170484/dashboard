@@ -6,8 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -21,42 +23,126 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 class MoneyController extends Controller
 {  
     /**
-     * @Route("/admin/payment/liqpay", name="admin_payment_liqpay")
+     * @Route("/admin/invoice", name="admin_invoices")
      */
-    public function liqpayAction(Request $request)
+    public function invoiceAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $user = $this->get('security.context')->getToken()->getUser();
         
-        $liqpay = $manager->getRepository("DashboardCommonBundle:Liqpay")->find(1);
+        $bills = $manager->getRepository("DashboardCommonBundle:Bill")->findAll();
+        $rateBills = $manager->getRepository("DashboardCommonBundle:RateBill")->findAll();
         
-        if(!$liqpay)
-            $liqpay = new Liqpay();
-        
-        $liqpayForm = $this->get('form.factory')->createNamedBuilder('liqpay', 'form', $liqpay)
-                ->add('publicKey', TextType::class, array('required' => true, 'label' => 'Public key: *', 'attr' => array('class' => 'form-control')))
-                ->add('privateKey', TextType::class, array('required' => true, 'label' => 'Private key: *', 'attr' => array('class' => 'form-control')))
-                ->add('currency', ChoiceType::class, array('choices' => array("USD" => "USD", "RUB" => "RUB", "UAH" => "UAH","EUR" => "EUR"), 'required' => true, 'label' => 'Валюта: *', 'attr' => array('class' => 'form-control')))
-                ->add('sandbox', CheckboxType::class, array('required' => false, 'label' => 'Тестовый режим: *'))
-                ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')))->getForm();
-        
-        $liqpayForm->handleRequest($request);
-        
-        if ($liqpayForm->isSubmitted() && $liqpayForm->isValid()) 
-        {
-            $manager->persist($liqpay);
-            $manager->flush();
+        if($request->request->get('action')){
+            switch($request->request->get('action')){
+                case 'download':
+                    $files = new ArrayCollection();
+                    $finder = new Finder();
+                    $finder->files()->in($request->server->get('DOCUMENT_ROOT') . '/docs/');
             
-            $this->addFlash(
-                    'notice',
-                    $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <strong>Успешно!</strong> Данные сохранены.</div>')
-            );
+                    foreach ($finder as $file) {
+                        $files->add($file);
+                    }
+                    
+                    if(count($files) > 0){
+                        $zip = new \ZipArchive();
+                        $zipName = 'Bills.zip';
+
+                        $zip->open($zipName,  \ZipArchive::CREATE);
+                        foreach ($files as $file) {
+                            $zip->addFromString($file->getFilename(),  $file->getContents());
+                        }
+                        $zip->close();
+
+                        $response = new Response(file_get_contents($zipName));
+                        $response->headers->set('Content-Type', 'application/zip');
+                        $response->headers->set('Content-Disposition', 'attachment;filename="' . $zipName . '"');
+                        $response->headers->set('Content-length', filesize($zipName));
+
+                        @unlink($zipName);
+
+                        return $response;
+                    }else{
+                        return $this->redirectToRoute('admin_invoices');
+                    }
+                    
+                break;
             
-            return $this->redirectToRoute('admin_payment_liqpay');
+                case 'excel':
+                    $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+                    $phpExcelObject->getProperties()->setCreator($user->getUserinfo()->getFirstname() . ' ' . $user->getUserinfo()->getLastname())
+                                                ->setTitle("Счета_" . date("d-m-Y"))
+                                                ->setDescription("Счета_" . date("d-m-Y"));
+                    $phpExcelObject->setActiveSheetIndex(0)
+                               ->setCellValue('A1', 'FECHA')
+                               ->setCellValue('B1', 'CTA.VENTAS')
+                               ->setCellValue('C1', 'TOTAL INGRESO')
+                               ->setCellValue('D1', 'BASE')
+                               ->setCellValue('E1', 'IVA ' . ($settings->getPremiumAdvPrice() * 100) . '%')
+                               ->setCellValue('F1', 'Nº CTA CLIENTE')
+                               ->setCellValue('G1', 'RAZON SOCIAL CLIENTE')
+                               ->setCellValue('H1', 'N.I.F.')
+                               ->setCellValue('I1', 'NUM DE FACT.');
+                    
+                    if($request->request->get('className')){
+                        foreach($request->request->get('className') as $className){
+                            $sql = "SELECT b FROM Dashboard\\CommonBundle\\Entity\\" . $className . " b WHERE 1=1";
+                            if($request->request->get('dateStart') && $request->request->get('dateStart') > 0){
+                                $sql .= " AND b.dateAdded <= '" . $request->request->get('dateStart')  . "'";
+                            }
+                            if($request->request->get('dateEnd') && $request->request->get('dateEnd') > 0){
+                                $sql .= " AND b.dateAdded >= '" . $request->request->get('dateEnd')  . "'";
+                            }
+                            $query = $manager->createQuery($sql);
+                            $bills = $query->getResult();
+                            
+                            $i = 2;
+                            if(count($bills) > 0){
+                                foreach($bills as $bill){
+                                    $phpExcelObject->setActiveSheetIndex(0)
+                                                    ->setCellValue('A' . $i, $bill->getDateAdded()->format('d.m.Y'))
+                                                    ->setCellValue('B' . $i, '70500000')
+                                                    ->setCellValue('C' . $i, $bill->getPrice() + round($bill->getPrice() * $settings->getPremiumAdvPrice()))
+                                                    ->setCellValue('D' . $i, $bill->getPrice())
+                                                    ->setCellValue('E' . $i, round($bill->getPrice() * $settings->getPremiumAdvPrice()))
+                                                    ->setCellValue('F' . $i, $bill->getUser()->getId());
+                                    if($bill->getUser()->getRoles()[0]->getRole() == 'ROLE_DEALER' || $bill->getUser()->getRoles()[0]->getRole() == 'ROLE_SERVICE'){
+                                        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('G' . $i, $bill->getUser()->getDealerinfo()->getCompany())
+                                                       ->setCellValue('H' . $i, $bill->getUser()->getDealerinfo()->getNifNumber());
+                                    }else{
+                                        $phpExcelObject->setActiveSheetIndex(0)->setCellValue('G' . $i, $bill->getUser()->getUserinfo()->getFirstname() . ' ' . $bill->getUser()->getUserinfo()->getLastname())
+                                                       ->setCellValue('H' . $i, '');
+                                    }
+                                    $phpExcelObject->setActiveSheetIndex(0)->setCellValue('I' . $i, $bill->getId());
+                                    $i++;
+                                }
+                            }
+                        } 
+                    }
+                    
+                    $phpExcelObject->getActiveSheet()->setTitle('Список счетов');
+                    $phpExcelObject->setActiveSheetIndex(0);
+                    $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+                    $response = $this->get('phpexcel')->createStreamedResponse($writer);
+                    $dispositionHeader = $response->headers->makeDisposition(
+                        ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                        'Bills_' . date("d-m-Y") . '.xls'
+                    );
+                    $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+                    $response->headers->set('Pragma', 'public');
+                    $response->headers->set('Cache-Control', 'maxage=1');
+                    $response->headers->set('Content-Disposition', $dispositionHeader);
+
+                return $response;        
+                break;
+            }
         }
         
-        return $this->render('DashboardAdminBundle:Money:liqpay.html.twig', array("liqpayForm" => $liqpayForm->createView()));
+        
+        return $this->render('DashboardAdminBundle:Money:invoices.html.twig', array("bills" => $bills, "rateBills" => $rateBills, "settings" => $settings));
     }
 }
 

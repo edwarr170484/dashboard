@@ -1,0 +1,164 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Счета{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Счета</li>
+    </ol>
+    <h1 class="page-header">Счета</h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="notice-message">
+                    {{ flashMessage | raw }}
+                </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="#" onclick="if(confirm('Вы действительно хотите удалить отмеченные?'))document.deleteSelected.submit(); else return false;">Удалить отмеченные</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Счета</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="billsFormExport">
+                        <div class="billsFormHeader" style="border:1px solid #ccd0d4;padding:6px 12px;margin-bottom: 15px;background: #d9e0e7;" onclick="$('.billsForm').slideToggle();">
+                            <b>Скачать / Экспорт <i class="fa fa-angle-down" aria-hidden="true"></i></b>
+                        </div>
+                        <div class="billsForm" style="padding:6px 12px">
+                            <form action="" method="POST" name="exportForm" id="exportForm">
+                                <div class="form-group">
+                                    <lable>Начальная дата</label>
+                                    <input type="date" name="dateStart" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <lable>Конечная дата</label>
+                                    <input type="date" name="dateEnd" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <div><input name="className[]" type="checkbox" value="Bill" checked="checked" /> По тарифам</div>
+                                    <div><input name="className[]" type="checkbox" value="RateBill" checked="checked" /> По пакетам и услугам</div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" value="" name="action" id="exportFormAction"/>
+                                    <button class="btn btn-success" onclick="$('#exportFormAction').val('download');document.exportForm.submit();">Скачать счета</button>
+                                    <button class="btn btn-success" onclick="$('#exportFormAction').val('excel');document.exportForm.submit();">Экспорт в xls</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <form action="" method="POST" name="deleteSelected" id="deleteSelected"> 
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a data-toggle="tab" href="#rates">По пакетам и услугам</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#services">По тарифам</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="rates" class="tab-pane fade active in">
+                            {% if bills | length > 0 %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" class="selectAllItems" /></th>
+                                            <th>№ счета</th>
+                                            <th>Дата выставления</th>
+                                            <th>ID клиента</th>
+                                            <th>Клиент</th>
+                                            <th>N.I.F.</th>
+                                            <th>Общая сумма</th>
+                                            <th>Статус</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bill in bills %}
+                                            <tr>
+                                                <td><input name="bill[]" value="{{ bill.id }}" type="checkbox" class="checkbox-item" /></td>
+                                                <td>{{ bill.id }}</td>
+                                                <td>{{ bill.dateAdded | date('d.m.Y') }}</td>
+                                                <td>{{ bill.user.id }}</td>
+                                                <td>
+                                                    {% if bill.user.roles[0].role == 'ROLE_INDIVIDUAL' or bill.user.roles[0].role == 'ROLE_ADMIN' %}
+                                                        {{ bill.user.userinfo.firstname }} {{ bill.user.userinfo.lastname }}
+                                                    {% else %}
+                                                        {{ bill.user.dealerinfo.company }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if bill.user.roles[0].role == 'ROLE_DEALER' or bill.user.roles[0].role == 'ROLE_SERVICE' %}
+                                                        {{ bill.user.dealerinfo.nifNumber }}
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ bill.price + (bill.price * settings.premiumAdvPrice) | round(2, 'ceil')}}</td>
+                                                <td>
+                                                    <select name="billStatus" class="form-control">
+                                                        <option value="0">{% trans %}Не оплачен{% endtrans %}</option>
+                                                        <option value="1" {% if bill.isPayed %}selected="selected"{% endif %}>{% trans %}Оплачен{% endtrans %}</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                {% trans %}Счетов по пакетам и услугам пока нет{% endtrans %}
+                            {% endif %}
+                        </div>
+                        <div id="services" class="tab-pane fade">
+                            {% if rateBills | length > 0 %}
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" class="selectAllItems" /></th>
+                                            <th>№ счета</th>
+                                            <th>Дата выставления</th>
+                                            <th>ID клиента</th>
+                                            <th>Клиент</th>
+                                            <th>N.I.F.</th>
+                                            <th>Общая сумма</th>
+                                            <th>Статус</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for bill in rateBills %}
+                                            <tr>
+                                                <td><input name="rateBill[]" value="{{ bill.id }}" type="checkbox" class="checkbox-item" /></td>
+                                                <td>{{ bill.id }}</td>
+                                                <td>{{ bill.dateAdded | date('d.m.Y') }}</td>
+                                                <td>{{ bill.user.id }}</td>
+                                                <td>{{ bill.user.dealerinfo.company }}</td>
+                                                <td>{{ bill.user.dealerinfo.nifNumber }}</td>
+                                                <td>{{ bill.price + (bill.price * settings.premiumAdvPrice) | round(2, 'ceil')}}</td>
+                                                <td>
+                                                    <select name="billStatus" class="form-control">
+                                                        <option value="0">{% trans %}Не оплачен{% endtrans %}</option>
+                                                        <option value="1" {% if bill.isPayed %}selected="selected"{% endif %}>{% trans %}Оплачен{% endtrans %}</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                {% trans %}Счетов по тарифам пока нет{% endtrans %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

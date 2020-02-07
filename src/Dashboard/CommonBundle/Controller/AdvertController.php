@@ -2353,9 +2353,8 @@ class AdvertController extends Controller
             }
         }
         
-        $bills = $manager->getRepository("DashboardCommonBundle:Bill")->findBy(array("product" => $product));
-        if($bills){
-            foreach($bills as $bill){
+        if($product->getBills()){
+            foreach($product->getBills() as $bill){
                 $bill->setProduct(null);
                 $manager->remove($bill);
             }

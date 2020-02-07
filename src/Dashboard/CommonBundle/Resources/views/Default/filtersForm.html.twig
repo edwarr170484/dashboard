@@ -3,23 +3,20 @@
         <ul class="nav nav-tabs" role="tablist">
             {% set i = 1 %}
             {% for category in categories %}
-                {% if category.allProductsNumber > 0 %}
-                    <li role="presentation" {% if i == 1 %}class="active"{% endif %}>
-                        <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
-                            {{ category.image |raw }}
-                            <span>{{ category.title}}</span>
-                            <div class="shadowBlock"></div>
-                        </a>
-                    </li>
-                    {% set i = i + 1 %}
-                {% endif %}
+                <li role="presentation" {% if i == 1 %}class="active"{% endif %}>
+                    <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
+                        {{ category.image |raw }}
+                        <span>{{ category.title}}</span>
+                        <div class="shadowBlock"></div>
+                    </a>
+                </li>
+                {% set i = i + 1 %}
             {% endfor %}
         </ul>
         <div class="tab-content">
             {% set i = 1 %}
             {% for category in categories %}
-                {% if category.allProductsNumber > 0 %}
-                    <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="categoryFilters{{ category.id }}">
+                <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="categoryFilters{{ category.id }}">
                         <form action="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}" method="POST">
                         <input name="category" type="hidden" value="{{ category.id }}" />
                         <div class="row">
@@ -109,11 +106,9 @@
         </svg>
                                     </button>
                                 </div>
-                                {% if category.allProductsNumber > 0 %}
-                                    <div class="mainPageFiltersShowResults">
-                                        <button>{% trans %}Показать{% endtrans %} <span>{{ category.allProductsNumber }}</span> {% trans %}предложений{% endtrans %}</button>
-                                    </div>
-                                {% endif %}
+                                <div class="mainPageFiltersShowResults">
+                                    <button>{% trans %}Поиск{% endtrans %}</button>
+                                </div>
                                 <script>
                                     $(document).ready(function(){
                                         $(".showAllParameters").click(function(){
@@ -134,7 +129,6 @@
                         </form>
                     </div>
                     {% set i = i + 1 %}
-                {% endif %}
             {% endfor %}
         </div>
     </div>

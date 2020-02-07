@@ -73,6 +73,7 @@ $(document).ready(function(){
     
     $(".masked-phone").mask("+34 99 999 99 99");
     $(".mainPageFiltersTabs").addClass("active");
+    
 });
 
 function clearServiceAuto(element, event){
@@ -108,6 +109,7 @@ function toggleGamburgerMenu(event, action){
     if(action === 'show'){
        $(".siteMenuGamburgerMenu").show(); 
        $("#gamburgerModal").modal('show');
+       $("body").removeClass("modal-open").attr("style", "");
     }
     
     if(action === 'hide'){

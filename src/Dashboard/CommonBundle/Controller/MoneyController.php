@@ -123,7 +123,7 @@ class MoneyController extends Controller
         $payment = $manager->getRepository("DashboardCommonBundle:Payment")->find($paymentId);
         
         if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
-            /*if($className == "RateBill"){
+            if($className == "RateBill"){
                 $userRate = new UserRate();
                 $userRate->setUser($user);
                 $userRate->setDateStart(new \DateTime("now"));
@@ -150,132 +150,130 @@ class MoneyController extends Controller
                 $manager->persist($bill);
                 $manager->flush();
             }else{
-                if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
-                    if($bill->getRates()){
-                        foreach($bill->getRates() as $rate){
-                            if(!$rate->getDateAdded()){
-                                $rate->setDateAdded(new \DateTime("now"));
-                            }
-                            $currentDate = ($rate->getDateEnd()) ? $rate->getDateEnd() : new \DateTime("now");
-                            $rate->setDateEnd($currentDate->add(new \DateInterval('P' . $rate->getRate()->getActiveTime() . 'Y')));
-                            $rate->setIsActive(1);
-                            $manager->persist($rate);
+                if($bill->getRates()){
+                    foreach($bill->getRates() as $rate){
+                        if(!$rate->getDateAdded()){
+                            $rate->setDateAdded(new \DateTime("now"));
                         }
-
-                        $manager->flush();
-                        $session->remove('selectedSalons');
+                        $currentDate = ($rate->getDateEnd()) ? $rate->getDateEnd() : new \DateTime("now");
+                        $rate->setDateEnd($currentDate->add(new \DateInterval('P' . $rate->getRate()->getActiveTime() . 'Y')));
+                        $rate->setIsActive(1);
+                        $manager->persist($rate);
                     }
 
-                    if($bill->getServicePack()){
-                        $servicePack = $bill->getServicePack();
-                        $product = $bill->getProducts()->first();
+                    $manager->flush();
+                    $session->remove('selectedSalons');
+                }
 
-                        if($servicePack->getServices()){
-                            foreach($servicePack->getServices() as $packService){
-                                $service = $packService->getService();
+                if($bill->getServicePack()){
+                    $servicePack = $bill->getServicePack();
+                    $product = $bill->getProducts()->first();
 
-                                if($packService->getValue()){
-                                    $serviceCount = $packService->getValue();
-                                }else{
-                                    $serviceCount = $service->getDays();
-                                }
+                    if($servicePack->getServices()){
+                        foreach($servicePack->getServices() as $packService){
+                            $service = $packService->getService();
 
-                                $productService = new ProductService();
-                                $productService->setProduct($product);
-                                $productService->setService($service);
-                                $productService->setIsActive(1);
-                                $productService->setDateAdded(new \DateTime("now"));
-                                $productService->setCount($serviceCount);
-
-                                $serviceCountParameter = $service->getParameter();
-
-                                switch($serviceCountParameter){
-                                    case 'days':
-                                        $currentDate = new \DateTime("now");
-                                        $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
-                                    break;
-
-                                    case 'count':
-                                        $productService->setDateEnd(new \DateTime("now"));
-                                    break;
-                                }
-
-                                $manager->persist($productService);
-                            }
-                        }
-
-                        $manager->flush();
-                    }
-
-                    if(count($bill->getServices()) > 0){
-                        foreach($bill->getServices() as $productService){
-                            $serviceCount = $productService->getService()->getDays();
-                            $serviceCountParameter = $productService->getService()->getParameter();
-
-                            if($productService->getProduct()){
-                                $productService->setIsActive(1);
-                                $productService->setCount($productService->getCount() + $serviceCount);
-                                $product = $productService->getProduct();
-
-                                $advancedDays = 0;
-                                foreach($bill->getServices() as $productService){
-                                    if($productService->getProduct()->getId() == $product->getId()){
-                                        if($productService->getService()->getDays() > $advancedDays){
-                                            $advancedDays = $productService->getService()->getDays();
-                                        }
-                                    }
-                                }
-
-                                switch($serviceCountParameter){
-                                    case 'days':
-                                        $currentDate = ($productService->getDateEnd()) ? $productService->getDateEnd() : new \DateTime("now");
-                                        $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
-
-                                        $daysLeft = $productService->getProduct()->getDaysLeft();
-
-                                        if($advancedDays == $serviceCount){
-                                            if($serviceCount > $daysLeft){
-                                                $diffDays = $serviceCount - $daysLeft;
-                                                $endDate = $product->getDateEnd()->add(new \DateInterval('P' . $diffDays . 'D'));
-                                                $product->setDateEnd($endDate);
-                                                $manager->persist($product);
-                                            }
-                                        }
-                                    break;
-
-                                    case 'count':
-                                        $productService->setDateEnd(new \DateTime("now"));
-                                    break;
-                                }
+                            if($packService->getValue()){
+                                $serviceCount = $packService->getValue();
                             }else{
-                                $productService->setProduct($bill->getProducts()->first());
-                                $productService->setIsActive(1);
-                                $productService->setDateAdded(new \DateTime("now"));
-                                $productService->setCount($productService->getCount() + $serviceCount);
+                                $serviceCount = $service->getDays();
+                            }
 
-                                switch($serviceCountParameter){
-                                    case 'days':
-                                        $currentDate = new \DateTime("now");
-                                        $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
-                                    break;
+                            $productService = new ProductService();
+                            $productService->setProduct($product);
+                            $productService->setService($service);
+                            $productService->setIsActive(1);
+                            $productService->setDateAdded(new \DateTime("now"));
+                            $productService->setCount($serviceCount);
 
-                                    case 'count':
-                                        $productService->setDateEnd(new \DateTime("now"));
-                                    break;
-                                }
+                            $serviceCountParameter = $service->getParameter();
+
+                            switch($serviceCountParameter){
+                                case 'days':
+                                    $currentDate = new \DateTime("now");
+                                    $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
+                                break;
+
+                                case 'count':
+                                    $productService->setDateEnd(new \DateTime("now"));
+                                break;
                             }
 
                             $manager->persist($productService);
                         }
-
-                        $session->remove('selectedServices');
                     }
-                    $bill->setPayment($payment);
-                    $bill->setIsClosed(1);
-                    $manager->persist($bill);
+
                     $manager->flush();
                 }
-            }*/
+
+                if(count($bill->getServices()) > 0){
+                    foreach($bill->getServices() as $productService){
+                        $serviceCount = $productService->getService()->getDays();
+                        $serviceCountParameter = $productService->getService()->getParameter();
+
+                        if($productService->getProduct()){
+                            $productService->setIsActive(1);
+                            $productService->setCount($productService->getCount() + $serviceCount);
+                            $product = $productService->getProduct();
+
+                            $advancedDays = 0;
+                            foreach($bill->getServices() as $productService){
+                                if($productService->getProduct()->getId() == $product->getId()){
+                                    if($productService->getService()->getDays() > $advancedDays){
+                                        $advancedDays = $productService->getService()->getDays();
+                                    }
+                                }
+                            }
+
+                            switch($serviceCountParameter){
+                                case 'days':
+                                    $currentDate = ($productService->getDateEnd()) ? $productService->getDateEnd() : new \DateTime("now");
+                                    $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
+
+                                    $daysLeft = $productService->getProduct()->getDaysLeft();
+
+                                    if($advancedDays == $serviceCount){
+                                        if($serviceCount > $daysLeft){
+                                            $diffDays = $serviceCount - $daysLeft;
+                                            $endDate = $product->getDateEnd()->add(new \DateInterval('P' . $diffDays . 'D'));
+                                            $product->setDateEnd($endDate);
+                                            $manager->persist($product);
+                                        }
+                                    }
+                                break;
+
+                                case 'count':
+                                    $productService->setDateEnd(new \DateTime("now"));
+                                break;
+                                }
+                        }else{
+                            $productService->setProduct($bill->getProducts()->first());
+                            $productService->setIsActive(1);
+                            $productService->setDateAdded(new \DateTime("now"));
+                            $productService->setCount($productService->getCount() + $serviceCount);
+
+                            switch($serviceCountParameter){
+                                case 'days':
+                                    $currentDate = new \DateTime("now");
+                                    $productService->setDateEnd($currentDate->add(new \DateInterval('P' . $serviceCount . 'D')));
+                                break;
+
+                                case 'count':
+                                    $productService->setDateEnd(new \DateTime("now"));
+                                break;
+                            }
+                        }
+
+                        $manager->persist($productService);
+                    }
+
+                    $session->remove('selectedServices');
+                }
+                $bill->setPayment($payment);
+                $bill->setIsClosed(1);
+                $manager->persist($bill);
+                $manager->flush();
+            }
             
             $pdf = new CustomPdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false, false, $settings);
             $pdf->SetCreator($settings->getSiteName());
@@ -380,11 +378,58 @@ class MoneyController extends Controller
                 }
                 
                 if($bill->getServicePack()){
+                    $servicePack = $bill->getServicePack();
+                    $product = $bill->getProducts()->first();
+                    $billId = 0;
                     
+                    if(count($servicePack->getPrices()) > 0){
+                        foreach($servicePack->getPrices() as $packPrice){
+                            if($packPrice->getCategory()->getId() == $product->getBaseCategory()->getId()){
+                                $billId = $packPrice->getBillId();
+                            }
+                        }
+                    }
+                    
+                    $totalServicePrice = $bill->getPrice() ;
+                    $totalPriceNds = round($totalServicePrice * $settings->getPremiumAdvPrice(), 2);
+                    $totalPrice = $totalPriceNds + $totalServicePrice;
+                    
+                    $services .= '<tr>'
+                        . '<td>' . $billId . '</td>'
+                        . '<td>' . $servicePack->getLabel() . '</td>'
+                        . '<td>1</td>'
+                        . '<td>' . $totalServicePrice . '</td>'
+                        . '<td>' . $totalPriceNds . '</td>'
+                        . '<td>' . $settings->getPremiumAdvPrice() * 100 . '%</td>'
+                        . '</tr>';
                 }
                 
                 if(count($bill->getServices()) > 0){
+                    $totalServicePrice = $bill->getPrice();
+                    $totalPriceNds = round($totalServicePrice * $settings->getPremiumAdvPrice(), 2);
+                    $totalPrice = $totalPriceNds + $totalServicePrice;
                     
+                    foreach($bill->getServices() as $productService){
+                        $baseCategory = $productService->getProduct()->getBaseCategory();
+                        $servicePriceValue = 0;
+                        $billId = 0;
+                        foreach($productService->getService()->getPrices() as $servicePrice){
+                            if($servicePrice->getCategory()->getId() == $baseCategory->getId()){
+                                $servicePriceValue = $servicePrice->getPrice();
+                                $billId = $servicePrice->getBillId();
+                            }
+                        }
+                        
+                        $services .= '<tr>'
+                            . '<td>' . $billId . '</td>'
+                            . '<td>' . $productService->getService()->getTitle() . '</td>'
+                            . '<td>1</td>'
+                            . '<td>' . $servicePriceValue + round($servicePriceValue * $settings->getPremiumAdvPrice(), 2) . '</td>'
+                            . '<td>' . round($servicePriceValue * $settings->getPremiumAdvPrice(), 2) . '</td>'
+                            . '<td>' . $settings->getPremiumAdvPrice() * 100 . '%</td>'
+                            . '</tr>';
+                        
+                    }
                 }                
             }
             
@@ -421,7 +466,7 @@ class MoneyController extends Controller
                         . '<td></td>'
                         . '<td></td>'
                         . '<td></td>'
-                        . '<td style="border-top:1"><b>TOTAL ' . $locale->getCUrrency()->getCode(). '.</b></td>'
+                        . '<td style="border-top:1"><b>TOTAL ' . $locale->getCurrency()->getCode(). '.</b></td>'
                         . '<td style="text-align:right;border-top:1">' . $totalPrice . '</td>'
                         . '</tr>'
                         . '</table><div></div><div></div><div></div>' . $user->getRoles()[0]->getInvoiceText();
@@ -434,6 +479,6 @@ class MoneyController extends Controller
             fclose($fp);
         }
         
-        return $this->render('DashboardCommonBundle:Money:result.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => "account_payments", "bill" => $bill,"back" => "/account/bills"));
+        return $this->render('DashboardCommonBundle:Money:result.html.twig', array("user" => $user, "settings" => $settings, "locale" => $locale, "routeName" => "account_payments", "bill" => $bill,"back" => "/account/bills"));
     }
 }

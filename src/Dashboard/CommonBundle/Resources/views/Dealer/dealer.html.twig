@@ -249,28 +249,43 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-9 col-md-9">
-                                        <div id="map" class="mapImage" style="width: 100%;"></div>
+                                        <div id="map" class="mapImage" style="width: 100%;height:50rem"></div>
                                         <script>
                                             var map;
                                             function initMap() {
-                                              map = new google.maps.Map(document.getElementById('map'), {
-                                                center: {lat: {{ settings.centerLat }}, lng: {{ settings.centerLng }} },
-                                                zoom: 6
-                                              });
-                                              
+                                                map = new google.maps.Map(document.getElementById('map'), {
+                                                    center: {lat: {{ settings.centerLat }}, lng: {{ settings.centerLng }} },
+                                                    zoom: 6
+                                                });
+                                                
+                                                var dealerWindows = [];
+                                                {% for salon in dealer.dealerinfo.salons %}
+                                                    dealerWindows[{{ salon.id }}] = '<div class="mapListItem"><a href="" class="mapListItemLink"></a><div class="mapListItemInfo"><div class="mapListItemInfoName">{{ salon.name }}</div>{% if salon.website %}<div class="mapListItemInfoText">Web: <a href="{{ salon.website }}">salon.website</a></div>{% endif %}{% if salon.phones | length > 0 %}<div class="mapListItemInfoText">{% trans %}Телефоны{% endtrans %}:{% set i = 0 %}{% for phone in salon.phones %}{{ phone.phone }}{% if i < salon.phones | length - 1 %},{% endif %}{% set i = i + 1 %}{% endfor %}</div>{% endif %}<div class="mapListItemInfoText"><svg width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 1C4.58867 1 1 4.37117 1 8.51358C1 14.7178 8.46733 20.6752 8.78533 20.9258C8.84474 20.9733 8.92012 20.9995 8.99818 21C9.07624 21.0005 9.15196 20.9751 9.212 20.9283C9.53 20.682 17 14.8272 17 8.51358C17 4.37117 13.4113 1 9 1ZM9.00133 20.2733C7.774 19.2452 1.66667 13.8616 1.66667 8.51358C1.66667 4.71491 4.95667 1.62499 9 1.62499C13.0433 1.62499 16.3333 4.71491 16.3333 8.51358C16.3333 13.9522 10.232 19.259 9.00133 20.2733Z" stroke="#616161"/><path d="M9 5C6.794 5 5 6.794 5 9C5 11.206 6.794 13 9 13C11.206 13 13 11.206 13 9C13 6.794 11.206 5 9 5ZM9 12.3333C7.162 12.3333 5.66667 10.838 5.66667 9C5.66667 7.162 7.162 5.66667 9 5.66667C10.838 5.66667 12.3333 7.162 12.3333 9C12.3333 10.838 10.838 12.3333 9 12.3333Z" stroke="#616161"/></svg>{{ salon.address }}</div></div></div>';
+                                                {% endfor %}
+                                                
                                                 {% if coordinates | length > 0 %}
                                                     var markers = locations.map(function(location, i) {
-                                                        return new google.maps.Marker({position: location});
+                                                        var infowindow = new google.maps.InfoWindow({
+                                                            content: dealerWindows[location.id]
+                                                        });
+
+                                                        var marker = new google.maps.Marker({position: {lat: location.lat, lng: location.lng}});
+
+                                                        marker.addListener('click', function() {
+                                                            map.setZoom(20);
+                                                            map.setCenter(marker.getPosition());
+                                                            infowindow.open(map, marker);
+                                                        });
+
+                                                        return marker;
                                                     });
-
                                                     var markerCluster = new MarkerClusterer(map, markers,{imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
-
                                                 {% endif %}
                                             }
                                             {% if coordinates | length > 0 %}
                                                 var locations = [
-                                                    {% for coordinate in coordinates %}
-                                                        {lat: {{ coordinate.lat}}, lng: {{ coordinate.lng }} },
+                                                    {% for key, coordinate in coordinates %}
+                                                        {lat: {{ coordinate.lat}}, lng: {{ coordinate.lng }}, id: {{ key }} },
                                                     {% endfor %}
                                                 ]
                                             {% endif %} 

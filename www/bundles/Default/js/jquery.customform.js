@@ -18,9 +18,9 @@
                             if($(this).attr("value") === selectValue && $(this).attr("value") !== "0" && $(this).attr("value") !== ""){
                                 
                                 if(isWrite){
-                                    cover.append("<div class='select-value'><input name='select-writable' value='"+ $(this).html() +"'></div>");
+                                    cover.append("<div class='select-value'><div class='select-value-inner'><input name='select-writable' value='"+ $(this).html() +"'></div></div>");
                                 }else{
-                                    cover.append("<div class='select-value'>" + $(this).html() + "</div>");
+                                    cover.append("<div class='select-value'><div class='select-value-inner'>" + $(this).html() + "</div></div>");
                                 }
                                 
                                 
@@ -33,9 +33,9 @@
                         
 			if(selected === 0){
                             if(isWrite){
-                                cover.append("<div class='select-value'><input name='select-writable' placeholder='" + selectElement.attr("placeholder") + "'></div>");
+                                cover.append("<div class='select-value'><div class='select-value-inner'><input name='select-writable' placeholder='" + selectElement.attr("placeholder") + "'></div></div>");
                             }else{
-                                cover.append("<div class='select-value'>" + selectElement.attr("placeholder") + "</div>");
+                                cover.append("<div class='select-value'><div class='select-value-inner'>" + selectElement.attr("placeholder") + "</div></div>");
                             }
                             
                             if(selectOptions.length > 0){
@@ -90,12 +90,12 @@
                         }
                         if(isWrite){
                             if(cover.find(".select-option.active").length > 0){
-                                cover.find(".select-value").html("<input name='select-writable' value='"+ params.slice(0,-2) +"'>");
+                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='"+ params.slice(0,-2) +"'></div>");
                             }else{
-                                cover.find(".select-value").html("<input name='select-writable' placeholder='"+ params.slice(0,-2) +"'>");
+                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' placeholder='"+ params.slice(0,-2) +"'></div>");
                             }
                         }else{
-                            cover.find(".select-value").html(params.slice(0,-2));
+                            cover.find(".select-value").html("<div class='select-value-inner'>" + params.slice(0,-2) + "</div>");
                         }
 			
 			selectElement.css("display", "none");
@@ -133,7 +133,7 @@
                                 $(this).parent().parent().find(".select-value").find("input").val(null);
                                 $(this).parent().parent().find(".select-value").find("input").attr('placeholder',($(this).parent().parent().find("select").attr("placeholder")));
                             }else{
-                                $(this).parent().parent().find(".select-value").html($(this).parent().parent().find("select").attr("placeholder"));
+                                $(this).parent().parent().find(".select-value").html("<div class='select-value-inner'>" + $(this).parent().parent().find("select").attr("placeholder") + "</div>");
                             }
                         });
 			selectOptions.find(".select-option").each(function(){
@@ -167,9 +167,9 @@
                                             }
                                             
                                             if(isWrite){
-                                                cover.find(".select-value").html("<input name='select-writable' value='"+ params.slice(0,-2) +"'>");
+                                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='"+ params.slice(0,-2) +"'></div>");
                                             }else{
-                                                cover.find(".select-value").html(params.slice(0,-2));
+                                                cover.find(".select-value").html("<div class='select-value-inner'>" + params.slice(0,-2) + "</div>");
                                             }
                                             
                                         }else{
@@ -183,9 +183,9 @@
                                             });
                                             
                                             if(isWrite){
-                                                cover.find(".select-value").html("<input name='select-writable' value='" + $(this).html() + "'>");
+                                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='" + $(this).html() + "'></div>");
                                             }else{
-                                                cover.find(".select-value").html($(this).html());
+                                                cover.find(".select-value").html("<div class='select-value-inner'>" + $(this).html() + "</div>");
                                             }
                                             
                                             selectOptions.removeClass("opened");

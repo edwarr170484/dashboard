@@ -291,7 +291,7 @@ class DealerController extends Controller
                 $address = str_replace(" ", "+", $salon->getAddress());
                 $coords = $this->get('app.maps')->getCoordinatesByAddress($address, $settings->getGoogleMapsKey());
                 if($coords['status'] == "OK"){
-                    $coordinates->set($dealer->getId(), $coords['results'][0]['geometry']['location']);
+                    $coordinates->set($salon->getId(), $coords['results'][0]['geometry']['location']);
                 }
             }
         }

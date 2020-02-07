@@ -5,10 +5,11 @@ namespace Dashboard\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Dashboard\CommonBundle\Entity\Category;
 use Dashboard\AdminBundle\Form\Type\CategoryType;
 use Dashboard\AdminBundle\Form\DataTransformer\CategoryToNumberTransformer;
@@ -260,7 +261,6 @@ class CategoryController extends Controller
             
             $category->setIsActive(true);
             $category->setIsShowPriceFilter(true);
-            $category->setIsShowBu(true);
             
             if($categoryForm['parent']->getData()){
                 $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.id = ' . $categoryForm['parent']->getData()->getId());
@@ -615,7 +615,101 @@ class CategoryController extends Controller
         }
         
         return $this->render('DashboardAdminBundle:Category:edit.html.twig', array("categoryForm" => $categoryForm->createView(),
-                                                                                          "category" => $category));
+                                                                                   "category" => $category));
+    }
+    
+    /**
+     * @Route("/admin/categoryimport", name="admin_category_import")
+     */
+    public function categoryImportAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $finder = new Finder();
+        
+        $finder->files()->name('moto.txt')->in('import');
+        
+        $baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
+        
+        $categories = new ArrayCollection();
+        $childrens = new ArrayCollection();
+        
+        if($baseCategory){
+            foreach ($finder as $file) {
+                $absoluteFilePath = $file->getRealPath();
+                $lines = file($file->getRealPath());
+                
+                if(count($lines) > 0){
+                    foreach($lines as $line){
+                        $categoryInfo = explode(";", $line);
+                        
+                        $category = new Category();
+                        $category->setParent($baseCategory);
+                        $category->setTitle($categoryInfo[0]);
+                        $category->setName($this->get('app.helpers')->translit($categoryInfo[0]));
+                        $category->setIsActive(1);
+                        $category->setIsShowFilters(1);
+                        $category->setIsShowPriceFilter(1);
+                        $category->setIsUseChildrensLikeModel(1);
+                        
+                        $marker = 0;
+                        foreach($categories as $cat){
+                            if($cat->getTitle() == $categoryInfo[0]){
+                                $marker = 1;
+                                break;
+                            }
+                        }
+                        
+                        if(!$marker){
+                            $categories->add($category);
+                        }
+                    }
+                    
+                    foreach($categories as $key => $category){
+                        $category->setSortorder($key + 1);
+                        $manager->persist($category);
+                    }
+                    
+                    $manager->flush();
+                    
+                    $categories = $manager->getRepository("DashboardCommonBundle:Category")->findBy(array("parent" => $baseCategory));
+                    
+                    if($categories){
+                        foreach($lines as $line){
+                            $categoryInfo = explode(";", $line);
+
+                            $parent = 0;
+                            foreach($categories as $category){
+                                if($category->getTitle() == $categoryInfo[0]){
+                                    $parent = $category;
+                                    break;
+                                }
+                            }
+
+                            if($parent){
+                                $child = new Category();
+                                $child->setParent($parent);
+                                $child->setTitle($categoryInfo[1]);
+                                $child->setName($this->get('app.helpers')->translit($categoryInfo[1]));
+                                $child->setIsActive(1);
+                                $child->setIsShowFilters(1);
+                                $child->setIsShowPriceFilter(1);
+                                $childrens->add($child);
+                            }
+                        }
+
+                        foreach($childrens as $key => $child){
+                            $child->setSortorder(count($child->getParent()->getChildren()) + 1);
+                            $manager->persist($child);
+                        }
+
+                        $manager->flush();
+                    }
+                }
+            }
+        }
+        
+        return new Response('OK');
     }
 }
 

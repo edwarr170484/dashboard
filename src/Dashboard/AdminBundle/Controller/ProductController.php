@@ -539,17 +539,6 @@ class ProductController extends Controller
                     }
                 }
                 
-                //удаляем отзывы, привязанные к этому товару
-                if($product->getReviews())
-                {
-                    foreach($product->getReviews() as $review)
-                    {
-                        $review->setProduct(null);
-                        $manager->persist($review);
-                        $manager->flush();
-                    }
-                }
-                
                 //удаляем сообщения, привязанные к этому товару
                 if($product->getMessages())
                 {

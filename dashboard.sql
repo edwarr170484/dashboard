@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Фев 07 2020 г., 14:12
+-- Время создания: Фев 10 2020 г., 10:00
 -- Версия сервера: 10.1.9-MariaDB
 -- Версия PHP: 5.6.15
 
@@ -25972,9 +25972,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_active`, `is_confirm`, `advert_number`, `fb_id`, `is_hide_email`, `is_alert_broadcast`, `is_alert_new_message`, `is_alert_new_order`, `is_alert_change_order_status`, `entires`) VALUES
-(1, 'tech@auto28.es', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'tech@auto28.es', 1, 1, 3, NULL, 0, 1, 1, 1, 0, 27),
+(1, 'tech@auto28.es', '$2b$10$qkAF.rNcJL0hDU9ROmybsuk8NcCKSCLiSu8Mwu1fEqasF5mC7CcCi', 'tech@auto28.es', 1, 1, 3, NULL, 0, 1, 1, 1, 0, 29),
 (2, 'host@sunweb.by', '$2y$13$vtSH86/tdpg2PTsPbqweNurffISvjjHnNJgvB.YtgoSPgt2BHNQXi', 'host@sunweb.by', 1, 1, 0, NULL, 0, 1, 1, 1, 1, 0),
-(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL, 9),
+(6, 'smurf84@mail.ru', '$2y$13$4GX/kIRIsTP9LtgwCjYK5uQtG1tXFyUGC9egcJsipjnogl9CKZ8Q2', 'smurf84@mail.ru', 1, 1, 0, NULL, 0, 1, 1, 1, NULL, 10),
 (7, 'google@mail.com', '$2y$13$XfC5uOWJ5LBPHE1I7KYiJ.PLi.AxxnRyn8xdn6ePd2TevHBFIwsJC', 'google@mail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0),
 (8, 'edwarr170484@gmail.com', '$2y$13$eyuCxfhoYVf3jQ6MyGO94OH805uQAx2ZPamznSaq1EnWNHi2/KMCW', 'edwarr170484@gmail.com', 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 0),
 (9, 'info@sunweb-it.com', '$2y$13$E8h6aHFxjOfuqeREcclJLux6p4kakrXKEgyJnA.aVvShVormZJPI2', 'info@sunweb-it.com', 1, 0, 0, NULL, 0, 0, 0, 0, 0, 0);

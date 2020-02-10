@@ -122,7 +122,7 @@ class AdvertController extends Controller
             
             $servicePack = $manager->getRepository("DashboardCommonBundle:Pack")->find($request->request->get('servicePack'));
             if($servicePack){
-                 //add bill
+                //add bill
                 $bill = new Bill();
                 $bill->setDateAdded(new \DateTime("now"));
                 $bill->addProduct($product);
@@ -282,7 +282,7 @@ class AdvertController extends Controller
                 if(count($user->getRates()) > 0){
                     foreach($user->getRates() as $rate){
                         $error = 0;
-                        if($rate->getCategory()->getid() == $product->getBaseCategory()->getId() && $rate->getAdvertNumber() > 0 && $rate->getIsActive()){
+                        if($rate->getCategory()->getId() == $product->getBaseCategory()->getId() && $rate->getAdvertNumber() > 0 && $rate->getIsActive()){
                             $manager->persist($product);
                             $manager->flush();
 

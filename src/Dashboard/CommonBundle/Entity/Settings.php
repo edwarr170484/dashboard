@@ -199,6 +199,24 @@ class Settings
      * @ORM\JoinColumn(name="review_order_status_id", referencedColumnName="id")
      */
     private $orderReviewStatus;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Service")
+     * @ORM\JoinColumn(name="premium_service_id", referencedColumnName="id")
+     */
+    private $premiumService;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Service")
+     * @ORM\JoinColumn(name="special_service_id", referencedColumnName="id")
+     */
+    private $specialService;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Service")
+     * @ORM\JoinColumn(name="selected_service_id", referencedColumnName="id")
+     */
+    private $selectedService;
 
 
     /**
@@ -1060,5 +1078,74 @@ class Settings
     public function getOrderReviewStatus()
     {
         return $this->orderReviewStatus;
+    }
+
+    /**
+     * Set premiumService
+     *
+     * @param \Dashboard\CommonBundle\Entity\Service $premiumService
+     * @return Settings
+     */
+    public function setPremiumService(\Dashboard\CommonBundle\Entity\Service $premiumService = null)
+    {
+        $this->premiumService = $premiumService;
+    
+        return $this;
+    }
+
+    /**
+     * Get premiumService
+     *
+     * @return \Dashboard\CommonBundle\Entity\Service 
+     */
+    public function getPremiumService()
+    {
+        return $this->premiumService;
+    }
+
+    /**
+     * Set specialService
+     *
+     * @param \Dashboard\CommonBundle\Entity\Service $specialService
+     * @return Settings
+     */
+    public function setSpecialService(\Dashboard\CommonBundle\Entity\Service $specialService = null)
+    {
+        $this->specialService = $specialService;
+    
+        return $this;
+    }
+
+    /**
+     * Get specialService
+     *
+     * @return \Dashboard\CommonBundle\Entity\Service 
+     */
+    public function getSpecialService()
+    {
+        return $this->specialService;
+    }
+
+    /**
+     * Set selectedService
+     *
+     * @param \Dashboard\CommonBundle\Entity\Service $selectedService
+     * @return Settings
+     */
+    public function setSelectedService(\Dashboard\CommonBundle\Entity\Service $selectedService = null)
+    {
+        $this->selectedService = $selectedService;
+    
+        return $this;
+    }
+
+    /**
+     * Get selectedService
+     *
+     * @return \Dashboard\CommonBundle\Entity\Service 
+     */
+    public function getSelectedService()
+    {
+        return $this->selectedService;
     }
 }

@@ -6,7 +6,7 @@
             <li>
                 <div class="accountMenuItem">
                     {{ block('accountAdverts') }}
-                    <a href="javascript:void(0)" onclick="$(this).parent().parent().find('ul').toggleClass('active')" {% if routeName == 'account_products' %}class="active"{% endif %}>
+                    <a href="javascript:void(0)" onclick="event.stopPropagation();$(this).parent().parent().find('ul').toggleClass('active')" {% if routeName == 'account_products' %}class="active"{% endif %}>
                         {% trans %}Мои объявления{% endtrans %} ({{ allProducts | length }})
                     </a>
                 </div>

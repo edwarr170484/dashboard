@@ -392,6 +392,7 @@ class AccountController extends Controller
         return $this->render('DashboardCommonBundle:User:account/message/conversations.html.twig', array("user" =>$user,
                                                                                     "conversations" => $conversations,
                                                                                     "locale" => $locale,
+                                                                                    "routeName" => $request->attributes->get("_route"),
                                                                                     "settings" => $settings));
     }
 
@@ -495,7 +496,7 @@ class AccountController extends Controller
                 $manager->flush();
             }
         }
-
+        
         //load all conversation with this user
         $query = $manager->createQuery("SELECT m FROM DashboardCommonBundle:Message m WHERE m.conversation = " . $conversationId . " AND m.userOwner = " . $user->getId() . " ORDER BY m.sentDate DESC")->setFirstResult(0)->setMaxResults($settings->getUserMessagesNumber());
 
@@ -608,8 +609,7 @@ class AccountController extends Controller
             return $this->redirectToRoute("account_conversation", array("conversationId" => $conversationId));
         }
 
-        return $this->render('DashboardCommonBundle:User:account/message/conversation.html.twig', array("lastmessage" => $message,
-                                                                                       "user" => $user,
+        return $this->render('DashboardCommonBundle:User:account/message/conversation.html.twig', array("user" => $user,
                                                                                        "formMessage" => $formMessage->createView(),
                                                                                        "messages" => $messages,
                                                                                        "conversation" => $conversation,

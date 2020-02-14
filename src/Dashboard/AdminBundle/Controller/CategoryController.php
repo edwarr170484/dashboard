@@ -11,6 +11,10 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dashboard\CommonBundle\Entity\Category;
+use Dashboard\CommonBundle\Entity\Generation;
+use Dashboard\CommonBundle\Entity\GenerationBoard;
+use Dashboard\CommonBundle\Entity\GenerationItem;
+use Dashboard\CommonBundle\Entity\Modification;
 use Dashboard\AdminBundle\Form\Type\CategoryType;
 use Dashboard\AdminBundle\Form\DataTransformer\CategoryToNumberTransformer;
 
@@ -627,30 +631,21 @@ class CategoryController extends Controller
         $fm = new Filesystem();
         $finder = new Finder();
         
-        $finder->files()->name('moto.txt')->in('import');
+        $finder->files()->name('auto.txt')->in('import');
         
         $baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
         
         $categories = new ArrayCollection();
         $childrens = new ArrayCollection();
+        $generationItems = new ArrayCollection();
         
         if($baseCategory){
             foreach ($finder as $file) {
-                $absoluteFilePath = $file->getRealPath();
                 $lines = file($file->getRealPath());
                 
                 if(count($lines) > 0){
-                    foreach($lines as $line){
+                    /*foreach($lines as $line){
                         $categoryInfo = explode(";", $line);
-                        
-                        $category = new Category();
-                        $category->setParent($baseCategory);
-                        $category->setTitle($categoryInfo[0]);
-                        $category->setName($this->get('app.helpers')->translit($categoryInfo[0]));
-                        $category->setIsActive(1);
-                        $category->setIsShowFilters(1);
-                        $category->setIsShowPriceFilter(1);
-                        $category->setIsUseChildrensLikeModel(1);
                         
                         $marker = 0;
                         foreach($categories as $cat){
@@ -661,6 +656,13 @@ class CategoryController extends Controller
                         }
                         
                         if(!$marker){
+                            $category = new Category();
+                            $category->setParent($baseCategory);
+                            $category->setTitle($categoryInfo[0]);
+                            $category->setName($this->get('app.helpers')->translit($categoryInfo[0]));
+                            $category->setIsActive(1);
+                            $category->setIsShowFilters(1);
+                            $category->setIsShowPriceFilter(1);
                             $categories->add($category);
                         }
                     }
@@ -670,12 +672,16 @@ class CategoryController extends Controller
                         $manager->persist($category);
                     }
                     
-                    $manager->flush();
+                    $manager->flush();*/
                     
                     $categories = $manager->getRepository("DashboardCommonBundle:Category")->findBy(array("parent" => $baseCategory));
+                    $boardFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(19);
+                    $gasFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(16);
+                    $transmissionFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(17);
+                    $gearFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(18);
                     
                     if($categories){
-                        foreach($lines as $line){
+                        /*foreach($lines as $line){
                             $categoryInfo = explode(";", $line);
 
                             $parent = 0;
@@ -686,24 +692,197 @@ class CategoryController extends Controller
                                 }
                             }
 
-                            if($parent){
-                                $child = new Category();
-                                $child->setParent($parent);
-                                $child->setTitle($categoryInfo[1]);
-                                $child->setName($this->get('app.helpers')->translit($categoryInfo[1]));
-                                $child->setIsActive(1);
-                                $child->setIsShowFilters(1);
-                                $child->setIsShowPriceFilter(1);
-                                $childrens->add($child);
+                            if($parent){                              
+                                $marker = 0;
+                                foreach($childrens as $cat){
+                                    if($cat->getTitle() == $categoryInfo[1] && $cat->getParent()->getId() == $parent->getId()){
+                                        $marker = 1;
+                                        
+                                        $boardFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[5])));
+                                    
+                                        if(count($cat->getGenerations()) > 0){
+                                            foreach($cat->getGenerations() as $catGeneration){
+                                                if(count($catGeneration->getBoards()) > 0){
+                                                    $contains = 0;
+                                                    foreach($catGeneration->getBoards() as $board){
+                                                        if($board->getBoard()->getId() == $boardFilterValue->getId()){
+                                                            $contains = 1;
+                                                            break;
+                                                        }
+                                                    }
+                                                    
+                                                    if(!$contains){
+                                                        $generationBoard = new GenerationBoard();
+                                                        $generationBoard->setGeneration($catGeneration);
+                                                        $generationBoard->setBoard($boardFilterValue);
+                                                        $catGeneration->addBoard($generationBoard);
+                                                    }
+                                                }
+                                                
+                                                if(count($catGeneration->getModifications()) > 0){
+                                                    $contain = 0;
+                                                    foreach($catGeneration->getModifications() as $modification){
+                                                        if(($modification->getLabel() == trim($categoryInfo[4])) && ($modification->getPower() == trim($categoryInfo[8])) && ($modification->getSize() == trim($categoryInfo[9]))){
+                                                            $contain = 1;
+                                                            break;
+                                                        }
+                                                    }
+                                                    
+                                                    if(!$contain){
+                                                        $modification = new Modification();
+                                                        $modification->setGeneration($catGeneration);
+                                                        $modification->setLabel(trim($categoryInfo[4]));
+                                                        $modification->setPower(trim($categoryInfo[8]));
+                                                        $modification->setSize(trim($categoryInfo[9]));
+                                                        $catGeneration->addModification($modification);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                        break;
+                                    }
+                                }
+
+                                if(!$marker){
+                                    $child = new Category();
+                                    $child->setParent($parent);
+                                    $child->setTitle($categoryInfo[1]);
+                                    $child->setName($this->get('app.helpers')->translit($categoryInfo[1]));
+                                    $child->setIsActive(1);
+                                    $child->setIsShowFilters(1);
+                                    $child->setIsShowPriceFilter(1);
+                                    $child->setYearFrom($categoryInfo[2]);
+                                    $child->setYearTo($categoryInfo[3]);
+                                    
+                                    //adding generation
+                                    $generation = new Generation();
+                                    $generation->setCategory($child);
+                                    $generation->setName("I generación");
+                                    $generation->setYearFrom($categoryInfo[2]);
+                                    $generation->setYearTo($categoryInfo[3]);
+                                    $generation->setIsRightWheel(1);
+                                    $generation->setIsGas(1);
+                                    
+                                    //adding boardType
+                                    $boardFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[5])));
+                                    $generationBoard = new GenerationBoard();
+                                    $generationBoard->setGeneration($generation);
+                                    $generationBoard->setBoard($boardFilterValue);
+                                    $generation->addBoard($generationBoard);
+                                    
+                                    //add first modification
+                                    $modification = new Modification();
+                                    $modification->setGeneration($generation);
+                                    $modification->setLabel(trim($categoryInfo[4]));
+                                    $modification->setPower(trim($categoryInfo[8]));
+                                    $modification->setSize(trim($categoryInfo[9]));
+                                    $generation->addModification($modification);
+                                    
+                                    $child->addGeneration($generation);
+                                    $childrens->add($child);
+                                }
                             }
                         }
 
                         foreach($childrens as $key => $child){
-                            $child->setSortorder(count($child->getParent()->getChildren()) + 1);
+                            $child->setSortorder(1);
                             $manager->persist($child);
                         }
 
-                        $manager->flush();
+                        $manager->flush();*/
+                        
+                    
+                    foreach($lines as $line){
+                        $categoryInfo = explode(";", $line);
+                        
+                        $parent = 0;
+                        foreach($categories as $category){
+                            if($category->getTitle() == $categoryInfo[0]){
+                                $parent = $category;
+                                break;
+                            }
+                        }
+
+                        if($parent){
+                            foreach($parent->getChildren() as $cat){
+                                if($cat->getTitle() == $categoryInfo[1]){
+                                    $boardValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[5])));
+                                    $gasFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $gasFilter, "value" => trim($categoryInfo[6])));
+                                    $gearFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $gearFilter, "value" => trim($categoryInfo[7])));
+                                    if(!$gearFilterValue){
+                                        $gearFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->find(64);
+                                    }
+                                    $transmissionFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $transmissionFilter, "value" => "Frente"));
+                                      
+                                    if(count($cat->getGenerations()) > 0){
+                                        foreach($cat->getGenerations() as $catGeneration){
+                                           
+                                            $modification = $manager->getRepository("DashboardCommonBundle:Modification")->findOneBy(array("generation" => $catGeneration, "label" => trim($categoryInfo[4]), "power" => trim($categoryInfo[8]), "size" => trim($categoryInfo[9])));
+                                            
+                                            if(count($generationItems) > 0){
+                                                $isItem = 0;
+                                                foreach($generationItems as $item){
+                                                    if(($item->getGeneration()->getId() == $catGeneration->getId()) &&
+                                                       ($item->getBoard()->getBoard()->getId() == $boardValue->getId()) && 
+                                                       ($item->getGasType()->getId() == $gasFilterValue->getId()) && 
+                                                       ($item->getTransmissionType()->getId() == $transmissionFilterValue->getId()) && 
+                                                       ($item->getGearType()->getId() == $gearFilterValue->getId())){
+                                                            $isItem = 1;
+                                                            if($modification){
+                                                                if(false === $item->getItemModifications()->contains($modification)){
+                                                                    $item->addItemModification($modification);
+                                                                }
+                                                            }
+                                                    }
+                                                }
+                                                
+                                                if(!$isItem){
+                                                    $generationItem = new GenerationItem();
+                                                    $generationItem->setGeneration($catGeneration);
+                                                    foreach($catGeneration->getBoards() as $generationBoard){
+                                                        if($generationBoard->getBoard()->getId() == $boardValue->getId()){
+                                                            $generationItem->setBoard($generationBoard);
+                                                        }
+                                                    }
+                                                    $generationItem->setGasType($gasFilterValue);
+                                                    $generationItem->setGearType($gearFilterValue);
+                                                    $generationItem->setTransmissionType($transmissionFilterValue);
+                                                    if($modification){
+                                                        $generationItem->addItemModification($modification);
+                                                    }
+                                                    $generationItems->add($generationItem); 
+                                                }
+                                                
+                                            }else{
+                                                $generationItem = new GenerationItem();
+                                                $generationItem->setGeneration($catGeneration);
+                                                foreach($catGeneration->getBoards() as $generationBoard){
+                                                    if($generationBoard->getBoard()->getId() == $boardValue->getId()){
+                                                        $generationItem->setBoard($generationBoard);
+                                                    }
+                                                }
+                                                $generationItem->setGasType($gasFilterValue);
+                                                $generationItem->setGearType($gearFilterValue);
+                                                $generationItem->setTransmissionType($transmissionFilterValue);
+                                                if($modification){
+                                                    $generationItem->addItemModification($modification);
+                                                }
+                                                $generationItems->add($generationItem);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    foreach($generationItems as $item){
+                        $manager->persist($item);
+                    }
+                        
+                    $manager->flush();
+                        
                     }
                 }
             }

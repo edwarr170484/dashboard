@@ -69,11 +69,15 @@ $(document).ready(function(){
         $(".siteMenuGamburgerMenu").hide();
         $(".objectStatusSelectSublist").removeClass("active");
         $("#gamburgerModal").modal('hide');
+        $(".account-menu-list").slideUp();
     });
     
     $(".masked-phone").mask("+34 99 999 99 99");
     $(".mainPageFiltersTabs").addClass("active");
-    
+    $("#breadScrumbsMobileMenuToggler").click(function(event){
+        event.stopPropagation();
+        $(".account-menu-list").slideToggle();
+    });
 });
 
 function clearServiceAuto(element, event){

@@ -322,4 +322,27 @@ class Payment
     {
         return $this->rateBills;
     }
+
+    /**
+     * Set clientId
+     *
+     * @param string $clientId
+     * @return Payment
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+    
+        return $this;
+    }
+
+    /**
+     * Get clientId
+     *
+     * @return string 
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
 }

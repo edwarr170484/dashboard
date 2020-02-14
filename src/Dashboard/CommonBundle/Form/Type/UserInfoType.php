@@ -26,8 +26,8 @@ class UserInfoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstname', TextType::class, array('required' => true, 'label' => 'vārds', 'attr' => array('class' => 'form-control','placeholder' => 'Имя')))
-            ->add('lastname', TextType::class, array('required' => false, 'label' => 'uzvārds', 'attr' => array('class' => 'form-control','placeholder' => 'Фамилия')))
+            ->add('firstname', TextType::class, array('required' => true, 'label' => 'Имя', 'attr' => array('class' => 'form-control','placeholder' => 'Имя')))
+            ->add('lastname', TextType::class, array('required' => false, 'label' => 'Фамилия', 'attr' => array('class' => 'form-control','placeholder' => 'Фамилия')))
             ->add('phone', TextType::class, array('required' => false, 'label' => 'Телефон', 'attr' => array('class' => 'form-control masked-phone','placeholder' => '+34')));
             if($this->user){
                $builder->add('avatarNew', FileType::class, array('required' => false, 'label' => '','mapped' => false, 'attr' => array('class' => 'change-avatar-input')))

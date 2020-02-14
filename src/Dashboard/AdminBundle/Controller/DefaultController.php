@@ -1384,7 +1384,23 @@ class DefaultController extends Controller
                             'empty_data' => null,
                             'required' => false, 
                             'label' => 'Добавлять отзывы, если заказ со статусом:', 'attr' => array('class' => 'form-control')))
-            ->add('successAddAdvertText', TextareaType::class, array('required' => false, 'label' => 'Текст для сообщения об успешном добавлении объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Текст для сообщения об успешном добавлении объявления')))->getForm();
+            ->add('successAddAdvertText', TextareaType::class, array('required' => false, 'label' => 'Текст для сообщения об успешном добавлении объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Текст для сообщения об успешном добавлении объявления')))
+            ->add('premiumService', 'entity', array('class' => 'DashboardCommonBundle:Service',
+                            'choice_label' => 'title',
+                            'empty_data' => null,
+                            'required' => false, 
+                            'label' => 'Отображать объявление как "Премиум" с услугой:', 'attr' => array('class' => 'form-control')))   
+            ->add('specialService', 'entity', array('class' => 'DashboardCommonBundle:Service',
+                            'choice_label' => 'title',
+                            'empty_data' => null,
+                            'required' => false, 
+                            'label' => 'Отображать объявление в блоке "Спецпредложения" с услугой:', 'attr' => array('class' => 'form-control')))
+            ->add('selectedService', 'entity', array('class' => 'DashboardCommonBundle:Service',
+                            'choice_label' => 'title',
+                            'empty_data' => null,
+                            'required' => false, 
+                            'label' => 'Выделять объявление с услугой:', 'attr' => array('class' => 'form-control')))
+                                    ->getForm();
         }
         
         foreach($locales as $locale)

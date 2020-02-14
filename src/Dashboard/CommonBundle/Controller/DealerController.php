@@ -11,6 +11,7 @@ use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Form\Type\DealerRegisterType;
 use Dashboard\CommonBundle\Entity\Message;
 use Dashboard\CommonBundle\Entity\Conversation;
+use Dashboard\CommonBundle\Entity\DealerPhone;
 
 use Dashboard\CommonBundle\Form\Type\ProfileMessageType;
 
@@ -116,10 +117,20 @@ class DealerController extends Controller
             $role->addUser($dealer);
             $dealer->setAdvertNumber(0);
             $dealer->setPassword($password);
+            $dealer->setIsAlertBroadcast(1);
+            $dealer->setIsAlertNewMessage(1);
+            $dealer->setIsAlertNewOrder(1);
             $dealer->getDealerinfo()->setUser($dealer);
             $dealer->getUserinfo()->setUser($dealer);
+            $dealer->getUserinfo()->setCity($dealer->getDealerinfo()->getCity());
+            $dealer->getUserinfo()->setCityCode($dealer->getDealerinfo()->getCityCode());
+            
+            $dealerPhone = new DealerPhone();
+            $dealerPhone->setDealerInfo($dealer->getDealerinfo());
+            $dealerPhone->setPhone($dealer->getUserinfo()->getPhone());
             
             $manager->persist($dealer);
+            $manager->persist($dealerPhone);
             $manager->persist($role);
             $manager->flush();
             

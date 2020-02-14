@@ -43,12 +43,12 @@ class DealerSalon
     private $logotype;
     
      /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true, options={"default": null})
      */
     private $dateAdded;
     
      /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true, options={"default": null})
      */
     private $dateStopped;
     

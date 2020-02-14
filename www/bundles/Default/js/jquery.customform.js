@@ -213,7 +213,7 @@
 			});
                         
                         $("input[name='select-writable']").keyup(function(){
-                            var optionsList = $(this).parent().next(".select-options").find(".select-option");
+                            var optionsList = $(this).parent().parent().next(".select-options").find(".select-option");
                             var controlVal = $(this).val();
                             optionsList.each(function(){
                                 var val = $(this).html();

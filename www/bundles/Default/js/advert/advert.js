@@ -504,7 +504,6 @@ function toggleProductService(productId, serviceId, servicePrice, locale_code, e
     $("body").find('.accountBottomPaymentSumm').remove();
     var serviceAction = '';
     var data = productId + ";" + serviceId + ";" + servicePrice;
-    var totalPrice = 0;
     
     if(element.hasClass("active")){
         serviceAction = 'removeservice'; 
@@ -522,7 +521,7 @@ function toggleProductService(productId, serviceId, servicePrice, locale_code, e
                 element.toggleClass("active");
 
                 if(data.totalPrice > 0){
-                    $("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">' + titleText + ':</div><div class="accoutnProductServicesTotalSumma">' + data.totalPrice + ' &euro;</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments/' + data.billId + '">' + buttonText + '</a></div></div></div></div></div></div>');
+                    $("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">' + titleText + ':</div><div class="accoutnProductServicesTotalSumma">' + data.totalPrice + ' &euro;</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments/' + data.billId + '/Bill">' + buttonText + '</a></div></div></div></div></div></div>');
                 }
             },
             error: function(xhr, ajaxOptions, thrownError) {

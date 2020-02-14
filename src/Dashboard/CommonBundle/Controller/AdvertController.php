@@ -96,7 +96,8 @@ class AdvertController extends Controller
             $product->setDateAdded(new \DateTime("now"));
             $product->setDateEdited(new \DateTime("now"));
             $product->setDateStart(new \DateTime("now"));
-            $endDate = $product->getDateStart()->add(new \DateInterval('P30D'));
+            $dateStart = $product->getDateStart();
+            $endDate = $dateStart->add(new \DateInterval('P30D'));
             $product->setDateEnd($endDate);
             
             if(count($advertImages) > 0){
@@ -128,9 +129,9 @@ class AdvertController extends Controller
                 $bill->addProduct($product);
                 $bill->setServicePack($servicePack);
                 $bill->setUser($user);
-                    
+
                 $price = 0;
-                    
+
                 if($servicePack->getPrices()){
                     foreach($servicePack->getPrices() as $packPrice){
                         if($packPrice->getCategory()->getId() == $baseCategory->getId()){
@@ -138,11 +139,11 @@ class AdvertController extends Controller
                         }
                     }
                 }
-                    
+
                 if($price == 0){
                     $price = $servicePack->getPrice();
                 }
-                    
+
                 $bill->setPrice($price);
                 $manager->persist($bill);
             }  
@@ -152,7 +153,7 @@ class AdvertController extends Controller
                 $bill->setDateAdded(new \DateTime("now"));
                 $bill->addProduct($product);
                 $bill->setUser($user);
-                
+
                 foreach($request->request->get('service') as $serviceId){
                     $service = $manager->getRepository("DashboardCommonBundle:Service")->find($serviceId);
                     if($service){
@@ -162,9 +163,9 @@ class AdvertController extends Controller
                         $productService->setIsActive(0);
                         //$product->addService($productService);
                         $bill->addService($productService);
-                        
+
                         $price = 0;
-                    
+
                         if($service->getPrices()){
                             foreach($service->getPrices() as $servicePrice){
                                 if($servicePrice->getCategory()->getId() == $baseCategory->getId()){
@@ -180,7 +181,7 @@ class AdvertController extends Controller
                         $bill->setPrice($bill->getPrice() + $price);
                     }
                 }
-                
+
                 $manager->persist($bill);
             }
             
@@ -1198,8 +1199,10 @@ class AdvertController extends Controller
             $board = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($request->request->get('board')[0]);
             $info->setBoard($board);
             
-            $color = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($request->request->get('color')[0]);
-            $info->setColor($color);
+            if($request->request->get('color')){
+                $color = $manager->getRepository("DashboardCommonBundle:FilterValue")->find($request->request->get('color')[0]);
+                $info->setColor($color);
+            }
             
             $condition = $manager->getRepository("DashboardCommonBundle:Shape")->find($request->request->get('condition'));
             $info->setShape($condition);
@@ -1805,7 +1808,8 @@ class AdvertController extends Controller
             $product->setDateAdded(new \DateTime("now"));
             $product->setDateEdited(new \DateTime("now"));
             $product->setDateStart(new \DateTime("now"));
-            $endDate = $product->getDateStart()->add(new \DateInterval('P30D'));
+            $dateStart = $product->getDateStart();
+            $endDate = $dateStart->add(new \DateInterval('P30D'));
             $product->setDateEnd($endDate);
             
             if(count($advertImages) > 0){
@@ -1950,7 +1954,7 @@ class AdvertController extends Controller
                 if(count($user->getRates()) > 0){
                     foreach($user->getRates() as $rate){
                         $error = 0;
-                        if($rate->getCategory()->getid() == $product->getBaseCategory()->getId() && $rate->getAdvertNumber() > 0 && $rate->getIsActive()){
+                        if($rate->getCategory()->getId() == $product->getBaseCategory()->getId() && $rate->getAdvertNumber() > 0 && $rate->getIsActive()){
                             $manager->persist($product);
                             if($bill){$manager->persist($bill);}
                             $manager->flush();

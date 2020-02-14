@@ -6,7 +6,7 @@
 
 ol, ul {margin: 0;}
 h1,h2,h4{@include fontView("GothamProBlack",#fff,4.8rem,5.6rem);margin: 0;}
-.container{max-width:1660px;width:100%;}
+.container{max-width:1660px;width:100%;position: relative;}
 h3{@include fontView("GothamProBlack",#fff,3.6rem,4rem);margin: 0;}
 a,input,textarea{outline:none !important;}
 body{font-size:10px;background:#F9F9F9;}
@@ -786,6 +786,7 @@ ul.justLinks li{position: relative;}
 .formParameterField .change-avatar{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-left: 1.5rem;}
 .formParameterLabel sup{color:$orange-color;}
 .formParameterField input{border:1px solid #aaa;@include border-radius(2px);color:$black-text;width: 22rem;padding: 1.2rem;@include fontView("GothamProRegular",$black-text,1.3rem,1.2rem);height: auto;display: block;}
+.formParameterField .select-cover input{padding: 0.4rem 0;border: none;background: none;}
 .formParameterField .select-cover{width: 22rem;border:1px solid #aaa;@include border-radius(2px);margin-bottom:0;}
 .formParemetersItem{@include flexBox(row,flex-start,center);padding-bottom: 1.6rem;}
 .formParameterField label{@include fontView("GothamProRegular",$input-black,1.6rem,2.2rem);margin-bottom: 0;font-weight: normal;}
@@ -802,7 +803,7 @@ ul.justLinks li{position: relative;}
 .accountAdvertInfoBoard{@include flexBox(row,flex-start,center);padding-top: 1rem;padding-bottom: 2rem;}
 .accountAdvertInfoBoardItem{background: $gray-color;@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 1rem 1.5rem;@include border-radius(5px);margin-right: 5px;}
 .accountAdvertInfoViews{@include fontView("GothamProRegular",#747474,1.4rem,1.8rem);padding-top: 0.6rem;}
-.accountAdvertInfoModificationItem{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);width: 50%;padding-bottom: 1rem;}
+.accountAdvertInfoModificationItem{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);width: 100%;padding-bottom: 1rem;}
 .accountAdvertInfoModification{@include flexBox(row,flex-start,center);flex-wrap:wrap;}
 .accountAdvertInfoCity{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);@include flexBox(row,flex-start,center);}
 .accountAdvertInfoRight{width: 50%;@include flexBox(row,flex-start,flex-start);}
@@ -854,9 +855,10 @@ ul.justLinks li{position: relative;}
 .accountAdvertLikeButton{position: absolute;top:-18px;right:-2px;}
 .accountNocontent{@include fontView("GothamProRegular",$light-black-color,1.4rem,2.4rem);}
 .accountNocontent.inTab{padding: 10px 15px;}
-.accountMessageItem{@include flexBox(row, space-between, center);}
+.accountMessageItem{@include flexBox(row, space-between, center);flex-wrap:wrap;}
 .accountMessageItem.hide{display: none;}
-.accountMessageItemUser{width: 40%;@include flexBox(row, flex-start, center);}
+.accountMessageItemUser{@include flexBox(row, flex-start, center);width: 80%;position: relative;}
+.accountMessageItemUser > a{position: absolute;display:none;width: 100%;height: 100%;top: 0;left: 0;}
 .accountMessageItemCheck {padding-right: 4rem;}
 .accountMessageItem.active .accountMessageItemEnvelope svg path{fill:$orange-color;stroke:#fff;}
 .accountMessageItemEnvelope{@include flexBox(row, flex-start, center);padding-right: 4rem;}
@@ -864,14 +866,12 @@ ul.justLinks li{position: relative;}
 .accountMessageItemUserAvatar img{width: 50px;height: 50px;@include border-radius(50%);}
 .accountMessageItemUserName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
 .accountMessageItemUserName a{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
-.accountMessageItemTitle{width: 40%;@include flexBox(row, space-between, center);}
 .accountMessageItemTitleName{@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);}
 .accountMessageItem.active .accountMessageItemTitleName{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountMessageItemTitleDate{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
 .accountMessageItem{border-bottom: 1px solid #DFE1E5;padding:1rem 2rem;}
 .accountMessageItem:hover{cursor:pointer;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
-.accountMessageItemButton{width: 20%;}
-.accountMessageItemButton{padding-left: 2rem;@include flexBox(row, flex-end,center);}
+.accountMessageItemButton{@include flexBox(row, flex-end,center);width: 20%;}
 .accountMessageItemButton a{display: block;background: $gray-color;@include border-radius(3px); @include fontView("GothamProBlack",$super-black-color,1.8rem,1.7rem);max-width:19.8rem;width: 100%;text-align: center;padding: 1.3rem 1.1rem;}
 .accountMessageItem.active .accountMessageItemButton a{background: $yellow-color;}
 .accountMessageItemButton a:hover,.accountMessageItemButton a:focus{background: $orange-color;text-decoration: none;}
@@ -1012,7 +1012,7 @@ body.userAccount{background:#F9F9F9;}
 .pageContentBlockInner .mainPageFiltersTabs{padding-top: 3rem;}
 .pageContentBlock{padding-bottom: 8rem;}
 .pageContentServices{padding-top: 6rem;}
-.pageContentService{@include flexBox(row,flex-start,stretch);}
+.pageContentService{@include flexBox(row,flex-start,stretch);flex-wrap:wrap;}
 .pageContentServiceDescription{width: 75%;}
 .pageContentServiceIcon{width: 25%;}
 .pageContentServiceDescriptionTitle{@include fontView("GothamProBold",$black-text,2.2rem,3.2rem);@include flexBox(row,flex-start,center);}
@@ -1025,7 +1025,8 @@ body.userAccount{background:#F9F9F9;}
 .pageContentAdvertismentDescription{width: 75%;padding-right: 6rem;text-align: justify;}
 .pageContentAdvertisment{@include flexBox(row,flex-start,stretch);}
 .pageContentAdvertismentDescriptionText{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-top: 3rem;padding-bottom: 3rem;}
-.pageContentAdvertismentDescriptionRate{@include flexBox(row,space-between,center);padding-bottom: 2rem;}
+.pageContentAdvertismentDescriptionText.office{padding-top: 6rem;}
+.pageContentAdvertismentDescriptionRate{@include flexBox(row,space-between,center);padding-bottom: 2rem;flex-wrap:wrap;}
 .pageContentAdvertismentDescriptionRateTitle{width: 60%;@include fontView("GothamProRegular",$black-text,2.1rem,3.2rem);}
 .pageContentAdvertismentDescriptionRatePrice{width: 40%;@include fontView("GothamProRegular",$black-text,2.6rem,3.2rem);}
 .pageContentAdvertismentDescriptionRatePrice span{@include fontView("GothamProBold",$black-text,2.6rem,3.2rem);}
@@ -1033,7 +1034,7 @@ body.userAccount{background:#F9F9F9;}
 .pageContentBannerBg{position: absolute;top: 0;width: 100%;height: 100%;left:-100%;background: #E7E7E7;}
 .pageMenuButton.cookieAlertButton.white a{background: #fff;color:$black-text;}
 .pageMenuButton.cookieAlertButton.white a:hover,.pageMenuButton.cookieAlertButton.white a:focus{background: $orange-color;}
-.pageContentBannerButtons{@include flexBox(row,space-between,center);padding-top: 4rem;}
+.pageContentBannerButtons{@include flexBox(row,space-between,center);padding-top: 4rem;flex-wrap:wrap;}
 .pageContentBannerButtons .pageMenuButton.cookieAlertButton a{@include fontView("GothamProBlack",$black-text,1.8rem,1.7rem);padding: 2rem;width:380px;}
 .pageContentRates{background: #fff;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(0px 9px 9px 9px);margin-top: 4.7rem;}
 .pageContentRates .categoryRate{padding-left: 4rem;padding-top: 4rem;padding-right: 4rem;}
@@ -1042,7 +1043,7 @@ body.userAccount{background:#F9F9F9;}
 .pageContentJobsItem{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);@include flexBox(row,flex-start,center);padding-bottom: 1.8rem;}
 .pageContentJobsItemIcon{width: 25px;height:25px;margin-right:1.7rem;@include flexBox(row,center,center);}
 .big-register-block{@include flexBox(row,center,center);}
-.registerBigForm{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(12px);background: #fff;padding: 6rem 13rem;margin: 6rem 0;}
+.registerBigForm{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(12px);background: #fff;padding:6rem 13rem;margin: 6rem 0;width: 80%;}
 .registerBigFormHeader{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 5rem;}
 .registerBigInner .formParemetersItem{justify-content: space-between;}
 .registerBigInner .formParameter{margin-right: 0;width: 45%;}
@@ -1066,6 +1067,7 @@ body.userAccount{background:#F9F9F9;}
 .mapListSearchBlockForm .formParameterField{width: 40%;}
 .mapListSearchBlockForm .formParameterField.button{width: 20%;}
 .mapListSearchBlockForm .formParameterField input{padding: 1.1rem;@include border-radius(0);}
+
 .mapListSearchBlockForm .formParameterField .select-cover{@include border-radius(2px 0px 0px 2px);width: 100%;}
 .formParameterField button.find{border:none;@include border-radius(0 3px 3px 0);background: $orange-color;padding: 1.2rem;@include fontView("GothamProRegular",#fff,1.4rem,1.3rem);text-align: center;margin-top: 0;width: 100%;}
 .mapListSearchBlock{padding-bottom: 3.6rem;padding-top: 5rem;}
@@ -1508,3 +1510,5 @@ ul.color li{position: relative;}
 .accountRatesInformationListCategories{@include flexBox(row,flex-start,center);}
 .accountRatesInformationListCategory{@include flexBox(row,flex-start,center);}
 .accountRatesInformationListCategory svg{width: 26px;}
+#breadScrumbsMobileMenuToggler{border:none;background: none;@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);position: absolute;right: 15px;top:10px;display: none;}
+button#breadScrumbsMobileMenuToggler:hover,#breadScrumbsMobileMenuToggler:focus{outline:none;}

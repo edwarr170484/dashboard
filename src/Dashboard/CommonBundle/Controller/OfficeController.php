@@ -20,6 +20,9 @@ use Dashboard\CommonBundle\Entity\Review;
 
 use Dashboard\CommonBundle\Form\Type\ProfileMessageType;
 use Dashboard\CommonBundle\Form\Type\DealerRegisterType;
+use Dashboard\CommonBundle\Entity\DealerPhone;
+use Dashboard\CommonBundle\Entity\DealerSalon;
+use Dashboard\CommonBundle\Entity\DealerSalonPhone;
 
 class OfficeController extends Controller
 { 
@@ -114,9 +117,31 @@ class OfficeController extends Controller
             $role->addUser($dealer);
             $dealer->setAdvertNumber(0);
             $dealer->setPassword($password);
+            $dealer->setIsAlertBroadcast(1);
+            $dealer->setIsAlertNewMessage(1);
+            $dealer->setIsAlertNewOrder(1);
             $dealer->getDealerinfo()->setUser($dealer);
+            $dealer->getUserinfo()->setUser($dealer);
+            $dealer->getUserinfo()->setCity($dealer->getDealerinfo()->getCity());
+            $dealer->getUserinfo()->setCityCode($dealer->getDealerinfo()->getCityCode());
+            
+            $dealerPhone = new DealerPhone();
+            $dealerPhone->setDealerInfo($dealer->getDealerinfo());
+            $dealerPhone->setPhone($dealer->getUserinfo()->getPhone());
+            
+            //create new service point
+            $dealerSalon = new DealerSalon();
+            $dealerSalon->setDealerInfo($dealer->getDealerinfo());
+            $dealerSalon->setName($dealer->getDealerinfo()->getCompany());
+            
+            $dealerSalonPhone = new DealerSalonPhone();
+            $dealerSalonPhone->setDealerSalon($dealerSalon);
+            $dealerSalonPhone->setPhone($dealer->getUserinfo()->getPhone());
             
             $manager->persist($dealer);
+            $manager->persist($dealerPhone);
+            $manager->persist($dealerSalon);
+            $manager->persist($dealerSalonPhone);
             $manager->persist($role);
             $manager->flush();
             

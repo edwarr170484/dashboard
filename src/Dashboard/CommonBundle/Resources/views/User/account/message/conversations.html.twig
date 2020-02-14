@@ -4,19 +4,22 @@
 {% block bodyClass %}class="userAccount"{% endblock %}
 {% block body %}
 <nav class="breadscrumbsBlock">
-      <div class="container">
+    <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <ul class="list-unstyled list-inline breadscrumbs">
                     <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
                     <li>/</li>
-                    <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
-                    <li>/</li>
+                    {% if user.roles[0].role != 'ROLE_SERVICE' %}
+                        <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
+                        <li>/</li>
+                    {% endif %}
                     <li>{% trans %}Сообщения{% endtrans %}</li>
                 </ul>
             </div>
         </div>
-      </div>
+        <button id="breadScrumbsMobileMenuToggler">{% trans %}Меню{% endtrans %}</button>
+    </div>
 </nav> 
 <div class="container">
     <div class="row content-row aligned">
@@ -93,6 +96,7 @@
                                             {% endif %}
                                             <div class="accountMessageItem {% if isActive %}active{% endif %}">
                                                 <div class="accountMessageItemUser">
+                                                    <a href="{{ path('account_conversation',{'conversationId' : conversation.id}) }}"></a>
                                                     <div class="accountMessageItemCheck">
                                                         <input type="checkbox" id="" name="conversation[]" class="custom-checkbox" value="{{ conversation.id }}">
                                                     </div>
@@ -141,32 +145,34 @@
                                                             {% endif %}
                                                         {% endif %}
                                                     </div>
-                                                    <div class="accountMessageItemUserName">
-                                                        {% if conversation.userOne.id == user.id %}
-                                                            {% if conversation.userTwo %}
-                                                                {{ conversation.userTwo.userinfo.firstname }} {{ conversation.userTwo.userinfo.lastname }}
+                                                    <div class="accountMessageItemTitle">
+                                                        <div class="accountMessageItemUserName">
+                                                            {% if conversation.userOne.id == user.id %}
+                                                                {% if conversation.userTwo %}
+                                                                    {{ conversation.userTwo.userinfo.firstname }} {{ conversation.userTwo.userinfo.lastname }}
+                                                                {% else %}
+                                                                    {% trans %}Пользователь был удален{% endtrans %}
+                                                                {% endif %}
                                                             {% else %}
-                                                                {% trans %}Пользователь был удален{% endtrans %}
+                                                                {% if conversation.userOne %}
+                                                                    {{conversation.userOne.userinfo.firstname}} {{conversation.userOne.userinfo.lastname}}
+                                                                {% else %}
+                                                                    {% trans %}Пользователь был удален{% endtrans %}
+                                                                {% endif %}
                                                             {% endif %}
-                                                        {% else %}
-                                                            {% if conversation.userOne %}
-                                                                {{conversation.userOne.userinfo.firstname}} {{conversation.userOne.userinfo.lastname}}
-                                                            {% else %}
-                                                                {% trans %}Пользователь был удален{% endtrans %}
-                                                            {% endif %}
+                                                        </div>
+                                                        {% if lastMessage %}
+                                                            <div class="accountMessageItemTitleName">
+                                                                {% if lastMessage.subject %}
+                                                                    {{ lastMessage.subject }}
+                                                                {% else %}
+                                                                    {{ lastMessage.message | striptags('<img>') }}
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="accountMessageItemTitleDate">
+                                                                {{ lastMessage.sentDate | date('d.m.Y в H:i') }}
+                                                            </div>
                                                         {% endif %}
-                                                    </div>
-                                                </div>
-                                                <div class="accountMessageItemTitle">
-                                                    <div class="accountMessageItemTitleName">
-                                                        {% if lastMessage.subject %}
-                                                            {{ lastMessage.subject }}
-                                                        {% else %}
-                                                            {{ lastMessage.message | striptags('<img>') }}
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="accountMessageItemTitleDate">
-                                                        {{ lastMessage.sentDate | date('d.m.Y в H:i') }}
                                                     </div>
                                                 </div>
                                                 <div class="accountMessageItemButton">

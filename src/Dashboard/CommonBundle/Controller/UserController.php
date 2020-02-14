@@ -71,7 +71,7 @@ class UserController extends Controller
                                 'notice',
                                 '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                                $this->get('translator')->trans('<strong>Kļūda!</strong> Jūs neesat apstiprinājis captcha.') . '</div>'
+                                $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не подтвердили капчу.') . '</div>'
                             );
 
                     return $this->render('DashboardCommonBundle:User:register.html.twig', array('registerForm' => $registerForm->createView(),
@@ -124,7 +124,11 @@ class UserController extends Controller
             $user->setUserinfo($userinfo);
             $user->setUsername($user->getEmail()); 
             $user->setIsActive(1);
-            
+            $user->setIsAlertBroadcast(1);
+            $user->setIsAlertNewMessage(1);
+            $user->setIsAlertNewOrder(1);
+            $user->setIsAlertChangeOrderStatus(1);
+                    
             if($settings->getIsModerate()){
                 $user->setIsConfirm(0);
             }else{
@@ -143,7 +147,7 @@ class UserController extends Controller
             
             //send confirmation link to email
             $message = \Swift_Message::newInstance()
-                ->setSubject($this->get('translator')->trans('Регистрация на портале') . $settings->getSiteName())
+                ->setSubject($this->get('translator')->trans('Регистрация на сайте') . $settings->getSiteName())
                 ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                 ->setTo($registerForm['email']->getData())
                 ->setBody(
@@ -159,8 +163,6 @@ class UserController extends Controller
             $success = 1;
             
         }
-        
-        
         
         return $this->render('DashboardCommonBundle:User:register.html.twig', array('registerForm' => $registerForm->createView(),
                                                                                     'success' => $success,"settings" => $settings, "locale" => $locale,"email" => $user->getEmail()));
@@ -214,7 +216,7 @@ class UserController extends Controller
                 
                 //send an email with password
                  $message = \Swift_Message::newInstance()
-                ->setSubject('Восстановление забытого пароля на портале gribupardot.sunweb.by')
+                ->setSubject('Восстановление забытого пароля на сайте' . $settings->getSiteName())
                 ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                 ->setTo($user->getEmail())
                 ->setBody(

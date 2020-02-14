@@ -18,17 +18,20 @@
 {% block body %}
 <nav class="breadscrumbsBlock">
       <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <ul class="list-unstyled list-inline breadscrumbs">
-                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
-                    <li>/</li>
-                    <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
-                    <li>/</li>
-                    <li><a href="{{path('account_rates')}}">{% trans %}Тарифы{% endtrans %}</a></li>
-                </ul>
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="list-unstyled list-inline breadscrumbs">
+                        <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                        <li>/</li>
+                        {% if user.roles[0].role != 'ROLE_SERVICE' %}
+                            <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
+                            <li>/</li>
+                        {% endif %}
+                        <li><a href="{{path('account_rates')}}">{% trans %}Тарифы{% endtrans %}</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+            <button id="breadScrumbsMobileMenuToggler">{% trans %}Меню{% endtrans %}</button>
       </div>
 </nav> 
 <div class="container">

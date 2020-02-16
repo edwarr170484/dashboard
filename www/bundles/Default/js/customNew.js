@@ -54,6 +54,7 @@ $(document).ready(function(){
         var count = $(".dealerPhonesItem").length;
         var newForm = prototype.replace(/__name__/g, count);
         $(".dealerPhonesList").append(newForm);
+        $(".masked-phone").mask("+34 99 999 99 99");
     });
     
     $("#addDealerSalonPhone").click(function(){
@@ -61,6 +62,7 @@ $(document).ready(function(){
         var count = $(".dealerSalonPhonesItem").length;
         var newForm = prototype.replace(/__name__/g, count);
         $(".dealerSalonPhonesList").append(newForm);
+        $(".masked-phone").mask("+34 99 999 99 99");
     });
     
     $(".dealerAuto").click(function(){$(this).find('.dealerAutoInner').toggleClass('active');});
@@ -69,7 +71,7 @@ $(document).ready(function(){
         $(".siteMenuGamburgerMenu").hide();
         $(".objectStatusSelectSublist").removeClass("active");
         $("#gamburgerModal").modal('hide');
-        $(".account-menu-list").slideUp();
+        //$(".account-menu-list").slideUp();
     });
     
     $(".masked-phone").mask("+34 99 999 99 99");
@@ -130,22 +132,25 @@ function resetWorkTimes(element, area){
 function selectWeekDays(element, area, dayClass){
     var hasActive = element.hasClass('active');
     var days = area.find(dayClass);
-    element.toggleClass('active');
     
-    if(hasActive){
-        days.each(function(){
-            if($(this).hasClass('active')){
-                $(this).removeClass('active');
-                $(this).find("input").prop("checked", false);
-            }
-        });
-    }else{
+    element.parent().parent().find(".selectDaysButton").each(function(){
+        $(this).removeClass("active");
+        $(this).find("input").prop("checked", false);
+    });
+    
+    area.find(".workDay").each(function(){
+        $(this).removeClass("active");
+        $(this).find("input").prop("checked", false);
+    });
+    
+    if(!hasActive){
         days.each(function(){
             if(!$(this).hasClass('active')){
                 $(this).addClass('active');
                 $(this).find("input").prop("checked", true);
             }
         });
+        element.addClass('active');
     }
 }
 
@@ -470,6 +475,8 @@ function getModalSearchResults(element){
     });
 }
 function toggleQuestion(element){
+    $(".pageFaqItem").removeClass("active");
+    $(".pageFaqItemAnswer").slideUp();
     element.toggleClass("active");
     element.find(".pageFaqItemAnswer").slideToggle();
 }

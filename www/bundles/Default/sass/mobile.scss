@@ -134,6 +134,9 @@
     .accountMessageItemButton{display: none;}
     .accountMessageItemUser{width: 100%;}
     .accountMessageItemUser > a{display: block;}
+    .advertFiltersItem.justFilter .advertFiltersItemValue .filter{width: 50%;margin-right: 0;}
+    .topBanner{display: none;}
+    .register-block-header{text-align: center;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
@@ -191,6 +194,7 @@
     .categoryRateDescriptionTitle{flex-wrap:wrap;}
     .categoryRateName{width: 100%;text-align: center;}
     .categoryRateServices{width: 100%;@include flexBox(row,center,center);padding-top: 2rem;}
+    .advertFiltersItem.justFilter .advertFiltersItemValue .filter{width: 100%;}
 }
 @media (max-width: 650px) 
 {

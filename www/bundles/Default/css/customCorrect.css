@@ -1,0 +1,38 @@
+footer {margin-top: 60px;
+    box-shadow: 0px -5px 12px rgba(0, 0, 0, 0.02);}
+.cookieAlertBlock {bottom: 0;
+    position: fixed;
+    z-index: 3000;
+    width: 100%;}
+	
+/** Добавил для главной страницы для серой плашки снизу **/
+.mainPageAutoListBlock {margin-bottom: -60px;}
+
+
+.siteMenuGamburgerMenu {top: 27px;left: 158px;} /* Выровнял открыающийся гамбургер */
+	
+	.addAdvertFiltersButtons .mainPageFiltersShowResults button, .siteMenuGamburger>button, .modal-footer button.btn:hover, .modal-footer button.btn:focus, .mainPageFiltersShowResults button:hover, .mainPageFiltersShowResults button:focus, .modal-content button.close,
+	.advertSellerOrder button, 
+	.cookieAlertButton button,
+	.advertSellerInfoHeader button, 
+.siteMenuSearch>button, 
+button.close, 
+.categoryAdvertShareLinks ul li button, 
+.productNoteText button, 
+.mainPageFiltersSettings button.clearFilters, .mainPageFiltersSettings button.showAllParameters
+{outline:none}
+	
+	
+	.formParameterField .change-avatar {cursor:pointer}
+	
+	.productNoteText svg {padding: 3px;}
+	.productNoteText svg:hover {background: #cecece;
+    padding: 4px;
+    border-radius: 3px;}
+	
+	@media (max-width: 420px) 
+{
+	.cookieAlertButton, .cookieAlertLink {text-align: center;width: 100%;margin: 10px 0;}
+	.addAdvertButtonMobile a {z-index:2800}
+
+}

@@ -293,7 +293,6 @@ class DefaultController extends Controller
     public function userAction($page, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
-        $sessionUser = $this->get('security.context')->getToken()->getUser();
         $users =  $manager->getRepository("DashboardCommonBundle:User")->findAll();
         $pagination = 0;
         
@@ -373,8 +372,11 @@ class DefaultController extends Controller
             $helper = $this->get("app.helpers");
             $pagination = $helper->paginator(($page > 0) ? (int)$page : 1, $totalUsers, 100, "/admin/users");
         }
+        
+        $roles = $manager->getRepository("DashboardCommonBundle:Role")->findAll();
 
         return $this->render('DashboardAdminBundle:Settings:users.html.twig', array("users" => $users,
+                                                                                    "roles" => $roles,
                                                                                     "pagination" => $pagination,
                                                                                     "userForm" => $userForm->createView()));
     }

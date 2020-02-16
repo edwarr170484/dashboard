@@ -1252,7 +1252,7 @@ class AccountController extends Controller
         }
 
         $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
-        $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale), $user->getDealerInfo());
+        $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale, $user), $user->getDealerInfo());
         $formPassword = $this->createForm(new UserPasswordType($this->getDoctrine()->getManager()), $user);
         $formAutos = $this->get('form.factory')->createNamedBuilder('autos', 'form', $user->getDealerInfo())
              ->add('autos', 'entity', array('class' => 'DashboardCommonBundle:Category',

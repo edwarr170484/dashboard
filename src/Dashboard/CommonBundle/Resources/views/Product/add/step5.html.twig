@@ -2,36 +2,7 @@
     <div class="row content-row">
     <div class="col-lg-9 col-md-9 left-column">
         <div class="content-block-header">
-            <h3>
-                {% if category.parent.translations | length > 0 %}
-                    {% for translation in category.parent.translations %}
-                        {% if translation.locale.id == locale.id %}
-                            {{ translation.value }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}        
-                    {{ category.parent.title}}
-                {% endif %}
-                 / 
-                {% if category.translations | length > 0 %}
-                    {% for translation in category.translations %}
-                        {% if translation.locale.id == locale.id %}
-                            {{ translation.value }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}        
-                    {{ category.title}}
-                {% endif %} 
-                {% if generation.translations | length > 0 %}
-                    {% for translation in generation.translations %}
-                        {% if translation.locale.id == locale.id %}
-                            {{ translation.value }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}        
-                    {{ generation.name }}
-                {% endif %} 
-            </h3>
+            <h3>{{ category.parent.title}} / {{ category.title}} {{ generation.name }}</h3>
         </div>
         <div class="addAdvertStepNavigation">
                 <a href="javascript:void(0)" onclick="getStep4('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
@@ -113,34 +84,7 @@
                                                 <div class="categoryAdvertCommonInfo">
                                                     <div class="categoryAdvertMainInfo">
                                                         <div class="categoryAdvertName">
-                                                            {% if category.parent.translations | length > 0 %}
-                                                                {% for translation in category.parent.translations %}
-                                                                    {% if translation.locale.id == locale.id %}
-                                                                        {{ translation.value }}
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            {% else %}        
-                                                                {{ category.parent.title}}
-                                                            {% endif %}
-                                                             / 
-                                                            {% if category.translations | length > 0 %}
-                                                                {% for translation in category.translations %}
-                                                                    {% if translation.locale.id == locale.id %}
-                                                                        {{ translation.value }}
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            {% else %}        
-                                                                {{ category.title}}
-                                                            {% endif %} 
-                                                            {% if generation.translations | length > 0 %}
-                                                                {% for translation in generation.translations %}
-                                                                    {% if translation.locale.id == locale.id %}
-                                                                        {{ translation.value }}
-                                                                    {% endif %}
-                                                                {% endfor %}
-                                                            {% else %}        
-                                                                {{ generation.name }}
-                                                            {% endif %} 
+                                                            {{ category.parent.title}} / {{ category.title}} {{ generation.name }}
                                                         </div>
                                                         <div class="categoryAdvertTypes">
                                                             <div class="categoryAdvertType">

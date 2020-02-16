@@ -970,7 +970,9 @@ class AdvertController extends Controller
                 case "step2":
                     $categoryId = $advertInfo->getCategory();
                     $generationId = $advertInfo->getGeneration();
+                    $baseCategoryId = $advertInfo->getBaseCategory();
                     
+                    $baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($baseCategoryId);
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
                     $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
                     
@@ -978,7 +980,7 @@ class AdvertController extends Controller
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
-                    return $this->render('DashboardCommonBundle:Product:add/step2.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "advertInfo" => $advertInfo, "advertImages" => $advertImages));
+                    return $this->render('DashboardCommonBundle:Product:add/step2.html.twig', array("baseCategory" => $baseCategory,"category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "advertInfo" => $advertInfo, "advertImages" => $advertImages));
                 break;
             
                 case 'setcolor':
@@ -1010,7 +1012,9 @@ class AdvertController extends Controller
                 case "step3":
                     $categoryId = $advertInfo->getCategory();
                     $generationId = $advertInfo->getGeneration();
+                    $baseCategoryId = $advertInfo->getBaseCategory();
                     
+                    $baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($baseCategoryId);
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
                     $generation = $manager->getRepository("DashboardCommonBundle:Generation")->find($generationId);
                     
@@ -1024,7 +1028,7 @@ class AdvertController extends Controller
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
-                    return $this->render('DashboardCommonBundle:Product:add/step3.html.twig', array("category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "filters" => $filters,"advertInfo" => $advertInfo));
+                    return $this->render('DashboardCommonBundle:Product:add/step3.html.twig', array("baseCategory" => $baseCategory, "category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "filters" => $filters,"advertInfo" => $advertInfo));
                 break;
             
                 case "step4":

@@ -15,6 +15,7 @@ use Dashboard\CommonBundle\Entity\Generation;
 use Dashboard\CommonBundle\Entity\GenerationBoard;
 use Dashboard\CommonBundle\Entity\GenerationItem;
 use Dashboard\CommonBundle\Entity\Modification;
+use Dashboard\CommonBundle\Entity\FilterValue;
 use Dashboard\AdminBundle\Form\Type\CategoryType;
 use Dashboard\AdminBundle\Form\DataTransformer\CategoryToNumberTransformer;
 
@@ -631,9 +632,75 @@ class CategoryController extends Controller
         $fm = new Filesystem();
         $finder = new Finder();
         
-        $finder->files()->name('auto.txt')->in('import');
+        /*$transmissionFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(17);
+        $transmissionFilterValue1 = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $transmissionFilter, "value" => "Trasero"));
+        $transmissionFilterValue2 = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $transmissionFilter, "value" => "Lleno"));
+        $generationItems = $manager->getRepository("DashboardCommonBundle:GenerationItem")->findAll();
         
-        $baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
+        $newItems = new ArrayCollection();
+        
+        if($generationItems){
+            foreach($generationItems as $item){
+                $newItem1 = clone $item;
+                $newItem2 = clone $item;
+                $newItem1->setTransmissionType($transmissionFilterValue1);
+                $newItem2->setTransmissionType($transmissionFilterValue2);
+                $newItems->add($newItem1);
+                $newItems->add($newItem2);
+            }
+        }
+        
+        foreach($newItems as $newItem){
+            $manager->persist($newItem);
+        }
+        
+        $manager->flush();*/
+        
+        //$finder->files()->name('equipment.txt')->in('import');
+        
+        /*$comfortFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(33);
+        $extrasFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(34);
+        $infotainmentFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(35);
+        $securityFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(36);
+        $filterValues = new ArrayCollection();
+        
+        foreach ($finder as $file) {
+            $lines = file($file->getRealPath());
+            foreach($lines as $line){
+                $filterInfo = explode(";", $line);
+                
+                $filterValue = new FilterValue();
+                $filterValue->setValue(trim($filterInfo[0]));
+                
+                switch(trim($filterInfo[1])){
+                    case 'comfort':
+                        $filterValue->setFilter($comfortFilter);
+                    break;
+                    
+                    case 'extras':
+                        $filterValue->setFilter($extrasFilter);
+                    break;
+                    
+                    case 'infotainment':
+                        $filterValue->setFilter($infotainmentFilter);
+                    break;
+                    
+                    case 'security':
+                        $filterValue->setFilter($securityFilter);
+                    break;
+                }
+                
+                $filterValues->add($filterValue);
+            }
+            
+            foreach($filterValues as $value){
+                $manager->persist($value);
+            }
+            
+            $manager->flush();
+        }*/
+        
+        /*$baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
         
         $categories = new ArrayCollection();
         $childrens = new ArrayCollection();
@@ -644,7 +711,7 @@ class CategoryController extends Controller
                 $lines = file($file->getRealPath());
                 
                 if(count($lines) > 0){
-                    /*foreach($lines as $line){
+                    foreach($lines as $line){
                         $categoryInfo = explode(";", $line);
                         
                         $marker = 0;
@@ -672,7 +739,7 @@ class CategoryController extends Controller
                         $manager->persist($category);
                     }
                     
-                    $manager->flush();*/
+                    $manager->flush();
                     
                     $categories = $manager->getRepository("DashboardCommonBundle:Category")->findBy(array("parent" => $baseCategory));
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(19);
@@ -681,7 +748,7 @@ class CategoryController extends Controller
                     $gearFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(18);
                     
                     if($categories){
-                        /*foreach($lines as $line){
+                        foreach($lines as $line){
                             $categoryInfo = explode(";", $line);
 
                             $parent = 0;
@@ -790,7 +857,7 @@ class CategoryController extends Controller
                             $manager->persist($child);
                         }
 
-                        $manager->flush();*/
+                        $manager->flush();
                         
                     
                     foreach($lines as $line){
@@ -886,7 +953,7 @@ class CategoryController extends Controller
                     }
                 }
             }
-        }
+        }*/
         
         return new Response('OK');
     }

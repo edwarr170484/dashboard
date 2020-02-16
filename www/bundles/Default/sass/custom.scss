@@ -7,6 +7,7 @@
 ol, ul {margin: 0;}
 h1,h2,h4{@include fontView("GothamProBlack",#fff,4.8rem,5.6rem);margin: 0;}
 .container{max-width:1660px;width:100%;position: relative;}
+.dealersContainer > .container{position: unset;}
 h3{@include fontView("GothamProBlack",#fff,3.6rem,4rem);margin: 0;}
 a,input,textarea{outline:none !important;}
 body{font-size:10px;background:#F9F9F9;}
@@ -239,7 +240,7 @@ footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;}
 .resultNavigation{@include fontView("GothamProRegular",#71798A,1.6rem,2.2rem);}
 .resultNavigation a{@include fontView("GothamProRegular",$orange-color,1.6rem,2.2rem);text-decoration: underline;}
 
-.register-block-header{@include fontView("GothamProBold",$gray-color-1,1.6rem,2.2rem);padding-bottom: 3.6rem;width: 100%;text-align: center;}
+.register-block-header{@include fontView("GothamProBold",$gray-color-1,1.6rem,2.2rem);padding-bottom: 3.6rem;width: 100%;}
 .register-block.result .register-block-header{color:$orange-color;}
 .register-block-header.social{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 2rem;}
 .register-block-header a{color:$orange-color;}
@@ -560,6 +561,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .filterInput:focus{border: 1px solid $yellow-color;}
 .filtersFromTo .select-cover{width: 50%;}
 .filtersFromTo .select-cover:nth-child(2n){border-left:none;}
+.filtersFromTo .select-cover.active:nth-child(2n){border-left:1px solid $orange-color;}
 .filtersFromTo input:nth-child(2n){border-left:none;}
 .filtersFromTo input:focus{border: 1px solid $yellow-color;}
 #owlMainSlider button.owl-dot{background: $gray-color;@include border-radius(2px);width: 12px;height: 12px;margin-right: 8px;}
@@ -667,8 +669,8 @@ ul.justLinks li{position: relative;}
 .addFotoIconInner{width: 100%;height: 100%;border: 2px dashed #DFE1E5;@include fontView("GothamProRegular",#747474,1.2rem,1.8rem);@include flexBox(column,flex-end,center);padding-bottom: 10px;}
 .advertFiltersItem.justFilter{background: none;padding: 0;}
 .advertFiltersItem.justFilter .advertFiltersItemName{margin: 0;padding: 0;@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);padding-bottom: 2rem;}
-.advertFiltersItem.justFilter .advertFiltersItemValue{@include flexBox(row,space-between,center);flex-wrap: wrap;padding-bottom: 3rem;padding-right: 30%;}
-.advertFiltersItem.justFilter .advertFiltersItemValue .filter{margin-bottom: 8px;}
+.advertFiltersItem.justFilter .advertFiltersItemValue{@include flexBox(row,space-between,center);flex-wrap: wrap;padding-bottom: 3rem;}
+.advertFiltersItem.justFilter .advertFiltersItemValue .filter{margin-bottom: 8px;width: 25%;}
 .advertFiltersItems.justFilter{padding-top: 6rem;}
 #advertFiltersItemsTable .addAdvertParameterLabel{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);display: block;margin-bottom: 1rem;}
 #advertFiltersItemsTable .addAdvertParameterLabel span{@include fontView("GothamProMRegular",#747474,1.3rem,2rem);display: block;}
@@ -1069,7 +1071,7 @@ body.userAccount{background:#F9F9F9;}
 .mapListSearchBlockForm .formParameterField input{padding: 1.1rem;@include border-radius(0);}
 
 .mapListSearchBlockForm .formParameterField .select-cover{@include border-radius(2px 0px 0px 2px);width: 100%;}
-.formParameterField button.find{border:none;@include border-radius(0 3px 3px 0);background: $orange-color;padding: 1.2rem;@include fontView("GothamProRegular",#fff,1.4rem,1.3rem);text-align: center;margin-top: 0;width: 100%;}
+.formParameterField button.find{border:none;@include border-radius(0 3px 3px 0);background: $orange-color;padding: 1.2rem;@include fontView("GothamProRegular",#fff,1.4rem,1.3rem);text-align: center;margin-top: 0;width: 100%;height: 100%;}
 .mapListSearchBlock{padding-bottom: 3.6rem;padding-top: 5rem;}
 .mapListItemImage{width: 30%;}
 .mapListItemImageSrc{padding-bottom: 1.1rem;}
@@ -1091,7 +1093,7 @@ body.userAccount{background:#F9F9F9;}
 .mapListItemInfoText span.open{color:$orange-color;}
 .mapListItems{height: 800px;}
 .mapListItemLink{position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: block;z-index:1;}
-.mapImage{position: absolute;top:0;right:0;width: 65%;padding-left: 1.5rem;height:100%;}
+.mapImage{position: absolute;top:0;right:0;width: 64%;padding-left: 1.5rem;height:100%;}
 .mapListAutoLogo, .mapListAutoName{display: block;}
 .mapListAutoName{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 1.5rem;}
 .mapListAuto{@include flexBox(column,flex-start,center);}
@@ -1391,7 +1393,7 @@ ul.color li{position: relative;}
 .pageFaqBlock{padding-right: 14rem;padding-bottom: 6rem;@include break-inside(avoid);page-break-inside:avoid;}
 .pageFaqBlockHeader{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem)}
 .pageFaqItems{padding-top: 3rem;}
-.pageFaqItem{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding: 1.6rem 0;border-bottom: 1px solid #DFE1E5;}
+.pageFaqItem{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding: 1.6rem 0;border-bottom: 1px solid #DFE1E5;cursor:pointer;}
 .pageFaqItemAnswer{padding-top: 3rem;padding-bottom: 1.4rem;display: none;padding-left: 5rem;}
 .pageFaqItemQuestion{@include flexBox(row,flex-start,center);}
 .pageFaqItemQuestion:before{content:url('../img/faq-plus.svg');margin-right:2rem;}

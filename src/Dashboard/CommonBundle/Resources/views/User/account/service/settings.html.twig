@@ -155,15 +155,15 @@
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(formDealer.cityCode) }}: <sup>*</sup></div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(formDealer.cityCode) }}
-                                    </div>
-                                </div>
-                                <div class="formParameter">
                                     <div class="formParameterLabel">{{ form_label(formDealer.city) }}: <sup>*</sup></div>
                                     <div class="formParameterField">
                                         {{ form_widget(formDealer.city) }}
+                                    </div>
+                                </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{{ form_label(formDealer.cityCode) }}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formDealer.cityCode) }}
                                     </div>
                                 </div>
                             </div>
@@ -783,6 +783,7 @@
                                                     var count = $(".dealerSalonPhonesItem").length;
                                                     var newForm = prototype.replace(/__name__/g, count);
                                                     $(".dealerSalonPhonesList").append(newForm);
+                                                    $(".masked-phone").mask("+34 99 999 99 99");
                                                 });
                                             </script>
                                         {% endif %}

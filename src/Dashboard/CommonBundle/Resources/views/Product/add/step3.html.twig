@@ -2,36 +2,7 @@
     <div class="row content-row">
     <div class="col-lg-9 col-md-9 left-column">
         <div class="content-block-header">
-            <h3>
-                {% if category.parent.translations | length > 0 %}
-                    {% for translation in category.parent.translations %}
-                        {% if translation.locale.id == locale.id %}
-                            {{ translation.value }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}        
-                    {{ category.parent.title}}
-                {% endif %}
-                 / 
-                {% if category.translations | length > 0 %}
-                    {% for translation in category.translations %}
-                        {% if translation.locale.id == locale.id %}
-                            {{ translation.value }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}        
-                    {{ category.title}}
-                {% endif %} 
-                {% if generation.translations | length > 0 %}
-                    {% for translation in generation.translations %}
-                        {% if translation.locale.id == locale.id %}
-                            {{ translation.value }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}        
-                    {{ generation.name }}
-                {% endif %} 
-            </h3>
+            <h3>{{ category.parent.title}} / {{ category.title}} {{ generation.name }}</h3>
         </div>
         <div class="addAdvertStepNavigation">
                 <a href="javascript:void(0)" onclick="getStep2('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>
@@ -40,36 +11,20 @@
                     <path d="M11 0.614477L10.3855 0L5.5 4.88985L0.614477 0L0 0.614477L4.88985 5.5L0 10.3855L0.614477 11L5.5 6.11015L10.3855 11L11 10.3855L6.11015 5.5L11 0.614477Z" fill="#494949"></path>
                 </svg>{% trans %}Очистить{% endtrans %}</a>
         </div>
-            {% if category.filters | length > 0 %}
+            {% if baseCategory.filters | length > 0 %}
                 <div class="advertFiltersItems justFilter">
-                {% for filter in  category.filters %}
-                    {% if filter.step == '3' and filter.isRequired %}
+                {% for filter in baseCategory.filters %}
+                    {% if filter.step == '3' %}
                         <div class="advertFiltersItem justFilter">
                             <div class="advertFiltersItemName">
-                                {% if filter.translations | length > 0 %}
-                                    {% for translation in filter.translations %}
-                                        {% if translation.locale.id == locale.id %}
-                                            {{ translation.value }}
-                                        {% endif %}
-                                    {% endfor %}
-                                {% else %}
-                                    {{ filter.name }}
-                                {% endif %}
+                                {{ filter.name }}
                             </div>
                             <div class="advertFiltersItemValue static-filters">
                                 {% if filter.values | length > 0 %}
                                     {% for value in filter.values %}
                                     <div class="filter">
                                         <input name="filter[]" type="checkbox" value="{{ value.id }}" class="custom-checkbox" {% if value.id in filters | keys %}checked="checked"{% endif %}/>
-                                        {% if value.translations | length > 0 %}
-                                            {% for translation in value.translations %}
-                                                {% if translation.locale.id == locale.id %}
-                                                    {{ translation.value }}
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% else %}
-                                            {{ value.value }}
-                                        {% endif %}
+                                        {{ value.value }}
                                     </div>
                                     {% endfor %}
                                 {% endif %}

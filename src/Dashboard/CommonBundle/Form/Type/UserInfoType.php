@@ -53,7 +53,7 @@ class UserInfoType extends AbstractType
                     'placeholder' => 'Город',
                     'required' => false,
                     'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
-                    'attr' => array('class' => 'custom-select','placeholder' => 'Город','data-write' => '1')));
+                    'attr' => array('class' => 'custom-select just-select','placeholder' => 'Город','data-write' => '1')));
                     
             $formModifier = function (FormInterface $form, City $city = null) {
                    $codes = null === $city ? array() : $city->getCodes();
@@ -62,7 +62,7 @@ class UserInfoType extends AbstractType
                                              'choice_label' => 'code',
                                              'choices' => $codes,
                                              'required' => true,
-                                             'label' => 'Индекс', 'attr' => array('class' => 'custom-select','id' => 'cityCode','placeholder' => 'Индекс')));
+                                             'label' => 'Индекс', 'attr' => array('class' => 'custom-select just-select','id' => 'cityCode','placeholder' => 'Индекс')));
                };
 
                $builder->addEventListener(

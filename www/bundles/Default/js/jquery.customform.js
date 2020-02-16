@@ -43,7 +43,9 @@
                             }
                         }
                         
-			cover.find(".select-options").append("<div class='clear-selects'>Сбросить</div>");
+                        if(!selectElement.hasClass('just-select')){
+                            cover.find(".select-options").append("<div class='clear-selects'>Сбросить</div>");
+                        }
                         if(typeof(selectOptionGroups.html()) != 'undefined'){
 				selectOptionGroups.each(function(){
 					var groupOptions = $(this).find("option");

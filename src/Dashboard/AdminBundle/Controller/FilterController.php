@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 
+use Dashboard\CommonBundle\Entity\Filter;
 use Dashboard\CommonBundle\Entity\FilterType;
 use Dashboard\AdminBundle\Form\Type\FiltersType;
 

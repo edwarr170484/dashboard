@@ -44,7 +44,7 @@ class MessageController extends Controller
         $messageForm = $this->get('form.factory')->createNamedBuilder('message', 'form', $message)
                 ->add('authorName', TextType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'user','placeholder' => 'John Doe')))
                 ->add('authorEmail', EmailType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'email', 'placeholder' => 'E-mail')))
-                ->add('messageSubject', TextType::class, array('required' => false, 'label' => '', 'attr' => array('class' => 'phone', 'placeholder' => '+37')))
+                ->add('messageSubject', TextType::class, array('required' => false, 'label' => '', 'attr' => array('class' => 'phone masked-phone', 'placeholder' => '+34')))
                 ->add('messageText', TextareaType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'form-control', 'placeholder' => 'Текст сообщения')))
                 ->add('save', ButtonType::class, array('label' => 'Отправить сообщение', 'attr' => array('class' => 'send-tab-form')))->getForm();
         

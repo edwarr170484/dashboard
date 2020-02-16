@@ -1,0 +1,93 @@
+﻿Aire Acondicionado;comfort
+Aire Acondicionado;comfort
+Climatizador;comfort
+Asientos;comfort
+Ajuste lumbar;comfort
+Asientos con masaje;comfort
+Asientos eléctricos;comfort
+Ventilación del asiento;comfort
+Asientos calef.;comfort
+Asistente al arranque en pendient;comfort
+Asistente de aparcamiento;comfort
+Cámara de aparcamiento;comfort
+Sensor de aparcamiento delantero;comfort
+Sensor de aparcamiento trasero;comfort
+Sistema de aparcamiento automático;comfort
+Cambio de levas en volante;comfort
+Cierre centralizado;comfort
+Apertura y arranque sin llave;comfort
+Cierre centralizado;comfort
+Control de velocidad;comfort
+Control de distancia;comfort
+Control de velocidad;comfort
+Dirección asistida;comfort
+Elevalunas eléctrico;comfort
+Pantalla frontal;comfort
+Parabrisas delantero calefactable;comfort
+Portón trasero électrique;comfort
+Precalentador;comfort
+Puertas corredizas;comfort
+Reposabrazos;comfort
+Retrovisores laterales eléctricos;comfort
+Sensor de lluvia;comfort
+Sensor de luces;comfort
+Start/Stop automático;comfort
+Suspensión de aire;comfort
+Techo panorámico;comfort
+Techo solar;comfort
+Volante calefactable;comfort
+Volante de cuero;comfort
+Adaptado discapacitados;extras
+Asiento trasero partido;extras
+Asientos deportivos;extras
+Baca;extras
+Bola de remolque;extras
+Cortavientos ;extras
+Llantas de aleación;extras
+Llantas de aleación;extras
+Paquete Sport;extras
+Porta esquís;extras
+Suspensión deportiva;extras
+Ventanas tintadas;extras
+Bluetooth;infotainment 
+CD;infotainment 
+Control por voz;infotainment 
+Función de TV;infotainment 
+Manos libres;infotainment 
+MP3;infotainment 
+Navegador;infotainment 
+Ordenador;infotainment 
+Pantalla táctil;infotainment 
+Radio;infotainment 
+Radio digital;infotainment 
+Sistema de sonido;infotainment 
+USB;infotainment 
+Volante multifunción;infotainment  
+ABS;security
+Airbag;security
+Airbag acompañante;security
+Airbag del conductor;security
+Airbag para la cabeza;security
+Airbag trasero;security
+Airbags laterales;security
+Alarma;security
+Control de presión de las ruedas;security
+Control de tracción;security
+ESP;security
+Inmovilizador;security
+ISOFIX;security
+Luz;security
+Faros antiniebla;security
+Faros de LED;security
+Faros de xenon;security
+Luces de marcha diurna LED;security
+Luz direccional;security
+Luz diurna;security
+Sistema de detección de fatiga;security
+Sistema de llamada de emergencia;security
+Sistemas de asistencia;security
+Alerta cambio de carril;security
+Asistente al frenado de emergencia;security
+Asistente de visión nocturna;security
+Reconocimiento de señales de tráfico;security
+Testigo de ángulo muerto;security

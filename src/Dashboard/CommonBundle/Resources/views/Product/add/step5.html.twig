@@ -28,7 +28,11 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Индекс города{% endtrans %}<sup> *</sup></span></td>
                                 <td>
                                     <div class="addAdvertContextParamenter">
-                                        <input name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" onkeyup="getCityCodesByValue($(this),'{{ locale.code}}')" required="required" type="text" />
+                                        {% if user and user.userinfo.city %}
+                                            <input value="{{ user.userinfo.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" onkeyup="getCityCodesByValue($(this),'{{ locale.code}}')" required="required" type="text" />
+                                        {% else %}
+                                            <input name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" onkeyup="getCityCodesByValue($(this),'{{ locale.code}}')" required="required" type="text" />
+                                        {% endif %}
                                         <div class="addAdvertContextParamenterValues"></div>
                                     </div>
                                 </td>
@@ -153,15 +157,7 @@
                                         {% endif %}
                                         <li class="nav-item {% if num == 1 %}active{% endif %}">
                                             <a class="nav-link" id="home-tab" data-toggle="tab" href="#servicePack{{ servicePack.id }}" role="tab" aria-controls="home" aria-selected="true" onclick="selectServicePack({{ servicePack.id }}, '{{ packPrice }} {{ locale.currency.label | raw }}', '{% trans %}Разместить и оплатить{% endtrans %}')">
-                                                {% if servicePack.translations | length > 0 %}
-                                                    {% for translation in servicePack.translations %}
-                                                        {% if translation.locale.id == locale.id %}
-                                                            {{ translation.value | raw }}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% else %}        
-                                                    {{ servicePack.name | raw }}
-                                                {% endif %} 
+                                                {{ servicePack.name | raw }}
                                                 <span class="tabServicePrice">
                                                     {{ packPrice }} {{ locale.currency.label | raw }}
                                                 </span>
@@ -235,17 +231,7 @@
                                                             {{ service.icon | raw }}
                                                         </div>
                                                         <div class="addAdvertServiceItemName">
-                                                            <div class="addAdvertServiceItemTitle">
-                                                                {% if service.translations | length > 0 %}
-                                                                    {% for translation in service.translations %}
-                                                                        {% if translation.locale.id == locale.id %}
-                                                                            {{ translation.value }}
-                                                                        {% endif %}
-                                                                    {% endfor %}
-                                                                {% else %}        
-                                                                    {{ service.title }}
-                                                                {% endif %} 
-                                                            </div>
+                                                            <div class="addAdvertServiceItemTitle">{{ service.title }}</div>
                                                             <div class="addAdvertServiceItemSubtitle">{{ service.days }} {% trans %}дней{% endtrans %}</div>
                                                         </div>
                                                         <div class="addAdvertServiceItemCheckbox">

@@ -18,22 +18,14 @@
                         <table class="table table-striped" id="advertFiltersItemsTable">
                             <tr>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %}</span></td>
-                                <td><input type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" {% if advertInfo.probeg %}value="{{ advertInfo.probeg }}"{% endif %}/></td>
+                                <td><input type="text" name="probeg" placeholder="{% trans %}Пробег (км){% endtrans %}" class="parameterValue" {% if advertInfo.probeg %}value="{{ advertInfo.probeg }}"{% endif %}/></td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %}</span></td>
                                 <td>
                                     <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}">
                                         {% if conditions %}
                                             {% for condition in conditions %}
                                                 <option value="{{ condition.id }}" {% if advertInfo.condition == condition.id %}selected="selected"{% endif %}>
-                                                    {% if condition.translations | length > 0 %}
-                                                        {% for translation in condition.translations %}
-                                                            {% if translation.locale.id == locale.id %}
-                                                                {{ translation.value }}
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% else %}        
-                                                        {{ condition.title }}
-                                                    {% endif %} 
+                                                    {{ condition.title }} 
                                                 </option>
                                             {% endfor %}
                                         {% endif %}
@@ -53,7 +45,7 @@
                                 </td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}VIN Номер{% endtrans %}</span></td>
                                 <td>
-                                    <input type="text" name="vin" placeholder="{% trans %}17 знаков{% endtrans %}" class="parameterValue" {% if advertInfo.vin %}value="{{ advertInfo.vin }}"{% endif %} />
+                                    <input type="text" name="vin" placeholder="{% trans %}VIN (17 знаков){% endtrans %}" class="parameterValue" {% if advertInfo.vin %}value="{{ advertInfo.vin }}"{% endif %} />
                                 </td>
                                 <td>
                                     <span class="addAdvertSubParameterLabel">{% trans %}- Номер VIN на сайте не показывается{% endtrans %}</span>
@@ -67,7 +59,7 @@
                                     </span>
                                 </td>
                                 <td colspan="3">
-                                    <textarea name="description" placeholder="{% trans %}Введите описание автомобиля{% endtrans %}" class="parameterValue">{% if advertInfo.description %}{{ advertInfo.description }}{% endif %}</textarea>
+                                    <textarea name="description" placeholder="{% trans %}Введите описание автомобиля (не более 3000 знаков){% endtrans %}" class="parameterValue">{% if advertInfo.description %}{{ advertInfo.description }}{% endif %}</textarea>
                                 </td>
                                 <td></td>
                             </tr>
@@ -99,7 +91,7 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %}</span></td>
                                 <td>
                                     <div class="addAdvertPriceParameters">
-                                        <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue"  {% if advertInfo.price %}value="{{ advertInfo.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
+                                        <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue addProductPriceInput"  {% if advertInfo.price %}value="{{ advertInfo.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
                                         <div class="filter">
                                             <input name="NDS" type="checkbox" value="1" class="custom-checkbox"  {% if advertInfo.nds %}checked="checked"{% endif %} />
                                             {% trans %}НДС включен{% endtrans %}
@@ -119,17 +111,38 @@
                                             <div class="categoryAdvertType garant {% if advertInfo.garant == 1 %}active{% endif %}" onclick="selectGarant($(this))">
                                                 {% trans %}Гарантия{% endtrans %}
                                                 <div class="categoryAdvertGarantNum">1</div>
-                                                <input name="garant" value="1" type="radio" {% if advertInfo.garant == 1 %}checked="checked"{% endif %} />
+                                                <input name="garant" value="1" type="checkbox" {% if advertInfo.garant == 1 %}checked="checked"{% endif %} />
+                                                <button onclick="resetGarant($(this).parent(), event)">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff" />
+                                                        <path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </button>
                                             </div>
                                             <div class="categoryAdvertType garant {% if advertInfo.garant == 3 %}active{% endif %}" onclick="selectGarant($(this))">
                                                 {% trans %}Гарантия{% endtrans %}
                                                 <div class="categoryAdvertGarantNum">3</div>
-                                                <input name="garant" value="3" type="radio" {% if advertInfo.garant == 3 %}checked="checked"{% endif %} />
+                                                <input name="garant" value="3" type="checkbox" {% if advertInfo.garant == 3 %}checked="checked"{% endif %} />
+                                                <button onclick="resetGarant($(this).parent(), event)">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff" />
+                                                        <path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </button>
                                             </div>
                                             <div class="categoryAdvertType garant {% if advertInfo.garant == 7 %}active{% endif %}" onclick="selectGarant($(this))">
                                                 {% trans %}Гарантия{% endtrans %}
                                                 <div class="categoryAdvertGarantNum">7</div>
-                                                <input name="garant" value="7" type="radio" {% if advertInfo.garant == 7 %}checked="checked"{% endif %} />
+                                                <input name="garant" value="7" type="checkbox" {% if advertInfo.garant == 7 %}checked="checked"{% endif %} />
+                                                <button onclick="resetGarant($(this).parent(), event)">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff" />
+                                                        <path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        <path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </button>
                                             </div>
                                         </div>
                                     </td>

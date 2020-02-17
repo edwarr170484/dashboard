@@ -129,7 +129,7 @@
     .accountAdvertFunctions.left, .accountAdvertFunctions.right{top: 0;left: 0;}
     .accountMessagesTools{flex-wrap:wrap;}
     .accountMessagesToolsLeft{padding-bottom: 1.5rem;@include flexBox(row,space-between,center);flex-wrap:wrap;width: 100%;}
-    .accountMessagesToolsCheck{padding-bottom: 1.5rem;}
+    .accountMessagesToolsCheck{padding:0;}
     .accountMessageItemCheck{padding-right: 1.5rem;}
     .accountMessageItemButton{display: none;}
     .accountMessageItemUser{width: 100%;}
@@ -137,6 +137,35 @@
     .advertFiltersItem.justFilter .advertFiltersItemValue .filter{width: 50%;margin-right: 0;}
     .topBanner{display: none;}
     .register-block-header{text-align: center;}
+    .accountConversationMessage,.accountMessageFormButtons{flex-wrap:wrap;}
+    .accountMessageFormButtons{justify-content:center}
+    .accountConversationMessageUser{width: 100%;}
+    .accountConversationMessageText{width: 100%;padding-right:0;padding-left: 7rem;}
+    .accountConversationMessageText.form{padding-left: 0;}
+    .accountMessagesToolsRight{justify-content: center;width: 100%;}
+    .accountSettingsFormBlock{padding-left: 0;}
+    .accountSettingsFormBlock .formParameter{margin-bottom: 1rem;margin-right: 2rem;}
+    .categoryRateOrderButton a{width: 100%;}
+    #advertFiltersItemsTable > tbody > tr > td:nth-child(2n-1){display: none;}
+    #advertFiltersItemsTable > tbody > tr > td:nth-child(2) .advertFiltersItemName{display: block;padding-bottom: 0;margin-top: 0.5rem;}
+    .addProductFilterRadios li{margin-bottom: 1rem;}
+    .addAdvertPriceParameters{flex-wrap:wrap;}
+    .advertFiltersItemValue .categoryAdverts{@include flexBox(row,center,center);}
+    .nav-tabs.addAdvertServicesTabs > li{padding-right: 0;width: 100%;}
+    .addAdvertUserAgreement{padding-right: 0;padding-bottom: 1.5rem;width: 100%;text-align: left;}
+    .cookieAlertButton.nextStep{justify-content: center;}
+    .addAdvertServiceTabsBlock .tab-pane .servicePremium{display: block;}
+    .addAdvertServiceDescription, .addAdvertServiceItems{width: 100%;}
+    .addAdvertServiceDescription{padding-bottom: 1.5rem;}
+    .addAdvertServiceItems{padding-left: 0;}
+    .right-column{align-items: center;}
+    .accountAdvert.cube.productnote{width: 100%;max-width:100%;}
+    .product-block .price{align-items: flex-start;padding-top: 1.5rem;}
+    .product-block{padding-bottom: 1.5rem;}
+    .productModalSliderIcons{display: none;}
+    #productSlider.modal.fade.in{display: block;}
+    .advertSliderMainFoto{padding-left: 0;}
+    .product-tabs-inner ul{justify-content:flex-start;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
@@ -195,6 +224,17 @@
     .categoryRateName{width: 100%;text-align: center;}
     .categoryRateServices{width: 100%;@include flexBox(row,center,center);padding-top: 2rem;}
     .advertFiltersItem.justFilter .advertFiltersItemValue .filter{width: 100%;}
+    .dealerAccountRates .categoryRateDescription{width: 100%;}
+    .categoryRateOrderButton{width: 100%;}
+    .categoryRateOrderButton a{width: 18rem;margin: 0 auto;}
+    .mainPageFiltersTabs.category-filters.addProduct a.block span.block{display: none;}
+    .advertFotosStartBg{justify-content: center;flex-wrap:wrap;}
+    .addFotoDescription{padding: 0;text-align: center;}
+    .addFotoIcon{margin-bottom: 1.5rem;}
+    .dz-preview{margin: 0;margin-bottom: 1.5rem;margin-right: 1.5rem;}
+    .addAdvertResultButtons{flex-wrap:wrap;justify-content: center;}
+    .addAdvertResultButtons .cookieAlertButton.nextStep{padding-bottom: 2.5rem;}
+    .advertFiltersHeader h3{font-size: 2.8rem;}
 }
 @media (max-width: 650px) 
 {
@@ -225,7 +265,7 @@
     .searchBlock{padding: 0;}
     .searchBlockInner input{width: 100%;margin-left: 0;}
     .pageContactUs{padding: 2rem;}
-    
+    .accountMessageFormButtons > .send-message-file{margin-bottom: 1rem;}
 }
 
 @media (max-width: 630px) 
@@ -235,6 +275,7 @@
     .categoryAdvertImages{height: auto;max-height:250px;}
     .pageContentAdvertismentDescriptionRateTitle,.pageContentAdvertismentDescriptionRatePrice{width: 100%;text-align: center;}
     .pageContentBanner{padding:3rem;}
+    
 }
 
 @media (max-width: 560px) 
@@ -248,8 +289,9 @@
 @media (max-width: 490px) 
 {
     .mainPageAutoList ul li{width:100%}
-    
-    
+    .addAdvertModificationParam.label{padding-right: 1rem;}
+    .addAdvertModification{flex-wrap:wrap;}
+    .addAdvertPriceGarant{display: block;}
 }
 @media (max-width: 475px) 
 {

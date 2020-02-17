@@ -371,6 +371,12 @@ function selectGarant(element){
     element.addClass('active');
 }
 
+function resetGarant(element, event){
+    event.stopPropagation();
+    element.find("input").prop("checked", false);
+    element.removeClass("active");
+}
+
 function getCityCodesByValue(element, locale_code){
     var searchText = element.val();
     

@@ -562,7 +562,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="accountAdvert cube">
+                    <div class="accountAdvert cube productnote">
                         {% if user %}
                         <div class="productNoteFormContainer" id="productNoteFormContainer{{ product.id }}" style="padding-top: 3rem;">
                             {% set noteText = '' %}
@@ -714,6 +714,79 @@
         </div>
     </div>
 </div>
+    {% if product.fotos | length > 0 %}
+        <div class="modalProductSlider modal fade" role="dialog" id="productSlider">
+            <div class="productSliderInner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-9 advertSliderMainFoto">
+                            <div class="owl-carousel" id="productModalSlider">
+                                {% for foto in product.fotos %}
+                                    <div data-hash="productFoto{{ foto.id }}">
+                                        <img src="{{ asset('bundles/images/products/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="productModalSliderIcons">
+                                <div class="advertIcons">
+                                    <ul class="list-unstyled list-inline">
+                                        {% for foto in product.fotos %}
+                                            <li>
+                                                <a href="#productFoto{{ foto.id }}">
+                                                    <img src="{{ asset('bundles/images/products/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 productSliderInfo">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="#222B2A"/>
+                                </svg>
+                            </button>
+                            <div class="advertSellerInfo">
+                                <div class="advertSellerInfoInner">
+                                    <div class="advertSellerInfoAdvertName">{{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}</div>
+                                    <div class="price">
+                                        <div class="content-block-header"><h1>{{ product.info.price }} {{ locale.currency.label | raw }}</h1></div>
+                                        <!--<div class="creditRule">от 500 &euro;/мес.</div>-->
+                                    </div>
+                                    <div class="advertSellerName">OcasionPlus Las Rozas</div>
+                                    <div class="advertSellerStatus">Vendedor profesional</div>
+                                    <div class="advertSellerContacts">
+                                        <div class="advertSellerContactsHeader">{% trans %}Контактная информация{% endtrans %}</div>
+                                        <div class="advertSellerTime">с 9:00 до 21:00</div>
+                                        <div class="advertContact phone">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M21.9994 16.9738V19.9846C22.0005 20.2642 21.9432 20.5408 21.831 20.7969C21.7188 21.053 21.5542 21.2829 21.3478 21.4719C21.1415 21.6608 20.8978 21.8047 20.6325 21.8942C20.3672 21.9838 20.0861 22.017 19.8072 21.9919C16.7128 21.6563 13.7404 20.601 11.1289 18.9108C8.69921 17.3699 6.63926 15.3141 5.09534 12.8892C3.39586 10.271 2.33824 7.29008 2.00816 4.18795C1.98303 3.91042 2.01608 3.63071 2.1052 3.36663C2.19432 3.10254 2.33757 2.85987 2.52581 2.65407C2.71405 2.44826 2.94317 2.28383 3.19858 2.17123C3.45398 2.05864 3.73008 2.00036 4.0093 2.0001H7.02608C7.5141 1.9953 7.98722 2.16778 8.35725 2.48537C8.72727 2.80297 8.96896 3.24401 9.03727 3.72629C9.1646 4.68982 9.40074 5.63587 9.74118 6.54642C9.87648 6.90563 9.90576 7.29602 9.82556 7.67133C9.74536 8.04665 9.55903 8.39115 9.28867 8.66402L8.01156 9.93859C9.44308 12.4512 11.5276 14.5315 14.0451 15.9602L15.3222 14.6856C15.5956 14.4158 15.9408 14.2298 16.3169 14.1498C16.6929 14.0698 17.0841 14.099 17.444 14.234C18.3564 14.5738 19.3043 14.8095 20.2698 14.9365C20.7582 15.0053 21.2044 15.2509 21.5233 15.6265C21.8422 16.0021 22.0116 16.4817 21.9994 16.9738Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            +49 (0)2433 938034
+                                        </div>
+                                        <div class="advertContact message">
+                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M21 10.4445C21.0038 11.911 20.6612 13.3577 20 14.6667C19.216 16.2353 18.0108 17.5546 16.5194 18.477C15.0279 19.3993 13.3091 19.8882 11.5555 19.8889C10.089 19.8927 8.64234 19.5501 7.33332 18.8889L1 21L3.11111 14.6667C2.44992 13.3577 2.10729 11.911 2.11111 10.4445C2.11179 8.69086 2.60068 6.97208 3.52302 5.48064C4.44536 3.98919 5.76472 2.78399 7.33332 2.00003C8.64234 1.33884 10.089 0.996208 11.5555 1.00003H12.1111C14.427 1.1278 16.6145 2.10532 18.2546 3.74543C19.8947 5.38553 20.8722 7.57297 21 9.88891V10.4445Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                            {% if app.user %}
+                                                <a data-toggle="modal" data-target="#messageModal" href="">{% trans %}Написать сообщение{% endtrans %}</a>
+                                            {% else %}
+                                                <a href="{{ path('login') }}">{% trans %}Написать сообщение{% endtrans %}</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="advertSellerOrder">
+                                        <button data-toggle="modal" data-target="#orderModal">{% trans %}Оставить заявку{% endtrans %}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}          
     <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -824,80 +897,7 @@
                 {{ form_end(complaintMessageForm)}}
             </div>
         </div>
-    </div>
-    {% if product.fotos | length > 0 %}
-        <div class="modalProductSlider modal fade" role="dialog" id="productSlider">
-            <div class="productSliderInner">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-9 advertSliderMainFoto">
-                            <div class="owl-carousel" id="productModalSlider">
-                                {% for foto in product.fotos %}
-                                    <div data-hash="productFoto{{ foto.id }}">
-                                        <img src="{{ asset('bundles/images/products/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <div class="productModalSliderIcons">
-                                <div class="advertIcons">
-                                    <ul class="list-unstyled list-inline">
-                                        {% for foto in product.fotos %}
-                                            <li>
-                                                <a href="#productFoto{{ foto.id }}">
-                                                    <img src="{{ asset('bundles/images/products/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 productSliderInfo">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="#222B2A"/>
-                                </svg>
-                            </button>
-                            <div class="advertSellerInfo">
-                                <div class="advertSellerInfoInner">
-                                    <div class="advertSellerInfoAdvertName">{{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}</div>
-                                    <div class="price">
-                                        <div class="content-block-header"><h1>{{ product.info.price }} {{ locale.currency.label | raw }}</h1></div>
-                                        <!--<div class="creditRule">от 500 &euro;/мес.</div>-->
-                                    </div>
-                                    <div class="advertSellerName">OcasionPlus Las Rozas</div>
-                                    <div class="advertSellerStatus">Vendedor profesional</div>
-                                    <div class="advertSellerContacts">
-                                        <div class="advertSellerContactsHeader">{% trans %}Контактная информация{% endtrans %}</div>
-                                        <div class="advertSellerTime">с 9:00 до 21:00</div>
-                                        <div class="advertContact phone">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M21.9994 16.9738V19.9846C22.0005 20.2642 21.9432 20.5408 21.831 20.7969C21.7188 21.053 21.5542 21.2829 21.3478 21.4719C21.1415 21.6608 20.8978 21.8047 20.6325 21.8942C20.3672 21.9838 20.0861 22.017 19.8072 21.9919C16.7128 21.6563 13.7404 20.601 11.1289 18.9108C8.69921 17.3699 6.63926 15.3141 5.09534 12.8892C3.39586 10.271 2.33824 7.29008 2.00816 4.18795C1.98303 3.91042 2.01608 3.63071 2.1052 3.36663C2.19432 3.10254 2.33757 2.85987 2.52581 2.65407C2.71405 2.44826 2.94317 2.28383 3.19858 2.17123C3.45398 2.05864 3.73008 2.00036 4.0093 2.0001H7.02608C7.5141 1.9953 7.98722 2.16778 8.35725 2.48537C8.72727 2.80297 8.96896 3.24401 9.03727 3.72629C9.1646 4.68982 9.40074 5.63587 9.74118 6.54642C9.87648 6.90563 9.90576 7.29602 9.82556 7.67133C9.74536 8.04665 9.55903 8.39115 9.28867 8.66402L8.01156 9.93859C9.44308 12.4512 11.5276 14.5315 14.0451 15.9602L15.3222 14.6856C15.5956 14.4158 15.9408 14.2298 16.3169 14.1498C16.6929 14.0698 17.0841 14.099 17.444 14.234C18.3564 14.5738 19.3043 14.8095 20.2698 14.9365C20.7582 15.0053 21.2044 15.2509 21.5233 15.6265C21.8422 16.0021 22.0116 16.4817 21.9994 16.9738Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-                                            +49 (0)2433 938034
-                                        </div>
-                                        <div class="advertContact message">
-                                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M21 10.4445C21.0038 11.911 20.6612 13.3577 20 14.6667C19.216 16.2353 18.0108 17.5546 16.5194 18.477C15.0279 19.3993 13.3091 19.8882 11.5555 19.8889C10.089 19.8927 8.64234 19.5501 7.33332 18.8889L1 21L3.11111 14.6667C2.44992 13.3577 2.10729 11.911 2.11111 10.4445C2.11179 8.69086 2.60068 6.97208 3.52302 5.48064C4.44536 3.98919 5.76472 2.78399 7.33332 2.00003C8.64234 1.33884 10.089 0.996208 11.5555 1.00003H12.1111C14.427 1.1278 16.6145 2.10532 18.2546 3.74543C19.8947 5.38553 20.8722 7.57297 21 9.88891V10.4445Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-                                            {% if app.user %}
-                                                <a data-toggle="modal" data-target="#messageModal" href="">{% trans %}Написать сообщение{% endtrans %}</a>
-                                            {% else %}
-                                                <a href="{{ path('login') }}">{% trans %}Написать сообщение{% endtrans %}</a>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="advertSellerOrder">
-                                        <button data-toggle="modal" data-target="#orderModal">{% trans %}Оставить заявку{% endtrans %}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}                                
+    </div>                             
     {% if app.user %}
         <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
             <div class="modal-dialog" role="document">

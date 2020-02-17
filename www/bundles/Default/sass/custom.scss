@@ -138,6 +138,7 @@ ul.list-inline{margin-left: 0;}
 .mainPageFiltersTabs ul li a:hover svg path,.mainPageFiltersTabs ul li a:focus svg path{fill: $super-black-color;}
 .mainPageFiltersTabs ul li.active a:hover,.mainPageFiltersTabs ul li.active a:focus{color:$black-text;background: $gray-light-color;}
 .tab-content{background: #fff;@include border-radius(0px 12px 12px 12px);padding: 3rem 2rem;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));position: relative;}
+.tab-content.categoryPage{@include border-radius(12px 12px 12px 12px);}
 .tab-pane{padding: 0;}
 .tab-pane .form-group{margin-bottom: 0;}
 .tab-pane .form-group .form-control{border-radius:0;margin-bottom:0.7rem;}
@@ -311,15 +312,16 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryViewButtons a.active svg path,.categoryViewButtons a.active svg path,{fill:$yellow-color;stroke:$yellow-color;}
 
 /*adverts list view*/
-.categoryAdvert{border: 3px solid transparent;@include border-radius(9px);padding: 2rem;width: 100%;@include flexBox(fow,flex-start,stretch);margin-bottom: 3.4rem;position: relative;flex-wrap:wrap;}
+.categoryAdvert{border: 3px solid transparent;padding: 2rem;width: 100%;@include flexBox(fow,flex-start,stretch);margin-bottom: 3.4rem;position: relative;flex-wrap:wrap;border-bottom:2px solid $gray-color;}
 .categoryAdvert a.categoryAdvertLink{position: absolute;display: block;width: 0;height: 0;top: 0;left: 0;}
-.categoryAdvert:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;background: #FFFFFF;}
+.categoryAdvert:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;background: #FFFFFF;@include border-radius(9px);border-bottom:2px solid transparent;}
 .categoryAdvert.addAdvert{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;background: #FFFFFF;}
 .categoryAdvert:hover a.categoryAdvertLink{width: 100%;height: 100%;}
 .categoryAdvert:hover .categoryAdvertShareLinks{display: block;}
 .categoryAdvertTop{position: absolute;top:-3px;left: -3px;background: url(../img/top.png) 50% 50% no-repeat;width: 112px;height: 151px;}
-.categoryAdvert.premium{border: 3px solid #F5AA01;background: #FFFFFF;}
-.categoryAdvert.payed{border: 3px solid #F5AA01;background: #FFFFFF;}
+.categoryAdvert.premium{border: 3px solid #F5AA01;background: #FFFFFF;@include border-radius(9px);}
+.categoryAdvert.payed{border: 3px solid #F5AA01;background: #FFFFFF;@include border-radius(9px);}
+.categoryAdvert.premium:hover, .categoryAdvert.payed:hover{border: 3px solid #F5AA01;}
 .categoryAdvertImages{width: 20%;height: 135px;overflow:hidden;}
 .categoryAdvertImages img{width: 100%;max-width:260px;}
 .categoryAdvertInfo{width: 80%;padding-left: 3rem;}
@@ -338,6 +340,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvertTypes{@include flexBox(row,flex-start,center);padding-top: 15px;@include flex-wrap(wrap);}
 .categoryAdvertType{@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 5px 16px 6px;background: $gray-color;@include border-radius(5px);margin-right: 10px;border:2px solid transparent;margin-bottom: 10px;}
 .categoryAdvertType.garant{border:2px solid $yellow-color;background: none;position: relative;margin-left: 12px;@include fontView("GothamProBold",$light-black-color,1.2rem,1.4rem);padding-left: 23px;}
+.categoryAdvertType.garant button{border:none;background:none;width: 24px;height: 24px;position: absolute;top:0;right: -5px;display: none;}
+.categoryAdvertType.garant.active button{display: block;}
 .categoryAdvertGarantNum{position: absolute;top: -3px;left: -13px;text-align:center;background: url('../img/garant.png') 0 0 no-repeat;width: 26px;height: 32px;@include fontView("GothamProBold",$black-text,2.2rem,3.2rem);}
 .categoryAdvertInfoFeatures{@include flexBox(row,space-between,center);@include flex-wrap(wrap);padding-top: 10px;}
 .categoryAdvertInfoFeature{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);width: 50%;padding-bottom: 10px;}
@@ -643,7 +647,8 @@ ul.justLinks li{position: relative;}
 .addProductFilterRadios li a:focus,.addProductFilterRadios li a.active{background: $yellow-color;}
 .advertFiltersItemValue ul.years li.yearsOlder a.olderBloakcTrigger{@include flexBox(row,flex-start,center);}
 .advertFiltersItemValue ul.years li.yearsOlder a.olderBloakcTrigger.active{@include fontView("GothamProRegular",$black-text,2.2rem,3.2rem);background: $yellow-color;}
-.advertFiltersItemValue ul.list-inline{@include flexBox(row,flex-start,center);}
+.advertFiltersItemValue ul.list-inline{@include flexBox(row,flex-start,center);flex-wrap:wrap;}
+.advertFiltersItemValue .static-filters .filter{margin-bottom: 0;}
 .addAdvertModification{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);position: relative;}
 .addAdvertModificationParam{padding-right: 2rem;}
 .addAdvertModificationParam.power{@include fontView("GothamProBold",$yellow-color,1.6rem,2.2rem)}
@@ -657,7 +662,7 @@ ul.justLinks li{position: relative;}
 .addAdvertModification{cursor:pointer;}
 .addAdvertModification:hover,.addAdvertModification.active,.addAdvertGeneration:hover,.addAdvertGeneration.active{background: $gray-color;}
 .addAdvertGeneration{cursor:pointer;position: relative;}
-.cookieAlertButton.nextStep{@include flexBox(row,flex-end,center);padding-bottom: 6rem;}
+.cookieAlertButton.nextStep{@include flexBox(row,flex-end,center);padding-bottom: 6rem;flex-wrap:wrap;}
 .advertFiltersItemValue ul.color{@include flexBox(row,flex-start,center);}
 .advertFiltersItemValue ul.color li a{display: block;width: 28px;height: 28px;border:1px solid #ABABAB;@include border-radius(50%);margin-right: 10px;}
 .advertFiltersItemValue ul.color li a:hover,.advertFiltersItemValue ul.color li a:focus,.advertFiltersItemValue ul.color li a.active{border: 3px solid #F5AA01;}
@@ -1514,3 +1519,6 @@ ul.color li{position: relative;}
 .accountRatesInformationListCategory svg{width: 26px;}
 #breadScrumbsMobileMenuToggler{border:none;background: none;@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);position: absolute;right: 15px;top:10px;display: none;}
 button#breadScrumbsMobileMenuToggler:hover,#breadScrumbsMobileMenuToggler:focus{outline:none;}
+.addAdvertGenerationIcon{width: 100%;height: 10rem;@include flexBox(row,center,center);}
+#advertFiltersItemsTable > tbody > tr > td:nth-child(2) .advertFiltersItemName{display: none;padding-bottom: 2rem;padding-left: 0;}
+#advertFiltersItemsTable input.parameterValue.addProductPriceInput{background: url('../img/euro.svg') no-repeat;background-position:top 10px right 12px;}

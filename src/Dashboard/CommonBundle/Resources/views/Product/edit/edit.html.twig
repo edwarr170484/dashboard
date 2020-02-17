@@ -150,6 +150,7 @@
                                 <tr>
                                     <td><div class="advertFiltersItemName">{% trans %}Год{% endtrans %}</div></td>
                                     <td>
+                                        <div class="advertFiltersItemName">{% trans %}Год{% endtrans %}</div>
                                         <div class="advertFiltersItemValue">
                                             {% if (product.category.yearTo - product.category.yearFrom) <= 10 %}
                                                 <ul class="list-unstyled list-inline years">
@@ -475,7 +476,7 @@
                                             <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %}</span></td>
                                             <td>
                                                 <div class="addAdvertPriceParameters">
-                                                    <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue"  {% if product.info.price %}value="{{ product.info.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
+                                                    <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue addProductPriceInput"  {% if product.info.price %}value="{{ product.info.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
                                                     <div class="filter">
                                                         <input name="NDS" type="checkbox" value="1" class="custom-checkbox"  {% if product.info.nds %}checked="checked"{% endif %} />
                                                         {% trans %}НДС включен{% endtrans %}
@@ -495,17 +496,38 @@
                                                     <div class="categoryAdvertType garant {% if product.info.garant == 1 %}active{% endif %}" onclick="selectGarant($(this))">
                                                         {% trans %}Гарантия{% endtrans %}
                                                         <div class="categoryAdvertGarantNum">1</div>
-                                                        <input name="garant" value="1" type="radio" {% if product.info.garant == 1 %}checked="checked"{% endif %} />
+                                                        <input name="garant" value="1" type="checkbox" {% if product.info.garant == 1 %}checked="checked"{% endif %} />
+                                                        <button onclick="resetGarant($(this).parent(), event)">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff" />
+                                                                <path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                <path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                     <div class="categoryAdvertType garant {% if product.info.garant == 3 %}active{% endif %}" onclick="selectGarant($(this))">
                                                         {% trans %}Гарантия{% endtrans %}
                                                         <div class="categoryAdvertGarantNum">3</div>
-                                                        <input name="garant" value="3" type="radio" {% if product.info.garant == 3 %}checked="checked"{% endif %} />
+                                                        <input name="garant" value="3" type="checkbox" {% if product.info.garant == 3 %}checked="checked"{% endif %} />
+                                                        <button onclick="resetGarant($(this).parent(), event)">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff" />
+                                                                <path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                <path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                     <div class="categoryAdvertType garant {% if product.info.garant == 7 %}active{% endif %}" onclick="selectGarant($(this))">
                                                         {% trans %}Гарантия{% endtrans %}
                                                         <div class="categoryAdvertGarantNum">7</div>
-                                                        <input name="garant" value="7" type="radio" {% if product.info.garant == 7 %}checked="checked"{% endif %} />
+                                                        <input name="garant" value="7" type="checkbox" {% if product.info.garant == 7 %}checked="checked"{% endif %} />
+                                                        <button onclick="resetGarant($(this).parent(), event)">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fff" />
+                                                                <path d="M15 9L9 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                                <path d="M9 9L15 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            </svg>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </td>

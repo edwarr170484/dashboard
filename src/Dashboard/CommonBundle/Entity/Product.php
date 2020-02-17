@@ -194,11 +194,11 @@ class Product
         $today = new \DateTime("now");
         $endDate = $this->getDateEnd();
         $interval = $today->diff($endDate);        
-        
+
         if($interval->invert){
             return 0;
         }else{
-            return $interval->d + 1;
+            return $interval->days + 1;
         }
     }
     

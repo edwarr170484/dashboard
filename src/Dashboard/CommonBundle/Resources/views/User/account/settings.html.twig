@@ -118,15 +118,10 @@
                                         {{ form_widget(formMain.userinfo.phone) }}
                                     </div>
                                 </div>
-                                <div class="formParameter" style="margin-right: 3rem;">
+                                <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Email{% endtrans %}: <sup>*</sup></div>
                                     <div class="formParameterField">
                                         {{ form_widget(formMain.email, {'required' : 'required'})}}
-                                    </div>
-                                </div>
-                                <div class="formParameter" style="margin-right: 0;">
-                                    <div class="formParameterField">
-                                        {{ form_widget(formMain.isHideEmail)}} {{ form_label(formMain.isHideEmail)}}
                                     </div>
                                 </div>
                             </div>

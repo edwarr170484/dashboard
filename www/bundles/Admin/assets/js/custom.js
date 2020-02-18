@@ -368,6 +368,17 @@ $(document).ready(function(){
         $(".table-jobs > tbody").append(newForm);
     });
     
+    $("#add-product-service").click(function(){ 
+        var prototype = $("#product_service").data("prototype");
+        var count = $(".table-product-service > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        var serviceCount = $(this).data("services");
+        
+        if(count <= serviceCount - 1){
+            $(".table-product-service > tbody").append(newForm);
+        }
+    });
+    
     $("#adminRegion").change(function(){
         
         $.ajax({

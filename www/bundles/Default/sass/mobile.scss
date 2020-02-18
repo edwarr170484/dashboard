@@ -144,10 +144,16 @@
     .accountConversationMessageText.form{padding-left: 0;}
     .accountMessagesToolsRight{justify-content: center;width: 100%;}
     .accountSettingsFormBlock{padding-left: 0;}
-    .accountSettingsFormBlock .formParameter{margin-bottom: 1rem;margin-right: 2rem;}
+    .accountSettingsFormBlock .formParameter{margin-bottom: 1rem;margin-right: 0;flex-wrap: wrap;width: 100%;}
+    .accountSettingsFormBlock .formParameter .formParameterLabel, .accountSettingsFormBlock .formParameter .formParameterField{width: 100%;}
+    .accountSettingsFormBlock .formParameter .formParameterField input{width: 100%;}
+    .accountSettingsFormBlock .formParameter .formParameterField .select-cover{width: 100%;}
+    #addDealerPhone{position: relative;bottom:0;right: 0;}
+    .accountSettingsFormBlock .form-control.dealerDescription{width: 100%;margin-top: 2rem;}
     .categoryRateOrderButton a{width: 100%;}
     #advertFiltersItemsTable > tbody > tr > td:nth-child(2n-1){display: none;}
     #advertFiltersItemsTable > tbody > tr > td:nth-child(2) .advertFiltersItemName{display: block;padding-bottom: 0;margin-top: 0.5rem;}
+    #dealerFotoTable > tbody > tr > td:nth-child(2n-1){display: none;}
     .addProductFilterRadios li{margin-bottom: 1rem;}
     .addAdvertPriceParameters{flex-wrap:wrap;}
     .advertFiltersItemValue .categoryAdverts{@include flexBox(row,center,center);}
@@ -166,9 +172,22 @@
     #productSlider.modal.fade.in{display: block;}
     .advertSliderMainFoto{padding-left: 0;}
     .product-tabs-inner ul{justify-content:flex-start;}
+    #dealerAutoSalonsModal .modal-content{padding: 3rem;}
+    #dealerAutoSalonEditModal .modal-content{padding: 3rem;}
+    #addDealerSalonPhone{position: relative;bottom:0;right: 0;}
+    .mapImage{display: none;}
+    
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
+    .accountOrderInfo{justify-content: center;}
+    .accountOrderInfoProduct{width: 100%;flex-wrap:wrap;justify-content:center;}
+    .accountOrderInfoProductImage{padding-right: 0;}
+    .accountOrderInfoProductDescription,.accountOrderInfoProductNumbers{width: 100%;padding-right: 0;}
+    .accountOrderInfoProductDescription{text-align: center;}
+    .accountOrderUser{justify-content: center;}
+    .accountOrderUserAvatar{width: 100%;@include flexBox(row,center,center);padding-bottom: 1.5rem;}
+    .accountOrderUserInfo{width: 100%;@include flexBox(row,center,center);}
 }
 @media (max-width: 768px) 
 {
@@ -235,6 +254,15 @@
     .addAdvertResultButtons{flex-wrap:wrap;justify-content: center;}
     .addAdvertResultButtons .cookieAlertButton.nextStep{padding-bottom: 2.5rem;}
     .advertFiltersHeader h3{font-size: 2.8rem;}
+    .dealerSalonParamsLogo{padding-bottom: 1.5rem;}
+    .accountBillInfoItem{width: 100%;padding-bottom: 1rem;text-align: center;}
+    .accountBillInfo a{flex-wrap:wrap;align-items:center;}
+    .accountBills{background: none;@include flexBox(row,flex-start,flex-start);}
+    .accountBill{flex-wrap:wrap;max-width:255px;background: #fff;margin-right: 1rem;margin-bottom: 1rem;border: 1px solid #DFE1E5;padding: 2.5rem 1rem}
+    .accountBillDownload{width: 100%;@include flexBox(row,center,center);}
+    .accountBillInfoItem.status{padding-top: 3rem;padding-bottom: 4rem;}
+    .paymentsMethodsBlockInner ul.paymentsList{display: block;}
+    .paymentsMethodsBlockInner ul.paymentsList li{display: block;margin-bottom: 1.5rem;}
 }
 @media (max-width: 650px) 
 {
@@ -275,7 +303,14 @@
     .categoryAdvertImages{height: auto;max-height:250px;}
     .pageContentAdvertismentDescriptionRateTitle,.pageContentAdvertismentDescriptionRatePrice{width: 100%;text-align: center;}
     .pageContentBanner{padding:3rem;}
-    
+    .accountOrderUserInfo ul{flex-wrap: wrap;}
+    .accountOrderUserInfo ul li{display: block;width: 100%;padding-bottom: 2rem;}
+    .accountOrderUserInfo ul li:last-child{padding-bottom: 1rem;}
+    .accountOrderUser{padding-left: 1.5rem;padding-right: 1.5rem;}
+    .accountOrderUserInfo ul li a{padding-right: 0;justify-content:center;}
+    .accountOrderUserAvatar{flex-wrap: wrap;}
+    .accountOrderUserAvatarImage{padding-right: 0;}
+    .accountOrderUserAvatarName{width: 100%;text-align: center;}
 }
 
 @media (max-width: 560px) 
@@ -285,6 +320,11 @@
     .cookieAlerts .cookieAlertLink{padding-bottom: 2.5rem;}
     .modal-header h3{font-size: 2.6rem;line-height: 3.2rem;}
     .modal-header{padding-bottom: 1.5rem;}
+    .mapListItem{flex-wrap:wrap;}
+    .mapListItemImage{width: 100%;padding-bottom: 2rem;padding-left:1.5rem;}
+    .mapListItemInfo{width: 100%;}
+    .mapListItemImageSrc img{max-width:150px;}
+    .mapListItemImageRating{justify-content:flex-start;}
 }
 @media (max-width: 490px) 
 {
@@ -309,6 +349,7 @@
     h2{font-size: 2.8rem;line-height: 3.2rem;}
     .mainPageSiteSubheader{font-size:2.4rem;line-height: 2.8rem;}
     .register-form-forms.right-text button[type="submit"]{width: 100%;}
+    
 }
 
 @media (max-width: 450px) 

@@ -3,16 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Entity/UserRate.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/AccountController.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/PaypalController.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/MoneyController.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Entity/User.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/User/account/rates.html.twig</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/OrderController.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Resources/views/Money/payments.html.twig</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Controller/DealerController.php</file>
-            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/CommonBundle/Entity/UserRateItem.php</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/src/Dashboard/AdminBundle/Controller/DefaultController.php</file>
+            <file>file:/C:/xampp/htdocs/dashboard.by/www/bundles/Default/sass/mobile.scss</file>
         </group>
     </open-files>
 </project-private>

@@ -525,15 +525,10 @@
                                         {{ form_widget(formMain.userinfo.phone) }}
                                     </div>
                                 </div>
-                                <div class="formParameter" style="margin-right: 3rem;">
+                                <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Email{% endtrans %}: <sup>*</sup></div>
                                     <div class="formParameterField">
                                         {{ form_widget(formMain.email, {'required' : 'required'})}}
-                                    </div>
-                                </div>
-                                <div class="formParameter" style="margin-right: 0;">
-                                    <div class="formParameterField">
-                                        {{ form_widget(formMain.isHideEmail)}} {{ form_label(formMain.isHideEmail)}}
                                     </div>
                                 </div>
                             </div>
@@ -718,7 +713,7 @@
                 <div class="accountSettingsFormBlock">
                     <div class="dealerSalonParams">
                         <div class="dealerSalonParamsLogo">
-                            <div class="formParameterLabel" style="padding-top: 1.2rem;padding-bottom: 3rem;">{{ form_label(formDealerSalon.logotypeNew) }}:</div>
+                            <div class="formParameterLabel" style="padding-top: 1.2rem;padding-bottom: 1.5rem;">{{ form_label(formDealerSalon.logotypeNew) }}:</div>
                             <div class="formParameterField dealerLogoField">
                                 {% if formDealerSalon.logotype.vars.value %}
                                     <div class="dealerSettingsLogotype">

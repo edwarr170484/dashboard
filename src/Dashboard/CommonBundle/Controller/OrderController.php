@@ -45,7 +45,7 @@ class OrderController extends Controller
             $manager->persist($bill);
             $manager->flush();
             
-            return $this->redirectToRoute('account_dealer_payments', array('billId' => $bill->getId()));
+            return $this->redirectToRoute('account_payments', array('billId' => $bill->getId(), 'className' => 'RateBill'));
         }
     }
 }

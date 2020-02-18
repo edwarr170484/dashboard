@@ -51,10 +51,8 @@
                                                    <td><input name="productIds[]" value="{{ product.id }}" type="checkbox" class="checkbox-item" /></td>
                                                    <td>{{ product.id }}</td>
                                                    <td>
-                                                        {% if product.mainfoto %}
-                                                            <img src="/bundles/images/products/{{ product.mainfoto }}" alt="" title="" width="150px" />
-                                                        {% else %}
-                                                            <img src="/bundles/images/products/thumbs/bez-foto-thumb.png" alt="" title="" width="150px" />
+                                                        {% if product.fotos | length > 0 %}
+                                                            <img style="max-width:250px" src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                         {% endif %}
                                                     </td>
                                                    <td><a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}" target="_blank">{{ product.name }}</a></td>

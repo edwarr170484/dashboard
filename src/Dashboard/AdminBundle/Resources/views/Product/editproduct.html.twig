@@ -55,7 +55,35 @@
     </tr>
 {% endblock %}
 
+{% block _product_service_widget %}
+    <table class="table table-bordered table-product-service">
+        <thead>
+            <tr>
+                <th>{% trans %}Услуга{% endtrans %}</th>
+                <th>{% trans %}Дата начала{% endtrans %}</th>
+                <th>{% trans %}Дата окончания{% endtrans %}</th>
+                <th>{% trans %}Количество единиц{% endtrans %}</th>
+                <th>{% trans %}Активна{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>{{ form_widget(form) }}</tbody>
+    </table> 
+{% endblock _product_service_widget %}
 
+{% block _product_service_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.service)}}</td>
+        <td>{{ form_widget(form.dateAdded)}}</td>
+        <td>{{ form_widget(form.dateEnd)}}</td>
+        <td>{{ form_widget(form.count)}}</td>
+        <td>{{ form_widget(form.isActive)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить услугу?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить услугу"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
 
 {% block title %}{% trans %}Панель управления{% endtrans %} - {% trans %}Редактировать объявление{% endtrans %}{% endblock %}
 
@@ -88,6 +116,9 @@
                             </li>
                             <li>
                                 <a data-toggle="tab" href="#additionals">Дополнительно</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#service">Услуги</a>
                             </li>
                         </ul>
                         <div class="tab-content">
@@ -268,6 +299,25 @@
                                         <label class="col-md-12">{{ form_label(productForm.info.description)}}</label>
                                         <div class="col-md-12">
                                             {{ form_widget(productForm.info.description)}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="service" class="tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                                                <div class="panel-heading ui-sortable-handle">
+                                                    <h4 class="panel-title">Услуги</h4>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <button class="btn btn-sm btn-success m-b-15" id="add-product-service" data-services="{{ services | length }}" type="button">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i> Добавить услугу</button>
+                                                        {{ form_widget(productForm.service)}}
+                                                        {% if productForm.service | length <= 0 %}
+                                                            Услуги не добавлены
+                                                        {% endif %}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

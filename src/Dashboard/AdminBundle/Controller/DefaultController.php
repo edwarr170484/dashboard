@@ -100,12 +100,19 @@ class DefaultController extends Controller
         $products = $manager->getRepository("DashboardCommonBundle:Product")->findBy(array("isConfirm" => "0", "isBlocked" => "0"));
         $complaints = $manager->getRepository("DashboardCommonBundle:Complaint")->findBy(array("status" => "0"));
         $messages = $manager->getRepository("DashboardCommonBundle:FormMessage")->findBy(array("isNew" => "1"));
+        $users = $manager->getRepository("DashboardCommonBundle:User")->findBy(array("isConfirm" => 0, "isActive" => 1));
+        
+        $newUsers = new ArrayCollection($users);
+        $dealers = $newUsers->filter(function(User $user){
+            return ($user->getRoles()[0]->getRole() == "ROLE_DEALER" || $user->getRoles()[0]->getRole() == "ROLE_SERVICE");
+        });
         
         return $this->render('DashboardAdminBundle:Common:header.html.twig', array("user" => $user,
                                                                                    "newConfirmations" => count($products),
                                                                                    "newComplaints" => count($complaints),
                                                                                    "newMessages" => count($messages),
-                                                                                   "settings" => $settings));
+                                                                                   "settings" => $settings,
+                                                                                   "users" => $dealers));
     }
     
     /**

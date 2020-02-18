@@ -929,7 +929,7 @@ ul.justLinks li{position: relative;}
 .accountOrder{border-bottom: 1px solid #DFE1E5;padding-bottom: 2.8rem;} 
 .accountOrder.review{background: #fff;}
 .accountOrder:hover{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));cursor:pointer;}
-.accountOrderUser{@include flexBox(row,space-between,center);padding-top: 1.2rem;padding-bottom: 0.8rem;padding-left: 3rem;padding-right: 3rem;border-bottom: 1px solid #DFE1E5;}
+.accountOrderUser{@include flexBox(row,space-between,center);padding-top: 1.2rem;padding-bottom: 0.8rem;padding-left: 3rem;padding-right: 3rem;border-bottom: 1px solid #DFE1E5;flex-wrap:wrap;}
 .accountOrderUserAvatar{@include flexBox(row,flex-start,center);}
 .accountOrderUserAvatarImage{padding-right: 2rem;}
 .accountOrderUserAvatarImage img{max-width:5rem;}
@@ -939,7 +939,7 @@ ul.justLinks li{position: relative;}
 .accountOrderUserInfo ul li a{@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);@include flexBox(row,flex-start,center);padding-right: 4.5rem;}
 .accountOrderUserInfo ul li a svg{margin-right: 1rem;}
 .accountOrderUserInfo ul li:last-child a{padding-right: 0;@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
-.accountOrderInfo{@include flexBox(row,space-between,center);padding-top: 0.8rem;padding-left: 3rem;padding-right: 3rem;}
+.accountOrderInfo{@include flexBox(row,space-between,center);padding-top: 0.8rem;padding-left: 3rem;padding-right: 3rem;flex-wrap: wrap;}
 .accountOrderInfoProduct{width:70%;@include flexBox(row,flex-start,center);}
 .accountOrderInfoProductImage{padding-right: 5rem;}
 .accountOrderInfoProductImage img{width: 100%;max-width:155px;@include border-radius(9px);}
@@ -1302,7 +1302,7 @@ body.userAccount{background:#F9F9F9;}
 .mapListItemEditButton button{@include flexBox(row,flex-start,center);background: none;border:none;@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
 .mapListItemEditButton button svg{margin-right: 1.1rem;}
 #dealerAutoSalonsModal .modal-content, #dealerAutoSalonEditModal .modal-content{padding: 5rem 7rem;}
-.dealerSalonParams{@include flexBox(row,space-between,flex-start);}
+.dealerSalonParams{@include flexBox(row,space-between,flex-start);flex-wrap:wrap;}
 .formParemetersItem.salonModalParameters .formParameter{margin-right: 0;}
 .modal-footer-tools{@include flexBox(row,space-between, center);}
 .modal-footer-tools .mapListItemEditButton{position: relative;top: 0;left: 0;}

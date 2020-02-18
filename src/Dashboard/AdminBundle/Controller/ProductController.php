@@ -364,9 +364,11 @@ class ProductController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $fm = new Filesystem();
         $originalFotos = new ArrayCollection();
+        $originalServices = new ArrayCollection();
         $user = $this->get('security.context')->getToken()->getUser();
         $product = new Product();
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->find(1);
+        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
         
         if($productId)
         {
@@ -374,9 +376,18 @@ class ProductController extends Controller
             
             if($product)
             {
-                foreach ($product->getFotos() as $foto) {
-                    $originalFotos->add($foto);
+                if($product->getFotos()){
+                    foreach ($product->getFotos() as $foto) {
+                        $originalFotos->add($foto);
+                    }
                 }
+                
+                if($product->getService()){
+                    foreach ($product->getService() as $service) {
+                        $originalServices->add($service);
+                    }
+                }
+                
                 $productForm = $this->createForm(new EditProductType($manager, $product->getUser()->getUserinfo()), $product);
             }
             else
@@ -410,6 +421,29 @@ class ProductController extends Controller
         
         if($productForm->isSubmitted() && $productForm->isValid())
         {
+            if($originalServices){
+                foreach ($originalServices as $service){
+                    if(false === $product->getService()->contains($service)){
+                        $service->setProduct(null);
+                        if($service->getBills()){
+                            foreach($service->getBills() as $bill){
+                                $bill->removeService($service);
+                                $manager->persist($bill);
+                            }
+                        }
+                        
+                        $manager->remove($service);
+                    }
+                }
+            }
+            
+            if($product->getService()){
+                foreach($product->getService() as $service){
+                    $service->setProduct($product);
+                    $manager->persist($service);
+                }
+            }
+            
             if($originalFotos)
             {
                 foreach ($originalFotos as $foto) 
@@ -499,7 +533,7 @@ class ProductController extends Controller
             return $this->redirectToRoute("admin_product_edit", array("productId" => $product->getId()));
         }
         
-        return $this->render('DashboardAdminBundle:Product:editproduct.html.twig', array("productForm" => $productForm->createView()));
+        return $this->render('DashboardAdminBundle:Product:editproduct.html.twig', array("productForm" => $productForm->createView(), "services" => $services));
     }
     
     private function deleteAdvert($productId, $request)

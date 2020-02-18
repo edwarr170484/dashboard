@@ -28,7 +28,7 @@ class UserType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, array('required' => false, 'label' => 'E-mail', 'attr' => array('class' => 'form-control')))  
-            ->add('isHideEmail', CheckboxType::class, array('required' => false, 'label' => 'Запретить показ на сайте', 'attr' => array('class' => 'custom-checkbox')))
+            //->add('isHideEmail', CheckboxType::class, array('required' => false, 'label' => 'Запретить показ на сайте', 'attr' => array('class' => 'custom-checkbox')))
             ->add('userinfo', new UserInfoType($this->em, $this->user, $this->locale), array('data_class' => 'Dashboard\CommonBundle\Entity\UserInfo'))
             ->add('save', ButtonType::class, array('label' => 'Сохранить'));
     }

@@ -54,7 +54,14 @@
                                 {% set i = 0 %}
                                 {% for role in roles %}
                                     <li {% if i == 0 %}class="active"{% endif %}>
-                                        <a data-toggle="tab" href="#roletab{{ role.id }}">{{ role.title }}</a>
+                                        <a data-toggle="tab" href="#roletab{{ role.id }}">
+                                            {{ role.title }}
+                                            {% if role.role == "ROLE_DEALER" or role.role == "ROLE_SERVICE" %}
+                                                {% if role.newUsers > 0 %}
+                                                    <span class="bg-red" style="padding:0.3rem;color:#fff;font-weight:bold;">+ {{ role.newUsers }}</span>
+                                                {% endif %}
+                                            {% endif %}
+                                        </a>
                                     </li>
                                     {% set i = i + 1 %}
                                 {% endfor %}

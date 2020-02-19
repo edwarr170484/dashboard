@@ -55,7 +55,7 @@ class EditProductType extends AbstractType
                                               'attr' => array('class' => 'form-control','placeholder' => 'Категория')))
             ->add('name', TextType::class, array('required' => true, 'label' => 'Название объявления', 'attr' => array('class' => 'form-control')))
             ->add('fotos', CollectionType::class, array('entry_type' => new ProductFotoType($this->em), 'required' => false,'allow_add' => true,'allow_delete' => true, 'by_reference' => false))
-            ->add('service', CollectionType::class, array('entry_type' => new ProductServiceType($this->em), 'required' => false,'allow_add' => true,'allow_delete' => true, 'by_reference' => false))
+            ->add('services', CollectionType::class, array('entry_type' => new ProductServiceType($this->em), 'required' => false,'allow_add' => true,'allow_delete' => true, 'by_reference' => false))
             ->add('info', new ProductInfoType($this->em), array('data_class' => 'Dashboard\CommonBundle\Entity\ProductInfo'))                                          
             ->add('isConfirm',CheckboxType::class,array('required' => false, 'label' => 'Объявление одобрено'))
             ->add('isActive',CheckboxType::class,array('required' => false, 'label' => 'Объявление активно'))

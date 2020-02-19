@@ -369,7 +369,7 @@ $(document).ready(function(){
     });
     
     $("#add-product-service").click(function(){ 
-        var prototype = $("#product_service").data("prototype");
+        var prototype = $("#product_services").data("prototype");
         var count = $(".table-product-service > tbody > tr").length;
         var newForm = prototype.replace(/__name__/g, count);
         var serviceCount = $(this).data("services");
@@ -377,6 +377,13 @@ $(document).ready(function(){
         if(count <= serviceCount - 1){
             $(".table-product-service > tbody").append(newForm);
         }
+    });
+    
+    $("#add-user-rate").click(function(){ 
+        var prototype = $("#user_rates").data("prototype");
+        var count = $(".table-user-rates > tbody > tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        $(".table-user-rates > tbody").append(newForm);
     });
     
     $("#adminRegion").change(function(){

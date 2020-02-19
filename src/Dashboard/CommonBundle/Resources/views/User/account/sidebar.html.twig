@@ -35,6 +35,28 @@
                 ​​    <path d="M9 1H2.6C2.17565 1 1.76869 1.16857 1.46863 1.46863C1.16857 1.76869 1 2.17565 1 2.6V15.4C1 15.8243 1.16857 16.2313 1.46863 16.5314C1.76869 16.8314 2.17565 17 2.6 17H12.2C12.6243 17 13.0313 16.8314 13.3314 16.5314C13.6314 16.2313 13.8 15.8243 13.8 15.4V5.8M9 1L13.8 5.8M9 1V5.8H13.8M5 11.4H9.8" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 ​​</svg>
                 <a href="{{ path('account_note_products') }}" {% if routeName == 'account_note_products' %}class="active"{% endif %}>{% trans %}Мои заметки{% endtrans %}</a>
+                {% set newMessages = 0 %}
+                {% if user.conversationOne | length > 0 %}
+                    {% for conversation in user.conversationOne %}
+                        {% for message in conversation.messages %}
+                            {% if message.userTo.id == user.id and message.isNew == 1 and message.userOwner.id == user.id %}
+                                {% set newMessages = newMessages + 1 %}
+                            {% endif %}
+                        {% endfor%}
+                    {% endfor%}
+                {% endif %}
+                {% if user.conversationTwo | length > 0 %}
+                    {% for conversation in user.conversationTwo %}
+                        {% for message in conversation.messages %}
+                            {% if message.userTo.id == user.id and message.isNew == 1 and message.userOwner.id == user.id %}
+                                {% set newMessages = newMessages + 1 %}
+                            {% endif %}
+                        {% endfor%}
+                    {% endfor%}
+                {% endif %}
+                {% if newMessages > 0 %}
+                    <span class="numberNewItems">{{ newMessages }}</span>
+                {% endif %}
             </div>
         </li>
         {% endif %}
@@ -54,8 +76,18 @@
                     <path d="M15.4 4.19995H2.6C1.71634 4.19995 1 4.9163 1 5.79995V13.8C1 14.6836 1.71634 15.4 2.6 15.4H15.4C16.2837 15.4 17 14.6836 17 13.8V5.79995C17 4.9163 16.2837 4.19995 15.4 4.19995Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M12.1998 15.4V2.6C12.1998 2.17565 12.0312 1.76869 11.7312 1.46863C11.4311 1.16857 11.0242 1 10.5998 1H7.3998C6.97546 1 6.56849 1.16857 6.26843 1.46863C5.96838 1.76869 5.7998 2.17565 5.7998 2.6V15.4" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <a href="{{ path('account_orders') }}" {% if routeName == 'account_orders' %}class="active"{% endif %}>{% trans %}Заявки{% endtrans %}
-                </a>
+                <a href="{{ path('account_orders') }}" {% if routeName == 'account_orders' %}class="active"{% endif %}>{% trans %}Заявки{% endtrans %}</a>
+                {% if user.receivedOrders | length > 0 %}
+                    {% set ordersNum = 0 %}
+                    {% for order in user.receivedOrders %}
+                        {% if order.status.id == settings.dafaultOrderStatus.id %}
+                        {% set ordersNum = ordersNum + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if ordersNum > 0 %}
+                        <span class="numberNewItems">{{ ordersNum }}</span>
+                    {% endif %}
+                {% endif %}
             </div>
         </li>
         <li>
@@ -79,6 +111,17 @@
                         <path d="M13.7998 1L16.9998 4.2L8.9998 12.2H5.7998V9L13.7998 1Z" stroke="#616161" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     <a href="{{ path('account_review') }}" {% if routeName == 'account_review' %}class="active"{% endif %}>{% trans %}Отзывы о компании{% endtrans %}</a>
+                    {% if user.targetReviews | length > 0 %}
+                        {% set reviewsNum = 0 %}
+                        {% for review in user.targetReviews %}
+                            {% if review.status.id == settings.newReviewStatus.id %}
+                            {% set reviewsNum = reviewsNum + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if reviewsNum > 0 %}
+                            <span class="numberNewItems">{{ reviewsNum }}</span>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </li>
         {% else %}

@@ -76,6 +76,20 @@ class Role implements RoleInterface
      */
     private $invoiceText;
     
+    private $newUsers;
+    
+    public function getNewUsers(){
+        $count = 0;
+        $this->getUsers()->map(function($user) use(&$count){
+            if($user->getIsActive()){
+                if(!$user->getIsConfirm()){
+                    $count++;
+                }
+            }
+        });
+        
+        return $count;
+    }
 
     public function __construct()
     {

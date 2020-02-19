@@ -29,7 +29,63 @@
     {%- endif -%}
 {%- endblock form_label -%}
 
-{% block title %}{% trans %} Панель управления - Редактировать группу{% endtrans %}{% endblock %}
+{% block _user_rates_widget %}
+    <table class="table table-bordered table-user-rates">
+        <thead>
+            <tr>
+                <th>{% trans %}Тариф{% endtrans %}</th>
+                <th>{% trans %}Категория{% endtrans %}</th>
+                <th>{% trans %}Дата начала{% endtrans %}</th>
+                <th>{% trans %}Дата окончания{% endtrans %}</th>
+                <th>{% trans %}Количество размещений{% endtrans %}</th>
+                <th>{% trans %}Активен{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>{{ form_widget(form) }}</tbody>
+    </table> 
+{% endblock %}
+
+{% block _user_rates_entry_row %}
+    <tr>
+        <td>
+            {{ form_widget(form.rate)}}
+            {% if form.items | length > 0 %}
+                <div>{{ form_widget(form.items)}}</div>
+            {% endif %}
+        </td>
+        <td>{{ form_widget(form.category)}}</td>
+        <td>{{ form_widget(form.dateStart)}}</td>
+        <td>{{ form_widget(form.dateEnd)}}</td>
+        <td>{{ form_widget(form.advertNumber)}}</td>
+        <td>{{ form_widget(form.isActive)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить тариф?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить тариф"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block _user_rates_entry_items_widget %}
+    <table class="table table-bordered table-user-rates-items">
+        <thead>
+            <tr>
+                <th>{% trans %}Услуга{% endtrans %}</th>
+                <th>{% trans %}Количество раз{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>{{ form_widget(form) }}</tbody>
+    </table> 
+{% endblock %}
+
+{% block _user_rates_entry_items_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.service)}}</td>
+        <td>{{ form_widget(form.count)}}</td>
+    </tr>
+{% endblock %}
+
+{% block title %}{% trans %} Панель управления - Редактировать пользователя{% endtrans %}{% endblock %}
 
 {% block body %}
     <div id="content" class="content">
@@ -55,13 +111,13 @@
                             <li class="active">
                                 <a data-toggle="tab" href="#maininfo">Основная информация</a>
                             </li>
-                            <li class="">
+                            <li>
                                 <a data-toggle="tab" href="#useradverts">Объявления ({{ user.products | length }})</a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div id="maininfo" class="tab-pane fade active in">
-                                {{ form_start(userForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                                <div id="maininfo" class="tab-pane fade active in">
+                                    {{ form_start(userForm, {'attr' : {'class' : 'form-horizontal'}})}}
                                     <div class="row">
                                         <div class="col-md-3">
                                             <label class="m-b-15">Аватар</label>
@@ -146,13 +202,31 @@
                                             </div> 
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                                                <div class="panel-heading ui-sortable-handle">
+                                                    <h4 class="panel-title">Тарифы</h4>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <button class="btn btn-sm btn-success m-b-15" id="add-user-rate" type="button">
+                                                        <i class="fa fa-plus" aria-hidden="true"></i> Добавить тариф</button>
+                                                        <div style="font-weight:bold">* Не добавляйте два одинаковых тарифа, редактируйте существующий</div>
+                                                        {{ form_widget(userForm.rates)}}
+                                                        {% if userForm.rates | length <= 0 %}
+                                                            Тарифы не подключены
+                                                        {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-md-3 ">{{ form_label(userForm.save)}}</label>
                                         <div class="col-md-9">
                                             {{ form_widget(userForm.save,{'type' : 'submit'})}}
                                         </div>
                                     </div> 
-                                {{ form_end(userForm)}}
+                                    {{ form_end(userForm)}}
                             </div>
                             <div id="useradverts" class="tab-pane fade">
                                 <div data-sortable-id="table-basic-7" class="panel panel-inverse">
@@ -178,8 +252,8 @@
                                                                         <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}" target="_blank">{{ product.name }}</a>
                                                                     </td>
                                                                     <td>
-                                                                        {% if product.mainfoto %}
-                                                                            <img class="m-b-15" src="{{ asset('bundles/images/products/') }}{{product.mainfoto}}" alt="" title="" width="200px" />
+                                                                        {% if product.fotos | length > 0 %}
+                                                                            <img style="max-width:250px" src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                                         {% endif %}
                                                                     </td>
                                                                     <td>

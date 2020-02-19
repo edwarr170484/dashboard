@@ -52,10 +52,10 @@
                                             <div class="accountRatesInformationList dealerAccountRates">
                                                 <div class="accountRatesInformationListItem">{{ rate.advertNumber }} {% trans %}размещений{% endtrans %}</div>
                                                 {% if rate.items | length > 0 %}
-                                                    {% for item in rate.tems %}
+                                                    {% for item in rate.items %}
                                                         <div class="accountRatesInformationListItem">
                                                             {{ item.service.service.iconGray | raw }}
-                                                            {{ item.count }} {{ item.service.service.name }}
+                                                            {{ item.count }} {{ item.service.service.title }}
                                                         </div>
                                                     {% endfor %}
                                                 {% endif %}

@@ -19,7 +19,7 @@ class ProductService
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Product", inversedBy="service")
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Product", inversedBy="services")
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $product;

@@ -162,6 +162,11 @@
                                                     {{ packPrice }} {{ locale.currency.label | raw }}
                                                 </span>
                                             </a>
+                                            {% if num == 1 %}
+                                                <script>
+                                                    $("#servicePack{{ servicePack.id }}").trigger('click');
+                                                </script>
+                                            {% endif %}    
                                         </li>
                                         {% if num == 1 %}
                                             <script>selectServicePack({{ servicePack.id }}, '{{ packPrice }} {{ locale.currency.label | raw }}', '{% trans %}Разместить и оплатить{% endtrans %}');</script>
@@ -257,7 +262,7 @@
                 <div class="addAdvertUserAgreement">
                     Нажимая на кнопку «Опубликовать объявление», вы принимаете условия <a href="">Пользовательского соглашения</a>
                 </div>
-                <button onclick="addAdvert('{{ locale.code }}','{% trans %}Заполните поля помеченный звездочкой{% endtrans %}', null)" id="addAdvertFinalButton">{% trans %}Разместить и оплатить <span>6,99</span> &euro;{% endtrans %}</button>
+                <button onclick="addAdvert('{{ locale.code }}','{% trans %}Заполните поля помеченный звездочкой{% endtrans %}', null)" id="addAdvertFinalButton">{% trans %}Разместить{% endtrans %}</button>
             </div> 
             <div class="cookieAlertButton nextStep gray">
                 <button onclick="addAdvert('{{ locale.code }}','{% trans %}Заполните поля помеченный звездочкой{% endtrans %}', 1)">{% trans %}Сохранить как черновик{% endtrans %}</button>

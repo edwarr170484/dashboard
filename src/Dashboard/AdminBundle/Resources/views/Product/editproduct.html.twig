@@ -55,7 +55,7 @@
     </tr>
 {% endblock %}
 
-{% block _product_service_widget %}
+{% block _product_services_widget %}
     <table class="table table-bordered table-product-service">
         <thead>
             <tr>
@@ -69,9 +69,9 @@
         </thead>
         <tbody>{{ form_widget(form) }}</tbody>
     </table> 
-{% endblock _product_service_widget %}
+{% endblock _product_services_widget %}
 
-{% block _product_service_entry_row %}
+{% block _product_services_entry_row %}
     <tr>
         <td>{{ form_widget(form.service)}}</td>
         <td>{{ form_widget(form.dateAdded)}}</td>
@@ -312,8 +312,9 @@
                                                 <div class="panel-body">
                                                     <button class="btn btn-sm btn-success m-b-15" id="add-product-service" data-services="{{ services | length }}" type="button">
                                                         <i class="fa fa-plus" aria-hidden="true"></i> Добавить услугу</button>
-                                                        {{ form_widget(productForm.service)}}
-                                                        {% if productForm.service | length <= 0 %}
+                                                        <div style="font-weight:bold">* Не добавляйте две одинаковых услуги, редактируйте существующие</div>
+                                                        {{ form_widget(productForm.services)}}
+                                                        {% if productForm.services | length <= 0 %}
                                                             Услуги не добавлены
                                                         {% endif %}
                                                 </div>

@@ -382,8 +382,8 @@ class ProductController extends Controller
                     }
                 }
                 
-                if($product->getService()){
-                    foreach ($product->getService() as $service) {
+                if($product->getServices()){
+                    foreach ($product->getServices() as $service) {
                         $originalServices->add($service);
                     }
                 }
@@ -423,7 +423,7 @@ class ProductController extends Controller
         {
             if($originalServices){
                 foreach ($originalServices as $service){
-                    if(false === $product->getService()->contains($service)){
+                    if(false === $product->getServices()->contains($service)){
                         $service->setProduct(null);
                         if($service->getBills()){
                             foreach($service->getBills() as $bill){
@@ -437,8 +437,8 @@ class ProductController extends Controller
                 }
             }
             
-            if($product->getService()){
-                foreach($product->getService() as $service){
+            if($product->getServices()){
+                foreach($product->getServices() as $service){
                     $service->setProduct($product);
                     $manager->persist($service);
                 }

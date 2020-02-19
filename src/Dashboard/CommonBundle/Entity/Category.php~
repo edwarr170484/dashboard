@@ -156,7 +156,7 @@ class Category
     private $translations;
         
     /**
-     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Generation", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Generation", mappedBy="category", cascade={"persist"})
      */
     private $generations;
     

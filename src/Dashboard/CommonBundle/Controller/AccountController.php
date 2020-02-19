@@ -729,7 +729,9 @@ class AccountController extends Controller
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
-
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        
         $order = $manager->getRepository("DashboardCommonBundle:ProductOrder")->find($orderId);
         $status = $manager->getRepository("DashboardCommonBundle:OrderStatus")->find($statusId);
         $statuses = $manager->getRepository("DashboardCommonBundle:OrderStatus")->findAll();

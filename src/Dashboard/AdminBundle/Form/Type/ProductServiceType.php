@@ -4,13 +4,10 @@ namespace Dashboard\AdminBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-
-use Dashboard\CommonBundle\Form\DataTransformer\ProductToNumberTransformer;
 
 class ProductServiceType extends AbstractType
 {

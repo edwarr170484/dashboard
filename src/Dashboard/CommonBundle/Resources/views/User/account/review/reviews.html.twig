@@ -36,6 +36,11 @@
     <div class="row content-row">
         {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
         <div class="col-lg-10 col-md-10">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="notice-message">
+                    {{ flashMessage | raw }}
+                </div>                             
+            {% endfor %}
             <div class="account-advert-block-content">
                 <div class="accountOrders">
                     {% if user.reviews | length > 0 %}

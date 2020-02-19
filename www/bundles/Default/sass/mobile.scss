@@ -176,7 +176,9 @@
     #dealerAutoSalonEditModal .modal-content{padding: 3rem;}
     #addDealerSalonPhone{position: relative;bottom:0;right: 0;}
     .mapImage{display: none;}
-    
+    .addReviewPage .form-group .form-group-label{width: 100%;padding-right: 0;padding-bottom: 1rem;}
+    .addReviewPage .form-group .form-group-control{width: 100%;}
+    .addReviewPage .form-group{flex-wrap:wrap;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}

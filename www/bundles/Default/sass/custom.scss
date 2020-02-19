@@ -772,7 +772,8 @@ ul.justLinks li{position: relative;}
 .account-menu-list li ul li a{@include fontView("GothamProMedium",#747474,1.3rem,1.2rem);text-transform: uppercase;padding-bottom: 1.4rem;}
 .account-menu-list li ul{padding-left:4.5rem;display: none;}
 .account-menu-list li ul.active{display: block;}
-.accountMenuItem{@include flexBox(row,flex-start,center);padding-bottom: 1.5rem;}
+.accountMenuItem{@include flexBox(row,flex-start,center);padding-bottom: 1.5rem;position: relative;}
+.accountMenuItem span.numberNewItems{background: url('../img/notify.png') 50% 50% no-repeat;width: 24px;height: 24px;position: absolute;top:-2px;left: -32px;@include fontView("GothamProMedium",$super-white-color,1.2rem,1.1rem);@include flexBox(row,center,center);}
 .account-menu-list li .accountMenuItem a{padding-bottom: 0;padding-left: 2rem;}
 .account-menu-list li .accountMenuItem a.logout{padding-left: 3.8rem;}
 .account-menu-list li a.active{color:$orange-color;}

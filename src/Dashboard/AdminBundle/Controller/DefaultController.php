@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 use Dashboard\CommonBundle\Entity\Region;
 use Dashboard\CommonBundle\Entity\City;
@@ -29,14 +30,11 @@ use Dashboard\CommonBundle\Entity\Page;
 use Dashboard\CommonBundle\Entity\Role;
 use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\UserInfo;
-use Dashboard\CommonBundle\Entity\UserPurse;
 use Dashboard\CommonBundle\Entity\Textblock;
 use Dashboard\CommonBundle\Entity\OrderStatus;
-use Dashboard\CommonBundle\Entity\UserPurseHistory;
-use Dashboard\CommonBundle\Entity\UserActivity;
 
 use Dashboard\AdminBundle\Form\Type\UserInfoType;
-use Dashboard\CommonBundle\Form\Type\UserPurseType;
+use Dashboard\AdminBundle\Form\Type\UserRateType;
 use Dashboard\AdminBundle\Form\Type\TranslationType;
 use Dashboard\AdminBundle\Form\Type\RegionType;
 use Dashboard\AdminBundle\Form\Type\PageblockType;
@@ -395,7 +393,8 @@ class DefaultController extends Controller
     {
         $manager = $this->getDoctrine()->getManager();
         $fm = new Filesystem();
-                 
+        $originalRates = new ArrayCollection;  
+        $originalRatesItems = new ArrayCollection;
         $user = ($userId) ? $manager->getRepository("DashboardCommonBundle:User")->find($userId) : new User();
 
         $roles = ($userId) ? $user->getRoles() : 0;
@@ -404,6 +403,17 @@ class DefaultController extends Controller
         
         $originalEmail = $user->getEmail();  
         
+        if($user->getRates()){
+            foreach($user->getRates() as $rate){
+                $originalRates->add($rate);
+                if($rate->getItems()){
+                    foreach($rate->getItems() as $item){
+                        $originalRatesItems->add($item);
+                    }
+                }
+            }
+        }
+        
         $userForm = $this->get('form.factory')->createNamedBuilder('user', 'form', $user)
             ->add('email', EmailType::class, array('required' => false, 'label' => 'эл. почта', 'attr' => array('class' => 'form-control')))
             ->add('password', TextType::class, array('required' => false, 'mapped' => false,'label' => 'новый пароль', 'attr' => array('class' => 'form-control', 'plceholder' => 'Новый пароль')))
@@ -411,6 +421,7 @@ class DefaultController extends Controller
             ->add('isActive', CheckboxType::class, array('required' => false, 'label' => 'Аккаунт активен', 'attr' => array('class' => 'form-control')))
             ->add('advertNumber', TextType::class, array('required' => false, 'label' => 'Количество дополнительных объявлений', 'attr' => array('class' => 'form-control')))
             ->add('userinfo', new UserInfoType($manager, $userinfo), array('data_class' => 'Dashboard\CommonBundle\Entity\UserInfo'))
+            ->add('rates', CollectionType::class, array('entry_type' => new UserRateType(), 'required' => false,'allow_add' => true,'allow_delete' => true, 'by_reference' => false))
             ->add('roles', 'entity', array('class' => 'DashboardCommonBundle:Role', 
                   'choice_label' => 'title', 'label' => 'Группа пользователей', 'data' => ($roles) ? $roles[0] : 0,'mapped' => false,'attr' => array('class' => 'form-control')))
             ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')))->getForm();
@@ -419,6 +430,57 @@ class DefaultController extends Controller
         
         if($userForm->isSubmitted() && $userForm->isValid())
         {
+            if($originalRates){
+                foreach($originalRates as $rate){
+                    if(false === $user->getRates()->contains($rate)){
+                        $rate->setUser(null);
+                        if($rate->getItems()){
+                            foreach($rate->getItems() as $item){
+                                $item->setUserrate(null);
+                                $manager->remove($item);
+                            }
+                        }
+                        $manager->remove($rate);
+                    }
+                    
+                    if($originalRatesItems){
+                        foreach($originalRatesItems as $item){
+                            if(false === $rate->getItems()->contains($item)){
+                                $item->setUserrate(null);
+                                $manager->remove($item);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if($user->getRates()){
+                foreach($user->getRates() as $rate){
+                    if(!$rate->getAdvertNumber()){
+                        $rate->setAdvertNumber($rate->getRate()->getAdvertNumber());
+                    }
+                    $rate->setUser($user);
+                    if(count($rate->getItems()) > 0){
+                        foreach($rate->getItems() as $item){
+                            $item->setUserrate($rate);
+                            $manager->persist($item);
+                        }
+                    }else{
+                        $services = $rate->getRate()->getServices();
+                        if(count($services) > 0){
+                            foreach($services as $service){
+                                $rateItem = new \Dashboard\CommonBundle\Entity\UserRateItem();
+                                $rateItem->setService($service);
+                                $rateItem->setCount($service->getValue());
+                                $rateItem->setUserrate($rate);
+                                $manager->persist($rateItem);
+                            }
+                        }
+                    }
+                    $manager->persist($rate);
+                }
+            }
+            
             $avatar = $userForm['userinfo']['avatarNew']->getData();
             $oldAvatar = $userForm['userinfo']['avatar']->getData();
             

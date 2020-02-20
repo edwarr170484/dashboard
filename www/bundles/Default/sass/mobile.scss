@@ -179,6 +179,19 @@
     .addReviewPage .form-group .form-group-label{width: 100%;padding-right: 0;padding-bottom: 1rem;}
     .addReviewPage .form-group .form-group-control{width: 100%;}
     .addReviewPage .form-group{flex-wrap:wrap;}
+    .categoryAdvert.premium .categoryAdvertImages{float:left;padding-right: 3rem;width: 30%;}
+    .categoryAdvert.premium{display: block;}
+    .categoryAdvert.premium .categoryAdvertInfo{width: 100%;padding-left: 0;}
+    .categoryAdvert.premium .categoryAdvertCommonInfo{display: block;}
+    .categoryAdvert.premium .categoryAdvertInfoPrice{margin-top: 2rem;}
+    .categoryAdvert.premium  .categoryAdvertShareLinks{top: -18px;right: 0;@include border-radius(25px);padding: 5px 10px;border:2px solid $yellow-color;}
+    .categoryAdvert.premium  .categoryAdvertShareLinks ul{@include flexBox(row,flex-start,center);}
+    .categoryAdvert.premium  .categoryAdvertShareLinks ul li button{margin-bottom: 0;}
+    .productNoteForm > svg{display: none;}
+    .productNoteForm textarea{width: 100%;margin-right: 0;}
+    .productNoteForm{flex-wrap: wrap;}
+    .productNoteForm .cookieAlertButton{width: 100%;margin-top: 1rem;}
+    .productNoteForm .cookieAlertButton button{width: 100%;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
@@ -275,8 +288,8 @@
     .categoryAdvert{display: block;}
     .categoryAdvertImages{width: 100%;}
     .categoryAdvertInfo{width: 100%;padding-left: 0;padding-top: 15px;}
-    .categoryAdvertInfoPrice{width: 100%;@include flexBox(row,space-between,center);@include flex-wrap(wrap);}
-    
+    .categoryAdvertInfoPrice{width: 100%;@include flexBox(row,center,center);@include flex-wrap(wrap);}
+    .categoryAdvert.premium .categoryAdvertImages{float: none;width: 100%;padding-right: 0;}
     .categoryAdvertInfoYear{width: 100%;@include flexBox(row,center,center);}
     .categoryAdvertInfoProbeg{width: 100%;@include flexBox(row,center,center);}
     .categoryAdvertPrice{width: auto;}

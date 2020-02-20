@@ -1656,7 +1656,46 @@ class AdvertController extends Controller
                     try
                     {
                         $image->move('bundles/images/products',$localImageName);
+                        
+                        if($settings->getWatermark()){
+                            $watermark = imagecreatefrompng('bundles/images/site/' . $settings->getWatermark());
+                            $marge_right = 10;
+                            $marge_bottom = 10;
+                            $sx = imagesx($watermark);
+                            $sy = imagesy($watermark);
+                            
+                            switch($extention)
+                            {
+                                case 'png':
+                                    $markImage = imagecreatefrompng('bundles/images/products/' . $localImageName);
+                                    imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
+                                    imagepng($markImage, 'bundles/images/products/' . $localImageName);
+                                    imagedestroy($markImage);
+                                break;
 
+                                case 'jpg':
+                                    $markImage = imagecreatefromjpeg('bundles/images/products/' . $localImageName);
+                                    imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
+                                    imagejpeg($markImage, 'bundles/images/products/' . $localImageName);
+                                    imagedestroy($markImage);
+                                break;
+
+                                case 'jpeg':
+                                    $markImage = imagecreatefromjpeg('bundles/images/products/' . $localImageName);
+                                    imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
+                                    imagejpeg($markImage, 'bundles/images/products/' . $localImageName);
+                                    imagedestroy($markImage);
+                                break;
+
+                                case 'gif':
+                                    $markImage = imagecreatefromgif('bundles/images/products/' . $localImageName);
+                                    imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
+                                    imagegif($markImage, 'bundles/images/products/' . $localImageName);
+                                    imagedestroy($markImage);
+                                break;
+                            }
+                        }
+                        
                         $simpleImage = $this->get('app.simpleimage');
                         $simpleImage->load('bundles/images/products/' . $localImageName);
                         $simpleImage->resizeToWidth(1024);

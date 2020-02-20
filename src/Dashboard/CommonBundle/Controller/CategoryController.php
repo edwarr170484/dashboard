@@ -479,6 +479,10 @@ class CategoryController extends Controller
             $products = 0;
         }
         
+        $premiumProducts = new ArrayCollection();
+        $specialProducts = new ArrayCollection();
+        $regularProducts = new ArrayCollection();
+        
         if($products){
             foreach($products as $product){
                 $product->setIsFavorite(0);
@@ -494,11 +498,49 @@ class CategoryController extends Controller
 
                     (count($favorite) > 0) ? $product->setIsFavorite(1) : $product->setIsFavorite(0);
                 }
+                
+                if($product->getServices()){
+                    $isService = 0;
+                    foreach($product->getServices() as $service){
+                        if($service->getIsActive()){
+                            if(($service->getService()->getId() == $settings->getPremiumService()->getId())){
+                                $product->setServiceName('payed');
+                                $premiumProducts->add($product);
+                                $isService = 1;
+                            }
+                            if(($service->getService()->getId() == $settings->getSpecialService()->getId())){
+                                $specialProducts->add($product);
+                                $isService = 1;
+                            }
+                            if(($service->getService()->getId() == $settings->getSelectedService()->getId())){
+                                $product->setServiceName('payed');
+                            }
+                        }
+                    }
+                    
+                    if(!$isService){
+                        $regularProducts->add($product);
+                    }
+                }
             }
         }
         
-
-        $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
+        $productsArray = new ArrayCollection($products);
+        
+        $specialProducts = $productsArray->filter(function($product) use ($settings){
+           $result = 0;
+           if($product->getServices()){
+               foreach($product->getServices() as $service){
+                   if(($service->getService()->getId() == $settings->getSpecialService()->getId()) && $service->getIsActive()){
+                       $result = 1;
+                       break;
+                   }
+               }
+           }
+           return $result;
+        });
+        
+        $premiumProduct = (count($premiumProducts) > 0) ? $premiumProducts[rand(1, count($premiumProducts)) - 1] : NULL;
         
         $link = '/category/' . $categoryId . '_' . $categoryName;
         
@@ -518,11 +560,11 @@ class CategoryController extends Controller
                                                                                        "categoryMarks" => $categoryMarks,
                                                                                        "categoryModels" => $categoryModels,
                                                                                        "formFilters" => $filters,
-                                                                                       "products" => $products,
+                                                                                       "products" => $regularProducts,
                                                                                        "productsTotalCount" => $productsTotalCount,
                                                                                        "pagination" => $pagination,
-                                                                                       "premiumProducts" => new ArrayCollection(),
-                                                                                       "specialProducts" => new ArrayCollection(),
+                                                                                       "premiumProduct" => $premiumProduct,
+                                                                                       "specialProducts" => $specialProducts,
                                                                                        "upProducts" => new ArrayCollection(),
                                                                                        "dealerProducts" => new ArrayCollection(),
                                                                                        "filters" => $request->request->get('filter'),

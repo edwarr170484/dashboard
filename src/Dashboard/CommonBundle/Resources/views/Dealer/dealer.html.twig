@@ -166,15 +166,15 @@
                             </div>
                         </div>
                         {% if dealer.products | length > 0 %}                    
-                            <div class="dealerPageProducts">
-                                {% include 'DashboardCommonBundle:Default:filtersForm.html.twig' with {'categories' : categories} %}
+                            <div class="dealerPageProducts" id="dealerPageProducts">
+                                {% include 'DashboardCommonBundle:Default:filtersForm.html.twig' with {'categories' : categories, 'request' : app.request} %}
                             </div>
                         {% endif %} 
                         {% if dealer.products | length > 0 %}
                             <div class="dealerPageProducts">
                                 <div class="categoryAdverts list">
                                     {% for product in dealer.products %}
-                                        {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : ''} %}
+                                        {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : '', 'user' : dealer} %}
                                     {% endfor %}
                                 </div>
                                 {% if pagination %}

@@ -185,9 +185,23 @@ class Product
      */
     private $bills;
     
+    private $serviceName;
+    
     private $daysLeft;
     
     private $isFavorite;
+    
+    public function setServiceName($serviceName)
+    {
+        $this->serviceName = $serviceName;
+    
+        return $this;
+    }
+
+    public function getServiceName()
+    {
+        return $this->serviceName;
+    }
     
     public function getDaysLeft(){
         

@@ -62,8 +62,8 @@
                             <div class="hidden-sm hidden-xs" style="text-align:center;">
                                 {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
                             </div>
-                            {% if products | length > 0 %}
-                            <div class="categorySorts">
+                            {% if products | length > 0 or premiumProduct or specialProducts | length > 0 %}
+                                <div class="categorySorts">
                                     <div class="categorySortFields">
                                         <div class="categorySortParams static-filters">
                                             <select name="" id="" class="custom-select" placeholder="{% trans %}По дате{% endtrans %}">
@@ -110,13 +110,17 @@
                                             </a>
                                         </div>
                                     </div>
-                                    {% if premiumProducts | length > 0 %}
-                                        {% for product in premiumProducts %}
-                                            {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : 'premium', 'user' : user} %}
-                                        {% endfor %}
-                                    {% endif %}
-                            </div>
-                            {% if specialProducts | length > 0 %}
+                                </div>
+                            {% if premiumProduct %}
+                                {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : premiumProduct,'locale' : locale, 'service' : 'premium', 'user' : user} %}
+                            {% endif %}
+                            {% if products | length > settings.catpagePremiumNumber %}
+                                <div class="categoryAdverts {{ view }}">
+                                    {% for i in 0..settings.catpagePremiumNumber - 1  %}
+                                        {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : products[i],'locale' : locale, 'service' : '', 'user' : user} %}
+                                    {% endfor %}
+                                </div>
+                                {% if specialProducts | length > 0 %}
                                     <div class="categorySpecialAdverts">
                                         <div class="categorySpecialAdvertsHeader">
                                             <h3>{% trans %}Спецпредложения{% endtrans %}</h3>
@@ -150,19 +154,56 @@
                                             {% endfor %}
                                         </div>
                                     </div>
-                            {% endif %}
-                            <div class="categoryAdverts {{ view }}">
-                                    {% if upProducts | length > 0 %}
-                                        {% for product in upProducts %}
-                                            {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : '', 'user' : user} %}
-                                        {% endfor %}
-                                    {% endif %}
+                                {% endif %}
+                                <div class="categoryAdverts {{ view }}">
+                                    {% for i in settings.catpagePremiumNumber..products | length - 1 %}
+                                        {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : products[i],'locale' : locale, 'service' : '', 'user' : user} %}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="categoryAdverts {{ view }}">
                                     {% if products | length > 0 %}
                                         {% for product in products %}
                                             {% include 'DashboardCommonBundle:Default:Products/regular.html.twig' with {'product' : product,'locale' : locale, 'service' : '', 'user' : user} %}
                                         {% endfor %}
                                     {% endif %}
-                            </div> 
+                                </div> 
+                                {% if specialProducts | length > 0 %}
+                                    <div class="categorySpecialAdverts">
+                                        <div class="categorySpecialAdvertsHeader">
+                                            <h3>{% trans %}Спецпредложения{% endtrans %}</h3>
+                                            <div class="categorySpecialAdvertsSliderNav" id="specialDealerAdvertsNav"></div>
+                                        </div>
+                                        <div class="categorySpecialAdvertsSlider owl-carousel" id="specialDealerAdverts">
+                                            {% for product in specialProducts %}
+                                                <div class="categorySpecialAdvert">
+                                                    <div class="categorySpecialAdvertImage">
+                                                        <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
+                                                            {% if product.fotos | length > 0 %}
+                                                                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                            {% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="categorySpecialAdvertName">
+                                                        <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
+                                                            {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="categorySpecialAdvertFeatures">
+                                                        <div class="categorySpecialAdvertFeature">{{ product.info.year }}, {% if product.info.shape %}{{ product.info.shape.title }}{% endif %}</div>
+                                                        <div class="categorySpecialAdvertFeature">
+                                                            {% if product.info.modification %}{{ product.info.modification.size }} /  {{ product.info.modification.power }} {% trans %}л.с.{% endtrans %}  / {% endif %} {% if product.info.gasType %} {{ product.info.gasType.value }}{% endif %}
+                                                        </div>
+                                                    </div>
+                                                        <div class="categorySpecialAdvertPrice">
+                                                            {{ product.info.price }} {{ locale.currency.label | raw }}
+                                                        </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
                             {% if pagination and products | length > 0 %}
                                     <div class="row">
                                         <div class="col-lg-12 padination">

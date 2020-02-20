@@ -1,6 +1,6 @@
 {% use 'DashboardCommonBundle:Common:icons.html.twig' %}
 <div class="categoryAdvertCover">
-    <div class="categoryAdvert {% if service == 'premium'%}premium{% endif %}" id="productBlock{{ product.id }}">
+    <div class="categoryAdvert {% if service == 'premium' %}premium{% endif %}{% if product.serviceName == 'payed' %}payed{% endif %}" id="productBlock{{ product.id }}">
         {% if service == 'premium'%}<div class="categoryAdvertTop"></div>{% endif %}
         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}" class="categoryAdvertLink"></a>
             <div class="categoryAdvertShareLinks">
@@ -155,7 +155,7 @@
                                 {% set rating  = 0 %}
                                 {% if product.user.targetReviews | length > 0 %}
                                     {% for review in product.user.targetReviews %}
-                                        {% if review.status.id == locale.settings.publicReviewStatus %}
+                                        {% if review.status.id == locale.settings.publicReviewStatus.id %}
                                             {% set reviews = reviews + 1 %}
                                             {% set rating = rating + review.rating %}
                                         {% endif %}
@@ -165,7 +165,7 @@
                                     {% if reviews > 0 %}
                                         {% set reviewRating = (rating/reviews) | round %}
                                     {% else %}
-                                        {% set reviewRating = (rating/reviews) | round %}
+                                        {% set reviewRating = 0 %}
                                     {% endif %}
                                     {% if reviewRating > 0 %}
                                         {% for i in 1..reviewRating %}
@@ -185,12 +185,12 @@
                                 </div>
                             </div>
                             <div class="categoryAdvertDealerAll">
-                                <a href="{{ path('dealerpage', {'dealerName' : product.user.dealerinfo.company}) }}">{% trans %}Все объявления дилера{% endtrans %}</a>
+                                <a href="{{ path('dealerPage', {'dealerName' : product.user.dealerinfo.company}) }}#dealerPageProducts">{% trans %}Все объявления дилера{% endtrans %}</a>
                                 <span>({{ product.user.products | length }})</span>
                             </div>
                         </div>
                         <div class="categoryAdvertDealerContact">
-                            <a href="{{ path('dealerpage', {'dealerName' : product.user.dealerinfo.company}) }}">{% trans %}Показать контакты{% endtrans %}</a>
+                            <a href="{{ path('dealerPage', {'dealerName' : product.user.dealerinfo.company}) }}">{% trans %}Показать контакты{% endtrans %}</a>
                         </div>
                     </div>
                 {% endif %}

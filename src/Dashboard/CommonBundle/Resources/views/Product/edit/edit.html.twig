@@ -223,9 +223,9 @@
                             <div class="advertFiltersItems">
                                 <table class="table table-striped" id="advertFiltersItemsTable">
                                     <tbody>
-                                        {% if product.category.filters %}
-                                            {% for filter in product.category.filters %}
-                                                {% if filter.type == 'color'%}
+                                        {% if product.baseCategory.filters %}
+                                            {% for filter in product.baseCategory.filters %}
+                                                {% if filter.type.name == 'color' and filter.step == '2'%}
                                                 <tr>
                                                     <td>
                                                         <div class="advertFiltersItemName">{{ filter.name }}</div>
@@ -373,10 +373,10 @@
                         </div> 
                     </div>
                     <div class="productFilters">
-                        {% if product.category.filters | length > 0 %}
+                        {% if product.baseCategory.filters | length > 0 %}
                             <div class="advertFiltersItems justFilter">
-                            {% for filter in  product.category.filters %}
-                                {% if filter.isRequired and filter.type != 'color' %}
+                            {% for filter in  product.baseCategory.filters %}
+                                {% if filter.type.name != 'color' and filter.step == '3' %}
                                     <div class="advertFiltersItem justFilter">
                                         <div class="advertFiltersItemName">{{ filter.name }}</div>
                                         <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">

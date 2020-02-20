@@ -589,6 +589,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvertDealerAll a:hover,.categoryAdvertDealerAll a:focus{text-decoration: none;}
 .categoryAdvertDealerAll span{@include fontView("GothamProRegular",$gray-color-1,1.4rem,100%);padding-left: 11px;}
 .categoryAdvertDealerLogo{padding-right: 3rem;padding-bottom: 13px;}
+.categoryAdvertDealerLogo img{width: 100%;max-width:116px;}
 .categoryAdverDealerTitle{@include fontView("GothamProRegular",$input-black,1.4rem,1.8rem);padding-right: 3rem;padding-bottom: 13px;}
 .categoryAdvertDealerNameInfo{@include flexBox(row,flex-start,center);@include flex-wrap(wrap);}
 .advertSellerRating.category{padding-top: 0;padding-bottom: 13px;}

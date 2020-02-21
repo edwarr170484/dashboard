@@ -525,21 +525,6 @@ class CategoryController extends Controller
             }
         }
         
-        $productsArray = new ArrayCollection($products);
-        
-        $specialProducts = $productsArray->filter(function($product) use ($settings){
-           $result = 0;
-           if($product->getServices()){
-               foreach($product->getServices() as $service){
-                   if(($service->getService()->getId() == $settings->getSpecialService()->getId()) && $service->getIsActive()){
-                       $result = 1;
-                       break;
-                   }
-               }
-           }
-           return $result;
-        });
-        
         $premiumProduct = (count($premiumProducts) > 0) ? $premiumProducts[rand(1, count($premiumProducts)) - 1] : NULL;
         
         $link = '/category/' . $categoryId . '_' . $categoryName;

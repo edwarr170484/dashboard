@@ -1,6 +1,6 @@
 {% use 'DashboardCommonBundle:Common:icons.html.twig' %}
 <div class="categoryAdvertCover">
-    <div class="categoryAdvert {% if service == 'premium' %}premium{% endif %}{% if product.serviceName == 'payed' %}payed{% endif %}" id="productBlock{{ product.id }}">
+    <div class="categoryAdvert {% if service == 'premium' %}premium{% endif %}{% if product.serviceName == 'payed' %} payed{% endif %}" id="productBlock{{ product.id }}">
         {% if service == 'premium'%}<div class="categoryAdvertTop"></div>{% endif %}
         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}" class="categoryAdvertLink"></a>
             <div class="categoryAdvertShareLinks">

@@ -51,6 +51,11 @@
         {{ render(controller('DashboardCommonBundle:Account:getSidebar',{'routeName' : routeName})) }}
         <div class="col-lg-10 col-md-10">
             <div class="account-advert-block-content">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
                 <div class="accountSettingsTabs">
                         <ul class="nav nav-tabs settingsTabs" id="myTab" role="tablist">
                             <li class="nav-item active">
@@ -70,9 +75,9 @@
                                             {% trans %}назад{% endtrans %}
                                         </a>
                                     </div>
-                                    <!--<div class="accountConversationHeaderTopic">
-                                        Mercedes-Benz S-klasse VI (W222, C217)
-                                    </div>-->
+                                    <div class="accountConversationHeaderTopic">
+                                        {{ conversation.subject }}
+                                    </div>
                                 </div>
                                 <div class="accountConversationMessages">
                                     {% if messages %}

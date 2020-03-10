@@ -254,9 +254,11 @@
                                         </div>
                                     </div>
                                 {% endif %}
-                                <div class="categoryDescription">
-                                    {{ category.description | raw}}
-                                </div>
+                                {% if category.description %}
+                                    <div class="categoryDescription">
+                                        {{ category.description | raw}}
+                                    </div>
+                                {% endif %}
                     <div class="hidden-sm hidden-xs" style="text-align:center;padding-bottom: 5.8rem;">
                         {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
                     </div>

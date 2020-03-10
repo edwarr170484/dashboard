@@ -24,7 +24,9 @@ class ModificationType extends AbstractType
         $builder
             ->add('power', TextType::class, array('required' => true,'label' => 'Мощность двигателя', 'attr' => array('class' => 'form-control')))
             ->add('size', TextType::class, array('required' => true,'label' => 'Объем двигателя', 'attr' => array('class' => 'form-control')))
-            ->add('label', TextType::class, array('required' => true,'label' => 'Надпись для года', 'attr' => array('class' => 'form-control')))
+            ->add('label', TextType::class, array('required' => true,'label' => 'Название', 'attr' => array('class' => 'form-control')))
+            ->add('yearFrom', TextType::class, array('required' => true,'label' => 'Начало выпуска', 'attr' => array('class' => 'form-control')))
+            ->add('yearTo', TextType::class, array('required' => true,'label' => 'Окончание выпуска', 'attr' => array('class' => 'form-control')))    
             ->add('sortorder', TextType::class, array('required' => false,'label' => 'Порядок', 'attr' => array('class' => 'form-control')))
             ->add($builder->create('generation', 'hidden')->addModelTransformer(new GenerationToNumberTransformer($this->manager)));
     }

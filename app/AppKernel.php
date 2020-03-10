@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Dashboard\CommonBundle\DashboardCommonBundle(),
             new Dashboard\GalleryBundle\DashboardGalleryBundle(),
+            new Dashboard\MenuBundle\DashboardMenuBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Dashboard\AdminBundle\DashboardAdminBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),

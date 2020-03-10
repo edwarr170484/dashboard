@@ -7,13 +7,15 @@
                 </div>
             </div>
             <div class="accountAdvertFunction">
-                <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы хотите опубликовать объявление?{% endtrans %}','publicate')">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="11" stroke="#616161" stroke-width="2"/>
-                        <path d="M12 12.25V12.5347L12.2449 12.68L16.3096 15.0918L16.0816 15.4658L11.5 12.7169V7.5H12V12.25Z" stroke="#616161"/>
-                    </svg>
-                    {% trans %}Опубликовать{% endtrans %}
-                </button>
+                <div class="accountAdvertFunction">
+                    <button onclick="showAdvertActionDialog({{ product.id }},'{{ locale.code }}','{% trans %}Вы хотите опубликовать объявление?{% endtrans %}','{% trans %}Опубликовать{% endtrans %}','{% trans %}Нет, я передумал{% endtrans %}','{% trans %}Опубликовать{% endtrans %}','publicate')">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="11" stroke="#616161" stroke-width="2"/>
+                            <path d="M12 12.25V12.5347L12.2449 12.68L16.3096 15.0918L16.0816 15.4658L11.5 12.7169V7.5H12V12.25Z" stroke="#616161"/>
+                        </svg>
+                        {% trans %}Опубликовать{% endtrans %}
+                    </button>
+                </div>
             </div>
         </div>
     {% else %}
@@ -30,7 +32,7 @@
             {% if product.isActive %}
                 {% if product.isBlocked %}
                     <div class="accountAdvertFunction">
-                        <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы хотите разблокировать объявление?{% endtrans %}','unblocked')">
+                        <button onclick="showAdvertActionDialog({{ product.id }},'{{ locale.code }}','{% trans %}Вы хотите разблокировать объявление?{% endtrans %}','{% trans %}Опубликовать повторно{% endtrans %}','{% trans %}Нет, я передумал{% endtrans %}','{% trans %}Опубликовать повторно{% endtrans %}','unblocked')">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="12" cy="12" r="11" stroke="#616161" stroke-width="2"/>
                                 <path d="M12 12.25V12.5347L12.2449 12.68L16.3096 15.0918L16.0816 15.4658L11.5 12.7169V7.5H12V12.25Z" stroke="#616161"/>
@@ -77,10 +79,10 @@
                 {% endif %}
             {% else %}
                 <div class="accountAdvertFunction">
-                    <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы хотите продлить объявление?{% endtrans %}','switchon')">
+                    <button onclick="showAdvertActionDialog({{ product.id }},'{{ locale.code }}','{% trans %}Вы хотите продлить объявление?{% endtrans %}','{% trans %}Продлить объявление{% endtrans %}','{% trans %}Нет, я передумал{% endtrans %}','{% trans %}Продлить объявление{% endtrans %}','switchon')">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="11" stroke="#616161" stroke-width="2"/>
-                            <path d="M12 12.25V12.5347L12.2449 12.68L16.3096 15.0918L16.0816 15.4658L11.5 12.7169V7.5H12V12.25Z" stroke="#616161"/>
+                            <circle cx="12" cy="12" r="11" stroke="#616161" stroke-width="2"></circle>
+                            <path d="M12 12.25V12.5347L12.2449 12.68L16.3096 15.0918L16.0816 15.4658L11.5 12.7169V7.5H12V12.25Z" stroke="#616161"></path>
                         </svg>
                         {% trans %}Продлить объявление{% endtrans %}
                     </button>
@@ -91,7 +93,7 @@
     {% if product.isDraft %}
         <div class="accountAdvertFunctions right">
             <div class="accountAdvertFunction">
-                <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы действительно хотите удалить объявление?{% endtrans %}','delete')">{% trans %}удалить{% endtrans %}</button>
+                <button onclick="showAdvertActionDialog({{ product.id }},'{{ locale.code }}','{% trans %}Вы действительно хотите удалить объявление?{% endtrans %}','{% trans %}Удалить объявление{% endtrans %}','{% trans %}Нет, я передумал{% endtrans %}','{% trans %}Удалить{% endtrans %}','delete')">{% trans %}удалить{% endtrans %}</button>
             </div>
             <div class="accountAdvertFunction">
                 {% if product.baseCategory.formType == 1 %}
@@ -105,9 +107,9 @@
         <div class="accountAdvertFunctions right">
             <div class="accountAdvertFunction">
                 {% if product.isActive and product.isConfirm %}
-                    <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы хотите снять объявление с продажи?{% endtrans %}','archive')">{% trans %}снять с продажи{% endtrans %}</button>
+                    <button onclick="showAdvertActionDialog({{ product.id }},'{{ locale.code }}','{% trans %}Вы хотите снять объявление с продажи?{% endtrans %}','{% trans %}Снять с продажи{% endtrans %}','{% trans %}Нет, я передумал{% endtrans %}','{% trans %}Снять с продажи{% endtrans %}','archive')">{% trans %}Снять с продажи{% endtrans %}</button>
                 {% else %}
-                    <button onclick="doAdvertAction({{ product.id }},'{{ locale.code }}', '{% trans %}Вы действительно хотите удалить объявление?{% endtrans %}','delete')">{% trans %}удалить{% endtrans %}</button>
+                    <button onclick="showAdvertActionDialog({{ product.id }},'{{ locale.code }}','{% trans %}Вы действительно хотите удалить объявление?{% endtrans %}','{% trans %}Удалить объявление{% endtrans %}','{% trans %}Нет, я передумал{% endtrans %}','{% trans %}Удалить{% endtrans %}','delete')">{% trans %}удалить{% endtrans %}</button>                    
                 {% endif %}
             </div>
             <div class="accountAdvertFunction">
@@ -122,23 +124,23 @@
     <div class="accountAdvertInfoLeft">
         <div class="accountAdvertImage">
             {% if product.fotos | length > 0 %}
-                <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}"><img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
+                {% if product.isActive and product.isConfirm and not product.isDraft and not product.isBlocked %}
+                    <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}"><img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
+                {% else %}
+                    <a href=javascript:void(0)"><img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
+                {% endif %}
             {% endif %}
             <div class="accountAdvertInfoViews">{% trans %}Просмотров{% endtrans %}: {% if product.views %}{{ product.views }}{% else %}0{% endif %}</div>
         </div>
         <div class="accountAdvertInfo">
             <div class="accountAdvertInfoName">
-                <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}">{{ product.name }}
-                {% if product.info.generation %}
-                    {% if product.info.generation.translations | length > 0 %}
-                        {% for translation in product.info.generation.translations %}
-                            {% if translation.locale.id == locale.id %}
-                                {{ translation.value }}
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}        
-                        {{ product.info.generation.name }}
-                    {% endif %} 
+                {% if product.isActive and product.isConfirm and not product.isDraft and not product.isBlocked %}
+                    <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}">{{ product.name }}
+                {% else %}
+                    <a href="javascript:void(0)">{{ product.name }}
+                {% endif %}
+                {% if product.info.modification %}
+                    {{ product.info.modification.label }}
                 {% endif %}
                 </a>
             </div>

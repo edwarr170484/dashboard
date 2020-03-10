@@ -224,7 +224,7 @@ function getGenerationsByBoard(boardId, locale_code){
         success: function(html)
         {
             $(".modal-body-cover").hide();
-            $("#addAdvertCarGenerations").html(html);
+            $("#addAdvertCarEngines").html(html);
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -377,17 +377,17 @@ function resetGarant(element, event){
     element.removeClass("active");
 }
 
-function getCityCodesByValue(element, locale_code){
-    var searchText = element.val();
+function getCityCodesByValue(element){
+    var id = element.val();
     
     $.ajax({
-        url: '/account/addadvert/getcitycodes/' + searchText,
+        url: '/account/addadvert/getcitycodes/' + id,
         type:'get',
         dataType: 'html',
         beforeSend: function(){},
-        success: function(data)
-        {
-            element.parent().find(".addAdvertContextParamenterValues").html(data).addClass("active");
+        success: function(data){
+            $("#advertCityCodeBlock").html(data);
+            $("#advertCityCode").customSelect();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -487,9 +487,18 @@ function setGasValue(element, locale_code){
     });
 }
 
-function doAdvertAction(productId, locale_code, text, action){
-    if(confirm(text)){
-        $.ajax({
+function showAdvertActionDialog(productId, locale_code, text, headerText, dismissText, buttonText, action){
+    var buttonHtml='<button onclick="doAdvertAction(' + productId + ',\'' + locale_code + '\',\'' + action + '\')">' + buttonText + '</button><button class="gray" class="close" data-dismiss="modal" aria-label="Close">' + dismissText + '</button>';
+    
+    $("#productToolsHeader").html(headerText);
+    $("#productToolsButtons").html(buttonHtml);
+    $("#productToolsText").html(text);
+    
+    $("#productToolsModal").modal();
+}
+
+function doAdvertAction(productId, locale_code, action){
+    $.ajax({
             url: '/' + locale_code + '/account/advert/ajax/' + action + '/' + productId,
             type:'get',
             dataType: 'html',
@@ -502,8 +511,7 @@ function doAdvertAction(productId, locale_code, text, action){
                 $(".modal-body-cover").hide();
                 err=xhr.responseText;
             }
-        });
-    }
+    });
 }
 
 function toggleProductService(productId, serviceId, servicePrice, locale_code, element, titleText, buttonText){

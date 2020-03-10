@@ -26,12 +26,11 @@ class CityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', 'entity', array('class' => 'DashboardCommonBundle:City', 
-                    'choice_label' => function($city){return $city->getName();}, 
-                    'data' => $this->city,
-                    'required' => false,
-                    'empty_data' => 0,
-                    'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
-                    'attr' => array('class' => 'custom-select','placeholder' => 'Город','data-write' => "1",'onchange' => 'document.regionFilter.submit()')));
+                                              'choice_label' => function($city){return $city->getName();}, 
+                                              'data' => $this->city,
+                                              'required' => false,
+                                              'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
+                                              'attr' => array('class' => 'custom-select','placeholder' => 'Город','data-write' => "1",'data-clearchange' => '1','onchange' => 'document.regionFilter.submit()')));
     }
     
     public function configureOptions(OptionsResolver $resolver)

@@ -40,6 +40,11 @@ class Conversation
     private $messages;
     
     /**
+     * @ORM\Column(type="string", length = 255, nullable=true, options={"default":null})
+     */
+    private $subject;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -158,5 +163,28 @@ class Conversation
     public function getUserTwo()
     {
         return $this->userTwo;
+    }
+
+    /**
+     * Set subject
+     *
+     * @param string $subject
+     * @return Conversation
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
+    
+        return $this;
+    }
+
+    /**
+     * Get subject
+     *
+     * @return string 
+     */
+    public function getSubject()
+    {
+        return $this->subject;
     }
 }

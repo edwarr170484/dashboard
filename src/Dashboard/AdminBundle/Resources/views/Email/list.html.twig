@@ -1,0 +1,56 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Тексты писем{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Тексты писем</li>
+    </ol>
+    <h1 class="page-header">Тексты писем</h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="notice-message">
+                    {{ flashMessage | raw }}
+                </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <h4 class="panel-title">Тексты писем</h4>
+                </div>
+                <div class="panel-body">
+                    {%if emails %}
+                        <form action="" method="POST" name="deleteSelected" id="deleteSelected">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Название</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="categoriesTableList">
+                                            {% for email in emails %}
+                                                <tr>
+                                                    <td>{{ email.title }}</td>
+                                                    <td>
+                                                        <a class="btn btn-success" href="{{ path('admin_email_edit',{ 'emailId' : email.id }) }}">
+                                                            <i class="fa fa-pencil" title="Редактировать"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}	
+
+                                    </tbody>
+                                </table>
+                            </form>                   
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

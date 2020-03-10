@@ -72,25 +72,14 @@
             <div class="col-lg-5 col-md-5 col-md-offset-1">
                 <div class="loginBlock">
                     {% if success %}   
-                                {% if settings.isModerate %}
-                                    <div class="register-block result">
-                                        <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
-                                        <div class="register-block-description confirm-restore">
-                                            {% trans %}Ваш аккаунт зарегистрирован в системе и проходит модерацию нашими специалистами. Регистрационные данные отправлены на введенный Вами email{% endtrans %}
-                                        </div>
-                                        <div class="resultEmail">{{ email }}</div>
-                                        <div class="resultNavigation"><a href="{{path('login')}}">Войдите</a>, используя свои данные</div>
+                                <div class="register-block result">
+                                    <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
+                                    <div class="register-block-description confirm-restore">
+                                        {% trans %}Ваш аккаунт зарегистрирован в системе. Данные для подтверждения аккаунта отправлены на введенный Вами адрес электронной почты.{% endtrans %}
                                     </div>
-                                {% else %}
-                                    <div class="register-block result">
-                                        <h1 class="register-block-header">{% trans %}Регистрация{% endtrans %}</h1>
-                                        <div class="register-block-description confirm-restore">
-                                            {% trans %}Ваш аккаунт успешно зарегистрирован в системе. Регистрационные данные отправлены на введенный Вами email{% endtrans %}
-                                        </div>
-                                        <div class="resultEmail">{{ email }}</div>
-                                        <div class="resultNavigation"><a href="{{path('login')}}">Войдите</a>, используя свои данные</div>
-                                    </div>    
-                                {% endif %}
+                                    <div class="resultEmail">{{ email }}</div>
+                                    <div class="resultNavigation"><a href="{{path('login')}}">Войдите</a>, используя свои данные.</div>
+                                </div>
                             {% else %}
                                 <div class="register-block">
                                     <h1 class="register-block-header"><a href="{{path('login')}}">{% trans %}Войти{% endtrans %}</a> {% trans %} или Зарегистрироваться{% endtrans %}</h1>

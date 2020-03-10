@@ -43,107 +43,8 @@
                 <div class="advertEditBigForm">
                     <form method="POST" action="">
                     <div class="advertHeader">
-                        <div class="advertFiltersTableHeader" style="font-size: 3rem;">{{ product.category.parent.title }} {{ product.category.title }} {{ product.info.generation.name }} {{ product.info.year }} </div>
+                        <div class="advertFiltersTableHeader" style="font-size: 3rem;">{{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}</div>
                     </div>
-                    <!--<div class="advertAutoMarka">
-                        <div class="advertFiltersTableHeader">{% trans %}Марка{% endtrans %}</div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                {% if categories | length > settings.categoryPanelItemsNumber %}
-                                    <div class="mainPageAutoList productEdit">
-                                        <ul class="list-unstyled list-inline justLinks shortCategoryList">
-                                            {% for child in categories | slice(0, settings.categoryPanelItemsNumber )%}
-                                                {% set categoryTitle = child.title %}
-                                                <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
-                                                    <a href="javascript:void(0)" onclick="" {% if product.category.parent.id == child.id %}class="active"{% endif %}>
-                                                        {{ categoryTitle }}
-                                                    </a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                        <ul class="list-unstyled list-inline justLinks fullCategoryList">
-                                            {% for child in categories %}
-                                                {% set categoryTitle =  child.title %}
-                                                <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
-                                                    <a href="javascript:void(0)" onclick="" {% if product.category.parent.id == child.id %}class="active"{% endif %}>
-                                                        {{ categoryTitle }}
-                                                    </a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                {% else %}
-                                    <div class="mainPageAutoList">
-                                        <ul class="list-unstyled list-inline justLinks">
-                                            {% for child in categories %}
-                                                <li>
-                                                    <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" {% if product.category.parent.id == child.id %}class="active"{% endif %}>{{ child.title}}</a>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            {% if categories | length > settings.categoryPanelItemsNumber %}
-                                <div class="col-lg-12 addAdvertFiltersButtons">
-                                    <div class="mainPageFiltersShowResults">
-                                        <button onclick="showHideAllCategories($(this))" data-text="{% trans %}Свернуть{% endtrans %}">{% trans %}Показать все марки{% endtrans %}</button>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="advertAutoMarka">
-                        <div class="advertFiltersTableHeader">{% trans %}Модель{% endtrans %}</div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                {% if product.category.parent.children | length > settings.categoryPanelItemsNumber %}
-                                    <div class="mainPageAutoList productEdit">
-                                        <ul class="list-unstyled list-inline justLinks shortCategoryList">
-                                            {% for child in product.category.parent.children | slice(0, settings.categoryPanelItemsNumber )%}
-                                                {% set categoryTitle = child.title %}
-                                                <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
-                                                    <a href="javascript:void(0)" onclick="" {% if product.category.id == child.id %}class="active"{% endif %}>
-                                                        {{ categoryTitle }}
-                                                    </a>
-                                                    <input name="category[]" type="radio" class="hidden-radio-parameter" value="{{ child.id }}" {% if product.category.id == child.id %}checked="checked"{% endif %}/>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                        <ul class="list-unstyled list-inline justLinks fullCategoryList">
-                                            {% for child in product.category.parent.children %}
-                                                {% set categoryTitle =  child.title %}
-                                                <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
-                                                    <a href="javascript:void(0)" onclick="" {% if product.category.id == child.id %}class="active"{% endif %}>
-                                                        {{ categoryTitle }}
-                                                    </a>
-                                                    <input name="category[]" type="radio" class="hidden-radio-parameter" value="{{ child.id }}" {% if product.category.id == child.id %}checked="checked"{% endif %}/>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                {% else %}
-                                    <div class="mainPageAutoList productEdit">
-                                        <ul class="list-unstyled list-inline justLinks">
-                                            {% for child in product.category.parent.children %}
-                                                <li>
-                                                    <a href="javascript:void(0)" onclick="" {% if product.category.id == child.id %}class="active"{% endif %}>{{ child.title}}</a>
-                                                    <input name="category[]" type="radio" class="hidden-radio-parameter" value="{{ child.id }}" {% if product.category.id == child.id %}checked="checked"{% endif %}/>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            {% if product.category.parent.children | length > settings.categoryPanelItemsNumber %}
-                                <div class="col-lg-12 addAdvertFiltersButtons" style="padding-bottom:2rem">
-                                    <div class="mainPageFiltersShowResults">
-                                        <button onclick="showHideAllCategories($(this))" data-text="{% trans %}Свернуть{% endtrans %}">{% trans %}Показать все марки{% endtrans %}</button>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>-->
                     <div class="advertTechnicalInformation">
                         <table class="table table-striped" id="advertFiltersItemsTable">
                             <tbody>
@@ -198,9 +99,6 @@
                                 </tr>
                                 <tr id="addAdvertCarBoards">
                                     {% include 'DashboardCommonBundle:Product:edit/boards.html.twig' with {'boards' : boards, 'locale' : locale,'advertInfo' : product} %}
-                                </tr>
-                                <tr id="addAdvertCarGenerations">
-                                    {% include 'DashboardCommonBundle:Product:edit/generations.html.twig' with {'boards' : boardGenerations, 'locale' : locale,'advertInfo' : product} %}
                                 </tr>
                                 <tr id="addAdvertCarEngines">
                                     {% include 'DashboardCommonBundle:Product:edit/gasTypes.html.twig' with {'gasTypes' : gasTypes, 'locale' : locale,'advertInfo' : product} %}
@@ -545,11 +443,14 @@
                                             <td>
                                                 <input name="contactName" class="parameterValue" required="required" type="text" {% if product.authorName %}value="{{  product.authorName }}"{% endif %} />
                                             </td>
-                                            <td><span class="addAdvertParameterLabel">{% trans %}Индекс города{% endtrans %}<sup> *</sup></span></td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
                                             <td>
                                                 <div class="addAdvertContextParamenter">
-                                                    <input name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" onkeyup="getCityCodesByValue($(this),'{{ locale.code}}')" required="required" type="text" {% if product.cityCode %}value="{{  product.cityCode.code }}"{% endif %} />
-                                                    <div class="addAdvertContextParamenterValues"></div>
+                                                    <select name="contactCity" data-write="1" class="custom-select just-select" id="advertCity" placeholder="{% trans %}Город{% endtrans %}" onchange="getCityCodesByValue($(this))">
+                                                        {% for city in cities %}
+                                                            <option value="{{ city.id }}" {% if product.city and product.city.id == city.id %}selected="selected"{% endif %}>{{ city.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
                                                 </div>
                                             </td>
                                         </tr>
@@ -558,11 +459,18 @@
                                             <td>
                                                 <input name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue masked-phone" required="required" type="text" {% if product.authorPhone %}value="{{  product.authorPhone }}"{% endif %} />
                                             </td>
-                                            <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Индекс{% endtrans %}<sup> *</sup></span></td>
                                             <td>
-                                                <div class="addAdvertContextParamenter">
-                                                    <input name="contactCity" placeholder="{% trans %}Город{% endtrans %}" class="parameterValue" onkeyup="getCitiesByValue($(this), '{{ locale.code }}')" required="required" type="text" {% if product.city %}value="{{  product.city.name }}"{% endif %} />
-                                                    <div class="addAdvertContextParamenterValues"></div>
+                                                <div class="addAdvertContextParamenter" id="advertCityCodeBlock">
+                                                    <select name="contactCityCode" data-write="1" class="custom-select just-select" id="advertCityCode" placeholder="{% trans %}Индекс{% endtrans %}">
+                                                        {% if product.city %}
+                                                            {% if product.city.codes | length > 0 %}
+                                                                {% for code in product.city.codes %}
+                                                                    <option value="{{ code.id }}" {% if product.cityCode and product.cityCode.id == code.id %}selected="selected"{% endif %}>{{ code.code }}</option>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </select>
                                                 </div>
                                             </td>
                                         </tr>

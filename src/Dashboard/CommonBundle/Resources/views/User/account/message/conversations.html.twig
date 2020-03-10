@@ -144,8 +144,6 @@
                                                                 </svg>
                                                             {% endif %}
                                                         {% endif %}
-                                                    </div>
-                                                    <div class="accountMessageItemTitle">
                                                         <div class="accountMessageItemUserName">
                                                             {% if conversation.userOne.id == user.id %}
                                                                 {% if conversation.userTwo %}
@@ -161,10 +159,12 @@
                                                                 {% endif %}
                                                             {% endif %}
                                                         </div>
+                                                    </div>
+                                                    <div class="accountMessageItemTitle">
                                                         {% if lastMessage %}
                                                             <div class="accountMessageItemTitleName">
-                                                                {% if lastMessage.subject %}
-                                                                    {{ lastMessage.subject }}
+                                                                {% if lastMessage.conversation.subject %}
+                                                                    {{ lastMessage.conversation.subject }}
                                                                 {% else %}
                                                                     {{ lastMessage.message | striptags('<img>') }}
                                                                 {% endif %}

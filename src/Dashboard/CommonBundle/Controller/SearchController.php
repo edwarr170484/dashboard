@@ -140,6 +140,7 @@ class SearchController extends Controller{
     
     private function createSearchSql($request, $category)
     {
+        $manager = $this->getDoctrine()->getManager();
         $joinInstructions = '';
         
         if($request->request->get('filter'))
@@ -206,6 +207,7 @@ class SearchController extends Controller{
         }
         
         if($request->request->get('categoryFilter')){
+            $categoryFilters = $request->request->get('categoryFilter');
             if(isset($categoryFilters['model']) && $categoryFilters['model'] != 0){
                 $sql .= " AND (";
                 foreach($categoryFilters['model'] as $key => $categoryId){

@@ -2,7 +2,7 @@
     <div class="row content-row">
     <div class="col-lg-9 col-md-9 left-column">
         <div class="content-block-header">
-            <h3>{{ category.parent.title}} / {{ category.title}} {{ generation.name }}</h3>
+            <h3>{{ category.parent.title}} / {{ category.title}} {% if modification %}{{ modification.label }}{% endif %}</h3>
         </div>
         <div class="addAdvertStepNavigation">
                 <a href="javascript:void(0)" onclick="getStep2('{{ locale.code }}')" class="back">{% trans %}Вернуться назад{% endtrans %}</a>

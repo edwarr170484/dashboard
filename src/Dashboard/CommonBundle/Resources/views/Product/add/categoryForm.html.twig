@@ -78,21 +78,19 @@
                         <div class="addAdvertForm-Group">
                             <div class="addAdvertFormGroupLabel">{{ filter.name }}</div>
                             <div class="addAdvertFormGroupControl">
-                                {% if filter.type == 'checkbox' %}
+                                {% if filter.type.name == 'checkbox' %}
                                     {% for value in filter.values %}
                                         <div class="static-filters filter">
                                             <input name="{{ filter.productParameter }}[{{ filter.id }}]" value="{{ value.id }}" type="checkbox" class="custom-checkbox"/> {{ value.value }}
                                         </div>
                                     {% endfor %}
                                 {% endif %}
-                                {% if filter.type == 'select' or filter.type == 'color' %}
-                                    <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" {% if filter.isRequired %}required="required"{% endif %}>
-                                        <option value="0">{% trans %}Нет{% endtrans %}</option>
-                                        {% for value in filter.values %}
-                                            <option value="{{ value.id }}">{{ value.value }}</option>
-                                        {% endfor %}
-                                    </select>
-                                {% endif %}
+                                <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" {% if filter.isRequired %}required="required"{% endif %}>
+                                    <option value="0">{% trans %}Нет{% endtrans %}</option>
+                                    {% for value in filter.values %}
+                                        <option value="{{ value.id }}">{{ value.value }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                     {% endfor %}
@@ -122,33 +120,47 @@
                 <div class="addAdvertForm-Group">
                     <div class="addAdvertFormGroupLabel">{% trans %}Как к Вам обращаться?{% endtrans %}</div>
                     <div class="addAdvertFormGroupControl">
-                        <input name="contactName" placeholder="{% trans %}John Doe{% endtrans %}" class="form-control" required="required" type="text" />
+                        <input value="{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}" name="contactName" placeholder="{% trans %}John Doe{% endtrans %}" class="form-control" required="required" type="text" />
                     </div>
                 </div>   
                 <div class="addAdvertForm-Group">
                     <div class="addAdvertFormGroupLabel">{% trans %}Email{% endtrans %}</div>
                     <div class="addAdvertFormGroupControl">
-                         <input name="contactEmail" placeholder="{% trans %}E-mail{% endtrans %}" class="form-control" type="text" />
+                        {% if user %}
+                            <input value="{{ user.email }}" name="contactEmail" placeholder="{% trans %}E-mail{% endtrans %}" class="parameterValue" required="required" type="text" />
+                        {% else %}
+                            <input name="contactEmail" placeholder="{% trans %}E-mail{% endtrans %}" class="parameterValue" required="required" type="text" />
+                        {% endif %}
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
                     <div class="addAdvertFormGroupLabel">{% trans %}Телефон{% endtrans %}</div>
                     <div class="addAdvertFormGroupControl">
-                        <input name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="form-control masked-phone" required="required" type="text" />
+                        <input value="{{ user.userinfo.phone }}" name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="form-control masked-phone" required="required" type="text" />
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
                     <div class="addAdvertFormGroupLabel">{% trans %}Город{% endtrans %}</div>
                     <div class="addAdvertFormGroupControl">
-                        <input name="contactCity" placeholder="{% trans %}Город{% endtrans %}" class="form-control" onkeyup="getCitiesByValue($(this), '{{ locale.code }}')" required="required" type="text" />
-                        <div class="addAdvertContextParamenterValues"></div>
+                        <select name="contactCity" data-write="1" class="custom-select just-select" id="advertCity" placeholder="{% trans %}Город{% endtrans %}" onchange="getCityCodesByValue($(this))">
+                            {% for city in cities %}
+                                <option value="{{ city.id }}" {% if user and user.userinfo.city and user.userinfo.city.id == city.id %}selected="selected"{% endif %}>{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
                     <div class="addAdvertFormGroupLabel">{% trans %}Индекс{% endtrans %}</div>
-                    <div class="addAdvertFormGroupControl">
-                        <input name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="form-control" onkeyup="getCityCodesByValue($(this),'{{ locale.code}}')" required="required" type="text" />
-                        <div class="addAdvertContextParamenterValues"></div>
+                    <div class="addAdvertFormGroupControl" id="advertCityCodeBlock">
+                        <select name="contactCityCode" data-write="1" class="custom-select just-select" id="advertCityCode" placeholder="{% trans %}Индекс{% endtrans %}">
+                            {% if user and user.userinfo.city %}
+                                {% if user.userinfo.city.codes | length > 0 %}
+                                    {% for code in user.userinfo.city.codes %}
+                                        <option value="{{ code.id }}" {% if user and user.userinfo.cityCode and user.userinfo.cityCode.id == code.id %}selected="selected"{% endif %}>{{ code.code }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endif %}
+                        </select>
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
@@ -162,7 +174,7 @@
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
-                {% if role.servicePacks or role.services %}
+                {% if (role.servicePacks or role.services) and role.role != 'ROLE_DEALER' %}
                 <div class="advertFiltersItem justFilter">
                     <div class="advertFiltersItemValue" style="padding-right: 0;">
                         <div class="advertFiltersServicesTabs">

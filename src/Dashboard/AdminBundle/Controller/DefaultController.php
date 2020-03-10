@@ -1172,36 +1172,49 @@ class DefaultController extends Controller
         
         $region = $manager->getRepository("DashboardCommonBundle:Region")->find(1);
         
-        $finder->files()->name('*.csv')->in('bundles');
+        $finder->files()->name('city.txt')->in('import');
+        $items = new ArrayCollection();
         
         foreach ($finder as $file) {
             $absoluteFilePath = $file->getRealPath();
-            $fileNameWithExtension = $file->getRelativePathname();
             
-            $lines = file($absoluteFilePath);//$file->getContents();
+            $lines = file($absoluteFilePath);
             if(count($lines) > 0){
                 foreach($lines as $cityInfo){
-                    $info = explode(',',$cityInfo);
-                    $city = $manager->getRepository("DashboardCommonBundle:City")->findOneByName($info[0]);
+                    $info = explode(';', $cityInfo);
                     
-                    /*if(!$city){
+                    /*$marker = 0;
+                    foreach($items as $item){
+                        if($item->getName() == $info[0]){
+                            $marker = 1;
+                            break;
+                        }
+                    }
+                    
+                    if(!$marker){
                         $city = new City();
                         $city->setName($info[0]);
                         $city->setRegion($region);
-                        $manager->persist($city);
-                        $manager->flush();
+                        $items->add($city);
                     }*/
-
+                    
+                    $city = $manager->getRepository("DashboardCommonBundle:City")->findOneByName($info[0]);
+                    
                     if($city){
                         $code = new CityCode();
                         $code->setCity($city);
                         $code->setCode($info[1]);
-                        $manager->persist($code);
-                        $manager->flush();
+                        $items->add($code);
                     }
                 }
             }
         }
+        
+        foreach($items as $item){
+            $manager->persist($item);
+        }
+        
+        $manager->flush();
         
         return new Response('OK');
     }
@@ -1599,23 +1612,6 @@ class DefaultController extends Controller
             }
         }
         
-        //удаляем кошелек и историю
-        foreach($user->getUserpurse()->getHistory() as $historyAction)
-        {
-            $historyAction->setUserpurse(null);
-            $manager->remove($historyAction);
-            $manager->flush();
-        }
-        
-        $userPurse = $user->getUserpurse();
-        $userPurse->setUser(null);
-        $manager->remove($userPurse);
-        
-        //удаляем активность
-        $userActivity = $user->getActivity();
-        $userActivity->setUser(null);
-        $manager->remove($userActivity);
-        
         //удаляем информацию
         $userInfo = $user->getUserinfo();
         $userInfo->setUser(null);
@@ -1792,24 +1788,7 @@ class DefaultController extends Controller
                 $this->deleteAdvert($product->getId(), $request);
             }
         }
-        //удаляем всех друзей
-        if($user->getFriends())
-        {
-            foreach($user->getFriends() as $friend)
-            {
-                $friend->setReferrer(null);
-                $manager->remove($friend);
-            }
-        }
-        $friends = $manager->getRepository("DashboardCommonBundle:Friend")->findBy(array("user" => $user));
-        if($friends)
-        {
-            foreach($friends as $friend)
-            {
-                $friend->setUser(null);
-                $manager->remove($friend);
-            }
-        }
+        
         //удаляемся из избранных объявлений
         $favProducts = $manager->getRepository("DashboardCommonBundle:FavoriteProducts")->findBy(array("userId" => $user->getId()));
         if($favProducts)
@@ -1868,14 +1847,7 @@ class DefaultController extends Controller
                 $manager->remove($order);
             }
         }
-        //удаляем ивайт
-        if($user->getInvite())
-        {
-            $invite = $user->getInvite();
-            $invite->setUser(null);
-            $manager->remove($invite);
-        }
-        
+                
         //удаляем пользователя
         $manager->remove($user);
         $manager->flush();

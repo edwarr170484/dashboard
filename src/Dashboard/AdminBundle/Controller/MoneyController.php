@@ -1,5 +1,4 @@
 <?php
-
 namespace Dashboard\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -7,18 +6,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Dashboard\CommonBundle\Entity\Liqpay;
-
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class MoneyController extends Controller
 {  
@@ -50,21 +40,45 @@ class MoneyController extends Controller
                     if(count($files) > 0){
                         $zip = new \ZipArchive();
                         $zipName = 'Bills.zip';
-
+                        
                         $zip->open($zipName,  \ZipArchive::CREATE);
-                        foreach ($files as $file) {
-                            $zip->addFromString($file->getFilename(),  $file->getContents());
+                        if($request->request->get('className')){
+                            foreach($request->request->get('className') as $className){
+                                $sql = "SELECT b FROM Dashboard\\CommonBundle\\Entity\\" . $className . " b WHERE 1=1";
+                                if($request->request->get('dateStart') && $request->request->get('dateStart') > 0){
+                                    $sql .= " AND b.dateAdded >= '" . $request->request->get('dateStart')  . "'";
+                                }
+                                if($request->request->get('dateEnd') && $request->request->get('dateEnd') > 0){
+                                    $sql .= " AND b.dateAdded <= '" . $request->request->get('dateEnd')  . "'";
+                                }
+                                $query = $manager->createQuery($sql);
+                                $bills = $query->getResult();
+                                
+                                if(count($bills) > 0){
+                                    foreach($bills as $bill){
+                                        foreach ($files as $file) {
+                                            if($file->getFilename() == "invoice-#" . $bill->getId() . ".pdf"){
+                                                $zip->addFromString($file->getFilename(),  $file->getContents());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                         $zip->close();
+                        if(file_exists($zipName)){
+                            $response = new Response(file_get_contents($zipName));
+                            $response->headers->set('Content-Type', 'application/zip');
+                            $response->headers->set('Content-Disposition', 'attachment;filename="' . $zipName . '"');
+                            $response->headers->set('Content-length', filesize($zipName));
 
-                        $response = new Response(file_get_contents($zipName));
-                        $response->headers->set('Content-Type', 'application/zip');
-                        $response->headers->set('Content-Disposition', 'attachment;filename="' . $zipName . '"');
-                        $response->headers->set('Content-length', filesize($zipName));
+                            @unlink($zipName);
 
-                        @unlink($zipName);
-
-                        return $response;
+                            return $response;
+                        }else{
+                            return $this->redirectToRoute('admin_invoices');
+                        }
+                        
                     }else{
                         return $this->redirectToRoute('admin_invoices');
                     }
@@ -88,18 +102,19 @@ class MoneyController extends Controller
                                ->setCellValue('I1', 'NUM DE FACT.');
                     
                     if($request->request->get('className')){
+                        $i = 2;
                         foreach($request->request->get('className') as $className){
                             $sql = "SELECT b FROM Dashboard\\CommonBundle\\Entity\\" . $className . " b WHERE 1=1";
                             if($request->request->get('dateStart') && $request->request->get('dateStart') > 0){
-                                $sql .= " AND b.dateAdded <= '" . $request->request->get('dateStart')  . "'";
+                                $sql .= " AND b.dateAdded >= '" . $request->request->get('dateStart')  . "'";
                             }
                             if($request->request->get('dateEnd') && $request->request->get('dateEnd') > 0){
-                                $sql .= " AND b.dateAdded >= '" . $request->request->get('dateEnd')  . "'";
+                                $sql .= " AND b.dateAdded <= '" . $request->request->get('dateEnd')  . "'";
                             }
                             $query = $manager->createQuery($sql);
                             $bills = $query->getResult();
                             
-                            $i = 2;
+                            
                             if(count($bills) > 0){
                                 foreach($bills as $bill){
                                     $phpExcelObject->setActiveSheetIndex(0)

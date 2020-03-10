@@ -143,7 +143,9 @@
             <tr>
                 <th>{% trans %}Мощность двигателя(л.с.){% endtrans %}</th>
                 <th>{% trans %}Объем двигателя{% endtrans %}</th>
-                <th>{% trans %}Год{% endtrans %}</th>
+                <th>{% trans %}Название{% endtrans %}</th>
+                <th>{% trans %}Начало выпуска{% endtrans %}</th>
+                <th>{% trans %}Окончание выпуска{% endtrans %}</th>
                 <th>{% trans %}Порядок{% endtrans %}</th>
                 <th>{% trans %}Действия{% endtrans %}</th>
             </tr>
@@ -159,6 +161,8 @@
         <td>{{ form_widget(form.power)}}</td>
         <td>{{ form_widget(form.size)}}</td>
         <td>{{ form_widget(form.label)}}</td>
+        <td>{{ form_widget(form.yearFrom)}}</td>
+        <td>{{ form_widget(form.yearTo)}}</td>
         <td>{{ form_widget(form.sortorder)}}{{ form_widget(form.generation)}}</td>
         <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
                 <i class="fa fa-times" title="Удалить перевод для языка"></i>

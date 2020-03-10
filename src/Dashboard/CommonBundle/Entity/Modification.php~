@@ -33,6 +33,16 @@ class Modification
     private $label;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
+     */
+    private $yearFrom;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
+     */
+    private $yearTo;
+    
+    /**
      * @ORM\Column(type="string", length=255, nullable=true, options={"default":"null"})
      */
     private $sortorder;
@@ -251,5 +261,51 @@ class Modification
     public function getGenerationItem()
     {
         return $this->generationItem;
+    }
+
+    /**
+     * Set yearFrom
+     *
+     * @param string $yearFrom
+     * @return Modification
+     */
+    public function setYearFrom($yearFrom)
+    {
+        $this->yearFrom = $yearFrom;
+    
+        return $this;
+    }
+
+    /**
+     * Get yearFrom
+     *
+     * @return string 
+     */
+    public function getYearFrom()
+    {
+        return $this->yearFrom;
+    }
+
+    /**
+     * Set yearTo
+     *
+     * @param string $yearTo
+     * @return Modification
+     */
+    public function setYearTo($yearTo)
+    {
+        $this->yearTo = $yearTo;
+    
+        return $this;
+    }
+
+    /**
+     * Get yearTo
+     *
+     * @return string 
+     */
+    public function getYearTo()
+    {
+        return $this->yearTo;
     }
 }

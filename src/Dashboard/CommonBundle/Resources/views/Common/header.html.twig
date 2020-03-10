@@ -51,11 +51,7 @@
                                     {% if sessionCity %}
                                         {{ sessionCity.name }}
                                     {% else %}
-                                        {% if sessionRegion %}
-                                            {{ sessionRegion.name }}
-                                        {% else %}
-                                            {% trans %}Испания{% endtrans %}
-                                        {% endif %}
+                                        {% trans %}Испания{% endtrans %}
                                     {% endif %}
                                 </a>            
                             </div>
@@ -145,7 +141,7 @@
                 <div class="siteLogoImage">
                     {% if settings.siteLogo %}
                         <a href="{{ path('main') }}">
-                            <img src="{{ asset('bundles/images/site/' ~ settings.siteLogo) }}" alt="{{ settings.siteName }}" title="{{ settings.siteName }}" />
+                            <img src="/logo.svg" alt="Auto28.es">
                         </a>
                     {% endif %}
                 </div>
@@ -166,86 +162,85 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 siteMainMenu hidden-sm hidden-xs">
-                <ul class="list-unstyled">
-                    {% if categories %}
-                        {% for category in categories %}
-                            {% if category.id == 27 %}
-                                <li class="submenu">
-                                    {% if category.isUseChildrensLikeModel %}
-                                        <a href="javascript:void(0)">
-                                    {% else %}
-                                        <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
-                                    {% endif %}
-                                        {{ category.title}}
-                                        <div class="shadowBlock"></div>
-                                    </a>
-                                    <div class="hover-border"></div>
-                                    <div class="siteMainSubmenu">
-                                        <ul class="list-unstyled">
-                                            <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchOld' : '1'}) }}">{% trans %}С&nbsp;пробегом{% endtrans %}</a></li>
-                                            <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchNew' : '1'}) }}">{% trans %}Новые{% endtrans %}</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            {% else %}
-                                <li class="{% if category.children | length > 0 %}submenu{% endif %}">
-                                    {% if category.isUseChildrensLikeModel %}
-                                        <a href="javascript:void(0)">
-                                    {% else %}
-                                        <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">
-                                    {% endif %}
-                                        {{ category.title}}
-                                        <div class="shadowBlock"></div>
-                                    </a>
-                                    <div class="hover-border"></div>
-                                    <div class="siteMainSubmenu">
-                                        {% if category.children | length > 0 %}
-                                            {% if category.children | length > 6 %}
-                                                {% set childsNum = category.children | length %}
-                                                {% set columnsNum =  category.children | length / 6 %}
-                                                {% set start = 0 %}
-                                                {% set end = 5 %}
-                                                {% for column in 1..columnsNum %}
-                                                    <ul class="list-unstyled">
-                                                        {% for i in start..end %}
-                                                            <li>
-                                                                <a href="{{ path('category',{'categoryId' : category.children[i].id, 'categoryName' : category.children[i].name}) }}">
-                                                                    {{ category.children[i].title}}
-                                                                </a>
-                                                            </li>
-                                                        {% endfor %}
-                                                        {% set start = start + 6 %}
-                                                        {% set end = end + 6 %}
-                                                    </ul>
-                                                {% endfor %}
-                                            {% else %}
-                                                <ul class="list-unstyled">
-                                                    {% for child in category.children %}
-                                                        <li>
-                                                            <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title}}</a>
-                                                        </li>
-                                                    {% endfor %}
-                                                </ul>
+            {% if topMenu %}
+                <div class="col-lg-6 col-md-6 siteMainMenu hidden-sm hidden-xs">
+                    <ul class="list-unstyled">
+                        {% if topMenu.items | length > 0 %}
+                            {% for item in topMenu.items %}
+                                {% if not item.parent %}
+                                    <li class="submenu">
+                                        {% if item.category or item.link or item.page %}
+                                            {% if item.category %}
+                                                {% set link = path('category',{'categoryId' : item.category.id, 'categoryName' : item.category.name}) %}
+                                            {% elseif item.page %}
+                                                {% if item.page.isUserpage %}
+                                                    {% set link = path('pages',{'route' : item.page.route}) %}
+                                                {% else %}
+                                                    {% set link = '/' ~ item.page.route %}
+                                                {% endif %}
+                                                {% set link = path('pages',{'route' : item.page.route}) %}
+                                            {% elseif item.link %}
+                                                {% set link = item.link %}
                                             {% endif %}
+                                            <a href="{{ link }}">{{ item.title }}<div class="shadowBlock"></div></a>
+                                        {% else %}
+                                            <a href="javascript:void(0)">{{ item.title }}<div class="shadowBlock"></div></a>
                                         {% endif %}
-                                    </div>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    <li class="submenu">
-                        <a href="">{% trans %}Услуги{% endtrans %}<div class="shadowBlock"></div></a>
-                        <div class="hover-border"></div>
-                        <div class="siteMainSubmenu">
-                            <ul class="list-unstyled">
-                                <li><a href="{{ path('dealers') }}">{% trans %}Дилеры{% endtrans %}</a></li>
-                                <li><a href="{{ path('services') }}">{% trans %}Сервисные&nbsp;центры{% endtrans %}</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                                        <div class="hover-border"></div>
+                                        {% if item.children | length > 0 %}
+                                            <div class="siteMainSubmenu">
+                                                {% if item.children | length > 6 %}
+                                                    {% set childsNum = item.children | length %}
+                                                    {% set columnsNum =  item.children | length / 6 %}
+                                                    {% set start = 0 %}
+                                                    {% set end = 5 %}
+                                                    {% for column in 1..columnsNum %}
+                                                        <ul class="list-unstyled">
+                                                            {% for i in start..end %}
+                                                                {% if item.children[i].category %}
+                                                                    {% set link = path('category',{'categoryId' : item.children[i].category.id, 'categoryName' : item.children[i].category.name}) %}
+                                                                {% elseif item.children[i].page %}
+                                                                    {% if item.children[i].page.isUserpage %}
+                                                                        {% set link = path('pages',{'route' : item.children[i].page.route}) %}
+                                                                    {% else %}
+                                                                        {% set link = '/' ~ item.children[i].page.route %}
+                                                                    {% endif %}
+                                                                {% elseif item.children[i].link %}
+                                                                    {% set link = item.children[i].link %}
+                                                                {% endif %}
+                                                                <li><a href="{{ link }}">{{ item.children[i].title }}</a></li>
+                                                            {% endfor %}
+                                                            {% set start = start + 6 %}
+                                                            {% set end = end + 6 %}
+                                                        </ul>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <ul class="list-unstyled">
+                                                        {% for child in item.children %}
+                                                            {% if child.category %}
+                                                                {% set link = path('category',{'categoryId' : child.category.id, 'categoryName' : child.category.name}) %}
+                                                            {% elseif child.page %}
+                                                                {% if child.page.isUserpage %}
+                                                                    {% set link = path('pages',{'route' : child.page.route}) %}
+                                                                {% else %}
+                                                                    {% set link = '/' ~ child.page.route %}
+                                                                {% endif %}
+                                                            {% elseif child.link %}
+                                                                {% set link = child.link %}
+                                                            {% endif %}
+                                                            <li><a href="{{ link }}">{{ child.title }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
             <div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
                 {% if app.user %}
                     {% if app.user.roles[0].role != "ROLE_SERVICE" %}
@@ -255,7 +250,8 @@
                     <a href="{{path('login')}}" class="header-add-button pull-right">{{ block('svgAddAdvert') }}</a>
                 {% endif %}
             </div>
-            <div class="siteMenuGamburgerMenu">
+            {% if toggleMenu %}
+                <div class="siteMenuGamburgerMenu">
                             <button onclick='toggleGamburgerMenu(event,"hide")'>
                                 <svg width="26" height="15" viewBox="0 0 26 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M22 6.19549H0V8.20271H22V6.19549Z" fill="#EB840B"/>
@@ -263,55 +259,54 @@
                                 <path d="M26 0.173828H0V2.18105H26V0.173828Z" fill="#EB840B"/>
                                 </svg>
                             </button>
-                            {% if categories %}
-                                {% for category in categories %}
-                                    {% if category.id == 27 %}
+                            {% if toggleMenu.items | length > 0 %}
+                                {% for item in toggleMenu.items %}
+                                    {% if not item.parent %}
                                         <div class="siteMenuGamburgerItem">
                                             <div class="siteMenuGamburgerHeader">
-                                                {% if category.isUseChildrensLikeModel %}
-                                                    <a href="javascript:void(0)">{{ category.title}}</a>
+                                                {% if item.category or item.link or item.page %}
+                                                    {% if item.category %}
+                                                        {% set link = path('category',{'categoryId' : item.category.id, 'categoryName' : item.category.name}) %}
+                                                    {% elseif item.page %}
+                                                        {% if item.page.isUserpage %}
+                                                            {% set link = path('pages',{'route' : item.page.route}) %}
+                                                        {% else %}
+                                                            {% set link = '/' ~ item.page.route %}
+                                                        {% endif %}
+                                                        {% set link = path('pages',{'route' : item.page.route}) %}
+                                                    {% elseif item.link %}
+                                                        {% set link = item.link %}
+                                                    {% endif %}
+                                                    <a href="{{ link }}">{{ item.title }}<div class="shadowBlock"></div></a>
                                                 {% else %}
-                                                    <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
+                                                    {{ item.title }}
                                                 {% endif %}
                                             </div>
-                                            <ul class="list-unstyled">
-                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchOld' : '1'}) }}">{% trans %}С пробегом{% endtrans %}</a></li>
-                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'searchNew' : '1'}) }}">{% trans %}Новые{% endtrans %}</a></li>
-                                                <li><a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name,'dealer' : '1'}) }}">{% trans %}Дилеры{% endtrans %}</a></li>
-                                            </ul>
-                                        </div>
-                                    {% else %}
-                                        <div class="siteMenuGamburgerItem">
-                                            <div class="siteMenuGamburgerHeader">
-                                                {% if category.isUseChildrensLikeModel %}
-                                                    <a href="javascript:void(0)">{{ category.title}}</a>
-                                                {% else %}
-                                                    <a href="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}">{{ category.title}}</a>
-                                                {% endif %}
-                                            </div>
-                                            {% if category.children | length > 0 %}
+                                            {% if item.children | length > 0 %}
                                                 <ul class="list-unstyled">
-                                                    {% for child in category.children %}
-                                                        <li>
-                                                            <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title}}</a>
-                                                        </li>
+                                                    {% for child in item.children %}
+                                                        {% if child.category %}
+                                                                {% set link = path('category',{'categoryId' : child.category.id, 'categoryName' : child.category.name}) %}
+                                                            {% elseif child.page %}
+                                                                {% if child.page.isUserpage %}
+                                                                    {% set link = path('pages',{'route' : child.page.route}) %}
+                                                                {% else %}
+                                                                    {% set link = '/' ~ child.page.route %}
+                                                                {% endif %}
+                                                            {% elseif child.link %}
+                                                                {% set link = child.link %}
+                                                            {% endif %}
+                                                            <li><a href="{{ link }}">{{ child.title }}</a></li>
                                                     {% endfor %}
                                                 </ul>
                                             {% endif %}
                                         </div>
+                                        
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
-                            <div class="siteMenuGamburgerItem">
-                                <div class="siteMenuGamburgerHeader">{% trans %}Информация{% endtrans %}</div>
-                                <ul class="list-unstyled">
-                                    <li><a href="{{ path('dealer') }}">{% trans %}Дилерам{% endtrans %}</a></li>
-                                    <li><a href="{{ path('service') }}">{% trans %}Автосервисам{% endtrans %}</a></li>
-                                    <li style="padding-top:3rem;"><a href="{{ path('contact') }}" style="font-family:'GothamProBold'">Обратная связь</a></li>
-                                    <li><a href="" style="font-family:'GothamProBold'">Разместить рекламу</a></li>
-                                </ul>  
-                            </div>
-                        </div>
+                </div>
+            {% endif %}
         </div>
         {% for flashMessage in app.session.flashbag.get('notice_header') %}
             <div class="notice-message">

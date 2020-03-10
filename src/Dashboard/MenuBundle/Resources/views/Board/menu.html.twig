@@ -1,0 +1,95 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Меню сайта{% endtrans %}{% endblock %}
+
+{% block body %}  
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Меню сайта</li>
+    </ol>
+    <h1 class="page-header">Меню сайта</h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="notice-message">
+                    {{ flashMessage | raw }}
+                </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('application_menu_board_edit') }}">Добавить</a></li>
+                            <li><a href="javascript:void(0)" title="{% trans %}Сохранить{% endtrans %}" onclick="document.form.submit();">Сохранить</a></li>
+                            <li><a href="javascript:void(0)" title="{% trans %}Удалить отмеченные{% endtrans %}" onclick="if(confirm('{% trans %}Вы действительно хотите удалить отмеченные пункты?{% endtrans %}')){$('#form_action').val('delete');document.form.submit();}">Удалить отмеченные</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Меню</h4>
+                </div>
+                <div class="panel-body">
+                    {% if locales %}
+                                {{ form_start(form) }}
+                                <ul class="nav nav-tabs">
+                                {% set i = 1 %}
+                                    {% for locale in locales %}
+                                        <li class="nav-item">
+                                            <a class="nav-link {% if i == 1 %}active{% endif %}" data-toggle="tab" role="tab" href="#locale_{{ locale.code }}" aria-controls="locale_{{ locale.code }}"><img src="{{ asset('bundles/Default/img/flags/' ~ locale.country) }}" />&nbsp;{{ locale.name }}</a>
+                                        </li>
+                                        {% set i = i + 1%}
+                                    {% endfor %}
+                                </ul>
+                                <div class="tab-content">
+                                    {% set i = 1 %}
+                                    {% for locale in locales %}
+                                        <div id="locale_{{ locale.code }}" class="tab-pane {% if i == 1 %}active in{% endif %}" role="tabpane">
+                                            {% if locale.menus | length > 0 %}
+                                                <table class="table table-bordered table-messages">
+                                                        <thead>
+                                                            <tr>
+                                                                <th><input type="checkbox" class="selectAllItems" /></th>
+                                                                <th>{% trans %}Название меню{% endtrans %}</th>
+                                                                <th>{% trans %}Расположение{% endtrans %}</th>
+                                                                <th>{% trans %}Порядок{% endtrans %}</th>
+                                                                <th>{% trans %}Действия{% endtrans %}</th>
+                                                            </tr>
+                                                        </thead>   
+                                                        <tbody>
+                                                                {% for menu in locale.menus %}
+                                                                    <tr>
+                                                                        <td><input name="menuIds[]" value="{{ menu.id }}" type="checkbox" class="checkbox-item" /></td>
+                                                                        <td>{{ menu.title }}</td>
+                                                                        <td>{{ menu.position }}</td>
+                                                                        <td>
+                                                                            <a href="javascript:void(0)" onclick="itemUp($(this))"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+                                                                            <input name="sortorder[{{ menu.id }}]" value="{{ menu.sort }}" class="item-sortorder"/>
+                                                                            <a href="javascript:void(0)" onclick="itemDown($(this))"><i class="fa fa-arrow-down" aria-hidden="true"></i></a>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a class="btn btn-info" href="{{ path('application_menu_board_edit',{menuId: menu.id}) }}">
+                                                                                <i class="fa fa-edit "></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                        </tbody>
+                                                </table>
+                                            {% else %}
+                                                {% trans %}Меню не найдены.{% endtrans %}
+                                            {% endif %}  
+                                        </div>
+                                    {% set i = i + 1%}
+                                    {% endfor %}
+                                </div>  
+                                {{ form_end(form) }}
+                            {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endblock %}    

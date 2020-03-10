@@ -44,7 +44,7 @@
                 <div class="account-advert-block-content">
                     <div class="row advert-category-adverts">
                         <div class="col-lg-12 col-md-12">
-                            <div class="accountAdverts">
+                            <div class="accountAdverts notesAdverts">
                                 {% if products | length > 0 %}
                                     {% for product in  products %}
                                         {{ include ('DashboardCommonBundle:User:account/products/note.html.twig', {product : product, user : user, locale : locale}) }}

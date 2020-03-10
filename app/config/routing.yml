@@ -14,10 +14,12 @@ dashboard_admin:
     resource: "@DashboardAdminBundle/Controller/"
     type:     annotation
     prefix:   /
-
 dashboard_common:
     resource: "@DashboardCommonBundle/Controller/"
     type:     annotation
+    prefix:   /
+dashboard_menu:
+    resource: "@DashboardMenuBundle/Resources/config/routing.yml"
     prefix:   /
 dashboard_gallery:
     resource: "@DashboardGalleryBundle/Resources/config/routing.yml"

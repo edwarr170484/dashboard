@@ -30,7 +30,7 @@
 {% endif %}
 
 {% block title %}
-    {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
+    {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
 {% endblock %}
 
 {% block topbanner %}
@@ -56,8 +56,8 @@
 {% if product.fotos | length > 0 %}
     <link rel="image_src" href="{{ absolute_url(asset('bundles/images/products/' ~ product.fotos[0].foto)) }}" />
 {% endif %}
-<meta property="og:title" content="{{ product.name }} {{ product.info.generation.name }}" />
-<meta property="og:description" content="{{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}" />
+<meta property="og:title" content="{{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}" />
+<meta property="og:description" content="{{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}" />
 {% if product.fotos | length > 0 %}
     <meta property="og:image" content="{{ absolute_url(asset('bundles/images/products/' ~ product.fotos[0].foto)) }}" />
 {% endif %}
@@ -82,7 +82,7 @@
                     {% endif %}
                     <li class="arrow">
                         <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">
-                            {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
+                            {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
                         </a>
                     </li>
                 </ul>
@@ -100,7 +100,7 @@
             {% endfor %}      
             <div class="row product-block">
                 <div class="col-lg-9 col-md-9">
-                    <div class="content-block-header"><h1>{{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}</h1></div>
+                    <div class="content-block-header"><h1>{{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}</h1></div>
                     <div class="advertInfo">
                         <div class="advertInfoTypes">{{ product.info.year }} {% trans %}г.{% endtrans %}, 
                             {% if product.info.modification %}
@@ -484,7 +484,7 @@
                         </div>
                         </div>
                         <div class="advertSellerInfoInner">
-                            <div class="advertSellerInfoAdvertName">{{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}</div>
+                            <div class="advertSellerInfoAdvertName">{{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}</div>
                             {% if product.user.roles[0].role == "ROLE_DEALER" %}
                                 <div class="advertSellerName">{{ product.user.dealerinfo.company }}</div>
                             {% else %}
@@ -647,7 +647,7 @@
                                 {% endif %}
                                 <div class="categorySpecialAdvertName">
                                     <a href="{{ path('product',{'productId' : sameProduct.id, 'productName' : sameProduct.translit}) }}">
-                                        {{ sameProduct.name }} {% if sameProduct.info.generation %}{{ sameProduct.info.generation.name }}{% endif %}
+                                        {{ sameProduct.name }} {% if sameProduct.info.modification %}{{ sameProduct.info.modification.label }}{% endif %}
                                     </a>
                                 </div>
                                 <div class="categorySpecialAdvertFeatures">
@@ -683,7 +683,7 @@
                                 {% endif %}
                                 <div class="categorySpecialAdvertName">
                                     <a href="{{ path('product',{'productId' : dealerProduct.id, 'productName' : dealerProduct.translit}) }}">
-                                        {{ dealerProduct.name }} {% if dealerProduct.info.generation %}{{ dealerProduct.info.generation.name }}{% endif %}
+                                        {{ dealerProduct.name }} {% if dealerProduct.info.modification %}{{ dealerProduct.info.modification.label }}{% endif %}
                                     </a>
                                 </div>
                                 <div class="categorySpecialAdvertFeatures">
@@ -749,7 +749,7 @@
                             </button>
                             <div class="advertSellerInfo">
                                 <div class="advertSellerInfoInner">
-                                    <div class="advertSellerInfoAdvertName">{{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}</div>
+                                    <div class="advertSellerInfoAdvertName">{{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}</div>
                                     <div class="price">
                                         <div class="content-block-header"><h1>{{ product.info.price }} {{ locale.currency.label | raw }}</h1></div>
                                         <!--<div class="creditRule">от 500 &euro;/мес.</div>-->

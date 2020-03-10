@@ -599,8 +599,17 @@ class CategoryController extends Controller
     {
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
+        $baseCategory = null;
+        $tmpCategory = $category;
         
-         return $this->render('DashboardCommonBundle:Default:Category/filterItems.html.twig', array("category" => $category, "type" => $type));
+        if($category){
+            while($tmpCategory->getParent()){
+                $baseCategory = $tmpCategory->getParent();
+                $tmpCategory = $tmpCategory->getParent();
+            }
+        }
+        
+        return $this->render('DashboardCommonBundle:Default:Category/filterItems.html.twig', array("category" => $category, "baseCategory" => $baseCategory, "type" => $type));
     }
 }
 

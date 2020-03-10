@@ -1,0 +1,6 @@
+application_menu_board_index:
+    path:     /admin/menu
+    defaults: { _controller: DashboardMenuBundle:Menu:menu }
+application_menu_board_edit:
+    path:     /admin/menu/edit/{menuId}
+    defaults: { _controller: DashboardMenuBundle:Menu:edit, menuId: 0 }

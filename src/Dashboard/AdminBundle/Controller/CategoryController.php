@@ -701,6 +701,46 @@ class CategoryController extends Controller
         }*/
         
         /*$baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
+        $finder->files()->name('export-short3.txt')->in('import');
+        $modifications = new ArrayCollection();
+        
+        $workFile = 0;
+        foreach($finder as $file){
+            $workFile = $file;
+        }
+        
+        $lines = file($workFile->getRealPath());
+        foreach($lines as $line){
+            $modificationInfo = explode(";", $line);
+            
+            $parentCategory = $manager->getRepository("DashboardCommonBundle:Category")->findOneBy(array("parent" => $baseCategory, "title" => $modificationInfo[0]));
+            $category = $manager->getRepository("DashboardCommonBundle:Category")->findOneBy(array("parent" => $parentCategory, "title" => $modificationInfo[1], "name" => $this->get('app.helpers')->translit($modificationInfo[1])));
+                        
+            if($category){
+                $generation = $category->getGenerations()->first();
+            
+                $modification = $manager->getRepository("DashboardCommonBundle:Modification")->findBy(array("generation" => $generation, "label" => trim($modificationInfo[2]), "power" => trim($modificationInfo[5]), "size" => trim($modificationInfo[6])));
+
+                if($modification){
+                    foreach($modification as $item){
+                        $item->setYearFrom(substr($modificationInfo[3],3,4));
+                        $item->setYearTo(substr($modificationInfo[4],3,4));
+                        $modifications->add($item);
+                    }
+                }
+            }else{
+                dump($parentCategory);
+                dump($modificationInfo);
+            }
+        }
+          
+        foreach($modifications as $modification){
+            $manager->persist($modification);
+        }
+        
+        $manager->flush();*/
+        
+        /*$baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
         
         $categories = new ArrayCollection();
         $childrens = new ArrayCollection();

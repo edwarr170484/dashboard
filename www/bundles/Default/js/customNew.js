@@ -80,6 +80,7 @@ $(document).ready(function(){
         event.stopPropagation();
         $(".account-menu-list").slideToggle();
     });
+    
 });
 
 function clearServiceAuto(element, event){
@@ -196,7 +197,8 @@ function selectCategoryItems(element, maxItems){
     var search = element.val().toLowerCase();
     var itemsNum = 0;
     container.find('.categoryItem').each(function(){
-       var part = $(this).data('title').substr(0, search.length);
+       var title = $(this).data('title').toString();
+       var part = title.substr(0, search.length);
        if(part !== search){
            $(this).addClass('hide');
        }else{

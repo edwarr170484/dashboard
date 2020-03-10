@@ -26,6 +26,12 @@ class LoginListener
     
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
+        $user = $this->security->getToken()->getUser();
+        
+        if(!$user->getIsConfirm()){
+            throw new BadCredentialsException('Ваш аккаунт не подтвержден!');
+        }
+        
         if($this->session->get('loginerror'))
         {
             $request = $event->getRequest();

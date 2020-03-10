@@ -1,0 +1,150 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Редактировать меню{% endtrans %}{% endblock %}
+
+{% form_theme menuForm _self %}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block _menu_items_widget %}
+    <table class="table table-bordered table-menu-items-blocks">
+        <thead>
+            <tr>
+                <th>{% trans %}Пункт меню{% endtrans %}</th>
+                <th>{% trans %}Родитель{% endtrans %}</th>
+                <th>{% trans %}Категория{% endtrans %}</th>
+                <th>{% trans %}Страница{% endtrans %}</th>
+                <th>{% trans %}Ссылка{% endtrans %}</th>
+                <th>{% trans %}Порядок{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock _menu_items_widget %}
+
+{% block _menu_items_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.title)}}</td>
+        <td>{{ form_widget(form.parent)}}</td>
+        <td>{{ form_widget(form.category)}}</td>
+        <td>{{ form_widget(form.page)}}</td>
+        <td>{{ form_widget(form.link)}}</td>
+        <td>
+            <a href="javascript:void(0)" onclick="itemUp($(this))"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+            {{ form_widget(form.sortorder)}}
+            <a href="javascript:void(0)" onclick="itemDown($(this))"><i class="fa fa-arrow-down" aria-hidden="true"></i></a>
+            {{ form_widget(form.menu)}}
+        </td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить блок?'))return false;else $(this).parent().parent().remove();">
+                <i class="fa fa-times" title="Удалить блок"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li><a href="{{ path('application_menu_board_index') }}">{% trans %}Меню сайта{% endtrans %}</a></li>
+        <li class="active">{{ subtitle }}</li>
+    </ol>
+    <h1 class="page-header">Меню сайта <small>{{ subtitle }}</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="notice-message">
+                    {{ flashMessage | raw }}
+                </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <h4 class="panel-title">Информация о категории</h4>
+                </div>
+                <div class="panel-body">
+                    {{ form_start(menuForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a data-toggle="tab" href="#common">{% trans %}Общая информация{% endtrans %}</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#blocks">{% trans %}Пункты меню{% endtrans %}</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                                <div class="tab-pane active" id="common" role="tabpanel">
+                                    <div class="form-group">
+                                        <label class="col-md-12">{{ form_label(menuForm.title)}}</label>
+                                        <div class="col-md-12">
+                                            {{ form_widget(menuForm.title)}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-12">{{ form_label(menuForm.name)}}</label>
+                                        <div class="col-md-12">
+                                            {{ form_widget(menuForm.name)}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-12">{{ form_label(menuForm.position)}}</label>
+                                        <div class="col-md-12">
+                                            {{ form_widget(menuForm.position)}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-12">{{ form_label(menuForm.locale)}}</label>
+                                        <div class="col-md-12">
+                                            {{ form_widget(menuForm.locale)}}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-12">{{ form_label(menuForm.sort)}}</label>
+                                        <div class="col-md-12">
+                                            {{ form_widget(menuForm.sort)}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="blocks" role="tabpanel">
+                                    <button class="btn btn-sm btn-success" id="add-menu-item-block" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить пункт меню</button>
+                                {{ form_widget(menuForm.items)}}
+                                {% if menuForm.items | length <= 0 %}
+                                    Не одбавлено ни одного пункта меню
+                                {% endif %}
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">{% trans %}Сохранить{% endtrans %}</button>
+                                </div>
+                    </div>
+                    
+                    {{ form_widget(menuForm.exit, {'id' : 'formExit'}) }}
+                    {{ form_end(menuForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endblock %}    

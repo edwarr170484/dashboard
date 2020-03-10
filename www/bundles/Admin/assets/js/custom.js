@@ -402,6 +402,12 @@ $(document).ready(function(){
         });
     });
     
+    $("#add-menu-item-block").click(function(){
+        var prototype = $(this).next("#menu_items").data("prototype");
+        var count = $(this).parent().find(".table-menu-items-blocks tbody tr").length;
+        var newForm = prototype.replace(/__name__/g, count);
+        $(this).parent().find(".table-menu-items-blocks tbody").append(newForm);
+    });
     
 });
 

@@ -1,24 +1,88 @@
-footer {margin-top: 60px;
+/* Ебаное уменьшение */
+h1, h2, h4 {font-size: 3.6rem;line-height: 4.6rem;}
+.pageContentBlockHeader,.pageContentAdvertismentDescriptionRatePrice {font-size: 2.3rem;line-height: 3.0rem;}
+.pageContentBanner {    font-size: 1.8rem;line-height: 3.2rem;}
+.pageContentServiceDescriptionText, .categoryRateDescriptionText,.pageContentAdvertismentDescriptionText {font-size: 1.5rem;}
+.pageContentServiceMessage,.categoryRateName {font-size: 2.2rem;line-height: 3.0rem;}
+.pageContentBanner {margin-bottom: 7rem;}
+.pageContentJobsLists {padding-bottom: 2rem;}
+.pageContentService {padding-bottom: 3.0rem;}
+.pageContentBlock {padding-bottom: 6rem;}
+.pageContentBannerButtons {padding-top: 3rem;}
+.categoryRate {padding-top: 2rem;}
+.pageContentBlock {padding-bottom: 4rem;}
+.page-banner {padding-bottom: 2rem;padding-top: 2rem;}
+.page-content{padding-bottom: 3rem;}
+.pageContentAdvertismentDescriptionRate{padding-bottom: 1.5rem;}
+.nav-tabs.settingsTabs>li.active>a {border-top-left-radius: 12px;
+    border-top-right-radius: 12px;}
+h3 {font-size: 3.2rem;}
+.mainPageContentHeader {padding-bottom: 5rem;}
+.mainPageText {padding-top: 6rem;}
+.mainPageSiteSubheader {font-size: 2.6rem;}
+.mainPageAutoListBlock {margin-bottom: -4rem;}
+.mainPageContentText,.footerSiteDescription {font-size: 1.3rem;}
+.mainPageAutoList ul {padding-top: 4rem;}
+.mainPageAutoList ul li a {font-size: 1.5rem; line-height: 1.5rem;}
+.accountAdvertServiceButtons button:hover {background: #FDEECC !important;}
+.accountAdvertServiceButton button {padding: 0.5rem 1rem;}
+.modal-header h3 {font-size: 2.2rem;}
+.pageContentAdvertismentDescriptionText.office { padding-top: 3rem;}
+.pageContentBannerButtons .pageMenuButton.cookieAlertButton a {width: 280px;padding: 1.7rem;}
+.pageContentServiceMessage {padding-bottom: 5.6rem;}
+.pageContentAdvertismentDescription,.pageContentAdvertismentIcon {    padding-top: 4rem;}
+.pageContentAdvertismentDescriptionRateTitle, .pageContentAdvertismentDescriptionRatePrice,.pageContentAdvertismentDescriptionRatePrice span {font-size:2rem}
+/* Временная мера */
+.select-language.active {
+    background: none;}
+.pageContentRates {border-radius: 9px 9px 9px 9px;}
+.register-block-header.social {text-align: left;} 
+.accountAdvertImage {max-height: 170px;}
+.accountAdvertImage img {border-radius: 8px;}
+.accountAdvertInfoBoard {padding-bottom: 1rem;}
+.accountAdvert {padding: 4rem 3rem 2rem;margin-bottom: 3rem;}
+.searchBlockInner input:focus {border-bottom: 2px solid #d3d5d4;}
+.searchBlockInner input {padding-bottom: 1rem;background: url(../img/search-left.svg) 0 10% no-repeat;}
+/* Категория */
+.categoryAdvert {margin-bottom:0px}
+.categoryAdvert:hover {margin-top: -1px;}
+.categoryAdvert.payed {margin-bottom:3rem;margin-top: 3rem;}
+.categoryAdvertImages {border-radius: 7px;}
+.categoryAdvertDealerAll a {color:#f5aa01;}
+.categorySpecialAdverts {margin-top:3rem;}
+.categoryAdvertInfoPrice {width: 22%;}
+.categoryAdvertInfoProbeg {width: 18%;}
+.categoryAdvertInfoYear {width: 13%;}
+.padination {    padding-bottom: 2.5rem;padding-top: 3.5rem;}
+
+.siteMainSubmenu {min-width: 100%;}
+.select-cover {padding: 11px 15px;}
+.register-block.result .register-block-header {text-align:center}
+.resultEmail {padding-top:0}
+footer {margin-top: 4rem;
     box-shadow: 0px -5px 12px rgba(0, 0, 0, 0.02);}
+	.footer-menu-list li {width:50%}
+	.footer-menu-list li:nth-child(even) {text-align: left;}
+	.footer-menu-list li a {    font-size: 1.3rem;}
 .cookieAlertBlock {bottom: 0;
     position: fixed;
     z-index: 3000;
     width: 100%;}
-	
-/** Добавил для главной страницы для серой плашки снизу **/
-.mainPageAutoListBlock {margin-bottom: -60px;}
+
+.accountConversationMessages {padding-left: 14rem;padding-right: 13rem;}
+textarea {resize: vertical;}
 
 
-.siteMenuGamburgerMenu {top: 27px;left: 158px;} /* Выровнял открыающийся гамбургер */
+.siteMenuGamburgerMenu {top: 27px;left: 133px;} /* Выровнял открыающийся гамбургер */
 	
 	.addAdvertFiltersButtons .mainPageFiltersShowResults button, .siteMenuGamburger>button, .modal-footer button.btn:hover, .modal-footer button.btn:focus, .mainPageFiltersShowResults button:hover, .mainPageFiltersShowResults button:focus, .modal-content button.close,
-	.advertSellerOrder button, 
-	.cookieAlertButton button,
+	.advertSellerOrder button, .accountAdvertFunction button,
+	.cookieAlertButton button,.accountAdvertServiceButton button,
 	.advertSellerInfoHeader button, 
-.siteMenuSearch>button, 
-button.close, 
-.categoryAdvertShareLinks ul li button, 
-.productNoteText button, 
+.siteMenuSearch>button,.categoryAdvertType.garant.active button,
+button.close,.mainPageAutoListShowAll button,
+.categoryAdvertShareLinks ul li button, .advertSliderMainFoto button.owl-next,.advertSliderMainFoto button.owl-prev,
+.productNoteText button, .categorySpecialAdvertsSliderNav button, 
 .mainPageFiltersSettings button.clearFilters, .mainPageFiltersSettings button.showAllParameters
 {outline:none}
 	
@@ -34,8 +98,30 @@ button.close,
 {
 	.cookieAlertButton, .cookieAlertLink {text-align: center;width: 100%;margin: 10px 0;}
 	.addAdvertButtonMobile a {z-index:2800}
+	.register-block-header.social {text-align:center}
+	.breadscrumbs li a {line-height: 1.2rem;padding-top: 1rem;}
+		.pagContentTabsSelectors ul li.active a{background: none;border-bottom: 2px #f7a700 solid;}
+		
+		.accountNocontent{text-align: center;margin-top: 2rem;}
+		
+		.searchBlockInner input {padding-bottom: 1rem;background: url(../img/search-left.svg) 0 10% no-repeat;}
+		
 
 }
 
 
-.register-block-header.social {text-align: left;} 
+
+
+@media (max-width: 1600px)
+{
+.mainPageFiltersTabs ul li a {padding: 1.7rem 1.2rem 1.5rem 1.2rem;}
+h1, h2, h4 {font-size: 3.6rem;line-height: 4.6rem;}
+.mainPageFiltersBlock {padding-top: 4.9rem;padding-bottom: 14rem;}
+.mainPageSiteSubheader{font-size: 2.2rem;padding-bottom: 4rem;}
+.mainPageSitHeader {padding-top: 5rem;padding-bottom: 1.3rem;}
+.header-search-box input[name="searchText"] {width: 220px;}
+.infoPaneCheckbox {margin-top: 15px;}
+.siteInfoPane {margin-bottom: 3rem;}
+.container {padding: 0 30px;}
+
+}

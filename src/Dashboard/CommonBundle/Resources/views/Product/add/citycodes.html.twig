@@ -1,5 +1,9 @@
-{% if codes %}
-    {% for code in codes %}
-        <div class="addAdvertContextParamenterValue" onclick="selectCityCode('{{ code.code }}', $(this))">{{ code.code }}</div>
-    {% endfor %}
+{% if city %}
+    {% if city.codes | length > 0 %}
+        <select name="contactCityCode" data-write="1" class="custom-select just-select" id="advertCityCode" placeholder="{% trans %}Индекс{% endtrans %}">
+            {% for code in city.codes %}
+                <option value="{{ code.id }}">{{ code.code }}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
 {% endif %}

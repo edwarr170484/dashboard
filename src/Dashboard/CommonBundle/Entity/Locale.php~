@@ -59,6 +59,11 @@ class Locale
     private $currency;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\MenuBundle\Entity\Menu", mappedBy="locale", cascade={"persist"})
+     */
+    private $menus;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Page", mappedBy="locale", cascade={"persist"})
      */
     private $pages;
@@ -77,6 +82,11 @@ class Locale
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\CategoryDescription", mappedBy="locale", cascade={"persist"})
      */
     private $descriptions;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Email", mappedBy="locale", cascade={"persist"})
+     */
+    private $emails;
     
     /**
      * Constructor
@@ -411,5 +421,71 @@ class Locale
     public function getDescriptions()
     {
         return $this->descriptions;
+    }
+
+    /**
+     * Add menus
+     *
+     * @param \Dashboard\MenuBundle\Entity\Menu $menus
+     * @return Locale
+     */
+    public function addMenu(\Dashboard\MenuBundle\Entity\Menu $menus)
+    {
+        $this->menus[] = $menus;
+    
+        return $this;
+    }
+
+    /**
+     * Remove menus
+     *
+     * @param \Dashboard\MenuBundle\Entity\Menu $menus
+     */
+    public function removeMenu(\Dashboard\MenuBundle\Entity\Menu $menus)
+    {
+        $this->menus->removeElement($menus);
+    }
+
+    /**
+     * Get menus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMenus()
+    {
+        return $this->menus;
+    }
+
+    /**
+     * Add emails
+     *
+     * @param \Dashboard\CommonBundle\Entity\Email $emails
+     * @return Locale
+     */
+    public function addEmail(\Dashboard\CommonBundle\Entity\Email $emails)
+    {
+        $this->emails[] = $emails;
+    
+        return $this;
+    }
+
+    /**
+     * Remove emails
+     *
+     * @param \Dashboard\CommonBundle\Entity\Email $emails
+     */
+    public function removeEmail(\Dashboard\CommonBundle\Entity\Email $emails)
+    {
+        $this->emails->removeElement($emails);
+    }
+
+    /**
+     * Get emails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEmails()
+    {
+        return $this->emails;
     }
 }

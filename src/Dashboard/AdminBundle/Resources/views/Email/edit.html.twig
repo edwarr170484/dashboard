@@ -1,0 +1,89 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme emailForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block title %}{% trans %} Панель управления - Редактировать текст письма{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_emails') }}">Тексты писем</a></li>
+            <li class="active">Редактировать текст письма</li>
+        </ol>
+        <h1 class="page-header">Редактировать текст</h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Текст письма</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(emailForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(emailForm.title)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(emailForm.title)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(emailForm.locale)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(emailForm.locale)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">{{ form_label(emailForm.text)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(emailForm.text)}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3">{{ form_label(emailForm.save)}}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(emailForm.save,{'type' : 'submit'})}}
+                                </div>
+                            </div>        
+                        </div>
+                        {{ form_end(emailForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

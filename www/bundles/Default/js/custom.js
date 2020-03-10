@@ -4,9 +4,10 @@ var myDropzone;
 
 $(document).ready(function(){
     $("body").click(function(){$(".yearsOlderItems").slideUp();});
+    
     $("#specialDealerAdverts").owlCarousel({
         margin : 25,
-        loop : true,
+        loop : false,
         items : 4,
         dots : false,
         navContainer : '#specialDealerAdvertsNav',

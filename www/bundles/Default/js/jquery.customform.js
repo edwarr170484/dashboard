@@ -10,6 +10,7 @@
 			var selectOptions = selectElement.find("option");
 			var selectOptionGroups = selectElement.find("optgroup");
                         var isWrite = (selectElement.data('write')) ? 1 : 0;
+                        var isClearChange = (selectElement.data('clearchange')) ? 1 : 0;
 
 			selectElement.wrap("<div class='select-cover'></div>");
 			var cover = selectElement.parent(".select-cover");
@@ -18,7 +19,7 @@
                             if($(this).attr("value") === selectValue && $(this).attr("value") !== "0" && $(this).attr("value") !== ""){
                                 
                                 if(isWrite){
-                                    cover.append("<div class='select-value'><div class='select-value-inner'><input name='select-writable' value='"+ $(this).html() +"'></div></div>");
+                                    cover.append("<div class='select-value'><div class='select-value-inner'><input name='select-writable' value='"+ $(this).html() +"' autocomplete='off'></div></div>");
                                 }else{
                                     cover.append("<div class='select-value'><div class='select-value-inner'>" + $(this).html() + "</div></div>");
                                 }
@@ -33,7 +34,7 @@
                         
 			if(selected === 0){
                             if(isWrite){
-                                cover.append("<div class='select-value'><div class='select-value-inner'><input name='select-writable' placeholder='" + selectElement.attr("placeholder") + "'></div></div>");
+                                cover.append("<div class='select-value'><div class='select-value-inner'><input name='select-writable' placeholder='" + selectElement.attr("placeholder") + "' autocomplete='off'></div></div>");
                             }else{
                                 cover.append("<div class='select-value'><div class='select-value-inner'>" + selectElement.attr("placeholder") + "</div></div>");
                             }
@@ -92,9 +93,9 @@
                         }
                         if(isWrite){
                             if(cover.find(".select-option.active").length > 0){
-                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='"+ params.slice(0,-2) +"'></div>");
+                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='"+ params.slice(0,-2) +"' autocomplete='off'></div>");
                             }else{
-                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' placeholder='"+ params.slice(0,-2) +"'></div>");
+                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' placeholder='"+ params.slice(0,-2) +"' autocomplete='off'></div>");
                             }
                         }else{
                             cover.find(".select-value").html("<div class='select-value-inner'>" + params.slice(0,-2) + "</div>");
@@ -108,19 +109,23 @@
 			cover.click(function(event){
 				event.stopPropagation();
 				
-				$(".select-options").removeClass("opened");
-				$(".select-options").slideUp();
-                                $(".select-cover").removeClass('active');
+				
 				
 				var selectOptions = $(this).find(".select-options"); 
 				if(selectOptions.hasClass("opened")){
+                                    $(".select-options").removeClass("opened");
+                                    $(".select-options").slideUp();
+                                    $(".select-cover").removeClass('active');
 					selectOptions.removeClass("opened");
 					selectOptions.slideUp();
                                         $(this).removeClass('active');
 				}else{
-					selectOptions.addClass("opened");
-					selectOptions.slideDown();
-                                        $(this).addClass('active');
+                                    $(".select-options").removeClass("opened");
+                                    $(".select-options").slideUp();
+                                    $(".select-cover").removeClass('active');
+                                    selectOptions.addClass("opened");
+                                    selectOptions.slideDown();
+                                    $(this).addClass('active');
 				}
                             
 			});
@@ -136,6 +141,9 @@
                                 $(this).parent().parent().find(".select-value").find("input").attr('placeholder',($(this).parent().parent().find("select").attr("placeholder")));
                             }else{
                                 $(this).parent().parent().find(".select-value").html("<div class='select-value-inner'>" + $(this).parent().parent().find("select").attr("placeholder") + "</div>");
+                            }
+                            if(isClearChange){
+                                selectElement.trigger('change');
                             }
                         });
 			selectOptions.find(".select-option").each(function(){
@@ -169,7 +177,7 @@
                                             }
                                             
                                             if(isWrite){
-                                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='"+ params.slice(0,-2) +"'></div>");
+                                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='"+ params.slice(0,-2) +"' autocomplete='off'></div>");
                                             }else{
                                                 cover.find(".select-value").html("<div class='select-value-inner'>" + params.slice(0,-2) + "</div>");
                                             }
@@ -185,7 +193,7 @@
                                             });
                                             
                                             if(isWrite){
-                                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='" + $(this).html() + "'></div>");
+                                                cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='" + $(this).html() + "' autocomplete='off'></div>");
                                             }else{
                                                 cover.find(".select-value").html("<div class='select-value-inner'>" + $(this).html() + "</div>");
                                             }

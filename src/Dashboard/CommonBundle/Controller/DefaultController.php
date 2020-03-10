@@ -38,16 +38,6 @@ class DefaultController extends Controller
         
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        
-        if(!$this->get('session')->has('sessionCity'))
-        {
-            if($this->getUser())
-            {
-                $user = $this->get('security.context')->getToken()->getUser();
-                if($user->getUserinfo()->getCity())
-                    $this->get('session')->set('sessionCity', $user->getUserinfo()->getCity()->getId());
-            }
-        }
 
         $locales = $manager->getRepository("DashboardCommonBundle:Locale")->findBy(array("isActive" => "1"));
         $sessionRegion = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionRegion'));
@@ -72,6 +62,9 @@ class DefaultController extends Controller
             }
         }
         
+        $topMenu = $manager->getRepository("DashboardMenuBundle:Menu")->findOneByName("topmenu");
+        $toggleMenu = $manager->getRepository("DashboardMenuBundle:Menu")->findOneByName("toggleMenu");
+        
         return $this->render('DashboardCommonBundle:Common:header.html.twig', array("user" => $user,
                                                                                     "settings" => $settings,
                                                                                     "categories" => $categories,
@@ -79,6 +72,8 @@ class DefaultController extends Controller
                                                                                     "sessionCity" => $sessionCity,
                                                                                     "locales" => $locales,
                                                                                     "locale" => $locale,
+                                                                                    "topMenu" => $topMenu,
+                                                                                    "toggleMenu" => $toggleMenu,
                                                                                     "isSettingsError" => $isSettingsError,
                                                                                     "uri" => $uri));
     }
@@ -110,13 +105,16 @@ class DefaultController extends Controller
         
         $cityForm = $this->createForm(new CityType($locale, $city), new City());
         $cityForm->handleRequest($request);
-
+        
+        $bottomMenu = $manager->getRepository("DashboardMenuBundle:Menu")->findOneByName("bottomMenu");
+        
         return $this->render('DashboardCommonBundle:Common:footer.html.twig', array("regions" => $regions, 
                                                                                     "cities" => $cities,
                                                                                     "settings" => $settings,
                                                                                     "footerPages" => $footerPages,
                                                                                     "textblock" => $textblock,
                                                                                     "locale" => $locale,
+                                                                                    "bottomMenu" => $bottomMenu,
                                                                                     "cityForm" => $cityForm->createView()));
     }
     
@@ -231,8 +229,6 @@ class DefaultController extends Controller
             $this->getCategoryProducts($category, $productsNum);
             $category->setAllProductsNumber($productsNum);
         }
-        
-        $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
         
         return $this->render('DashboardCommonBundle:Default:index.html.twig', array("categories" => $categories,
                                                                                     "page" => $page,
@@ -642,6 +638,7 @@ class DefaultController extends Controller
                         $conversation->setUserOne($product->getUser());
                         $conversation->setUserTwo($sessionUser);
                         $conversation->setUserDeleted(null);
+                        $conversation->setSubject($product->getName());
                         $manager->persist($conversation);
                         $manager->flush();
                     }
@@ -651,6 +648,7 @@ class DefaultController extends Controller
                     $message->setUserOwner($sessionUser);
                     $message->setIsNew(1);
                     $message->setIsDeleted(0);
+                    $message->setSubject($product->getName());
                     $message->setSentDate(new \DateTime("now"));
                     $message->setReadedDate(new \DateTime("now"));
                     $message->setProduct($product);
@@ -754,6 +752,7 @@ class DefaultController extends Controller
                         $conversation->setUserOne($profileMessageForm['userTo']->getData());
                         $conversation->setUserTwo($profileMessageForm['userFrom']->getData());
                         $conversation->setUserDeleted(null);
+                        $conversation->setSubject($product->getName());
                         $manager->persist($conversation);
                         $manager->flush();
                     }
@@ -761,6 +760,7 @@ class DefaultController extends Controller
                     $profileMessage->setUserOwner($profileMessageForm['userFrom']->getData());
                     $profileMessage->setIsNew(1);
                     $profileMessage->setIsDeleted(0);
+                    $profileMessage->setSubject($product->getName());
                     $profileMessage->setSentDate(new \DateTime("now"));
                     $profileMessage->setReadedDate(new \DateTime("now"));
                     $profileMessage->setProduct(null);

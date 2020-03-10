@@ -195,7 +195,6 @@ class AccountController extends Controller
 
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        $services = $manager->getRepository("DashboardCommonBundle:Service")->findAll();
         
         $session = new Session();
         $encoders = [new JsonEncoder()];
@@ -203,6 +202,15 @@ class AccountController extends Controller
         $serializer = new Serializer($normalizers, $encoders);
         
         $selectedServices = ($session->get('selectedServices')) ? $serializer->deserialize($session->get('selectedServices'), 'Dashboard\CommonBundle\Model\SelectedService[]', 'json') : array();
+        
+        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder');
+
+        try{
+            $categories = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $categories = 0;
+        }
         
         if($productType){
             switch($productType){
@@ -242,6 +250,24 @@ class AccountController extends Controller
         catch(\Doctrine\ORM\NoResultException $e) {
             $products = 0;
         }
+        
+        $totalAdvertsCount = 0;
+        $services = new ArrayCollection();
+        
+        if(count($user->getRates()) > 0){
+            foreach($user->getRates() as $rate){
+                if($rate->getIsActive()){
+                    $totalAdvertsCount += $rate->getAdvertNumber();
+                    if(count($rate->getItems()) > 0){
+                        foreach($rate->getItems() as $item){
+                            if(false === $services->contains($item->getService()->getService())){
+                                $services->add($item->getService()->getService());
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         return $this->render('DashboardCommonBundle:User:account/products/products.html.twig', array("products" => $products,
                                                                                     "settings" => $settings,
@@ -250,6 +276,8 @@ class AccountController extends Controller
                                                                                     "productType" => $productType,
                                                                                     "services" => $services,
                                                                                     "locale" => $locale,
+                                                                                    "totalAdvertsCount" => $totalAdvertsCount,
+                                                                                    "categories" => $categories,
                                                                                     "selectedServices" => $selectedServices,
                                                                                     "routeName" => $request->attributes->get("_route")));
     }
@@ -546,19 +574,28 @@ class AccountController extends Controller
             {
                 $extention = $image->getClientOriginalExtension();
 
-                if(in_array($extention, $extentions) && ($image->getClientSize() < 2097152))
+                if(in_array($extention, $extentions))
                 {
                     $localImageName = rand(1, 99999).'.'.$extention;
                     $image->move('bundles/images/messages',$localImageName);
+                    
+                    $simpleImage = $this->get('app.simpleimage');
+                    $simpleImage->load('bundles/images/messages/' . $localImageName);
+                    
+                    if($simpleImage->getWidth() > 1000){
+                        $simpleImage->resizeToWidth(1000);
+                        $simpleImage->save('bundles/images/messages/' . $localImageName);
+                    }
+                    
                     $newMessage->setImage($localImageName);
                 }
                 else
                 {
                     $this->addFlash(
-                            'notice',
-                            '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                            $this->get('translator')->trans('<strong>Ошибка!</strong> Изображение не соответствует требованиям. Допустимые расширения: jpg, jpeg, png, gif. Максимальный размер - 2Мб. Сообщение отправлено без изображения.') . '</div>'
+                        'notice',
+                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
+                        $this->get('translator')->trans('<strong>Ошибка!</strong> Изображение не соответствует требованиям. Допустимые расширения: jpg, jpeg, png, gif. Максимальный размер - 2Мб. Сообщение отправлено без изображения.') . '</div>'
                     );
                 }
             }
@@ -672,7 +709,7 @@ class AccountController extends Controller
                 $conversation = new Conversation();
                 $conversation->setUserOne($user);
                 $conversation->setUserTwo($companion);
-
+                $conversation->setSubject($this->get('translator')->trans('Техническая поддержка'));
                 $manager->persist($conversation);
                 $manager->flush();
             }

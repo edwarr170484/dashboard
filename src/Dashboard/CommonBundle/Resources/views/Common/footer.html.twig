@@ -16,46 +16,40 @@
             <div class="col-md-9">
                 <div id="navbar-bottom">
                     <div class="row">
-                        <div class="col-md-4 col-md-offset-1 footer-menu">
-                            <div class="footer-menu-header">{% trans %}Информация{% endtrans %} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
-</svg></div>
-                            <div class="footer-menu-list-block">
-                                <ul class="list-unstyled footer-menu-list list-inline">
-                                    {% if footerPages %}
-                                        {% for page in footerPages %}
-                                            {% if page.footerMenuSection == 1 %}
-                                                {% if page.isUserpage %}
-                                                    <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
-                                                {% else %}
-                                                    <li><a href="{{ path(page.route) }}">{{ page.title }}</a></li>
-                                                {% endif %}
+                        {% if bottomMenu %}
+                            {% if bottomMenu.items | length > 0 %}
+                                {% for item in bottomMenu.items %}
+                                    {% if not item.parent %}
+                                        <div class="col-md-3 col-md-offset-1 footer-menu">
+                                            <div class="footer-menu-header">{{ item.title }} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
+                </svg></div>
+                                            {% if item.children | length > 0 %}
+                                                <div class="footer-menu-list-block">
+                                                    <ul class="list-unstyled footer-menu-list list-inline">
+                                                        {% for child in item.children %}
+                                                            {% if child.category %}
+                                                                {% set link = path('category',{'categoryId' : child.category.id, 'categoryName' : child.category.name}) %}
+                                                            {% elseif child.page %}
+                                                                {% if child.page.isUserpage %}
+                                                                    {% set link = path('pages',{'route' : child.page.route}) %}
+                                                                {% else %}
+                                                                    {% set link = '/' ~ child.page.route %}
+                                                                {% endif %}
+                                                            {% elseif child.link %}
+                                                                {% set link = child.link %}
+                                                            {% endif %}
+                                                            <li><a href="{{ link }}">{{ child.title }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>   
                                             {% endif %}
-                                        {% endfor %}
+                                            
+                                        </div>
                                     {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-md-offset-1 footer-menu">
-                            <div class="footer-menu-header">{% trans %}Услуги{% endtrans %} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
-</svg></div>
-                            <div class="footer-menu-list-block">
-                                <ul class="list-unstyled footer-menu-list">
-                                    {% if footerPages %}
-                                        {% for page in footerPages %}
-                                            {% if page.footerMenuSection == 2 %}
-                                                {% if page.isUserpage %}
-                                                    <li><a href="{{ path('pages',{'route' : page.route}) }}">{{ page.title }}</a></li>
-                                                {% else %}
-                                                    <li><a href="{{ path(page.route) }}">{{ page.title }}</a></li>
-                                                {% endif %}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
                         <div class="col-md-2 col-md-offset-1 footer-menu">
                             <div class="footer-menu-header">{% trans %}Аккаунт{% endtrans %} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
@@ -184,5 +178,8 @@
     <script src="{{ asset('bundles/Default/js/jquery.customform.js') }}"></script>
     <script src="{{ asset('bundles/Default/js/owl/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('bundles/Default/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+    {% if settings.isShowCaptcha %}
+        <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit'></script>
+    {% endif %}
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{ settings.googleMapsKey }}&callback=initMap" async defer></script>	

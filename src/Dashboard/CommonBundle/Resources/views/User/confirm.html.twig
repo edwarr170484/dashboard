@@ -1,0 +1,39 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Подтверждение аккаунта{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="breadscrumbsBlock">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    <li><a href="{{ path('main') }}">{% trans %}Главная{% endtrans %}</a></li>
+                    <li>/</li>
+                    <li><a href="">{% trans %}Подтверждение аккаунта{% endtrans %}</a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="">
+    <div class="container">
+        <div class="row login-blocks confirm">
+            <div class="col-lg-5 col-md-5">
+                <div class="loginBlock">
+                    <div class="register-block result">
+                        <h1 class="register-block-header">{% trans %}Подтверждение аккаунта{% endtrans %}</h1>
+                        <div class="register-block-description confirm-restore">
+                            {{ info }}
+                        </div>
+                        {% if not error %}
+                            <div class="resultEmail">{{ email }}</div>
+                            <div class="resultNavigation"><a href="{{path('login')}}">Войдите</a>, используя свои данные.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+{% endblock %}

@@ -103,6 +103,23 @@
                                                             <div class="payemntInfoData">
                                                                 <div class="paymentTabName">{{ payment.title }}</div>
                                                                 <div class="paymentTabTieser">{{ payment.tieser | raw }}</div>
+                                                                {% if payment.info %}
+                                                                    <div class="paymentTabMore"><a href="" data-toggle="modal" data-target="#paymentModal{{ payment.id }}">{% trans %}Más información{% endtrans %}</a></div>
+                                                                    <div class="modal fade" id="paymentModal{{ payment.id }}" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+                                                                        <div class="modal-dialog" role="document">
+                                                                            <div class="modal-content payment">
+                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                                                                                    </svg>
+                                                                                </button>
+                                                                                <div class="paymentFullText">
+                                                                                    {{ payment.info | raw }}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                {% endif %}
                                                             </div>
                                                         </div>
                                                         {% if payment.code == 'paypal' %}

@@ -44,39 +44,56 @@
                 <div class="account-advert-block-content">
                     <div class="row advert-category-adverts">
                         {% if user.rates | length > 0 and user.roles[0].role == 'ROLE_DEALER'%}
-                            {% for rate in user.rates %}
-                                {% if rate.isActive %}
-                                    <div class="col-lg-12 col-md-12">
-                                        <div class="accountRatesInformation">
-                                            <div class="accountRatesInformationHeader">{% trans with {'%ratename%' : rate.rate.name } %}В рамках вашего тарифа %ratename% доступно:{% endtrans %}</div>
-                                            <div class="accountRatesInformationList dealerAccountRates">
-                                                <div class="accountRatesInformationListItem">{{ rate.advertNumber }} {% trans %}размещений{% endtrans %}</div>
-                                                {% if rate.items | length > 0 %}
-                                                    {% for item in rate.items %}
+                            <div class="col-lg-12 col-md-12">
+                                <div class="accountRatesInformation">
+                                    <div class="accountRatesInformationHeader">{% trans %}В рамках вашего пакета доступно:{% endtrans %}</div>
+                                    <div class="accountRatesInformationList dealerAccountRates">
+                                        <div class="accountRatesInformationListItem">{{ totalAdvertsCount }} {% trans %}размещений{% endtrans %}</div>
+                                            {% if services | length > 0 %}
+                                                {% for service in services %}
+                                                    <div class="accountRatesInformationListBlock">
                                                         <div class="accountRatesInformationListItem">
-                                                            {{ item.service.service.iconGray | raw }}
-                                                            {{ item.count }} {{ item.service.service.title }}
+                                                            {{ service.iconGray | raw }}
+                                                            {{ service.title }}
                                                         </div>
-                                                    {% endfor %}
-                                                {% endif %}
-                                                <div class="accountRatesInformationListItem">
-                                                    <a href="{{ path('account_rates') }}">
-                                                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
-                                                            <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="#EB840B"/>
-                                                            <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="#EB840B"/>
-                                                            <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
-                                                            <path d="M20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
-                                                            <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="white"/>
-                                                            <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="white"/>
-                                                        </svg>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                                        <div class="accountRatesInformationListCategories">
+                                                            {% for category in categories %}
+                                                                {% set serviceCount = 0 %}
+                                                                {% for rate in user.rates %}
+                                                                    {% if rate.category.id == category.id %}
+                                                                        {% if rate.items | length > 0 %}
+                                                                            {% for item in rate.items %}
+                                                                                {% if item.service.service.id == service.id %}
+                                                                                    {% set serviceCount = serviceCount + item.count %}
+                                                                                {% endif %}
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                                <div class="accountRatesInformationListCategory">
+                                                                    {{ category.image | raw }} {{ serviceCount }}
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        <div class="accountRatesInformationListItem">
+                                            <a href="{{ path('account_rates') }}">
+                                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                    <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="#EB840B"/>
+                                                    <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="#EB840B"/>
+                                                    <path d="M20 40C8.94118 40 0 31.0588 0 20C0 8.94118 8.94118 0 20 0C31.0588 0 40 8.94118 40 20C40 31.0588 31.0588 40 20 40ZM20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                    <path d="M20 2.35294C10.2353 2.35294 2.35294 10.2353 2.35294 20C2.35294 29.7647 10.2353 37.6471 20 37.6471C29.7647 37.6471 37.6471 29.7647 37.6471 20C37.6471 10.2353 29.7647 2.35294 20 2.35294Z" fill="#EB840B"/>
+                                                    <path d="M9.60156 18.4H30.4016V20H9.60156V18.4Z" fill="white"/>
+                                                    <path d="M19.1992 8.79999H20.7992V29.6H19.1992V8.79999Z" fill="white"/>
+                                                </svg>
+                                            </a>
                                         </div>
                                     </div>
-                                {% endif %}
-                            {% endfor %}
+                                </div>
+                            </div>
                         {% endif %}
                         <div class="col-lg-12 col-md-12">
                             <div class="accountAdverts">
@@ -108,4 +125,22 @@
         <script>$("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">{% trans %}Общая сумма{% endtrans %}:</div><div class="accoutnProductServicesTotalSumma">{{ totalPrice }} {{ locale.currency.label | raw }}</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments/{{ billId }}">{% trans %}Оплатить{% endtrans %}</a></div></div></div></div></div></div>');</script>
     {% endif %}
 {% endif %}
+<div class="modal fade" id="productToolsModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                </svg>
+            </button>
+            <div class="modal-header" style="border:none">
+                <h3 class="modal-title" id="productToolsHeader"></h3>
+            </div>
+            <div class="modal-body">
+                <div class="productToolsText" id="productToolsText"></div>
+                <div class="productToolsButtons cookieAlertButton" id="productToolsButtons"></div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock%}

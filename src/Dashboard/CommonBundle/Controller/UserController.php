@@ -39,8 +39,11 @@ use Dashboard\CommonBundle\Form\Type\MessageType;
 use Dashboard\CommonBundle\Form\Type\ProfileMessageType;
 use Dashboard\CommonBundle\Form\Type\ReviewType;
 
-
 use Dashboard\CommonBundle\Form\DataTransformer\ProductToNumberTransformer;
+
+use Dashboard\CommonBundle\Entity\DealerPhone;
+use Dashboard\CommonBundle\Entity\DealerSalon;
+use Dashboard\CommonBundle\Entity\DealerSalonPhone;
 
 class UserController extends Controller
 {    
@@ -67,12 +70,12 @@ class UserController extends Controller
             {
                 if(!$this->get('app.helpers')->checkCaptcha($request->request->get('g-recaptcha-response')))
                 {
-                            $this->addFlash(
-                                'notice',
-                                '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                                $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не подтвердили капчу.') . '</div>'
-                            );
+                    $this->addFlash(
+                        'notice',
+                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не подтвердили капчу.') . '</div>'
+                    );
 
                     return $this->render('DashboardCommonBundle:User:register.html.twig', array('registerForm' => $registerForm->createView(),
                                                                                         'success' => $success,"settings" => $settings, "locale" => $locale));
@@ -124,17 +127,11 @@ class UserController extends Controller
             $user->setUserinfo($userinfo);
             $user->setUsername($user->getEmail()); 
             $user->setIsActive(1);
+            $user->setIsConfirm(0);
             $user->setIsAlertBroadcast(1);
             $user->setIsAlertNewMessage(1);
             $user->setIsAlertNewOrder(1);
             $user->setIsAlertChangeOrderStatus(1);
-                    
-            if($settings->getIsModerate()){
-                $user->setIsConfirm(0);
-            }else{
-                $user->setIsConfirm(1);
-            }
-            
             $user->addRole($role);
             $role->addUser($user);
             $user->setAdvertNumber(0);
@@ -145,6 +142,17 @@ class UserController extends Controller
             $manager->persist($role);
             $manager->flush();
             
+            $register = new Register();
+            $key = md5(md5(md5($password . rand(1, 99999999)) . rand(1, 99999)) . $user->getEmail());
+            $register->setConfirmKey($key);
+            $register->setDate(new \DateTime("now"));
+            
+            $query = $manager->createQuery('SELECT u FROM Dashboard\CommonBundle\Entity\User u ORDER BY u.id ASC');
+            $users = $query->getResult();
+            $register->setUserId($users[count($users) - 1]->getId());
+            $manager->persist($register);
+            $manager->flush();
+            
             //send confirmation link to email
             $message = \Swift_Message::newInstance()
                 ->setSubject($this->get('translator')->trans('Регистрация на сайте') . $settings->getSiteName())
@@ -153,10 +161,10 @@ class UserController extends Controller
                 ->setBody(
                     $this->renderView(
                         'Emails/userregistration.html.twig',
-                        array('user' => $user, "settings" => $settings, "password" => $mailPassword)
+                        array('user' => $user, "password" => $mailPassword, "settings" => $settings, "key" => $key, "register" => $register)
                     ),
                     'text/html'
-                );
+            );
             
             $this->get('mailer')->send($message);
             
@@ -166,6 +174,86 @@ class UserController extends Controller
         
         return $this->render('DashboardCommonBundle:User:register.html.twig', array('registerForm' => $registerForm->createView(),
                                                                                     'success' => $success,"settings" => $settings, "locale" => $locale,"email" => $user->getEmail()));
+    }
+    
+    /**
+     * @Route("/register/confirm/{key}:{id}", name="register_confirm")
+     */
+    public function registerConfirmAction($key, $id, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $error = 0;
+        
+        if($key){
+            $confirmation = $manager->getRepository("DashboardCommonBundle:Register")->findOneBy(array("id" => $id, "confirmKey" => $key));
+            
+            if($confirmation){
+                $date = new \DateTime("now");
+                $diff=$date->diff($confirmation->getDate()); 
+                $user = $manager->getRepository("DashboardCommonBundle:User")->find($confirmation->getUserId());
+
+                if((($diff->d * 24) + $diff->h) < 48){
+                    $user->setIsConfirm(1);
+                    $manager->persist($user);
+                    
+                    $info = $this->get('translator')->trans('Вы успешно подтвердили регистрацию. Теперь вы можете войти в систему.');
+                    $manager->remove($confirmation);
+                    $manager->flush();
+                    
+                    if($user->getRoles()[0]->getRole() == 'ROLE_DEALER'){
+                        $dealerPhone = new DealerPhone();
+                        $dealerPhone->setDealerInfo($user->getDealerinfo());
+                        $dealerPhone->setPhone($user->getUserinfo()->getPhone());
+                        $manager->persist($dealerPhone);
+                    }
+                    
+                    if($user->getRoles()[0]->getRole() == 'ROLE_SERVICE'){
+                        $dealerPhone = new DealerPhone();
+                        $dealerPhone->setDealerInfo($user->getDealerinfo());
+                        $dealerPhone->setPhone($user->getUserinfo()->getPhone());
+
+                        //create new service point
+                        $dealerSalon = new DealerSalon();
+                        $dealerSalon->setDealerInfo($user->getDealerinfo());
+                        $dealerSalon->setName($user->getDealerinfo()->getCompany());
+
+                        $dealerSalonPhone = new DealerSalonPhone();
+                        $dealerSalonPhone->setDealerSalon($dealerSalon);
+                        $dealerSalonPhone->setPhone($user->getUserinfo()->getPhone());
+                        
+                        $manager->persist($dealerPhone);
+                        $manager->persist($dealerSalon);
+                        $manager->persist($dealerSalonPhone);
+                    }
+                    
+                    $manager->flush();
+                }
+                else{
+                    if($user->getUserinfo()){
+                        $manager->remove($user->getUserinfo());
+                    }
+                    if($user->getDealerinfo()){
+                        $manager->remove($user->getDealerinfo());
+                    }
+                    $manager->remove($user);
+                    $manager->remove($confirmation);
+                    $manager->flush();
+                    
+                    $error = 1;
+                    $info = $this->get('translator')->trans('Ключ подтверждения просрочен. Вам необходимо пройти процедуру регистрации еще раз.');
+                }
+            }
+            else{
+                return $this->redirectToRoute("login");
+            }
+        }
+        else{
+            $error = 1;
+            $info = $this->get('translator')->trans('Ключ подтверждения указан невено. Возможно он был просрочен либо не существует. Попробуйте пройти процедуру регистрации еще раз.');
+        }
+        
+        return $this->render('DashboardCommonBundle:User:confirm.html.twig', array('info' => $info,'error' => $error));
     }
     
     /**

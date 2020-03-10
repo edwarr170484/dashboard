@@ -6,8 +6,12 @@
             <div class="addAdvertModifications">
                 {% for modification in modifications %}
                     <div class="addAdvertModification {% if modification.id == advertInfo.modification %}active{% endif %}" onclick="setModification({{ modification.id }},'{{ locale.code}}', $(this))">
-                        <div class="addAdvertModificationParam power">{{ modification.power }} {% trans %}л.с.{% endtrans %}</div>
-                        <div class="addAdvertModificationParam size">{{ modification.size }}</div>
+                        {% if modification.power %}
+                            <div class="addAdvertModificationParam power">{{ modification.power }} {% trans %}л.с.{% endtrans %}</div>
+                        {% endif %}    
+                        {% if modification.size %}
+                            <div class="addAdvertModificationParam size">{{ modification.size }}</div>
+                        {% endif %}
                         <div class="addAdvertModificationParam label">{{ modification.label }}</div>
                     </div>
                 {% endfor %}

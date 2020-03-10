@@ -19,14 +19,14 @@ class Category
     
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Category", mappedBy="parent")
-     * @ORM\OrderBy({"sortorder" = "ASC"})
+     * @ORM\OrderBy({"title" = "ASC"})
      */
     private $children;
 
     /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Category", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     * @ORM\OrderBy({"sortorder" = "ASC"})
+     * @ORM\OrderBy({"title" = "ASC"})
      */
     private $parent;
     

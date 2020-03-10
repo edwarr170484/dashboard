@@ -193,7 +193,7 @@ ul.list-inline{margin-left: 0;}
 .mainPageContentHeader{padding-bottom: 8.6rem;}
 .mainPageAutoListBlock{background: $gray-color;padding-bottom: 7.4rem;padding-top: 9rem;}
 .mainPageAutoListHeader h3{color:$gray-color-1;}
-.mainPageAutoList ul{@include flexBox(row,space-between,center);@include flex-wrap(wrap);padding-top: 6rem;padding-bottom: 2.9rem;}
+.mainPageAutoList ul{@include flexBox(row,flex-start,center);@include flex-wrap(wrap);padding-top: 6rem;padding-bottom: 2.9rem;}
 .mainPageAutoList.productEdit ul{padding-top: 1rem;}
 .mainPageAutoList ul li{width: 20%;padding: 0;margin-bottom: 11px;background: url('../img/round-arrow.png') 0 50% no-repeat;padding-left: 48px;@include flexBox(row,flex-start,center);padding-top: 6px;padding-bottom: 6px;}
 .mainPageAutoList ul li a{@include fontView("GothamProBold",$black-text,1.8rem,1.7rem);text-transform:uppercase;border-bottom:2px solid transparent;transition:$aTransition;}
@@ -233,6 +233,7 @@ footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;}
    padding-bottom: 1rem;
 }
 .login-blocks{@include flexBox(row,flex-start,center);padding-top: 10.8rem;padding-bottom: 10.8rem;@include flex-wrap(wrap);}
+.login-blocks.confirm{justify-content:center;}
 .loginBlock{background: #fff;@include border-radius(12px);@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
 .register-block{@include flexBox(column,space-between,center);padding-left: 14rem;padding-right: 14rem;padding-top: 6rem;padding-bottom: 6rem;}
 .register-block.result{@include flexBox(column,center,center);padding-top: 12rem;padding-bottom: 12rem;}
@@ -368,7 +369,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdverts.grid .categoryAdvertInfoPrice .categoryAdvertCredit{margin: 0;font-size: 1.4rem;}
 .categoryAdvertInfoFeature.grid{display: none;}
 .categoryAdverts.grid .categoryAdvertInfoFeature.grid{display: block;}
-.banner-link{display: block;text-align: center;}
+.banner-link{text-align: center;}
 .banner-link img{width: 100%;max-width:970px;}
 .categoryAdvertShareLinks{position: absolute;top:25px;right:25px;background:#fff;display: none;}
 .categoryAdverts.grid .categoryAdvertShareLinks{top: -18px;right: 0;@include border-radius(25px);padding: 5px 10px;border:2px solid $yellow-color;}
@@ -578,6 +579,8 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .cookieAlertBlock{background: $super-white-color;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));padding: 3rem 0;position: fixed;bottom:0;left:0;right:0;z-index:100001;}
 .cookieAlertButton button{border:none;background:$yellow-color;@include fontView("GothamProBlack",$super-black-color,1.8rem,100%);text-align: center;padding: 1.3rem 1.5rem;width: 270px;@include border-radius(3px);}
 .cookieAlertButton button:hover,.cookieAlertButton button:focus{background: $orange-color;}
+.cookieAlertButton button.gray{background: #E7E7E7;margin-top: 2rem;}
+.cookieAlertButton button.gray:hover,.cookieAlertButton button.gray:focus{background: rgba(231, 231, 231,0.6);}
 .cookieAlertMessage{@include fontView("GothamProRegular",$super-black-color,1.4rem,2.4rem);width: 65%;}
 .cookieAlertLink a{@include fontView("GothamProBlack",$gray-color-1,1.8rem,1.7rem);display: block;padding: 1.3rem 1.5rem;}
 .categoryAdvertDealerInfo{width: 100%;padding-top: 30px;}
@@ -602,6 +605,8 @@ ul.justLinks li{position: relative;}
 .mainPageFiltersTabs ul li a.block{@include flexBox(column, flex-start, center);}
 .mainPageFiltersTabs ul li a.block svg{margin: 0;}
 .mainPageFiltersTabs ul li a.block span{display: block;@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);margin-top: 1rem;text-transform: none;border-bottom:2px solid transparent;padding-bottom: 2px;}
+.mainPageFiltersTabs.addProduct ul li a{background: none;@include box-shadow(none);}
+.mainPageFiltersTabs.addProduct ul li.active a{background: #FDFDFD;@include box-shadow(0px 5px 12px rgba(0,0,0,0.12));border:none;}
 .mainPageFiltersTabs ul li.active a svg path{fill:$black-text;}
 .mainPageFiltersTabs.category-filters ul li.active a span{border-bottom:2px solid $yellow-color;}
 .addAdvertStepsBlock{@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));@include border-radius(9px);width: 100%;}
@@ -641,7 +646,7 @@ ul.justLinks li{position: relative;}
 .yearsOlderItem{position: relative;}
 .advertFiltersItemValue ul.years li .yearsOlderItem a{@include fontView("GothamProRegular",$black-text,1.6rem,3.2rem);display: block;text-align: center;padding: 3px 16px;@include border-radius(0);}
 .advertFiltersItemValue ul.years li .yearsOlderItem a:hover,.advertFiltersItemValue ul.years li .yearsOlderItem a:focus{text-decoration: none;background: $yellow-color;}
-.yearsOlderItems{display: none;height:290px;overflow-y:scroll;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
+.yearsOlderItems{display: none;max-height:290px;overflow-y:scroll;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
 .addProductFilterRadios li{padding-right: 2rem;position: relative;}
 .addProductFilterRadios li a{@include fontView("GothamProRegular",$light-black-color,1.2rem,1.4rem);padding: 10px 16px;background: $gray-color;@include border-radius(5px);display: block;}
 .addProductFilterRadios li a:hover,.addProductFilterRadios li a:focus{text-decoration: none;}
@@ -782,7 +787,7 @@ ul.justLinks li{position: relative;}
 .accountSettingsTabsProcess{position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(255,255,255,0.8);display: none;z-index:444;}
 .accountSettingsTabsProcess.active{@include flexBox(row,center,center);}
 .accountSettingsTabs ul li a{@include fontView("GothamProRegular",$black-text,2.2rem,3rem);}
-.nav-tabs.settingsTabs > li > a{@include border-radius(0);border:none;@include flexBox(row, flex-start, center);}
+.nav-tabs.settingsTabs > li > a{@include border-radius(5px 5px 0 0);border:none;@include flexBox(row, flex-start, center);}
 .nav-tabs.settingsTabs > li > a > .numberNewItems{display: block;background: rgba(240,153,75,0.5);padding: 4px;@include fontView("GothamProMedium",$super-white-color,1.2rem,1.1rem);@include border-radius(50%);margin-left: 1rem;padding: 9px 4px;}
 .nav-tabs.settingsTabs > li > a > .numberNewItems span{background: $orange-color;margin: 4px 0;padding: 4px 6px;@include border-radius(50%);}
 .nav-tabs.settingsTabs > li.active > a{font-family:"GothamProMedium", sans-serif;background: #fff;border:none;color:$black-text;}
@@ -845,7 +850,7 @@ ul.justLinks li{position: relative;}
 .accountAdvert.cube{position: relative;background: #fff;border: 1px solid #DFE1E5;@include border-radius(9px);padding:5rem 3rem 1rem;@include flexBox(row,flex-start,stretch);margin-bottom: 5rem;}
 .accountAdverts.line{@include flexBox(row, space-between,center);flex-wrap:wrap;}
 .accountAdvert.cube{width: 100%;max-width: 30.8rem;padding: 0;background: none;border:none;display: block;position: relative;}
-.accountAdvert.cube .inner{border: 2px solid #DFE1E5;@include border-radius(9px 9px 0px 9px);background: #fff;display: block;padding: 2rem;}
+.accountAdvert.cube .inner{border: 2px solid #DFE1E5;@include border-radius(9px 9px 9px 9px);background: #fff;display: block;padding: 2rem;}
 .accountAdvert.cube .accountAdvertInfoName{font-size: 1.7rem; line-height: 2.6rem;font-weight: normal;padding-top: 1.5rem;}
 .accountAdvert.cube .accountAdvertInfoBoard{padding-top: 1rem;padding-bottom: 3rem;}
 .accountAdvert.cube .inner a:hover,.accountAdvert.cube .inner a:focus{text-decoration: none;}
@@ -871,16 +876,17 @@ ul.justLinks li{position: relative;}
 .accountMessageItemCheck {padding-right: 4rem;}
 .accountMessageItem.active .accountMessageItemEnvelope svg path{fill:$orange-color;stroke:#fff;}
 .accountMessageItemEnvelope{@include flexBox(row, flex-start, center);padding-right: 4rem;}
-.accountMessageItemUserAvatar{padding-right: 2rem;}
-.accountMessageItemUserAvatar img{width: 50px;height: 50px;@include border-radius(50%);}
-.accountMessageItemUserName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.accountMessageItemUserAvatar{padding-right: 2rem;@include flexBox(row, flex-start, center);width: 35%;}
+.accountMessageItemUserAvatar img{width: 50px;@include border-radius(50%);}
+.accountMessageItemUserName{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);padding-left: 2rem;}
 .accountMessageItemUserName a{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
-.accountMessageItemTitleName{@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);}
+.accountMessageItemTitle{@include flexBox(row, space-between, center);flex-grow:2;}
+.accountMessageItemTitleName{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);padding-right: 2rem;}
 .accountMessageItem.active .accountMessageItemTitleName{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountMessageItemTitleDate{@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);}
 .accountMessageItem{border-bottom: 1px solid #DFE1E5;padding:1rem 2rem;}
 .accountMessageItem:hover{cursor:pointer;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
-.accountMessageItemButton{@include flexBox(row, flex-end,center);width: 20%;}
+.accountMessageItemButton{@include flexBox(row, flex-end,center);width: 15%;}
 .accountMessageItemButton a{display: block;background: $gray-color;@include border-radius(3px); @include fontView("GothamProBlack",$super-black-color,1.8rem,1.7rem);max-width:19.8rem;width: 100%;text-align: center;padding: 1.3rem 1.1rem;}
 .accountMessageItem.active .accountMessageItemButton a{background: $yellow-color;}
 .accountMessageItemButton a:hover,.accountMessageItemButton a:focus{background: $orange-color;text-decoration: none;}
@@ -889,7 +895,7 @@ ul.justLinks li{position: relative;}
 .accountConversationHeader{@include flexBox(row,space-between,center);padding: 3.5rem 2rem; border-bottom: 1px solid #DFE1E5;}
 .accountConversationHeaderBack a{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$input-black,1.4rem,2.4rem);}
 .accountConversationHeaderBack a:hover,.accountConversationHeaderBack a:focus{text-decoration: none;}
-.accountConversationHeaderTopic{@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);}
+.accountConversationHeaderTopic{@include fontView("GothamProBlack",$black-text,1.7rem,2.6rem);}
 .accountConversationHeaderTopic span{@include fontView("GothamProBold",$black-text,1.7rem,2.6rem);}
 .accountConversationMessage{@include flexBox(row,flex-start,flex-start);padding-bottom: 2rem;}
 .accountConversationMessage.oppoMessage{padding-left: 5rem;}
@@ -970,7 +976,7 @@ ul.justLinks li{position: relative;}
 .accountReviewRating{padding-bottom: 1.6rem;}
 .accountOrderInfo.order .accountOrderInfoProductStatus{text-align: center;}
 .accountOrders{padding-bottom: 5rem;}
-.accountBlacklistUser .accountMessageItemUser{width: 80%;}
+.accountBlacklistUser .accountMessageItemUser{width: 85%;}
 .accountBlacklistUser{background: #fff;padding-left: 3rem;padding-right: 2.5rem;padding-top: 1rem;padding-bottom: 1rem;border-bottom: 1px solid #DFE1E5;}
 .accountBlacklistUserDelete a{background: none;border:none;}
 .accountBlacklistUserDelete a:hover svg path,.accountBlacklistUserDelete a:focus svg path{stroke:$yellow-color;}
@@ -1316,7 +1322,10 @@ body.userAccount{background:#F9F9F9;}
 .accountRatesInformationListItem svg{margin-right: 1rem;}
 .accountRatesInformationListItem a{@include flexBox(row,center,center);}
 .mainPageFiltersTabs.dealerAccountRates{padding-top: 0;}
-.accountRatesInformationList.dealerAccountRates{padding-bottom: 7rem;}
+.accountRatesInformationList.dealerAccountRates{padding-bottom: 5rem;flex-wrap:wrap;}
+.accountRatesInformationListBlock{padding-bottom: 2rem;}
+.accountRatesInformationListItem{padding-bottom: 2rem;}
+.accountRatesInformationListBlock .accountRatesInformationListItem{padding-bottom: 0;}
 .dealerAccountRates .categoryRateDescription{width: 60%;}
 .categoryRateOrderButton{width: 20%;}
 .categoryRateOrderButton a{display: block;background: none;border:1px solid #222B2A;@include border-radius(3px);@include fontView("GothamProRegular",$black-text,1.8rem,1.7rem);padding: 1.2rem 1.1rem;width: 18rem;text-align: center;}
@@ -1347,7 +1356,7 @@ body.userAccount{background:#F9F9F9;}
 .paymentInfoBlock{@include flexBox(row,flex-start,stretch);}
 .paymentInfoShield{padding-right: 1.5rem;}
 .paymentInfoLink{@include flexBox(row,center,center);padding-top: 7rem;padding-bottom: 6rem;}
-.paymentsMethodsBlockInner ul{@include flexBox(row,center,center);}
+.paymentsMethodsBlockInner ul{@include flexBox(row,space-between,center);}
 .accountBillStatus span{@include border-radius(3px);@include fontView("GothamProRegular",$black-text,1.7rem,2.6rem);padding: 0.7rem;text-transform:lowercase;}
 .accountBillStatus span.inprocess{background: $yellow-color;}
 .accountBillStatus span.complete{background: #DFE1E5;}
@@ -1359,7 +1368,7 @@ body.userAccount{background:#F9F9F9;}
 .dealerSalonJobItemJob{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}
 .dealerSalonJobItemJob.custom-checkbox{margin-right: 1.3rem;}
 .salonJobs,#salonJobs{height: 350px;}
-.alert{@include fontView("GothamProRegular",$black-text,1.3rem,1.8rem);margin-bottom: 0;}
+.alert{@include fontView("GothamProRegular",$black-text,1.3rem,1.8rem);margin-bottom: 0;width: 100%;margin-bottom: 1rem;}
 .mapListItem.dealerSalon{justify-content: space-between;}
 .dealerSalonInformation{@include flexBox(row,flex-start,stretch);}
 .accountAdvertServiceButton.rateButton button{position: relative;}
@@ -1516,11 +1525,23 @@ ul.color li{position: relative;}
 .searchReturnBlock{background: #fff;padding-top: 1.5rem;padding-bottom: 1.5rem;}
 .paymentResultSubtext{@include fontView("GothamProRegular",$black-text,2.2rem,3.2rem);text-align: center;}
 .paymentResultIcon{padding-top: 3rem;padding-bottom: 5rem;@include flexBox(row, center, center);}
-.accountRatesInformationListCategories{@include flexBox(row,flex-start,center);}
-.accountRatesInformationListCategory{@include flexBox(row,flex-start,center);}
-.accountRatesInformationListCategory svg{width: 26px;}
+.accountRatesInformationListCategories{@include flexBox(row,flex-start,center);margin-top: 10px;margin-right:3rem;}
+.accountRatesInformationListCategory{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.4rem,2.4rem);margin-right: 10px;}
+.accountRatesInformationListCategory svg{width: 26px;margin-right: 10px;}
 #breadScrumbsMobileMenuToggler{border:none;background: none;@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);position: absolute;right: 15px;top:10px;display: none;}
 button#breadScrumbsMobileMenuToggler:hover,#breadScrumbsMobileMenuToggler:focus{outline:none;}
 .addAdvertGenerationIcon{width: 100%;height: 10rem;@include flexBox(row,center,center);}
 #advertFiltersItemsTable > tbody > tr > td:nth-child(2) .advertFiltersItemName{display: none;padding-bottom: 2rem;padding-left: 0;}
 #advertFiltersItemsTable input.parameterValue.addProductPriceInput{background: url('../img/euro.svg') no-repeat;background-position:top 10px right 12px;}
+.paymentTabMore{padding-top: 1.5rem;}
+.paymentTabMore a{@include fontView("GothamProRegular",$orange-color,1.6rem,2.2rem);text-decoration: underline;}
+.paymentTabMore a:hover{text-decoration: none;}
+.paymentFullText{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);}
+.paymentFullText .modal-header h3{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem);}
+.modal-content.payment{padding: 5rem 3rem;}
+.close-alert{background: none;border:none;}
+.productToolsText{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);text-align: center;padding-bottom: 3rem;}
+#productToolsButtons{@include flexBox(column,center,center);}
+#productToolsButtons button{width: 100%;}
+.notesAdverts{@include flexBox(row,flex-start,flex-start);flex-wrap:wrap;}
+.notesAdverts .accountAdvert.cube{margin-right: 2rem;}

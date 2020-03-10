@@ -278,6 +278,9 @@
     .accountBillInfoItem.status{padding-top: 3rem;padding-bottom: 4rem;}
     .paymentsMethodsBlockInner ul.paymentsList{display: block;}
     .paymentsMethodsBlockInner ul.paymentsList li{display: block;margin-bottom: 1.5rem;}
+    .accountMessageItemUser{flex-wrap:wrap;}
+    .accountMessageItemTitle{padding-left: 12rem;flex-wrap:wrap;}
+    .accountMessageItemUserAvatar{width: auto;}
 }
 @media (max-width: 650px) 
 {

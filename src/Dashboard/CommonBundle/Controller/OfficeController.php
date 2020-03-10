@@ -108,11 +108,7 @@ class OfficeController extends Controller
             
             $dealer->setUsername($dealer->getEmail()); 
             $dealer->setIsActive(1);
-            if($settings->getIsModerate()){
-                $dealer->setIsConfirm(0);
-            }else{
-                $dealer->setIsConfirm(1);
-            }
+            $dealer->setIsConfirm(0);
             $dealer->addRole($role);
             $role->addUser($dealer);
             $dealer->setAdvertNumber(0);
@@ -125,37 +121,33 @@ class OfficeController extends Controller
             $dealer->getUserinfo()->setCity($dealer->getDealerinfo()->getCity());
             $dealer->getUserinfo()->setCityCode($dealer->getDealerinfo()->getCityCode());
             
-            $dealerPhone = new DealerPhone();
-            $dealerPhone->setDealerInfo($dealer->getDealerinfo());
-            $dealerPhone->setPhone($dealer->getUserinfo()->getPhone());
-            
-            //create new service point
-            $dealerSalon = new DealerSalon();
-            $dealerSalon->setDealerInfo($dealer->getDealerinfo());
-            $dealerSalon->setName($dealer->getDealerinfo()->getCompany());
-            
-            $dealerSalonPhone = new DealerSalonPhone();
-            $dealerSalonPhone->setDealerSalon($dealerSalon);
-            $dealerSalonPhone->setPhone($dealer->getUserinfo()->getPhone());
-            
             $manager->persist($dealer);
-            $manager->persist($dealerPhone);
-            $manager->persist($dealerSalon);
-            $manager->persist($dealerSalonPhone);
             $manager->persist($role);
             $manager->flush();
             
+            $register = new Register();
+            $key = md5(md5(md5($password . rand(1, 99999999)) . rand(1, 99999)) . $dealer->getEmail());
+            $register->setConfirmKey($key);
+            $register->setDate(new \DateTime("now"));
+            
+            $query = $manager->createQuery('SELECT u FROM Dashboard\CommonBundle\Entity\User u ORDER BY u.id ASC');
+            $users = $query->getResult();
+            $register->setUserId($users[count($users) - 1]->getId());
+            $manager->persist($register);
+            $manager->flush();
+            
+            //send confirmation link to email
             $message = \Swift_Message::newInstance()
-                ->setSubject($this->get('translator')->trans('Регистрация на портале') . $settings->getSiteName())
+                ->setSubject($this->get('translator')->trans('Регистрация на сайте') . $settings->getSiteName())
                 ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                 ->setTo($registerForm['email']->getData())
                 ->setBody(
                     $this->renderView(
                         'Emails/userregistration.html.twig',
-                        array('user' => $dealer, "settings" => $settings, "password" => $mailPassword)
+                        array('user' => $dealer, "password" => $mailPassword, "settings" => $settings, "key" => $key,"register" => $register)
                     ),
                     'text/html'
-                );
+            );
             
             $this->get('mailer')->send($message);
             

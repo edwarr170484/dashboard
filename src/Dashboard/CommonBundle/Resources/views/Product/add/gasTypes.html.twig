@@ -9,7 +9,6 @@
                         <a href="javascript:voit(0)" onclick="getGearType({{ gasType.id }},'{{ locale.code}}')" {% if gasType.id == advertInfo.gasType %}class="active"{% endif %}>{{ gasType.value }}</a>
                     </li>
                 {% endfor %}
-                <li class="static-filters"><div class="filter"><input onclick="setGasValue($(this),'{{ locale.code }}')" name="isGas" type="checkbox" value="1" class="gas-checkbox" {% if advertInfo.isGas %}checked="checked"{% endif %}  /> {% trans %}Газобалонное оборудование{% endtrans %}</div></li>
             </ul>
             <script>$(".gas-checkbox").customCheckbox();</script>
         </div>

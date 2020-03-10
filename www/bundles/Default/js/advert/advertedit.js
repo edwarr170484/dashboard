@@ -72,33 +72,6 @@ function getGenerationsByBoardEdit(boardId, productId){
         success: function(html)
         {
             $(".modal-body-cover").hide();
-            $("#addAdvertCarGenerations").html(html);
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            $(".modal-body-cover").hide();
-            err=xhr.responseText;
-        }
-    });
-}
-
-function getGenerationEngineEdit(generationId, productId, element){
-    element.parent().find('.addAdvertGeneration').each(function(){$(this).removeClass('active');});
-    element.addClass('active');
-    
-    $.ajax({
-        url: '/account/editadvert/ajax/' + productId + '/engines/' + generationId,
-        type:'get',
-        dataType: 'html',
-        beforeSend: function(){
-            $("#addAdvertCarEngines").html('');
-            $("#addAdvertCarGears").html('');
-            $("#addAdvertCarTransmittions").html('');
-            $("#addAdvertCarModifications").html('');
-            $(".cookieAlertButton.nextStep").addClass("hide");
-        },
-        success: function(html)
-        {
-            $(".modal-body-cover").hide();
             $("#addAdvertCarEngines").html(html);
         },
         error: function(xhr, ajaxOptions, thrownError) {

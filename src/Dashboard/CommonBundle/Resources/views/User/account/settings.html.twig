@@ -127,34 +127,43 @@
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(formMain.userinfo.city, {'id':'city'})}}
-                                        <script>
-                                            $('#city').change(function() {
-                                                var $form = $('.userSettingsForm');
-                                                var data = {};
-                                                data[$('#city').attr('name')] = $('#city').val();
-
-                                                $.ajax({
-                                                    url : $form.attr('action'),
-                                                    type: $form.attr('method'),
-                                                    data : data,
-                                                    success: function(html) {
-                                                        $('#cityCodeField').html($(html).find('#cityCodeField').html());
-                                                        $('#settingsCityCode').customSelect();
-                                                    }
-                                                });
-                                            });
-                                        </script>
-                                    </div>
-                                </div>
-                                <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: <sup>*</sup></div>
-                                    <div class="formParameterField" id="cityCodeField">
+                                    <div class="formParameterField">
                                         {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
                                     </div>
                                 </div>
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formMain.userinfo.city,{'id' : 'settingsCity'})}}
+                                    </div>
+                                </div>
+                                <script>
+                                    $("#settingsCityCode").keyup(function(){
+                                        var len = $(this).val().length;
+                                        if(len === 5){
+                                            $.ajax({
+                                                url : '/region/getcity/' + $(this).val(),
+                                                type: 'get',
+                                                dataType: 'json',
+                                                success: function(data) {
+                                                    if(data !== 0){
+                                                        $("#settingsCity").parent().find(".select-option").each(function(){
+                                                            if($(this).data('value') === parseInt(data.city)){
+                                                                $(this).trigger('click');
+                                                                $("#settingsCityCode").val(data.code);
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                    
+                                    $("#settingsCity").change(function(){
+                                        $("#settingsCityCode").val(null);
+                                    });
+                                </script>
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">

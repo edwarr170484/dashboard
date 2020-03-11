@@ -26,6 +26,7 @@ function getStep12(categoryId, locale_code){
         {
             $(".modal-body-cover").hide();
             $("#addAdvertStep").html(html);
+            $("html").animate({scrollTop:0});
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -44,6 +45,7 @@ function getStep2(locale_code){
         {
             $(".modal-body-cover").hide();
             $("#addAdvertStep").html(html);
+            $("html").animate({scrollTop:0});
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -63,6 +65,7 @@ function getStep3(locale_code){
             $(".modal-body-cover").hide();
             $("#addAdvertStep").html(html);
             $(".custom-checkbox").customCheckbox();
+            $("html").animate({scrollTop:0});
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -84,6 +87,7 @@ function getStep4(locale_code){
             $("#addAdvertStep").html(html);
             $(".custom-checkbox").customCheckbox();
             $(".custom-select").customSelect();
+            $("html").animate({scrollTop:0});
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -103,6 +107,7 @@ function getStep5(locale_code){
         {
             $(".modal-body-cover").hide();
             $("#addAdvertStep").html(html);
+            $("html").animate({scrollTop:0});
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();
@@ -139,6 +144,7 @@ function addAdvert(locale_code,text, isDraft){
             {
                 $(".modal-body-cover").hide();
                 $("#addAdvertStep").html(html);
+                $("html").animate({scrollTop:0});
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 $(".modal-body-cover").hide();

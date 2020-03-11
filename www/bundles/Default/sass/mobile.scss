@@ -192,6 +192,7 @@
     .productNoteForm{flex-wrap: wrap;}
     .productNoteForm .cookieAlertButton{width: 100%;margin-top: 1rem;}
     .productNoteForm .cookieAlertButton button{width: 100%;}
+    .addAdvertServiceTabsBlock .tab-pane .service{flex-wrap:wrap;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}

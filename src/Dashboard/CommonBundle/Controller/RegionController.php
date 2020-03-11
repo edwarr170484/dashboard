@@ -34,8 +34,6 @@ class RegionController extends Controller
             catch(\Doctrine\ORM\NoResultException $e) {
                 $cities = 0;
             }
-            
-        //$answer .= '<div class="select-option" data-value="0">Вся Латвия</div>';
         
         if($cities)
         {
@@ -58,6 +56,25 @@ class RegionController extends Controller
         }
         else
             return new Response($answer);
+    }
+    
+    /**
+     * @Route("/region/getcity/{cityCode}", name="region_getcodecity")
+     */
+    public function getCityByCodeAction($cityCode, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        
+        if($cityCode){
+            
+            $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($cityCode);
+            
+            if($code){
+                return new \Symfony\Component\HttpFoundation\JsonResponse(array("city" => $code->getCity()->getId(), "code" => $code->getCode()));
+            }
+        }
+        
+        return new Response(0);
     }
 }
 

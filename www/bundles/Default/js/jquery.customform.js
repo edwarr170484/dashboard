@@ -211,6 +211,18 @@
                                         }
                                         
                                         selectElement.trigger("change");
+                                        selectElement.parent().find("input[name='select-writable']").keyup(function(){
+                                                var optionsList = $(this).parent().parent().next(".select-options").find(".select-option");
+                                                var controlVal = $(this).val();
+                                                optionsList.each(function(){
+                                                    var val = $(this).html();
+                                                    if(val.includes(controlVal)){
+                                                        $(this).removeClass("hide");
+                                                    }else{
+                                                        $(this).addClass("hide");
+                                                    }
+                                                });
+                                        });
 				});
 			});
 			

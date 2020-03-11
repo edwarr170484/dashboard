@@ -241,12 +241,7 @@
                                                         },
                                                         removedfile: function(file){
                                                             $(".addFotoIcon").remove();
-                                                            var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
-                                                            $.ajax({
-                                                                url: '/account/ajaxdeletefoto/' + file.previewElement.attributes.getNamedItem("imageId").value,
-                                                                type:'get',
-                                                                dataType: 'html'
-                                                            });
+                                                            
                                                             var _ref;
                                                             var ret = (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
 
@@ -257,6 +252,13 @@
                                                                 $("div#advertFotos").html(this.options.dictDefaultMessage);
                                                                 $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
                                                             }
+                                                            
+                                                            var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
+                                                            $.ajax({
+                                                                url: '/account/ajaxdeletefoto/' + file.previewElement.attributes.getNamedItem("imageId").value,
+                                                                type:'get',
+                                                                dataType: 'html'
+                                                            });
 
                                                             return ret;
                                                         }
@@ -300,11 +302,11 @@
                                 <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
                                     <table class="table table-striped" id="advertFiltersItemsTable">
                                         <tr>
-                                            <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %}</span></td>
-                                            <td><input type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" {% if product.info.probeg %}value="{{ product.info.probeg }}"{% endif %} /></td>
-                                            <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %}</span></td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %} <sup> *</sup></span></td>
+                                            <td><input required="required" type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" {% if product.info.probeg %}value="{{ product.info.probeg }}"{% endif %} /></td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %} <sup> *</sup></span></td>
                                             <td>
-                                                <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}">
+                                                <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}" required="required">
                                                     {% if conditions %}
                                                         {% for condition in conditions %}
                                                             <option value="{{ condition.id }}" {% if product.info.shape.id == condition.id %}selected="selected"{% endif %}>
@@ -317,9 +319,9 @@
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %}</span></td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %} <sup> *</sup></span></td>
                                             <td>
-                                                <select name="owners" class="custom-select" placeholder="{% trans %}Количество владельцев{% endtrans %}">
+                                                <select name="owners" class="custom-select" placeholder="{% trans %}Количество владельцев{% endtrans %}" required="required">
                                                     <option value="Один" {% if product.info.owners == 'Один' %}selected="selected"{% endif %}>Один</option>
                                                     <option value="Два" {% if product.info.owners == 'Два' %}selected="selected"{% endif %}>Два</option>
                                                     <option value="Три" {% if product.info.owners == 'Три' %}selected="selected"{% endif %}>Три</option>
@@ -371,10 +373,10 @@
                                 <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
                                     <table class="table table-striped" id="advertFiltersItemsTable">
                                         <tr>
-                                            <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %}</span></td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %} <sup> *</sup></span></td>
                                             <td>
                                                 <div class="addAdvertPriceParameters">
-                                                    <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue addProductPriceInput"  {% if product.info.price %}value="{{ product.info.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
+                                                    <input required="required" type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue addProductPriceInput"  {% if product.info.price %}value="{{ product.info.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
                                                     <div class="filter">
                                                         <input name="NDS" type="checkbox" value="1" class="custom-checkbox"  {% if product.info.nds %}checked="checked"{% endif %} />
                                                         {% trans %}НДС включен{% endtrans %}
@@ -446,7 +448,7 @@
                                             <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
                                             <td>
                                                 <div class="addAdvertContextParamenter">
-                                                    <select name="contactCity" data-write="1" class="custom-select just-select" id="advertCity" placeholder="{% trans %}Город{% endtrans %}" onchange="getCityCodesByValue($(this))">
+                                                    <select name="contactCity" data-write="1" class="custom-select just-select" id="settingsCity" placeholder="{% trans %}Город{% endtrans %}" required="required">
                                                         {% for city in cities %}
                                                             <option value="{{ city.id }}" {% if product.city and product.city.id == city.id %}selected="selected"{% endif %}>{{ city.name }}</option>
                                                         {% endfor %}
@@ -462,16 +464,40 @@
                                             <td><span class="addAdvertParameterLabel">{% trans %}Индекс{% endtrans %}<sup> *</sup></span></td>
                                             <td>
                                                 <div class="addAdvertContextParamenter" id="advertCityCodeBlock">
-                                                    <select name="contactCityCode" data-write="1" class="custom-select just-select" id="advertCityCode" placeholder="{% trans %}Индекс{% endtrans %}">
-                                                        {% if product.city %}
-                                                            {% if product.city.codes | length > 0 %}
-                                                                {% for code in product.city.codes %}
-                                                                    <option value="{{ code.id }}" {% if product.cityCode and product.cityCode.id == code.id %}selected="selected"{% endif %}>{{ code.code }}</option>
-                                                                {% endfor %}
-                                                            {% endif %}
+                                                    <div class="addAdvertContextParamenter" id="advertCityCodeBlock">
+                                                        {% if product.cityCode %}
+                                                            <input id="settingsCityCode" value="{{ product.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
+                                                        {% else %}
+                                                            <input id="settingsCityCode" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
                                                         {% endif %}
-                                                    </select>
+                                                    </div>
                                                 </div>
+                                                <script>
+                                                    $("#settingsCity").customSelect();
+                                                    $("#settingsCityCode").keyup(function(){
+                                                        var len = $(this).val().length;
+                                                        if(len === 5){
+                                                            $.ajax({
+                                                                url : '/region/getcity/' + $(this).val(),
+                                                                type: 'get',
+                                                                dataType: 'json',
+                                                                success: function(data) {
+                                                                    if(data !== 0){
+                                                                        $("#settingsCity").parent().find(".select-option").each(function(){
+                                                                            if($(this).data('value') === parseInt(data.city)){
+                                                                                $(this).trigger('click');
+                                                                                $("#settingsCityCode").val(data.code);
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                    $("#settingsCity").change(function(){
+                                                        $("#settingsCityCode").val(null);
+                                                    });
+                                                </script>
                                             </td>
                                         </tr>
                                         <tr>

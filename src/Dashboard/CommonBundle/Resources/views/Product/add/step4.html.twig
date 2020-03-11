@@ -17,11 +17,11 @@
                     <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
                         <table class="table table-striped" id="advertFiltersItemsTable">
                             <tr>
-                                <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %}</span></td>
-                                <td><input type="text" name="probeg" placeholder="{% trans %}Пробег (км){% endtrans %}" class="parameterValue" {% if advertInfo.probeg %}value="{{ advertInfo.probeg }}"{% endif %}/></td>
-                                <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %}</span></td>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Пробег{% endtrans %} <sup> *</sup></span></td>
+                                <td><input required="required" type="text" name="probeg" placeholder="{% trans %}Пробег (км){% endtrans %}" class="parameterValue" {% if advertInfo.probeg %}value="{{ advertInfo.probeg }}"{% endif %}/></td>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %} <sup> *</sup></span></td>
                                 <td>
-                                    <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}">
+                                    <select name="condition" class="custom-select just-select" placeholder="{% trans %}Выберите состояние{% endtrans %}" required="required">
                                         {% if conditions %}
                                             {% for condition in conditions %}
                                                 <option value="{{ condition.id }}" {% if advertInfo.condition == condition.id %}selected="selected"{% endif %}>
@@ -34,9 +34,9 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %}</span></td>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %} <sup> *</sup></span></td>
                                 <td>
-                                    <select name="owners" class="custom-select" placeholder="{% trans %}Количество владельцев{% endtrans %}">
+                                    <select name="owners" class="custom-select just-select" placeholder="{% trans %}Количество владельцев{% endtrans %}" required="required">
                                         <option value="Один" {% if advertInfo.owners == 'Один' %}selected="selected"{% endif %}>Один</option>
                                         <option value="Два" {% if advertInfo.owners == 'Два' %}selected="selected"{% endif %}>Два</option>
                                         <option value="Три" {% if advertInfo.owners == 'Три' %}selected="selected"{% endif %}>Три</option>
@@ -88,10 +88,10 @@
                     <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
                         <table class="table table-striped" id="advertFiltersItemsTable">
                             <tr>
-                                <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %}</span></td>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Цена{% endtrans %} <sup> *</sup></span></td>
                                 <td>
                                     <div class="addAdvertPriceParameters">
-                                        <input type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue addProductPriceInput"  {% if advertInfo.price %}value="{{ advertInfo.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
+                                        <input required="required" type="text" name="price" placeholder="{% trans %}Цена{% endtrans %}" class="parameterValue addProductPriceInput"  {% if advertInfo.price %}value="{{ advertInfo.price }}"{% endif %} style="max-width:41rem;margin-right: 7rem;"/>
                                         <div class="filter">
                                             <input name="NDS" type="checkbox" value="1" class="custom-checkbox"  {% if advertInfo.nds %}checked="checked"{% endif %} />
                                             {% trans %}НДС включен{% endtrans %}

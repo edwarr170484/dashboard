@@ -960,12 +960,7 @@
             },
             removedfile: function(file){
                 $(".addFotoIcon").remove();
-                var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
-                $.ajax({
-                    url: '/account/deleteimage/' + imageName,
-                    type:'get',
-                    dataType: 'html'
-                });
+               
                 var _ref;
                 var ret = (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
                 
@@ -976,6 +971,13 @@
                     $("div#advertFotos").html(this.options.dictDefaultMessage);
                     $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
                 }
+                
+                var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
+                $.ajax({
+                    url: '/account/deleteimage/' + imageName,
+                    type:'get',
+                    dataType: 'html'
+                });
                 
                 return ret;
             }

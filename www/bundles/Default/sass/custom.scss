@@ -603,6 +603,7 @@ ul.justLinks li{position: relative;}
 .addAdvertFiltersButtons{@include flexBox(row,flex-end,center);}
 .addAdvertFiltersButtons .mainPageFiltersShowResults button{max-width: 250px;padding: 1.4rem 4.5rem;}
 .mainPageFiltersTabs ul li a.block{@include flexBox(column, flex-start, center);}
+.mainPageFiltersTabs ul li a.block:hover,.mainPageFiltersTabs ul li a.block:focus{border:1px solid transparent;}
 .mainPageFiltersTabs ul li a.block svg{margin: 0;}
 .mainPageFiltersTabs ul li a.block span{display: block;@include fontView("GothamProBold",$black-text,1.6rem,2.2rem);margin-top: 1rem;text-transform: none;border-bottom:2px solid transparent;padding-bottom: 2px;}
 .mainPageFiltersTabs.addProduct ul li a{background: none;@include box-shadow(none);}
@@ -720,6 +721,7 @@ ul.justLinks li{position: relative;}
 .addAdvertServiceItemTitle{@include fontView("GothamProMedium",$black-text,1.8rem,2.4rem);}
 .addAdvertServiceItemSubtitle{@include fontView("GothamProRegular",#747474,1.4rem,2.4rem);}
 .addAdvertServiceItem{@include flexBox(row,flex-start,flex-start);}
+.addAdvertServiceItem.service-checkbox{@include flexBox(row,space-between,flex-start);}
 .addAdvertServiceItemIcon{margin-right: 1.4rem;}
 .addAdvertServiceItems{padding-left: 10rem;position: relative;z-index:3;}
 .servicePremium.service20{background: url('../img/service20.svg') 100% 100% no-repeat;}
@@ -727,7 +729,7 @@ ul.justLinks li{position: relative;}
 .nav-tabs.addAdvertServicesTabs > li.active:last-child > a{background: #DFE1E5;border-top:5px solid $yellow-color;color:$black-text;}
 .addAdvertServiceTabsBlock .tab-pane .service{padding: 6rem 5rem;border:5px solid #DFE1E5;background:#DFE1E5;@include flexBox(row,space-between,center);position: relative;overflow:hidden;}
 .addAdvertServiceDescriptionBgGray{position: absolute;width: 814px;height: 814px;top:-100px;left:-150px;background: #FFFFFF;@include border-radius(50%);}
-.addAdvertServiceItemCheckbox{@include flexBox(row,flex-start,center);@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);}
+.addAdvertServiceItemCheckbox{@include flexBox(row,flex-start,center);@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);width: 40%;}
 .addAdvertServiceItemCheck{width: 22px;height: 22px;border:1px solid $orange-color;background: #fff;@include border-radius(2px);position: relative;margin-right: 28px;margin-left: 11px;cursor:pointer;}
 .addAdvertServiceItemCheck.active{background: url(../img/check.svg) 50% 50% no-repeat $orange-color;}
 .addAdvertServiceItemCheck input{position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: block;@include opacity(0);padding: 0;}
@@ -1545,3 +1547,4 @@ button#breadScrumbsMobileMenuToggler:hover,#breadScrumbsMobileMenuToggler:focus{
 #productToolsButtons button{width: 100%;}
 .notesAdverts{@include flexBox(row,flex-start,flex-start);flex-wrap:wrap;}
 .notesAdverts .accountAdvert.cube{margin-right: 2rem;}
+.addAdvertServiceItemInfo{@include flexBox(row,flex-start,flex-start);width: 60%;}

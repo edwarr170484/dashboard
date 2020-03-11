@@ -199,9 +199,7 @@
                     <div class="addAdvertForm-Group">
                         <div class="addAdvertFormGroupLabel">{% trans %}Город{% endtrans %}</div>
                         <div class="addAdvertFormGroupControl">
-                            <input name="contactCity" placeholder="{% trans %}Город{% endtrans %}" class="form-control" value="{{ product.city.name }}" onkeyup="getCitiesByValue($(this), '{{ locale.code }}')" required="required" type="text" />
-                            <div class="addAdvertContextParamenterValues"></div>
-                            <select name="contactCity" data-write="1" class="custom-select just-select" id="advertCity" placeholder="{% trans %}Город{% endtrans %}" onchange="getCityCodesByValue($(this))">
+                            <select name="contactCity" data-write="1" class="custom-select just-select" id="settingsCity" placeholder="{% trans %}Город{% endtrans %}" required="required">
                                 {% for city in cities %}
                                     <option value="{{ city.id }}" {% if product.city and product.city.id == city.id %}selected="selected"{% endif %}>{{ city.name }}</option>
                                 {% endfor %}
@@ -211,16 +209,38 @@
                     <div class="addAdvertForm-Group">
                         <div class="addAdvertFormGroupLabel">{% trans %}Индекс{% endtrans %}</div>
                         <div class="addAdvertFormGroupControl" id="advertCityCodeBlock">
-                            <select name="contactCityCode" data-write="1" class="custom-select just-select" id="advertCityCode" placeholder="{% trans %}Индекс{% endtrans %}">
-                                {% if product.city %}
-                                    {% if product.city.codes | length > 0 %}
-                                        {% for code in product.city.codes %}
-                                            <option value="{{ code.id }}" {% if product.cityCode and product.cityCode.id == code.id %}selected="selected"{% endif %}>{{ code.code }}</option>
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endif %}
-                            </select>
+                            {% if product.cityCode %}
+                                <input id="settingsCityCode" value="{{ product.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
+                            {% else %}
+                                <input id="settingsCityCode" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
+                            {% endif %}
                         </div>
+                        <script>
+                            $("#settingsCity").customSelect();
+                            $("#settingsCityCode").keyup(function(){
+                                var len = $(this).val().length;
+                                if(len === 5){
+                                    $.ajax({
+                                        url : '/region/getcity/' + $(this).val(),
+                                        type: 'get',
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            if(data !== 0){
+                                                $("#settingsCity").parent().find(".select-option").each(function(){
+                                                    if($(this).data('value') === parseInt(data.city)){
+                                                        $(this).trigger('click');
+                                                            $("#settingsCityCode").val(data.code);
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            $("#settingsCity").change(function(){
+                                $("#settingsCityCode").val(null);
+                            });
+                        </script>
                     </div>
                     <div class="addAdvertForm-Group">
                         <div class="addAdvertFormGroupLabel">{% trans %}Фотографии{% endtrans %}</div>

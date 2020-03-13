@@ -636,7 +636,7 @@ class AccountController extends Controller
                     ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($userTo->getEmail())
-                    ->setBody('Вы получили новое сообщение на сайте gribupardot.sunweb.by. '
+                    ->setBody('Вы получили новое сообщение на сайте ' . $settings->getSiteName() . '. '
                             . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_conversations', array(), true) . '">личном кабинете</a>.','text/html');
 
                     $this->get('mailer')->send($message);
@@ -788,7 +788,7 @@ class AccountController extends Controller
                             ->setBody(
                                 $this->renderView(
                                     'Emails/changeorderstatus.html.twig',
-                                    array('order' => $order, "orderStatus" => $status->getName(), "comment" => 0)
+                                    array('order' => $order, "orderStatus" => $status->getName(), "comment" => 0, "settings" => $settings)
                                 ),
                                 'text/html'
                         );

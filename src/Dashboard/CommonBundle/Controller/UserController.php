@@ -310,7 +310,7 @@ class UserController extends Controller
                 ->setBody(
                     $this->renderView(
                         'Emails/userrestorepassword.html.twig',
-                        array('password' => $newPassword)
+                        array('password' => $newPassword, "settings" => $settings)
                     ),
                     'text/html'
                 );
@@ -403,7 +403,7 @@ class UserController extends Controller
                             ->setBody(
                                 $this->renderView(
                                     'Emails/changeorderstatus.html.twig',
-                                    array("order" => $order, 
+                                    array("order" => $order, "settings" => $settings,
                                           "orderStatus" => $orderStatusSelect->getName(),
                                           "comment" => $comment)
                                 ),
@@ -530,10 +530,10 @@ class UserController extends Controller
                     if($messageForm['userTo']->getData()->getAlerts())
                     {
                         $message = \Swift_Message::newInstance()
-                        ->setSubject('Вам пришло новое сообщение на сайте gribupardot.sunweb.by')
+                        ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($messageForm['userTo']->getData()->getEmail())
-                        ->setBody('Вы получили новое сообщение на сайте gribupardot.sunweb.by. '
+                        ->setBody('Вы получили новое сообщение на сайте ' . $settings->getSiteName() . '. '
                                 . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_messages', array(), true) . '">личном кабинете</a>.','text/html');
 
                         $this->get('mailer')->send($message);
@@ -903,10 +903,10 @@ class UserController extends Controller
                     if($messageForm['userTo']->getData()->getAlerts())
                     {
                         $message = \Swift_Message::newInstance()
-                        ->setSubject('Вам пришло новое сообщение на сайте gribupardot.sunweb.by')
+                        ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($messageForm['userTo']->getData()->getEmail())
-                        ->setBody('Вы получили новое сообщение на сайте gribupardot.sunweb.by. '
+                        ->setBody('Вы получили новое сообщение на сайте ' . $settings->getSiteName() . '. '
                                 . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_messages', array(), true) . '">личном кабинете</a>.','text/html');
 
                         $this->get('mailer')->send($message);
@@ -1046,10 +1046,10 @@ class UserController extends Controller
                     if($messageForm['userTo']->getData()->getAlerts())
                     {
                         $message = \Swift_Message::newInstance()
-                        ->setSubject('Вам пришло новое сообщение на сайте gribupardot.sunweb.by')
+                        ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($messageForm['userTo']->getData()->getEmail())
-                        ->setBody('Вы получили новое сообщение на сайте gribupardot.sunweb.by. '
+                        ->setBody('Вы получили новое сообщение на сайте ' . $settings->getSiteName() . '. '
                                 . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_messages', array(), true) . '">личном кабинете</a>.','text/html');
 
                         $this->get('mailer')->send($message);

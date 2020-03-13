@@ -38,10 +38,14 @@
   </head>
   <body {% block bodyClass %}{% endblock %}>
         <style>.sticky {position: fixed;z-index: 101;}.stop {position: relative;z-index: 101;}</style>
-        {% block topbanner %}{% endblock %}
-        {{ render(controller('DashboardCommonBundle:Default:getHeader', {'request' : app.request})) }}
-	{% block body %}{% endblock %}	
-	{{ render(controller('DashboardCommonBundle:Default:getFooter', {'request' : app.request, 'session' : app.session})) }} 
+        <div class="wrapper">
+            <div class="content">
+                {% block topbanner %}{% endblock %}
+                {{ render(controller('DashboardCommonBundle:Default:getHeader', {'request' : app.request})) }}
+                {% block body %}{% endblock %}	
+            </div>
+            {{ render(controller('DashboardCommonBundle:Default:getFooter', {'request' : app.request, 'session' : app.session})) }} 
+        </div>
   </body>
 </html>
 

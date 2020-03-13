@@ -254,7 +254,7 @@ class DealerController extends Controller
                                 $this->renderView(
                                     'Emails/productmessage.html.twig',
                                     array('message' => $profileMessage->getMessage(),
-                                          'user' => $sessionUser)
+                                          'user' => $sessionUser, "settings" => $settings)
                                 ),
                                 'text/html'
                             );

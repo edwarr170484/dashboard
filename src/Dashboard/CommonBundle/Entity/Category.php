@@ -142,6 +142,7 @@ class Category
     
     /**
      * @ORM\ManyToMany(targetEntity="Dashboard\CommonBundle\Entity\Filter", mappedBy="categories", cascade={"persist"})
+     * @ORM\OrderBy({"sortorder" = "ASC"})
      */
     private $filters;
     

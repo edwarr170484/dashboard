@@ -165,7 +165,7 @@
                                                         </select>
                                                     </div>
                                                 {% endif %}
-                                                {% if filter.type == 'color' %}
+                                                {% if filter.type.name == 'color' %}
                                                     <div class="col-lg-3 col-md-3">
                                                         <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}" multiple="multiple" onchange="sendFiltersForm()">
                                                             {% for value in filter.values %}
@@ -174,23 +174,23 @@
                                                         </select>
                                                     </div>
                                                 {% endif %}
-                                                {% if filter.type == 'selectable' %}
+                                                {% if filter.type.name == 'selectable' %}
                                                     <div class="col-lg-3 col-md-3">
                                                         <div class="filtersFromTo">
                                                             <input name="{{ filter.productParameter }}Selectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}от{% endtrans %}" />
-                                                            <input name="{{ filter.productParameter }}Selectable[{{ filter.id }}]" placeholder="{{ filter.name}}, {% trans %}до{% endtrans %}" />
+                                                            <input name="{{ filter.productParameter }}Selectable[{{ filter.id }}]" placeholder="{% trans %}до{% endtrans %}" />
                                                         </div>
                                                     </div>
                                                 {% endif %}
-                                                {% if filter.type == 'region_select' %}
+                                                {% if filter.type.name == 'region_select' %}
                                                     <div class="col-lg-3 col-md-3">
                                                         <div class="filtersFromTo">
-                                                            <select name="{{ filter.productParameter }}RangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }}, {% trans %}от{% endtrans %}" onchange="sendFiltersForm()">
+                                                            <select name="{{ filter.productParameter }}RangeList[{{ filter.id }}]" class="custom-select just-select" placeholder="{{ filter.name  }}, {% trans %}от{% endtrans %}" onchange="sendFiltersForm()">
                                                                 {% for value in filter.values %}
                                                                     <option value="{{ value.id }}">{{ value.value }}</option>
                                                                 {% endfor %}
                                                             </select>
-                                                            <select name="{{ filter.productParameter }}RangeList[{{ filter.id }}]" class="custom-select" placeholder="{{ filter.name  }} {% trans %}до{% endtrans %}" onchange="sendFiltersForm()">
+                                                            <select name="{{ filter.productParameter }}RangeList[{{ filter.id }}]" class="custom-select just-select" placeholder="{% trans %}до{% endtrans %}" onchange="sendFiltersForm()">
                                                                 {% for value in filter.values %}
                                                                     <option value="{{ value.id }}">{{ value.value }}</option>
                                                                 {% endfor %}
@@ -204,7 +204,7 @@
                                     {% if category.isShowPriceFilter %}
                                         <div class="col-lg-3 col-md-3">
                                             <div class="filtersFromTo">
-                                                <input name="filterSelectablePrice[]" value="" placeholder="{% trans %}Цена от{% endtrans %}" type="text" />
+                                                <input name="filterSelectablePrice[]" value="" placeholder="{% trans %}Цена, от{% endtrans %}" type="text" />
                                                 <input name="filterSelectablePrice[]" value="" placeholder="{% trans %}до{% endtrans %}" type="text" />
                                             </div>
                                         </div>

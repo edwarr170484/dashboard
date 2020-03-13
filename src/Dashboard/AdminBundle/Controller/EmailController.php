@@ -40,8 +40,8 @@ class EmailController extends Controller
             return $this->createNotFoundException("Email template not found");
         }
         
-        if (file_exists('../app/Resources/views/emails/' . $email->getTemplate() . '.html.twig')){
-            $emailFile = file_get_contents('../app/Resources/views/emails/' . $email->getTemplate() . '.html.twig');
+        if (file_exists('../app/Resources/views/Emails/' . $email->getTemplate() . '.html.twig')){
+            $emailFile = file_get_contents('../app/Resources/views/Emails/' . $email->getTemplate() . '.html.twig');
         }     
         
         $emailForm = $this->get('form.factory')->createNamedBuilder('email', 'form', $email)
@@ -50,7 +50,7 @@ class EmailController extends Controller
                             'choice_label' => 'name',
                             'required' => true, 
                             'label' => 'Локализация:', 'attr' => array('class' => 'form-control')))
-                ->add('text', TextareaType::class, array('required' => true, 'data' => $emailFile,'label' => 'Текст письма:', 'attr' => array('class' => 'form-control', 'rows' => '40')))
+                ->add('text', TextareaType::class, array('required' => true, 'data' => $emailFile, 'label' => 'Текст письма:', 'attr' => array('class' => 'form-control tinyeditor', 'rows' => '40')))
                 ->add('save', ButtonType::class, array('label' => 'Сохранить', 'attr' => array('class' => 'btn btn-success pull-right')))
                 ->getForm();
         

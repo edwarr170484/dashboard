@@ -1,4 +1,4 @@
-<img src="{{ absolute_url(asset('/logo.svg')) }}">
+<img src="{{ absolute_url(asset('bundles/images/site/' ~ settings.siteLogo)) }}" />
 <h3>Пользователь сайта gribupardot.sunweb.by поделился с Вами информацией об объявлении!</h3>
 <p>
     Пользователь <a href="{{ absolute_url(path('profile', {'userId' : user.id})) }}"><strong>{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</strong></a> отправил Вам ссылку на объявление на сайте gribupardot.sunweb.by.

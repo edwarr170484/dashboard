@@ -193,6 +193,9 @@
     .productNoteForm .cookieAlertButton{width: 100%;margin-top: 1rem;}
     .productNoteForm .cookieAlertButton button{width: 100%;}
     .addAdvertServiceTabsBlock .tab-pane .service{flex-wrap:wrap;}
+    #navbar-bottom{padding-left: 0;}
+    .col-md-5.footer-menu{padding-right: 15px;}
+    .index-services-blocks{padding-left: 15px;padding-right: 15px;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}

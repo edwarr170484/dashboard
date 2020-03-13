@@ -38,8 +38,9 @@
                                         <tr>
                                             <th><input type="checkbox" class="selectAllItems" /></th>
                                             <th>Название</th>
-                                            <th>Привязанных категорий</th>
+                                            <th>Привязанные категории</th>
                                             <th>Значений</th>
+                                            <th>Порядок</th>
                                             <th>Действия</th>
                                         </tr>
                                     </thead>
@@ -51,8 +52,15 @@
                                                     <td>
                                                         {{ filter.name }}
                                                     </td>
-                                                    <td>{{ filter.categories | length }}</td>
+                                                    <td>
+                                                        {% if filter.categories | length > 0 %}
+                                                            {% for category in filter.categories %}
+                                                                <div>{{ category.title }}</div>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </td>
                                                     <td>{{ filter.values | length }}</td>
+                                                    <td><input name="sortorder[{{ filter.id }}]" value="{{ filter.sortorder }}" /></td>
                                                     <td>
                                                         <a class="btn btn-success" href="{{ path('admin_filters_edit',{ 'filterId' : filter.id }) }}">
                                                             <i class="fa fa-pencil" title="Редактировать фильтр"></i>

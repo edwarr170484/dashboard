@@ -64,11 +64,6 @@ class Filter
     /**
      * @ORM\Column(type="boolean", options={"default":"0"})
      */
-    private $isSelltype;
-
-    /**
-     * @ORM\Column(type="boolean", options={"default":"0"})
-     */
     private $isShowCard;
 
     /**
@@ -78,6 +73,7 @@ class Filter
 
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\FilterValue", mappedBy="filter", cascade={"persist"})
+     * @ORM\OrderBy({"value" = "ASC"})
      */
     private $values;
 
@@ -231,29 +227,6 @@ class Filter
     public function getIsSearch()
     {
         return $this->isSearch;
-    }
-
-    /**
-     * Set isSelltype
-     *
-     * @param boolean $isSelltype
-     * @return Filter
-     */
-    public function setIsSelltype($isSelltype)
-    {
-        $this->isSelltype = $isSelltype;
-
-        return $this;
-    }
-
-    /**
-     * Get isSelltype
-     *
-     * @return boolean
-     */
-    public function getIsSelltype()
-    {
-        return $this->isSelltype;
     }
 
     /**

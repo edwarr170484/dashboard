@@ -10,6 +10,9 @@ h1,h2,h4{@include fontView("GothamProBlack",#fff,4.8rem,5.6rem);margin: 0;}
 .dealersContainer > .container{position: unset;}
 h3{@include fontView("GothamProBlack",#fff,3.6rem,4rem);margin: 0;}
 a,input,textarea{outline:none !important;}
+html,body{height:100%;}
+.wrapper {display: flex;flex-direction: column;min-height: 100%;}
+.content {flex: 1 0 auto;}
 body{font-size:10px;background:#F9F9F9;}
 header{background: #fff;}
 ul.list-inline{margin-left: 0;}
@@ -176,8 +179,8 @@ ul.list-inline{margin-left: 0;}
 .siteInfoPaneFloat{position: absolute;top:4rem;right:4rem;}
 .siteInfoPaneContentButton a:hover,.siteInfoPaneContentButton a:focus{background:$gray-color;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));color:$black-text;text-decoration: none;}
 .header-search-box{height: 40px;@include flexBox(row,flex-start,canter);}
-.header-search-box input[name="searchText"]{display: block;border:2px solid $black-text;@include fontView("GothamProRegular",$black-text,1.4rem,100%);padding: 0;padding-left: 12px;width: 270px;}
-.header-search-box a.top-select-region{display: block;border:2px solid $black-text;border-right: none;border-left: none;margin: 0;padding-left: 36px;@include fontView("GothamProRegular",$black-text,1.4rem,1.3rem);@include flexBox(row,flex-start,center);background: url('../img/geotag.png') 6px 50% no-repeat;width: 164px;}
+.header-search-box input[name="searchText"]{display: block;border:2px solid $black-text;@include fontView("GothamProRegular",$black-text,1.4rem,100%);padding: 0;padding-left: 12px;width: 240px;}
+.header-search-box a.top-select-region{display: block;border:2px solid $black-text;border-right: none;border-left: none;margin: 0;padding-left: 36px;@include fontView("GothamProRegular",$black-text,1.4rem,1.3rem);@include flexBox(row,flex-start,center);background: url('../img/geotag.png') 6px 50% no-repeat;width: 144px;}
 .header-search-box input[type="submit"]{background: url('../img/search-white.png') 50% 50% no-repeat $black-text;@include border-radius(0);width: 40px;height: 40px;border:none;}
 .header-search-box input[type="submit"]:hover,.header-search-box input[type="submit"]:focus{background-color: $yellow-color;border:2px solid $black-text;border-left:none;}
 .blackCheckbox{@include flexBox(row,flex-start,center);@include fontView("GothamProRegular",$black-text,1.4rem,1.3rem);}
@@ -209,18 +212,22 @@ ul.list-inline{margin-left: 0;}
 .footer-menu-header:hover svg path{fill:$black-text;}
 .footer-menu-header.active svg{@include transform(rotate(180deg));}
 .footer-menu-header svg{display: none;}
-footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;}
+footer{padding-top: 5.5rem;padding-bottom: 5rem;background: #fff;flex: 0 0 auto;}
 .footer-menu-list{display:flex;flex-direction:row;justify-content:space-between;flex-wrap:wrap;margin-top: 2rem;}
 .footer-menu-list.no-flex{display: block;}
 .footer-menu-list li{padding:0;margin-bottom: 1.7rem;}
-.footer-menu-list li:nth-child(even){text-align: right;}
+.footer-menu-list li{width: 40%;}
+.footer-menu-list li:nth-child(even){width: 60%;}
 .footer-menu-list.no-flex li:nth-child(even){text-align: left;}
+.footer-menu-list.no-flex li{width: 100%;}
 .footer-menu-list li a{border-bottom: 2px solid transparent;@include fontView("GothamProRegular",$light-black-color,1.4rem,1.8rem);@include transition($aTransition);}
 .footer-menu-list li a:hover,.footer-menu-list li a:focus{border-bottom: 2px solid $yellow-color;text-decoration: none;}
 .footerCopyrights{@include fontView("GothamProRegular",#747474,1.4rem,2.4rem);padding-top: 1.5rem;}
 .footerCopyrights a{@include fontView("GothamProRegular",#747474,1.4rem,2.4rem);}
 .footerCopyrights a:hover,.footerCopyrights a:focus{text-decoration: underline;}
 .footerLogo img{width:100%;max-width:142px;}
+#navbar-bottom{padding-left: 4%;}
+.col-md-5.footer-menu{padding-right: 6%;}
 .addAdvertButtonMobile a{display: block;position: fixed;bottom:20px;right:20px;width:56px;height:56px;z-index:333;}
 .addAdvertButtonMobile a:hover svg path,.addAdvertButtonMobile a:focus svg path{fill:$yellow-color;}
 .breadscrumbsBlock{background: $gray-color;}
@@ -1548,3 +1555,4 @@ button#breadScrumbsMobileMenuToggler:hover,#breadScrumbsMobileMenuToggler:focus{
 .notesAdverts{@include flexBox(row,flex-start,flex-start);flex-wrap:wrap;}
 .notesAdverts .accountAdvert.cube{margin-right: 2rem;}
 .addAdvertServiceItemInfo{@include flexBox(row,flex-start,flex-start);width: 60%;}
+.index-services-blocks{padding-left: 8%;padding-right: 8%;}

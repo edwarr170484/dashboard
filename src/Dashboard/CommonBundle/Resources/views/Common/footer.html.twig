@@ -20,7 +20,7 @@
                             {% if bottomMenu.items | length > 0 %}
                                 {% for item in bottomMenu.items %}
                                     {% if not item.parent %}
-                                        <div class="col-md-3 col-md-offset-1 footer-menu">
+                                        <div class="col-md-5 footer-menu">
                                             <div class="footer-menu-header">{{ item.title }} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
                 </svg></div>
@@ -44,19 +44,18 @@
                                                     </ul>
                                                 </div>   
                                             {% endif %}
-                                            
                                         </div>
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
-                        <div class="col-md-2 col-md-offset-1 footer-menu">
+                        <div class="col-md-2 footer-menu">
                             <div class="footer-menu-header">{% trans %}Аккаунт{% endtrans %} <svg width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M11.2725 -3.18e-08L12 0.754687L6 7L-3.29884e-08 0.754687L0.723749 -4.92901e-07L6 5.48698L11.2725 -3.18e-08Z" fill="#616161"/>
 </svg></div>
                             <div class="footer-menu-list-block">
                                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                    <ul class="list-unstyled footer-menu-list">
+                                    <ul class="list-unstyled footer-menu-list no-flex">
                                         <li>
                                             <a href="{{path('account')}}">{% trans %}Личный кабинет{% endtrans %}</a>
                                         </li>

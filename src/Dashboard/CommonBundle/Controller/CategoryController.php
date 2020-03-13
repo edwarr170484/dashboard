@@ -158,6 +158,7 @@ class CategoryController extends Controller
         }
         
         if($request->request->get('categoryFilter')){
+            $clearCategory = 1;
             if(isset($categoryFilters['model']) && $categoryFilters['model'] != 0){
                 $sql .= " AND (";
                 foreach($categoryFilters['model'] as $key => $categoryId){
@@ -188,6 +189,7 @@ class CategoryController extends Controller
                     }
                 }
                 $sql .= ")";
+                $clearCategory = 0;
             }elseif(isset($categoryFilters['mark']) && $categoryFilters['mark'] != 0){
                 $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryFilters['mark']);
                 if($searchCategory->getChildren())
@@ -204,6 +206,7 @@ class CategoryController extends Controller
                 else{
                     $sql .= " AND p.category = " . $searchCategory->getId();
                 }
+                $clearCategory = 0;
             }elseif(isset($categoryFilters['type']) && $categoryFilters['type'] != 0){
                 $searchCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryFilters['type']);
                 if($searchCategory->getChildren())
@@ -219,6 +222,23 @@ class CategoryController extends Controller
                 }
                 else{
                     $sql .= " AND p.category = " . $searchCategory->getId();
+                }
+                $clearCategory = 0;
+            }
+            if($clearCategory){
+                if($category->getChildren())
+                {
+                    $sql .= " AND (p.category = " . $category->getId();
+                    foreach($category->getChildren() as $child)
+                    {
+                        $sql .= " OR p.category = " . $child->getId();
+                        $sql .= $this->createCategorySql($child); 
+
+                    }
+                    $sql .= ")";
+                }
+                else{
+                    $sql .= " AND p.category = " . $category->getId();
                 }
             }
         }else{
@@ -540,8 +560,18 @@ class CategoryController extends Controller
         else
             $pagination = $this->get('app.helpers')->paginator($page, $productsTotalCount, $settings->getMainpageAdvertsNumber(), $link,'list-unstyled list-inline',$sort);
         
+        $query = $manager->createQuery('SELECT c FROM Dashboard\CommonBundle\Entity\Category c WHERE c.parent IS NULL AND c.isActive = 1 ORDER BY c.sortorder');
+        
+        try{
+            $baseCategories = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $baseCategories = 0;
+        }
+        
         return $this->render('DashboardCommonBundle:Default:Category/category.html.twig', array("category" => $category,
                                                                                        "categories" => $categories,
+                                                                                       "baseCategories" => $baseCategories,
                                                                                        "categoryMarks" => $categoryMarks,
                                                                                        "categoryModels" => $categoryModels,
                                                                                        "formFilters" => $filters,

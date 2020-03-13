@@ -153,9 +153,9 @@
                     <div class="addAdvertFormGroupLabel">{% trans %}Индекс{% endtrans %} <sup> *</sup></div>
                     <div class="addAdvertFormGroupControl">
                         {% if user and user.userinfo.cityCode %}
-                            <input id="settingsCityCode" value="{{ user.userinfo.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
+                            <input id="settingsCityCode" value="{{ user.userinfo.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" type="text" />
                         {% else %}
-                            <input id="settingsCityCode" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
+                            <input id="settingsCityCode" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" type="text" />
                         {% endif %}
                     </div>
                     <script>

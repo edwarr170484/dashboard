@@ -65,7 +65,6 @@ class FiltersType extends AbstractType
             ->add('translations', 'collection', array('type' => new TranslationType($this->manager), 'label' => ' ','allow_add'    => true, 'allow_delete' => true, 'by_reference' => false))
             ->add('isRequired', CheckboxType::class, array('required' => false,'label' => 'Обязательно для заполнения при добавлении объявления'))
             ->add('isSearch', CheckboxType::class, array('required' => false,'label' => 'Показывать в форме поиска'))
-            ->add('isSelltype', CheckboxType::class, array('required' => false,'label' => 'Назначить фильтр как "Тип сделки" для категории'))
             ->add('isShowCard', CheckboxType::class, array('required' => false,'label' => 'Показывать значение фильтра в карточке объявления'))
             ->add('productParameter', ChoiceType::class, array('choices' => $this->params, 
                                                                     'required' => true, 

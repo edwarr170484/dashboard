@@ -423,7 +423,7 @@ class DefaultController extends Controller
                         ->setBody(
                             $this->renderView(
                                 'Emails/sellerneworder.html.twig',
-                                array('product' => $product, "order" => $order)
+                                array('product' => $product, "order" => $order, "settings" => $settings)
                             ),
                             'text/html'
                         );
@@ -460,8 +460,7 @@ class DefaultController extends Controller
                 ->setBody(
                     $this->renderView(
                         'Emails/friendmessage.html.twig',
-                        array('product' => $product,
-                              'user' => $sessionUser)
+                        array('product' => $product, "settings" => $settings, 'user' => $sessionUser)
                     ),
                     'text/html'
                 );
@@ -505,8 +504,7 @@ class DefaultController extends Controller
                     ->setBody(
                         $this->renderView(
                             'Emails/complaint.html.twig',
-                            array('product' => $product,
-                                  'user' => $sessionUser)
+                            array('product' => $product, 'user' => $sessionUser, "settings" => $settings)
                         ),
                         'text/html'
                     );
@@ -541,8 +539,7 @@ class DefaultController extends Controller
                             ->setBody(
                                 $this->renderView(
                                     'Emails/correct.html.twig',
-                                    array('product' => $product,
-                                          'reason' => 'На Ваше объявление подано более 10 жалоб, поэтому его действие было приостановлено.')
+                                    array('product' => $product, "settings" => $settings, 'reason' => 'На Ваше объявление подано более 10 жалоб, поэтому его действие было приостановлено.')
                                 ),
                                 'text/html'
                             );
@@ -673,8 +670,7 @@ class DefaultController extends Controller
                         ->setBody(
                             $this->renderView(
                                 'Emails/productmessagecopy.html.twig',
-                                array('message' => $message->getMessage(),
-                                      'product' => $product)
+                                array('message' => $message->getMessage(), 'product' => $product, "settings" => $settings)
                             ),
                             'text/html'
                         );
@@ -691,8 +687,7 @@ class DefaultController extends Controller
                             ->setBody(
                                 $this->renderView(
                                     'Emails/productmessage.html.twig',
-                                    array('message' => $message->getMessage(),
-                                          'user' => $sessionUser)
+                                    array('message' => $message->getMessage(), "settings" => $settings, 'user' => $sessionUser)
                                 ),
                                 'text/html'
                             );

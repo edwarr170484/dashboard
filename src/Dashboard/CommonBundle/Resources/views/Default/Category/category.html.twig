@@ -54,10 +54,8 @@
 			<div class="content-block-header">
                             <h1>{{ category.title }}</h1>
                         </div>
-                            <div class="mainPageFiltersTabs category-filters">
-                                <div class="tab-content categoryPage">
-                                    {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'category' : category, 'categories' : categories, 'formFilters' : formFilters,'productsTotalCount' : productsTotalCount, 'request' : app.request} %}
-                                </div>
+                            <div class="mainPageFiltersTabs category-filters" style="padding-top: 0;">
+                                {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'this' : category, 'categories' : baseCategories, 'formFilters' : formFilters, 'productsTotalCount' : productsTotalCount, 'request' : app.request} %}
                             </div>                              
                             <div class="hidden-sm hidden-xs" style="text-align:center;">
                                 {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
@@ -138,7 +136,7 @@
                                                     </div>
                                                     <div class="categorySpecialAdvertName">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                                            {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
+                                                            {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
                                                         </a>
                                                     </div>
                                                     <div class="categorySpecialAdvertFeatures">
@@ -186,7 +184,7 @@
                                                     </div>
                                                     <div class="categorySpecialAdvertName">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                                            {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
+                                                            {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
                                                         </a>
                                                     </div>
                                                     <div class="categorySpecialAdvertFeatures">
@@ -237,7 +235,7 @@
                                                     </div>
                                                     <div class="categorySpecialAdvertName">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                                            {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
+                                                            {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
                                                         </a>
                                                     </div>
                                                     <div class="categorySpecialAdvertFeatures">

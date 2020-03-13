@@ -632,6 +632,28 @@ class CategoryController extends Controller
         $fm = new Filesystem();
         $finder = new Finder();
         
+        $yearFiter = $manager->getRepository("DashboardCommonBundle:Filter")->find(32);
+        
+        $categoryYearsFrom = $manager->createQuery('SELECT c.yearFrom FROM Dashboard\CommonBundle\Entity\Category c WHERE c.yearFrom > 0 ORDER BY c.yearFrom ASC');
+        $yearsFrom = $categoryYearsFrom->getResult();
+        
+        $yearStart = intval($yearsFrom[0]['yearFrom']);
+        $yearEnd = intval($yearsFrom[count($yearsFrom) - 1]['yearFrom']);
+        
+        $values = new ArrayCollection();
+        
+        for($i = $yearStart; $i <= $yearEnd + 1; $i++){
+            $value = new FilterValue();
+            $value->setFilter($yearFiter);
+            $value->setValue($i);
+            $values->add($value);
+        }
+        
+        foreach($values as $val){
+            $manager->persist($val);
+        }
+        $manager->flush($val);
+        
         /*$transmissionFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(17);
         $transmissionFilterValue1 = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $transmissionFilter, "value" => "Trasero"));
         $transmissionFilterValue2 = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $transmissionFilter, "value" => "Lleno"));

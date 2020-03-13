@@ -71,7 +71,9 @@ class FilterController extends Controller
     public function filtersAction($filterId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
-        $filters = $manager->getRepository("DashboardCommonBundle:Filter")->findAll();
+
+        $query = $manager->createQuery('SELECT f FROM Dashboard\CommonBundle\Entity\Filter f ORDER BY f.sortorder ASC');
+        $filters = $query->getResult();
         
         if($filterId)
         {
@@ -173,6 +175,28 @@ class FilterController extends Controller
                     );
                 }
             }
+            
+            return $this->redirectToRoute("admin_filters");
+        }
+        
+        if($request->request->get('sortorder'))
+        {
+            foreach($request->request->get('sortorder') as $key => $value){
+                $filter = $manager->getRepository("DashboardCommonBundle:Filter")->find($key);
+                if($filter){
+                    $filter->setSortorder($value);
+                    $manager->persist($filter);
+                }
+            }
+            
+            $manager->flush();
+            
+            $this->addFlash(
+                'notice',
+                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Успешно!</strong> Информация сохранена.</div>')
+            );
             
             return $this->redirectToRoute("admin_filters");
         }

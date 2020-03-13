@@ -394,8 +394,7 @@ class OfficeController extends Controller
                             ->setBody(
                                 $this->renderView(
                                     'Emails/productmessage.html.twig',
-                                    array('message' => $profileMessage->getMessage(),
-                                          'user' => $sessionUser)
+                                    array('message' => $profileMessage->getMessage(), "settings" => $settings, 'user' => $sessionUser)
                                 ),
                                 'text/html'
                             );
@@ -448,9 +447,7 @@ class OfficeController extends Controller
                     ->setBody(
                         $this->renderView(
                             'Emails/complaintsalon.html.twig',
-                            array('service' => $service,
-                                  'user' => $sessionUser,
-                                  'settings' => $settings)
+                            array('service' => $service, 'user' => $sessionUser, 'settings' => $settings)
                         ),
                         'text/html'
                 );

@@ -210,9 +210,9 @@
                         <div class="addAdvertFormGroupLabel">{% trans %}Индекс{% endtrans %}</div>
                         <div class="addAdvertFormGroupControl" id="advertCityCodeBlock">
                             {% if product.cityCode %}
-                                <input id="settingsCityCode" value="{{ product.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
+                                <input id="settingsCityCode" value="{{ product.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" type="text" />
                             {% else %}
-                                <input id="settingsCityCode" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
+                                <input id="settingsCityCode" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" type="text" />
                             {% endif %}
                         </div>
                         <script>

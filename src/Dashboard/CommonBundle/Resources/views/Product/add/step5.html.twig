@@ -20,9 +20,9 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Имя{% endtrans %}<sup> *</sup></span></td>
                                 <td>
                                     {% if user %}
-                                        <input value="{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}" name="contactName" placeholder="{% trans %}Иван Иванов{% endtrans %}" class="parameterValue" required="required" type="text" />
+                                        <input value="{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}" name="contactName" placeholder="{% trans %}John Doe{% endtrans %}" class="parameterValue" required="required" type="text" />
                                     {% else %}
-                                        <input name="contactName" placeholder="{% trans %}Иван Иванов{% endtrans %}" class="parameterValue" required="required" type="text" />
+                                        <input name="contactName" placeholder="{% trans %}John Doe{% endtrans %}" class="parameterValue" required="required" type="text" />
                                     {% endif %}
                                 </td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
@@ -287,10 +287,10 @@
                 <div class="addAdvertUserAgreement">
                     Нажимая на кнопку «Опубликовать объявление», вы принимаете условия <a href="">Пользовательского соглашения</a>
                 </div>
-                <button onclick="addAdvert('{{ locale.code }}','{% trans %}Заполните поля помеченный звездочкой{% endtrans %}', null)" id="addAdvertFinalButton">{% trans %}Разместить{% endtrans %}</button>
+                <button onclick="if(checkAddAdvertFields($('.advertFiltersItems'), '{% trans %}Форма не заполнена полностью{% endtrans %}', '{% trans %}Заполните обязательные поля{% endtrans %}', '{% trans %}Закрыть{% endtrans %}')){addAdvert('{{ locale.code }}', null);}" id="addAdvertFinalButton">{% trans %}Разместить{% endtrans %}</button>
             </div> 
             <div class="cookieAlertButton nextStep gray">
-                <button onclick="addAdvert('{{ locale.code }}','{% trans %}Заполните поля помеченный звездочкой{% endtrans %}', 1)">{% trans %}Сохранить как черновик{% endtrans %}</button>
+                <button onclick="if(checkAddAdvertFields($('.advertFiltersItems'), '{% trans %}Форма не заполнена полностью{% endtrans %}', '{% trans %}Заполните обязательные поля{% endtrans %}', '{% trans %}Закрыть{% endtrans %}')){addAdvert('{{ locale.code }}', 1);}">{% trans %}Сохранить как черновик{% endtrans %}</button>
             </div>
     </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">

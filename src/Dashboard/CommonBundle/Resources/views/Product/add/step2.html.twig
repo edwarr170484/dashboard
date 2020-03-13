@@ -53,12 +53,12 @@
                 </table>
             </div>
             <div class="cookieAlertButton nextStep">
-                <button onclick="getStep3('{{ locale.code }}')">{% trans %}Следующий шаг{% endtrans %}</button>
+                <button onclick="if(checkAddAdvertColor($('#advertFiltersItemsTable'), '{% trans %}Заполните форму{% endtrans %}', '{% trans %}Вы не выбрали цвет{% endtrans %}', '{% trans %}Закрыть{% endtrans %}')){getStep3('{{ locale.code }}');}">{% trans %}Следующий шаг{% endtrans %}</button>
             </div>
         </div>            
     </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
-             {% include 'DashboardCommonBundle:Product:add/steps.html.twig' with {'locale' : locale, 'advertInfo' : advertInfo} %}
+            {% include 'DashboardCommonBundle:Product:add/steps.html.twig' with {'locale' : locale, 'advertInfo' : advertInfo} %}
         </div>
     </div>
     <script>

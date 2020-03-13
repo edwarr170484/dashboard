@@ -36,6 +36,7 @@ function getStep12(categoryId, locale_code){
 }
 
 function getStep2(locale_code){
+    
     $.ajax({
         url: '/account/addadvert/step2',
         type:'get',
@@ -116,20 +117,7 @@ function getStep5(locale_code){
     });
 }
 
-function addAdvert(locale_code,text, isDraft){
-    var error = 0;
-    $(".advertFiltersItems input[type='text']").each(function(){
-       if($(this).attr('required') == 'required'){
-           if($(this).val() == 'null' || $(this).val() == '' || $(this).val() == 'NULL' || $(this).val() == '0' || $(this).val() === undefined || $(this).val() == 0){
-               $(this).addClass("error");
-               error = 1;
-               $(document).scrollTop(0);
-               return;
-           }
-       } 
-    });
-    
-    if(error === 1){alert(text);}
+function addAdvert(locale_code, isDraft){
     
     var draftParameter = (isDraft) ? '/' + isDraft : '';
     
@@ -491,6 +479,65 @@ function setGasValue(element, locale_code){
             err=xhr.responseText;
         }
     });
+}
+
+function checkAddAdvertColor(element, headerText, text, buttonText){
+    var marker = 1;
+    element.find(".advertFiltersItemValue a").each(function(){
+        if($(this).hasClass('active')){
+            marker = 0;
+        }
+    });
+    
+    if(marker === 1){
+        var buttonHtml = '<button lass="close" data-dismiss="modal" aria-label="Close">' + buttonText + '</button>';
+    
+        $("#addAdvertModalHeader").html(headerText);
+        $("#productToolsButtons").html(buttonHtml);
+        $("#addAdvertModalText").html(text);
+        $("#addAdvertModal").modal();
+    }
+    
+    return !marker;
+}
+
+function checkAddAdvertFields(element, headerText, text, buttonText){
+    var error = 0;
+    
+    element.find('input[required="required"]').each(function(){
+       if($(this).attr('required') == 'required'){
+           if($(this).val() == 'null' || $(this).val() == '' || $(this).val() == 'NULL' || $(this).val() == '0' || $(this).val() === undefined || $(this).val() == 0){
+               error = 1;
+           }
+       }
+    });
+    
+    element.find('select[required="required"]').each(function(){
+       if($(this).attr('required') == 'required'){
+           if($(this).val() == 'null' || $(this).val() == '' || $(this).val() == 'NULL' || $(this).val() == '0' || $(this).val() === undefined || $(this).val() == 0){
+               error = 1;
+           }
+       }
+    });
+    
+    element.find('textarea[required="required"]').each(function(){
+       if($(this).attr('required') == 'required'){
+           if($(this).val() == 'null' || $(this).val() == '' || $(this).val() == 'NULL' || $(this).val() == '0' || $(this).val() === undefined || $(this).val() == 0){
+               error = 1;
+           }
+       }
+    });
+    
+    if(error == 1){
+        var buttonHtml = '<button lass="close" data-dismiss="modal" aria-label="Close">' + buttonText + '</button>';
+    
+        $("#addAdvertModalHeader").html(headerText);
+        $("#productToolsButtons").html(buttonHtml);
+        $("#addAdvertModalText").html(text);
+        $("#addAdvertModal").modal();
+    }
+    
+    return !error;
 }
 
 function showAdvertActionDialog(productId, locale_code, text, headerText, dismissText, buttonText, action){

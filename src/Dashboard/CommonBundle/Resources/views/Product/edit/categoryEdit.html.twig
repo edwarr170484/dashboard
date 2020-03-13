@@ -64,22 +64,22 @@
                         {% endif %}
                     </div>
                     <div class="addAdvertForm-Group">
-                        <div class="addAdvertFormGroupLabel">{% trans %}Год выпуска{% endtrans %}</div>
+                        <div class="addAdvertFormGroupLabel">{% trans %}Год выпуска{% endtrans %} <sup> *</sup></div>
                         <div class="addAdvertFormGroupControl">
                             <input class="form-control" name="year" value="{% if product.info.year %}{{ product.info.year }}{% endif %}" required="required" />
                         </div>
                     </div>
                     <div class="addAdvertForm-Group">
-                        <div class="addAdvertFormGroupLabel">{% trans %}Пробег, км{% endtrans %}</div>
+                        <div class="addAdvertFormGroupLabel">{% trans %}Пробег, км{% endtrans %} <sup> *</sup></div>
                         <div class="addAdvertFormGroupControl">
                             <input class="form-control" name="probeg" value="{% if product.info.probeg %}{{ product.info.probeg }}{% endif %}" required="required" />
                         </div>
                     </div>
                     {% if conditions | length > 0 %}
                         <div class="addAdvertForm-Group">
-                            <div class="addAdvertFormGroupLabel">{% trans %}Состояние{% endtrans %}</div>
+                            <div class="addAdvertFormGroupLabel">{% trans %}Состояние{% endtrans %} <sup> *</sup></div>
                             <div class="addAdvertFormGroupControl">
-                                <select name="condition" class="custom-select">
+                                <select name="condition" class="custom-select just-select">
                                     <option value="0">{% trans %}Нет{% endtrans %}</option>
                                     {% for condition in conditions %}
                                         {% set selected = '' %}
@@ -107,7 +107,7 @@
                     {% if filters | length > 0 %}
                         {% for filter in filters %}
                             <div class="addAdvertForm-Group">
-                                <div class="addAdvertFormGroupLabel">{{ filter.name }}</div>
+                                <div class="addAdvertFormGroupLabel">{{ filter.name }} {% if filter.isRequired %}<sup> *</sup>{% endif %}</div>
                                 <div class="addAdvertFormGroupControl">
                                     {% if filter.type == 'checkbox' %}
                                         {% for value in filter.values %}
@@ -126,7 +126,7 @@
                                     {% endif %}
                                     {% if filter.type == 'select' or filter.type == 'color' %}
                                         {% if filter.productParameter == 'filter' %}
-                                            <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" {% if filter.isRequired %}required="required"{% endif %}>
+                                            <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select just-select" {% if filter.isRequired %}required="required"{% endif %}>
                                                 <option value="0">{% trans %}Нет{% endtrans %}</option>
                                                 {% for value in filter.values %}
                                                     {% set selected = '' %}
@@ -142,7 +142,7 @@
                                             </select>
                                         {% else %}
                                             {% set val = attribute(product.info, 'get' ~ filter.productParameter) %}
-                                            <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" {% if filter.isRequired %}required="required"{% endif %}>
+                                            <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select just-select" {% if filter.isRequired %}required="required"{% endif %}>
                                                 <option value="0">{% trans %}Нет{% endtrans %}</option>
                                                 {% for value in filter.values %}
                                                     {% set selected = '' %}
@@ -173,13 +173,13 @@
                         </div>
                     </div>
                     <div class="addAdvertForm-Group">
-                        <div class="addAdvertFormGroupLabel">{% trans %}Цена{% endtrans %}, {{ locale.currency.label | raw }}</div>
+                        <div class="addAdvertFormGroupLabel">{% trans %}Цена{% endtrans %}, {{ locale.currency.label | raw }} <sup> *</sup></div>
                         <div class="addAdvertFormGroupControl">
                             <input class="form-control" name="price" value="{% if product.info.price %}{{ product.info.price }}{% endif %}" required="required" />
                         </div>
                     </div>
                     <div class="addAdvertForm-Group">
-                        <div class="addAdvertFormGroupLabel">{% trans %}Как к Вам обращаться?{% endtrans %}</div>
+                        <div class="addAdvertFormGroupLabel">{% trans %}Как к Вам обращаться?{% endtrans %} <sup> *</sup></div>
                         <div class="addAdvertFormGroupControl">
                             <input name="contactName" placeholder="{% trans %}John Doe{% endtrans %}" class="form-control" required="required" type="text" value="{{ product.authorName }}" />
                         </div>
@@ -347,12 +347,7 @@
                                                         },
                                                         removedfile: function(file){
                                                             $(".addFotoIcon").remove();
-                                                            var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
-                                                            $.ajax({
-                                                                url: '/account/ajaxdeletefoto/' + file.previewElement.attributes.getNamedItem("imageId").value,
-                                                                type:'get',
-                                                                dataType: 'html'
-                                                            });
+                                                            
                                                             var _ref;
                                                             var ret = (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
 
@@ -363,7 +358,14 @@
                                                                 $("div#advertFotos").html(this.options.dictDefaultMessage);
                                                                 $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
                                                             }
-
+                                                            
+                                                            var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
+                                                            $.ajax({
+                                                                url: '/account/ajaxdeletefoto/' + file.previewElement.attributes.getNamedItem("imageId").value,
+                                                                type:'get',
+                                                                dataType: 'html'
+                                                            });
+                                                            
                                                             return ret;
                                                         }
                                                         });

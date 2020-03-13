@@ -153,7 +153,7 @@
                 </div>
             </div>
             <div class="cookieAlertButton nextStep">
-                <button onclick="getStep5('{{ locale.code }}')">{% trans %}Следующий шаг{% endtrans %}</button>
+                <button onclick="if(checkAddAdvertFields($('.advertFiltersItems'), '{% trans %}Форма не заполнена полностью{% endtrans %}', '{% trans %}Заполните обязательные поля{% endtrans %}', '{% trans %}Закрыть{% endtrans %}')){getStep5('{{ locale.code }}');}">{% trans %}Следующий шаг{% endtrans %}</button>
             </div>           
     </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">

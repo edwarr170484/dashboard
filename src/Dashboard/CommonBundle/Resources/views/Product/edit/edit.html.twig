@@ -306,7 +306,7 @@
                                             <td><input required="required" type="text" name="probeg" placeholder="{% trans %}км{% endtrans %}" class="parameterValue" {% if product.info.probeg %}value="{{ product.info.probeg }}"{% endif %} /></td>
                                             <td><span class="addAdvertParameterLabel">{% trans %}Состояние{% endtrans %} <sup> *</sup></span></td>
                                             <td>
-                                                <select name="condition" class="custom-select" placeholder="{% trans %}Выберите состояние{% endtrans %}" required="required">
+                                                <select name="condition" class="custom-select just-select" placeholder="{% trans %}Выберите состояние{% endtrans %}" required="required">
                                                     {% if conditions %}
                                                         {% for condition in conditions %}
                                                             <option value="{{ condition.id }}" {% if product.info.shape.id == condition.id %}selected="selected"{% endif %}>
@@ -321,7 +321,7 @@
                                         <tr>
                                             <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %} <sup> *</sup></span></td>
                                             <td>
-                                                <select name="owners" class="custom-select" placeholder="{% trans %}Количество владельцев{% endtrans %}" required="required">
+                                                <select name="owners" class="custom-select just-select" placeholder="{% trans %}Количество владельцев{% endtrans %}" required="required">
                                                     <option value="Один" {% if product.info.owners == 'Один' %}selected="selected"{% endif %}>Один</option>
                                                     <option value="Два" {% if product.info.owners == 'Два' %}selected="selected"{% endif %}>Два</option>
                                                     <option value="Три" {% if product.info.owners == 'Три' %}selected="selected"{% endif %}>Три</option>

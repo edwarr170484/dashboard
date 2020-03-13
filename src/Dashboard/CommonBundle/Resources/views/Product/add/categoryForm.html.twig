@@ -37,22 +37,22 @@
                 {% endif %}
                 <div id="advertModelCategories"></div>
                 <div class="addAdvertForm-Group">
-                    <div class="addAdvertFormGroupLabel">{% trans %}Год выпуска{% endtrans %}</div>
+                    <div class="addAdvertFormGroupLabel">{% trans %}Год выпуска{% endtrans %} <sup> *</sup></div>
                     <div class="addAdvertFormGroupControl">
                         <input class="form-control" name="year" value="" required="required" />
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
-                    <div class="addAdvertFormGroupLabel">{% trans %}Пробег, км{% endtrans %}</div>
+                    <div class="addAdvertFormGroupLabel">{% trans %}Пробег, км{% endtrans %} <sup> *</sup></div>
                     <div class="addAdvertFormGroupControl">
                         <input class="form-control" name="probeg" value="" required="required" />
                     </div>
                 </div>
                 {% if conditions | length > 0 %}
                     <div class="addAdvertForm-Group">
-                        <div class="addAdvertFormGroupLabel">{% trans %}Состояние{% endtrans %}</div>
+                        <div class="addAdvertFormGroupLabel">{% trans %}Состояние{% endtrans %} <sup> *</sup></div>
                         <div class="addAdvertFormGroupControl">
-                            <select name="condition" class="custom-select">
+                            <select name="condition" class="custom-select just-select" required="required">
                                 <option value="0">{% trans %}Нет{% endtrans %}</option>
                                 {% for condition in conditions %}
                                     <option value="{{ condition.id }}">{{ condition.title }}</option>
@@ -76,16 +76,16 @@
                 {% if filters | length > 0 %}
                     {% for filter in filters %}
                         <div class="addAdvertForm-Group">
-                            <div class="addAdvertFormGroupLabel">{{ filter.name }}</div>
+                            <div class="addAdvertFormGroupLabel">{{ filter.name }} {% if filter.isRequired %}<sup> *</sup>{% endif %}</div>
                             <div class="addAdvertFormGroupControl">
                                 {% if filter.type.name == 'checkbox' %}
                                     {% for value in filter.values %}
                                         <div class="static-filters filter">
-                                            <input name="{{ filter.productParameter }}[{{ filter.id }}]" value="{{ value.id }}" type="checkbox" class="custom-checkbox"/> {{ value.value }}
+                                            <input name="{{ filter.productParameter }}[{{ filter.id }}]" value="{{ value.id }}" type="checkbox" class="custom-checkbox" /> {{ value.value }}
                                         </div>
                                     {% endfor %}
                                 {% endif %}
-                                <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select" {% if filter.isRequired %}required="required"{% endif %}>
+                                <select name="{{ filter.productParameter }}[{{ filter.id }}]" class="custom-select just-select" {% if filter.isRequired %}required="required"{% endif %}>
                                     <option value="0">{% trans %}Нет{% endtrans %}</option>
                                     {% for value in filter.values %}
                                         <option value="{{ value.id }}">{{ value.value }}</option>
@@ -112,19 +112,19 @@
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
-                    <div class="addAdvertFormGroupLabel">{% trans %}Цена{% endtrans %}, {{ locale.currency.label | raw }}</div>
+                    <div class="addAdvertFormGroupLabel">{% trans %}Цена{% endtrans %}, {{ locale.currency.label | raw }} <sup> *</sup></div>
                     <div class="addAdvertFormGroupControl">
                         <input class="form-control" name="price" value="" required="required" />
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
-                    <div class="addAdvertFormGroupLabel">{% trans %}Как к Вам обращаться?{% endtrans %}</div>
+                    <div class="addAdvertFormGroupLabel">{% trans %}Как к Вам обращаться?{% endtrans %} <sup> *</sup></div>
                     <div class="addAdvertFormGroupControl">
                         <input value="{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}" name="contactName" placeholder="{% trans %}John Doe{% endtrans %}" class="form-control" required="required" type="text" />
                     </div>
                 </div>   
                 <div class="addAdvertForm-Group">
-                    <div class="addAdvertFormGroupLabel">{% trans %}Email{% endtrans %}</div>
+                    <div class="addAdvertFormGroupLabel">{% trans %}Email{% endtrans %} <sup> *</sup></div>
                     <div class="addAdvertFormGroupControl">
                         {% if user %}
                             <input value="{{ user.email }}" name="contactEmail" placeholder="{% trans %}E-mail{% endtrans %}" class="parameterValue" required="required" type="text" />
@@ -134,13 +134,13 @@
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
-                    <div class="addAdvertFormGroupLabel">{% trans %}Телефон{% endtrans %}</div>
+                    <div class="addAdvertFormGroupLabel">{% trans %}Телефон{% endtrans %} <sup> *</sup></div>
                     <div class="addAdvertFormGroupControl">
                         <input value="{{ user.userinfo.phone }}" name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="form-control masked-phone" required="required" type="text" />
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
-                    <div class="addAdvertFormGroupLabel">{% trans %}Город{% endtrans %}</div>
+                    <div class="addAdvertFormGroupLabel">{% trans %}Город{% endtrans %} <sup> *</sup></div>
                     <div class="addAdvertFormGroupControl">
                         <select name="contactCity" data-write="1" class="custom-select just-select" id="settingsCity" placeholder="{% trans %}Город{% endtrans %}" required="required">
                             {% for city in cities %}
@@ -150,8 +150,8 @@
                     </div>
                 </div>
                 <div class="addAdvertForm-Group">
-                    <div class="addAdvertFormGroupLabel">{% trans %}Индекс{% endtrans %}</div>
-                    <div class="addAdvertFormGroupControl" id="advertCityCodeBlock">
+                    <div class="addAdvertFormGroupLabel">{% trans %}Индекс{% endtrans %} <sup> *</sup></div>
+                    <div class="addAdvertFormGroupControl">
                         {% if user and user.userinfo.cityCode %}
                             <input id="settingsCityCode" value="{{ user.userinfo.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" required="required" type="text" />
                         {% else %}
@@ -297,7 +297,7 @@
                                                     {% else %}
                                                         {% set servicePrice = service.price %}
                                                     {% endif %}
-                                                    <div class="addAdvertServiceItem">
+                                                    <div class="addAdvertServiceItem service-checkbox">
                                                         <div class="addAdvertServiceItemIcon">
                                                             {{ service.icon | raw }}
                                                         </div>
@@ -430,12 +430,7 @@
             },
             removedfile: function(file){
                 $(".addFotoIcon").remove();
-                var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
-                $.ajax({
-                    url: '/account/addadvert/deleteimage/' + imageName,
-                    type:'get',
-                    dataType: 'html'
-                });
+                
                 var _ref;
                 var ret = (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
                 
@@ -446,6 +441,13 @@
                     $("div#advertFotos").html(this.options.dictDefaultMessage);
                     $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
                 }
+                
+                var imageName = file.previewElement.attributes.getNamedItem("imageName").value;
+                $.ajax({
+                    url: '/account/addadvert/deleteimage/' + imageName,
+                    type:'get',
+                    dataType: 'html'
+                });
                 
                 return ret;
             }

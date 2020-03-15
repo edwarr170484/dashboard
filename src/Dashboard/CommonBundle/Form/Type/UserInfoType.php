@@ -25,19 +25,23 @@ class UserInfoType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $code = ($this->user && $this->user->getCityCode()) ? $this->user->getCityCode()->getCode() : '';
         $builder
             ->add('firstname', TextType::class, array('required' => true, 'label' => 'Имя', 'attr' => array('class' => 'form-control','placeholder' => 'Имя')))
             ->add('lastname', TextType::class, array('required' => false, 'label' => 'Фамилия', 'attr' => array('class' => 'form-control','placeholder' => 'Фамилия')))
-            ->add('phone', TextType::class, array('required' => false, 'label' => 'Телефон', 'attr' => array('class' => 'form-control masked-phone','placeholder' => '+34')))
-            ->add('avatarNew', FileType::class, array('required' => false, 'label' => '','mapped' => false, 'attr' => array('class' => 'change-avatar-input')))
-            ->add('avatar', HiddenType::class, array('required' => false, 'label' => ''))
-            ->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
+            ->add('phone', TextType::class, array('required' => false, 'label' => 'Телефон', 'attr' => array('class' => 'form-control masked-phone','placeholder' => '+34')));
+            if($this->user){
+                $builder->add('avatarNew', FileType::class, array('required' => false, 'label' => '','mapped' => false, 'attr' => array('class' => 'change-avatar-input')))
+                        ->add('avatar', HiddenType::class, array('required' => false, 'label' => ''))
+                        ->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
                                           'choice_label' => 'name',
                                           'placeholder' => 'Город',
-                                          'required' => true,
+                                          'required' => false,
                                           'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
                                           'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Город', 'data-write' => '1')))
-            ->add('cityCode', TextType::class, array('required' => true, 'mapped' => false, 'label' => 'Индекс', 'attr' => array('class' => 'form-control', 'placeholder' => 'Индекс')));
+                        ->add('cityCode', TextType::class, array('required' => false, 'data' => $code,'mapped' => false, 'label' => 'Индекс', 'attr' => array('class' => 'form-control', 'placeholder' => 'Индекс', 'maxlength' => '5', 'autocomplete' => 'off')));
+            }
+            
     }
     
     public function configureOptions(OptionsResolver $resolver)

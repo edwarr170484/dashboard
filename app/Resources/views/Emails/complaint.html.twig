@@ -1,7 +1,7 @@
 <img src="{{ absolute_url(asset('bundles/images/site/' ~ settings.siteLogo)) }}" />
-<h3>Пользователь сайта gribupardot.sunweb.by пожаловался на объявление.</h3>
+<h3>Пользователь сайта {{ settings.siteName }} пожаловался на объявление.</h3>
 <p>
-    Пользователь <strong>{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</strong> пожаловался на объявление на сайте gribupardot.sunweb.by 
+    Пользователь <strong>{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</strong> пожаловался на объявление на сайте {{ settings.siteName }} 
     <h3><a href="{{ absolute_url(path('product', {'productId' : product.id,'productName' : product.translit})) }}">{{ product.name }}</a></h3>
-    Вы можете обработать жалобу в <a href="{{  absolute_url(path("admin_complaint")) }}">системе управления сайтом</a> gribupardot.sunweb.by.
+    Вы можете обработать жалобу в <a href="{{  absolute_url(path("admin_complaint")) }}">системе управления сайтом</a> {{ settings.siteName }}.
 </p>

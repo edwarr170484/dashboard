@@ -600,7 +600,7 @@ class AdvertController extends Controller
                         $advertData = $serializer->serialize($advertInfo, 'json');
                         $session->set('advertInfo', $advertData);
                     }
-                    $advertInfo->setStep("1");
+                    $advertInfo->setStep(1);
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
@@ -752,7 +752,7 @@ class AdvertController extends Controller
                         }
                     }
                     
-                    $advertInfo->setStep("1");
+                    $advertInfo->setStep(1);
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
@@ -1017,7 +1017,7 @@ class AdvertController extends Controller
                     $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
                     $modification = $manager->getRepository("DashboardCommonBundle:Modification")->find($advertInfo->getModification());
                     
-                    $advertInfo->setStep("2");
+                    $advertInfo->setStep(2);
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
@@ -1065,7 +1065,7 @@ class AdvertController extends Controller
                         $filters[$advertFilter->getId()] = 1;
                     }
                     
-                    $advertInfo->setStep("3");
+                    $advertInfo->setStep(3);
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
@@ -1093,7 +1093,7 @@ class AdvertController extends Controller
                     $modification = $manager->getRepository("DashboardCommonBundle:Modification")->find($advertInfo->getModification());
                     $conditions = $manager->getRepository("DashboardCommonBundle:Shape")->findAll();
                     
-                    $advertInfo->setStep("4");
+                    $advertInfo->setStep(4);
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
@@ -1132,7 +1132,7 @@ class AdvertController extends Controller
                     $modification = $manager->getRepository("DashboardCommonBundle:Modification")->find($advertInfo->getModification());
                     $shape = $manager->getRepository("DashboardCommonBundle:Shape")->find($advertInfo->getCondition());
                     
-                    $advertInfo->setStep("5");
+                    $advertInfo->setStep(5);
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
@@ -1897,7 +1897,6 @@ class AdvertController extends Controller
             $product->setRegion($city->getRegion());
             $product->setCity($city);
             $product->setCityCode($cityCode);
-            $product->setTranslit($helper->translit($productTitle));
             $product->setIsActive(1);
             $product->setDateAdded(new \DateTime("now"));
             $product->setDateEdited(new \DateTime("now"));
@@ -1926,7 +1925,7 @@ class AdvertController extends Controller
             
             $bill = 0;
             
-            if($advertInfo->getServicePack()){
+            if($advertInfo->getServicePack() && !$isDraft){
                 $servicePack = $manager->getRepository("DashboardCommonBundle:Pack")->find($advertInfo->getServicePack());
                 if($servicePack){
                     //add bill
@@ -1954,7 +1953,7 @@ class AdvertController extends Controller
                 }
             }       
             
-            if(count($advertInfo->getServices()) > 0){
+            if(count($advertInfo->getServices()) > 0 && !$isDraft){
                 $bill = new Bill();
                 $bill->setDateAdded(new \DateTime("now"));
                 $bill->addProduct($product);
@@ -2035,7 +2034,8 @@ class AdvertController extends Controller
             $productName = array();
             $this->generateCategoriesTree($category, $productName, $locale);
             $productTitle = implode(" ", array_reverse($productName));
-                        
+            $product->setTranslit($helper->translit($productTitle));
+            
             $product->setName($productTitle);
             
             $product->setInfo($info);
@@ -2092,7 +2092,21 @@ class AdvertController extends Controller
             if($isDraft){
                 return $this->render('DashboardCommonBundle:Product:add/resultDraft.html.twig', array("locale" => $locale, "settings" => $settings));
             }else{
-                return $this->render('DashboardCommonBundle:Product:add/result.html.twig', array("locale" => $locale, "settings" => $settings));
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Размещение объявления на сайте ' . $settings->getSiteName())
+                    ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
+                    ->setTo($user->getEmail())
+                    ->setBody($this->renderView(
+                                'Emails/newproduct.html.twig',
+                                array("settings" => $settings, "user" => $user)
+                        ),'text/html');
+
+                $this->get('mailer')->send($message);
+                
+                if($bill){
+                    return new \Symfony\Component\HttpFoundation\JsonResponse(array("redirect" => 1, "href" => $this->generateUrl('account_payments', array("billId" => $bill->getId(), "className" => "Bill"))));
+                }
+                return new \Symfony\Component\HttpFoundation\JsonResponse(array("redirect" => 0, "view" => $this->renderView('DashboardCommonBundle:Product:add/result.html.twig', array("locale" => $locale, "settings" => $settings))));
             }
         }
         

@@ -203,6 +203,7 @@ class DefaultController extends Controller
         
         $roleForm = $this->get('form.factory')->createNamedBuilder('role', 'form', $role)
                 ->add('title', TextType::class, array('required' => true, 'label' => 'Заголовок группы', 'attr' => array('class' => 'form-control','placeholder' => 'Название группы пользователей')))
+                ->add('filterTitle', TextType::class, array('required' => false, 'label' => 'Название для фильтра', 'attr' => array('class' => 'form-control','placeholder' => 'Название для фильтра')))
                 ->add('name', TextType::class, array('required' => true, 'label' => 'Название группы пользователей', 'attr' => array('class' => 'form-control','placeholder' => 'Название группы пользователей')))
                 ->add('advertNumber', TextType::class, array('required' => false, 'label' => 'Максимальное количество объявлений', 'attr' => array('class' => 'form-control','placeholder' => 'Максимальное количество объявлений')))
                 ->add('advertFotoNumber', TextType::class, array('required' => false, 'label' => 'Максимальное количество фото для одного объявления', 'attr' => array('class' => 'form-control','placeholder' => 'Максимальное количество фото для одного объявления')))

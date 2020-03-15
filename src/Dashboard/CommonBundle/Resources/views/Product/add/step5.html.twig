@@ -48,17 +48,19 @@
                                 </td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}Индекс{% endtrans %}<sup> *</sup></span></td>
                                 <td>
-                                    <div class="addAdvertContextParamenter" id="advertCityCodeBlock">
+                                    <div class="addAdvertContextParamenter cityCodeBlock" id="advertCityCodeBlock">
                                         {% if user and user.userinfo.cityCode %}
                                             <input id="settingsCityCode" value="{{ user.userinfo.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" type="text" />
                                         {% else %}
                                             <input id="settingsCityCode" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" type="text" />
                                         {% endif %}
+                                        <div class="codesListBlock"></div>
                                     </div>
                                     <script>
                                         $("#settingsCity").customSelect();
                                         $("#settingsCityCode").keyup(function(){
                                             var len = $(this).val().length;
+                                            var element = $(this);
                                             if(len === 5){
                                                 $.ajax({
                                                     url : '/region/getcity/' + $(this).val(),
@@ -69,16 +71,28 @@
                                                             $("#settingsCity").parent().find(".select-option").each(function(){
                                                                 if($(this).data('value') === parseInt(data.city)){
                                                                     $(this).trigger('click');
+                                                                    $("#settingsCity").val(data.city);
                                                                     $("#settingsCityCode").val(data.code);
                                                                 }
                                                             });
                                                         }
                                                     }
                                                 });
+                                            }else{
+                                                $.ajax({
+                                                    url : '/region/getcodes/' + $(this).val(),
+                                                    type: 'get',
+                                                    dataType: 'html',
+                                                    success: function(data) {
+                                                        element.parent().find('.codesListBlock').html(data).show();
+                                                    }
+                                                });
                                             }
                                         });
+
                                         $("#settingsCity").change(function(){
                                             $("#settingsCityCode").val(null);
+                                            $(".codesListBlock").html('').hide();
                                         });
                                     </script>
                                 </td> 

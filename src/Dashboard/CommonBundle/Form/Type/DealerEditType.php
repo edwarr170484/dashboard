@@ -31,7 +31,8 @@ class DealerEditType extends AbstractType
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $email = ($this->user->getDealerinfo()->getEmail()) ? $this->user->getDealerinfo()->getEmail() : $this->user->getEmail();    
+        $code = ($this->user && $this->user->getDealerInfo()->getCityCode()) ? $this->user->getDealerInfo()->getCityCode()->getCode() : '';
+        $email = ($this->user && $this->user->getDealerinfo()->getEmail()) ? $this->user->getDealerinfo()->getEmail() : $this->user->getEmail();    
         $builder
             ->add('company', TextType::class, array('required' => true, 'label' => 'Компания', 'attr' => array('class' => 'form-control')))
             ->add('firma', TextType::class, array('required' => true, 'label' => 'Фирма', 'attr' => array('class' => 'form-control')))
@@ -50,54 +51,16 @@ class DealerEditType extends AbstractType
             ->add('save', ButtonType::class, array('label' => 'Сохранить'));
         
             $builder->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
-                    'choice_label' => function($city)
-                    {
-                        if(count($city->getTranslations()) > 0)
-                        {
-                            foreach($city->getTranslations() as $translation)
-                            {
-                                if($translation->getLocale()->getId() == $this->locale->getId())
-                                {
-                                    return $translation->getValue();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            return $city->getName();
-                        }
-                    }, 
-                    'label' => 'Город',
-                    'required' => true,
-                    'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
-                    'attr' => array('class' => 'custom-select just-select', 'data-write' => '1')));
-                    
-         $formModifier = function (FormInterface $form, City $city = null) {
-                $codes = null === $city ? array() : $city->getCodes();
-
-                $form->add('cityCode', 'entity', array('class' => 'DashboardCommonBundle:CityCode',
-                                          'choice_label' => 'code',
-                                          'choices' => $codes,
+                                          'choice_label' => 'name',
+                                          'placeholder' => 'Город',
                                           'required' => false,
-                                          'placeholder' => 'Индекс',
-                                          'label' => 'Индекс', 'attr' => array('class' => 'custom-select just-select')));
-            };
+                                          'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
+                                          'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Город', 'data-write' => '1')))
+                    ->add('cityCode', TextType::class, array('required' => false, 'data' => $code,'mapped' => false, 'label' => 'Индекс', 'attr' => array('class' => 'form-control', 'placeholder' => 'Индекс', 'maxlength' => '5', 'autocomplete' => 'off')));
+                    
+         
                            
-            $builder->addEventListener(
-                FormEvents::PRE_SET_DATA,
-                function (FormEvent $event) use ($formModifier) {
-                    $data = $event->getData();
-                    $formModifier($event->getForm(), ($data) ? $data->getCity() : NULL);
-                }
-            );
             
-            $builder->get('city')->addEventListener(
-                FormEvents::POST_SUBMIT,
-                function (FormEvent $event) use ($formModifier) {
-                    $city = $event->getForm()->getData();
-                    $formModifier($event->getForm()->getParent(), $city);
-                }
-            );
     }
     
     public function configureOptions(OptionsResolver $resolver)

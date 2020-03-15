@@ -151,10 +151,14 @@ class CategoryController extends Controller
             }
         }
         
-        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.info pi" . $joinInstructions . " LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0 AND p.isActive = 1";
+        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.info pi" . $joinInstructions . " LEFT JOIN p.user pu LEFT JOIN pu.roles pur WHERE pu.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0 AND p.isActive = 1";
         
         if($this->get('session')->has('sessionCity')){
             $sql .= " AND p.city = " . $this->get('session')->get('sessionCity');
+        }
+        
+        if($request->request->get('userFilter') && $request->request->get('userFilter') != "-1"){
+            $sql .= " AND pur.id = " . intval($request->request->get('userFilter'));
         }
         
         if($request->request->get('categoryFilter')){
@@ -477,6 +481,8 @@ class CategoryController extends Controller
             }
         }
         
+        
+        
         if($request->query->get('sortorder') && $request->query->get('order'))
         {
             $sql .= " ORDER BY p." . $request->query->get('sortorder') . " " . $request->query->get('order');
@@ -569,6 +575,9 @@ class CategoryController extends Controller
             $baseCategories = 0;
         }
         
+        $query = $manager->createQuery("SELECT r FROM DashboardCommonBundle:Role r WHERE r.role <> 'ROLE_ADMIN' AND r.role <> 'ROLE_SERVICE'");
+        $roles = $query->getResult();
+        
         return $this->render('DashboardCommonBundle:Default:Category/category.html.twig', array("category" => $category,
                                                                                        "categories" => $categories,
                                                                                        "baseCategories" => $baseCategories,
@@ -589,7 +598,8 @@ class CategoryController extends Controller
                                                                                        "locale" => $locale,
                                                                                        "settings" => $settings,
                                                                                        "view" => $view,
-                                                                                       "user" => $user));
+                                                                                       "user" => $user,
+                                                                                       "roles" => $roles));
     }
     
     private function getFilters(&$filters, $category){

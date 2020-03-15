@@ -37,10 +37,10 @@
                                 <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %} <sup> *</sup></span></td>
                                 <td>
                                     <select name="owners" class="custom-select just-select" placeholder="{% trans %}Количество владельцев{% endtrans %}" required="required">
-                                        <option value="Один" {% if advertInfo.owners == 'Один' %}selected="selected"{% endif %}>Один</option>
-                                        <option value="Два" {% if advertInfo.owners == 'Два' %}selected="selected"{% endif %}>Два</option>
-                                        <option value="Три" {% if advertInfo.owners == 'Три' %}selected="selected"{% endif %}>Три</option>
-                                        <option value="Больше трех" {% if advertInfo.owners == 'Больше трех' %}selected="selected"{% endif %}>Больше трех</option>
+                                        <option value="Один" {% if advertInfo.owners == "Один" %}selected="selected"{% endif %}>Один</option>
+                                        <option value="Два" {% if advertInfo.owners == "Два" %}selected="selected"{% endif %}>Два</option>
+                                        <option value="Три" {% if advertInfo.owners == "Три" %}selected="selected"{% endif %}>Три</option>
+                                        <option value="Больше трех" {% if advertInfo.owners == "Больше трех" %}selected="selected"{% endif %}>Больше трех</option>
                                     </select>
                                 </td>
                                 <td><span class="addAdvertParameterLabel">{% trans %}VIN Номер{% endtrans %}</span></td>

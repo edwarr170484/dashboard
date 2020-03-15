@@ -230,11 +230,15 @@ class DefaultController extends Controller
             $category->setAllProductsNumber($productsNum);
         }
         
+        $query = $manager->createQuery("SELECT r FROM DashboardCommonBundle:Role r WHERE r.role <> 'ROLE_ADMIN' AND r.role <> 'ROLE_SERVICE'");
+        $roles = $query->getResult();
+        
         return $this->render('DashboardCommonBundle:Default:index.html.twig', array("categories" => $categories,
                                                                                     "page" => $page,
                                                                                     "locale" => $locale,
                                                                                     "settings" => $settings,
-                                                                                    "sessionCity" => $sessionCity));
+                                                                                    "sessionCity" => $sessionCity,
+                                                                                    "roles" => $roles));
     }
     
     private function getCategoryProducts($category, &$productsNum){

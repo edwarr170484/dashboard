@@ -28,7 +28,7 @@
                 <div class="row">
                     <div class="col-lg-7 col-md-offset-1 col-lg-offset-1 mainPageFiltersBlock">
                         <div class="mainPageFiltersHeader"><h1>{% trans %}Продажа автомобилей{% endtrans %}</h1></div>
-                        {% include 'DashboardCommonBundle:Default:filtersForm.html.twig' with {'categories' : categories, 'request' : app.request} %}
+                        {% include 'DashboardCommonBundle:Default:filtersForm.html.twig' with {'categories' : categories, 'request' : app.request, 'roles' : roles} %}
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-5 col-md-5">
+            <div class="col-lg-5 col-md-5 mainPageSitHeaderBlock">
                 <div class="mainPageSitHeader"><h2>{% trans %}Доска бесплатных объявлений в Испании{% endtrans %}</h2></div>
                 <div class="mainPageSiteSubheader">{% trans %}С нами Вы сможете{% endtrans %}:</div>
             </div>

@@ -632,7 +632,24 @@ class CategoryController extends Controller
         $fm = new Filesystem();
         $finder = new Finder();
         
-        $yearFiter = $manager->getRepository("DashboardCommonBundle:Filter")->find(32);
+        /*$baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
+        
+        if($baseCategory){
+            foreach($baseCategory->getChildren() as $child){
+                if(count($child->getChildren()) > 0){
+                    foreach($child->getChildren() as $subChild){
+                        $subChild->setParent(null);
+                        $manager->remove($subChild);
+                    }
+                }
+                $child->setParent(null);
+                $manager->remove($child);
+            }
+            
+            $manager->flush();
+        }*/
+        
+        /*$yearFiter = $manager->getRepository("DashboardCommonBundle:Filter")->find(32);
         
         $categoryYearsFrom = $manager->createQuery('SELECT c.yearFrom FROM Dashboard\CommonBundle\Entity\Category c WHERE c.yearFrom > 0 ORDER BY c.yearFrom ASC');
         $yearsFrom = $categoryYearsFrom->getResult();
@@ -652,9 +669,9 @@ class CategoryController extends Controller
         foreach($values as $val){
             $manager->persist($val);
         }
-        $manager->flush($val);
+        $manager->flush($val);*/
         
-        /*$transmissionFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(17);
+        $transmissionFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(17);
         $transmissionFilterValue1 = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $transmissionFilter, "value" => "Trasero"));
         $transmissionFilterValue2 = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $transmissionFilter, "value" => "Lleno"));
         $generationItems = $manager->getRepository("DashboardCommonBundle:GenerationItem")->findAll();
@@ -676,7 +693,7 @@ class CategoryController extends Controller
             $manager->persist($newItem);
         }
         
-        $manager->flush();*/
+        $manager->flush();
         
         //$finder->files()->name('equipment.txt')->in('import');
         
@@ -723,7 +740,7 @@ class CategoryController extends Controller
         }*/
         
         /*$baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
-        $finder->files()->name('export-short3.txt')->in('import');
+        $finder->files()->name('export-short.txt')->in('import');
         $modifications = new ArrayCollection();
         
         $workFile = 0;
@@ -764,6 +781,7 @@ class CategoryController extends Controller
         
         /*$baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
         
+        $finder->files()->name('export-short4.txt')->in('import');
         $categories = new ArrayCollection();
         $childrens = new ArrayCollection();
         $generationItems = new ArrayCollection();
@@ -778,7 +796,7 @@ class CategoryController extends Controller
                         
                         $marker = 0;
                         foreach($categories as $cat){
-                            if($cat->getTitle() == $categoryInfo[0]){
+                            if($cat->getTitle() == trim($categoryInfo[0])){
                                 $marker = 1;
                                 break;
                             }
@@ -787,12 +805,13 @@ class CategoryController extends Controller
                         if(!$marker){
                             $category = new Category();
                             $category->setParent($baseCategory);
-                            $category->setTitle($categoryInfo[0]);
-                            $category->setName($this->get('app.helpers')->translit($categoryInfo[0]));
+                            $category->setTitle(trim($categoryInfo[0]));
+                            $category->setName($this->get('app.helpers')->translit(trim($categoryInfo[0])));
                             $category->setIsActive(1);
                             $category->setIsShowFilters(1);
                             $category->setIsShowPriceFilter(1);
                             $categories->add($category);
+                            $count++;
                         }
                     }
                     
@@ -802,7 +821,7 @@ class CategoryController extends Controller
                     }
                     
                     $manager->flush();
-                    
+
                     $categories = $manager->getRepository("DashboardCommonBundle:Category")->findBy(array("parent" => $baseCategory));
                     $boardFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(19);
                     $gasFilter = $manager->getRepository("DashboardCommonBundle:Filter")->find(16);
@@ -815,7 +834,7 @@ class CategoryController extends Controller
 
                             $parent = 0;
                             foreach($categories as $category){
-                                if($category->getTitle() == $categoryInfo[0]){
+                                if($category->getTitle() == trim($categoryInfo[0])){
                                     $parent = $category;
                                     break;
                                 }
@@ -824,10 +843,10 @@ class CategoryController extends Controller
                             if($parent){                              
                                 $marker = 0;
                                 foreach($childrens as $cat){
-                                    if($cat->getTitle() == $categoryInfo[1] && $cat->getParent()->getId() == $parent->getId()){
+                                    if($cat->getTitle() == trim($categoryInfo[1]) && $cat->getParent()->getId() == $parent->getId()){
                                         $marker = 1;
                                         
-                                        $boardFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[5])));
+                                        $boardFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[7])));
                                     
                                         if(count($cat->getGenerations()) > 0){
                                             foreach($cat->getGenerations() as $catGeneration){
@@ -851,7 +870,7 @@ class CategoryController extends Controller
                                                 if(count($catGeneration->getModifications()) > 0){
                                                     $contain = 0;
                                                     foreach($catGeneration->getModifications() as $modification){
-                                                        if(($modification->getLabel() == trim($categoryInfo[4])) && ($modification->getPower() == trim($categoryInfo[8])) && ($modification->getSize() == trim($categoryInfo[9]))){
+                                                        if(($modification->getLabel() == trim($categoryInfo[4])) && ($modification->getPower() == trim($categoryInfo[10])) && ($modification->getSize() == trim($categoryInfo[11]))){
                                                             $contain = 1;
                                                             break;
                                                         }
@@ -861,8 +880,10 @@ class CategoryController extends Controller
                                                         $modification = new Modification();
                                                         $modification->setGeneration($catGeneration);
                                                         $modification->setLabel(trim($categoryInfo[4]));
-                                                        $modification->setPower(trim($categoryInfo[8]));
-                                                        $modification->setSize(trim($categoryInfo[9]));
+                                                        $modification->setPower(trim($categoryInfo[10]));
+                                                        $modification->setSize(trim($categoryInfo[11]));
+                                                        $modification->setYearFrom(substr(trim($categoryInfo[5]),3,4));
+                                                        $modification->setYearTo(substr(trim($categoryInfo[6]),3,4));
                                                         $catGeneration->addModification($modification);
                                                     }
                                                 }
@@ -876,25 +897,25 @@ class CategoryController extends Controller
                                 if(!$marker){
                                     $child = new Category();
                                     $child->setParent($parent);
-                                    $child->setTitle($categoryInfo[1]);
-                                    $child->setName($this->get('app.helpers')->translit($categoryInfo[1]));
+                                    $child->setTitle(trim($categoryInfo[1]));
+                                    $child->setName($this->get('app.helpers')->translit(trim($categoryInfo[1])));
                                     $child->setIsActive(1);
                                     $child->setIsShowFilters(1);
                                     $child->setIsShowPriceFilter(1);
-                                    $child->setYearFrom($categoryInfo[2]);
-                                    $child->setYearTo($categoryInfo[3]);
+                                    $child->setYearFrom(trim($categoryInfo[2]));
+                                    $child->setYearTo(trim($categoryInfo[3]));
                                     
                                     //adding generation
                                     $generation = new Generation();
                                     $generation->setCategory($child);
                                     $generation->setName("I generación");
-                                    $generation->setYearFrom($categoryInfo[2]);
-                                    $generation->setYearTo($categoryInfo[3]);
+                                    $generation->setYearFrom(trim($categoryInfo[2]));
+                                    $generation->setYearTo(trim($categoryInfo[3]));
                                     $generation->setIsRightWheel(1);
                                     $generation->setIsGas(1);
                                     
                                     //adding boardType
-                                    $boardFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[5])));
+                                    $boardFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[7])));
                                     $generationBoard = new GenerationBoard();
                                     $generationBoard->setGeneration($generation);
                                     $generationBoard->setBoard($boardFilterValue);
@@ -904,8 +925,10 @@ class CategoryController extends Controller
                                     $modification = new Modification();
                                     $modification->setGeneration($generation);
                                     $modification->setLabel(trim($categoryInfo[4]));
-                                    $modification->setPower(trim($categoryInfo[8]));
-                                    $modification->setSize(trim($categoryInfo[9]));
+                                    $modification->setPower(trim($categoryInfo[10]));
+                                    $modification->setSize(trim($categoryInfo[11]));
+                                    $modification->setYearFrom(substr(trim($categoryInfo[5]),3,4));
+                                    $modification->setYearTo(substr(trim($categoryInfo[6]),3,4));
                                     $generation->addModification($modification);
                                     
                                     $child->addGeneration($generation);
@@ -927,7 +950,7 @@ class CategoryController extends Controller
                         
                         $parent = 0;
                         foreach($categories as $category){
-                            if($category->getTitle() == $categoryInfo[0]){
+                            if($category->getTitle() == trim($categoryInfo[0])){
                                 $parent = $category;
                                 break;
                             }
@@ -935,10 +958,10 @@ class CategoryController extends Controller
 
                         if($parent){
                             foreach($parent->getChildren() as $cat){
-                                if($cat->getTitle() == $categoryInfo[1]){
-                                    $boardValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[5])));
-                                    $gasFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $gasFilter, "value" => trim($categoryInfo[6])));
-                                    $gearFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $gearFilter, "value" => trim($categoryInfo[7])));
+                                if($cat->getTitle() == trim($categoryInfo[1])){
+                                    $boardValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $boardFilter, "value" => trim($categoryInfo[7])));
+                                    $gasFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $gasFilter, "value" => trim($categoryInfo[8])));
+                                    $gearFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->findOneBy(array("filter" => $gearFilter, "value" => trim($categoryInfo[9])));
                                     if(!$gearFilterValue){
                                         $gearFilterValue = $manager->getRepository("DashboardCommonBundle:FilterValue")->find(64);
                                     }
@@ -947,7 +970,7 @@ class CategoryController extends Controller
                                     if(count($cat->getGenerations()) > 0){
                                         foreach($cat->getGenerations() as $catGeneration){
                                            
-                                            $modification = $manager->getRepository("DashboardCommonBundle:Modification")->findOneBy(array("generation" => $catGeneration, "label" => trim($categoryInfo[4]), "power" => trim($categoryInfo[8]), "size" => trim($categoryInfo[9])));
+                                            $modification = $manager->getRepository("DashboardCommonBundle:Modification")->findOneBy(array("generation" => $catGeneration, "label" => trim($categoryInfo[4]), "power" => trim($categoryInfo[10]), "size" => trim($categoryInfo[11])));
                                             
                                             if(count($generationItems) > 0){
                                                 $isItem = 0;
@@ -1015,8 +1038,8 @@ class CategoryController extends Controller
                     }
                 }
             }
-        }*/
         
+        }*/
         return new Response('OK');
     }
 }

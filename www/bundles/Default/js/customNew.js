@@ -840,3 +840,7 @@ function selectDealerAutoMark(element){
     element.find("input").blur();
     $(".mapListItems").toggleClass("hide");
 }
+function selectCityCode(element, value){
+    element.parent().parent().find("input").val(value).trigger('keyup');
+    element.parent().hide();
+}

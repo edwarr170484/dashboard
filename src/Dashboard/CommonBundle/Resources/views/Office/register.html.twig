@@ -43,17 +43,10 @@
             <div class="big-register-block">
                 <div class="registerBigForm">
                     {% if success %}
-                        {% if settings.isModerate %}
-                            <div class="registerBigFormHeader">{% trans %}Заявление отправлено на модерацию{% endtrans %}</div>
-                            <div class="accountNocontent">
-                                {% trans %}Ваше заявление на регистрацию отправлено на модерацию. Наши специалисты проверят его и свяжутся с вами в самое ближайшее время{% endtrans %}.
-                            </div>
-                        {% else %}
-                            <div class="registerBigFormHeader">{% trans %}Спасибо за регистрацию!{% endtrans %}</div>
-                            <div class="accountNocontent">
-                                {% trans %}Регистрационные данные отправлены на введенный Вами email. Используйте их для входа в личный кабинет{% endtrans %}.
-                            </div>
-                        {% endif %}
+                        <div class="registerBigFormHeader">{% trans %}Спасибо за регистрацию!{% endtrans %}</div>
+                        <div class="accountNocontent">
+                            {% trans %}Регистрационные данные отправлены на введенный Вами email. Подтвердите регистрацию и используйте их для входа в личный кабинет{% endtrans %}.
+                        </div>
                     {% else %}
                         <div class="registerBigFormHeader">{% trans %}Регистрация сервиса{% endtrans %}</div>
                         <div class="registerBigInner">

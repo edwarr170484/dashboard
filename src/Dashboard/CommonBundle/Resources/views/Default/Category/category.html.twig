@@ -55,7 +55,7 @@
                             <h1>{{ category.title }}</h1>
                         </div>
                             <div class="mainPageFiltersTabs category-filters" style="padding-top: 0;">
-                                {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'this' : category, 'categories' : baseCategories, 'formFilters' : formFilters, 'productsTotalCount' : productsTotalCount, 'request' : app.request} %}
+                                {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'this' : category, 'categories' : baseCategories, 'formFilters' : formFilters, 'productsTotalCount' : productsTotalCount, 'request' : app.request, 'roles' : roles} %}
                             </div>                              
                             <div class="hidden-sm hidden-xs" style="text-align:center;">
                                 {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
@@ -72,9 +72,6 @@
                                                 <option value="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}?sortorder=pi.price&order=ASC">{% trans %}Сначала дешевые{% endtrans %}</option>
                                                 <option value="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}?sortorder=pi.price&order=DESC">{% trans %}Сначала дорогие{% endtrans %}</option>
                                             </select>
-                                            <div class="filter">
-                                                <input name="creditProducts" type="checkbox" value="1" class="custom-checkbox" /> {% trans %}В кредит{% endtrans %}
-                                            </div>
                                         </div>
                                         <div class="categoryViewButtons">
                                             <a href="javascript:void(0)" class="template {% if view == 'grid' %}active{% endif %}" data-pattern="grid">

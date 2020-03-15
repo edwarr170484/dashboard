@@ -300,9 +300,9 @@ class MoneyController extends Controller
                 $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
             }else{
                 $pdf->SetXY(PDF_MARGIN_LEFT, 45);
-                $html = '<dl style="color:#fff"><dt><b>' . $user->getFirstname() . ' ' . $user->getLastname() . ' D.N.I./N.I.E.</b> N33333333<br/></dt><dt>' . $user->getUserinfo()->getCityCode()->getCode() . ' ' . $user->getUserinfo()->getCity()->getName() . '</dt><dt>' . $user->getEmail() . '</dt></dl>';
+                $html = '<dl style="color:#fff"><dt><b>' . $user->getUserinfo()->getFirstname() . ' ' . $user->getUserinfo()->getLastname() . ' D.N.I./N.I.E.</b> N33333333<br/></dt><dt>' . $user->getUserinfo()->getCityCode()->getCode() . ' ' . $user->getUserinfo()->getCity()->getName() . '</dt><dt>' . $user->getEmail() . '</dt></dl>';
                 $pdf->writeHTMLCell(0, 0, '', '', $html, 'L', 1, 0, true, 'L', true);
-                $html = '<dl><dt><b>' . $user->getFirstname() . ' ' . $user->getLastname() . ' D.N.I./N.I.E.</b> N33333333<br/></dt><dt>' . $user->getUserinfo()->getCityCode()->getCode() . ' ' . $user->getUserinfo()->getCity()->getName() . '</dt><dt>' . $user->getEmail() . '</dt></dl>';
+                $html = '<dl><dt><b>' . $user->getUserinfo()->getFirstname() . ' ' . $user->getUserinfo()->getLastname() . ' D.N.I./N.I.E.</b> N33333333<br/></dt><dt>' . $user->getUserinfo()->getCityCode()->getCode() . ' ' . $user->getUserinfo()->getCity()->getName() . '</dt><dt>' . $user->getEmail() . '</dt></dl>';
                 $pdf->SetXY(PDF_MARGIN_LEFT + 1, 43);
                 $pdf->writeHTMLCell(0, 0, '', '', $html, '', 1, 0, true, 'L', true);
             }

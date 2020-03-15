@@ -117,6 +117,10 @@ class OfficeController extends Controller
             $dealer->setIsAlertNewMessage(1);
             $dealer->setIsAlertNewOrder(1);
             $dealer->getDealerinfo()->setUser($dealer);
+            $cityCode = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($registerForm['dealerinfo']['cityCode']->getData());
+            if($cityCode){
+                $dealer->getDealerinfo()->setCityCode($cityCode);
+            }
             $dealer->getUserinfo()->setUser($dealer);
             $dealer->getUserinfo()->setCity($dealer->getDealerinfo()->getCity());
             $dealer->getUserinfo()->setCityCode($dealer->getDealerinfo()->getCityCode());

@@ -19,9 +19,14 @@ class Role implements RoleInterface
     private $id;
     
     /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=true, options={"default":"null"})
+     * @ORM\Column(name="title", type="string", length=255, nullable=true, options={"default":null})
      */
     private $title;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
+     */
+    private $filterTitle;
 
     /**
      * @ORM\Column(name="name", type="string", length=255)
@@ -409,5 +414,28 @@ class Role implements RoleInterface
     public function getInvoiceText()
     {
         return $this->invoiceText;
+    }
+
+    /**
+     * Set filterTitle
+     *
+     * @param string $filterTitle
+     * @return Role
+     */
+    public function setFilterTitle($filterTitle)
+    {
+        $this->filterTitle = $filterTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get filterTitle
+     *
+     * @return string 
+     */
+    public function getFilterTitle()
+    {
+        return $this->filterTitle;
     }
 }

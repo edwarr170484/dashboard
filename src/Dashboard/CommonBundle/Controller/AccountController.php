@@ -565,7 +565,7 @@ class AccountController extends Controller
                     $this->get('translator')->trans('<strong>Ошибка!</strong> Пользователь внес Вас в черный список. Отправка сообщения невозможна.') . '</div>'
                 );
 
-                return $this->redirectToRoute("account_messages");
+                return $this->redirectToRoute("account_conversations");
             }
 
             $image = $formMessage['image']->getData();
@@ -636,8 +636,10 @@ class AccountController extends Controller
                     ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($userTo->getEmail())
-                    ->setBody('Вы получили новое сообщение на сайте ' . $settings->getSiteName() . '. '
-                            . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_conversations', array(), true) . '">личном кабинете</a>.','text/html');
+                    ->setBody($this->renderView(
+                                'Emails/newmessage.html.twig',
+                                array("settings" => $settings, "user" => $newMessage->getUserTo())
+                        ),'text/html');
 
                     $this->get('mailer')->send($message);
                 }
@@ -859,7 +861,7 @@ class AccountController extends Controller
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($product->getUser()->getEmail())
                         ->setBody('О Вас оставили новый отзыв на сайте ' . $settings->getSiteName() . '. '
-                                . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_targetreview', array(), true) . '">личном кабинете</a>.','text/html');
+                                . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_review', array(), true) . '">личном кабинете</a>.','text/html');
 
                         $this->get('mailer')->send($message);
                     }
@@ -1143,10 +1145,11 @@ class AccountController extends Controller
             ->add('isAlertNewOrder', CheckboxType::class, array('required' => false, 'label' => $this->get('translator')->trans('получать информацию о новой заявке'), 'attr' => array('class' => 'custom-checkbox')))
             ->add('isAlertChangeOrderStatus', CheckboxType::class, array('required' => false, 'label' => $this->get('translator')->trans('получать информацию о смене статуса заказа'), 'attr' => array('class' => 'custom-checkbox')))
             ->getForm();
-
+        
         $formMain->handleRequest($request);
         $formPassword->handleRequest($request);
-
+        
+        
         if($formMain->isValid())
         {
             //check if email exists
@@ -1165,7 +1168,7 @@ class AccountController extends Controller
                     'notice',
                     '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                    $this->get('translator')->trans('<strong>Kļūda!</strong> Email %mess% pieder citam lietotājam.', array("%mess%" => $formMain['email']->getData())) . '</div>'
+                    $this->get('translator')->trans('<strong>Ошибка!</strong> Email %mess% уже существует в системе.', array("%mess%" => $formMain['email']->getData())) . '</div>'
                 );
 
                 return $this->render('DashboardCommonBundle:User:account/settings.html.twig', array("avatar" => $user->getUserinfo()->getAvatar(),
@@ -1194,6 +1197,12 @@ class AccountController extends Controller
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
                 $user->getUserinfo()->setAvatar($localAvatarName);
+            }
+            
+            $cityCode = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formMain['userinfo']['cityCode']->getData());
+            
+            if($cityCode){
+                $user->getUserinfo()->setCityCode($cityCode);
             }
 
             $user->setUsername($user->getEmail());
@@ -1366,6 +1375,12 @@ class AccountController extends Controller
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
                 $user->getUserinfo()->setAvatar($localAvatarName);
             }
+            
+            $cityCode = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formMain['userinfo']['cityCode']->getData());
+            
+            if($cityCode){
+                $user->getUserinfo()->setCityCode($cityCode);
+            }
 
             $user->setUsername($user->getEmail());
             $manager->persist($user);
@@ -1413,6 +1428,12 @@ class AccountController extends Controller
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/dealers/logotypes',$localAvatarName);
                 $user->getDealerInfo()->setLogotype($localAvatarName);
+            }
+            
+            $cityCode = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formDealer['cityCode']->getData());
+            
+            if($cityCode){
+                $user->getDealerInfo()->setCityCode($cityCode);
             }
 
             $manager->persist($user->getDealerInfo());
@@ -1586,7 +1607,7 @@ class AccountController extends Controller
         $selectedSalons = ($session->get('selectedSalons')) ? $serializer->deserialize($session->get('selectedSalons'), 'Dashboard\CommonBundle\Model\SelectedSalon[]', 'json') : array();
 
         $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
-        $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale), $user->getDealerInfo());
+        $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale, $user), $user->getDealerInfo());
         $formPassword = $this->createForm(new UserPasswordType($this->getDoctrine()->getManager()), $user);
         $formAutos = $this->get('form.factory')->createNamedBuilder('autos', 'form', $user->getDealerInfo())
              ->add('autos', 'entity', array('class' => 'DashboardCommonBundle:Category',
@@ -1665,6 +1686,12 @@ class AccountController extends Controller
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
                 $user->getUserinfo()->setAvatar($localAvatarName);
             }
+            
+            $cityCode = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formMain['userinfo']['cityCode']->getData());
+            
+            if($cityCode){
+                $user->getUserinfo()->setCityCode($cityCode);
+            }
 
             $user->setUsername($user->getEmail());
             $manager->persist($user);
@@ -1716,6 +1743,12 @@ class AccountController extends Controller
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/dealers/logotypes',$localAvatarName);
                 $user->getDealerInfo()->setLogotype($localAvatarName);
+            }
+            
+            $cityCode = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formDealer['cityCode']->getData());
+            
+            if($cityCode){
+                $user->getDealerInfo()->setCityCode($cityCode);
             }
 
             $manager->persist($user->getDealerInfo());

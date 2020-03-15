@@ -397,7 +397,7 @@ class UserController extends Controller
                         if($order->getUserSended()->getAlerts())
                         {
                             $message = \Swift_Message::newInstance()
-                            ->setSubject('Изменение статуса Вашего заказа №' . $order->getId() . ' на портале gribupardot.sunweb.by')
+                            ->setSubject('Изменение статуса Вашего заказа №' . $order->getId() . ' на портале ' . $settings->getSiteName())
                             ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                             ->setTo($order->getUserSended()->getEmail())
                             ->setBody(
@@ -533,8 +533,10 @@ class UserController extends Controller
                         ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($messageForm['userTo']->getData()->getEmail())
-                        ->setBody('Вы получили новое сообщение на сайте ' . $settings->getSiteName() . '. '
-                                . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_messages', array(), true) . '">личном кабинете</a>.','text/html');
+                        ->setBody($this->renderView(
+                                'Emails/newmessage.html.twig',
+                                array("settings" => $settings, "user" => $message->getUserOwner())
+                        ),'text/html');
 
                         $this->get('mailer')->send($message);
                     }
@@ -906,8 +908,10 @@ class UserController extends Controller
                         ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($messageForm['userTo']->getData()->getEmail())
-                        ->setBody('Вы получили новое сообщение на сайте ' . $settings->getSiteName() . '. '
-                                . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_messages', array(), true) . '">личном кабинете</a>.','text/html');
+                        ->setBody($this->renderView(
+                                'Emails/newmessage.html.twig',
+                                array("settings" => $settings, "user" => $message->getUserOwner())
+                        ),'text/html');
 
                         $this->get('mailer')->send($message);
                     }
@@ -1049,8 +1053,10 @@ class UserController extends Controller
                         ->setSubject('Вам пришло новое сообщение на сайте ' . $settings->getSiteName())
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($messageForm['userTo']->getData()->getEmail())
-                        ->setBody('Вы получили новое сообщение на сайте ' . $settings->getSiteName() . '. '
-                                . 'Вы можете прочитать его в <a href="' . $this->generateUrl('account_messages', array(), true) . '">личном кабинете</a>.','text/html');
+                        ->setBody($this->renderView(
+                                'Emails/newmessage.html.twig',
+                                array("settings" => $settings, "user" => $message->getUserOwner())
+                        ),'text/html');
 
                         $this->get('mailer')->send($message);
                     }

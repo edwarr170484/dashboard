@@ -53,6 +53,7 @@ $(document).ready(function(){
     $("#owlMainSlider").owlCarousel({
         items:1,
         loop : true,
+        dots: false,
     });
     
     $(".clearFilters").click(function(){

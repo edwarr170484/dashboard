@@ -196,6 +196,7 @@
     #navbar-bottom{padding-left: 0;}
     .col-md-5.footer-menu{padding-right: 15px;}
     .index-services-blocks{padding-left: 15px;padding-right: 15px;}
+    .mainPageSitHeaderBlock{padding-left: 15px;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}

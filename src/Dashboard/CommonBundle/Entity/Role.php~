@@ -19,9 +19,14 @@ class Role implements RoleInterface
     private $id;
     
     /**
-     * @ORM\Column(name="title", type="string", length=255, nullable=true, options={"default":"null"})
+     * @ORM\Column(name="title", type="string", length=255, nullable=true, options={"default":null})
      */
     private $title;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
+     */
+    private $filterTitle;
 
     /**
      * @ORM\Column(name="name", type="string", length=255)

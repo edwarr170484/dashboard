@@ -125,6 +125,9 @@ class SearchController extends Controller{
             }
         }
         
+        $query = $manager->createQuery("SELECT r FROM DashboardCommonBundle:Role r WHERE r.role <> 'ROLE_ADMIN' AND r.role <> 'ROLE_SERVICE'");
+        $roles = $query->getResult();
+        
         return $this->render('DashboardCommonBundle:Default:Search/search.html.twig', array(
                                                                                      "products" => $regularProducts,
                                                                                      "categories" => $categories,
@@ -135,7 +138,8 @@ class SearchController extends Controller{
                                                                                      "settings" => $settings,
                                                                                      "page" => $page,
                                                                                      "view" => $view,
-                                                                                     "user" => $user));
+                                                                                     "user" => $user,
+                                                                                     "roles" => $roles));
     }
     
     private function createSearchSql($request, $category)
@@ -200,10 +204,14 @@ class SearchController extends Controller{
             }
         }
         
-        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.info pi" . $joinInstructions . " LEFT JOIN p.user pu WHERE pu.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0 AND p.isActive = 1";
+        $sql = "SELECT p FROM DashboardCommonBundle:Product p LEFT JOIN p.info pi" . $joinInstructions . " LEFT JOIN p.user pu LEFT JOIN pu.roles pur WHERE pu.isActive = 1 AND p.isConfirm = 1 AND p.isBlocked = 0 AND p.isActive = 1";
         
         if($this->get('session')->has('sessionCity')){
             $sql .= " AND p.city = " . $this->get('session')->get('sessionCity');
+        }
+        
+        if($request->request->get('userFilter') && $request->request->get('userFilter') != "-1"){
+            $sql .= " AND pur.id = " . intval($request->request->get('userFilter'));
         }
         
         if($request->request->get('categoryFilter')){

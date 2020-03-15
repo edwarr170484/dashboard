@@ -76,5 +76,17 @@ class RegionController extends Controller
         
         return new Response(0);
     }
+    
+    /**
+     * @Route("/region/getcodes/{data}", name="region_getcodes")
+     */
+    public function getCodesAction($data, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $query = $manager->createQuery("SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE '" . $data . "%'");
+        $codes = $query->getResult();
+            
+        return $this->render('DashboardCommonBundle:Region:codes.html.twig', array("codes" => $codes));
+    }
 }
 

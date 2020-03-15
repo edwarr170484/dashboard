@@ -21,10 +21,10 @@
                                 {% if filter.type.name == 'color' and filter.step == '2'%}
                                 <tr>
                                     <td>
-                                        <div class="advertFiltersItemName">{{ filter.name }}</div>
+                                        <div class="advertFiltersItemName"><span class="addAdvertParameterLabel">{{ filter.name }} <sup> *</sup></span></div>
                                     </td>
                                     <td>
-                                        <div class="advertFiltersItemName">{{ filter.name }}</div>
+                                        <div class="advertFiltersItemName"><span class="addAdvertParameterLabel">{{ filter.name }} <sup> *</sup></span></div>
                                         <div class="advertFiltersItemValue">
                                             <ul class="list-unstyled list-inline color">
                                                 {% if filter.values | length > 0 %}

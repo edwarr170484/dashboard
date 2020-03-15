@@ -109,8 +109,6 @@
 			cover.click(function(event){
 				event.stopPropagation();
 				
-				
-				
 				var selectOptions = $(this).find(".select-options"); 
 				if(selectOptions.hasClass("opened")){
                                     $(".select-options").removeClass("opened");
@@ -191,6 +189,8 @@
                                                     $(this).attr("selected","selected");
                                                 } 
                                             });
+                                            
+                                            selectElement.val(value);
                                             
                                             if(isWrite){
                                                 cover.find(".select-value").html("<div class='select-value-inner'><input name='select-writable' value='" + $(this).html() + "' autocomplete='off'></div>");

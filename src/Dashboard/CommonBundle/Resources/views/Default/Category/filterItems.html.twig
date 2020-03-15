@@ -1,6 +1,6 @@
 {% if category %}
         {% if type == 'mark' %}
-            <select name="categoryFilter[mark]" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel{{ baseCategory.id }}'), 'model')">
+            <select name="categoryFilter[mark]" class="custom-select" data-write="1" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel{{ baseCategory.id }}'), 'model')">
                 <option value="0"></option>
         {% endif %}
         {% if type == 'model' %}
@@ -11,9 +11,7 @@
                 <option value="0"></option>
             {% endif %}
             {% for child in category.children %}
-                <option value="{{ child.id}}">
-                    {{ child.title }}
-                </option>
+                <option value="{{ child.id}}" >{{ child.title }}</option>
             {% endfor %}
         {% endif %}
         </select>

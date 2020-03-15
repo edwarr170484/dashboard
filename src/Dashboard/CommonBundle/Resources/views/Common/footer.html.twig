@@ -133,7 +133,7 @@
                             <h4 class="modal-title" id="regionModalLabel">{% trans %}Пользовательское соглашение{% endtrans %}</h4>
                         </div>
                         <div class="modal-body">
-                            {{ textblock.userAgreement | raw}}
+                            {{ settings.textblockUserAgreement | raw}}
                         </div>
                         <div class="modal-footer">
                             <div class="col-sm-4"></div>
@@ -156,7 +156,7 @@
                             {% endif %}
                             <div class="searchBlockForm">
                                 <form action="{{ path('search') }}" method="post" id="modalSearchForm">
-                                    <input name="searchText" type="text" placeholder="{% trans %}Поиск{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} onkeyup="getModalSearchResults($(this))"/>
+                                    <input name="searchText" type="text" placeholder="{% trans %}Поиск{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} onkeyup="getModalSearchResults($(this))" autocomplete="off" />
                                     <button type="submit" class="submit">{% trans %}Все результаты{% endtrans %}</button>
                                 </form>
                             </div>

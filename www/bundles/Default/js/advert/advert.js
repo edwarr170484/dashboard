@@ -121,25 +121,27 @@ function addAdvert(locale_code, isDraft){
     
     var draftParameter = (isDraft) ? '/' + isDraft : '';
     
-    if(!error){
-        $.ajax({
+    $.ajax({
             url: '/account/createadvert' + draftParameter,
             type:'post',
-            data: $(".advertFiltersItems input[type='text'], .advertFiltersItems input[type='checkbox']:checked, .advertFiltersItems input[type='hidden']"),
-            dataType: 'html',
+            data: $(".advertFiltersItems input[type='text'], .advertFiltersItems input[type='checkbox']:checked, .advertFiltersItems input[type='hidden'], .advertFiltersItems select"),
+            dataType: 'json',
             beforeSend: function(){$(".modal-body-cover").show();},
-            success: function(html)
+            success: function(data)
             {
-                $(".modal-body-cover").hide();
-                $("#addAdvertStep").html(html);
-                $("html").animate({scrollTop:0});
+                if(data.redirect){
+                    window.location.href = data.href;
+                }else{
+                    $(".modal-body-cover").hide();
+                    $("#addAdvertStep").html(data.view);
+                    $("html").animate({scrollTop:0});
+                }
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 $(".modal-body-cover").hide();
                 err=xhr.responseText;
             }
-        });
-    }
+    });
 }
 
 function getBoardTypesByYear(year, locale_code, text){
@@ -407,18 +409,6 @@ function getCitiesByValue(element, locale_code){
             err=xhr.responseText;
         }
     });
-}
-
-function selectCityCode(code, element){
-    element.parent().parent().find("input").val(code);
-    element.parent().removeClass('active');
-    element.parent().html('');
-}
-
-function selectCity(city, element){
-    element.parent().parent().find("input").val(city);
-    element.parent().removeClass('active');
-    element.parent().html('');
 }
 
 function selectServicePack(servicePackId, price, text){

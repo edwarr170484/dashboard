@@ -169,9 +169,24 @@
                             {% for item in topMenu.items %}
                                 {% if not item.parent %}
                                     <li class="submenu">
+                                        {% set active = '' %}
                                         {% if item.category or item.link or item.page %}
                                             {% if item.category %}
                                                 {% set link = path('category',{'categoryId' : item.category.id, 'categoryName' : item.category.name}) %}
+                                                {% if routeParameters and routeParameters.categoryId is defined %}
+                                                    {% if item.category.isUseChildrensLikeType %}
+                                                        {% if item.category.children %}
+                                                            {% for child in item.category.children %}
+                                                                {% if child.id == routeParameters.categoryId %}
+                                                                    {% set active = 'active' %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if item.category.id == routeParameters.categoryId %}
+                                                        {% set active = 'active' %}
+                                                    {% endif %}
+                                                {% endif %}
                                             {% elseif item.page %}
                                                 {% if item.page.isUserpage %}
                                                     {% set link = path('pages',{'route' : item.page.route}) %}
@@ -180,11 +195,17 @@
                                                 {% endif %}
                                                 {% set link = path('pages',{'route' : item.page.route}) %}
                                             {% elseif item.link %}
+                                                {% if route == 'dealers' or route == 'services' %}
+                                                    {% set active = 'active' %}
+                                                {% endif %}
                                                 {% set link = item.link %}
                                             {% endif %}
-                                            <a href="{{ link }}">{{ item.title }}<div class="shadowBlock"></div></a>
+                                            <a href="{{ link }}" class="{{ active }}">{{ item.title }}<div class="shadowBlock"></div><div class="bottomBorder"></div></a>
                                         {% else %}
-                                            <a href="javascript:void(0)">{{ item.title }}<div class="shadowBlock"></div></a>
+                                            {% if route == 'dealers' or route == 'services' %}
+                                                {% set active = 'active' %}
+                                            {% endif %}
+                                            <a href="javascript:void(0)" class="{{ active }}">{{ item.title }}<div class="shadowBlock"></div><div class="bottomBorder"></div></a>
                                         {% endif %}
                                         <div class="hover-border"></div>
                                         {% if item.children | length > 0 %}

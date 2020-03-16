@@ -180,8 +180,7 @@ function showHideAllCategories(element){
     var text = element.html();
     element.html(newText);
     element.data('text', text);
-    element.parent().parent().parent().find(".shortCategoryList").toggleClass("hide");
-    element.parent().parent().parent().find(".fullCategoryList").toggleClass("view");
+    element.parent().parent().parent().find(".categoryItem.hideCategory").toggleClass("showCategory");
 }
 
 function showHideAllServicesCategories(element){
@@ -200,10 +199,23 @@ function selectCategoryItems(element, maxItems){
        var title = $(this).data('title').toString();
        var part = title.substr(0, search.length);
        if(part !== search){
-           $(this).addClass('hide');
+           if($(this).hasClass("showCategory")){
+               $(this).removeClass("showCategory");
+           }else{
+               $(this).addClass('hideCategory');
+           }
        }else{
            itemsNum++;
-           $(this).removeClass('hide');
+           if($(this).hasClass("visible")){
+               $(this).removeClass("hideCategory");
+               $(this).removeClass("showCategory");
+           }else{
+               if(search.length > 0){
+                   $(this).addClass('showCategory');
+               }else{
+                   $(this).removeClass('showCategory');
+               }
+           }
        }
     });
     
@@ -448,6 +460,9 @@ function addAutoserviceRate(salonId, rateId, ratePrice, element, titleText, butt
 
 function toggleSearchModal(event){
     event.stopPropagation();
+    $("input[name='searchText'").val(null);
+    $(".modalSearchResult").remove();
+    $("#modalSearchForm button.submit").removeClass("active");
     if($("#desktopSearchModal").hasClass("active")){
         $('html, body').css({overflow: 'auto',height: 'auto'});
     }else{

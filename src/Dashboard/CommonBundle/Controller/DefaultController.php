@@ -75,7 +75,9 @@ class DefaultController extends Controller
                                                                                     "topMenu" => $topMenu,
                                                                                     "toggleMenu" => $toggleMenu,
                                                                                     "isSettingsError" => $isSettingsError,
-                                                                                    "uri" => $uri));
+                                                                                    "uri" => $uri,
+                                                                                    "routeParameters" => $request->attributes->get("_route_params"),
+                                                                                    "route" => $request->attributes->get("_route")));
     }
     
     public function getFooterAction($session, Request $request)

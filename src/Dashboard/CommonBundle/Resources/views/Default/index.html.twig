@@ -140,28 +140,26 @@
                             <div class="mainPageAutoList">
                                 {% if settings.mainPageDefaultCategory.children | length > settings.categoryPanelItemsNumber %}
                                     <ul class="list-unstyled list-inline shortCategoryList">
-                                        {% for child in settings.mainPageDefaultCategory.children | slice(0, settings.categoryPanelItemsNumber )%}
-                                            {% if child.isActive %}
-                                                <li>
-                                                    <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title }}</a>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </ul>
-                                    <ul class="list-unstyled list-inline fullCategoryList">
+                                        {% set i = 0 %}
                                         {% for child in settings.mainPageDefaultCategory.children %}
+                                            {% if i >= settings.categoryPanelItemsNumber %}
+                                                {% set hide = 'hideCategory' %}
+                                            {% else %}
+                                                {% set hide = '' %}
+                                            {% endif %}
                                             {% if child.isActive %}
-                                                <li>
+                                                <li class="categoryItem {{ hide }}">
                                                     <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title }}</a>
                                                 </li>
                                             {% endif %}
+                                            {% set i = i + 1 %}
                                         {% endfor %}
                                     </ul>
                                 {% else %}
                                     <ul class="list-unstyled list-inline">
                                         {% for child in settings.mainPageDefaultCategory.children %}
                                             {% if child.isActive %}
-                                                <li>
+                                                <li class="categoryItem">
                                                     <a href="{{ path('category',{'categoryId' : child.id, 'categoryName' : child.name}) }}">{{ child.title }}</a>
                                                 </li>
                                             {% endif %}

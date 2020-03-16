@@ -61,54 +61,45 @@
                                                         <input type="text" placeholder="{% trans %}Выберите марку{% endtrans %}" onkeyup="selectCategoryItems($(this), {{ settings.categoryPanelItemsNumber}})"/>
                                                     </div>
                                                     {% if category.children | length > settings.categoryPanelItemsNumber %}
-                                                    <div class="mainPageAutoList">
-                                                        <ul class="list-unstyled list-inline justLinks shortCategoryList">
-                                                            {% for child in category.children | slice(0, settings.categoryPanelItemsNumber )%}
-                                                                {% if category.formType == 1 %}
-                                                                    <li class="categoryItem" data-title="{{ child.title | lower }}">
-                                                                        <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" >
-                                                                            {{ child.title }}
-                                                                        </a>
-                                                                    </li>
-                                                                {% else %}
-                                                                    <li class="categoryItem" data-title="{{ child.title | lower }}">
-                                                                        <a href="{{ path('addCategoryAdvert', {'categoryName' : child.name }) }}">
-                                                                            {{ child.title }}
-                                                                        </a>
-                                                                    </li>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        </ul>
-                                                        <ul class="list-unstyled list-inline justLinks fullCategoryList">
-                                                            {% for child in category.children %}
-                                                                {% if category.formType == 1 %}
-                                                                    <li class="categoryItem" data-title="{{ child.title | lower }}">
-                                                                        <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" >
-                                                                            {{ child.title }}
-                                                                        </a>
-                                                                    </li>
-                                                                {% else %}
-                                                                    <li class="categoryItem" data-title="{{ child.title | lower }}">
-                                                                        <a href="{{ path('addCategoryAdvert', {'categoryName' : child.name }) }}">
-                                                                            {{ child.title }}
-                                                                        </a>
-                                                                    </li>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        </ul>
-                                                    </div>
+                                                        <div class="mainPageAutoList">
+                                                            <ul class="list-unstyled list-inline justLinks shortCategoryList">
+                                                                {% set i = 0 %}
+                                                                {% for child in category.children %}
+                                                                    {% if i >= settings.categoryPanelItemsNumber %}
+                                                                        {% set hide = 'hideCategory' %}
+                                                                    {% else %}
+                                                                        {% set hide = 'visible' %}
+                                                                    {% endif %}
+                                                                    {% if category.formType == 1 %}
+                                                                        <li class="categoryItem {{ hide }}" data-title="{{ child.title | lower }}">
+                                                                            <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')" >
+                                                                                {{ child.title }}
+                                                                            </a>
+                                                                        </li>
+                                                                    {% else %}
+                                                                        <li class="categoryItem {{ hide }}" data-title="{{ child.title | lower }}">
+                                                                            <a href="{{ path('addCategoryAdvert', {'categoryName' : child.name }) }}">
+                                                                                {{ child.title }}
+                                                                            </a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                    {% set i = i + 1 %}
+                                                                {% endfor %}
+                                                            </ul>
+                                                            
+                                                        </div>
                                                     {% else %}
                                                         <div class="mainPageAutoList">
                                                             <ul class="list-unstyled list-inline justLinks">
                                                                 {% for child in category.children %}
                                                                     {% if category.formType == 1 %}
-                                                                        <li>
+                                                                        <li class="categoryItem">
                                                                             <a href="javascript:void(0)" onclick="getStep11({{ child.id }}, '{{ locale.code }}')">
                                                                                 {{ child.title}}
                                                                             </a>
                                                                         </li>
                                                                     {% else %}
-                                                                        <li>
+                                                                        <li class="categoryItem">
                                                                             <a href="{{ path('addCategoryAdvert', {'categoryName' : child.name }) }}">
                                                                                 {{ child.title}}
                                                                             </a>

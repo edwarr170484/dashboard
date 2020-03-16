@@ -143,6 +143,8 @@
                             if(isClearChange){
                                 selectElement.trigger('change');
                             }
+                            $(this).parent().slideUp();
+                            $(this).parent().find(".select-option").removeClass('hide');
                         });
 			selectOptions.find(".select-option").each(function(){
 				$(this).click(function(e){

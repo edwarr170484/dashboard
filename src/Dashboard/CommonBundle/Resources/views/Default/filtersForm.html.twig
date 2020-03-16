@@ -100,7 +100,7 @@
                                             </select>
                                         </div>
                                         <div class="col-lg-3 col-md-3" id="categoryModel{{ category.id }}">
-                                            <select name="categoryFilter[model][]" class="custom-select" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
+                                            <select name="categoryFilter[model][]" class="custom-select" data-write="1" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
                                                 {% if app.request.get('category') and app.request.get('category') == category.id %}
                                                     {% for child in categoryModels %}
                                                         {% set selected = '' %}

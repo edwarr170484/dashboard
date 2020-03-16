@@ -2,15 +2,27 @@
     <div class="mainPageFiltersTabs">
         <ul class="nav nav-tabs" role="tablist">
             {% if this.id %}
-                {% for category in categories %}
-                    <li role="presentation" {% if category.id == this.id %}class="active"{% endif %}>
-                        <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
-                            {{ category.image |raw }}
-                            <span>{{ category.title}}</span>
-                            <div class="shadowBlock"></div>
-                        </a>
-                    </li>
-                {% endfor %}
+                {% if this.parent %}
+                    {% for category in categories %}
+                        <li role="presentation" {% if category.id == this.parent.id %}class="active"{% endif %}>
+                            <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
+                                {{ category.image |raw }}
+                                <span>{{ category.title}}</span>
+                                <div class="shadowBlock"></div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    {% for category in categories %}
+                        <li role="presentation" {% if category.id == this.id %}class="active"{% endif %}>
+                            <a href="#categoryFilters{{ category.id }}" aria-controls="home" role="tab" data-toggle="tab">
+                                {{ category.image |raw }}
+                                <span>{{ category.title}}</span>
+                                <div class="shadowBlock"></div>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
             {% else %}
                 {% set i = 1 %}
                 {% for category in categories %}
@@ -28,7 +40,11 @@
         <div class="tab-content">
             {% set i = 1 %}
             {% for category in categories %}
-                    <div role="tabpanel" class="tab-pane {% if category.id == this.id %}active{% endif %}" id="categoryFilters{{ category.id }}">
+                    {% if this.parent %}
+                        <div role="tabpanel" class="tab-pane {% if category.id == this.parent.id %}active{% endif %}" id="categoryFilters{{ category.id }}">
+                    {% else %}
+                        <div role="tabpanel" class="tab-pane {% if category.id == this.id %}active{% endif %}" id="categoryFilters{{ category.id }}">
+                    {% endif %}
                     <form action="{{ path('category', {'categoryId' : category.id, 'categoryName' : category.name}) }}" method="POST">
                     <input name="category" type="hidden" value="{{ category.id }}" />
                     <div class="row">
@@ -111,7 +127,7 @@
                                         </select>
                                     </div>
                                     <div class="col-lg-3 col-md-3" id="categoryModel{{ category.id }}">
-                                        <select name="categoryFilter[model][]" class="custom-select" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
+                                        <select name="categoryFilter[model][]" class="custom-select" data-write="1" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
                                             {% if app.request.get('category') and app.request.get('category') == category.id %}
                                                 {% for child in categoryModels %}
                                                     {% set selected = '' %}

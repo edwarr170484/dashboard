@@ -265,7 +265,7 @@ class CategoryController extends Controller
         if($request->request->get('searchText'))
         {
             $sql .= " AND (p.name LIKE '%" . $request->request->get('searchText') . "%'";
-            $sql .= " OR p.description LIKE '%" . $request->request->get('searchText') . "%')";
+            $sql .= " OR pi.description LIKE '%" . $request->request->get('searchText') . "%')";
         }
         
         if($request->request->get('searchNew') && $request->request->get('searchOld')){

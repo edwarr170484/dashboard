@@ -4,7 +4,7 @@
                 <option value="0"></option>
         {% endif %}
         {% if type == 'model' %}
-            <select name="categoryFilter[model][]" class="custom-select" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
+            <select name="categoryFilter[model][]" class="custom-select" data-write="1" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
         {% endif %}
         {% if category.children | length > 0 %}
             {% if type == 'mark' %}

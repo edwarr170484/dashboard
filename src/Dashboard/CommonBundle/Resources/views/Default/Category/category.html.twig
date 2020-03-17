@@ -34,7 +34,7 @@
                         {% for cat in categories %}
                             <li>
                                  <a href="{{ path('category',{'categoryId' : cat.id, 'categoryName' : cat.name}) }}">
-                                    {{ cat.title}}
+                                    {% if cat.hTitle %}{{ cat.hTitle }}{% else %}{{ cat.title }}{% endif %}
                                 </a>
                             </li>
                             {% if i < categories  | length - 1 %}
@@ -52,7 +52,7 @@
 	<div class="row content-row">
 		<div class="col-lg-9 col-md-9 left-column">
 			<div class="content-block-header">
-                            <h1>{{ category.title }}</h1>
+                            <h1>{% if category.hTitle  %}{{ category.hTitle }}{% else %}{{ category.title }}{% endif %}</h1>
                         </div>
                             <div class="mainPageFiltersTabs category-filters" style="padding-top: 0;">
                                 {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'this' : category, 'categories' : baseCategories, 'formFilters' : formFilters, 'productsTotalCount' : productsTotalCount, 'request' : app.request, 'roles' : roles} %}

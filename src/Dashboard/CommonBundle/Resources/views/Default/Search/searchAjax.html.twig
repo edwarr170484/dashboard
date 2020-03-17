@@ -15,7 +15,7 @@
                             <div class="categorySpecialAdvertInner">
                                 <div class="categorySpecialAdvertName">
                                     <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                        {{ product.name }} {% if product.info.generation %}{{ product.info.generation.name }}{% endif %}
+                                        {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
                                     </a>
                                 </div>
                                 <div class="categorySpecialAdvertFeatures">

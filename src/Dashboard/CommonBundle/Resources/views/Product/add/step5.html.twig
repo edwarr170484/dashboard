@@ -46,7 +46,7 @@
                                     {% endif %}
                                     <script>$(".masked-phone").mask("+34 99 999 99 99");</script>
                                 </td>
-                                <td><span class="addAdvertParameterLabel">{% trans %}Индекс{% endtrans %}<sup> *</sup></span></td>
+                                <td><span class="addAdvertParameterLabel">{% trans %}Индекс{% endtrans %}</span></td>
                                 <td>
                                     <div class="addAdvertContextParamenter cityCodeBlock" id="advertCityCodeBlock">
                                         {% if user and user.userinfo.cityCode %}
@@ -119,6 +119,8 @@
                                             <div class="categoryAdvertImages">
                                                 {% if advertImages %}
                                                     <img src="{{ asset('bundles/images/products/' ~ advertImages[0].name) }}" alt="" title="" />
+                                                {% else %}
+                                                    <img src="{{ asset('bundles/images/products/nophoto.png') }}" alt="" title="" />
                                                 {% endif %}
                                             </div>
                                             <div class="categoryAdvertInfo">

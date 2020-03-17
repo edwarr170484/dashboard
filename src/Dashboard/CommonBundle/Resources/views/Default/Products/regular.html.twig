@@ -80,6 +80,8 @@
         <div class="categoryAdvertImages">
             {% if product.fotos | length > 0 %}
                 <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+            {% else %}
+                <img src="{{ asset('bundles/images/products/nophoto.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
             {% endif %}
         </div>
         <div class="categoryAdvertInfo">

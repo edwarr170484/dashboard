@@ -76,7 +76,7 @@
                     <li>/</li>
                     {% if categoriesBread %}
                         {% for cat in categoriesBread %}
-                            <li><a href="{{ path('category',{'categoryId' : cat.id, 'categoryName' : cat.name}) }}">{{ cat.title}}</a></li>
+                            <li><a href="{{ path('category',{'categoryId' : cat.id, 'categoryName' : cat.name}) }}">{% if cat.hTitle %}{{ cat.hTitle }}{% else %}{{ cat.title }}{% endif %}</a></li>
                             <li>/</li>
                         {% endfor %}
                     {% endif %}
@@ -157,6 +157,12 @@
                                 </ul>
                             </div>
                         </div>
+                        {% else %}
+                            <div class="advertMainFoto">
+                                <a href="javascript:void(0)">
+                                    <img src="{{ asset('bundles/images/products/nophoto.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                </a>
+                            </div>
                         {% endif %}                
                     </div>
                     <div class="row">

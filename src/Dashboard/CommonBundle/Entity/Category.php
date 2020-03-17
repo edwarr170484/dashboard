@@ -41,6 +41,11 @@ class Category
     private $title;
     
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, options={"default":null})
+     */
+    private $hTitle;
+    
+    /**
      * @ORM\Column(type="text", nullable=true, options={"default":null})
      */
     private $description;
@@ -1016,5 +1021,28 @@ class Category
     public function getIsBreakRedirect()
     {
         return $this->isBreakRedirect;
+    }
+
+    /**
+     * Set hTitle
+     *
+     * @param string $hTitle
+     * @return Category
+     */
+    public function setHTitle($hTitle)
+    {
+        $this->hTitle = $hTitle;
+    
+        return $this;
+    }
+
+    /**
+     * Get hTitle
+     *
+     * @return string 
+     */
+    public function getHTitle()
+    {
+        return $this->hTitle;
     }
 }

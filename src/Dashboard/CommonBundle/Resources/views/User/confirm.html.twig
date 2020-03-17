@@ -27,7 +27,7 @@
                             {{ info }}
                         </div>
                         {% if not error %}
-                            <div class="resultEmail">{{ email }}</div>
+                            <div class="resultEmail">{% if user %}{{ user.email }}{% endif %}</div>
                             <div class="resultNavigation"><a href="{{path('login')}}">Войдите</a>, используя свои данные.</div>
                         {% endif %}
                     </div>

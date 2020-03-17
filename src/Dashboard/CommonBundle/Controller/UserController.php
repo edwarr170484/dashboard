@@ -184,6 +184,7 @@ class UserController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $error = 0;
+        $user = 0;
         
         if($key){
             $confirmation = $manager->getRepository("DashboardCommonBundle:Register")->findOneBy(array("id" => $id, "confirmKey" => $key));
@@ -193,56 +194,40 @@ class UserController extends Controller
                 $diff=$date->diff($confirmation->getDate()); 
                 $user = $manager->getRepository("DashboardCommonBundle:User")->find($confirmation->getUserId());
 
-                if((($diff->d * 24) + $diff->h) < 48){
-                    $user->setIsConfirm(1);
-                    $manager->persist($user);
+                $user->setIsConfirm(1);
+                $manager->persist($user);
                     
-                    $info = $this->get('translator')->trans('Вы успешно подтвердили регистрацию. Теперь вы можете войти в систему.');
-                    $manager->remove($confirmation);
-                    $manager->flush();
+                $info = $this->get('translator')->trans('Вы успешно подтвердили регистрацию. Теперь вы можете войти в систему.');
+                $manager->remove($confirmation);
+                $manager->flush();
                     
-                    if($user->getRoles()[0]->getRole() == 'ROLE_DEALER'){
-                        $dealerPhone = new DealerPhone();
-                        $dealerPhone->setDealerInfo($user->getDealerinfo());
-                        $dealerPhone->setPhone($user->getUserinfo()->getPhone());
-                        $manager->persist($dealerPhone);
-                    }
+                if($user->getRoles()[0]->getRole() == 'ROLE_DEALER'){
+                    $dealerPhone = new DealerPhone();
+                    $dealerPhone->setDealerInfo($user->getDealerinfo());
+                    $dealerPhone->setPhone($user->getUserinfo()->getPhone());
+                    $manager->persist($dealerPhone);
+                }
                     
-                    if($user->getRoles()[0]->getRole() == 'ROLE_SERVICE'){
-                        $dealerPhone = new DealerPhone();
-                        $dealerPhone->setDealerInfo($user->getDealerinfo());
-                        $dealerPhone->setPhone($user->getUserinfo()->getPhone());
+                if($user->getRoles()[0]->getRole() == 'ROLE_SERVICE'){
+                    $dealerPhone = new DealerPhone();
+                    $dealerPhone->setDealerInfo($user->getDealerinfo());
+                    $dealerPhone->setPhone($user->getUserinfo()->getPhone());
 
-                        //create new service point
-                        $dealerSalon = new DealerSalon();
-                        $dealerSalon->setDealerInfo($user->getDealerinfo());
-                        $dealerSalon->setName($user->getDealerinfo()->getCompany());
+                    //create new service point
+                    $dealerSalon = new DealerSalon();
+                    $dealerSalon->setDealerInfo($user->getDealerinfo());
+                    $dealerSalon->setName($user->getDealerinfo()->getCompany());
 
-                        $dealerSalonPhone = new DealerSalonPhone();
-                        $dealerSalonPhone->setDealerSalon($dealerSalon);
-                        $dealerSalonPhone->setPhone($user->getUserinfo()->getPhone());
+                    $dealerSalonPhone = new DealerSalonPhone();
+                    $dealerSalonPhone->setDealerSalon($dealerSalon);
+                    $dealerSalonPhone->setPhone($user->getUserinfo()->getPhone());
                         
-                        $manager->persist($dealerPhone);
-                        $manager->persist($dealerSalon);
-                        $manager->persist($dealerSalonPhone);
-                    }
-                    
-                    $manager->flush();
+                    $manager->persist($dealerPhone);
+                    $manager->persist($dealerSalon);
+                    $manager->persist($dealerSalonPhone);
                 }
-                else{
-                    if($user->getUserinfo()){
-                        $manager->remove($user->getUserinfo());
-                    }
-                    if($user->getDealerinfo()){
-                        $manager->remove($user->getDealerinfo());
-                    }
-                    $manager->remove($user);
-                    $manager->remove($confirmation);
-                    $manager->flush();
                     
-                    $error = 1;
-                    $info = $this->get('translator')->trans('Ключ подтверждения просрочен. Вам необходимо пройти процедуру регистрации еще раз.');
-                }
+                $manager->flush();
             }
             else{
                 return $this->redirectToRoute("login");
@@ -253,7 +238,7 @@ class UserController extends Controller
             $info = $this->get('translator')->trans('Ключ подтверждения указан невено. Возможно он был просрочен либо не существует. Попробуйте пройти процедуру регистрации еще раз.');
         }
         
-        return $this->render('DashboardCommonBundle:User:confirm.html.twig', array('info' => $info,'error' => $error));
+        return $this->render('DashboardCommonBundle:User:confirm.html.twig', array('info' => $info, 'error' => $error, "user" => $user));
     }
     
     /**

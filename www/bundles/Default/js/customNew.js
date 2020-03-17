@@ -81,6 +81,14 @@ $(document).ready(function(){
         $(".account-menu-list").slideToggle();
     });
     
+    $("#dealerinfo_workinfo_workStart").mask("99:99");
+    $("#dealerinfo_workinfo_workStop").mask("99:99");
+    $("#dealerinfo_workinfo_breakStart").mask("99:99");
+    $("#dealerinfo_workinfo_breakStop").mask("99:99");
+    $("#dealersalon_workinfo_workStart").mask("99:99");
+    $("#dealersalon_workinfo_workStop").mask("99:99");
+    $("#dealersalon_workinfo_breakStart").mask("99:99");
+    $("#dealersalon_workinfo_breakStop").mask("99:99");
 });
 
 function clearServiceAuto(element, event){

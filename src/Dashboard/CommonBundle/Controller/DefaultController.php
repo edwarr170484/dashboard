@@ -57,7 +57,7 @@ class DefaultController extends Controller
         $isSettingsError = 0;
         
         if($user){
-            if(!$user->getUserinfo()->getCity() || !$user->getUserinfo()->getCityCode()){
+            if(!$user->getUserinfo()->getCity()){
                 $isSettingsError = 1;
             }
         }

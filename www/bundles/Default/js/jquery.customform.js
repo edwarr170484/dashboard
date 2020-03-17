@@ -215,9 +215,9 @@
                                         selectElement.trigger("change");
                                         selectElement.parent().find("input[name='select-writable']").keyup(function(){
                                                 var optionsList = $(this).parent().parent().next(".select-options").find(".select-option");
-                                                var controlVal = $(this).val();
+                                                var controlVal = $(this).val().toLowerCase();
                                                 optionsList.each(function(){
-                                                    var val = $(this).html();
+                                                    var val = $(this).html().toLowerCase();
                                                     if(val.includes(controlVal)){
                                                         $(this).removeClass("hide");
                                                     }else{
@@ -238,9 +238,9 @@
                         
                         $("input[name='select-writable']").keyup(function(){
                             var optionsList = $(this).parent().parent().next(".select-options").find(".select-option");
-                            var controlVal = $(this).val();
+                            var controlVal = $(this).val().toLowerCase();
                             optionsList.each(function(){
-                                var val = $(this).html();
+                                var val = $(this).html().toLowerCase();
                                 if(val.includes(controlVal)){
                                     $(this).removeClass("hide");
                                 }else{

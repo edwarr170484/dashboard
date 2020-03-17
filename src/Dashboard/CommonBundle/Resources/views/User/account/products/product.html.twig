@@ -197,44 +197,44 @@
             <div class="accountAdvertInfoProbeg">{{ product.info.probeg }} {% trans %}км{% endtrans %}</div>
         </div>
         {% if product.isConfirm and product.isActive %}
-        <div class="accountAdvertServiceButtons">
-            {% if user.roles[0].services | length > 0 %}
-                {% for service in user.roles[0].services %}
-                    {% if service.prices | length > 0 %}
-                        {% set servicePrice = 0 %}
-                        {% for price in service.prices %}
-                            {% if price.category.id == product.baseCategory.id %}
-                                {% set servicePrice = price.price %}
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {% set servicePrice = service.price %}
-                    {% endif %}
-                    {% set buttonClass = '' %}
-                    {% if selectedServices | length > 0 %}
-                        {% for selectedService in selectedServices %}
-                            {% if selectedService.service == service.id and selectedService.product == product.id %}
-                                {% set buttonClass = 'active' %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    <div class="accountAdvertServiceButton">
-                        <button onclick="toggleProductService({{ product.id }}, {{ service.id }}, {{ servicePrice }}, '{{ locale.code }}', $(this), '{% trans %}Общая сумма{% endtrans %}','{% trans %}Оплатить{% endtrans %}')" class="{{ buttonClass }}">
-                            {{ service.iconGray | raw }}
-                            <span class="buttonServiceName">
-                                <span class="buttonServiceNameTitle">{{ service.title }}</span>
-                                <span class="buttonServiceRule">
-                                    {{ service.days }} {{ service.parameter }}
+            <div class="accountAdvertServiceButtons">
+                {% if user.roles[0].services | length > 0 %}
+                    {% for service in user.roles[0].services %}
+                        {% if service.prices | length > 0 %}
+                            {% set servicePrice = 0 %}
+                            {% for price in service.prices %}
+                                {% if price.category.id == product.baseCategory.id %}
+                                    {% set servicePrice = price.price %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% set servicePrice = service.price %}
+                        {% endif %}
+                        {% set buttonClass = '' %}
+                        {% if selectedServices | length > 0 %}
+                            {% for selectedService in selectedServices %}
+                                {% if selectedService.service == service.id and selectedService.product == product.id %}
+                                    {% set buttonClass = 'active' %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <div class="accountAdvertServiceButton">
+                            <button onclick="toggleProductService({{ product.id }}, {{ service.id }}, {{ servicePrice }}, '{{ locale.code }}', $(this), '{% trans %}Общая сумма{% endtrans %}','{% trans %}Оплатить{% endtrans %}')" class="{{ buttonClass }}">
+                                {{ service.iconGray | raw }}
+                                <span class="buttonServiceName">
+                                    <span class="buttonServiceNameTitle">{{ service.title }}</span>
+                                    <span class="buttonServiceRule">
+                                        {{ service.days }} {{ service.parameter }}
+                                    </span>
                                 </span>
-                            </span>
-                            <span class="buttonServicePrice">
-                                {{ servicePrice }} {{ locale.currency.label | raw }}
-                            </span>
-                        </button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+                                <span class="buttonServicePrice">
+                                    {{ servicePrice }} {{ locale.currency.label | raw }}
+                                </span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
     {% endif %}
     </div>
 </div>

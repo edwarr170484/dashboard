@@ -415,4 +415,27 @@ class Role implements RoleInterface
     {
         return $this->invoiceText;
     }
+
+    /**
+     * Set filterTitle
+     *
+     * @param string $filterTitle
+     * @return Role
+     */
+    public function setFilterTitle($filterTitle)
+    {
+        $this->filterTitle = $filterTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get filterTitle
+     *
+     * @return string 
+     */
+    public function getFilterTitle()
+    {
+        return $this->filterTitle;
+    }
 }

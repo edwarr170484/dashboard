@@ -31,6 +31,7 @@ class CategoryType extends AbstractType
     {    
         $builder
             ->add('title', TextType::class, array('required' => true,'label' => 'Название категории', 'attr' => array('class' => 'form-control')))
+            ->add('hTitle', TextType::class, array('required' => false,'label' => 'Название категории h1', 'attr' => array('class' => 'form-control')))
             ->add('name', TextType::class, array('required' => true,'label' => 'Транслит(SEO)', 'attr' => array('class' => 'form-control')))
             ->add('description', TextareaType::class, array('required' => false, 'label' => 'Описание', 'attr' => array('class' => 'form-control tinyeditor')))
             ->add('isShowFilters', CheckboxType::class, array('required' => false, 'label' => 'Показывать фильтры', 'attr' => array('class' => 'form-control')))

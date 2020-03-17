@@ -120,7 +120,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane fade active in" id="companySettings" role="tabpanel">
-                        {{ form_start(formDealer, {'method':'POST', 'multipart':true,'attr': {'class': 'form-horizontal userSettingsForm'}}) }}
+                        {{ form_start(formDealer, {'method':'POST', 'multipart':true,'attr': {'id' : 'dealerinfo','class': 'form-horizontal userSettingsForm'}}) }}
                         <div class="accountBlockHeader subheader">
                             <div class="account-block-header"><h1><b>{% trans %}Данные компании{% endtrans %}</b></h1></div>
                         </div>
@@ -155,7 +155,7 @@
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: <sup>*</sup></div>
+                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}:</div>
                                     <div class="formParameterField cityCodeBlock">
                                         {{ form_widget(formDealer.cityCode,{'id' : 'dealerCityCode'})}}
                                         <div class="codesListBlock"></div>
@@ -246,8 +246,8 @@
                             <div class="formParemetersItem" style="padding-bottom: 3rem;">
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{{ form_label(formDealer.logotypeNew) }}:</div>
-                                    <div class="formParameterField dealerLogoField">
-                                        <a class="change-avatar logotype">
+                                    <div class="formParameterField dealerLogoField dealerLogotype">
+                                        <a class="change-avatar logotype" onclick='$(this).parent().find(".change-avatar-input").trigger("click");'>
                                             <svg width="126" height="126" viewBox="0 0 126 126" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <rect x="0.5" y="0.5" width="125" height="125" rx="4.5" stroke="#DFE1E5"/>
                                                 <rect x="3.5" y="3.5" width="119" height="119" rx="4.5" stroke="#F5AA01" stroke-dasharray="12 6"/>
@@ -266,6 +266,41 @@
                                         {% endif %}
                                         {{ form_widget(formDealer.logotypeNew) }}
                                         {{ form_widget(formDealer.logotype) }}
+                                        <script>
+                                            $("#dealerinfo_logotypeNew").change(function(){
+                                                var fd = new FormData;
+                                                $("#dealerinfo").find("input[type='text']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#dealerinfo").find("input[type='email']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#dealerinfo").find("select").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#dealerinfo").find("input[type='hidden']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#dealerinfo").find("textarea").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#dealerinfo").find("input[type='file']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id'))[0].files[0]);
+                                                });
+                                                //fd.append('dealerinfo[logotypeNew]', $('#dealerinfo_logotypeNew')[0].files[0]);
+                                                
+                                                $.ajax({
+                                                    url:'/account/settings',
+                                                    data: fd,
+                                                    processData: false,
+                                                    contentType: false,
+                                                    method: 'post',
+                                                    success : function(html){
+                                                        $('.dealerLogotype').html($(html).find('.dealerLogotype').html());
+                                                    }
+                                                });
+                                            });
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -506,13 +541,13 @@
                         <div class="accountBlockHeader subheader">
                             <div class="account-block-header"><h1><b>{% trans %}Контакты{% endtrans %}</b></h1></div></div>
                         <div class="accountSettingsFormBlock">
-                            {{ form_start(formMain, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal userSettingsForm'}}) }}
+                            {{ form_start(formMain, {'method':'POST','multipart':true,'attr': {'id' : 'userMain','class': 'form-horizontal userSettingsForm'}}) }}
                             <div class="formParemetersItem">
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Аватар{% endtrans %}:</div>
-                                    <div class="formParameterField dealerLogoField">
+                                    <div class="formParameterField dealerLogoField dealerUserLogotype">
                                         {% if avatar %}
-                                            <img src="{{ asset('bundles/images/users/avatars/') }}{{avatar}}" alt="" title="" />
+                                            <img src="{{ asset('bundles/images/users/avatars/' ~ avatar) }}" alt="" title="" />
                                         {% else %}
                                             <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <circle cx="32" cy="32" r="32" fill="#F5AA01"/>
@@ -522,7 +557,39 @@
                                         {% endif %}
                                         {{ form_widget(formMain.userinfo.avatarNew) }}
                                         {{ form_widget(formMain.userinfo.avatar) }}
-                                        <a class="change-avatar">{% trans %}изменить{% endtrans %}</a>
+                                        <a class="change-avatar" onclick='$(this).parent().find(".change-avatar-input").trigger("click");'>{% trans %}изменить{% endtrans %}</a>
+                                        <script>
+                                            $("#userMain_userinfo_avatarNew").change(function(){
+                                                var fd = new FormData;
+                                                $("#userMain").find("input[type='text']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#userMain").find("input[type='email']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#userMain").find("select").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#userMain").find("input[type='hidden']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#userMain").find("input[type='file']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id'))[0].files[0]);
+                                                });
+                                                //fd.append('dealerinfo[logotypeNew]', $('#dealerinfo_logotypeNew')[0].files[0]);
+                                                
+                                                $.ajax({
+                                                    url:'/account/settings',
+                                                    data: fd,
+                                                    processData: false,
+                                                    contentType: false,
+                                                    method: 'post',
+                                                    success : function(html){
+                                                        $('.dealerUserLogotype').html($(html).find('.dealerUserLogotype').html());
+                                                    }
+                                                });
+                                            });
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -556,7 +623,7 @@
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: <sup>*</sup></div>
+                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}:</div>
                                     <div class="formParameterField cityCodeBlock">
                                         {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
                                         <div class="codesListBlock"></div>

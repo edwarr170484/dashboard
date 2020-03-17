@@ -74,32 +74,53 @@
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.city) }} <sup>*</sup></div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(registerForm.dealerinfo.city) }}
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.cityCode) }}</div>
+                                    <div class="formParameterField" id="cityCodeField">
+                                        {{ form_widget(registerForm.dealerinfo.cityCode, {'id' : 'dealerCityCode'}) }}
                                     </div>
                                 </div>
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.cityCode) }} <sup>*</sup></div>
-                                    <div class="formParameterField" id="cityCodeField">
-                                        {{ form_widget(registerForm.dealerinfo.cityCode) }}
+                                    <div class="formParameterLabel">{{ form_label(registerForm.dealerinfo.city) }} <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(registerForm.dealerinfo.city, {'id' : 'dealerCity'}) }}
                                     </div>
                                 </div>
                                 <script>
-                                    $('#dealerRegister_dealerinfo_city').change(function() {
-                                        var $form = $('.dealerRegisterForm');
-                                        var data = {};
-                                        data[$('#dealerRegister_dealerinfo_city').attr('name')] = $('#dealerRegister_dealerinfo_city').val();
-
-                                        $.ajax({
-                                            url : $form.attr('action'),
-                                            type: $form.attr('method'),
-                                            data : data,
-                                            success: function(html) {
-                                                $('#cityCodeField').html($(html).find('#cityCodeField').html());
-                                                $('#dealerRegister_dealerinfo_cityCode').customSelect();
-                                            }
-                                        });
+                                    $("#dealerCityCode").keyup(function(){
+                                        var len = $(this).val().length;
+                                        var element = $(this);
+                                        if(len === 5){
+                                            $.ajax({
+                                                url : '/region/getcity/' + $(this).val(),
+                                                type: 'get',
+                                                dataType: 'json',
+                                                success: function(data) {
+                                                    if(data !== 0){
+                                                        $("#dealerCity").parent().find(".select-option").each(function(){
+                                                            if($(this).data('value') === parseInt(data.city)){
+                                                                $(this).trigger('click');
+                                                                $("#dealerCity").val(data.city);
+                                                                $("#dealerCityCode").val(data.code);
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        }else{
+                                            $.ajax({
+                                                url : '/region/getcodes/' + $(this).val(),
+                                                type: 'get',
+                                                dataType: 'html',
+                                                success: function(data) {
+                                                    element.parent().find('.codesListBlock').html(data).show();
+                                                }
+                                            });
+                                        }
+                                    });
+                                    
+                                    $("#dealerCity").change(function(){
+                                        $("#dealerCityCode").val(null);
+                                        $(".codesListBlock").html('').hide();
                                     });
                                 </script>
                             </div>

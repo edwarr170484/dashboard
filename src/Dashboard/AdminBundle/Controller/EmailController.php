@@ -59,7 +59,7 @@ class EmailController extends Controller
         if($emailForm->isSubmitted() && $emailForm->isValid()){
             
             //create translation file template
-            file_put_contents('../app/Resources/views/emails/' . $email->getTemplate(). '.html.twig', $emailForm['text']->getData());
+            file_put_contents('../app/Resources/views/Emails/' . $email->getTemplate(). '.html.twig', $emailForm['text']->getData());
                         
             $manager->persist($email);
             $manager->flush();

@@ -22,7 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Dashboard\CommonBundle\Form\Type\CityType;
-use Dashboard\CommonBundle\Entity\City;
+use Dashboard\CommonBundle\Entity\Region;
 use Dashboard\CommonBundle\Entity\ProductInfo;
 
 class DefaultController extends Controller
@@ -40,7 +40,7 @@ class DefaultController extends Controller
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
 
         $locales = $manager->getRepository("DashboardCommonBundle:Locale")->findBy(array("isActive" => "1"));
-        $sessionRegion = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionRegion'));
+        $sessionRegion = $manager->getRepository("DashboardCommonBundle:Region")->findOneById($this->get('session')->get('sessionRegion'));
         $sessionCity = $manager->getRepository("DashboardCommonBundle:City")->findOneById($this->get('session')->get('sessionCity'));
         
         if($locale->getIsDefault())
@@ -85,8 +85,6 @@ class DefaultController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
-        $regions = $manager->getRepository("DashboardCommonBundle:Region")->findAll();
-        $cities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
         $textblock = $manager->getRepository("DashboardCommonBundle:Textblock")->find(1);
 
         $query = $manager->createQuery('SELECT p FROM Dashboard\CommonBundle\Entity\Page p WHERE p.isFooterMenu = 1 AND p.locale=' . $locale->getId() . ' ORDER BY p.sortorder');
@@ -98,26 +96,24 @@ class DefaultController extends Controller
             $footerPages = 0;
         }
         
-        if($session->get('sessionCity'))
+        if($session->get('sessionRegion'))
         {
-            $city = $manager->getRepository("DashboardCommonBundle:City")->find($session->get('sessionCity'));
+            $region = $manager->getRepository("DashboardCommonBundle:Region")->find($session->get('sessionRegion'));
         }
         else
-            $city = 0;
+            $region = 0;
         
-        $cityForm = $this->createForm(new CityType($locale, $city), new City());
-        $cityForm->handleRequest($request);
+        $regionForm = $this->createForm(new CityType($locale, $region), new Region());
+        $regionForm->handleRequest($request);
         
         $bottomMenu = $manager->getRepository("DashboardMenuBundle:Menu")->findOneByName("bottomMenu");
         
-        return $this->render('DashboardCommonBundle:Common:footer.html.twig', array("regions" => $regions, 
-                                                                                    "cities" => $cities,
-                                                                                    "settings" => $settings,
+        return $this->render('DashboardCommonBundle:Common:footer.html.twig', array("settings" => $settings,
                                                                                     "footerPages" => $footerPages,
                                                                                     "textblock" => $textblock,
                                                                                     "locale" => $locale,
                                                                                     "bottomMenu" => $bottomMenu,
-                                                                                    "cityForm" => $cityForm->createView()));
+                                                                                    "regionForm" => $regionForm->createView()));
     }
     
     public function getBannersAction($page = null, $category = null, $position = null)
@@ -128,6 +124,8 @@ class DefaultController extends Controller
         {
             if($position == 'centerpage')
                 $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultcenter");
+            if($position == 'bottompage')
+                $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultbottom");
             if($position == 'rightcolumn')
                 $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultright");
             if($position == 'toppage')
@@ -188,6 +186,8 @@ class DefaultController extends Controller
         {
             if($position == 'centerpage')
                 $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultcenter");
+            if($position == 'bottompage')
+                $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultbottom");
             if($position == 'rightcolumn')
                 $banners = $manager->getRepository("DashboardCommonBundle:Banner")->findByPosition("defaultright");
             if($position == 'toppage')
@@ -278,7 +278,7 @@ class DefaultController extends Controller
         if($securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
             $sessionUser = $this->get('security.context')->getToken()->getUser();
         else
-            $sessionUser = 0;
+            $sessionUser = NULL;
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
@@ -394,7 +394,7 @@ class DefaultController extends Controller
             $sameProducts = $allproducts;
         
         $order = new ProductOrder();
-        $orderForm = $this->createForm(new OrderType($manager, $product->getUser()), $order);
+        $orderForm = $this->createForm(new OrderType(), $order);
         
         $orderForm->handleRequest($request);
 
@@ -403,21 +403,21 @@ class DefaultController extends Controller
             if($product->getUser()->getId() != $sessionUser->getId())
             {
                 $order->setDateAdded(new \DateTime("now"));
-                    $order->setUserReceived($product->getUser());
-                    $order->setUserSended($sessionUser);
-                    $order->setProduct($product);
-                    $order->setIsNew(1);
-                    $order->setStatus($settings->getDafaultOrderStatus());
+                $order->setUserReceived($product->getUser());
+                $order->setUserSended($sessionUser);
+                $order->setProduct($product);
+                $order->setIsNew(1);
+                $order->setStatus($settings->getDafaultOrderStatus());
 
-                    $manager->persist($order);
-                    $manager->flush();
+                $manager->persist($order);
+                $manager->flush();
 
-                    $this->addFlash(
+                $this->addFlash(
                         'notice',
                         '<div class="alert alert-success alert-dismissible fade in" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
                         $this->get('translator')->trans('<strong>Успешно!</strong> Ваш заказ отправлен владельцу объявления. Он свяжется с Вами в ближайшее время.') . '</div>'
-                    );
+                );
                     
                     //send information about new order to sellers email
                     if($product->getUser()->getIsAlertNewOrder())
@@ -846,6 +846,17 @@ class DefaultController extends Controller
                                                                                           "isFavorite" => $isFavorite,
                                                                                           "productFilters" => $productFilters));
     } 
+    
+    /**
+     * @Route("/getsellerphone/{productId}", name="getsellerphone", defaults={"productId" : "0"})
+     */
+    public function getSellerPhoneAction($productId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $product = $manager->getRepository("DashboardCommonBundle:Product")->find($productId);
+            
+        return $this->render('DashboardCommonBundle:Default:Products/phones.html.twig', array("product" => $product));
+    }
     
     /**
      * @Route("/pages/{route}", name="pages")

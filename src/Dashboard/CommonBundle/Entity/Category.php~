@@ -1022,4 +1022,27 @@ class Category
     {
         return $this->isBreakRedirect;
     }
+
+    /**
+     * Set hTitle
+     *
+     * @param string $hTitle
+     * @return Category
+     */
+    public function setHTitle($hTitle)
+    {
+        $this->hTitle = $hTitle;
+    
+        return $this;
+    }
+
+    /**
+     * Get hTitle
+     *
+     * @return string 
+     */
+    public function getHTitle()
+    {
+        return $this->hTitle;
+    }
 }

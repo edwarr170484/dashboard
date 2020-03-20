@@ -10,12 +10,330 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Finder\Finder;
 
 use Dashboard\CommonBundle\Entity\Region;
 use Dashboard\CommonBundle\Entity\City;
+use Dashboard\CommonBundle\Entity\CityCode;
+use Dashboard\AdminBundle\Form\Type\RegionType;
 
 class RegionController extends Controller
 {
+    /**
+     * @Route("/admin/region/{page}", name="admin_settings_region", defaults={"page" : 0})
+     */
+    public function regionAction($page, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+
+        if($request->request->get('regionIds'))
+        {
+            foreach($request->request->get('regionIds') as $regionId)
+            {
+                $region = $manager->getRepository("DashboardCommonBundle:Region")->find($regionId);
+
+                if($region)
+                {
+                    if(count($region->getProduct()) > 0)
+                    {
+                        $this->addFlash(
+                            'notice_region',
+                            $this->get('translator')->trans('<div class="alert alert-danger alert-dismissible fade in" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>Ошибка!</strong> Нельзя удалить регион. К нему привязаны ' . count($region->getProduct()) . ' объявлений.</div>')
+                        );
+                    }
+                    else
+                    {
+                        if($region->getTranslations())
+                        {
+                            foreach($region->getTranslations() as $translation)
+                            {
+                                $translation->setRegion(null);
+                                $manager->remove($translation);
+                            }
+                        }
+                        
+                        if($region->getCity())
+                        {
+                            foreach($region->getCity() as $city)
+                            {
+                                if($city->getTranslations())
+                                {
+                                    foreach($city->getTranslations() as $translation)
+                                    {
+                                        $translation->setCity(null);
+                                        $manager->remove($translation);
+                                    }
+                                }
+                                $city->setRegion(null);
+                                $manager->remove($city);
+                            }
+                        }
+
+                        $manager->remove($region);
+                        $manager->flush();
+                    }
+                }
+            }
+                            
+            $this->addFlash(
+                'notice_region',
+                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Успешно!</strong> Операция выполнена.</div>')
+            );
+            
+            return $this->redirectToRoute('admin_settings_region');
+        }
+        
+        if($request->request->get('sortorder'))
+        {
+            foreach($request->request->get('sortorder') as $key => $value)
+            {
+                $region = $manager->getRepository("DashboardCommonBundle:Region")->find($key);
+                
+                if($region)
+                {
+                    $region->setSortorder($value);
+                    $manager->persist($region);
+                }
+            }
+            $manager->flush();
+            $this->addFlash(
+                'notice_region',
+                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Успешно!</strong> Операция выполнена.</div>')
+            );
+            
+            return $this->redirectToRoute('admin_settings_region');
+        }
+        
+        $query = $manager->createQuery("SELECT r FROM DashboardCommonBundle:Region r" );
+
+        try{
+            $regions = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $regions = 0;
+        }
+
+        $totalRegions = count($regions);
+        
+        $query = $manager->createQuery("SELECT r FROM DashboardCommonBundle:Region r ORDER BY r.name ASC" )->setFirstResult((($page > 0) ? ($page - 1) : 0) * 30)->setMaxResults(30);
+
+        try{
+            $regions = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $regions = 0;
+        }
+        
+        $helper = $this->get("app.helpers");
+        $pagination = $helper->paginator(($page > 0) ? (int)$page : 1, $totalRegions, 30, "/admin/region", '', '');
+                        
+        return $this->render('DashboardAdminBundle:Settings:region.html.twig', array("regions" => $regions, "pagination" => $pagination,));
+    }
+    
+    /**
+     * @Route("/admin/edit/region/{regionId}", name="admin_settings_region_edit", defaults={"regionId" : 0})
+     */
+    public function regionEditAction($regionId,Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $originalCities = new ArrayCollection();
+        $originalTranslations = new ArrayCollection();
+        $originalCityTranslations = new ArrayCollection();
+        
+        $region = ($regionId) ? $manager->getRepository("DashboardCommonBundle:Region")->find($regionId) : new Region();
+        
+        if($regionId && $region)
+        {
+            foreach ($region->getCity() as $city) {
+                $originalCities->add($city);
+                
+                if($city->getTranslations())
+                {
+                    foreach($city->getTranslations() as $translation)
+                    {
+                        $originalCityTranslations->add($translation);
+                    }
+                }
+            }
+            
+            foreach ($region->getTranslations() as $item) {
+                $originalTranslations->add($item);
+            }
+        }
+        
+        $regionForm = $this->createForm(new RegionType($manager), $region);
+         
+        $regionForm->handleRequest($request);
+        
+        if($regionForm->isSubmitted() && $regionForm->isValid())
+        {
+            if($originalTranslations)
+            {
+                foreach ($originalTranslations as $item) 
+                {
+                    if (false === $region->getTranslations()->contains($item)) 
+                    {
+                        $item->setRegion(null);
+                        $manager->remove($item);
+                    }
+                }
+            }
+
+            if($region->getTranslations())
+            {
+                foreach($region->getTranslations() as $item)
+                {
+                    $item->setRegion($region);
+                    $manager->persist($item);
+                }
+            }
+            
+            if($originalCities)
+            {
+                foreach ($originalCities as $city) 
+                {
+                    if (false === $region->getCity()->contains($city)) 
+                    {
+                        if($city->getTranslations())
+                        {
+                            foreach($city->getTranslations() as $translation)
+                            {
+                                $translation->setCity(null);
+                                $manager->remove($translation);
+                            }
+                        }
+                        $city->setRegion(null);
+                        $manager->remove($city);
+                    }
+                    
+                    if($originalCityTranslations)
+                    {
+                        foreach($originalCityTranslations as $translation)
+                        {
+                            if (false === $city->getTranslations()->contains($translation))
+                            {
+                                $translation->setCity(null);
+                                $manager->remove($translation);
+                            }
+                        }
+                    }
+                }
+            } 
+            
+            if($region->getCity())
+            {
+                foreach($region->getCity() as $city)
+                {
+                    if($city->getTranslations())
+                    {
+                        foreach($city->getTranslations() as $translation)
+                        {
+                            $translation->setCity($city);
+                            $manager->persist($translation);
+                        }
+                    }
+                    $city->setRegion($region);
+                    $manager->persist($city);
+                }
+            }
+            
+            $manager->persist($region);
+            $manager->flush();
+
+            $this->addFlash(
+                'notice_region',
+                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Выполнено!</strong> Информация о стране сохранена.</div>')
+            );
+            
+            return $this->redirectToRoute("admin_settings_region_edit", array("regionId" => $region->getId()));
+        }
+        
+        return $this->render('DashboardAdminBundle:Settings:regionedit.html.twig', array("regionForm" => $regionForm->createView()));
+    }
+    
+    /**
+     * @Route("/admin/cityimport", name="admin_city_import")
+     */
+    public function cityImportAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $finder = new Finder();
+        
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->find(1);
+        $regions = $manager->getRepository("DashboardCommonBundle:Region")->findAll();
+        
+        $finder->files()->name('city.txt')->in('import');
+        $items = new ArrayCollection();
+        
+        foreach ($finder as $file) {
+            $absoluteFilePath = $file->getRealPath();
+            
+            $lines = file($absoluteFilePath);
+            if(count($lines) > 0){
+                foreach($lines as $cityInfo){
+                    $info = explode(';', $cityInfo);
+                    
+                    $baseRegion = false;
+                    foreach($regions as $region){
+                        if($region->getName() == trim($info[0])){
+                            $baseRegion = $region;
+                            break;
+                        }
+                    }
+                    
+                    if($baseRegion){
+                        $city = $manager->getRepository("DashboardCommonBundle:City")->findOneByName(trim($info[1]));
+                        if($city){
+                            $city->setRegion($baseRegion);
+                            $manager->persist($city);
+                        }
+                    }
+                    
+                    /*$marker = 0;
+                    foreach($items as $item){
+                        if($item->getName() == $info[0]){
+                            $marker = 1;
+                            break;
+                        }
+                    }
+                    
+                    if(!$marker){
+                        $city = new City();
+                        $city->setName($info[0]);
+                        $city->setRegion($region);
+                        $items->add($city);
+                    }*/
+                    
+                    /*$region = $manager->getRepository("DashboardCommonBundle:Region")->findOneByName(trim($cityInfo));
+                    
+                    if(!$region){
+                        $region = new Region();
+                        $region->setName(trim($cityInfo));
+                        $region->setLocale($locale);
+                        $items->add($region);
+                    }*/
+                }
+            }
+        }
+        
+        /*foreach($items as $item){
+            $manager->persist($item);
+        }*/
+        
+        $manager->flush();
+        
+        return new Response('OK');
+    }
+    
     /**
      * @Route("/region/{regionId}", name="region_getcity")
      * @Route("/{_locale}/region/{regionId}", name="region_getcityLocale", defaults={"_locale" : "lv"}, requirements={"_locale" : "lv|ru"})
@@ -70,11 +388,24 @@ class RegionController extends Controller
             $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($cityCode);
             
             if($code){
-                return new \Symfony\Component\HttpFoundation\JsonResponse(array("city" => $code->getCity()->getId(), "code" => $code->getCode()));
+                return new \Symfony\Component\HttpFoundation\JsonResponse(array("region" => $code->getCity()->getRegion()->getId(), "city" => $code->getCity()->getId(), "code" => $code->getCode()));
             }
         }
         
         return new Response(0);
+    }
+    
+    /**
+     * @Route("/region/get/{cityId}", name="region_get")
+     */
+    public function getRegionAction($cityId, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $city = $manager->getRepository("DashboardCommonBundle:City")->find($cityId);
+        
+        if($city){
+            return new \Symfony\Component\HttpFoundation\JsonResponse(array("region" => $city->getRegion()->getId()));
+        }    
     }
     
     /**

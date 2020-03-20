@@ -48,8 +48,8 @@
                             </div>
                             <div class="select-location">
                                 <a data-toggle="modal" data-target="#regionModal" class="top-select-region">
-                                    {% if sessionCity %}
-                                        {{ sessionCity.name }}
+                                    {% if sessionRegion %}
+                                        {{ sessionRegion.name }}
                                     {% else %}
                                         {% trans %}Испания{% endtrans %}
                                     {% endif %}
@@ -110,14 +110,10 @@
                                 </div>
                                 <div class="select-location">
                                     <a data-toggle="modal" data-target="#regionModal" class="top-select-region">
-                                        {% if sessionCity %}
-                                            {{ sessionCity.name }}
+                                        {% if sessionRegion %}
+                                            {{ sessionRegion.name }}
                                         {% else %}
-                                            {% if sessionRegion %}
-                                                {{ sessionRegion.name }}
-                                            {% else %}
-                                                {% trans %}Испания{% endtrans %}
-                                            {% endif %}
+                                            {% trans %}Испания{% endtrans %}
                                         {% endif %}
                                     </a>            
                                 </div>

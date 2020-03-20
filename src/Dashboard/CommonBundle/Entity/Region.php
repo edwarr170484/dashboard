@@ -49,6 +49,12 @@ class Region
     private $sortorder;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Locale", inversedBy="regions")
+     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
+     */
+    private $locale;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -244,5 +250,28 @@ class Region
     public function getSortorder()
     {
         return $this->sortorder;
+    }
+
+    /**
+     * Set locale
+     *
+     * @param \Dashboard\CommonBundle\Entity\Locale $locale
+     * @return Region
+     */
+    public function setLocale(\Dashboard\CommonBundle\Entity\Locale $locale = null)
+    {
+        $this->locale = $locale;
+    
+        return $this;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return \Dashboard\CommonBundle\Entity\Locale 
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 }

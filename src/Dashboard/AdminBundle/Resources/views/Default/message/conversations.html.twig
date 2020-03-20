@@ -115,15 +115,17 @@
                                                 </div>
                                             </td>
                                             <td style="font-size: 1.4rem;">
-                                                <div {% if isActive %}style="font-weight:700"{% endif %}>
-                                                    {{ lastMessage.message }}{% if newMessages > 0 %}&nbsp;&nbsp;<span class="label label-info">+ {{ newMessages }}</span>{% endif %}
-                                                </div>
-                                                {% if lastMessage.image %}
-                                                    <div class="accountConversationMessageImage">
-                                                        <a href="/bundles/images/messages/{{lastMessage.image}}" data-lightbox="image-{{ lastMessage.id }}">
-                                                            <img src="/bundles/images/messages/{{lastMessage.image}}" alt="" title="" style="max-width:250px"/>
-                                                        </a>
+                                                {% if lastMessage %}
+                                                    <div {% if isActive %}style="font-weight:700"{% endif %}>
+                                                        {{ lastMessage.message }}{% if newMessages > 0 %}&nbsp;&nbsp;<span class="label label-info">+ {{ newMessages }}</span>{% endif %}
                                                     </div>
+                                                    {% if lastMessage.image %}
+                                                        <div class="accountConversationMessageImage">
+                                                            <a href="/bundles/images/messages/{{lastMessage.image}}" data-lightbox="image-{{ lastMessage.id }}">
+                                                                <img src="/bundles/images/messages/{{lastMessage.image}}" alt="" title="" style="max-width:250px"/>
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
                                                 {% endif %}
                                             </td>
                                             <td style="width:30%">

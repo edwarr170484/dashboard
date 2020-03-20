@@ -416,6 +416,22 @@ class AccountController extends Controller
         catch(\Doctrine\ORM\NoResultException $e) {
             $conversations = 0;
         }
+        
+        //select admin user
+        $query = $manager->createQuery("SELECT u,ur FROM DashboardCommonBundle:User u LEFT JOIN u.roles ur WHERE ur.role='ROLE_ADMIN' AND u.isActive = 1 AND u.isConfirm = 1");
+
+        try{
+            $admin = $query->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $admin = 0;
+        }
+        
+        $checkCoversations = new ArrayCollection($conversations);
+        
+        $conversations = $checkCoversations->filter(function($conversation) use($admin){
+            return ($conversation->getUserOne()->getId() != $admin->getId() && $conversation->getUserTwo()->getId() != $admin->getId()) ? 1 : 0;
+        });
 
         return $this->render('DashboardCommonBundle:User:account/message/conversations.html.twig', array("user" =>$user,
                                                                                     "conversations" => $conversations,
@@ -647,6 +663,16 @@ class AccountController extends Controller
 
             return $this->redirectToRoute("account_conversation", array("conversationId" => $conversationId));
         }
+        
+        //select admin user
+        $query = $manager->createQuery("SELECT u,ur FROM DashboardCommonBundle:User u LEFT JOIN u.roles ur WHERE ur.role='ROLE_ADMIN' AND u.isActive = 1 AND u.isConfirm = 1");
+
+        try{
+            $admin = $query->getSingleResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $admin = 0;
+        }
 
         return $this->render('DashboardCommonBundle:User:account/message/conversation.html.twig', array("user" => $user,
                                                                                        "formMessage" => $formMessage->createView(),
@@ -654,6 +680,7 @@ class AccountController extends Controller
                                                                                        "conversation" => $conversation,
                                                                                        "settings" => $settings,
                                                                                        "locale" => $locale,
+                                                                                       "admin" => $admin,
                                                                                        "routeName" => $request->attributes->get("_route")));
     }
 
@@ -688,9 +715,9 @@ class AccountController extends Controller
     }
 
     /**
-     * @Route("/account/startconversation/{companionId}", name="account_start_conversation")
+     * @Route("/account/startconversation/{companionId}/{productId}", name="account_start_conversation", defaults={"productId" : 0})
      */
-    public function startConversationAction($companionId, Request $request)
+    public function startConversationAction($companionId, $productId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
         $user = $this->get('security.context')->getToken()->getUser();
@@ -706,12 +733,26 @@ class AccountController extends Controller
             catch(\Doctrine\ORM\NoResultException $e) {
                 $conversation = 0;
             }
-
+            
+            $product = ($productId) ? $manager->getRepository("DashboardCommonBundle:Product")->find($productId) : NULL;
+            
             if(!$conversation){
                 $conversation = new Conversation();
                 $conversation->setUserOne($user);
                 $conversation->setUserTwo($companion);
-                $conversation->setSubject($this->get('translator')->trans('Техническая поддержка'));
+                if($product){
+                    $conversation->setSubject($product->getName());
+                }else{
+                    $conversation->setSubject($this->get('translator')->trans('Техническая поддержка'));
+                }
+                $manager->persist($conversation);
+                $manager->flush();
+            }else{
+                if($product){
+                    $conversation->setSubject($product->getName());
+                }else{
+                    $conversation->setSubject($this->get('translator')->trans('Техническая поддержка'));
+                }
                 $manager->persist($conversation);
                 $manager->flush();
             }
@@ -1196,6 +1237,12 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
+                
+                $simpleImage = $this->get('app.simpleimage');
+                $simpleImage->load('bundles/images/users/avatars/' . $localAvatarName);
+                $simpleImage->resizeToWidth(192);
+                $simpleImage->save('bundles/images/users/avatars/' . $localAvatarName, $simpleImage->image_type);
+                
                 $user->getUserinfo()->setAvatar($localAvatarName);
             }
             
@@ -1203,6 +1250,8 @@ class AccountController extends Controller
             
             if($cityCode){
                 $user->getUserinfo()->setCityCode($cityCode);
+            }else{
+                $user->getUserinfo()->setCityCode(null);
             }
 
             $user->setUsername($user->getEmail());
@@ -1213,7 +1262,7 @@ class AccountController extends Controller
                 'notice',
                 '<div class="alert alert-success alert-dismissible fade in" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                $this->get('translator')->trans('<strong>Gatavs!</strong> Lietotāja dati tika veiksmīgi saglabāti.') . '</div>'
+                $this->get('translator')->trans('<strong>Выполнено!</strong> Данные пользователя успешно сохранены.') . '</div>'
             );
 
 
@@ -1238,7 +1287,7 @@ class AccountController extends Controller
                     'notice',
                     '<div class="alert alert-success alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                    $this->get('translator')->trans('<strong>Gatavs!</strong> Parole ir veiksmīgi atjaunināta.') . '</div>'
+                    $this->get('translator')->trans('<strong>Выполнено!</strong> Пароль успешно обновлен.') . '</div>'
                 );
             }
             else
@@ -1247,7 +1296,7 @@ class AccountController extends Controller
                     'notice',
                     '<div class="alert alert-danger alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                    $this->get('translator')->trans('<strong>Nav ieviests!</strong> Neizdevās atjaunināt paroli.') . '</div>'
+                    $this->get('translator')->trans('<strong>Не выполнено!</strong> Не удалось обновить пароль.') . '</div>'
                 );
             }
 
@@ -1373,6 +1422,12 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
+                
+                $simpleImage = $this->get('app.simpleimage');
+                $simpleImage->load('bundles/images/users/avatars/' . $localAvatarName);
+                $simpleImage->resizeToWidth(192);
+                $simpleImage->save('bundles/images/users/avatars/' . $localAvatarName, $simpleImage->image_type);
+                
                 $user->getUserinfo()->setAvatar($localAvatarName);
             }
             
@@ -1380,6 +1435,8 @@ class AccountController extends Controller
             
             if($cityCode){
                 $user->getUserinfo()->setCityCode($cityCode);
+            }else{
+                $user->getUserinfo()->setCityCode(null);
             }
 
             $user->setUsername($user->getEmail());
@@ -1427,6 +1484,12 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/dealers/logotypes',$localAvatarName);
+                
+                $simpleImage = $this->get('app.simpleimage');
+                $simpleImage->load('bundles/images/dealers/logotypes/' . $localAvatarName);
+                $simpleImage->resizeToHeight(252);
+                $simpleImage->save('bundles/images/dealers/logotypes/' . $localAvatarName, $simpleImage->image_type);
+                
                 $user->getDealerInfo()->setLogotype($localAvatarName);
             }
             
@@ -1434,6 +1497,8 @@ class AccountController extends Controller
             
             if($cityCode){
                 $user->getDealerInfo()->setCityCode($cityCode);
+            }else{
+                $user->getUserinfo()->setCityCode(null);
             }
 
             $manager->persist($user->getDealerInfo());
@@ -1494,6 +1559,12 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999) . rand(1, 99999) . rand(1, 99999) . '.' . $extention;
                 $avatar->move('bundles/images/dealers/salons',$localAvatarName);
+                
+                $simpleImage = $this->get('app.simpleimage');
+                $simpleImage->load('bundles/images/dealers/salons/' . $localAvatarName);
+                $simpleImage->resizeToHeight(252);
+                $simpleImage->save('bundles/images/dealers/salons/' . $localAvatarName, $simpleImage->image_type);
+                
                 $dealerSalon->setLogotype($localAvatarName);
             }
 
@@ -1684,6 +1755,12 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/users/avatars',$localAvatarName);
+                
+                $simpleImage = $this->get('app.simpleimage');
+                $simpleImage->load('bundles/images/users/avatars/' . $localAvatarName);
+                $simpleImage->resizeToWidth(192);
+                $simpleImage->save('bundles/images/users/avatars/' . $localAvatarName, $simpleImage->image_type);
+                
                 $user->getUserinfo()->setAvatar($localAvatarName);
             }
             
@@ -1691,6 +1768,8 @@ class AccountController extends Controller
             
             if($cityCode){
                 $user->getUserinfo()->setCityCode($cityCode);
+            }else{
+                $user->getUserinfo()->setCityCode(null);
             }
 
             $user->setUsername($user->getEmail());
@@ -1742,6 +1821,12 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999).'.'.$extention;
                 $avatar->move('bundles/images/dealers/logotypes',$localAvatarName);
+                
+                $simpleImage = $this->get('app.simpleimage');
+                $simpleImage->load('bundles/images/dealers/logotypes/' . $localAvatarName);
+                $simpleImage->resizeToHeight(252);
+                $simpleImage->save('bundles/images/dealers/logotypes/' . $localAvatarName, $simpleImage->image_type);
+                
                 $user->getDealerInfo()->setLogotype($localAvatarName);
             }
             
@@ -1749,6 +1834,8 @@ class AccountController extends Controller
             
             if($cityCode){
                 $user->getDealerInfo()->setCityCode($cityCode);
+            }else{
+                $user->getUserinfo()->setCityCode(null);
             }
 
             $manager->persist($user->getDealerInfo());
@@ -1809,6 +1896,12 @@ class AccountController extends Controller
                 $extention = $avatar->getClientOriginalExtension();
                 $localAvatarName = rand(1, 99999) . rand(1, 99999) . rand(1, 99999) . '.' . $extention;
                 $avatar->move('bundles/images/dealers/salons',$localAvatarName);
+                
+                $simpleImage = $this->get('app.simpleimage');
+                $simpleImage->load('bundles/images/dealers/salons/' . $localAvatarName);
+                $simpleImage->resizeToHeight(252);
+                $simpleImage->save('bundles/images/dealers/salons/' . $localAvatarName, $simpleImage->image_type);
+                
                 $dealerSalon->setLogotype($localAvatarName);
             }
 
@@ -2317,7 +2410,7 @@ class AccountController extends Controller
                     $manager->flush();
                 }
                 
-                 return new \Symfony\Component\HttpFoundation\JsonResponse(array("totalPrice" => $totalPrice, "billId" => $bill->getId()));
+                return new \Symfony\Component\HttpFoundation\JsonResponse(array("totalPrice" => $totalPrice, "billId" => $bill->getId()));
                  
             break;
         

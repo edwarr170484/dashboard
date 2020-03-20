@@ -2086,11 +2086,11 @@ class AdvertController extends Controller
             $session->remove('advertFilters');    
             
             if($error){
-                return $this->render('DashboardCommonBundle:Product:add/resultError.html.twig', array("locale" => $locale, "settings" => $settings));
+                return new \Symfony\Component\HttpFoundation\JsonResponse(array("redirect" => 0, "view" => $this->renderView('DashboardCommonBundle:Product:add/resultError.html.twig', array("locale" => $locale, "settings" => $settings))));
             }
             
             if($isDraft){
-                return $this->render('DashboardCommonBundle:Product:add/resultDraft.html.twig', array("locale" => $locale, "settings" => $settings));
+                return new \Symfony\Component\HttpFoundation\JsonResponse(array("redirect" => 0, "view" => $this->renderView('DashboardCommonBundle:Product:add/resultDraft.html.twig', array("locale" => $locale, "settings" => $settings))));
             }else{
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Размещение объявления на сайте ' . $settings->getSiteName())

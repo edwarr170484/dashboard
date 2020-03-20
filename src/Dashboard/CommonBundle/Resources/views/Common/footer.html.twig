@@ -102,7 +102,7 @@
 {% endif %}
 <div class="modal fade" id="regionModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
     <div class="modal-dialog" role="document">
-        {{ form_start(cityForm, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal','id' : 'regionFilter'}}) }}
+        {{ form_start(regionForm, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal','id' : 'regionFilter'}}) }}
             <input name="selectFilterRegionCity" value="1" type="hidden" />
             <div class="modal-content">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -116,12 +116,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <div class="col-md-12" id="siteRegionCities">
-                            {{ form_widget(cityForm.name)}}
+                            {{ form_widget(regionForm.name)}}
                         </div>
                     </div>
                 </div>
             </div>
-        {{ form_end(cityForm) }}
+        {{ form_end(regionForm) }}
     </div>
 </div>
         <div class="modal fade" id="userAgreementModal" tabindex="-1" role="dialog" aria-labelledby="howToBuyModalLabel">
@@ -156,7 +156,7 @@
                             {% endif %}
                             <div class="searchBlockForm">
                                 <form action="{{ path('search') }}" method="post" id="modalSearchForm">
-                                    <input name="searchText" type="text" placeholder="{% trans %}Поиск{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} onkeyup="getModalSearchResults($(this))" autocomplete="off" />
+                                    <input id="modalSearchText" name="searchText" type="text" placeholder="{% trans %}Поиск{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} onkeyup="getModalSearchResults($(this))" autocomplete="off" />
                                     <button type="submit" class="submit">{% trans %}Все результаты{% endtrans %}</button>
                                 </form>
                             </div>
@@ -180,5 +180,5 @@
     {% if settings.isShowCaptcha %}
         <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit'></script>
     {% endif %}
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ settings.googleMapsKey }}&callback=initMap" async defer></script>	
+    <!--<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ settings.googleMapsKey }}&callback=initMap" async defer></script>-->	

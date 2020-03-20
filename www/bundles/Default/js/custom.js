@@ -56,10 +56,6 @@ $(document).ready(function(){
         dots: false,
     });
     
-    $(".clearFilters").click(function(){
-        $(".clear-selects").trigger('click');
-    });
-    
     $("img").on("contextmenu", false);
     
     $(".custom-select").customSelect();
@@ -662,27 +658,6 @@ function changeOrderCommentStatus(element, orderId, locale)
 function showAllReviews()
 {
     $(".account-review-block").hide();
-}
-
-function showSellerNumer(productId)
-{
-    $.ajax({
-            url: '/getsellerphone/' + productId,
-            type:'get',
-            dataType: 'html',
-            beforeSend: function(){
-                
-                $(".seller-number-spinner").show();
-            },
-            success: function(html)
-            {
-                 $(".seller-number-spinner").hide();
-                 $(".seller-block-phone").html(html);
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                err=xhr.responseText;
-            }
-    });
 }
 
 function showUserNumer(userId)

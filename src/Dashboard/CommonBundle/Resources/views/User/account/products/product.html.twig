@@ -129,6 +129,8 @@
                 {% else %}
                     <a href=javascript:void(0)"><img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
                 {% endif %}
+            {% else %}
+                <img src="{{ asset('bundles/images/products/nophoto.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
             {% endif %}
             <div class="accountAdvertInfoViews">{% trans %}Просмотров{% endtrans %}: {% if product.views %}{{ product.views }}{% else %}0{% endif %}</div>
         </div>
@@ -138,9 +140,6 @@
                     <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}">{{ product.name }}
                 {% else %}
                     <a href="javascript:void(0)">{{ product.name }}
-                {% endif %}
-                {% if product.info.modification %}
-                    {{ product.info.modification.label }}
                 {% endif %}
                 </a>
             </div>

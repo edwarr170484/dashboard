@@ -22,9 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-use Dashboard\CommonBundle\Entity\Region;
-use Dashboard\CommonBundle\Entity\City;
-use Dashboard\CommonBundle\Entity\CityCode;
+
 use Dashboard\CommonBundle\Entity\Banner;
 use Dashboard\CommonBundle\Entity\Page;
 use Dashboard\CommonBundle\Entity\Role;
@@ -36,7 +34,6 @@ use Dashboard\CommonBundle\Entity\OrderStatus;
 use Dashboard\AdminBundle\Form\Type\UserInfoType;
 use Dashboard\AdminBundle\Form\Type\UserRateType;
 use Dashboard\AdminBundle\Form\Type\TranslationType;
-use Dashboard\AdminBundle\Form\Type\RegionType;
 use Dashboard\AdminBundle\Form\Type\PageblockType;
 
 class DefaultController extends Controller
@@ -105,10 +102,33 @@ class DefaultController extends Controller
             return ($user->getRoles()[0]->getRole() == "ROLE_DEALER" || $user->getRoles()[0]->getRole() == "ROLE_SERVICE");
         });
         
+        $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE c.userOne = " . $user->getId() . " OR c.userTwo = " . $user->getId() . " ORDER BY c.id DESC");
+
+        try{
+            $conversations = $query->getResult();
+        }
+        catch(\Doctrine\ORM\NoResultException $e) {
+            $conversations = 0;
+        }
+        
+        $techNewMessages = 0;
+        if(count($conversations) > 0){
+            foreach($conversations as $conversation){
+                if($conversation->getMessages()){
+                    foreach($conversation->getMessages() as $message){
+                        if($message->getIsNew()){
+                            $techNewMessages++;
+                        }
+                    }
+                }
+            }
+        }
+        
         return $this->render('DashboardAdminBundle:Common:header.html.twig', array("user" => $user,
                                                                                    "newConfirmations" => count($products),
                                                                                    "newComplaints" => count($complaints),
                                                                                    "newMessages" => count($messages),
+                                                                                   "techNewMessages" => $techNewMessages,
                                                                                    "settings" => $settings,
                                                                                    "users" => $dealers));
     }
@@ -943,282 +963,6 @@ class DefaultController extends Controller
         
         return $this->render('DashboardAdminBundle:Settings:orderstatusedit.html.twig', array("statusForm" => $statusForm->createView()));
     }
-    
-    /**
-     * @Route("/admin/region", name="admin_settings_region")
-     */
-    public function regionAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $regions = $manager->getRepository("DashboardCommonBundle:Region")->findBy(array(), array("sortorder" => "ASC"));
-
-        if($request->request->get('regionIds'))
-        {
-            foreach($request->request->get('regionIds') as $regionId)
-            {
-                $region = $manager->getRepository("DashboardCommonBundle:Region")->find($regionId);
-
-                if($region)
-                {
-                    if(count($region->getProduct()) > 0)
-                    {
-                        $this->addFlash(
-                            'notice_region',
-                            $this->get('translator')->trans('<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <strong>Ошибка!</strong> Нельзя удалить регион. К нему привязаны ' . count($region->getProduct()) . ' объявлений.</div>')
-                        );
-                    }
-                    else
-                    {
-                        if($region->getTranslations())
-                        {
-                            foreach($region->getTranslations() as $translation)
-                            {
-                                $translation->setRegion(null);
-                                $manager->remove($translation);
-                            }
-                        }
-                        
-                        if($region->getCity())
-                        {
-                            foreach($region->getCity() as $city)
-                            {
-                                if($city->getTranslations())
-                                {
-                                    foreach($city->getTranslations() as $translation)
-                                    {
-                                        $translation->setCity(null);
-                                        $manager->remove($translation);
-                                    }
-                                }
-                                $city->setRegion(null);
-                                $manager->remove($city);
-                            }
-                        }
-
-                        $manager->remove($region);
-                        $manager->flush();
-                    }
-                }
-            }
-                            
-            $this->addFlash(
-                'notice_region',
-                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Успешно!</strong> Операция выполнена.</div>')
-            );
-            
-            return $this->redirectToRoute('admin_settings_region');
-        }
-        
-        if($request->request->get('sortorder'))
-        {
-            foreach($request->request->get('sortorder') as $key => $value)
-            {
-                $region = $manager->getRepository("DashboardCommonBundle:Region")->find($key);
-                
-                if($region)
-                {
-                    $region->setSortorder($value);
-                    $manager->persist($region);
-                }
-            }
-            $manager->flush();
-            $this->addFlash(
-                'notice_region',
-                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Успешно!</strong> Операция выполнена.</div>')
-            );
-            
-            return $this->redirectToRoute('admin_settings_region');
-        }
-                        
-        return $this->render('DashboardAdminBundle:Settings:region.html.twig', array("regions" => $regions));
-    }
-    
-    /**
-     * @Route("/admin/edit/region/{regionId}", name="admin_settings_region_edit", defaults={"regionId" : 0})
-     */
-    public function regionEditAction($regionId,Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $originalCities = new ArrayCollection();
-        $originalTranslations = new ArrayCollection();
-        $originalCityTranslations = new ArrayCollection();
-        
-        $region = ($regionId) ? $manager->getRepository("DashboardCommonBundle:Region")->find($regionId) : new Region();
-        
-        if($regionId && $region)
-        {
-            foreach ($region->getCity() as $city) {
-                $originalCities->add($city);
-                
-                if($city->getTranslations())
-                {
-                    foreach($city->getTranslations() as $translation)
-                    {
-                        $originalCityTranslations->add($translation);
-                    }
-                }
-            }
-            
-            foreach ($region->getTranslations() as $item) {
-                $originalTranslations->add($item);
-            }
-        }
-        
-        $regionForm = $this->createForm(new RegionType($manager), $region);
-         
-        $regionForm->handleRequest($request);
-        
-        if($regionForm->isSubmitted() && $regionForm->isValid())
-        {
-            if($originalTranslations)
-            {
-                foreach ($originalTranslations as $item) 
-                {
-                    if (false === $region->getTranslations()->contains($item)) 
-                    {
-                        $item->setRegion(null);
-                        $manager->remove($item);
-                    }
-                }
-            }
-
-            if($region->getTranslations())
-            {
-                foreach($region->getTranslations() as $item)
-                {
-                    $item->setRegion($region);
-                    $manager->persist($item);
-                }
-            }
-            
-            if($originalCities)
-            {
-                foreach ($originalCities as $city) 
-                {
-                    if (false === $region->getCity()->contains($city)) 
-                    {
-                        if($city->getTranslations())
-                        {
-                            foreach($city->getTranslations() as $translation)
-                            {
-                                $translation->setCity(null);
-                                $manager->remove($translation);
-                            }
-                        }
-                        $city->setRegion(null);
-                        $manager->remove($city);
-                    }
-                    
-                    if($originalCityTranslations)
-                    {
-                        foreach($originalCityTranslations as $translation)
-                        {
-                            if (false === $city->getTranslations()->contains($translation))
-                            {
-                                $translation->setCity(null);
-                                $manager->remove($translation);
-                            }
-                        }
-                    }
-                }
-            } 
-            
-            if($region->getCity())
-            {
-                foreach($region->getCity() as $city)
-                {
-                    if($city->getTranslations())
-                    {
-                        foreach($city->getTranslations() as $translation)
-                        {
-                            $translation->setCity($city);
-                            $manager->persist($translation);
-                        }
-                    }
-                    $city->setRegion($region);
-                    $manager->persist($city);
-                }
-            }
-            
-            $manager->persist($region);
-            $manager->flush();
-
-            $this->addFlash(
-                'notice_region',
-                $this->get('translator')->trans('<div class="alert alert-success alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Выполнено!</strong> Информация о стране сохранена.</div>')
-            );
-            
-            return $this->redirectToRoute("admin_settings_region_edit", array("regionId" => $region->getId()));
-        }
-        
-        return $this->render('DashboardAdminBundle:Settings:regionedit.html.twig', array("regionForm" => $regionForm->createView()));
-    }
-    
-    /**
-     * @Route("/admin/cityimport", name="admin_city_import")
-     */
-    public function cityImportAction(Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $fm = new Filesystem();
-        $finder = new Finder();
-        
-        $region = $manager->getRepository("DashboardCommonBundle:Region")->find(1);
-        
-        $finder->files()->name('city.txt')->in('import');
-        $items = new ArrayCollection();
-        
-        foreach ($finder as $file) {
-            $absoluteFilePath = $file->getRealPath();
-            
-            $lines = file($absoluteFilePath);
-            if(count($lines) > 0){
-                foreach($lines as $cityInfo){
-                    $info = explode(';', $cityInfo);
-                    
-                    /*$marker = 0;
-                    foreach($items as $item){
-                        if($item->getName() == $info[0]){
-                            $marker = 1;
-                            break;
-                        }
-                    }
-                    
-                    if(!$marker){
-                        $city = new City();
-                        $city->setName($info[0]);
-                        $city->setRegion($region);
-                        $items->add($city);
-                    }*/
-                    
-                    $city = $manager->getRepository("DashboardCommonBundle:City")->findOneByName($info[0]);
-                    
-                    if($city){
-                        $code = new CityCode();
-                        $code->setCity($city);
-                        $code->setCode($info[1]);
-                        $items->add($code);
-                    }
-                }
-            }
-        }
-        
-        foreach($items as $item){
-            $manager->persist($item);
-        }
-        
-        $manager->flush();
-        
-        return new Response('OK');
-    }
 
     /**
      * @Route("/admin/banner/{bannerId}", name="admin_settings_banners", defaults={"bannerId" : 0})
@@ -1307,11 +1051,13 @@ class DefaultController extends Controller
                 ->add('position', ChoiceType::class, array('choices' => 
                     array('toppage' => 'A1',
                           'rightcolumn' => 'B1',
-                          'centerpage' => 'C1',
+                          'bottompage' => 'C1',
+                          'centerpage' => 'C2',
                           'slider' => 'A6',
                           'defaulttop' => 'A1 по умолчанию',
                           'defaultright' => 'B1 по умолчанию',
-                          'defaultcenter' => 'C1 по умолчанию',
+                          'defaultbottom' => 'C1 по умолчанию',
+                          'defaultcenter' => 'C2 по умолчанию',
                           'defaultslider' => 'A6 по умолчанию',), 
                     'data' => $banner->getPosition(), 'label' => 'Позиция баннера', 'attr' => array('class' => 'form-control')))
                 ->add('dateFrom', DateType::class, array('required' => false, 'label' => 'Дата начала отображения', 'attr' => array('class' => 'form-control')))

@@ -633,21 +633,13 @@ class CategoryController extends Controller
     }
     
     /**
-     * @Route("/category/subcategories/{type}/{categoryId}", name="category_subcategories")
+     * @Route("/category/subcategories/{type}/{categoryId}/{baseCategory}", name="category_subcategories")
      */
-    public function subcategoriesAction($type, $categoryId, Request $request)        
+    public function subcategoriesAction($type, $categoryId, $baseCategory,Request $request)        
     {
         $manager = $this->getDoctrine()->getManager();
         $category = $manager->getRepository("DashboardCommonBundle:Category")->find($categoryId);
-        $baseCategory = null;
-        $tmpCategory = $category;
-        
-        if($category){
-            while($tmpCategory->getParent()){
-                $baseCategory = $tmpCategory->getParent();
-                $tmpCategory = $tmpCategory->getParent();
-            }
-        }
+        $baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find($baseCategory);
         
         return $this->render('DashboardCommonBundle:Default:Category/filterItems.html.twig', array("category" => $category, "baseCategory" => $baseCategory, "type" => $type));
     }

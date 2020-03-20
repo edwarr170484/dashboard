@@ -15,28 +15,26 @@ use Dashboard\CommonBundle\Entity\Region;
 
 class CityType extends AbstractType
 {
-    private $locale;
-    private $city;
+    private $region;
     
-    public function __construct($locale, $city = null) {
-       $this->locale = $locale;
-       $this->city = $city;
+    public function __construct($region = null) {
+       $this->region = $region;
     }
     
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'entity', array('class' => 'DashboardCommonBundle:City', 
-                                              'choice_label' => function($city){return $city->getName();}, 
-                                              'data' => $this->city,
+        $builder->add('name', 'entity', array('class' => 'DashboardCommonBundle:Region', 
+                                              'choice_label' => 'name', 
+                                              'data' => $this->region,
                                               'required' => false,
                                               'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
-                                              'attr' => array('class' => 'custom-select','placeholder' => 'Город','data-write' => "1",'data-clearchange' => '1','onchange' => 'document.regionFilter.submit()')));
+                                              'attr' => array('class' => 'custom-select','placeholder' => 'Регион','data-write' => "1",'data-clearchange' => '1','onchange' => 'document.regionFilter.submit()')));
     }
     
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Dashboard\CommonBundle\Entity\City',
+            'data_class' => 'Dashboard\CommonBundle\Entity\Region',
             'translation_domain' => 'messages'
         ));
     }

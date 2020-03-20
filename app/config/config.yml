@@ -74,12 +74,6 @@ fos_user:
 hwi_oauth:
     firewall_name: main
     resource_owners:
-        vkontakte:
-            type:                vkontakte
-            client_id:           5625207
-            client_secret:       BucTJlfnkfOxZ8kuJggA
-            options:
-                csrf: true
         facebook:
             type:                facebook
             client_id:           1826839984269211

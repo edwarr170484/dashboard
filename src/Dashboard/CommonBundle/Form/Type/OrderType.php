@@ -28,18 +28,13 @@ use Dashboard\CommonBundle\Form\DataTransformer\CategoryToNumberTransformer;
 use Dashboard\CommonBundle\Entity\Category;
 
 class OrderType extends AbstractType
-{
-    public function __construct($em, $productuser) {
-        $this->em = $em;
-        $this->productuser = $productuser;
-    }
-    
+{   
     public function buildForm(FormBuilderInterface $builder, array $options)
     {    
         $builder
             ->add('name', TextType::class, array('required' => true, 'label' => 'Имя: *', 'attr' => array('class' => 'form-control')))
             ->add('email', EmailType::class, array('required' => true, 'label' => 'Email: *', 'attr' => array('class' => 'form-control')))
-            ->add('phone', TextType::class, array('required' => true, 'label' => 'Телефон: *', 'attr' => array('class' => 'form-control')))
+            ->add('phone', TextType::class, array('required' => false, 'label' => 'Телефон:', 'attr' => array('class' => 'form-control masked-phone')))
             ->add('comment', TextareaType::class, array('required' => false, 'label' => 'Комментарий', 'attr' => array('class' => 'form-control')))
             ->add('save', ButtonType::class, array('label' => 'Оставить заявку', 'attr' => array('class' => 'btn')));
     }

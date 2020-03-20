@@ -33,6 +33,12 @@ class UserInfoType extends AbstractType
             if($this->user){
                 $builder->add('avatarNew', FileType::class, array('required' => false, 'label' => '','mapped' => false, 'attr' => array('class' => 'change-avatar-input')))
                         ->add('avatar', HiddenType::class, array('required' => false, 'label' => ''))
+                        ->add('region', 'entity', array('class' => 'DashboardCommonBundle:Region', 
+                                          'choice_label' => 'name',
+                                          'placeholder' => 'Регион',
+                                          'required' => false,
+                                          'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
+                                          'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Регион', 'data-write' => '1')))
                         ->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
                                           'choice_label' => 'name',
                                           'placeholder' => 'Город',

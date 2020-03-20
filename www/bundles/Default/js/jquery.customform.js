@@ -131,6 +131,8 @@
                         selectOptions.find(".clear-selects").click(function(e){
                             e.stopPropagation();
                             $(this).parent().parent().find("select").find("option").each(function(){$(this).attr("selected",null);});
+                            $(this).parent().parent().find("select").val(null);
+                            $(this).parent().parent().removeClass("selected").removeClass("active");
                             $(this).parent().find(".select-option").each(function(){$(this).removeClass("active");});
                             selectElement.val(null);
                             
@@ -146,6 +148,7 @@
                             $(this).parent().slideUp();
                             $(this).parent().find(".select-option").removeClass('hide');
                         });
+                        
 			selectOptions.find(".select-option").each(function(){
 				$(this).click(function(e){
 					e.stopPropagation();
@@ -216,6 +219,10 @@
                                         selectElement.parent().find("input[name='select-writable']").keyup(function(){
                                                 var optionsList = $(this).parent().parent().next(".select-options").find(".select-option");
                                                 var controlVal = $(this).val().toLowerCase();
+                                                if(!$(this).parent().parent().next(".select-options").hasClass("opened")){
+                                                    $(this).parent().parent().parent().addClass('active');
+                                                    $(this).parent().parent().next(".select-options").slideDown();
+                                                }
                                                 optionsList.each(function(){
                                                     var val = $(this).html().toLowerCase();
                                                     if(val.includes(controlVal)){
@@ -239,6 +246,10 @@
                         $("input[name='select-writable']").keyup(function(){
                             var optionsList = $(this).parent().parent().next(".select-options").find(".select-option");
                             var controlVal = $(this).val().toLowerCase();
+                            if(!$(this).parent().parent().next(".select-options").hasClass("opened")){
+                                $(this).parent().parent().parent().addClass('active');
+                                $(this).parent().parent().next(".select-options").slideDown();
+                            }
                             optionsList.each(function(){
                                 var val = $(this).html().toLowerCase();
                                 if(val.includes(controlVal)){
@@ -251,6 +262,30 @@
 		}
 		
 		this.each(make);
+    };
+    
+    $.fn.clearValue = function(options) {
+        var make = function(){
+            selectElement = $(this);
+            selectElement.find("option").each(function(){$(this).attr("selected",null);});
+            selectElement.val(null);
+            selectElement.parent().removeClass("selected").removeClass("active");
+            selectElement.parent().find(".select-option").each(function(){$(this).removeClass("active");});
+            
+            var isWrite = (selectElement.data('write')) ? 1 : 0;
+            
+            if(isWrite){
+                selectElement.parent().find(".select-value").find("input").val(null);
+                selectElement.parent().find(".select-value").find("input").attr('placeholder',(selectElement.attr("placeholder")));
+            }else{
+                selectElement.parent().find(".select-value").html("<div class='select-value-inner'>" + selectElement.attr("placeholder") + "</div>");
+            }
+            
+            selectElement.parent().find(".select-options").removeClass("opened").slideUp();
+            selectElement.parent().find(".select-option").removeClass('hide');
+        }
+        
+        this.each(make);
     };
 	
 	$.fn.customCheckbox = function(options) {

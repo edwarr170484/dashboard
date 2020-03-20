@@ -19,7 +19,7 @@
 						<a href="javascript:;" data-toggle="dropdown" class="dropdown-toggle f-s-14">
 							<i class="fa fa-bell-o"></i>
                                                         {% if newConfirmations + newComplaints + newMessages + users | length %}
-                                                            <span class="label">{{ newConfirmations + newComplaints + newMessages + users | length }}</span>
+                                                            <span class="label">{{ newConfirmations + newComplaints + newMessages + users | length + techNewMessages }}</span>
                                                         {% endif %}
 						</a>
 						<ul class="dropdown-menu media-list pull-right animated fadeInDown">
@@ -61,6 +61,19 @@
                                                                     <div class="text-muted f-s-11">{{ newMessages }} новых обращений</div>
                                                                 {% else %}
                                                                     <div class="text-muted f-s-11">Новых обращений нет</div>
+                                                                {% endif %}
+                                                            </div>
+                                                        </a>
+                                                    </li>
+                                                    <li class="media">
+                                                        <a href="{{ path('admin_conversations') }}">
+                                                            <div class="media-left"><i class="fa fa-gears media-object bg-aqua"></i></div>
+                                                            <div class="media-body">
+                                                                <h6 class="media-heading"> Техническая поддержка</h6>
+                                                                {% if techNewMessages %}
+                                                                    <div class="text-muted f-s-11">{{ techNewMessages }} новых сообщений</div>
+                                                                {% else %}
+                                                                    <div class="text-muted f-s-11">Новых сообщений нет</div>
                                                                 {% endif %}
                                                             </div>
                                                         </a>

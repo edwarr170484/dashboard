@@ -72,6 +72,7 @@ class JobController extends Controller
     {
         $manager = $this->getDoctrine()->getManager();
         $originalJobs = new ArrayCollection();
+        $fm = new Filesystem();
         
         if($categoryId){
             $category = $manager->getRepository("DashboardCommonBundle:JobCategory")->find($categoryId);

@@ -1,12 +1,11 @@
-{% if category %}
         {% if type == 'mark' %}
-            <select name="categoryFilter[mark]" class="custom-select" data-write="1" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel{{ baseCategory.id }}'), 'model')">
+            <select name="categoryFilter[mark]" class="custom-select" data-clearchange="1" data-write="1" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel{{ baseCategory.id }}'), 'model', {{ baseCategory.id }})">
                 <option value="0"></option>
         {% endif %}
         {% if type == 'model' %}
             <select name="categoryFilter[model][]" class="custom-select" data-write="1" placeholder="{% trans %}Модель{% endtrans %}" multiple="multiple">
         {% endif %}
-        {% if category.children | length > 0 %}
+        {% if category and category.children | length > 0 %}
             {% if type == 'mark' %}
                 <option value="0"></option>
             {% endif %}
@@ -15,4 +14,3 @@
             {% endfor %}
         {% endif %}
         </select>
-{% endif %}

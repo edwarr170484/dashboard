@@ -175,6 +175,7 @@ class MessageController extends Controller
         $user = $this->get('security.context')->getToken()->getUser();
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
+        $fm = new Filesystem();
         
         if($request->request->get('actionForm'))
         {

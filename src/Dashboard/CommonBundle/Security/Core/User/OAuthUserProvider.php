@@ -72,25 +72,7 @@ class OAuthUserProvider implements OAuthAwareUserProviderInterface, UserProvider
         
         switch($this->response->getResourceOwner()->getName())
         {
-            case 'vkontakte':
-                $user->setVkID($this->response->getUsername());
-            
-                if($this->response->getResponse()['response'][0])
-                {
-                    $avatar = $this->response->getResponse()['response'][0]['photo_medium'];
-
-                    $path = explode(".", $avatar);
-                    $localAvatarName = rand(1, 99999).'.'.$path[count($path) - 1];
-
-                    $fs->copy($avatar, 'bundles/images/users/avatars/' . $localAvatarName);
-
-                    $userinfo->setAvatar($localAvatarName);
-                }
-                $user->setFbID(null);
-            break;
-            
             case 'facebook':
-                
                 $user->setFbID($this->response->getUsername());
                 $user->setVkID(null);
             break;
@@ -126,9 +108,6 @@ class OAuthUserProvider implements OAuthAwareUserProviderInterface, UserProvider
         {
             switch($this->response->getResourceOwner()->getName())
             {
-                case 'vkontakte':
-                    $user = $this->repository->findOneBy(array('username' => $username, 'vkID' => $this->response->getUsername()));
-                break;
                 case 'facebook':
                     $user = $this->repository->findOneBy(array('username' => $username, 'fbID' => $this->response->getUsername()));
                 break;
@@ -141,9 +120,6 @@ class OAuthUserProvider implements OAuthAwareUserProviderInterface, UserProvider
         {
             switch($this->response->getResourceOwner()->getName())
             {
-                case 'vkontakte':
-                    $user = $this->repository->findOneByVkID($this->response->getUsername());
-                break;
                 case 'facebook':
                     $user = $this->repository->findOneByFbID($this->response->getUsername());
                 break;
@@ -157,11 +133,6 @@ class OAuthUserProvider implements OAuthAwareUserProviderInterface, UserProvider
         {
             switch($this->response->getResourceOwner()->getName())
             {
-                case 'vkontakte':
-                    $user->setVkID($this->response->getUsername());
-                    $this->entityManager->persist($user);
-                    $this->entityManager->flush();
-                break;
                 case 'facebook':
                     $user->setFbID($this->response->getUsername());
                     $this->entityManager->persist($user);

@@ -29,7 +29,11 @@
                         <li><a href="{{ path('account') }}">{% trans %}Личный кабинет{% endtrans %}</a></li>
                         <li>/</li>
                     {% endif %}
-                    <li>{% trans %}Сообщения{% endtrans %}</li>
+                    {% if conversation.userOne.id == admin.id or conversation.userTwo.id == admin.id %}
+                        <li>{% trans %}Техническая поддержка{% endtrans %}</li>
+                    {% else %}
+                        <li>{% trans %}Сообщения{% endtrans %}</li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -43,7 +47,11 @@
         </div>
         <div class="col-lg-10 col-md-10">
             <div class="accountBlockHeader">
-                <div class="account-block-header"><h1><b>{% trans %}Сообщения{% endtrans %}</b></h1></div>
+                {% if conversation.userOne.id == admin.id or conversation.userTwo.id == admin.id %}
+                    <div class="account-block-header"><h1><b>{% trans %}Техническая поддержка{% endtrans %}</b></h1></div>
+                {% else %}
+                    <div class="account-block-header"><h1><b>{% trans %}Сообщения{% endtrans %}</b></h1></div>
+                {% endif %}
             </div>
         </div>
     </div>

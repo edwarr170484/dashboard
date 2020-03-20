@@ -51,7 +51,8 @@
                                 <div class="siteInfoPaneFloat">
                                     <form action="{{ path('search') }}" method="post">
                                         <div class="header-search-box">
-                                            <input name="searchText" type="text" placeholder="{% trans %}Найти{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
+                                            <input name="searchText" type="text" placeholder="{% trans %}Найти{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %}
+                                                   autocomplete="off" />
                                             <a data-toggle="modal" data-target="#regionModal" class="top-select-region">
                                                 {% if sessionCity %}
                                                     {{ sessionCity.name }}

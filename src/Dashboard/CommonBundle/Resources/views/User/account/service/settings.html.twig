@@ -247,15 +247,6 @@
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{{ form_label(formDealer.logotypeNew) }}:</div>
                                     <div class="formParameterField dealerLogoField dealerLogotype">
-                                        <a class="change-avatar logotype" onclick='$(this).parent().find(".change-avatar-input").trigger("click");'>
-                                            <svg width="126" height="126" viewBox="0 0 126 126" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <rect x="0.5" y="0.5" width="125" height="125" rx="4.5" stroke="#DFE1E5"/>
-                                                <rect x="3.5" y="3.5" width="119" height="119" rx="4.5" stroke="#F5AA01" stroke-dasharray="12 6"/>
-                                                <circle cx="63" cy="63" r="27.5" stroke="#F5AA01" stroke-width="3"/>
-                                                <line x1="47" y1="63.5" x2="79" y2="63.5" stroke="#F5AA01" stroke-width="3"/>
-                                                <line x1="62.5" y1="79" x2="62.5" y2="47" stroke="#F5AA01" stroke-width="3"/>
-                                            </svg>
-                                        </a>
                                         {% if formDealer.logotype.vars.value %}
                                             <div class="dealerSettingsLogotype">
                                                 <img src="{{ asset('bundles/images/dealers/logotypes/' ~ formDealer.logotype.vars.value) }}" alt="" title="" />
@@ -263,6 +254,25 @@
                                                     <button type="button" onclick="deleteDealerLogotype('{% trans %}Удалить логотип?{% endtrans %}')">{% trans %}Удалить{% endtrans %}</button>
                                                 </div>
                                             </div>
+                                            <a class="change-avatar logotype hide" onclick='$(this).parent().find(".change-avatar-input").trigger("click");'>
+                                                <svg width="126" height="126" viewBox="0 0 126 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.5" y="0.5" width="125" height="125" rx="4.5" stroke="#DFE1E5"/>
+                                                    <rect x="3.5" y="3.5" width="119" height="119" rx="4.5" stroke="#F5AA01" stroke-dasharray="12 6"/>
+                                                    <circle cx="63" cy="63" r="27.5" stroke="#F5AA01" stroke-width="3"/>
+                                                    <line x1="47" y1="63.5" x2="79" y2="63.5" stroke="#F5AA01" stroke-width="3"/>
+                                                    <line x1="62.5" y1="79" x2="62.5" y2="47" stroke="#F5AA01" stroke-width="3"/>
+                                                </svg>
+                                            </a>
+                                        {% else %}
+                                            <a class="change-avatar logotype" onclick='$(this).parent().find(".change-avatar-input").trigger("click");'>
+                                                <svg width="126" height="126" viewBox="0 0 126 126" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.5" y="0.5" width="125" height="125" rx="4.5" stroke="#DFE1E5"/>
+                                                    <rect x="3.5" y="3.5" width="119" height="119" rx="4.5" stroke="#F5AA01" stroke-dasharray="12 6"/>
+                                                    <circle cx="63" cy="63" r="27.5" stroke="#F5AA01" stroke-width="3"/>
+                                                    <line x1="47" y1="63.5" x2="79" y2="63.5" stroke="#F5AA01" stroke-width="3"/>
+                                                    <line x1="62.5" y1="79" x2="62.5" y2="47" stroke="#F5AA01" stroke-width="3"/>
+                                                </svg>
+                                            </a>
                                         {% endif %}
                                         {{ form_widget(formDealer.logotypeNew) }}
                                         {{ form_widget(formDealer.logotype) }}

@@ -76,7 +76,7 @@
                                                         </div>
                                                         <div class="accountOrderUserInfo">
                                                             <ul class="list-unstyled list-inline">
-                                                                <li><a href="{{ path('account_start_conversation',{'companionId' : order.userSended.id}) }}">{% trans %}Написать покупателю{% endtrans %}</a></li>
+                                                                <li><a href="{{ path('account_start_conversation',{'companionId' : order.userSended.id, 'productId' : order.product.id}) }}">{% trans %}Написать покупателю{% endtrans %}</a></li>
                                                                 <li><a href="tel:{{ order.userSended.userinfo.phone }}">
                                                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                             <path d="M2.81556 6.05889C3.93556 8.26 5.74 10.0567 7.94111 11.1844L9.65222 9.47333C9.86222 9.26333 10.1733 9.19333 10.4456 9.28667C11.3167 9.57444 12.2578 9.73 13.2222 9.73C13.65 9.73 14 10.08 14 10.5078V13.2222C14 13.65 13.65 14 13.2222 14C5.91889 14 0 8.08111 0 0.777778C0 0.35 0.35 0 0.777778 0H3.5C3.92778 0 4.27778 0.35 4.27778 0.777778C4.27778 1.75 4.43333 2.68333 4.72111 3.55444C4.80667 3.82667 4.74444 4.13 4.52667 4.34778L2.81556 6.05889Z" fill="#616161"/>

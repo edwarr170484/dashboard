@@ -133,7 +133,7 @@
                                                     </div>
                                                     <div class="categorySpecialAdvertName">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                                            {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
+                                                            {{ product.name }}
                                                         </a>
                                                     </div>
                                                     <div class="categorySpecialAdvertFeatures">
@@ -181,7 +181,7 @@
                                                     </div>
                                                     <div class="categorySpecialAdvertName">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                                            {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
+                                                            {{ product.name }}
                                                         </a>
                                                     </div>
                                                     <div class="categorySpecialAdvertFeatures">
@@ -232,7 +232,7 @@
                                                     </div>
                                                     <div class="categorySpecialAdvertName">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
-                                                            {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
+                                                            {{ product.name }}
                                                         </a>
                                                     </div>
                                                     <div class="categorySpecialAdvertFeatures">
@@ -255,7 +255,7 @@
                                     </div>
                                 {% endif %}
                     <div class="hidden-sm hidden-xs" style="text-align:center;padding-bottom: 5.8rem;">
-                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'bottompage'})) }}
                     </div>
 		</div>
 		<div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">

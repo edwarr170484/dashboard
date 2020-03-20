@@ -4,7 +4,7 @@ $(document).ready(function(){
     $(".serviceInfo").mCustomScrollbar();
     $(".salonJobs").mCustomScrollbar();
     
-    $(".change-avatar").click(function(){$(this).parent().find(".change-avatar-input").trigger("click");});
+    /*$(".change-avatar").click(function(){$(this).parent().find(".change-avatar-input").trigger("click");});*/
     
     $("#selectAutoMark").click(function(){
         $(this).find("input").blur();
@@ -174,6 +174,7 @@ function deleteDealerLogotype(text){
             success: function()
             {
                 $("#dealerinfo_logotype").val(0);
+                $(".dealerSettingsLogotype").next('.logotype').removeClass('hide');
                 $(".dealerSettingsLogotype").remove();
             },
             error: function(xhr, ajaxOptions, thrownError) {
@@ -477,6 +478,7 @@ function toggleSearchModal(event){
         $('html, body').css({overflow: 'hidden',height: '100%'});
     }
     $("#desktopSearchModal").toggleClass("active");
+    $("#modalSearchText").focus();
 }
 function getModalSearchResults(element){
     $.ajax({
@@ -842,16 +844,17 @@ function clearFormFilters(formElement){
     });
 }
 
-function getSubCategories(element, targetElement, type){
+function getSubCategories(element, targetElement, type, baseCategory){
     var val = element.val();
     $.ajax({
-        url: '/category/subcategories/' + type + '/' + val,
+        url: '/category/subcategories/' + type + '/' + val + '/' + baseCategory,
         type: 'get',
         dataType: 'html',
         success: function(data)
         {
             targetElement.html(data);
             targetElement.find("select").customSelect();
+            targetElement.find("select").trigger("change");
         },
         error: function(xhr, ajaxOptions, thrownError) {
             err=xhr.responseText;
@@ -866,4 +869,20 @@ function selectDealerAutoMark(element){
 function selectCityCode(element, value){
     element.parent().parent().find("input").val(value).trigger('keyup');
     element.parent().hide();
+}
+
+function showSellerNumer(productId)
+{
+    $.ajax({
+        url: '/getsellerphone/' + productId,
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(html){
+            $(".advertContactPhones").html(html);
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            err=xhr.responseText;
+        }
+    });
 }

@@ -77,11 +77,11 @@
                                     {{ flashMessage | raw }}
                                 </div>                             
                             {% endfor %}
-                            {{ form_start(formMain, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal userSettingsForm'}}) }}
+                            {{ form_start(formMain, {'method':'POST','multipart':true,'attr': {'id' : 'userMain','class': 'form-horizontal userSettingsForm'}}) }}
                             <div class="formParemetersItem">
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Аватар{% endtrans %}:</div>
-                                    <div class="formParameterField dealerLogoField">
+                                    <div class="formParameterField dealerLogoField dealerUserLogotype">
                                         {% if avatar %}
                                             <img src="{{ asset('bundles/images/users/avatars/') }}{{avatar}}" alt="" title="" />
                                         {% else %}
@@ -93,7 +93,39 @@
                                         {% endif %}
                                         {{ form_widget(formMain.userinfo.avatarNew) }}
                                         {{ form_widget(formMain.userinfo.avatar) }}
-                                        <a class="change-avatar">{% trans %}изменить{% endtrans %}</a>
+                                        <a class="change-avatar" onclick='$(this).parent().find(".change-avatar-input").trigger("click");'>{% trans %}изменить{% endtrans %}</a>
+                                        <script>
+                                            $("#userMain_userinfo_avatarNew").change(function(){
+                                                var fd = new FormData;
+                                                $("#userMain").find("input[type='text']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#userMain").find("input[type='email']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#userMain").find("select").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#userMain").find("input[type='hidden']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+                                                });
+                                                $("#userMain").find("input[type='file']").each(function(){
+                                                    fd.append($(this).attr('name'), $('#' + $(this).attr('id'))[0].files[0]);
+                                                });
+                                                //fd.append('dealerinfo[logotypeNew]', $('#dealerinfo_logotypeNew')[0].files[0]);
+                                                
+                                                $.ajax({
+                                                    url:'/account/settings',
+                                                    data: fd,
+                                                    processData: false,
+                                                    contentType: false,
+                                                    method: 'post',
+                                                    success : function(html){
+                                                        $('.dealerUserLogotype').html($(html).find('.dealerUserLogotype').html());
+                                                    }
+                                                });
+                                            });
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -127,16 +159,24 @@
                             </div>
                             <div class="formParemetersItem">
                                 <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: </div>
-                                    <div class="formParameterField cityCodeBlock">
-                                        {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
-                                        <div class="codesListBlock"></div>
+                                    <div class="formParameterLabel">{% trans %}Регион{% endtrans %}: <sup>*</sup></div>
+                                    <div class="formParameterField">
+                                        {{ form_widget(formMain.userinfo.region,{'id' : 'settingsRegion'})}}
                                     </div>
                                 </div>
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
                                     <div class="formParameterField">
                                         {{ form_widget(formMain.userinfo.city,{'id' : 'settingsCity'})}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="formParemetersItem">
+                                <div class="formParameter">
+                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: </div>
+                                    <div class="formParameterField cityCodeBlock">
+                                        {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
+                                        <div class="codesListBlock"></div>
                                     </div>
                                 </div>
                                 <script>
@@ -150,6 +190,11 @@
                                                 dataType: 'json',
                                                 success: function(data) {
                                                     if(data !== 0){
+                                                        $("#settingsRegion").parent().find(".select-option").each(function(){
+                                                            if($(this).data('value') === parseInt(data.region)){
+                                                                $(this).trigger('click');
+                                                            }
+                                                        });
                                                         $("#settingsCity").parent().find(".select-option").each(function(){
                                                             if($(this).data('value') === parseInt(data.city)){
                                                                 $(this).trigger('click');
@@ -172,12 +217,32 @@
                                         }
                                     });
                                     
+                                    $("#settingsRegion").change(function(){
+                                        $("#settingsCityCode").val(null);
+                                        $(".codesListBlock").html('').hide();
+                                        $("#settingsCity").clearValue();
+                                    });
+                                    
                                     $("#settingsCity").change(function(){
                                         $("#settingsCityCode").val(null);
                                         $(".codesListBlock").html('').hide();
+                                        $.ajax({
+                                                url : '/region/get/' + $(this).val(),
+                                                type: 'get',
+                                                dataType: 'json',
+                                                success: function(data) {
+                                                    if(data !== 0){
+                                                        $("#settingsRegion").parent().find(".select-option").each(function(){
+                                                            if($(this).data('value') === parseInt(data.region)){
+                                                                $(this).trigger('click');
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                        });
                                     });
                                 </script>
-                            </div>
+                            </div>    
                             <div class="formParemetersItem">
                                 <div class="formParameter">
                                     <div class="formParameterLabel"></div>

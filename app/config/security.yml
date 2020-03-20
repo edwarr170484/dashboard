@@ -46,6 +46,14 @@ security:
         main:
             pattern:      ^/
             anonymous: ~
+            oauth:
+                resource_owners:
+                    facebook:            "/connect/check-facebook" 
+                login_path:        /login
+                failure_path:      /login
+                default_target_path: /account/settings
+                oauth_user_provider:
+                    service: my_project.oauth.user_provider
             form_login:
                 csrf_token_generator: security.csrf.token_manager
                 provider: seller_db_provider 
@@ -53,15 +61,6 @@ security:
                 check_path: /login
                 default_target_path: /account
                 use_referer: true
-            oauth:
-                resource_owners:
-                    vkontakte:           "/connect/check-vkontakte"
-                    facebook:            "/connect/check-facebook" 
-                login_path:        /connect
-                failure_path:      /connect
-                default_target_path: /account/settings
-                oauth_user_provider:
-                    service: my_project.oauth.user_provider
             logout:
                 path:   /logout
                 target: /
@@ -78,7 +77,6 @@ security:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/restore, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/connect/check-vkontakte, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/check-facebook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/account, roles: [ROLE_INDIVIDUAL,ROLE_DEALER,ROLE_SERVICE] }
         

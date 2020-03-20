@@ -481,9 +481,9 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .advertAdditionalsItems ul li{@include break-inside(avoid);display: block;margin-bottom: 10px;}
 .advertTextHeader h3{color:$black-text;}
 .advertAdditionals{padding-bottom: 5rem;}
-.advertTextText{@include fontView("GothamProRegular",$super-black-color,1.4rem,1.8rem);padding-top: 2.4rem;}
+.advertTextText{@include fontView("GothamProRegular",$super-black-color,1.4rem,1.8rem);padding-top: 2.4rem;padding-bottom: 6.5rem;}
 .no-padding{padding: 0;}
-.product-tabs{padding-top: 6.5rem;padding-bottom: 3.5rem;}
+.product-tabs{padding-bottom: 3.5rem;}
 .product-tabs-inner{@include border-radius(9px);@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));}
 .product-tabs-inner ul{background: $super-white-color;@include flexBox(row,space-between,center);@include flex-wrap(wrap);}
 .product-tabs-inner .nav-tabs > li > a{
@@ -884,7 +884,7 @@ ul.justLinks li{position: relative;}
 .accountMessageItem{@include flexBox(row, space-between, center);flex-wrap:wrap;}
 .accountMessageItem.hide{display: none;}
 .accountMessageItemUser{@include flexBox(row, flex-start, center);width: 80%;position: relative;}
-.accountMessageItemUser > a{position: absolute;display:none;width: 100%;height: 100%;top: 0;left: 0;}
+.accountMessageItemUser > a{position: absolute;display:block;width: 100%;height: 100%;top: 0;left: 0;}
 .accountMessageItemCheck {padding-right: 4rem;}
 .accountMessageItem.active .accountMessageItemEnvelope svg path{fill:$orange-color;stroke:#fff;}
 .accountMessageItemEnvelope{@include flexBox(row, flex-start, center);padding-right: 4rem;}

@@ -49,6 +49,12 @@ class Region
     private $sortorder;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Locale", inversedBy="regions")
+     * @ORM\JoinColumn(name="locale_id", referencedColumnName="id")
+     */
+    private $locale;
+    
+    /**
      * Constructor
      */
     public function __construct()

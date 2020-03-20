@@ -82,7 +82,7 @@
                     {% endif %}
                     <li class="arrow">
                         <a href="{{ path('product', {'productId' : product.id,'productName' : product.translit}) }}">
-                            {{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}
+                            {{ product.name }}
                         </a>
                     </li>
                 </ul>
@@ -100,7 +100,7 @@
             {% endfor %}      
             <div class="row product-block">
                 <div class="col-lg-9 col-md-9">
-                    <div class="content-block-header"><h1>{{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}</h1></div>
+                    <div class="content-block-header"><h1>{{ product.name }}</h1></div>
                     <div class="advertInfo">
                         <div class="advertInfoTypes">{{ product.info.year }} {% trans %}г.{% endtrans %}, 
                             {% if product.info.modification %}
@@ -121,47 +121,41 @@
                 <div class="col-md-9">
                     <div class="row advertFotos">
                         {% if product.fotos | length > 0 %}
-                        <div class="advertMainFoto">
-                            <a href="#productFoto{{ product.fotos[0].id }}" data-toggle="modal" data-target="#productSlider">
-                                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                            </a>
-                        </div>
-                        <div class="advertFotoIcons">
-                            <div class="advertIcons">
-                                <ul class="list-unstyled list-inline">
-                                    {% if product.fotos | length > 4 %}
-                                        {% set num = 0 %}
-                                        {% for i in 0 .. 2 %}
-                                            <li>
-                                                <a href="#productFoto{{ product.fotos[i].id }}" data-toggle="modal" data-target="#productSlider">
-                                                    <img src="{{ asset('bundles/images/products/' ~ product.fotos[i].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                                                </a>
-                                            </li>
-                                            {% set num = i %}
-                                        {% endfor %}
-                                        <li>
-                                            <a href="#productFoto{{ product.fotos[num + 1].id }}" data-toggle="modal" data-target="#productSlider">
-                                                <img src="{{ asset('bundles/images/products/' ~ product.fotos[num + 1].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                                                <div class="advertIconCover">{% trans %}Еще{% endtrans %} {{ product.fotos | length - 4 }} {% trans %}фото{% endtrans %}</div>
-                                            </a>
-                                        </li>
-                                    {% else %}
-                                        {% for foto in product.fotos %}
-                                            <li>
-                                                <a href="#productFoto{{ foto.id }}" data-toggle="modal" data-target="#productSlider">
-                                                    <img src="{{ asset('bundles/images/products/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                        {% else %}
                             <div class="advertMainFoto">
-                                <a href="javascript:void(0)">
-                                    <img src="{{ asset('bundles/images/products/nophoto.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                <a href="#productFoto{{ product.fotos[0].id }}" data-toggle="modal" data-target="#productSlider">
+                                    <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                 </a>
+                            </div>
+                            <div class="advertFotoIcons">
+                                <div class="advertIcons">
+                                    <ul class="list-unstyled list-inline">
+                                        {% if product.fotos | length > 4 %}
+                                            {% set num = 0 %}
+                                            {% for i in 0 .. 2 %}
+                                                <li>
+                                                    <a href="#productFoto{{ product.fotos[i].id }}" data-toggle="modal" data-target="#productSlider">
+                                                        <img src="{{ asset('bundles/images/products/' ~ product.fotos[i].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                    </a>
+                                                </li>
+                                                {% set num = i %}
+                                            {% endfor %}
+                                            <li>
+                                                <a href="#productFoto{{ product.fotos[num + 1].id }}" data-toggle="modal" data-target="#productSlider">
+                                                    <img src="{{ asset('bundles/images/products/' ~ product.fotos[num + 1].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                    <div class="advertIconCover">{% trans %}Еще{% endtrans %} {{ product.fotos | length - 4 }} {% trans %}фото{% endtrans %}</div>
+                                                </a>
+                                            </li>
+                                        {% else %}
+                                            {% for foto in product.fotos %}
+                                                <li>
+                                                    <a href="#productFoto{{ foto.id }}" data-toggle="modal" data-target="#productSlider">
+                                                        <img src="{{ asset('bundles/images/products/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
                             </div>
                         {% endif %}                
                     </div>
@@ -275,12 +269,14 @@
                                     {% endfor  %}
                                 </div>
                                 {% endif %}
-                                <div class="advertText">
-                                    <div class="advertTextHeader"><h3>{% trans %}Комментарий продавца{% endtrans %}</h3></div>
-                                    <div class="advertTextText">
-                                        {{ product.info.description | raw }}
+                                {% if product.info.description %}
+                                    <div class="advertText">
+                                        <div class="advertTextHeader"><h3>{% trans %}Комментарий продавца{% endtrans %}</h3></div>
+                                        <div class="advertTextText">
+                                            {{ product.info.description | raw }}
+                                        </div>
                                     </div>
-                                </div>
+                                {% endif %}
                                 <div class="row">
                                 <div class="col-lg-12 product-tabs">
                                 <div class="product-tabs-inner">
@@ -490,7 +486,7 @@
                         </div>
                         </div>
                         <div class="advertSellerInfoInner">
-                            <div class="advertSellerInfoAdvertName">{{ product.name }} {% if product.info.modification %}{{ product.info.modification.label }}{% endif %}</div>
+                            <div class="advertSellerInfoAdvertName">{{ product.name }}</div>
                             {% if product.user.roles[0].role == "ROLE_DEALER" %}
                                 <div class="advertSellerName">{{ product.user.dealerinfo.company }}</div>
                             {% else %}
@@ -531,27 +527,14 @@
                                     <div class="advertSellerTime" id="dealerWorktime{{ product.user.id }}"></div>
                                     <script>getDealerWorkTime($("#dealerWorktime{{ product.user.id }}"), {{ product.user.id }})</script>
                                 {% endif %}
-                                {% if product.user.roles[0].role == "ROLE_DEALER" %}
-                                    {% if product.user.dealerinfo.phones | length > 0 %}
-                                        {% for phone in product.user.dealerinfo.phones %}
-                                            <div class="advertContact phone">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M21.9994 16.9738V19.9846C22.0005 20.2642 21.9432 20.5408 21.831 20.7969C21.7188 21.053 21.5542 21.2829 21.3478 21.4719C21.1415 21.6608 20.8978 21.8047 20.6325 21.8942C20.3672 21.9838 20.0861 22.017 19.8072 21.9919C16.7128 21.6563 13.7404 20.601 11.1289 18.9108C8.69921 17.3699 6.63926 15.3141 5.09534 12.8892C3.39586 10.271 2.33824 7.29008 2.00816 4.18795C1.98303 3.91042 2.01608 3.63071 2.1052 3.36663C2.19432 3.10254 2.33757 2.85987 2.52581 2.65407C2.71405 2.44826 2.94317 2.28383 3.19858 2.17123C3.45398 2.05864 3.73008 2.00036 4.0093 2.0001H7.02608C7.5141 1.9953 7.98722 2.16778 8.35725 2.48537C8.72727 2.80297 8.96896 3.24401 9.03727 3.72629C9.1646 4.68982 9.40074 5.63587 9.74118 6.54642C9.87648 6.90563 9.90576 7.29602 9.82556 7.67133C9.74536 8.04665 9.55903 8.39115 9.28867 8.66402L8.01156 9.93859C9.44308 12.4512 11.5276 14.5315 14.0451 15.9602L15.3222 14.6856C15.5956 14.4158 15.9408 14.2298 16.3169 14.1498C16.6929 14.0698 17.0841 14.099 17.444 14.234C18.3564 14.5738 19.3043 14.8095 20.2698 14.9365C20.7582 15.0053 21.2044 15.2509 21.5233 15.6265C21.8422 16.0021 22.0116 16.4817 21.9994 16.9738Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                </svg>
-                                                {{ phone.phone }}
-                                            </div>
-                                        {% endfor %}
-                                    {% endif %}
-                                {% else %}
-                                    {% if product.user.userinfo.phone %}
-                                        <div class="advertContact phone">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M21.9994 16.9738V19.9846C22.0005 20.2642 21.9432 20.5408 21.831 20.7969C21.7188 21.053 21.5542 21.2829 21.3478 21.4719C21.1415 21.6608 20.8978 21.8047 20.6325 21.8942C20.3672 21.9838 20.0861 22.017 19.8072 21.9919C16.7128 21.6563 13.7404 20.601 11.1289 18.9108C8.69921 17.3699 6.63926 15.3141 5.09534 12.8892C3.39586 10.271 2.33824 7.29008 2.00816 4.18795C1.98303 3.91042 2.01608 3.63071 2.1052 3.36663C2.19432 3.10254 2.33757 2.85987 2.52581 2.65407C2.71405 2.44826 2.94317 2.28383 3.19858 2.17123C3.45398 2.05864 3.73008 2.00036 4.0093 2.0001H7.02608C7.5141 1.9953 7.98722 2.16778 8.35725 2.48537C8.72727 2.80297 8.96896 3.24401 9.03727 3.72629C9.1646 4.68982 9.40074 5.63587 9.74118 6.54642C9.87648 6.90563 9.90576 7.29602 9.82556 7.67133C9.74536 8.04665 9.55903 8.39115 9.28867 8.66402L8.01156 9.93859C9.44308 12.4512 11.5276 14.5315 14.0451 15.9602L15.3222 14.6856C15.5956 14.4158 15.9408 14.2298 16.3169 14.1498C16.6929 14.0698 17.0841 14.099 17.444 14.234C18.3564 14.5738 19.3043 14.8095 20.2698 14.9365C20.7582 15.0053 21.2044 15.2509 21.5233 15.6265C21.8422 16.0021 22.0116 16.4817 21.9994 16.9738Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                            </svg>
-                                            {{ product.user.userinfo.phone }}
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
+                                <div class="advertContactPhones">
+                                    <div class="advertContact phone">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21.9994 16.9738V19.9846C22.0005 20.2642 21.9432 20.5408 21.831 20.7969C21.7188 21.053 21.5542 21.2829 21.3478 21.4719C21.1415 21.6608 20.8978 21.8047 20.6325 21.8942C20.3672 21.9838 20.0861 22.017 19.8072 21.9919C16.7128 21.6563 13.7404 20.601 11.1289 18.9108C8.69921 17.3699 6.63926 15.3141 5.09534 12.8892C3.39586 10.271 2.33824 7.29008 2.00816 4.18795C1.98303 3.91042 2.01608 3.63071 2.1052 3.36663C2.19432 3.10254 2.33757 2.85987 2.52581 2.65407C2.71405 2.44826 2.94317 2.28383 3.19858 2.17123C3.45398 2.05864 3.73008 2.00036 4.0093 2.0001H7.02608C7.5141 1.9953 7.98722 2.16778 8.35725 2.48537C8.72727 2.80297 8.96896 3.24401 9.03727 3.72629C9.1646 4.68982 9.40074 5.63587 9.74118 6.54642C9.87648 6.90563 9.90576 7.29602 9.82556 7.67133C9.74536 8.04665 9.55903 8.39115 9.28867 8.66402L8.01156 9.93859C9.44308 12.4512 11.5276 14.5315 14.0451 15.9602L15.3222 14.6856C15.5956 14.4158 15.9408 14.2298 16.3169 14.1498C16.6929 14.0698 17.0841 14.099 17.444 14.234C18.3564 14.5738 19.3043 14.8095 20.2698 14.9365C20.7582 15.0053 21.2044 15.2509 21.5233 15.6265C21.8422 16.0021 22.0116 16.4817 21.9994 16.9738Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <a href="javascript:void(0)" onclick="showSellerNumer({{ product.id }})">{% trans %}Показать телефон{% endtrans %}</a>
+                                    </div>
+                                </div>
                                 <div class="advertContact message">
                                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M21 10.4445C21.0038 11.911 20.6612 13.3577 20 14.6667C19.216 16.2353 18.0108 17.5546 16.5194 18.477C15.0279 19.3993 13.3091 19.8882 11.5555 19.8889C10.089 19.8927 8.64234 19.5501 7.33332 18.8889L1 21L3.11111 14.6667C2.44992 13.3577 2.10729 11.911 2.11111 10.4445C2.11179 8.69086 2.60068 6.97208 3.52302 5.48064C4.44536 3.98919 5.76472 2.78399 7.33332 2.00003C8.64234 1.33884 10.089 0.996208 11.5555 1.00003H12.1111C14.427 1.1278 16.6145 2.10532 18.2546 3.74543C19.8947 5.38553 20.8722 7.57297 21 9.88891V10.4445Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -653,7 +636,7 @@
                                 {% endif %}
                                 <div class="categorySpecialAdvertName">
                                     <a href="{{ path('product',{'productId' : sameProduct.id, 'productName' : sameProduct.translit}) }}">
-                                        {{ sameProduct.name }} {% if sameProduct.info.modification %}{{ sameProduct.info.modification.label }}{% endif %}
+                                        {{ sameProduct.name }}
                                     </a>
                                 </div>
                                 <div class="categorySpecialAdvertFeatures">
@@ -689,7 +672,7 @@
                                 {% endif %}
                                 <div class="categorySpecialAdvertName">
                                     <a href="{{ path('product',{'productId' : dealerProduct.id, 'productName' : dealerProduct.translit}) }}">
-                                        {{ dealerProduct.name }} {% if dealerProduct.info.modification %}{{ dealerProduct.info.modification.label }}{% endif %}
+                                        {{ dealerProduct.name }}
                                     </a>
                                 </div>
                                 <div class="categorySpecialAdvertFeatures">
@@ -705,7 +688,7 @@
                 </div>  
             {% endif %}
             <div class="productpage-banner hidden-sm hidden-xs">
-                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'position' : 'centerpage'})) }}
+                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'position' : 'bottompage'})) }}
             </div>
         </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs">

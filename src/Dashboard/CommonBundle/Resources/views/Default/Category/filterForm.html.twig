@@ -69,7 +69,7 @@
                                 {% if category.isUseChildrensLikeType %}
                                     {% if category.children | length > 0 %}
                                         <div class="col-lg-3 col-md-3" id="categoryType{{ category.id }}">
-                                            <select name="categoryFilter[type]" class="custom-select" placeholder="{% trans %}Тип{% endtrans %}" onchange="getSubCategories($(this), $('#categoryMark{{ category.id }}'), 'mark')">
+                                            <select name="categoryFilter[type]" class="custom-select" data-clearchange="1" placeholder="{% trans %}Тип{% endtrans %}" onchange="getSubCategories($(this), $('#categoryMark{{ category.id }}'), 'mark', {{ category.id }})">
                                                 <option value="0"></option>
                                                 {% for child in category.children %}
                                                     {% set selected = '' %}
@@ -86,7 +86,7 @@
                                 {% else %}
                                     {% if category.children | length > 0 %}
                                         <div class="col-lg-3 col-md-3" id="categoryMark{{ category.id }}">
-                                            <select name="categoryFilter[mark]" data-write="1" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel{{ category.id }}'), 'model')">
+                                            <select name="categoryFilter[mark]" data-write="1" data-clearchange="1" class="custom-select" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel{{ category.id }}'), 'model', {{ category.id }})">
                                                 <option value="0"></option>
                                                 {% for child in category.children %}
                                                     {% set selected = '' %}
@@ -107,7 +107,7 @@
                                 {% endif %}
                                 {% if category.isUseChildrensLikeType %}
                                     <div class="col-lg-3 col-md-3" id="categoryMark{{ category.id }}">
-                                        <select name="categoryFilter[mark]" class="custom-select" data-write="1" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel{{ category.id }}'), 'model')">
+                                        <select name="categoryFilter[mark]" class="custom-select" data-write="1" data-clearchange="1" placeholder="{% trans %}Марка{% endtrans %}" onchange="getSubCategories($(this), $('#categoryModel{{ category.id }}'), 'model', {{ category.id }})">
                                             {% if app.request.get('category') and app.request.get('category') == category.id %}
                                                 <option value="0"></option>
                                                 {% for child in categoryMarks %}

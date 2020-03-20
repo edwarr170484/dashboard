@@ -89,6 +89,11 @@ class Locale
     private $emails;
     
     /**
+     * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\Region", mappedBy="locale", cascade={"persist"})
+     */
+    private $regions;
+    
+    /**
      * Constructor
      */
     public function __construct()
@@ -487,5 +492,38 @@ class Locale
     public function getEmails()
     {
         return $this->emails;
+    }
+
+    /**
+     * Add regions
+     *
+     * @param \Dashboard\CommonBundle\Entity\Region $regions
+     * @return Locale
+     */
+    public function addRegion(\Dashboard\CommonBundle\Entity\Region $regions)
+    {
+        $this->regions[] = $regions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove regions
+     *
+     * @param \Dashboard\CommonBundle\Entity\Region $regions
+     */
+    public function removeRegion(\Dashboard\CommonBundle\Entity\Region $regions)
+    {
+        $this->regions->removeElement($regions);
+    }
+
+    /**
+     * Get regions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRegions()
+    {
+        return $this->regions;
     }
 }

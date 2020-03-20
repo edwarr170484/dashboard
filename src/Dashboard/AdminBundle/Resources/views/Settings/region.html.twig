@@ -66,6 +66,11 @@
                             Регионы не добавлены
                         {% endif%}
                     </div>
+                    {% if pagination %}
+                        <div class="pagination">
+                            {{ pagination | raw }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

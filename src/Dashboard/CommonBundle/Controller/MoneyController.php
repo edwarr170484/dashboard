@@ -124,25 +124,72 @@ class MoneyController extends Controller
         
         if($bill && $bill->getIsPayed() && !$bill->getIsClosed()){
             if($className == "RateBill"){
-                $userRate = new UserRate();
-                $userRate->setUser($user);
-                $userRate->setDateStart(new \DateTime("now"));
-                $currentDate = $userRate->getDateStart();
-                $userRate->setDateEnd($currentDate->add(new \DateInterval('P' . $bill->getRate()->getActiveTime() . 'Y')));
-                $userRate->setRate($bill->getRate());
-                $userRate->setCategory($bill->getCategory());
-                $userRate->setAdvertNumber($bill->getRate()->getAdvertNumber());
-                $userRate->setIsActive(1);
-
-                if(count($bill->getRate()->getServices())){
-                    foreach($bill->getRate()->getServices() as $rateService){
-                        $userRateItem = new UserRateItem();
-                        $userRateItem->setUserrate($userRate);
-                        $userRateItem->setService($rateService);
-                        $userRateItem->setCount($rateService->getValue());
-                        $manager->persist($userRateItem);
+                $userRate = false;
+                
+                if(count($user->getRates()) > 0){
+                    foreach($user->getRates() as $rate){
+                        if(($rate->getCategory()->getId() == $bill->getCategory()->getId())){
+                            $userRate = $rate;
+                        }
                     }
-                }            
+                }
+                
+                if($userRate){
+                    $currentDate = $userRate->getDateEnd();
+                    $userRate->setDateEnd($currentDate->add(new \DateInterval('P' . $bill->getRate()->getActiveTime() . 'Y')));
+                    $userRate->setAdvertNumber($userRate->getAdvertNumber() + $bill->getRate()->getAdvertNumber());
+                    
+                    if(count($bill->getRate()->getServices()) > 0){
+                        foreach($bill->getRate()->getServices() as $rateService){
+                            if(count($userRate->getItems()) > 0){
+                                $userRateItem = false;
+                                foreach($userRate->getItems() as $item){
+                                    if($item->getService()->getService()->getId() == $rateService->getService()->getId()){
+                                        $userRateItem = $item;
+                                        break;
+                                    }
+                                }
+                                
+                                if($userRateItem){
+                                    $userRateItem->setCount($userRateItem->getCount() + $rateService->getValue());
+                                }else{
+                                    $userRateItem = new UserRateItem();
+                                    $userRateItem->setUserrate($userRate);
+                                    $userRateItem->setService($rateService);
+                                    $userRateItem->setCount($rateService->getValue());
+                                }
+                                
+                                $manager->persist($userRateItem);
+                            }else{
+                                $userRateItem = new UserRateItem();
+                                $userRateItem->setUserrate($userRate);
+                                $userRateItem->setService($rateService);
+                                $userRateItem->setCount($rateService->getValue());
+                                $manager->persist($userRateItem);
+                            }
+                        }
+                    }
+                }else{
+                    $userRate = new UserRate();
+                    $userRate->setUser($user);
+                    $userRate->setDateStart(new \DateTime("now"));
+                    $currentDate = $userRate->getDateStart();
+                    $userRate->setDateEnd($currentDate->add(new \DateInterval('P' . $bill->getRate()->getActiveTime() . 'Y')));
+                    $userRate->setRate($bill->getRate());
+                    $userRate->setCategory($bill->getCategory());
+                    $userRate->setAdvertNumber($bill->getRate()->getAdvertNumber());
+                    $userRate->setIsActive(1);
+                    
+                    if(count($bill->getRate()->getServices()) > 0){
+                        foreach($bill->getRate()->getServices() as $rateService){
+                            $userRateItem = new UserRateItem();
+                            $userRateItem->setUserrate($userRate);
+                            $userRateItem->setService($rateService);
+                            $userRateItem->setCount($rateService->getValue());
+                            $manager->persist($userRateItem);
+                        }
+                    }    
+                }      
 
                 $bill->setPayment($payment);
                 $bill->setIsClosed(1);
@@ -151,7 +198,7 @@ class MoneyController extends Controller
                 $manager->flush();
             }else{
                 if($bill->getRates()){
-                    foreach($bill->getRates() as $rate){
+                    foreach($bill->getRates() as $rate){                       
                         if(!$rate->getDateAdded()){
                             $rate->setDateAdded(new \DateTime("now"));
                         }

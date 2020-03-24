@@ -54,7 +54,7 @@ $(document).ready(function(){
         var count = $(".dealerPhonesItem").length;
         var newForm = prototype.replace(/__name__/g, count);
         $(".dealerPhonesList").append(newForm);
-        $(".masked-phone").mask("+34 99 999 99 99");
+        $(".masked-phone").mask("+34 999 999 999");
     });
     
     $("#addDealerSalonPhone").click(function(){
@@ -62,7 +62,7 @@ $(document).ready(function(){
         var count = $(".dealerSalonPhonesItem").length;
         var newForm = prototype.replace(/__name__/g, count);
         $(".dealerSalonPhonesList").append(newForm);
-        $(".masked-phone").mask("+34 99 999 99 99");
+        $(".masked-phone").mask("+34 999 999 999");
     });
     
     $(".dealerAuto").click(function(){$(this).find('.dealerAutoInner').toggleClass('active');});
@@ -74,7 +74,7 @@ $(document).ready(function(){
         //$(".account-menu-list").slideUp();
     });
     
-    $(".masked-phone").mask("+34 99 999 99 99");
+    $(".masked-phone").mask("+34 999 999 999");
     $(".mainPageFiltersTabs").addClass("active");
     $("#breadScrumbsMobileMenuToggler").click(function(event){
         event.stopPropagation();
@@ -502,10 +502,15 @@ function getModalSearchResults(element){
     });
 }
 function toggleQuestion(element){
-    $(".pageFaqItem").removeClass("active");
-    $(".pageFaqItemAnswer").slideUp();
-    element.toggleClass("active");
-    element.find(".pageFaqItemAnswer").slideToggle();
+    if(element.hasClass("active")){
+        element.removeClass("active");
+        element.find(".pageFaqItemAnswer").slideUp();
+    }else{
+        $(".pageFaqItem").removeClass("active");
+        $(".pageFaqItemAnswer").slideUp();
+        element.addClass("active");
+        element.find(".pageFaqItemAnswer").slideDown();
+    }
 }
 
 function getDealerWorkTime(element, dealerId){

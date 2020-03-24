@@ -44,27 +44,58 @@
                 {{ page.text | raw }}
                 <div class="pageFaq">
                     {% if questions | length > 0%}
-                        {% for question in questions %}
-                            <div class="pageFaqBlock">
-                                <div class="pageFaqBlockHeader">{{ question.name }}</div>
-                                <div class="pageFaqItems">
-                                    {% if question.answers | length > 0 %}
-                                        {% for answer in question.answers %}
-                                            {% if answer.isSHow %}
-                                                <div class="pageFaqItem" onclick="toggleQuestion($(this));">
-                                                    <div class="pageFaqItemQuestion">
-                                                        {{ answer.name }}
-                                                    </div>
-                                                    <div class="pageFaqItemAnswer">
-                                                        {{ answer.content | raw }}
-                                                    </div>
-                                                </div>
+                        {% set num = questions | length / 2 %}
+                        {% set num = num | round(0, 'ceil') %}
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 faq-left">
+                                {% for i in 0..num-1 %}
+                                    <div class="pageFaqBlock">
+                                        <div class="pageFaqBlockHeader">{{ questions[i].name }}</div>
+                                        <div class="pageFaqItems">
+                                            {% if questions[i].answers | length > 0 %}
+                                                {% for answer in questions[i].answers %}
+                                                    {% if answer.isSHow %}
+                                                        <div class="pageFaqItem" onclick="toggleQuestion($(this));">
+                                                            <div class="pageFaqItemQuestion">
+                                                                {{ answer.name }}
+                                                            </div>
+                                                            <div class="pageFaqItemAnswer">
+                                                                {{ answer.content | raw }}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
+                            {% if questions | length > 1 %}
+                                <div class="col-lg-6 col-md-6 faq-right">
+                                    {% for i in num..questions | length - 1 %}
+                                        <div class="pageFaqBlock">
+                                            <div class="pageFaqBlockHeader">{{ questions[i].name }}</div>
+                                            <div class="pageFaqItems">
+                                                {% if questions[i].answers | length > 0 %}
+                                                    {% for answer in questions[i].answers %}
+                                                        {% if answer.isSHow %}
+                                                            <div class="pageFaqItem" onclick="toggleQuestion($(this));">
+                                                                <div class="pageFaqItemQuestion">
+                                                                    {{ answer.name }}
+                                                                </div>
+                                                                <div class="pageFaqItemAnswer">
+                                                                    {{ answer.content | raw }}
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}    
+                                </div> 
+                            {% endif %}
+                        </div>
                     {% endif %}
                 </div>
             </div>

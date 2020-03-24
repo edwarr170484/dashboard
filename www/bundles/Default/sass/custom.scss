@@ -1418,15 +1418,17 @@ ul.color li{position: relative;}
 .pagContentTabsSelectors ul li .whiteBlock{display: none;}
 .pagContentTabsSelectors ul li.active .whiteBlock{display: block;position: absolute;right: -20px;width: 40px;height: 100%;top: 0;z-index: 99;background: #fff;}
 .pagContentTabsContent .tab-pane{background: #fff;padding: 3rem 3.4rem;@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);@include box-shadow(0px 5px 12px rgba(0, 0, 0, 0.12));position: relative;}
-.pageFaqBlock{padding-right: 14rem;padding-bottom: 6rem;@include break-inside(avoid);page-break-inside:avoid;}
+.pageFaqBlock{padding-bottom: 6rem;}
 .pageFaqBlockHeader{@include fontView("GothamProBlack",$black-text,2.5rem,3.2rem)}
 .pageFaqItems{padding-top: 3rem;}
+.faq-left{padding-right: 55px;}
+.faq-right{padding-left: 55px;}
 .pageFaqItem{@include fontView("GothamProRegular",$black-text,1.6rem,2.2rem);padding: 1.6rem 0;border-bottom: 1px solid #DFE1E5;cursor:pointer;}
 .pageFaqItemAnswer{padding-top: 3rem;padding-bottom: 1.4rem;display: none;padding-left: 5rem;}
 .pageFaqItemQuestion{@include flexBox(row,flex-start,center);}
 .pageFaqItemQuestion:before{content:url('../img/faq-plus.svg');margin-right:2rem;}
 .pageFaqItem.active .pageFaqItemQuestion:before{content:url('../img/faq-black-plus.svg');margin-right:2rem;}
-.pageFaq{@include column-count(2);@include column-gap(0);}
+.pageFaq{}
 .topBanner{background: $yellow-color;}
 .form-group-label{@include fontView("GothamProMedium",$black-text,1.6rem,2.2rem);padding-bottom: 1rem;}
 .form-group-label span{color:#F5AA01;}

@@ -1,18 +1,10 @@
 <footer id="footerBlock">
-    <div class="container">
-        <div class="row">
+    <div class="container"><div class="row">
             <div class="col-md-3 footerLogoBlock" >
-                <div class="footerLogo">
-                    {% if settings.siteLogo %}
-                        <a href="{{ path('main') }}">
-                            <img src="{{ asset('bundles/images/site/' ~ settings.siteLogo) }}" alt="{{ settings.siteName }}" title="{{ settings.siteName }}" />
-                        </a>
-                    {% endif %}
-                </div>
+                <div class="footerLogo"><a href="/"><img src="/logo.svg" alt="Auto28.es" /></a></div>
                 <div class="footerSiteDescription">
                     {% trans %}Lorem ipsum dolor sit amet, consectetur adipisicing elit. A, totam, porro dolorum vitae ad quasi veniam iusto sed tempora cumque perferendis aspernatur. Laboriosam, animi, inventore, quia numquam optio libero enim ipsa in dolores quis iusto atque qui{% endtrans %}.
-                </div>
-            </div>    
+                </div></div>    
             <div class="col-md-9">
                 <div id="navbar-bottom">
                     <div class="row">
@@ -90,7 +82,7 @@
                         {% trans %}Información importante sobre cookies: El sitio web de la auto28.es utiliza cookies propias para mejorar la navegación. Las cookies utilizadas no contienen ningún tipo de información de carácter personal. Si continua navegando entendemos acepta su uso{% endtrans %}.
                     </div>
                     <div class="cookieAlertLink">
-                        <a href="/pages/cookie-information">{% trans %}Больше информации{% endtrans %}</a>
+                        <a href="/pages/Politika-konfidentsialnosti#block3">{% trans %}Больше информации{% endtrans %}</a>
                     </div>
                     <div class="cookieAlertButton">
                         <button onclick="accceptCookieInfo($(this))">{% trans %}Принять{% endtrans %}</button>
@@ -147,14 +139,7 @@
             </div>
         </div>
         <div id="desktopSearchModal" tabindex="-1" role="dialog" onclick="toggleSearchModal(event)">
-            <div class="searchBlock">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12 searchBlockInner" onclick="event.stopPropagation()">
-                            {% if settings.siteLogo %}
-                                <div><img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" /></div>
-                            {% endif %}
-                            <div class="searchBlockForm">
+            <div class="searchBlock"><div class="container"><div class="row"><div class="col-lg-12 searchBlockInner" onclick="event.stopPropagation()"><div><img src="/logo.svg" alt="Auto28.es"></div><div class="searchBlockForm">
                                 <form action="{{ path('search') }}" method="post" id="modalSearchForm">
                                     <input id="modalSearchText" name="searchText" type="text" placeholder="{% trans %}Поиск{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} onkeyup="getModalSearchResults($(this))" autocomplete="off" />
                                     <button type="submit" class="submit">{% trans %}Все результаты{% endtrans %}</button>

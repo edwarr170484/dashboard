@@ -263,30 +263,6 @@
 		
 		this.each(make);
     };
-    
-    $.fn.clearValue = function(options) {
-        var make = function(){
-            selectElement = $(this);
-            selectElement.find("option").each(function(){$(this).attr("selected",null);});
-            selectElement.val(null);
-            selectElement.parent().removeClass("selected").removeClass("active");
-            selectElement.parent().find(".select-option").each(function(){$(this).removeClass("active");});
-            
-            var isWrite = (selectElement.data('write')) ? 1 : 0;
-            
-            if(isWrite){
-                selectElement.parent().find(".select-value").find("input").val(null);
-                selectElement.parent().find(".select-value").find("input").attr('placeholder',(selectElement.attr("placeholder")));
-            }else{
-                selectElement.parent().find(".select-value").html("<div class='select-value-inner'>" + selectElement.attr("placeholder") + "</div>");
-            }
-            
-            selectElement.parent().find(".select-options").removeClass("opened").slideUp();
-            selectElement.parent().find(".select-option").removeClass('hide');
-        }
-        
-        this.each(make);
-    };
 	
 	$.fn.customCheckbox = function(options) {
 	

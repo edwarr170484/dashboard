@@ -121,10 +121,6 @@ class UserController extends Controller
             $role = $this->getDoctrine()->getRepository("DashboardCommonBundle:Role")->findOneByRole("ROLE_INDIVIDUAL");
             $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
             
-            $userinfo = new UserInfo();
-            $userinfo->setUser($user);
-            
-            $user->setUserinfo($userinfo);
             $user->setUsername($user->getEmail()); 
             $user->setIsActive(1);
             $user->setIsConfirm(0);
@@ -137,10 +133,13 @@ class UserController extends Controller
             $user->setAdvertNumber(0);
             $user->setPassword($password);
             
-            $manager->persist($userinfo);
             $manager->persist($user);
             $manager->persist($role);
             $manager->flush();
+            
+            $userinfo = new UserInfo();
+            $userinfo->setUser($user);
+            $manager->persist($userinfo);
             
             $register = new Register();
             $key = md5(md5(md5($password . rand(1, 99999999)) . rand(1, 99999)) . $user->getEmail());

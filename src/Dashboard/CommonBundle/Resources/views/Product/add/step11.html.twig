@@ -42,7 +42,7 @@
                                                     {% else %}        
                                                         {% set categoryTitle = child.title %}
                                                     {% endif %}
-                                                    <li class="categoryItem" data-title="{{ categoryTitle | lower }}">
+                                                    <li class="categoryItem visible" data-title="{{ categoryTitle | lower }}">
                                                         <a href="javascript:void(0)" onclick="getStep12({{ child.id }}, '{{ locale.code }}')" >
                                                             {{ categoryTitle }}
                                                         </a>

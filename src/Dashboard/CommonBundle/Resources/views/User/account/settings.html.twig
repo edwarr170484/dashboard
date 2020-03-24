@@ -193,12 +193,12 @@
                                                         $("#settingsRegion").parent().find(".select-option").each(function(){
                                                             if($(this).data('value') === parseInt(data.region)){
                                                                 $(this).trigger('click');
+                                                                $("#settingsCityCode").val(data.code);
                                                             }
                                                         });
                                                         $("#settingsCity").parent().find(".select-option").each(function(){
                                                             if($(this).data('value') === parseInt(data.city)){
                                                                 $(this).trigger('click');
-                                                                $("#settingsCity").val(data.city);
                                                                 $("#settingsCityCode").val(data.code);
                                                             }
                                                         });
@@ -220,7 +220,6 @@
                                     $("#settingsRegion").change(function(){
                                         $("#settingsCityCode").val(null);
                                         $(".codesListBlock").html('').hide();
-                                        $("#settingsCity").clearValue();
                                     });
                                     
                                     $("#settingsCity").change(function(){

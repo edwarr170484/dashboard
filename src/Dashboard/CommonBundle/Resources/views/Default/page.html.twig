@@ -48,23 +48,31 @@
                             <ul class="list-unstyled">
                                 {% set i = 1 %}
                                 {% for block in page.blocks %}
-                                    <li {% if i == 1 %}class="active"{% endif %}><a href="#block{{ block.id }}" aria-controls="home" role="tab" data-toggle="tab">{{ block.blockTitle }}<div class="whiteBlock"></div></a></li>
-                                    {% set i = i + 1 %}
+                                    <li><a class="tabBlockLink" href="#block{{ block.id }}" aria-controls="home" role="tab" data-toggle="tab">{{ block.blockTitle }}<div class="whiteBlock"></div></a></li>
                                 {% endfor %}
                             </ul>
                         </div>
                         <div class="pagContentTabsContent">
                             {% set i = 1 %}
                             {% for block in page.blocks %}
-                                <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="block{{ block.id }}">{{ block.blockContent | raw }}</div>
+                                <div role="tabpanel" class="tab-pane" id="block{{ block.id }}">{{ block.blockContent | raw }}</div>
                             {% set i = i + 1 %}
                             {% endfor %}
                         </div>
                     </div>
                 {% endif %}
-            </div>
-            <div class="page-banner">
-                {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page, 'position' : 'centerpage'})) }}
+                <script>
+                    $(".pagContentTabs").find(".tabBlockLink").each(function(){
+                        if($(this).attr("href") === window.location.hash){
+                            $(this).parent().addClass("active");
+                        }
+                    });
+                    $(".pagContentTabs").find(".tab-pane").each(function(){
+                        if("#" + $(this).attr("id") === window.location.hash){
+                            $(this).addClass("active");
+                        }
+                    });
+                </script>
             </div>
         </div>
         <div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">

@@ -781,12 +781,12 @@ class CategoryController extends Controller
         
         /*$baseCategory = $manager->getRepository("DashboardCommonBundle:Category")->find(27);
         
-        $finder->files()->name('export-short4.txt')->in('import');
+        $finder->files()->name('export-short5.txt')->in('import');
         $categories = new ArrayCollection();
         $childrens = new ArrayCollection();
-        $generationItems = new ArrayCollection();
+        $generationItems = new ArrayCollection();*/
         
-        if($baseCategory){
+        /*if($baseCategory){
             foreach ($finder as $file) {
                 $lines = file($file->getRealPath());
                 
@@ -796,7 +796,7 @@ class CategoryController extends Controller
                         
                         $marker = 0;
                         foreach($categories as $cat){
-                            if($cat->getTitle() == trim($categoryInfo[0])){
+                            if($cat->getTitle() == trim($line)){
                                 $marker = 1;
                                 break;
                             }
@@ -805,13 +805,12 @@ class CategoryController extends Controller
                         if(!$marker){
                             $category = new Category();
                             $category->setParent($baseCategory);
-                            $category->setTitle(trim($categoryInfo[0]));
-                            $category->setName($this->get('app.helpers')->translit(trim($categoryInfo[0])));
+                            $category->setTitle(trim($line));
+                            $category->setName($this->get('app.helpers')->translit(trim($line)));
                             $category->setIsActive(1);
                             $category->setIsShowFilters(1);
                             $category->setIsShowPriceFilter(1);
                             $categories->add($category);
-                            $count++;
                         }
                     }
                     

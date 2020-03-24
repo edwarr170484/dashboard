@@ -138,7 +138,11 @@
                                             {% if conversation.userOne and conversation.userTwo %}
                                                 {{ form_start(formMessage, {'method':'POST','multipart':true}) }}
                                                     <div class="accountMessageFormText">
-                                                        {{ form_widget(formMessage.message)}}
+                                                        {% if conversation.userOne.id == admin.id or conversation.userTwo.id == admin.id %}
+                                                            {{ form_widget(formMessage.message, {'attr' : {'placeholder' : 'Написать тех.поддержке'}})}}
+                                                        {% else %}
+                                                            {{ form_widget(formMessage.message)}}
+                                                        {% endif %}
                                                     </div>
                                                     <div class="accountMessageFormButtons">
                                                         <div class="send-message-file">

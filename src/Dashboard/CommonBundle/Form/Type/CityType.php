@@ -16,15 +16,13 @@ use Dashboard\CommonBundle\Entity\Region;
 class CityType extends AbstractType
 {
     private $region;
-    
-    public function __construct($region = null) {
-       $this->region = $region;
+    public function __construct($region) {
+        $this->region = $region;
     }
-    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('name', 'entity', array('class' => 'DashboardCommonBundle:Region', 
-                                              'choice_label' => 'name', 
+                                              'choice_label' => 'name',
                                               'data' => $this->region,
                                               'required' => false,
                                               'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},

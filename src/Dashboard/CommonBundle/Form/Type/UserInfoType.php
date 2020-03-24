@@ -37,7 +37,7 @@ class UserInfoType extends AbstractType
                                           'choice_label' => 'name',
                                           'placeholder' => 'Регион',
                                           'required' => false,
-                                          'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
+                                          'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
                                           'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Регион', 'data-write' => '1')))
                         ->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
                                           'choice_label' => 'name',

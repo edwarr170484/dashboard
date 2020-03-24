@@ -96,15 +96,14 @@ class DefaultController extends Controller
             $footerPages = 0;
         }
         
-        if($session->get('sessionRegion'))
-        {
+        if($session->get('sessionRegion')){
             $region = $manager->getRepository("DashboardCommonBundle:Region")->find($session->get('sessionRegion'));
         }
-        else
-            $region = 0;
+        else{
+            $region =null;
+        }
         
-        $regionForm = $this->createForm(new CityType($locale, $region), new Region());
-        $regionForm->handleRequest($request);
+        $regionForm = $this->createForm(new CityType($region));
         
         $bottomMenu = $manager->getRepository("DashboardMenuBundle:Menu")->findOneByName("bottomMenu");
         

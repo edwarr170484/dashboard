@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Role implements RoleInterface
 {
     /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id()
+     * @ORM\Column(type="integer")
+     * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -95,12 +95,7 @@ class Role implements RoleInterface
         
         return $count;
     }
-
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-    }
-
+    
     /**
      * @see RoleInterface
      */
@@ -108,11 +103,23 @@ class Role implements RoleInterface
     {
         return $this->role;
     }
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->services = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->payments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->servicePacks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rates = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -120,23 +127,68 @@ class Role implements RoleInterface
     }
 
     /**
+     * Set title
+     *
+     * @param string $title
+     * @return Role
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set filterTitle
+     *
+     * @param string $filterTitle
+     * @return Role
+     */
+    public function setFilterTitle($filterTitle)
+    {
+        $this->filterTitle = $filterTitle;
+    
+        return $this;
+    }
+
+    /**
+     * Get filterTitle
+     *
+     * @return string 
+     */
+    public function getFilterTitle()
+    {
+        return $this->filterTitle;
+    }
+
+    /**
      * Set name
      *
      * @param string $name
-     *
      * @return Role
      */
     public function setName($name)
     {
         $this->name = $name;
-
+    
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string
+     * @return string 
      */
     public function getName()
     {
@@ -147,50 +199,14 @@ class Role implements RoleInterface
      * Set role
      *
      * @param string $role
-     *
      * @return Role
      */
     public function setRole($role)
     {
         $this->role = $role;
-
+    
         return $this;
     }
-
-    /**
-     * Add user
-     *
-     * @param \Dashboard\CommonBundle\Entity\User $user
-     *
-     * @return Role
-     */
-    public function addUser(\Dashboard\CommonBundle\Entity\User $user)
-    {
-        $this->users[] = $user;
-
-        return $this;
-    }
-
-    /**
-     * Remove user
-     *
-     * @param \Dashboard\CommonBundle\Entity\User $user
-     */
-    public function removeUser(\Dashboard\CommonBundle\Entity\User $user)
-    {
-        $this->users->removeElement($user);
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUsers()
-    {
-        return $this->users;
-    }
-
 
     /**
      * Set advertNumber
@@ -201,7 +217,7 @@ class Role implements RoleInterface
     public function setAdvertNumber($advertNumber)
     {
         $this->advertNumber = $advertNumber;
-
+    
         return $this;
     }
 
@@ -224,7 +240,7 @@ class Role implements RoleInterface
     public function setAdvertFotoNumber($advertFotoNumber)
     {
         $this->advertFotoNumber = $advertFotoNumber;
-
+    
         return $this;
     }
 
@@ -239,6 +255,62 @@ class Role implements RoleInterface
     }
 
     /**
+     * Set invoiceText
+     *
+     * @param string $invoiceText
+     * @return Role
+     */
+    public function setInvoiceText($invoiceText)
+    {
+        $this->invoiceText = $invoiceText;
+    
+        return $this;
+    }
+
+    /**
+     * Get invoiceText
+     *
+     * @return string 
+     */
+    public function getInvoiceText()
+    {
+        return $this->invoiceText;
+    }
+
+    /**
+     * Add users
+     *
+     * @param \Dashboard\CommonBundle\Entity\User $users
+     * @return Role
+     */
+    public function addUser(\Dashboard\CommonBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+    
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \Dashboard\CommonBundle\Entity\User $users
+     */
+    public function removeUser(\Dashboard\CommonBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
      * Add services
      *
      * @param \Dashboard\CommonBundle\Entity\Service $services
@@ -247,7 +319,7 @@ class Role implements RoleInterface
     public function addService(\Dashboard\CommonBundle\Entity\Service $services)
     {
         $this->services[] = $services;
-
+    
         return $this;
     }
 
@@ -269,95 +341,6 @@ class Role implements RoleInterface
     public function getServices()
     {
         return $this->services;
-    }
-
-    /**
-     * Add servicePacks
-     *
-     * @param \Dashboard\CommonBundle\Entity\Pack $servicePacks
-     * @return Role
-     */
-    public function addServicePack(\Dashboard\CommonBundle\Entity\Pack $servicePacks)
-    {
-        $this->servicePacks[] = $servicePacks;
-
-        return $this;
-    }
-
-    /**
-     * Remove servicePacks
-     *
-     * @param \Dashboard\CommonBundle\Entity\Pack $servicePacks
-     */
-    public function removeServicePack(\Dashboard\CommonBundle\Entity\Pack $servicePacks)
-    {
-        $this->servicePacks->removeElement($servicePacks);
-    }
-
-    /**
-     * Get servicePacks
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getServicePacks()
-    {
-        return $this->servicePacks;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return Role
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Add rates
-     *
-     * @param \Dashboard\CommonBundle\Entity\Rate $rates
-     * @return Role
-     */
-    public function addRate(\Dashboard\CommonBundle\Entity\Rate $rates)
-    {
-        $this->rates[] = $rates;
-    
-        return $this;
-    }
-
-    /**
-     * Remove rates
-     *
-     * @param \Dashboard\CommonBundle\Entity\Rate $rates
-     */
-    public function removeRate(\Dashboard\CommonBundle\Entity\Rate $rates)
-    {
-        $this->rates->removeElement($rates);
-    }
-
-    /**
-     * Get rates
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRates()
-    {
-        return $this->rates;
     }
 
     /**
@@ -394,48 +377,68 @@ class Role implements RoleInterface
     }
 
     /**
-     * Set invoiceText
+     * Add servicePacks
      *
-     * @param string $invoiceText
+     * @param \Dashboard\CommonBundle\Entity\Pack $servicePacks
      * @return Role
      */
-    public function setInvoiceText($invoiceText)
+    public function addServicePack(\Dashboard\CommonBundle\Entity\Pack $servicePacks)
     {
-        $this->invoiceText = $invoiceText;
+        $this->servicePacks[] = $servicePacks;
     
         return $this;
     }
 
     /**
-     * Get invoiceText
+     * Remove servicePacks
      *
-     * @return string 
+     * @param \Dashboard\CommonBundle\Entity\Pack $servicePacks
      */
-    public function getInvoiceText()
+    public function removeServicePack(\Dashboard\CommonBundle\Entity\Pack $servicePacks)
     {
-        return $this->invoiceText;
+        $this->servicePacks->removeElement($servicePacks);
     }
 
     /**
-     * Set filterTitle
+     * Get servicePacks
      *
-     * @param string $filterTitle
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getServicePacks()
+    {
+        return $this->servicePacks;
+    }
+
+    /**
+     * Add rates
+     *
+     * @param \Dashboard\CommonBundle\Entity\Rate $rates
      * @return Role
      */
-    public function setFilterTitle($filterTitle)
+    public function addRate(\Dashboard\CommonBundle\Entity\Rate $rates)
     {
-        $this->filterTitle = $filterTitle;
-
+        $this->rates[] = $rates;
+    
         return $this;
     }
 
     /**
-     * Get filterTitle
+     * Remove rates
      *
-     * @return string 
+     * @param \Dashboard\CommonBundle\Entity\Rate $rates
      */
-    public function getFilterTitle()
+    public function removeRate(\Dashboard\CommonBundle\Entity\Rate $rates)
     {
-        return $this->filterTitle;
+        $this->rates->removeElement($rates);
+    }
+
+    /**
+     * Get rates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRates()
+    {
+        return $this->rates;
     }
 }

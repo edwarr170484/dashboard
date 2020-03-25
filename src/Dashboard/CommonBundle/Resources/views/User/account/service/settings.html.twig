@@ -153,66 +153,58 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="formParemetersItem">
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}:</div>
-                                    <div class="formParameterField cityCodeBlock">
-                                        {{ form_widget(formDealer.cityCode,{'id' : 'dealerCityCode'})}}
-                                        <div class="codesListBlock"></div>
+                            <div id="dealerSettingsRegionBlock">
+                                <div class="formParemetersItem">
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Регион{% endtrans %}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formDealer.region,{'id' : 'dealerRegion'})}}
+                                        </div>
+                                    </div>
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formDealer.city,{'id' : 'dealerCity'})}}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(formDealer.city,{'id' : 'dealerCity'})}}
+                                <div class="formParemetersItem">
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}:</div>
+                                        <div class="formParameterField cityCodeBlock">
+                                            {{ form_widget(formDealer.cityCode,{'id' : 'dealerCityCode'})}}
+                                            <div class="codesListBlock"></div>
+                                        </div>
+                                    </div>
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{{ form_label(formDealer.address) }}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formDealer.address) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <script>
-                                    $("#dealerCityCode").keyup(function(){
-                                        var len = $(this).val().length;
-                                        var element = $(this);
-                                        if(len === 5){
-                                            $.ajax({
-                                                url : '/region/getcity/' + $(this).val(),
-                                                type: 'get',
-                                                dataType: 'json',
-                                                success: function(data) {
-                                                    if(data !== 0){
-                                                        $("#dealerCity").parent().find(".select-option").each(function(){
-                                                            if($(this).data('value') === parseInt(data.city)){
-                                                                $(this).trigger('click');
-                                                                $("#dealerCity").val(data.city);
-                                                                $("#dealerCityCode").val(data.code);
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            });
-                                        }else{
-                                            $.ajax({
-                                                url : '/region/getcodes/' + $(this).val(),
-                                                type: 'get',
-                                                dataType: 'html',
-                                                success: function(data) {
-                                                    element.parent().find('.codesListBlock').html(data).show();
-                                                }
-                                            });
-                                        }
+                                    $("#dealerRegion").change(function(){
+                                        $("#dealerCityCode").val(null);
+                                        $("#dealerCityCode").parent().find('.codesListBlock').hide();
+                                        changeRegionForm(false, $(this));
                                     });
-                                    
                                     $("#dealerCity").change(function(){
                                         $("#dealerCityCode").val(null);
-                                        $(".codesListBlock").html('').hide();
+                                        $("#dealerCityCode").parent().find('.codesListBlock').hide();
+                                        changeRegionForm(false, $(this));
+                                    });
+                                    $("#dealerCityCode").keyup(function(){
+                                        var len = $(this).val().length;
+                                        if(len === 5){
+                                            changeRegionForm(true, $(this));
+                                        }else{
+                                            getCityCodes($(this).val(), $(this));
+                                        }
                                     });
                                 </script>
                             </div>
                             <div class="formParemetersItem">
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{{ form_label(formDealer.address) }}: <sup>*</sup></div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(formDealer.address) }}
-                                    </div>
-                                </div>
                                 <div class="formParameter">
                                     <div class="formParameterLabel">{{ form_label(formDealer.email) }}: <sup>*</sup></div>
                                     <div class="formParameterField">
@@ -220,7 +212,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="formParemetersItem">
+                            <div class="formParametersItem">
                                 <div class="formParameter">
                                     <div class="formParameterLabel" style="padding-bottom: 1.6rem;">{{ form_label(formDealer.phones) }}: <sup>*</sup></div>
                                     <div class="formParameterField">
@@ -241,7 +233,7 @@
                                             </svg>
                                         </button>
                                     </div>
-                                </div>
+                                </div>            
                             </div>
                             <div class="formParemetersItem" style="padding-bottom: 3rem;">
                                 <div class="formParameter">
@@ -660,56 +652,48 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="formParemetersItem">
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}:</div>
-                                    <div class="formParameterField cityCodeBlock">
-                                        {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
-                                        <div class="codesListBlock"></div>
+                            <div id="settingsRegionBlock">
+                                <div class="formParemetersItem">
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Регион{% endtrans %}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formMain.userinfo.region,{'id' : 'settingsRegion'})}}
+                                        </div>
+                                    </div>
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formMain.userinfo.city,{'id' : 'settingsCity'})}}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(formMain.userinfo.city,{'id' : 'settingsCity'})}}
+                                <div class="formParemetersItem">
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: </div>
+                                        <div class="formParameterField cityCodeBlock">
+                                            {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
+                                            <div class="codesListBlock"></div>
+                                        </div>
                                     </div>
-                                </div>
+                                </div> 
                                 <script>
-                                    $("#settingsCityCode").keyup(function(){
-                                        var len = $(this).val().length;
-                                        var element = $(this);
-                                        if(len === 5){
-                                            $.ajax({
-                                                url : '/region/getcity/' + $(this).val(),
-                                                type: 'get',
-                                                dataType: 'json',
-                                                success: function(data) {
-                                                    if(data !== 0){
-                                                        $("#settingsCity").parent().find(".select-option").each(function(){
-                                                            if($(this).data('value') === parseInt(data.city)){
-                                                                $(this).trigger('click');
-                                                                $("#settingsCity").val(data.city);
-                                                                $("#settingsCityCode").val(data.code);
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            });
-                                        }else{
-                                            $.ajax({
-                                                url : '/region/getcodes/' + $(this).val(),
-                                                type: 'get',
-                                                dataType: 'html',
-                                                success: function(data) {
-                                                    element.parent().find('.codesListBlock').html(data).show();
-                                                }
-                                            });
-                                        }
+                                    $("#settingsRegion").change(function(){
+                                        $("#settingsCityCode").val(null);
+                                        $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                                        changeRegionForm(false, $(this));
                                     });
-                                    
                                     $("#settingsCity").change(function(){
                                         $("#settingsCityCode").val(null);
-                                        $(".codesListBlock").html('').hide();
+                                        $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                                        changeRegionForm(false, $(this));
+                                    });
+                                    $("#settingsCityCode").keyup(function(){
+                                        var len = $(this).val().length;
+                                        if(len === 5){
+                                            changeRegionForm(true, $(this));
+                                        }else{
+                                            getCityCodes($(this).val(), $(this));
+                                        }
                                     });
                                 </script>
                             </div>

@@ -47,6 +47,12 @@ class DealerInfo
     private $website;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\Region")
+     * @ORM\JoinColumn(name="region_id", referencedColumnName="id")
+     */
+    private $region;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Dashboard\CommonBundle\Entity\City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
      */
@@ -614,5 +620,28 @@ class DealerInfo
     public function getRating()
     {
         return $this->rating;
+    }
+
+    /**
+     * Set region
+     *
+     * @param \Dashboard\CommonBundle\Entity\Region $region
+     * @return DealerInfo
+     */
+    public function setRegion(\Dashboard\CommonBundle\Entity\Region $region = null)
+    {
+        $this->region = $region;
+    
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \Dashboard\CommonBundle\Entity\Region 
+     */
+    public function getRegion()
+    {
+        return $this->region;
     }
 }

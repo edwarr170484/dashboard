@@ -17,7 +17,7 @@ use Dashboard\CommonBundle\Entity\City;
 use Dashboard\CommonBundle\Entity\CityCode;
 use Dashboard\AdminBundle\Form\Type\RegionType;
 use Dashboard\CommonBundle\Form\Type\UserType;
-
+use Dashboard\CommonBundle\Form\Type\DealerEditType;
 class RegionController extends Controller
 {
     /**
@@ -362,7 +362,33 @@ class RegionController extends Controller
             $codes = new ArrayCollection();
         }
         
-        return $this->render('DashboardCommonBundle:Region:userinfo.html.twig', array("user" => $user, "codes" => $codes, "formMain" => $formMain->createView()));
+        $formDealer = NULL;
+        if($user->getDealerinfo()){
+            $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale, $user), $user->getDealerInfo());
+            $formDealer->handleRequest($request);
+            
+            if($formDealer['cityCode']->getData() != ""){
+                $query = $manager->createQuery("SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE '" . $formDealer['cityCode']->getData() . "%'");
+                $dealerCodes = $query->getResult();
+
+                if(strlen($formDealer['cityCode']->getData()) >=5){
+                    $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formDealer['cityCode']->getData());
+                    $user->getDealerinfo()->setCity($code->getCity());
+                    $user->getDealerinfo()->setRegion($code->getCity()->getRegion());
+                    $user->getDealerinfo()->setCityCode($code);
+                    $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale, $user), $user->getDealerInfo());
+                }
+            }else{
+                $dealerCodes = new ArrayCollection();
+            }
+        }
+        
+        $formDealerView = NULL;
+        if($formDealer){
+            $formDealerView = $formDealer->createView();
+        }
+        
+        return $this->render('DashboardCommonBundle:Region:userinfo.html.twig', array("user" => $user, "codes" => $codes, "formMain" => $formMain->createView(), "formDealer" => $formDealerView));
         
     }
     

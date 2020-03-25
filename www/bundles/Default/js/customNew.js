@@ -32,6 +32,7 @@ $(document).ready(function(){
         center:true,
         callbacks: true,
         URLhashListener: true,
+        dots: false,
         startPosition: 'URLHash',
         navContainer : '#productModalSlider',
         navText : ['<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.5 43L1.5 22L22.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>','<svg width="24" height="44" viewBox="0 0 24 44" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 43L22.5 22L1.5 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'],
@@ -877,12 +878,18 @@ function selectCityCode(element, value){
     element.parent().hide();
 }
 
-function changeRegionForm(showCodes){
+function changeRegionForm(showCodes, element){
     var fd = new FormData;
     $("#userMain").find("input[type='text']").each(function(){
         fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
     });
     $("#userMain").find("select").each(function(){
+        fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+    });
+    $("#dealerinfo").find("input[type='text']").each(function(){
+        fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+    });
+    $("#dealerinfo").find("select").each(function(){
         fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
     });
 
@@ -894,10 +901,11 @@ function changeRegionForm(showCodes){
         method: 'post',
         success : function(html){
             $('#settingsRegionBlock').html($(html).find('#settingsRegionBlock').html());
+            $('#dealerSettingsRegionBlock').html($(html).find('#dealerSettingsRegionBlock').html());
             $(".custom-select").customSelect();
             if(showCodes){
-                $("#settingsCityCode").parent().find('.codesListBlock').show();
-                $("#settingsCityCode").focus();
+                element.parent().find('.codesListBlock').show();
+                element.focus();
             }
         }
     });

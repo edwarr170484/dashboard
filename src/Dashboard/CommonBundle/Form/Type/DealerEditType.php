@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Dashboard\CommonBundle\Entity\City;
 use Dashboard\CommonBundle\Form\DataTransformer\UserToNumberTransformer;
 use Dashboard\CommonBundle\Form\Type\WorkInfoType;
+use Dashboard\CommonBundle\Entity\Region;
 
 class DealerEditType extends AbstractType
 {
@@ -47,20 +48,42 @@ class DealerEditType extends AbstractType
             ->add('description', TextareaType::class, array('required' => false, 'label' => 'Описание', 'attr' => array('class' => 'form-control dealerDescription','placeholder' => 'Описание компании'))) 
             ->add('isNewAuto', CheckboxType::class, array('required' => false, 'label' => 'Новые', 'attr' => array('class' => 'custom-checkbox')))
             ->add('isOldAuto', CheckboxType::class, array('required' => false, 'label' => 'С пробегом', 'attr' => array('class' => 'custom-checkbox')))
-            ->add('workinfo', new WorkInfoType($this->em), array('label' => ' ','data_class' => 'Dashboard\CommonBundle\Entity\Workinfo'))     
+            ->add('workinfo', new WorkInfoType($this->em), array('label' => ' ','data_class' => 'Dashboard\CommonBundle\Entity\Workinfo')) 
+            ->add('cityCode', TextType::class, array('required' => false, 'data' => $code,'mapped' => false, 'label' => 'Индекс', 'attr' => array('class' => 'form-control', 'placeholder' => 'Индекс', 'maxlength' => '5', 'autocomplete' => 'off')))
+            ->add('region', 'entity', array('class' => 'DashboardCommonBundle:Region', 
+                                        'choice_label' => 'name',
+                                        'placeholder' => 'Регион',
+                                        'required' => false,
+                                        'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
+                                        'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Регион', 'data-write' => '1')))
             ->add('save', ButtonType::class, array('label' => 'Сохранить'));
-        
-            $builder->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
-                                          'choice_label' => 'name',
-                                          'placeholder' => 'Город',
-                                          'required' => false,
-                                          'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
-                                          'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Город', 'data-write' => '1')))
-                    ->add('cityCode', TextType::class, array('required' => false, 'data' => $code,'mapped' => false, 'label' => 'Индекс', 'attr' => array('class' => 'form-control', 'placeholder' => 'Индекс', 'maxlength' => '5', 'autocomplete' => 'off')));
-                    
-         
-                           
             
+            $formModifier = function (FormInterface $form, Region $region = null) {
+                     $cities = null === $region ? array() : $region->getCity();
+                     $form->add('city', 'entity', array('class' => 'DashboardCommonBundle:City',
+                                        'choice_label' => 'name',
+                                        'choices' => $cities,
+                                        'required' => false,
+                                        'placeholder' => 'Город',
+                                        'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
+                                        'label' => 'Город', 'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Город', 'data-write' => '1')));
+            };
+            
+            $builder->addEventListener(
+                FormEvents::PRE_SET_DATA,
+                function (FormEvent $event) use ($formModifier) {
+                    $data = $event->getData();
+                    $formModifier($event->getForm(), $data->getRegion());
+                }
+            );
+                
+            $builder->get('region')->addEventListener(
+                FormEvents::POST_SUBMIT,
+                function (FormEvent $event) use ($formModifier) {
+                    $region = $event->getForm()->getData();
+                    $formModifier($event->getForm()->getParent(), $region);
+                }
+            );
     }
     
     public function configureOptions(OptionsResolver $resolver)

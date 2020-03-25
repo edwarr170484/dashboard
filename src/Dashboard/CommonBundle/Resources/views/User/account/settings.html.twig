@@ -185,17 +185,17 @@
                                     $("#settingsRegion").change(function(){
                                         $("#settingsCityCode").val(null);
                                         $("#settingsCityCode").parent().find('.codesListBlock').hide();
-                                        changeRegionForm(false);
+                                        changeRegionForm(false, $(this));
                                     });
                                     $("#settingsCity").change(function(){
                                         $("#settingsCityCode").val(null);
                                         $("#settingsCityCode").parent().find('.codesListBlock').hide();
-                                        changeRegionForm(false);
+                                        changeRegionForm(false, $(this));
                                     });
                                     $("#settingsCityCode").keyup(function(){
                                         var len = $(this).val().length;
                                         if(len === 5){
-                                            changeRegionForm(true);
+                                            changeRegionForm(true, $(this));
                                         }else{
                                             getCityCodes($(this).val(), $(this));
                                         }

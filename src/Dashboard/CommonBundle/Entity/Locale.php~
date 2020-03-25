@@ -493,4 +493,37 @@ class Locale
     {
         return $this->emails;
     }
+
+    /**
+     * Add regions
+     *
+     * @param \Dashboard\CommonBundle\Entity\Region $regions
+     * @return Locale
+     */
+    public function addRegion(\Dashboard\CommonBundle\Entity\Region $regions)
+    {
+        $this->regions[] = $regions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove regions
+     *
+     * @param \Dashboard\CommonBundle\Entity\Region $regions
+     */
+    public function removeRegion(\Dashboard\CommonBundle\Entity\Region $regions)
+    {
+        $this->regions->removeElement($regions);
+    }
+
+    /**
+     * Get regions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRegions()
+    {
+        return $this->regions;
+    }
 }

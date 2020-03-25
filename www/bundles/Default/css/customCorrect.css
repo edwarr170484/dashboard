@@ -37,8 +37,10 @@ h3 {font-size: 3.2rem;}
 .pageContentServiceMessage {padding-bottom: 5.6rem;}
 .pageContentAdvertismentDescription,.pageContentAdvertismentIcon {    padding-top: 4rem;}
 .pageContentAdvertismentDescriptionRateTitle, .pageContentAdvertismentDescriptionRatePrice,.pageContentAdvertismentDescriptionRatePrice span {font-size:2rem}
-.accountNocontent {padding-bottom:5rem;}
+.accountNocontent {    padding-bottom: 8rem;
+    padding-top: 0rem;}
 .nav-tabs>li>a:hover {border-color:none!important;}
+.advertSliderMainFoto {margin:auto 0;height: auto;}
 /* Временная мера */
 .select-language.active {
     background: none;}
@@ -75,9 +77,23 @@ footer {margin-top: 4rem;
     width: 100%;}
 
 .mainPageAutoList ul li {width: 20%;}
+#desktopSearchModal {background: rgba(0,0,0,0.8);backdrop-filter: blur(5px);}
+.categorySpecialAdvertInner {border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;}
+
+.paymentInfoBlock {max-width: 800px;}
+.paymentsMethodsBlockInner ul {max-width: 800px;margin: auto;}
+
 /*Лк сообщения */
 .accountConversationMessages {padding-left: 14rem;padding-right: 13rem;}
 textarea {resize: vertical;}
+.nav-tabs.settingsTabs>li>a>.numberNewItems {padding: 0px 4px;}
+.nav-tabs.settingsTabs>li>a>.numberNewItems span {min-width: 18px;text-align: center;display: grid;}
+.accountAdvertInfoModificationItem {font-size: 1.2em;
+    line-height: 1.8rem;
+    width: 50%;
+    padding-right: 15px;}
+	.accountMenuItem span.numberNewItems {top: -4px;}
 
 
 .siteMenuGamburgerMenu {top: 27px;left: 133px;} /* Выровнял открыающийся гамбургер */
@@ -112,6 +128,12 @@ h1, h2, h4 {font-size: 3.6rem;line-height: 4.6rem;}
 .siteInfoPane {margin-bottom: 3rem;}
 .container {padding: 0 30px;}
 
+}
+
+@media (max-width: 1490px)
+{
+	.footer-menu-list li:nth-child(even) {width: 100%;}
+	.footer-menu-list li {width: 100%;}
 }
 	@media (max-width: 650px) 
 {

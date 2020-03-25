@@ -1,3 +1,57 @@
+{{ form_start(formDealer, {'method':'POST', 'multipart':true,'attr': {'id' : 'dealerinfo','class': 'form-horizontal userSettingsForm'}}) }}
+    <div id="dealerSettingsRegionBlock">
+                                <div class="formParemetersItem">
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Регион{% endtrans %}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formDealer.region,{'id' : 'dealerRegion'})}}
+                                        </div>
+                                    </div>
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formDealer.city,{'id' : 'dealerCity'})}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="formParemetersItem">
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}:</div>
+                                        <div class="formParameterField cityCodeBlock">
+                                            {{ form_widget(formDealer.cityCode,{'id' : 'dealerCityCode'})}}
+                                            <div class="codesListBlock"></div>
+                                        </div>
+                                    </div>
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{{ form_label(formDealer.address) }}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formDealer.address) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    $("#dealerRegion").change(function(){
+                                        $("#dealerCityCode").val(null);
+                                        $("#dealerCityCode").parent().find('.codesListBlock').hide();
+                                        changeRegionForm(false, $(this));
+                                    });
+                                    $("#dealerCity").change(function(){
+                                        $("#dealerCityCode").val(null);
+                                        $("#dealerCityCode").parent().find('.codesListBlock').hide();
+                                        changeRegionForm(false, $(this));
+                                    });
+                                    $("#dealerCityCode").keyup(function(){
+                                        var len = $(this).val().length;
+                                        if(len === 5){
+                                            changeRegionForm(true, $(this));
+                                        }else{
+                                            getCityCodes($(this).val(), $(this));
+                                        }
+                                    });
+                                </script>
+    </div> 
+{{ form_end(formDealer)}}
+
 {{ form_start(formMain, {'method':'POST','multipart':true,'attr': {'id' : 'userMain','class': 'form-horizontal userSettingsForm'}}) }}
     <div id="settingsRegionBlock">
         <div class="formParemetersItem">
@@ -31,17 +85,17 @@
             $("#settingsRegion").change(function(){
                 $("#settingsCityCode").val(null);
                 $("#settingsCityCode").parent().find('.codesListBlock').hide();
-                changeRegionForm(false);
+                changeRegionForm(false, $(this));
             });
             $("#settingsCity").change(function(){
                 $("#settingsCityCode").val(null);
                 $("#settingsCityCode").parent().find('.codesListBlock').hide();
-                changeRegionForm(false);
+                changeRegionForm(false, $(this));
             });
             $("#settingsCityCode").keyup(function(){
                 var len = $(this).val().length;
                 if(len === 5){
-                    changeRegionForm(true);
+                    changeRegionForm(true, $(this));
                 }else{
                     getCityCodes($(this).val(), $(this));
                 }

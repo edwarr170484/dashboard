@@ -399,29 +399,27 @@ class DefaultController extends Controller
 
         if ($orderForm->isSubmitted() && $orderForm->isValid())
         {
-            if($product->getUser()->getId() != $sessionUser->getId())
-            {
-                $order->setDateAdded(new \DateTime("now"));
-                $order->setUserReceived($product->getUser());
-                $order->setUserSended($sessionUser);
-                $order->setProduct($product);
-                $order->setIsNew(1);
-                $order->setStatus($settings->getDafaultOrderStatus());
+            $order->setDateAdded(new \DateTime("now"));
+            $order->setUserReceived($product->getUser());
+            $order->setUserSended($sessionUser);
+            $order->setProduct($product);
+            $order->setIsNew(1);
+            $order->setStatus($settings->getDafaultOrderStatus());
 
-                $manager->persist($order);
-                $manager->flush();
+            $manager->persist($order);
+            $manager->flush();
 
-                $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваш заказ отправлен владельцу объявления. Он свяжется с Вами в ближайшее время.') . '</div>'
-                );
+            $this->addFlash(
+                'notice',
+                '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                $this->get('translator')->trans('<strong>Успешно!</strong> Ваш заказ отправлен владельцу объявления. Он свяжется с Вами в ближайшее время.') . '</div>'
+            );
                     
-                    //send information about new order to sellers email
-                    if($product->getUser()->getIsAlertNewOrder())
-                    {
-                        $message = \Swift_Message::newInstance()
+            //send information about new order to sellers email
+            if($product->getUser()->getIsAlertNewOrder())
+            {
+                $message = \Swift_Message::newInstance()
                         ->setSubject('Поступил заказ на сайте ' . $settings->getSiteName())
                         ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                         ->setTo($product->getUser()->getEmail())
@@ -433,25 +431,16 @@ class DefaultController extends Controller
                             'text/html'
                         );
 
-                        $this->get('mailer')->send($message);
-                    }
-                }
-                else
-                {
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Ошибка!</strong> Это объявление принадлежит Вам. Вы не можете заказывать сами у себя.') . '</div>'
-                    );
-                }
-                
-                return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
+                $this->get('mailer')->send($message);
+            }
+            
+            return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
+            
         }
         
         $friendMessageForm = $this->get('form.factory')->createNamedBuilder('friendmessage', 'form')
-                ->add('friendemail', EmailType::class, array('required' => true, 'label' => $this->get('translator')->trans('Email друга: *'), 'attr' => array('class' => 'form-control')))
-                ->add('friendname', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('Имя друга: *'), 'attr' => array('class' => 'form-control')))
+                ->add('friendemail', EmailType::class, array('required' => true, 'label' => $this->get('translator')->trans('Email друга: *'), 'attr' => array('class' => 'form-control','placeholder' => $this->get('translator')->trans('Email друга *'))))
+                ->add('friendname', TextType::class, array('required' => true, 'label' => $this->get('translator')->trans('Имя друга: *'), 'attr' => array('class' => 'form-control', 'placeholder' => $this->get('translator')->trans('Имя друга *'))))
                 ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
         
         $friendMessageForm->handleRequest($request);
@@ -484,25 +473,23 @@ class DefaultController extends Controller
         
         $complaint = new Complaint();
         $complaintMessageForm = $this->get('form.factory')->createNamedBuilder('complaint', 'form', $complaint)
-                 ->add('username', TextType::class, array('required' => true, 'mapped' => false, 'label' => $this->get('translator')->trans('Ваше имя: *'), 'attr' => array('class' => 'form-control')))
-                 ->add('reason', TextareaType::class, array('required' => true,'label' => $this->get('translator')->trans('Причина жалобы: *'), 'attr' => array('class' => 'form-control')))
+                 ->add('username', TextType::class, array('required' => true, 'mapped' => false, 'label' => $this->get('translator')->trans('Ваше имя: *'), 'attr' => array('class' => 'form-control', 'placeholder' => $this->get('translator')->trans('Ваше имя *'))))
+                 ->add('reason', TextareaType::class, array('required' => true,'label' => $this->get('translator')->trans('Причина жалобы: *'), 'attr' => array('class' => 'form-control', 'placeholder' => $this->get('translator')->trans('Причина жалобы *'))))
                  ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
         
         $complaintMessageForm->handleRequest($request);
             
         if($complaintMessageForm->isSubmitted() && $complaintMessageForm->isValid())
         {
-                if($product->getUser()->getId() != $sessionUser->getId())
-                {   
-                    $complaint->setUser($sessionUser);
-                    $complaint->setProduct($product);
-                    $complaint->setDateAdded(new \DateTime("now"));
-                    $complaint->setStatus(0);
+            $complaint->setUser($sessionUser);
+            $complaint->setProduct($product);
+            $complaint->setDateAdded(new \DateTime("now"));
+            $complaint->setStatus(0);
                     
-                    $manager->persist($complaint);
-                    $manager->flush();
+            $manager->persist($complaint);
+            $manager->flush();
                     
-                    $message = \Swift_Message::newInstance()
+            $message = \Swift_Message::newInstance()
                     ->setSubject('Жалоба на объявление на сайте ' . $settings->getSiteName())
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($settings->getAdminEmail())
@@ -514,30 +501,30 @@ class DefaultController extends Controller
                         'text/html'
                     );
 
-                    $this->get('mailer')->send($message);
+            $this->get('mailer')->send($message);
                     
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваша жалоба зарегистрирована и будет рассмотрена в ближайшее время.') . '</div>'
-                    );
+            $this->addFlash(
+                'notice',
+                '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                $this->get('translator')->trans('<strong>Успешно!</strong> Ваша жалоба зарегистрирована и будет рассмотрена в ближайшее время.') . '</div>'
+            );
                     
-                    $productComplaints = $manager->getRepository("DashboardCommonBundle:Complaint")->findByProduct($product);
+            $productComplaints = $manager->getRepository("DashboardCommonBundle:Complaint")->findByProduct($product);
                     
-                    if(count($productComplaints) >= 10)
-                    {
-                        $product->setIsActive(false);
-                        $product->setIsConfirm(false);
-                        $product->setIsCorrect(true);
-                        $product->setCorrectReason($this->get('translator')->trans("Количество жалоб на объявление больше 10"));
+            if(count($productComplaints) >= 10)
+            {
+                $product->setIsActive(false);
+                $product->setIsConfirm(false);
+                $product->setIsCorrect(true);
+                $product->setCorrectReason($this->get('translator')->trans("Количество жалоб на объявление больше 10"));
                         
-                        $manager->persist($product);
-                        $manager->flush();
+                $manager->persist($product);
+                $manager->flush();
                         
-                        if($product->getUser()->getAlerts())
-                        {
-                            $messageCorrect = \Swift_Message::newInstance()
+                if($product->getUser()->getAlerts())
+                {
+                    $messageCorrect = \Swift_Message::newInstance()
                             ->setSubject('Ваше объявление отправлено на коррекцию.')
                             ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                             ->setTo($product->getUser()->getEmail())
@@ -549,24 +536,13 @@ class DefaultController extends Controller
                                 'text/html'
                             );
 
-                            $this->get('mailer')->send($messageCorrect);
-                        }
+                    $this->get('mailer')->send($messageCorrect);
+                }
                         
-                        return $this->redirectToRoute("main");
-                    }
-                    
-                }
-                else 
-                {
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете жаловаться на свое объявление.') . '</div>'
-                    );
-                }
+                return $this->redirectToRoute("main");
+            }    
                 
-                return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
+            return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
         }
         
         $rating = 0;

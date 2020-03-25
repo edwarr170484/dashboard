@@ -26,10 +26,10 @@ class ProductMessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('userName', TextType::class, array('required' => false, 'data' => $this->user->getUserinfo()->getFirstname() . " " . $this->user->getUserinfo()->getLastname(),'mapped' => false,'label' => 'Ваше имя:*', 'attr' => array('class' => 'form-control')))     
-            ->add('userEmail', TextType::class, array('required' => false, 'data' => $this->user->getEmail(),'mapped' => false,'label' => 'E-mail: *', 'attr' => array('class' => 'form-control')))
-            ->add('userPhone', TextType::class, array('required' => false, 'data' => $this->user->getUserinfo()->getPhone() ,'mapped' => false,'label' => 'Phone'.': *', 'attr' => array('class' => 'form-control')))
-            ->add('message', TextareaType::class, array('required' => true, 'label' => 'Текст сообщения: *', 'attr' => array('class' => 'form-control')))
+            ->add('userName', TextType::class, array('required' => false, 'data' => $this->user->getUserinfo()->getFirstname() . " " . $this->user->getUserinfo()->getLastname(),'mapped' => false,'label' => 'Ваше имя:*', 'attr' => array('class' => 'form-control', 'placeholder' => 'Ваше имя *')))     
+            ->add('userEmail', TextType::class, array('required' => false, 'data' => $this->user->getEmail(),'mapped' => false,'label' => 'E-mail: *', 'attr' => array('class' => 'form-control', 'placeholder' => 'E-mail *')))
+            ->add('userPhone', TextType::class, array('required' => false, 'data' => $this->user->getUserinfo()->getPhone() ,'mapped' => false,'label' => ''.': *', 'attr' => array('class' => 'form-control', 'placeholder' => 'Телефон')))
+            ->add('message', TextareaType::class, array('required' => true, 'label' => 'Текст сообщения: *', 'attr' => array('class' => 'form-control', 'placeholder' => 'Текст сообщения *')))
             ->add('save', ButtonType::class, array('label' => 'Отправить', 'attr' => array('class' => 'send-tab-form')));
     }
     

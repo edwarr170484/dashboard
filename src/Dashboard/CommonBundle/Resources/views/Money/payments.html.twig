@@ -39,14 +39,16 @@
                     <div class="tab-content" style="padding:0;">
                         <div class="tab-pane fade active in" id="inbox" role="tabpanel">
                             <div class="accountConversationHeader">
-                                <div class="accountConversationHeaderBack">
-                                    <a href="{{ back }}">
-                                        <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 1rem;">
-                                            <path d="M8 0.999999L2 7.91954L8 15" stroke="#616161" stroke-width="2"/>
-                                        </svg>
-                                        {% trans %}назад{% endtrans %}
-                                    </a>
-                                </div>
+                                {% if user.roles[0].role != 'ROLE_INDIVIDUAL' %}
+                                    <div class="accountConversationHeaderBack">
+                                        <a href="{{ back }}">
+                                            <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 1rem;">
+                                                <path d="M8 0.999999L2 7.91954L8 15" stroke="#616161" stroke-width="2"/>
+                                            </svg>
+                                            {% trans %}назад{% endtrans %}
+                                        </a>
+                                    </div>
+                                {% endif %}
                                 <div class="accountConversationHeaderTopic">
                                     {% trans %}Сумма к оплате:{% endtrans %} <span>{{ bill.price }} {{ locale.currency.label | raw }}</span>
                                 </div>

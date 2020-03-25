@@ -24,8 +24,8 @@ class ProfileMessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('subject', TextType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'form-control', 'placeholder' => 'Тема сообщения: *')))    
-            ->add('message', TextareaType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'form-control', 'placeholder' => 'Текст сообщения: *')))
+            ->add('subject', TextType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'form-control', 'placeholder' => 'Тема сообщения *')))    
+            ->add('message', TextareaType::class, array('required' => true, 'label' => '', 'attr' => array('class' => 'form-control', 'placeholder' => 'Текст сообщения *')))
             ->add($builder->create('userFrom', 'hidden')->addModelTransformer(new UserToNumberTransformer($this->em))) 
             ->add($builder->create('userTo', 'hidden')->addModelTransformer(new UserToNumberTransformer($this->em)))   
             ->add('save', ButtonType::class, array('label' => 'Отправить', 'attr' => array('class' => 'btn')));

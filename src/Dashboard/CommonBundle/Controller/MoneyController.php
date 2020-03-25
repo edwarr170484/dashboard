@@ -105,7 +105,7 @@ class MoneyController extends Controller
             return $this->createNotFoundException();
         }
                 
-        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill, "back" => "/account/bills"));
+        return $this->render('DashboardCommonBundle:Money:payments.html.twig', array("user" => $user,"settings" => $settings,"locale" => $locale,"routeName" => $request->attributes->get("_route"), "bill" => $bill, "back" => "/account/rates"));
     }
     
     /**

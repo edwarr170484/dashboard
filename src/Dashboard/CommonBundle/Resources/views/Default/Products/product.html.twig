@@ -546,9 +546,11 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="advertSellerOrder">
-                                <button data-toggle="modal" data-target="#orderModal">{% trans %}Оставить заявку{% endtrans %}</button>
-                            </div>
+                            {% if not user or product.user.id != user.id %}
+                                <div class="advertSellerOrder">
+                                    <button data-toggle="modal" data-target="#orderModal">{% trans %}Оставить заявку{% endtrans %}</button>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="accountAdvert cube productnote">
@@ -819,26 +821,22 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(orderForm.name) }}</label>
-                            <div class="col-lg-8 col-md-8">
+                            <div class="col-lg-12">
                                 {{ form_widget(orderForm.name) }}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(orderForm.email) }}</label>
-                            <div class="col-lg-8 col-md-8">
+                            <div class="col-lg-12">
                                 {{ form_widget(orderForm.email) }}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(orderForm.phone) }}</label>
-                            <div class="col-lg-8 col-md-8">
+                            <div class="col-lg-12">
                                 {{ form_widget(orderForm.phone) }}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(orderForm.comment) }}</label>
-                            <div class="col-lg-8 col-md-8">
+                            <div class="col-lg-12">
                                 {{ form_widget(orderForm.comment) }}
                             </div>
                         </div> 
@@ -864,14 +862,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(friendMessageForm.friendemail) }}</label>
-                            <div class="col-lg-8 col-md-8">
+                            <div class="col-lg-12">
                                 {{ form_widget(friendMessageForm.friendemail) }}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(friendMessageForm.friendname) }}</label>
-                            <div class="col-lg-8 col-md-8">
+                            <div class="col-lg-12">
                                 {{ form_widget(friendMessageForm.friendname) }}
                             </div>
                         </div>
@@ -897,14 +893,12 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(complaintMessageForm.username) }}</label>
-                            <div class="col-lg-8 col-md-8">
+                            <div class="col-lg-12">
                                 {{ form_widget(complaintMessageForm.username) }}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-lg-4 col-md-4 control-label">{{ form_label(complaintMessageForm.reason) }}</label>
-                            <div class="col-lg-8 col-md-8">
+                            <div class="col-lg-12">
                                 {{ form_widget(complaintMessageForm.reason) }}
                             </div>
                         </div>
@@ -931,14 +925,12 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label class="col-lg-4 col-md-4 control-label">{{ form_label(profileMessageForm.subject) }}</label>
-                                <div class="col-lg-8 col-md-8">
+                                <div class="col-lg-12">
                                     {{ form_widget(profileMessageForm.subject) }}
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-lg-4 col-md-4 control-label">{{ form_label(profileMessageForm.message) }}</label>
-                                <div class="col-lg-8 col-md-8">
+                                <div class="col-lg-12">
                                     {{ form_widget(profileMessageForm.message) }}
                                 </div>
                             </div>

@@ -16,6 +16,7 @@ use Dashboard\CommonBundle\Entity\Region;
 use Dashboard\CommonBundle\Entity\City;
 use Dashboard\CommonBundle\Entity\CityCode;
 use Dashboard\AdminBundle\Form\Type\RegionType;
+use Dashboard\CommonBundle\Form\Type\UserType;
 
 class RegionController extends Controller
 {
@@ -335,35 +336,34 @@ class RegionController extends Controller
     }
     
     /**
-     * @Route("/region/getcity/{cityCode}", name="region_getcodecity")
+     * @Route("/region/getuserinfo", name="region_getuserinfo")
      */
-    public function getCityByCodeAction($cityCode, Request $request)
+    public function getUserinfoAction(Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $user = $this->get('security.context')->getToken()->getUser();
         
-        if($cityCode){
+        $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
+        $formMain->handleRequest($request);
+        
+        if($formMain['userinfo']['cityCode']->getData() != ""){
+            $query = $manager->createQuery("SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE '" . $formMain['userinfo']['cityCode']->getData() . "%'");
+            $codes = $query->getResult();
             
-            $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($cityCode);
-            
-            if($code){
-                return new \Symfony\Component\HttpFoundation\JsonResponse(array("region" => $code->getCity()->getRegion()->getId(), "city" => $code->getCity()->getId(), "code" => $code->getCode()));
+            if(strlen($formMain['userinfo']['cityCode']->getData()) >=5){
+                $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formMain['userinfo']['cityCode']->getData());
+                $user->getUserinfo()->setCity($code->getCity());
+                $user->getUserinfo()->setRegion($code->getCity()->getRegion());
+                $user->getUserinfo()->setCityCode($code);
+                $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
             }
+        }else{
+            $codes = new ArrayCollection();
         }
         
-        return new Response(0);
-    }
-    
-    /**
-     * @Route("/region/get/{cityId}", name="region_get")
-     */
-    public function getRegionAction($cityId, Request $request)
-    {
-        $manager = $this->getDoctrine()->getManager();
-        $city = $manager->getRepository("DashboardCommonBundle:City")->find($cityId);
+        return $this->render('DashboardCommonBundle:Region:userinfo.html.twig', array("user" => $user, "codes" => $codes, "formMain" => $formMain->createView()));
         
-        if($city){
-            return new \Symfony\Component\HttpFoundation\JsonResponse(array("region" => $city->getRegion()->getId(), "city" => $city->getId()));
-        }    
     }
     
     /**

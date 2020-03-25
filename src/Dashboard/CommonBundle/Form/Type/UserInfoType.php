@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 use Dashboard\CommonBundle\Entity\City;
+use Dashboard\CommonBundle\Entity\Region;
 
 class UserInfoType extends AbstractType
 {
@@ -34,18 +35,40 @@ class UserInfoType extends AbstractType
                 $builder->add('avatarNew', FileType::class, array('required' => false, 'label' => '','mapped' => false, 'attr' => array('class' => 'change-avatar-input')))
                         ->add('avatar', HiddenType::class, array('required' => false, 'label' => ''))
                         ->add('region', 'entity', array('class' => 'DashboardCommonBundle:Region', 
-                                          'choice_label' => 'name',
-                                          'placeholder' => 'Регион',
-                                          'required' => false,
-                                          'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
-                                          'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Регион', 'data-write' => '1')))
-                        ->add('city', 'entity', array('class' => 'DashboardCommonBundle:City', 
-                                          'choice_label' => 'name',
-                                          'placeholder' => 'Город',
-                                          'required' => false,
-                                          'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
-                                          'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Город', 'data-write' => '1')))
+                                        'choice_label' => 'name',
+                                        'placeholder' => 'Регион',
+                                        'required' => false,
+                                        'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('r')->orderBy('r.name', 'ASC');},
+                                        'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Регион', 'data-write' => '1')))
                         ->add('cityCode', TextType::class, array('required' => false, 'data' => $code,'mapped' => false, 'label' => 'Индекс', 'attr' => array('class' => 'form-control', 'placeholder' => 'Индекс', 'maxlength' => '5', 'autocomplete' => 'off')));
+            }
+            if($this->user){
+                $formModifier = function (FormInterface $form, Region $region = null) {
+                     $cities = null === $region ? array() : $region->getCity();
+                     $form->add('city', 'entity', array('class' => 'DashboardCommonBundle:City',
+                                        'choice_label' => 'name',
+                                        'choices' => $cities,
+                                        'required' => false,
+                                        'placeholder' => 'Город',
+                                        'query_builder' => function(EntityRepository $er){return $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');},
+                                        'label' => 'Город', 'attr' => array('class' => 'custom-select just-select', 'placeholder' => 'Город', 'data-write' => '1')));
+                };
+                
+                $builder->addEventListener(
+                    FormEvents::PRE_SET_DATA,
+                    function (FormEvent $event) use ($formModifier) {
+                        $data = $event->getData();
+                        $formModifier($event->getForm(), $data->getRegion());
+                    }
+                );
+                
+                $builder->get('region')->addEventListener(
+                    FormEvents::POST_SUBMIT,
+                    function (FormEvent $event) use ($formModifier) {
+                        $region = $event->getForm()->getData();
+                        $formModifier($event->getForm()->getParent(), $region);
+                    }
+                );
             }
             
     }

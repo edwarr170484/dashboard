@@ -872,8 +872,50 @@ function selectDealerAutoMark(element){
     $(".mapListItems").toggleClass("hide");
 }
 function selectCityCode(element, value){
-    element.parent().parent().find("input").val(value).trigger('keyup');
+    element.parent().parent().find("input").val(value);
+    changeRegionForm(0);
     element.parent().hide();
+}
+
+function changeRegionForm(showCodes){
+    var fd = new FormData;
+    $("#userMain").find("input[type='text']").each(function(){
+        fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+    });
+    $("#userMain").find("select").each(function(){
+        fd.append($(this).attr('name'), $('#' + $(this).attr('id')).val());
+    });
+
+    $.ajax({
+        url:'/region/getuserinfo',
+        data: fd,
+        processData: false,
+        contentType: false,
+        method: 'post',
+        success : function(html){
+            $('#settingsRegionBlock').html($(html).find('#settingsRegionBlock').html());
+            $(".custom-select").customSelect();
+            if(showCodes){
+                $("#settingsCityCode").parent().find('.codesListBlock').show();
+                $("#settingsCityCode").focus();
+            }
+        }
+    });
+}
+
+function getCityCodes(data, element){
+    $.ajax({
+        url: '/region/getcodes/' + data,
+        type:'get',
+        dataType: 'html',
+        beforeSend: function(){},
+        success: function(html){
+            element.parent().find(".codesListBlock").html(html).show();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            err=xhr.responseText;
+        }
+    });
 }
 
 function showSellerNumer(productId)

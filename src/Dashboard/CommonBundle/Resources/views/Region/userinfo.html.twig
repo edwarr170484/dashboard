@@ -1,0 +1,51 @@
+{{ form_start(formMain, {'method':'POST','multipart':true,'attr': {'id' : 'userMain','class': 'form-horizontal userSettingsForm'}}) }}
+    <div id="settingsRegionBlock">
+        <div class="formParemetersItem">
+            <div class="formParameter">
+                <div class="formParameterLabel">{% trans %}Регион{% endtrans %}: <sup>*</sup></div>
+                <div class="formParameterField">
+                    {{ form_widget(formMain.userinfo.region,{'id' : 'settingsRegion'})}}
+                </div>
+            </div>
+            <div class="formParameter">
+                <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
+                <div class="formParameterField">
+                    {{ form_widget(formMain.userinfo.city,{'id' : 'settingsCity'})}}
+                </div>
+            </div>
+        </div>
+        <div class="formParemetersItem">
+            <div class="formParameter">
+                <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: </div>
+                <div class="formParameterField cityCodeBlock">
+                    {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
+                    <div class="codesListBlock">
+                        {% if codes | length > 0 %}
+                            {% include 'DashboardCommonBundle:Region:codes.html.twig' with {'codes' : codes} %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $("#settingsRegion").change(function(){
+                $("#settingsCityCode").val(null);
+                $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                changeRegionForm(false);
+            });
+            $("#settingsCity").change(function(){
+                $("#settingsCityCode").val(null);
+                $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                changeRegionForm(false);
+            });
+            $("#settingsCityCode").keyup(function(){
+                var len = $(this).val().length;
+                if(len === 5){
+                    changeRegionForm(true);
+                }else{
+                    getCityCodes($(this).val(), $(this));
+                }
+            });
+        </script>
+    </div> 
+{{ form_end(formMain)}}

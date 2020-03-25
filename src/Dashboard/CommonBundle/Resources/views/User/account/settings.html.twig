@@ -157,91 +157,51 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="formParemetersItem">
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Регион{% endtrans %}: <sup>*</sup></div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(formMain.userinfo.region,{'id' : 'settingsRegion'})}}
+                            <div id="settingsRegionBlock">
+                                <div class="formParemetersItem">
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Регион{% endtrans %}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formMain.userinfo.region,{'id' : 'settingsRegion'})}}
+                                        </div>
+                                    </div>
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
+                                        <div class="formParameterField">
+                                            {{ form_widget(formMain.userinfo.city,{'id' : 'settingsCity'})}}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
-                                    <div class="formParameterField">
-                                        {{ form_widget(formMain.userinfo.city,{'id' : 'settingsCity'})}}
+                                <div class="formParemetersItem">
+                                    <div class="formParameter">
+                                        <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: </div>
+                                        <div class="formParameterField cityCodeBlock">
+                                            {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
+                                            <div class="codesListBlock"></div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="formParemetersItem">
-                                <div class="formParameter">
-                                    <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}: </div>
-                                    <div class="formParameterField cityCodeBlock">
-                                        {{ form_widget(formMain.userinfo.cityCode,{'id' : 'settingsCityCode'})}}
-                                        <div class="codesListBlock"></div>
-                                    </div>
-                                </div>
+                                </div> 
                                 <script>
-                                    $("#settingsCityCode").keyup(function(){
-                                        var len = $(this).val().length;
-                                        var element = $(this);
-                                        if(len === 5){
-                                            $.ajax({
-                                                url : '/region/getcity/' + $(this).val(),
-                                                type: 'get',
-                                                dataType: 'json',
-                                                success: function(data) {
-                                                    if(data !== 0){
-                                                        $("#settingsRegion").parent().find(".select-option").each(function(){
-                                                            if($(this).data('value') === parseInt(data.region)){
-                                                                $(this).trigger('click');
-                                                                $("#settingsCityCode").val(data.code);
-                                                            }
-                                                        });
-                                                        $("#settingsCity").parent().find(".select-option").each(function(){
-                                                            if($(this).data('value') === parseInt(data.city)){
-                                                                $(this).trigger('click');
-                                                                $("#settingsCityCode").val(data.code);
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                            });
-                                        }else{
-                                            $.ajax({
-                                                url : '/region/getcodes/' + $(this).val(),
-                                                type: 'get',
-                                                dataType: 'html',
-                                                success: function(data) {
-                                                    element.parent().find('.codesListBlock').html(data).show();
-                                                }
-                                            });
-                                        }
-                                    });
-                                    
                                     $("#settingsRegion").change(function(){
                                         $("#settingsCityCode").val(null);
-                                        $(".codesListBlock").html('').hide();
+                                        $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                                        changeRegionForm(false);
                                     });
-                                    
                                     $("#settingsCity").change(function(){
                                         $("#settingsCityCode").val(null);
-                                        $(".codesListBlock").html('').hide();
-                                        $.ajax({
-                                                url : '/region/get/' + $(this).val(),
-                                                type: 'get',
-                                                dataType: 'json',
-                                                success: function(data) {
-                                                    if(data !== 0){
-                                                        $("#settingsRegion").parent().find(".select-option").each(function(){
-                                                            if($(this).data('value') === parseInt(data.region)){
-                                                                $(this).trigger('click');
-                                                            }
-                                                        });
-                                                    }
-                                                }
-                                        });
+                                        $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                                        changeRegionForm(false);
+                                    });
+                                    $("#settingsCityCode").keyup(function(){
+                                        var len = $(this).val().length;
+                                        if(len === 5){
+                                            changeRegionForm(true);
+                                        }else{
+                                            getCityCodes($(this).val(), $(this));
+                                        }
                                     });
                                 </script>
-                            </div>    
+                            </div> 
                             <div class="formParemetersItem">
                                 <div class="formParameter">
                                     <div class="formParameterLabel"></div>

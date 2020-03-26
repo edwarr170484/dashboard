@@ -24,7 +24,7 @@ class Region
     
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\City", mappedBy="region")
-     * @ORM\OrderBy({"sortorder" = "ASC"})
+     * @ORM\OrderBy({"name" = "ASC"})
      **/
     private $city;
     

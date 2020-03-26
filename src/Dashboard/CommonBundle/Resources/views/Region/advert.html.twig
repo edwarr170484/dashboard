@@ -1,0 +1,84 @@
+<div class="advertFiltersItemValue static-filters" style="padding-right: 0;" id="advertContactBlock">
+    <table class="table table-striped" id="advertFiltersItemsTable">
+        <tr>
+            <td><span class="addAdvertParameterLabel">{% trans %}Имя{% endtrans %}<sup> *</sup></span></td>
+            <td>
+                <input name="contactName" {% if app.request.get('contactName') %}value="{{ app.request.get('contactName') }}"{% endif %} placeholder="{% trans %}John Doe{% endtrans %}" class="parameterValue" required="required" type="text" />
+            </td>
+            <td><span class="addAdvertParameterLabel">{% trans %}Регион{% endtrans %}<sup> *</sup></span></td>
+            <td>
+                <div class="addAdvertContextParamenter">
+                    <select name="contactRegion" data-write="1" class="custom-select just-select" id="settingsRegion" placeholder="{% trans %}Регион{% endtrans %}" required="required">
+                        {% for region in regions %}
+                            {% set selected = '' %}
+                            {% if selectedRegion and selectedRegion.id == region.id %}
+                                {% set selected='selected=selected' %}
+                            {% elseif app.request.get('contactRegion') == region.id %}
+                                {% set selected='selected=selected' %}
+                            {% endif %}
+                            <option value="{{ region.id }}" {{ selected }}>{{ region.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="addAdvertParameterLabel">{% trans %}Телефон{% endtrans %}<sup> *</sup></span></td>
+            <td>
+                <input name="contactPhone" {% if app.request.get('contactPhone') %}value="{{ app.request.get('contactPhone') }}"{% endif %} placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue masked-phone" required="required" type="text" />
+                <script>$(".masked-phone").mask("+34 999 999 999");</script>
+            </td>
+            <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
+            <td>
+                <div class="addAdvertContextParamenter">
+                    <select name="contactCity" data-write="1" class="custom-select just-select" id="settingsCity" placeholder="{% trans %}Город{% endtrans %}" required="required">
+                        {% if selectedRegion %}
+                            {% for city in selectedRegion.city %}
+                                {% set selected = '' %}
+                                {% if selectedCity and selectedCity.id == city.id %}
+                                    {% set selected='selected=selected' %}
+                                {% elseif app.request.get('contactCity') and  app.request.get('contactCity') == city.id %}
+                                    {% set selected='selected=selected' %}
+                                {% endif %}
+                                <option value="{{ city.id }}" {{ selected }}>{{ city.name }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="addAdvertParameterLabel">{% trans %}E-mail{% endtrans %}<sup> *</sup></span></td>
+            <td>
+                <input name="contactEmail" {% if app.request.get('contactEmail') %}value="{{ app.request.get('contactEmail') }}"{% endif %} placeholder="{% trans %}E-mail{% endtrans %}" class="parameterValue" required="required" type="text" />
+            </td>
+            <td><span class="addAdvertParameterLabel">{% trans %}Индекс{% endtrans %}</span></td>
+            <td>
+                <div class="addAdvertContextParamenter cityCodeBlock">
+                    <input id="settingsCityCode" name="contactCityCode" {% if app.request.get('contactCityCode') %}value="{{ app.request.get('contactCityCode') }}"{% endif %} placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" type="text" />
+                    <div class="codesListBlock"></div>
+                </div>
+            </td> 
+        </tr>
+        <script>
+            $("#settingsRegion").change(function(){
+                $("#settingsCityCode").val(null);
+                $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                changeAdvertRegionForm(false, $(this));
+            });
+            $("#settingsCity").change(function(){
+                $("#settingsCityCode").val(null);
+                $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                changeAdvertRegionForm(false, $(this));
+            });
+            $("#settingsCityCode").keyup(function(){
+                var len = $(this).val().length;
+                if(len === 5){
+                    changeAdvertRegionForm(true, $(this));
+                }else{
+                    getAdvertCityCodes($(this).val(), $(this));
+                }
+            });
+        </script>
+    </table>
+</div>

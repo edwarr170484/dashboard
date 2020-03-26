@@ -1,0 +1,51 @@
+{{ form_start(registerForm, {'method':'POST', 'attr': {'class': 'form-horizontal dealerRegisterForm', 'id' : 'dealerinfo'}}) }}
+    <div id="dealerSettingsRegionBlock">
+        <div class="formParemetersItem">
+            <div class="formParameter">
+                <div class="formParameterLabel">{% trans %}Регион{% endtrans %}: <sup>*</sup></div>
+                <div class="formParameterField">
+                    {{ form_widget(registerForm.dealerinfo.region,{'id' : 'dealerRegion'})}}
+                </div>
+            </div>
+            <div class="formParameter">
+                <div class="formParameterLabel">{% trans %}Город{% endtrans %}: <sup>*</sup></div>
+                <div class="formParameterField">
+                    {{ form_widget(registerForm.dealerinfo.city,{'id' : 'dealerCity'})}}
+                </div>
+            </div>
+        </div>
+        <div class="formParemetersItem">
+            <div class="formParameter">
+                <div class="formParameterLabel">{% trans %}Индекс{% endtrans %}:</div>
+                <div class="formParameterField cityCodeBlock">
+                    {% if code %}
+                        {{ form_widget(registerForm.dealerinfo.cityCode,{'id' : 'dealerCityCode', 'attr' : {'value' : code.code}})}}
+                    {% else %}
+                        {{ form_widget(registerForm.dealerinfo.cityCode,{'id' : 'dealerCityCode'})}}
+                    {% endif %}
+                    <div class="codesListBlock"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $("#dealerRegion").change(function(){
+                $("#dealerCityCode").val(null);
+                $("#dealerCityCode").parent().find('.codesListBlock').hide();
+                changeRegionForm(false, $(this));
+            });
+            $("#dealerCity").change(function(){
+                $("#dealerCityCode").val(null);
+                $("#dealerCityCode").parent().find('.codesListBlock').hide();
+                changeRegionForm(false, $(this));
+            });
+            $("#dealerCityCode").keyup(function(){
+                var len = $(this).val().length;
+                if(len === 5){
+                    changeRegionForm(true, $(this));
+                }else{
+                    getCityCodes($(this).val(), $(this));
+                }
+            });
+        </script>
+    </div>   
+{{ form_end(registerForm)}}

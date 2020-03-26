@@ -1,0 +1,5 @@
+{% if codes %}
+    {% for code in codes %}
+        <div class="select-option " onclick="selectAdvertCityCode($(this), '{{ code.code }}')">{{ code.code }}</div>
+    {% endfor %}
+{% endif %}

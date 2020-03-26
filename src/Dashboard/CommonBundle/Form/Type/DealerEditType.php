@@ -59,8 +59,8 @@ class DealerEditType extends AbstractType
             ->add('save', ButtonType::class, array('label' => 'Сохранить'));
             
             $formModifier = function (FormInterface $form, Region $region = null) {
-                     $cities = null === $region ? array() : $region->getCity();
-                     $form->add('city', 'entity', array('class' => 'DashboardCommonBundle:City',
+                    $cities = null === $region ? array() : $region->getCity();
+                    $form->add('city', 'entity', array('class' => 'DashboardCommonBundle:City',
                                         'choice_label' => 'name',
                                         'choices' => $cities,
                                         'required' => false,

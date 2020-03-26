@@ -12,12 +12,14 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Finder\Finder;
 
+use Dashboard\CommonBundle\Entity\User;
 use Dashboard\CommonBundle\Entity\Region;
 use Dashboard\CommonBundle\Entity\City;
 use Dashboard\CommonBundle\Entity\CityCode;
 use Dashboard\AdminBundle\Form\Type\RegionType;
 use Dashboard\CommonBundle\Form\Type\UserType;
 use Dashboard\CommonBundle\Form\Type\DealerEditType;
+use Dashboard\CommonBundle\Form\Type\DealerRegisterType;
 class RegionController extends Controller
 {
     /**
@@ -344,52 +346,99 @@ class RegionController extends Controller
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $user = $this->get('security.context')->getToken()->getUser();
         
-        $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
-        $formMain->handleRequest($request);
-        
-        if($formMain['userinfo']['cityCode']->getData() != ""){
-            $query = $manager->createQuery("SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE '" . $formMain['userinfo']['cityCode']->getData() . "%'");
-            $codes = $query->getResult();
+        if(!is_string($user)){
             
-            if(strlen($formMain['userinfo']['cityCode']->getData()) >=5){
-                $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formMain['userinfo']['cityCode']->getData());
-                $user->getUserinfo()->setCity($code->getCity());
-                $user->getUserinfo()->setRegion($code->getCity()->getRegion());
-                $user->getUserinfo()->setCityCode($code);
-                $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
-            }
-        }else{
-            $codes = new ArrayCollection();
-        }
-        
-        $formDealer = NULL;
-        if($user->getDealerinfo()){
-            $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale, $user), $user->getDealerInfo());
-            $formDealer->handleRequest($request);
-            
-            if($formDealer['cityCode']->getData() != ""){
-                $query = $manager->createQuery("SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE '" . $formDealer['cityCode']->getData() . "%'");
-                $dealerCodes = $query->getResult();
+            $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
+            $formMain->handleRequest($request);
 
-                if(strlen($formDealer['cityCode']->getData()) >=5){
-                    $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formDealer['cityCode']->getData());
-                    $user->getDealerinfo()->setCity($code->getCity());
-                    $user->getDealerinfo()->setRegion($code->getCity()->getRegion());
-                    $user->getDealerinfo()->setCityCode($code);
-                    $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale, $user), $user->getDealerInfo());
+            if($formMain['userinfo']['cityCode']->getData() != ""){
+                $query = $manager->createQuery("SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE '" . $formMain['userinfo']['cityCode']->getData() . "%'");
+                $codes = $query->getResult();
+
+                if(strlen($formMain['userinfo']['cityCode']->getData()) >=5){
+                    $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formMain['userinfo']['cityCode']->getData());
+                    $user->getUserinfo()->setCity($code->getCity());
+                    $user->getUserinfo()->setRegion($code->getCity()->getRegion());
+                    $user->getUserinfo()->setCityCode($code);
+                    $formMain = $this->createForm(new UserType($this->getDoctrine()->getManager(), $user->getUserinfo(), $locale), $user);
                 }
             }else{
-                $dealerCodes = new ArrayCollection();
+                $codes = new ArrayCollection();
+            }
+
+            $formDealer = NULL;
+            if($user->getDealerinfo()){
+                $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale, $user), $user->getDealerInfo());
+                $formDealer->handleRequest($request);
+
+                if($formDealer['cityCode']->getData() != ""){
+                    $query = $manager->createQuery("SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE '" . $formDealer['cityCode']->getData() . "%'");
+                    $dealerCodes = $query->getResult();
+
+                    if(strlen($formDealer['cityCode']->getData()) >=5){
+                        $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($formDealer['cityCode']->getData());
+                        $user->getDealerinfo()->setCity($code->getCity());
+                        $user->getDealerinfo()->setRegion($code->getCity()->getRegion());
+                        $user->getDealerinfo()->setCityCode($code);
+                        $formDealer = $this->createForm(new DealerEditType($this->getDoctrine()->getManager(), $locale, $user), $user->getDealerInfo());
+                    }
+                }else{
+                    $dealerCodes = new ArrayCollection();
+                }
+            }
+
+            $formDealerView = NULL;
+            if($formDealer){
+                $formDealerView = $formDealer->createView();
+            }
+
+            return $this->render('DashboardCommonBundle:Region:userinfo.html.twig', array("user" => $user, "codes" => $codes, "formMain" => $formMain->createView(), "formDealer" => $formDealerView));
+        }else{
+            $dealer = new User();
+            $registerForm = $this->createForm(new DealerRegisterType($manager, NULL, $locale), $dealer);
+            $registerForm->handleRequest($request);
+            
+            $code = null;
+            if($registerForm['dealerinfo']['cityCode']->getData() != ""){
+                if(strlen($registerForm['dealerinfo']['cityCode']->getData()) >=5){
+                    $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($registerForm['dealerinfo']['cityCode']->getData());
+                    $dealer->getDealerinfo()->setCity($code->getCity());
+                    $dealer->getDealerinfo()->setRegion($code->getCity()->getRegion());
+                    $dealer->getDealerinfo()->setCityCode($code);
+                    $registerForm = $this->createForm(new DealerRegisterType($manager, NULL, $locale), $dealer);
+                }
+            }
+            
+            return $this->render('DashboardCommonBundle:Region:registerinfo.html.twig', array("registerForm" => $registerForm->createView(), "code" => $code));
+        }
+    }
+    
+    /**
+     * @Route("/region/getadvertregion", name="region_getadvert")
+     */
+    public function getAdvertRegionAction(Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
+        $user = $this->get('security.context')->getToken()->getUser();
+        
+        $regions = $manager->getRepository("DashboardCommonBundle:Region")->findBy(array(), array("name" => "ASC"));
+        $selectedRegion = null;
+        $selectedCity = null;
+        
+        if($request->request->get('contactRegion')){
+            $selectedRegion = $manager->getRepository("DashboardCommonBundle:Region")->find($request->request->get('contactRegion'));
+        }
+        
+        if($request->request->get('contactCityCode')){
+            $code = $manager->getRepository("DashboardCommonBundle:CityCode")->findOneByCode($request->request->get('contactCityCode'));
+            if($code){
+                $selectedRegion = $code->getCity()->getRegion();
+                $selectedCity = $code->getCity();
             }
         }
         
-        $formDealerView = NULL;
-        if($formDealer){
-            $formDealerView = $formDealer->createView();
-        }
-        
-        return $this->render('DashboardCommonBundle:Region:userinfo.html.twig', array("user" => $user, "codes" => $codes, "formMain" => $formMain->createView(), "formDealer" => $formDealerView));
-        
+        return $this->render('DashboardCommonBundle:Region:advert.html.twig', array("regions" => $regions,"selectedRegion" => $selectedRegion, "selectedCity" => $selectedCity));
     }
     
     /**
@@ -402,6 +451,18 @@ class RegionController extends Controller
         $codes = $query->getResult();
             
         return $this->render('DashboardCommonBundle:Region:codes.html.twig', array("codes" => $codes));
+    }
+    
+    /**
+     * @Route("/region/getcodesadvert/{data}", name="region_getcodesadvert")
+     */
+    public function getCodesAdvertAction($data, Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $query = $manager->createQuery("SELECT cc FROM Dashboard\CommonBundle\Entity\CityCode cc WHERE cc.code LIKE '" . $data . "%'");
+        $codes = $query->getResult();
+            
+        return $this->render('DashboardCommonBundle:Region:codesadvert.html.twig', array("codes" => $codes));
     }
 }
 

@@ -109,6 +109,7 @@ function getStep5(locale_code){
             $(".modal-body-cover").hide();
             $("#addAdvertStep").html(html);
             $("html").animate({scrollTop:0});
+            $(".custom-select").customSelect();
         },
         error: function(xhr, ajaxOptions, thrownError) {
             $(".modal-body-cover").hide();

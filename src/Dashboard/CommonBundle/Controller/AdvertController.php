@@ -340,9 +340,9 @@ class AdvertController extends Controller
         }
         
         $conditions = $manager->getRepository("DashboardCommonBundle:Shape")->findAll();
-        $cities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
+        $regions = $manager->getRepository("DashboardCommonBundle:Region")->findBy(array(), array("name" => "ASC"));
         
-        return $this->render('DashboardCommonBundle:Product:add/categoryForm.html.twig', array("baseCategory" => $baseCategory,"category" => $category,"locale" => $locale,"advertImages" => $advertImages,"role" => $user->getRoles()[0],"user" => $user,"settings" => $settings,"filters" => $filters,"conditions" => $conditions,"cities" => $cities));
+        return $this->render('DashboardCommonBundle:Product:add/categoryForm.html.twig', array("baseCategory" => $baseCategory,"category" => $category,"locale" => $locale,"advertImages" => $advertImages,"role" => $user->getRoles()[0],"user" => $user,"settings" => $settings,"filters" => $filters,"conditions" => $conditions,"regions" => $regions));
     }
     
     /**
@@ -530,9 +530,9 @@ class AdvertController extends Controller
         }
         
         $conditions = $manager->getRepository("DashboardCommonBundle:Shape")->findAll();
-        $cities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
+        $regions = $manager->getRepository("DashboardCommonBundle:Region")->findBy(array(), array("name" => "ASC"));
         
-        return $this->render('DashboardCommonBundle:Product:edit/categoryEdit.html.twig', array("baseCategory" => $baseCategory,"category" => $category,"locale" => $locale,"role" => $user->getRoles()[0],"settings" => $settings,"filters" => $filters,"conditions" => $conditions,"product" => $product,"cities" => $cities));
+        return $this->render('DashboardCommonBundle:Product:edit/categoryEdit.html.twig', array("baseCategory" => $baseCategory,"category" => $category,"locale" => $locale,"role" => $user->getRoles()[0],"settings" => $settings,"filters" => $filters,"conditions" => $conditions,"product" => $product,"regions" => $regions));
     }
     
     /**
@@ -1136,9 +1136,9 @@ class AdvertController extends Controller
                     $advertData = $serializer->serialize($advertInfo, 'json');
                     $session->set('advertInfo', $advertData);
                     
-                    $cities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
+                    $regions = $manager->getRepository("DashboardCommonBundle:Region")->findBy(array(), array("name" => "ASC"));
                     
-                    return $this->render('DashboardCommonBundle:Product:add/step5.html.twig', array("baseCategory" => $baseCategory,"category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "advertImages" => $advertImages, "advertInfo" => $advertInfo,"shape" => $shape,"color" => $color, "board" => $board,"gas" => $gas,"gear" => $gear, "transmission" => $transmission,"modification" => $modification, "user" => $user,"role" => $user->getRoles()[0],"cities" => $cities));
+                    return $this->render('DashboardCommonBundle:Product:add/step5.html.twig', array("baseCategory" => $baseCategory,"category" => $category, "generation" => $generation, "locale" => $locale, "settings" => $settings, "advertImages" => $advertImages, "advertInfo" => $advertInfo,"shape" => $shape,"color" => $color, "board" => $board,"gas" => $gas,"gear" => $gear, "transmission" => $transmission,"modification" => $modification, "user" => $user, "role" => $user->getRoles()[0],"regions" => $regions));
                     
                 break;
                 
@@ -1439,7 +1439,7 @@ class AdvertController extends Controller
         }
         $conditions = $manager->getRepository("DashboardCommonBundle:Shape")->findAll();
         
-        $cities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
+        $regions = $manager->getRepository("DashboardCommonBundle:Region")->findBy(array(), array("name" => "ASC"));
         
         return $this->render('DashboardCommonBundle:Product:edit/edit.html.twig', array("product" => $product, 
                                                                                         "settings" => $settings, 
@@ -1455,7 +1455,7 @@ class AdvertController extends Controller
                                                                                         "transmittionTypes" => $transmittionTypes,
                                                                                         "modifications" => $modifications,
                                                                                         "categories" => $categories,
-                                                                                        "cities" => $cities));
+                                                                                        "regions" => $regions));
     }
     
     /**

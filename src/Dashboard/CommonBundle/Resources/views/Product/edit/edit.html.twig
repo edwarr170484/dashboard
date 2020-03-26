@@ -322,10 +322,10 @@
                                             <td><span class="addAdvertParameterLabel">{% trans %}Владельцы{% endtrans %} <sup> *</sup></span></td>
                                             <td>
                                                 <select name="owners" class="custom-select just-select" placeholder="{% trans %}Количество владельцев{% endtrans %}" required="required">
-                                                    <option value="Один" {% if product.info.owners == 'Один' %}selected="selected"{% endif %}>Один</option>
-                                                    <option value="Два" {% if product.info.owners == 'Два' %}selected="selected"{% endif %}>Два</option>
-                                                    <option value="Три" {% if product.info.owners == 'Три' %}selected="selected"{% endif %}>Три</option>
-                                                    <option value="Больше трех" {% if product.info.owners == 'Больше трех' %}selected="selected"{% endif %}>Больше трех</option>
+                                                    <option value="1" {% if product.info.owners == 1 %}selected="selected"{% endif %}>Один</option>
+                                                    <option value="2" {% if product.info.owners == 2 %}selected="selected"{% endif %}>Два</option>
+                                                    <option value="3" {% if product.info.owners == 3 %}selected="selected"{% endif %}>Три</option>
+                                                    <option value="1000" {% if product.info.owners == 1000 %}selected="selected"{% endif %}>Больше трех</option>
                                                 </select>
                                             </td>
                                             <td><span class="addAdvertParameterLabel">{% trans %}VIN Номер{% endtrans %}</span></td>
@@ -438,19 +438,19 @@
                             </div>
                             <div class="advertFiltersItem justFilter">
                                 <div class="advertFiltersItemName">{% trans %}Контакты{% endtrans %}</div>
-                                <div class="advertFiltersItemValue static-filters" style="padding-right: 0;">
+                                <div class="advertFiltersItemValue static-filters" style="padding-right: 0;" id="advertContactBlock">
                                     <table class="table table-striped" id="advertFiltersItemsTable">
                                         <tr>
                                             <td><span class="addAdvertParameterLabel">{% trans %}Имя{% endtrans %}<sup> *</sup></span></td>
                                             <td>
                                                 <input name="contactName" class="parameterValue" required="required" type="text" {% if product.authorName %}value="{{  product.authorName }}"{% endif %} />
                                             </td>
-                                            <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Регион{% endtrans %}<sup> *</sup></span></td>
                                             <td>
                                                 <div class="addAdvertContextParamenter">
-                                                    <select name="contactCity" data-write="1" class="custom-select just-select" id="settingsCity" placeholder="{% trans %}Город{% endtrans %}" required="required">
-                                                        {% for city in cities %}
-                                                            <option value="{{ city.id }}" {% if product.city and product.city.id == city.id %}selected="selected"{% endif %}>{{ city.name }}</option>
+                                                    <select name="contactRegion" data-write="1" class="custom-select just-select" id="settingsRegion" placeholder="{% trans %}Регион{% endtrans %}" required="required">
+                                                        {% for region in regions %}
+                                                            <option value="{{ region.id }}" {% if product.region and product.region.id == region.id %}selected="selected"{% endif %}>{{ region.name }}</option>
                                                         {% endfor %}
                                                     </select>
                                                 </div>
@@ -461,10 +461,26 @@
                                             <td>
                                                 <input name="contactPhone" placeholder="{% trans %}Телефон{% endtrans %}" class="parameterValue masked-phone" required="required" type="text" {% if product.authorPhone %}value="{{  product.authorPhone }}"{% endif %} />
                                             </td>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}Город{% endtrans %}<sup> *</sup></span></td>
+                                            <td>
+                                                <div class="addAdvertContextParamenter">
+                                                    <select name="contactCity" data-write="1" class="custom-select just-select" id="settingsCity" placeholder="{% trans %}Город{% endtrans %}" required="required">
+                                                        {% for city in product.region.city %}
+                                                            <option value="{{ city.id }}" {% if product.city and product.city.id == city.id %}selected="selected"{% endif %}>{{ city.name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="addAdvertParameterLabel">{% trans %}E-mail{% endtrans %}<sup> *</sup></span></td>
+                                            <td>
+                                                <input name="contactEmail" placeholder="{% trans %}E-mail{% endtrans %}" class="parameterValue" required="required" type="text" {% if product.authorEmail %}value="{{  product.authorEmail }}"{% endif %} />
+                                            </td>
                                             <td><span class="addAdvertParameterLabel">{% trans %}Индекс{% endtrans %}</span></td>
                                             <td>
-                                                <div class="addAdvertContextParamenter" id="advertCityCodeBlock">
-                                                    <div class="addAdvertContextParamenter cityCodeBlock" id="advertCityCodeBlock">
+                                                <div class="addAdvertContextParamenter">
+                                                    <div class="addAdvertContextParamenter cityCodeBlock">
                                                         {% if product.cityCode %}
                                                             <input id="settingsCityCode" value="{{ product.cityCode.code }}" name="contactCityCode" placeholder="{% trans %}Индекс{% endtrans %}" class="parameterValue" type="text" />
                                                         {% else %}
@@ -473,53 +489,28 @@
                                                         <div class="codesListBlock"></div>
                                                     </div>
                                                 </div>
-                                                <script>
-                                                    $("#settingsCity").customSelect();
-                                                    $("#settingsCityCode").keyup(function(){
-                                                        var len = $(this).val().length;
-                                                        var element = $(this);
-                                                        if(len === 5){
-                                                            $.ajax({
-                                                                url : '/region/getcity/' + $(this).val(),
-                                                                type: 'get',
-                                                                dataType: 'json',
-                                                                success: function(data) {
-                                                                    if(data !== 0){
-                                                                        $("#settingsCity").parent().find(".select-option").each(function(){
-                                                                            if($(this).data('value') === parseInt(data.city)){
-                                                                                $(this).trigger('click');
-                                                                                $("#settingsCity").val(data.city);
-                                                                                $("#settingsCityCode").val(data.code);
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                }
-                                                            });
-                                                        }else{
-                                                            $.ajax({
-                                                                url : '/region/getcodes/' + $(this).val(),
-                                                                type: 'get',
-                                                                dataType: 'html',
-                                                                success: function(data) {
-                                                                    element.parent().find('.codesListBlock').html(data).show();
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-
-                                                    $("#settingsCity").change(function(){
-                                                        $("#settingsCityCode").val(null);
-                                                        $(".codesListBlock").html('').hide();
-                                                    });
-                                                </script>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td><span class="addAdvertParameterLabel">{% trans %}E-mail{% endtrans %}<sup> *</sup></span></td>
-                                            <td>
-                                                <input name="contactEmail" placeholder="{% trans %}E-mail{% endtrans %}" class="parameterValue" required="required" type="text" {% if product.authorEmail %}value="{{  product.authorEmail }}"{% endif %} />
-                                            </td>
-                                        </tr>
+                                        <script>
+                                            $("#settingsRegion").change(function(){
+                                                $("#settingsCityCode").val(null);
+                                                $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                                                changeAdvertRegionForm(false, $(this));
+                                            });
+                                            $("#settingsCity").change(function(){
+                                                $("#settingsCityCode").val(null);
+                                                $("#settingsCityCode").parent().find('.codesListBlock').hide();
+                                                changeAdvertRegionForm(false, $(this));
+                                            });
+                                            $("#settingsCityCode").keyup(function(){
+                                                var len = $(this).val().length;
+                                                if(len === 5){
+                                                    changeAdvertRegionForm(true, $(this));
+                                                }else{
+                                                    getAdvertCityCodes($(this).val(), $(this));
+                                                }
+                                            });
+                                        </script>
                                     </table>
                                 </div>
                             </div>

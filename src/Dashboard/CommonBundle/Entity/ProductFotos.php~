@@ -28,7 +28,10 @@ class ProductFotos
      */
     private $foto;
 
-
+    /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
+     */
+    private $sortorder;
     /**
      * Get id
      *

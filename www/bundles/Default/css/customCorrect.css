@@ -41,6 +41,8 @@ h3 {font-size: 3.2rem;}
     padding-top: 0rem;}
 .nav-tabs>li>a:hover {border-color:none!important;}
 .advertSliderMainFoto {margin:auto 0;height: auto;}
+.productSliderInfo .advertSellerOrder button {max-width: 260px;}
+.productModalSliderIcons img:hover {background:#F5AA01;  opacity: 0.5}
 /* Временная мера */
 .select-language.active {
     background: none;}
@@ -55,7 +57,7 @@ h3 {font-size: 3.2rem;}
 /* Категория */
 .categoryAdvert {margin-bottom:0px}
 .categoryAdvert:hover {margin-top: -1px;}
-.categoryAdvert.payed {margin-bottom:3rem;margin-top: 3rem;}
+.categoryAdvert.payed {margin-bottom:3rem;}
 .categoryAdvertImages {border-radius: 7px;}
 .categoryAdvertDealerAll a {color:#f5aa01;}
 .categorySpecialAdverts {margin-top:3rem;}
@@ -63,7 +65,11 @@ h3 {font-size: 3.2rem;}
 .categoryAdvertInfoProbeg {width: 18%;}
 .categoryAdvertInfoYear {width: 13%;}
 .padination {    padding-bottom: 2.5rem;padding-top: 3.5rem;}
-
+.categoryAdverts.grid {float:left}
+.productNoteForm textarea {min-height:64px;}
+.productNoteForm.active input {    width: 100%;min-height: 4rem;padding-left: 5px;margin-bottom: 0rem;font-size: 12px;margin-bottom: 1.5rem;}
+.accountAdvertLikeButton button, .accountAdvertBottomFunction button, .accountConversationMessageText button:hover, .accountConversationMessageText button:focus {outline:none}
+.modalSearchResult {padding-top:0 }
 .siteMainSubmenu {min-width: 100%;}
 .select-cover {padding: 11px 15px;}
 .register-block.result .register-block-header {text-align:center}
@@ -75,8 +81,23 @@ footer {margin-top: 4rem;
     position: fixed;
     z-index: 3000;
     width: 100%;}
-
+	.categorySortFields {margin-bottom:3rem}
+	.categoryAdvertTop {width: 82px;height: 121px;}
+.pagContentTabsContent .tab-pane {border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;}
+	
+	.advertise-block img {border-radius:8px}
+.pagContentTabsSelectors {width: 20%;}
+.pagContentTabsContent {width: 80%;}
 .mainPageAutoList ul li {width: 20%;}
+.categoryDescription h2 {
+    color: #222B2A;
+    font-size: 3.2rem;
+    text-align: center;margin-bottom: 3rem;
+}
+
 #desktopSearchModal {background: rgba(0,0,0,0.8);backdrop-filter: blur(5px);}
 .categorySpecialAdvertInner {border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;}
@@ -120,6 +141,7 @@ button.close,.mainPageAutoListShowAll button,
 {
 .mainPageFiltersTabs ul li a {padding: 1.7rem 1.2rem 1.5rem 1.2rem;}
 h1, h2, h4 {font-size: 3.6rem;line-height: 4.6rem;}
+.categoryDescription h2 {font-size: 3.0rem;line-height: 4.0rem;}
 .mainPageFiltersBlock {padding-top: 4.9rem;padding-bottom: 14rem;}
 .mainPageSiteSubheader{font-size: 2.2rem;padding-bottom: 4rem;}
 .mainPageSitHeader {padding-top: 5rem;padding-bottom: 1.3rem;}
@@ -135,6 +157,15 @@ h1, h2, h4 {font-size: 3.6rem;line-height: 4.6rem;}
 	.footer-menu-list li:nth-child(even) {width: 100%;}
 	.footer-menu-list li {width: 100%;}
 }
+
+@media (max-width: 768px){
+.categoryDescription h2 {
+    font-size: 2.2rem!important;
+    line-height: 2.8rem!important;
+}
+
+}
+
 	@media (max-width: 650px) 
 {
 .siteMenuGamburgerMenu {top:0}

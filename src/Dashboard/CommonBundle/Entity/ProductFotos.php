@@ -28,7 +28,12 @@ class ProductFotos
      */
     private $foto;
 
-
+    /**
+     * @ORM\Column(type="integer", length=15, nullable=true, options={"default": 0})
+     */
+    private $sortorder;
+    
+    
     /**
      * Get id
      *
@@ -83,5 +88,28 @@ class ProductFotos
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * Set sortorder
+     *
+     * @param integer $sortorder
+     * @return ProductFotos
+     */
+    public function setSortorder($sortorder)
+    {
+        $this->sortorder = $sortorder;
+    
+        return $this;
+    }
+
+    /**
+     * Get sortorder
+     *
+     * @return integer 
+     */
+    public function getSortorder()
+    {
+        return $this->sortorder;
     }
 }

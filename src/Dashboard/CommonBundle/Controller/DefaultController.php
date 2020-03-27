@@ -274,10 +274,11 @@ class DefaultController extends Controller
     {
         $manager = $this->getDoctrine()->getManager();
         $securityContext = $this->container->get('security.authorization_checker');
-        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY'))
+        if($securityContext->isGranted('IS_AUTHENTICATED_FULLY')){
             $sessionUser = $this->get('security.context')->getToken()->getUser();
-        else
+        }else{
             $sessionUser = NULL;
+        }
         $locale = $manager->getRepository("DashboardCommonBundle:Locale")->findOneBy(array("code" => $request->getLocale()));
         $settings = $manager->getRepository("DashboardCommonBundle:Settings")->findOneBy(array("locale" => $locale));
         $allcities = $manager->getRepository("DashboardCommonBundle:City")->findAll();
@@ -393,15 +394,17 @@ class DefaultController extends Controller
             $sameProducts = $allproducts;
         
         $order = new ProductOrder();
-        $orderForm = $this->createForm(new OrderType(), $order);
+        $orderForm = $this->createForm(new OrderType($sessionUser), $order);
         
         $orderForm->handleRequest($request);
 
-        if ($orderForm->isSubmitted() && $orderForm->isValid())
+        if($orderForm->isSubmitted() && $orderForm->isValid())
         {
             $order->setDateAdded(new \DateTime("now"));
             $order->setUserReceived($product->getUser());
-            $order->setUserSended($sessionUser);
+            if($sessionUser){
+                $order->setUserSended($sessionUser);
+            }
             $order->setProduct($product);
             $order->setIsNew(1);
             $order->setStatus($settings->getDafaultOrderStatus());
@@ -454,7 +457,7 @@ class DefaultController extends Controller
                 ->setBody(
                     $this->renderView(
                         'Emails/friendmessage.html.twig',
-                        array('product' => $product, "settings" => $settings, 'user' => $sessionUser)
+                        array('product' => $product, "settings" => $settings)
                     ),
                     'text/html'
                 );
@@ -472,8 +475,9 @@ class DefaultController extends Controller
         }
         
         $complaint = new Complaint();
+        $userName = ($sessionUser) ? $sessionUser->getUserinfo()->getFirstname() . ' ' . $sessionUser->getUserinfo()->getLastname() : '';
         $complaintMessageForm = $this->get('form.factory')->createNamedBuilder('complaint', 'form', $complaint)
-                 ->add('username', TextType::class, array('required' => true, 'mapped' => false, 'label' => $this->get('translator')->trans('Ваше имя: *'), 'attr' => array('class' => 'form-control', 'placeholder' => $this->get('translator')->trans('Ваше имя *'))))
+                 ->add('authorName', TextType::class, array('required' => true, 'data' => $userName, 'label' => $this->get('translator')->trans('Ваше имя: *'), 'attr' => array('class' => 'form-control', 'placeholder' => $this->get('translator')->trans('Ваше имя *'))))
                  ->add('reason', TextareaType::class, array('required' => true,'label' => $this->get('translator')->trans('Причина жалобы: *'), 'attr' => array('class' => 'form-control', 'placeholder' => $this->get('translator')->trans('Причина жалобы *'))))
                  ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
         
@@ -481,7 +485,9 @@ class DefaultController extends Controller
             
         if($complaintMessageForm->isSubmitted() && $complaintMessageForm->isValid())
         {
-            $complaint->setUser($sessionUser);
+            if($sessionUser){
+                $complaint->setUser($sessionUser);
+            }
             $complaint->setProduct($product);
             $complaint->setDateAdded(new \DateTime("now"));
             $complaint->setStatus(0);
@@ -496,7 +502,7 @@ class DefaultController extends Controller
                     ->setBody(
                         $this->renderView(
                             'Emails/complaint.html.twig',
-                            array('product' => $product, 'user' => $sessionUser, "settings" => $settings)
+                            array('product' => $product, "settings" => $settings, "complaint" => $complaint)
                         ),
                         'text/html'
                     );
@@ -578,124 +584,8 @@ class DefaultController extends Controller
         
         if($this->getUser())
         {
-            $message = new Message();
-            $productMessageForm = $this->createForm(new ProductMessageType($manager, $sessionUser), $message);
-            
             $profileMessage = new Message();
             $profileMessageForm = $this->createForm(new ProfileMessageType($manager), $profileMessage);
-            
-            $productMessageForm->handleRequest($request);
-            
-            if($productMessageForm->isSubmitted() && $productMessageForm->isValid())
-            {
-                if($product->getUser()->getId() != $sessionUser->getId())
-                {
-                    $blacklistItem = $manager->getRepository("DashboardCommonBundle:Blacklist")->findOneBy(array("userAuthor" => $product->getUser()->getId(), "userTo" => $sessionUser->getId()));
-                
-                    if($blacklistItem)
-                    {
-                        $this->addFlash(
-                                'notice',
-                                '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                                $this->get('translator')->trans('<strong>Ошибка!</strong> Этот пользователь добавил Вас в черный список.') . '</div>'
-                            );
-
-                        return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-                    }
-                    
-                    //check if conversation exists
-                    $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE (c.userOne = " . $sessionUser->getId()  . " AND c.userTwo = " . $product->getUser()->getId() . " ) "
-                            . "OR (c.userOne = " . $product->getUser()->getId() . " AND c.userTwo = " . $sessionUser->getId()  . ")");
-                    
-                    try{
-                        $conversation = $query->getSingleResult();
-                    }
-                    catch(\Doctrine\ORM\NoResultException $e) {
-                        $conversation = new Conversation();
-                        $conversation->setUserOne($product->getUser());
-                        $conversation->setUserTwo($sessionUser);
-                        $conversation->setUserDeleted(null);
-                        $conversation->setSubject($product->getName());
-                        $manager->persist($conversation);
-                        $manager->flush();
-                    }
-                    
-                    $message->setUserFrom($sessionUser);
-                    $message->setUserTo($product->getUser());
-                    $message->setUserOwner($sessionUser);
-                    $message->setIsNew(1);
-                    $message->setIsDeleted(0);
-                    $message->setSubject($product->getName());
-                    $message->setSentDate(new \DateTime("now"));
-                    $message->setReadedDate(new \DateTime("now"));
-                    $message->setProduct($product);
-                    $message->setConversation($conversation);
-                    
-                    $manager->persist($message);
-                    $manager->flush();
-                    
-                    $messageTwo = new Message();
-                    $messageTwo = clone $message;
-                    $messageTwo->setUserOwner($product->getUser());
-                    
-                    $manager->persist($messageTwo);
-                    $manager->flush();
-                    
-                    if($productMessageForm['copytoemail']->getData())
-                    {
-                        $messageSent = \Swift_Message::newInstance()
-                        ->setSubject('Копия сообщения для владельца объявления')
-                        ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-                        ->setTo($productMessageForm['userEmail']->getData())
-                        ->setBody(
-                            $this->renderView(
-                                'Emails/productmessagecopy.html.twig',
-                                array('message' => $message->getMessage(), 'product' => $product, "settings" => $settings)
-                            ),
-                            'text/html'
-                        );
-
-                        $this->get('mailer')->send($messageSent);
-                    }
-                    
-                    if($product->getUser()->getAlerts())
-                    {
-                        $messageSent = \Swift_Message::newInstance()
-                            ->setSubject('Новое сообщение на сайте ' . $settings->getSiteName())
-                            ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-                            ->setTo($product->getUser()->getEmail())
-                            ->setBody(
-                                $this->renderView(
-                                    'Emails/productmessage.html.twig',
-                                    array('message' => $message->getMessage(), "settings" => $settings, 'user' => $sessionUser)
-                                ),
-                                'text/html'
-                            );
-
-                            $this->get('mailer')->send($messageSent);
-                    }
-                    
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                        $this->get('translator')->trans('<strong>Успешно!</strong> Выше сообщение отправлено владельцу объявления.') . '</div>'
-                    );
-                }
-                else
-                {
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' .
-                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете отправить сообщение самому себе.') . '</div>'
-                    );
-                }
-                
-                return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
-            }
-            
             $profileMessageForm->handleRequest($request);
 
             if ($profileMessageForm->isSubmitted() && $profileMessageForm->isValid())
@@ -714,60 +604,48 @@ class DefaultController extends Controller
                     return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
                 }
                 
-                if($product->getUser()->getId() != $sessionUser->getId())
-                {
-                    //check if conversation exists
-                    $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE (c.userOne = " . $profileMessageForm['userFrom']->getData()->getId()  . " AND c.userTwo = " . $profileMessageForm['userTo']->getData()->getId() . " ) "
+                //check if conversation exists
+                $query = $manager->createQuery("SELECT c FROM DashboardCommonBundle:Conversation c WHERE (c.userOne = " . $profileMessageForm['userFrom']->getData()->getId()  . " AND c.userTwo = " . $profileMessageForm['userTo']->getData()->getId() . " ) "
                             . "OR (c.userOne = " . $profileMessageForm['userTo']->getData()->getId() . " AND c.userTwo = " . $profileMessageForm['userFrom']->getData()->getId()  . ")");
                     
-                    try{
-                        $conversation = $query->getSingleResult();
-                    }
-                    catch(\Doctrine\ORM\NoResultException $e) {
-                        $conversation = new Conversation();
-                        $conversation->setUserOne($profileMessageForm['userTo']->getData());
-                        $conversation->setUserTwo($profileMessageForm['userFrom']->getData());
-                        $conversation->setUserDeleted(null);
-                        $conversation->setSubject($product->getName());
-                        $manager->persist($conversation);
-                        $manager->flush();
-                    }
+                try{
+                    $conversation = $query->getSingleResult();
+                }
+                catch(\Doctrine\ORM\NoResultException $e) {
+                    $conversation = new Conversation();
+                    $conversation->setUserOne($profileMessageForm['userTo']->getData());
+                    $conversation->setUserTwo($profileMessageForm['userFrom']->getData());
+                    $conversation->setUserDeleted(null);
+                    $conversation->setSubject($product->getName());
+                    $manager->persist($conversation);
+                    $manager->flush();
+                }
 
-                    $profileMessage->setUserOwner($profileMessageForm['userFrom']->getData());
-                    $profileMessage->setIsNew(1);
-                    $profileMessage->setIsDeleted(0);
-                    $profileMessage->setSubject($product->getName());
-                    $profileMessage->setSentDate(new \DateTime("now"));
-                    $profileMessage->setReadedDate(new \DateTime("now"));
-                    $profileMessage->setProduct(null);
-                    $profileMessage->setConversation($conversation);
+                $profileMessage->setUserOwner($profileMessageForm['userFrom']->getData());
+                $profileMessage->setIsNew(1);
+                $profileMessage->setIsDeleted(0);
+                $profileMessage->setSubject($product->getName());
+                $profileMessage->setSentDate(new \DateTime("now"));
+                $profileMessage->setReadedDate(new \DateTime("now"));
+                $profileMessage->setProduct(null);
+                $profileMessage->setConversation($conversation);
                     
-                    $manager->persist($profileMessage);
-                    $manager->flush();
+                $manager->persist($profileMessage);
+                $manager->flush();
                     
-                    $messageTwo = new Message();
-                    $messageTwo = clone $profileMessage;
-                    $messageTwo->setUserOwner($profileMessageForm['userTo']->getData());
+                $messageTwo = new Message();
+                $messageTwo = clone $profileMessage;
+                $messageTwo->setUserOwner($profileMessageForm['userTo']->getData());
                     
-                    $manager->persist($messageTwo);
-                    $manager->flush();
+                $manager->persist($messageTwo);
+                $manager->flush();
                     
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Успешно!</strong> Ваше сообщение отправлено.') . '</div>'
-                    );
-                    
-                }
-                else {
-                    $this->addFlash(
-                        'notice',
-                        '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                        $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете писать сообщения себе.') . '</div>'
-                    );
-                }
+                $this->addFlash(
+                    'notice',
+                    '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                    $this->get('translator')->trans('<strong>Успешно!</strong> Ваше сообщение отправлено.') . '</div>'
+                );
                 
                 return $this->redirectToRoute("product", array("productId" => $product->getId(),"productName" => $product->getTranslit()));
             }
@@ -789,7 +667,6 @@ class DefaultController extends Controller
                                                                                           "orderForm" => $orderForm->createView(),
                                                                                           "user" => $sessionUser,
                                                                                           "favoriteProductIs" => $favoriteProductIs,
-                                                                                          "productMessageForm" => $productMessageForm->createView(),
                                                                                           "friendMessageForm" => $friendMessageForm->createView(),
                                                                                           "complaintMessageForm" => $complaintMessageForm->createView(),
                                                                                           "profileMessageForm" => $profileMessageForm->createView(),

@@ -86,6 +86,7 @@ class Product
     
     /**
      * @ORM\OneToMany(targetEntity="Dashboard\CommonBundle\Entity\ProductFotos", mappedBy="product", cascade={"persist"})
+     * @ORM\OrderBy({"sortorder" = "ASC"})
      */
     private $fotos;
     

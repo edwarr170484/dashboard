@@ -1,3 +1,3 @@
-<img src="https://lh6.googleusercontent.com/jUINxXgP0BiDUPUQULrWMv8wUdF4_ecw2ilgmoT318_Iy3bGtvb8t8RTNZdl2cBdrkr6dctxUh7f3A=w1920-h1057" />
-<h3>Статус заказа был изменен продавцом!</h3>
-<p>Статус Вашего заказа №{{ order.id }} был изменен на <strong>{{ orderStatus }}</strong>. {% if comment %} <br /><strong>Причина: </strong>{{ comment }} {% endif %} <br /> Вы можете отслеживать статус Вашего заказа в <a href="{{  absolute_url(path("account"))}}">личном кабинете</a> на портале.</p>
+<img src="https://dl.dropboxusercontent.com/s/bhlz9y5atxpxv6p/logo.png" alt="auto28.es" />
+<h3>Статус Вашего заказа был изменен продавцом!</h3>
+<p>Статус Вашего заказа №{{ order.id }} был изменен на <strong>{{ orderStatus }}</strong>. {% if comment %} <br /><strong>Причина: </strong>{{ comment }} {% endif %} <br /> Если вы зарегистрированы на сайте {{ settings.siteName }}, то можете отслеживать статус Вашего заказа в <a href="{{  absolute_url(path("account"))}}">личном кабинете</a>.</p>

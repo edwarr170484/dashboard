@@ -1,0 +1,61 @@
+<div class="advertSellerInfoInner">
+    <div class="advertSellerInfoAdvertName">{{ product.name }}</div>
+    <div class="price">
+        <div class="content-block-header"><h1>{{ product.info.price }} {{ locale.currency.label | raw }}</h1></div>
+        <!--<div class="creditRule">от 500 &euro;/мес.</div>-->
+    </div>
+    {% if product.user.roles[0].role == "ROLE_DEALER" %}
+        <div class="advertSellerName">{{ product.user.dealerinfo.company }}</div>
+    {% else %}
+        <div class="advertSellerName">{{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}</div>
+    {% endif %}
+    {% if product.user.roles[0].role == "ROLE_DEALER" %}
+        <div class="advertSellerStatus">{{ product.user.dealerinfo.company }}</div>
+        <div class="advertSellerRating">
+            {% set reviewRating = product.user.dealerinfo.rating %}
+            {% if reviewRating > 0 %}
+                {% for i in 1..reviewRating %}
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M10.4741 16.4598C10.187 16.2624 9.81297 16.2624 9.52586 16.4598L4.59695 19.8476C3.89851 20.3277 3.01742 19.5906 3.32918 18.7871L5.46858 13.2727C5.61869 12.8858 5.4854 12.4433 5.14908 12.2121L0.382204 8.93567C-0.321474 8.45201 0.0106287 7.32113 0.856344 7.32113H6.00222C6.35174 7.32113 6.66604 7.10174 6.79585 6.76715L9.20637 0.553979C9.49293 -0.184659 10.5071 -0.18466 10.7936 0.553978L13.2041 6.76715C13.334 7.10174 13.6483 7.32113 13.9978 7.32113H19.1437C19.9894 7.32113 20.3215 8.45201 19.6178 8.93567L14.8509 12.2121C14.5146 12.4433 14.3813 12.8858 14.5314 13.2727L16.6708 18.7871C16.9826 19.5906 16.1015 20.3277 15.403 19.8476L10.4741 16.4598Z" fill="#F5AA01"/>
+                    </svg>
+                {% endfor %}
+            {% endif %}
+            {% if reviewRating < 5 %}
+                {% for i in (reviewRating + 1)..5 %}
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10.7574 16.0477C10.2996 15.7331 9.70036 15.7331 9.24264 16.0477L4.31373 19.4356C4.17172 19.5332 4.02319 19.514 3.90506 19.4152C3.78475 19.3146 3.7243 19.151 3.79532 18.9679L5.93472 13.4536C6.16664 12.8558 5.96433 12.1658 5.4323 11.8001L0.665424 8.52362C0.516486 8.42125 0.469212 8.25402 0.517993 8.08791C0.566447 7.92292 0.689557 7.82113 0.856344 7.82113H6.00222C6.56535 7.82113 7.06021 7.46811 7.262 6.948L9.67251 0.734829C9.79399 0.421724 10.206 0.421724 10.3275 0.734829L12.738 6.948C12.9398 7.46811 13.4346 7.82113 13.9978 7.82113H19.1437C19.3104 7.82113 19.4336 7.92291 19.482 8.08791C19.5308 8.25402 19.4835 8.42125 19.3346 8.52362L14.5677 11.8001C14.0357 12.1658 13.8334 12.8558 14.0653 13.4536L16.2047 18.9679C16.2757 19.151 16.2153 19.3146 16.0949 19.4152C15.9768 19.514 15.8283 19.5332 15.6863 19.4356L10.7574 16.0477Z" stroke="#F5AA01"/>
+                    </svg>
+                {% endfor %}
+            {% endif %}
+            <div class="advertSellerRatingValue">({{ product.user.targetReviews | length }})</div>
+        </div>
+    {% endif %}
+    <div class="advertSellerContacts">
+        <div class="advertSellerContactsHeader">{% trans %}Контактная информация{% endtrans %}</div>
+        {% if product.user.roles[0].role == "ROLE_DEALER" %}
+            <div class="advertSellerTime" id="dealerWorktime{{ product.user.id }}"></div>
+            <script>getDealerWorkTime($("#dealerWorktime{{ product.user.id }}"), {{ product.user.id }})</script>
+        {% endif %}
+        <div class="advertContactPhones">
+            <div class="advertContact phone">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21.9994 16.9738V19.9846C22.0005 20.2642 21.9432 20.5408 21.831 20.7969C21.7188 21.053 21.5542 21.2829 21.3478 21.4719C21.1415 21.6608 20.8978 21.8047 20.6325 21.8942C20.3672 21.9838 20.0861 22.017 19.8072 21.9919C16.7128 21.6563 13.7404 20.601 11.1289 18.9108C8.69921 17.3699 6.63926 15.3141 5.09534 12.8892C3.39586 10.271 2.33824 7.29008 2.00816 4.18795C1.98303 3.91042 2.01608 3.63071 2.1052 3.36663C2.19432 3.10254 2.33757 2.85987 2.52581 2.65407C2.71405 2.44826 2.94317 2.28383 3.19858 2.17123C3.45398 2.05864 3.73008 2.00036 4.0093 2.0001H7.02608C7.5141 1.9953 7.98722 2.16778 8.35725 2.48537C8.72727 2.80297 8.96896 3.24401 9.03727 3.72629C9.1646 4.68982 9.40074 5.63587 9.74118 6.54642C9.87648 6.90563 9.90576 7.29602 9.82556 7.67133C9.74536 8.04665 9.55903 8.39115 9.28867 8.66402L8.01156 9.93859C9.44308 12.4512 11.5276 14.5315 14.0451 15.9602L15.3222 14.6856C15.5956 14.4158 15.9408 14.2298 16.3169 14.1498C16.6929 14.0698 17.0841 14.099 17.444 14.234C18.3564 14.5738 19.3043 14.8095 20.2698 14.9365C20.7582 15.0053 21.2044 15.2509 21.5233 15.6265C21.8422 16.0021 22.0116 16.4817 21.9994 16.9738Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <a href="javascript:void(0)" onclick="showSellerNumer({{ product.id }}, $(this))">{% trans %}Показать телефон{% endtrans %}</a>
+            </div>
+        </div>
+        {% if user and product.user.id != user.id %}
+            <div class="advertContact message">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 10.4445C21.0038 11.911 20.6612 13.3577 20 14.6667C19.216 16.2353 18.0108 17.5546 16.5194 18.477C15.0279 19.3993 13.3091 19.8882 11.5555 19.8889C10.089 19.8927 8.64234 19.5501 7.33332 18.8889L1 21L3.11111 14.6667C2.44992 13.3577 2.10729 11.911 2.11111 10.4445C2.11179 8.69086 2.60068 6.97208 3.52302 5.48064C4.44536 3.98919 5.76472 2.78399 7.33332 2.00003C8.64234 1.33884 10.089 0.996208 11.5555 1.00003H12.1111C14.427 1.1278 16.6145 2.10532 18.2546 3.74543C19.8947 5.38553 20.8722 7.57297 21 9.88891V10.4445Z" stroke="#747474" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <a data-toggle="modal" data-target="#messageModal" href="">{% trans %}Написать сообщение{% endtrans %}</a>
+            </div>
+        {% endif %}
+    </div>
+    {% if not user or product.user.id != user.id %}
+        <div class="advertSellerOrder">
+            <button data-toggle="modal" data-target="#orderModal">{% trans %}Оставить заявку{% endtrans %}</button>
+        </div>
+    {% endif %}
+</div>

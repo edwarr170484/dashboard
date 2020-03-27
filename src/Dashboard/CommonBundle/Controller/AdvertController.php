@@ -24,6 +24,8 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
+use Dashboard\AdminBundle\ImageResize;
+
 use Dashboard\CommonBundle\Entity\Product;
 use Dashboard\CommonBundle\Entity\ProductInfo;
 use Dashboard\CommonBundle\Entity\ProductFotos;
@@ -1713,6 +1715,13 @@ class AdvertController extends Controller
                     try
                     {
                         $image->move('bundles/images/products',$localImageName);
+                        $resize = new ImageResize('bundles/images/products/' . $localImageName);
+                        if($resize->getSourceHeight() > $resize->getSourceWidth()){
+                            $resize->resize(453, 680, true);
+                        }else{
+                            $resize->resize(1020, 680, true);
+                        }
+                        $resize->save('bundles/images/products/' . $localImageName);
                         
                         if($settings->getWatermark()){
                             $watermark = imagecreatefrompng('bundles/images/site/' . $settings->getWatermark());
@@ -1752,15 +1761,11 @@ class AdvertController extends Controller
                                 break;
                             }
                         }
-                        
-                        $simpleImage = $this->get('app.simpleimage');
-                        $simpleImage->load('bundles/images/products/' . $localImageName);
-                        $simpleImage->resizeToWidth(1024);
-                        $simpleImage->save('bundles/images/products/' . $localImageName);
 
                         $newImage = new ProductFotos();
                         $newImage->setFoto($localImageName);
                         $newImage->setProduct($product);
+                        $newImage->setSortorder(count($product->getFotos()) + 1);
                         
                         $manager->persist($newImage);
                         $manager->flush();
@@ -1775,7 +1780,7 @@ class AdvertController extends Controller
                     $error = $this->get('translator')->trans("Ошибка при загрузке файла. Попробуйте еще раз. Допустимые расширения: jpg, jpeg, png, gif.");
                 }
 
-                $data = $error ? array('error' => $error) : array('imageName' => $localImageName, 'imageId' => $newImage->getId());
+                $data = $error ? array('error' => $error) : array('imageName' => $localImageName, 'imageId' => $newImage->getId(), 'imageSortorder' => $newImage->getSortorder());
 
                 return new Response(json_encode( $data ));
                 
@@ -1788,14 +1793,56 @@ class AdvertController extends Controller
                     try
                     {
                         $image->move('bundles/images/products',$localImageName);
+                        $resize = new ImageResize('bundles/images/products/' . $localImageName);
+                        if($resize->getSourceHeight() > $resize->getSourceWidth()){
+                            $resize->resize(453, 680, true);
+                        }else{
+                            $resize->resize(1020, 680, true);
+                        }
+                        $resize->save('bundles/images/products/' . $localImageName);
+                        
+                        if($settings->getWatermark()){
+                            $watermark = imagecreatefrompng('bundles/images/site/' . $settings->getWatermark());
+                            $marge_right = 10;
+                            $marge_bottom = 10;
+                            $sx = imagesx($watermark);
+                            $sy = imagesy($watermark);
+                            
+                            switch($extention)
+                            {
+                                case 'png':
+                                    $markImage = imagecreatefrompng('bundles/images/products/' . $localImageName);
+                                    imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
+                                    imagepng($markImage, 'bundles/images/products/' . $localImageName);
+                                    imagedestroy($markImage);
+                                break;
 
-                        $simpleImage = $this->get('app.simpleimage');
-                        $simpleImage->load('bundles/images/products/' . $localImageName);
-                        $simpleImage->resizeToWidth(1024);
-                        $simpleImage->save('bundles/images/products/' . $localImageName);
+                                case 'jpg':
+                                    $markImage = imagecreatefromjpeg('bundles/images/products/' . $localImageName);
+                                    imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
+                                    imagejpeg($markImage, 'bundles/images/products/' . $localImageName);
+                                    imagedestroy($markImage);
+                                break;
+
+                                case 'jpeg':
+                                    $markImage = imagecreatefromjpeg('bundles/images/products/' . $localImageName);
+                                    imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
+                                    imagejpeg($markImage, 'bundles/images/products/' . $localImageName);
+                                    imagedestroy($markImage);
+                                break;
+
+                                case 'gif':
+                                    $markImage = imagecreatefromgif('bundles/images/products/' . $localImageName);
+                                    imagecopy($markImage, $watermark, imagesx($markImage) - $sx - $marge_right, imagesy($markImage) - $sy - $marge_bottom, 0, 0, imagesx($watermark), imagesy($watermark));
+                                    imagegif($markImage, 'bundles/images/products/' . $localImageName);
+                                    imagedestroy($markImage);
+                                break;
+                            }
+                        }
 
                         $newImage = new AdvertImage();
                         $newImage->setName($localImageName);
+                        $newImage->setSortorder(count($advertImages) + 1);
                         array_push($advertImages, $newImage);
                         $advertData = $serializer->serialize($advertImages, 'json');
                         $session->set('advertImages', $advertData);
@@ -1824,6 +1871,7 @@ class AdvertController extends Controller
     public function ajaxDeleteFotoAction($fotoId, Request $request)
     {
         $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
         $user = $this->get('security.context')->getToken()->getUser();
         $foto = $manager->getRepository("DashboardCommonBundle:ProductFotos")->find($fotoId);
         
@@ -1838,6 +1886,24 @@ class AdvertController extends Controller
             
             $foto->setProduct(null);
             $manager->remove($foto);
+            $manager->flush();
+        }
+        
+        return new Response("OK");
+    }
+    
+    /**
+     * @Route("/account/ajaxsortfoto/{fotoId}/{sortorder}", name="ajaxSortFoto")
+     */
+    public function ajaxSortFotoAction($fotoId, $sortorder,Request $request)
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $fm = new Filesystem();
+        $user = $this->get('security.context')->getToken()->getUser();
+        $foto = $manager->getRepository("DashboardCommonBundle:ProductFotos")->find($fotoId);
+        
+        if($foto){
+            $foto->setSortorder($sortorder);
             $manager->flush();
         }
         

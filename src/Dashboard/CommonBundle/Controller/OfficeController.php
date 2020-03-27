@@ -428,23 +428,27 @@ class OfficeController extends Controller
         }
         
         $complaint = new Complaint();
+        $userName = ($sessionUser) ? $sessionUser->getUserinfo()->getFirstname() . ' ' . $sessionUser->getUserinfo()->getLastname() : '';
         $complaintMessageForm = $this->get('form.factory')->createNamedBuilder('complaint', 'form', $complaint)
+                ->add('authorName', TextType::class, array('required' => true, 'data' => $userName, 'label' => $this->get('translator')->trans('Ваше имя: *'), 'attr' => array('class' => 'form-control', 'placeholder' => $this->get('translator')->trans('Ваше имя *'))))
                  ->add('reason', TextareaType::class, array('required' => true,'label' => '', 'attr' => array('class' => 'form-control','placeholder' => $this->get('translator')->trans('Причина жалобы'))))
                  ->add('save', ButtonType::class, array('label' => $this->get('translator')->trans('Отправить'), 'attr' => array('class' => 'btn')))->getForm();
         
         $complaintMessageForm->handleRequest($request);
         
         if($complaintMessageForm->isSubmitted() && $complaintMessageForm->isValid()){
-            if($service->getDealerinfo()->getUser()->getId() != $sessionUser->getId()){   
+            if($sessionUser){
                 $complaint->setUser($sessionUser);
-                $complaint->setSalon($service);
-                $complaint->setDateAdded(new \DateTime("now"));
-                $complaint->setStatus(0);
+            }
+            
+            $complaint->setSalon($service);
+            $complaint->setDateAdded(new \DateTime("now"));
+            $complaint->setStatus(0);
                     
-                $manager->persist($complaint);
-                $manager->flush();
+            $manager->persist($complaint);
+            $manager->flush();
                     
-                $message = \Swift_Message::newInstance()
+            $message = \Swift_Message::newInstance()
                     ->setSubject('Жалоба на сайте ' . $settings->getSiteName())
                     ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
                     ->setTo($settings->getAdminEmail())
@@ -456,24 +460,14 @@ class OfficeController extends Controller
                         'text/html'
                 );
 
-                $this->get('mailer')->send($message);
+            $this->get('mailer')->send($message);
                     
-                $this->addFlash(
-                    'notice',
-                    '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Успешно!</strong> Ваша жалоба зарегистрирована и будет рассмотрена в ближайшее время.') . '</div>'
-                );
-                    
-            }
-            else {
-                $this->addFlash(
-                    'notice',
-                    '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
-                    $this->get('translator')->trans('<strong>Ошибка!</strong> Вы не можете жаловаться на себя.') . '</div>'
-                );
-            }
+            $this->addFlash(
+                'notice',
+                '<div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' . 
+                $this->get('translator')->trans('<strong>Успешно!</strong> Ваша жалоба зарегистрирована и будет рассмотрена в ближайшее время.') . '</div>'
+            );
             
             return $this->redirectToRoute("servicePage", array("serviceId" => $service->getId(),"serviceName" => $service->getName()));
         }

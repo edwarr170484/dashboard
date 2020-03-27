@@ -186,7 +186,7 @@
                                                             var existingFiles = [
                                                                 {% if product.fotos | length > 0 %}
                                                                     {% for image in product.fotos %}
-                                                                        { name: "{{ image.foto }}", imageId: "{{ image.id }}",size: 12345678,imageUrl:'/bundles/images/products/{{ image.foto }}' },
+                                                                        { name: "{{ image.foto }}", imageId: "{{ image.id }}", imageSortorder : "{{ image.sortorder }}",size: 12345678,imageUrl:'/bundles/images/products/{{ image.foto }}' },
                                                                     {% endfor%}
                                                                 {% endif %}
                                                             ];
@@ -195,10 +195,13 @@
                                                                 myDropzone.files.push(existingFiles[i]);
                                                                 var imageName = document.createAttribute("imageName");
                                                                 var imageId = document.createAttribute("imageId");
+                                                                var imageSortorder = document.createAttribute("imageSortorder");
                                                                 imageName.value = existingFiles[i].name;
                                                                 imageId.value = existingFiles[i].imageId;
+                                                                imageSortorder.value = existingFiles[i].imageSortorder;
                                                                 myDropzone.files[i].previewElement.attributes.setNamedItem(imageName);
                                                                 myDropzone.files[i].previewElement.attributes.setNamedItem(imageId);
+                                                                myDropzone.files[i].previewElement.attributes.setNamedItem(imageSortorder);
                                                                 myDropzone.createThumbnailFromUrl(existingFiles[i], existingFiles[i].imageUrl);
                                                                 myDropzone.emit("complete", existingFiles[i]);
                                                             }
@@ -227,10 +230,13 @@
                                                             if(answer.imageName){
                                                                 var imageName = document.createAttribute("imageName");
                                                                 var imageId = document.createAttribute("imageId");
+                                                                var imageSortorder = document.createAttribute("imageSortorder");
                                                                 imageName.value = answer.imageName;
                                                                 imageId.value = answer.imageId;
+                                                                imageSortorder.value = answer.imageSortorder;
                                                                 file.previewElement.attributes.setNamedItem(imageName);
                                                                 file.previewElement.attributes.setNamedItem(imageId);
+                                                                file.previewElement.attributes.setNamedItem(imageSortorder);
                                                             }
 
                                                             $("div#advertFotos").append('<div class="addFotoIcon"><div class="addFotoIconInner">{% trans %}Осталось{% endtrans %} ' + (30 - $(".dz-preview").length) + '</div></div>');
@@ -264,6 +270,27 @@
                                                         }
                                                         });
                                                     $(".advertFotosStartBg").click(function(){$("#advertFotos").trigger('click');});
+                                                    $( "#advertFotos" ).sortable({items: ".dz-preview", stop: function(event, ui) {
+                                                            /*var id = ui.item.context.attributes.getNamedItem("imageId").value;
+                                                            var position = ui.item.index();*/
+                                                            $("#advertFotos").find(".dz-preview").each(function(){
+                                                                var id = $(this).eq().context.attributes.getNamedItem("imageId").value;
+                                                                var sortorder = $(this).index() + 1;
+                                                                
+                                                                $.ajax({
+                                                                    url: '/account/ajaxsortfoto/' + id + '/' + sortorder,
+                                                                    type:'get',
+                                                                    dataType: 'html',
+                                                                    beforeSend: function(){},
+                                                                    success: function(){
+
+                                                                    },
+                                                                    error: function(xhr, ajaxOptions, thrownError) {
+
+                                                                    }
+                                                                });
+                                                            });
+                                                    }});
                                                 </script>
                                             </td>
                                         </tr>

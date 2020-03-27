@@ -36,6 +36,11 @@ class Complaint
     private $salon;
     
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $authorName;
+    
+    /**
      * @ORM\Column(type="text")
      */
     private $reason;
@@ -197,5 +202,28 @@ class Complaint
     public function getSalon()
     {
         return $this->salon;
+    }
+
+    /**
+     * Set authorName
+     *
+     * @param string $authorName
+     * @return Complaint
+     */
+    public function setAuthorName($authorName)
+    {
+        $this->authorName = $authorName;
+    
+        return $this;
+    }
+
+    /**
+     * Get authorName
+     *
+     * @return string 
+     */
+    public function getAuthorName()
+    {
+        return $this->authorName;
     }
 }

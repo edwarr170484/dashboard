@@ -22,6 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
+use Dashboard\AdminBundle\ImageResize;
+
 use Dashboard\CommonBundle\Entity\Message;
 use Dashboard\CommonBundle\Entity\DealerFoto;
 use Dashboard\CommonBundle\Entity\DealerSalon;
@@ -823,11 +825,11 @@ class AccountController extends Controller
                     $manager->persist($order);
                     $manager->flush();
 
-                    if($order->getUserSended()->getIsAlertChangeOrderStatus()){
+                    if(!$order->getUserSended() || $order->getUserSended()->getIsAlertChangeOrderStatus()){
                         $message = \Swift_Message::newInstance()
                             ->setSubject('Изменен статус заказа на сайте ' . $settings->getSiteName())
                             ->setFrom(array($settings->getAdminEmail() => $settings->getSiteName()))
-                            ->setTo($order->getUserSended()->getEmail())
+                            ->setTo($order->getEmail())
                             ->setBody(
                                 $this->renderView(
                                     'Emails/changeorderstatus.html.twig',
@@ -2013,11 +2015,14 @@ class AccountController extends Controller
                 try
                 {
                     $image->move('bundles/images/dealers',$localImageName);
-
-                    $simpleImage = $this->get('app.simpleimage');
-                    $simpleImage->load('bundles/images/dealers/' . $localImageName);
-                    $simpleImage->resizeToWidth(1024);
-                    $simpleImage->save('bundles/images/dealers/' . $localImageName);
+                    
+                    $resize = new ImageResize('bundles/images/dealers/' . $localImageName);
+                    if($resize->getSourceHeight() > $resize->getSourceWidth()){
+                        $resize->resize(453, 680, true);
+                    }else{
+                        $resize->resize(1020, 680, true);
+                    }
+                    $resize->save('bundles/images/dealers/' . $localImageName);
 
                     $newImage = new DealerFoto();
                     $newImage->setImage($localImageName);

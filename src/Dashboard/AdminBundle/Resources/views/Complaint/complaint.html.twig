@@ -50,7 +50,13 @@
                                                 <tr {% if complaint.status == 0 %}class="active"{% endif %}>
                                                     <td>{{ complaint.dateAdded | date("d.m.Y в H:i")}}</td>
                                                     <td>{{ complaint.reason }}</td>
-                                                    <td><a href="{{ path('admin_user_edit', {'userId' : complaint.user.id}) }}">{{ complaint.user.userinfo.firstname }} {{ complaint.user.userinfo.lastname }}</a></td>
+                                                    <td>
+                                                        {% if complaint.user %}
+                                                            <a href="{{ path('admin_user_edit', {'userId' : complaint.user.id}) }}">{{ complaint.authorName }}</a>
+                                                        {% else %}
+                                                            {{ complaint.authorName }}
+                                                        {% endif %}
+                                                    </td>
                                                     <td>
                                                         {% if complaint.product %}
                                                         <a href="{{ path('admin_product_edit', {'productId' : complaint.product.id}) }}">{{ complaint.product.name }}</a>

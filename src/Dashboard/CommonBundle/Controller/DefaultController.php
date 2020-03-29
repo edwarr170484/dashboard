@@ -298,7 +298,7 @@ class DefaultController extends Controller
         $categories = array();
         
         $product = $manager->getRepository("DashboardCommonBundle:Product")->findOneBy(array("id" => $productId, "isActive" => "1", "isConfirm" => "1", "isBlocked" => "0", "isDraft" => "0"));
-        
+
         if(!$product)
             throw $this->createNotFoundException();
         if($product->getUser()->getIsActive() == 0)

@@ -16,7 +16,7 @@
         <div class="tab-content">
             {% set i = 1 %}
             {% for category in categories %}
-                <div role="tabpanel" class="tab-pane {% if i == 1 %}active{% endif %}" id="categoryFilters{{ category.id }}">
+                <div role="tabpanel" class="tab-pane {% if i == 1 %} active{% endif %}" id="categoryFilters{{ category.id }}">
                         <form action="{{ path('category',{'categoryId' : category.id, 'categoryName' : category.name}) }}" method="POST">
                         <input name="category" type="hidden" value="{{ category.id }}" />
                         <div class="row">

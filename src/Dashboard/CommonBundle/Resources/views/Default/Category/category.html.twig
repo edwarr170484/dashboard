@@ -55,7 +55,7 @@
                             <h1>{% if category.hTitle  %}{{ category.hTitle }}{% else %}{{ category.title }}{% endif %}</h1>
                         </div>
                             <div class="mainPageFiltersTabs category-filters" style="padding-top: 0;">
-                                {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'this' : category, 'categories' : baseCategories, 'formFilters' : formFilters, 'productsTotalCount' : productsTotalCount, 'request' : app.request, 'roles' : roles} %}
+                                {% include 'DashboardCommonBundle:Default:Category/filterForm.html.twig' with {'this' : categories[0], 'categories' : baseCategories, 'formFilters' : formFilters, 'productsTotalCount' : productsTotalCount, 'request' : app.request, 'roles' : roles} %}
                             </div>                              
                             <div class="hidden-sm hidden-xs" style="text-align:center;">
                                 {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
@@ -127,7 +127,7 @@
                                                     <div class="categorySpecialAdvertImage">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
                                                             {% if product.fotos | length > 0 %}
-                                                                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                <img src="{{ asset('bundles/images/products/thumbs/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                             {% endif %}
                                                         </a>
                                                     </div>
@@ -175,7 +175,7 @@
                                                     <div class="categorySpecialAdvertImage">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
                                                             {% if product.fotos | length > 0 %}
-                                                                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                <img src="{{ asset('bundles/images/products/thumbs/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                             {% endif %}
                                                         </a>
                                                     </div>
@@ -226,7 +226,7 @@
                                                     <div class="categorySpecialAdvertImage">
                                                         <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
                                                             {% if product.fotos | length > 0 %}
-                                                                <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                <img src="{{ asset('bundles/images/products/thumbs/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                             {% endif %}
                                                         </a>
                                                     </div>

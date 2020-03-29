@@ -200,6 +200,12 @@
     .mainPageSitHeaderBlock{padding-left: 15px;}
     .faq-left{padding-right: 15px;}
     .faq-right{padding-left: 15px;}
+    .error404{display: block;}
+    .error404 .errorCode{padding-bottom: 4.5rem;padding-right: 0;font-size: 15rem;text-align: center;}
+    .error404 .errorCodeDescriptionLink{padding-top: 2.5rem;font-size: 3rem;}
+    .error404 .errorCodeDescription{text-align: center;}
+    .error404 .errorCodeDescriptionTitle{font-size: 4rem;}
+    .page-content.error404{padding-top: 18rem;padding-bottom: 18rem;}
 }
 @media(max-width:830px){
     .siteMenuGamburgerMenu{@include column-count(3);}
@@ -289,6 +295,10 @@
     .accountMessageItemUser{flex-wrap:wrap;}
     .accountMessageItemTitle{padding-left: 12rem;flex-wrap:wrap;}
     .accountMessageItemUserAvatar{width: auto;}
+    .page-content.error404{padding-top: 14rem;padding-bottom: 14rem;}
+    .error404 .errorCode{font-size: 12rem;}
+    .error404 .errorCodeDescriptionLink{font-size: 2.6rem;}
+    .error404 .errorCodeDescriptionTitle{font-size: 3.4rem;}
 }
 @media (max-width: 650px) 
 {
@@ -337,6 +347,10 @@
     .accountOrderUserAvatar{flex-wrap: wrap;}
     .accountOrderUserAvatarImage{padding-right: 0;}
     .accountOrderUserAvatarName{width: 100%;text-align: center;}
+    .error404 .errorCode{font-size: 10rem;}
+    .error404 .errorCodeDescriptionLink{font-size: 2rem;}
+    .page-content.error404{padding-top: 10rem;padding-bottom: 10rem;}
+    .error404 .errorCodeDescriptionTitle{font-size: 2.8rem;}
 }
 
 @media (max-width: 560px) 

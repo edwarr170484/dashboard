@@ -106,9 +106,9 @@
                                                                 <div class="accountOrderInfoProductImage">
                                                                     <a href="{{ path('product',{'productId' : order.product.id, 'productName' : order.product.translit}) }}">
                                                                         {% if order.product.fotos | length > 0 %}
-                                                                            <img src="{{ asset('bundles/images/products/' ~ order.product.fotos[0].foto) }}" alt="" title="" />
+                                                                            <img src="{{ asset('bundles/images/products/thumbs/' ~ order.product.fotos[0].foto) }}" alt="" title="" />
                                                                         {% else %}
-                                                                            <img src="{{ asset('bundles/images/products/bez-foto.png') }}" alt="" title="" />
+                                                                            <img src="{{ asset('bundles/images/products/nophoto.png') }}" alt="" title="" />
                                                                         {% endif %}
                                                                     </a>
                                                                 </div>

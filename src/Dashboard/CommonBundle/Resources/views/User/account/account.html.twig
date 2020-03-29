@@ -110,4 +110,28 @@
     {% if totalPrice > 0 %}
         <script>$("body").append('<div class="accountBottomPaymentSumm"><div class="container"><div class="row"><div class="col-lg-12"><div class="accountBottomPaymentSummValue"><div class="accountBottomPaymentSummValueText">{% trans %}Общая сумма{% endtrans %}:</div><div class="accoutnProductServicesTotalSumma">{{ totalPrice }} {{ locale.currency.label | raw }}</div><div class="accountBottomPaymentSummValueButton"><a href="/account/payments/{{ billId }}">{% trans %}Оплатить{% endtrans %}</a></div></div></div></div></div></div>');</script>
 {% endif %}
+{% if favProducts | length > 0 %}
+    {% for product in favProducts %}
+        <div class="modal fade" id="productFavoriteModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M26 1.4524L24.5476 0L13 11.5578L1.4524 0L0 1.4524L11.5578 13L0 24.5476L1.4524 26L13 14.4422L24.5476 26L26 24.5476L14.4422 13L26 1.4524Z" fill="white"/>
+                        </svg>
+                    </button>
+                    <div class="modal-header" style="border:none">
+                        <h3 class="modal-title" id="productToolsHeader">{% trans %}Удалить из избранных{% endtrans %}</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="productToolsText" id="productToolsText">{% trans %}Вы хотите удалить это объявление из избранных?{% endtrans %}</div>
+                        <div class="productToolsButtons cookieAlertButton" id="productToolsButtons">
+                            <button onclick="deleteFavoriteProduct({{ product.id }})">{% trans %}Удалить{% endtrans %}</button><button class="gray" class="close" data-dismiss="modal" aria-label="Close">{% trans %}Нет, я передумал{% endtrans %}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
 {% endblock%}

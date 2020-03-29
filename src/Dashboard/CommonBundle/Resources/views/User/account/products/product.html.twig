@@ -125,9 +125,9 @@
         <div class="accountAdvertImage">
             {% if product.fotos | length > 0 %}
                 {% if product.isActive and product.isConfirm and not product.isDraft and not product.isBlocked %}
-                    <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}"><img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
+                    <a href="{{ path('product', {'productId' : product.id, 'productName' : product.translit}) }}"><img src="{{ asset('bundles/images/products/thumbs/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
                 {% else %}
-                    <a href=javascript:void(0)"><img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
+                    <a href=javascript:void(0)"><img src="{{ asset('bundles/images/products/thumbs/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" /></a>
                 {% endif %}
             {% else %}
                 <img src="{{ asset('bundles/images/products/nophoto.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />

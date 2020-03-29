@@ -130,14 +130,14 @@
                                             {% for i in 0 .. 2 %}
                                                 <li>
                                                     <a href="#productFoto{{ product.fotos[i].id }}" data-toggle="modal" data-target="#productSlider">
-                                                        <img src="{{ asset('bundles/images/products/' ~ product.fotos[i].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                        <img src="{{ asset('bundles/images/products/thumbs/' ~ product.fotos[i].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                     </a>
                                                 </li>
                                                 {% set num = i %}
                                             {% endfor %}
                                             <li>
                                                 <a href="#productFoto{{ product.fotos[num + 1].id }}" data-toggle="modal" data-target="#productSlider">
-                                                    <img src="{{ asset('bundles/images/products/' ~ product.fotos[num + 1].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                    <img src="{{ asset('bundles/images/products/thumbs/' ~ product.fotos[num + 1].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                     <div class="advertIconCover">{% trans %}Еще{% endtrans %} {{ product.fotos | length - 4 }} {% trans %}фото{% endtrans %}</div>
                                                 </a>
                                             </li>
@@ -145,7 +145,7 @@
                                             {% for foto in product.fotos %}
                                                 <li>
                                                     <a href="#productFoto{{ foto.id }}" data-toggle="modal" data-target="#productSlider">
-                                                        <img src="{{ asset('bundles/images/products/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                        <img src="{{ asset('bundles/images/products/thumbs/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                     </a>
                                                 </li>
                                             {% endfor %}
@@ -184,12 +184,6 @@
                                             <li>
                                                 <div class="advertFilterName">{% trans %}Модель{% endtrans %}</div>
                                                 <div class="advertFilterValue">{{ categoriesBread[2].title }}</div>
-                                            </li>
-                                            {% endif %}
-                                            {% if product.info.generation %}
-                                            <li>
-                                                <div class="advertFilterName">{% trans %}Поколение{% endtrans %}</div>
-                                                <div class="advertFilterValue">{{ product.info.generation.name }}</div>
                                             </li>
                                             {% endif %}
                                             {% if product.info.board %}
@@ -298,7 +292,7 @@
                                 {% if sameProduct.fotos | length > 0 %}
                                     <div class="categorySpecialAdvertImage">
                                         <a href="{{ path('product',{'productId' : sameProduct.id, 'productName' : sameProduct.translit}) }}">
-                                            <img src="{{ asset('bundles/images/products/' ~ sameProduct.fotos[0].foto) }}" alt="{{ sameProduct.name }}" title="{{ sameProduct.name }}" />
+                                            <img src="{{ asset('bundles/images/products/thumbs/' ~ sameProduct.fotos[0].foto) }}" alt="{{ sameProduct.name }}" title="{{ sameProduct.name }}" />
                                         </a>
                                     </div>
                                 {% endif %}
@@ -334,7 +328,7 @@
                                 {% if dealerProduct.fotos | length > 0 %}
                                     <div class="categorySpecialAdvertImage">
                                         <a href="{{ path('product',{'productId' : dealerProduct.id, 'productName' : dealerProduct.translit}) }}">
-                                            <img src="{{ asset('bundles/images/products/' ~ dealerProduct.fotos[0].foto) }}" alt="{{ dealerProduct.name }}" title="{{ dealerProduct.name }}" />
+                                            <img src="{{ asset('bundles/images/products/thumbs/' ~ dealerProduct.fotos[0].foto) }}" alt="{{ dealerProduct.name }}" title="{{ dealerProduct.name }}" />
                                         </a>
                                     </div>
                                 {% endif %}
@@ -385,7 +379,7 @@
                                         {% for foto in product.fotos %}
                                             <li>
                                                 <a href="#productFoto{{ foto.id }}">
-                                                    <img src="{{ asset('bundles/images/products/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                    <img src="{{ asset('bundles/images/products/thumbs/' ~ foto.foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                                 </a>
                                             </li>
                                         {% endfor %}

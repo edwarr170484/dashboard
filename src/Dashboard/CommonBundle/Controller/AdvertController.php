@@ -1717,11 +1717,19 @@ class AdvertController extends Controller
                         $image->move('bundles/images/products',$localImageName);
                         $resize = new ImageResize('bundles/images/products/' . $localImageName);
                         if($resize->getSourceHeight() > $resize->getSourceWidth()){
-                            $resize->resize(453, 680, true);
+                            $resize->resize(529, 705, true);
                         }else{
-                            $resize->resize(1020, 680, true);
+                            $resize->resize(940, 705, true);
                         }
                         $resize->save('bundles/images/products/' . $localImageName);
+                        
+                        $resize = new ImageResize('bundles/images/products/' . $localImageName);
+                        if($resize->getSourceHeight() > $resize->getSourceWidth()){
+                            $resize->crop(429, 315);
+                        }else{
+                            $resize->resize(429, 315, true);
+                        }
+                        $resize->save('bundles/images/products/thumbs/' . $localImageName);
                         
                         if($settings->getWatermark()){
                             $watermark = imagecreatefrompng('bundles/images/site/' . $settings->getWatermark());
@@ -1795,11 +1803,19 @@ class AdvertController extends Controller
                         $image->move('bundles/images/products',$localImageName);
                         $resize = new ImageResize('bundles/images/products/' . $localImageName);
                         if($resize->getSourceHeight() > $resize->getSourceWidth()){
-                            $resize->resize(453, 680, true);
+                            $resize->resize(529, 705, true);
                         }else{
-                            $resize->resize(1020, 680, true);
+                            $resize->resize(940, 705, true);
                         }
                         $resize->save('bundles/images/products/' . $localImageName);
+                        
+                        $resize = new ImageResize('bundles/images/products/' . $localImageName);
+                        if($resize->getSourceHeight() > $resize->getSourceWidth()){
+                            $resize->crop(429, 315);
+                        }else{
+                            $resize->resize(429, 315, true);
+                        }
+                        $resize->save('bundles/images/products/thumbs/' . $localImageName);
                         
                         if($settings->getWatermark()){
                             $watermark = imagecreatefrompng('bundles/images/site/' . $settings->getWatermark());
@@ -1878,9 +1894,12 @@ class AdvertController extends Controller
         if($foto && $foto->getProduct()->getUser()->getId() == $user->getId()){
             if($foto->getFoto())
             {
-                if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto()))
-                {
+                if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto())){
                     $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/' . $foto->getFoto());
+                }
+                
+                if($fm->exists($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/thumbs/' . $foto->getFoto())){
+                    $fm->remove($request->server->get('DOCUMENT_ROOT') . '/bundles/images/products/thumbs/' . $foto->getFoto());
                 }
             }
             

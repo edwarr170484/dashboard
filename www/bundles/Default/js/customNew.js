@@ -687,15 +687,16 @@ function addFavoriteProduct(productId, user, element)
     }
 }
 
-function deleteFavoriteProduct(productId, text){
-    if(confirm(text)){
-        $.ajax({
+function deleteFavoriteProduct(productId){
+    $('#productFavoriteModal' + productId).modal('hide');
+    $.ajax({
             url: '/deletefavorite/' + productId,
             type:'get',
             dataType: 'json',
             success: function(data)
             {
                 if(data.error === 0){
+                    
                     $("#favoriteProduct" + productId).remove();
                     window.location.reload();
                 }
@@ -703,8 +704,7 @@ function deleteFavoriteProduct(productId, text){
             error: function(xhr, ajaxOptions, thrownError) {
                 err=xhr.responseText;
             }
-        });
-    }
+    });
 }
 
 function showReviewAnswerForm(element){

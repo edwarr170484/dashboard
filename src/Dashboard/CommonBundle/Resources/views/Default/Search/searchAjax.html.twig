@@ -4,11 +4,10 @@
             <div class="categorySpecialAdverts new modalAdverts">
                 {% for product in products %}
                     <div class="categorySpecialAdvert">
-                        
                             <div class="categorySpecialAdvertImage">
                                 <a href="{{ path('product',{'productId' : product.id, 'productName' : product.translit}) }}">
                                     {% if product.fotos | length > 0 %}
-                                        <img src="{{ asset('bundles/images/products/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                        <img src="{{ asset('bundles/images/products/thumbs/' ~ product.fotos[0].foto) }}" alt="{{ product.name }}" title="{{ product.name }}" />
                                     {% endif %}
                                 </a>
                             </div>

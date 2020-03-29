@@ -397,9 +397,9 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .categoryAdvertShareLinks ul li button.share:hover .shareLinks,.categoryAdvertShareLinks ul li button.share:focus .shareLinks{display: block;}
 .at-share-btn-elements{@include flexBox(row,flex-start,center);}
 .at-resp-share-element a.at-share-btn{margin-bottom: 0;}
-.categoryAdvertShareLinks ul li button > svg:nth-child(2){display: none;}
-.categoryAdvertShareLinks ul li button:hover > svg:nth-child(2){display: block;}
-.categoryAdvertShareLinks ul li button:hover > svg:first-child{display: none;}
+.categoryAdvertShareLinks ul li button > img:nth-child(2){display: none;}
+.categoryAdvertShareLinks ul li button:hover > img:nth-child(2){display: block;}
+.categoryAdvertShareLinks ul li button:hover > img:first-child{display: none;}
 .categorySpecialAdverts{background:$black-text;@include border-radius(15px);padding: 3.5rem 2rem 0;@include box-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));margin-bottom: 3.4rem;}
 .categorySpecialAdverts.new{background: none;@include box-shadow(none);padding-left: 0;padding-right: 0;}
 .categorySpecialAdvertsHeader{padding-left: 3.2rem;background: url(../img/spec.png) 0 50% no-repeat;position: relative;@include flexBox(row,space-between,center)}
@@ -493,10 +493,10 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
     @include border-radius(0);
     border:none;
 }
-.product-tabs-inner .nav-tabs > li > a svg{margin-right: 16px;}
-.product-tabs-inner .nav-tabs > li > a svg:last-child{display: none;}
-.product-tabs-inner .nav-tabs > li > a:hover svg:last-child,.product-tabs-inner .nav-tabs > li > a:focus svg:last-child{display: block;}
-.product-tabs-inner .nav-tabs > li > a:hover svg:first-child,.product-tabs-inner .nav-tabs > li > a:focus svg:first-child{display: none;}
+.product-tabs-inner .nav-tabs > li > a img{margin-right: 16px;}
+.product-tabs-inner .nav-tabs > li > a img:last-child{display: none;}
+.product-tabs-inner .nav-tabs > li > a:hover img:last-child,.product-tabs-inner .nav-tabs > li > a:focus img:last-child{display: block;}
+.product-tabs-inner .nav-tabs > li > a:hover img:first-child,.product-tabs-inner .nav-tabs > li > a:focus img:first-child{display: none;}
 .product-tabs-inner .tab-content .tab-pane{padding: 10px 15px;@include fontView("GothamProRegular",$super-black-color,1.4rem,2.2rem);}
 .product-tabs-inner .nav-tabs > li > a:hover,.product-tabs-inner .nav-tabs > li > a:focus{border:none;background: #fff;}
 .advertSellerInfo{}
@@ -866,7 +866,7 @@ ul.justLinks li{position: relative;}
 .accountAdvertFunction button:hover,.accountAdvertRightFunction button:focus{background: #FDEECC;}
 .accountAdvertFunctions.left .accountAdvertFunction button,.accountAdvertFunctions.left .accountAdvertFunction div.button{padding: 0.9rem 1.5rem;}
 .accountAdvert.cube{position: relative;background: #fff;border: 1px solid #DFE1E5;@include border-radius(9px);padding:5rem 3rem 1rem;@include flexBox(row,flex-start,stretch);margin-bottom: 5rem;}
-.accountAdverts.line{@include flexBox(row, space-between,center);flex-wrap:wrap;}
+.accountAdverts.line{@include flexBox(row, flex-start, center);flex-wrap:wrap;}
 .accountAdvert.cube{width: 100%;max-width: 30.8rem;padding: 0;background: none;border:none;display: block;position: relative;}
 .accountAdvert.cube .inner{border: 2px solid #DFE1E5;@include border-radius(9px 9px 9px 9px);background: #fff;display: block;padding: 2rem;}
 .accountAdvert.cube .accountAdvertInfoName{font-size: 1.7rem; line-height: 2.6rem;font-weight: normal;padding-top: 1.5rem;}
@@ -1471,9 +1471,10 @@ ul.color li{position: relative;}
 .categoryRateInner{@include flexBox(row,flex-start,stretch);}
 .notAllowedCategory{@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem); text-align: center;padding-top: 7.9rem;padding-bottom: 7.9rem;}
 .error404{background:url('../img/404back.png') 50% 50% no-repeat $yellow-color;padding-top: 24rem;padding-bottom: 24rem;@include fontView("GothamProBlack",$black-text,4.8rem,5.6rem);@include flexBox(row,center,center);flex-wrap:wrap;}
-.error404 .errorCode{font-size: 18.9rem;padding-right: 8rem;}
+.error404 .errorCode{font-size: 18.9rem;padding-right: 8rem;line-height: 100%;}
 .error404 .errorCodeDescriptionLink{font-size: 3.6rem;line-height: 4rem;padding-top: 4rem;}
 .error404 .errorCodeDescriptionLink a{color:$black-text;text-decoration: underline;}
+.page-content.error404{padding-bottom: 24rem;}
 .topBannerBlock .banner-link img{max-width: 100%;}
 .userSettingsError{position: fixed;top:0;left: 0;right: 0;background: #fff;@include fontView("GothamProRegular",$black-text,1.4rem,1.8rem);padding-top: 3rem;padding-bottom: 3rem;text-align: center;z-index:1002;@include box-shadow(0px 5px 32px rgba(0, 0, 0, 0.19));}
 .userSettingsError a{@include fontView("GothamProRegular",$yellow-color,1.4rem,1.8rem);}
@@ -1570,3 +1571,51 @@ button#breadScrumbsMobileMenuToggler:hover,#breadScrumbsMobileMenuToggler:focus{
 .cityCodeBlock{position: relative;}
 .codesListBlock{position: absolute;top: 100%;left: 0;right: 0;display: none;background:#fff;z-index: 1;max-height: 250px;overflow: scroll;overflow-x: hidden;margin-left: -1px;margin-right: -1px;border:1px solid #EB840B;border-top: none;@include fontView("GothamProRegular",$input-black,1.3rem,100%);}
 .mainPageSitHeaderBlock{padding-left: 8%;}
+#advertFotos .dz-preview.dz-processing .dz-progress {
+      opacity: 1;
+      -webkit-transition: all 0.2s linear;
+      -moz-transition: all 0.2s linear;
+      -ms-transition: all 0.2s linear;
+      -o-transition: all 0.2s linear;
+      transition: all 0.2s linear; }
+#advertFotos .dz-preview.dz-complete .dz-progress {
+      opacity: 0;
+      -webkit-transition: opacity 0.4s ease-in;
+      -moz-transition: opacity 0.4s ease-in;
+      -ms-transition: opacity 0.4s ease-in;
+      -o-transition: opacity 0.4s ease-in;
+      transition: opacity 0.4s ease-in; }
+#advertFotos .dz-preview:not(.dz-processing) .dz-progress {
+      -webkit-animation: pulse 6s ease infinite;
+      -moz-animation: pulse 6s ease infinite;
+      -ms-animation: pulse 6s ease infinite;
+      -o-animation: pulse 6s ease infinite;
+      animation: pulse 6s ease infinite; }
+#advertFotos .dz-preview .dz-progress {
+      opacity: 1;
+      z-index: 1000;
+      pointer-events: none;
+      position: absolute;
+      height: 16px;
+      left: 50%;
+      top: 50%;
+      margin-top: -8px;
+      width: 80px;
+      margin-left: -40px;
+      background: rgba(255, 255, 255, 0.9);
+      -webkit-transform: scale(1);
+      border-radius: 8px;
+      overflow: hidden; }
+#advertFotos .dz-preview .dz-progress .dz-upload {
+        background: #333;
+        background: linear-gradient(to bottom, #666, #444);
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 0;
+        -webkit-transition: width 300ms ease-in-out;
+        -moz-transition: width 300ms ease-in-out;
+        -ms-transition: width 300ms ease-in-out;
+        -o-transition: width 300ms ease-in-out;
+        transition: width 300ms ease-in-out; }

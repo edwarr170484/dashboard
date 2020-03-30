@@ -1717,19 +1717,10 @@ class AdvertController extends Controller
                         $image->move('bundles/images/products',$localImageName);
                         $resize = new ImageResize('bundles/images/products/' . $localImageName);
                         if($resize->getSourceHeight() > $resize->getSourceWidth()){
-                            $resize->resize(529, 705, true);
+                            $resize->gamma(false)->resizeToWidth(529)->crop(529, 705)->save('bundles/images/products/' . $localImageName)->resizeToWidth(420)->crop(420, 315)->save('bundles/images/products/thumbs/' . $localImageName);
                         }else{
-                            $resize->resize(940, 705, true);
+                            $resize->gamma(false)->resizeToHeight(705)->crop(940, 705)->save('bundles/images/products/' . $localImageName)->resizeToHeight(315)->crop(420, 315)->save('bundles/images/products/thumbs/' . $localImageName);
                         }
-                        $resize->save('bundles/images/products/' . $localImageName);
-                        
-                        $resize = new ImageResize('bundles/images/products/' . $localImageName);
-                        if($resize->getSourceHeight() > $resize->getSourceWidth()){
-                            $resize->crop(429, 315);
-                        }else{
-                            $resize->resize(429, 315, true);
-                        }
-                        $resize->save('bundles/images/products/thumbs/' . $localImageName);
                         
                         if($settings->getWatermark()){
                             $watermark = imagecreatefrompng('bundles/images/site/' . $settings->getWatermark());
@@ -1803,19 +1794,10 @@ class AdvertController extends Controller
                         $image->move('bundles/images/products',$localImageName);
                         $resize = new ImageResize('bundles/images/products/' . $localImageName);
                         if($resize->getSourceHeight() > $resize->getSourceWidth()){
-                            $resize->resize(529, 705, true);
+                            $resize->gamma(false)->resizeToWidth(529)->crop(529, 705)->save('bundles/images/products/' . $localImageName)->resizeToWidth(420)->crop(420, 315)->save('bundles/images/products/thumbs/' . $localImageName);
                         }else{
-                            $resize->resize(940, 705, true);
+                            $resize->gamma(false)->resizeToHeight(705)->crop(940, 705)->save('bundles/images/products/' . $localImageName)->resizeToHeight(315)->crop(420, 315)->save('bundles/images/products/thumbs/' . $localImageName);
                         }
-                        $resize->save('bundles/images/products/' . $localImageName);
-                        
-                        $resize = new ImageResize('bundles/images/products/' . $localImageName);
-                        if($resize->getSourceHeight() > $resize->getSourceWidth()){
-                            $resize->crop(429, 315);
-                        }else{
-                            $resize->resize(429, 315, true);
-                        }
-                        $resize->save('bundles/images/products/thumbs/' . $localImageName);
                         
                         if($settings->getWatermark()){
                             $watermark = imagecreatefrompng('bundles/images/site/' . $settings->getWatermark());

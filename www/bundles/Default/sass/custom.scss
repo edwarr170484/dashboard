@@ -564,7 +564,7 @@ a.oauth.facebook:hover,a.oauth.facebook:focus{background-color:rgba(52,76,138,0.
 .productSliderInfo .advertSellerContacts{padding-top: 3rem;}
 .productModalSliderIcons .advertIcons img{max-width:160px;}
 .productModalSliderIcons .advertIcons a{@include border-radius(0);}
-#productModalSlider.owl-carousel .owl-item img{max-width:1024px;}
+#productModalSlider.owl-carousel .owl-item img{width:auto;max-height:705px;}
 .advertSliderMainFoto{position: relative;padding-right: 0;height: 100%;@include flexBox(column,space-between,center);}
 .advertSliderMainFoto button{background: none;border: none;position: absolute;height: 100%;width:200px;z-index:9999;}
 .advertSliderMainFoto button:hover svg,.advertSliderMainFoto button:focus svg{stroke:$yellow-color;}

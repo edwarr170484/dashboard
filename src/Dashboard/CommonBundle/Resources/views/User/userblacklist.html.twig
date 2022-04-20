@@ -1,0 +1,175 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Melnais saraksts{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{ path('account_userblacklist') }}">{% trans %}Melnais saraksts{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{ path('account_userblacklistLocale',{'_locale' : app.request.locale}) }}">{% trans %}Melnais saraksts{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-4 col-md-4">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-8 col-md-8">
+            <div class="account-purchase-menu">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            {% if  app.request.locale == 'lv' %}
+                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% else %}
+                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if  app.request.locale == 'lv' %}
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Melnais saraksts{% endtrans %}</h1></div>
+                       {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                            <div class="row advert-category-adverts">
+                                <div class="col-lg-12 col-md-12">
+                                   <div class="account-advert-block-content userprofile-maindata">
+                                       <div class="meet-friends-block">
+                                           {% if blacklist %}
+                                                <table class="messages-table table table-striped friends-table">
+                                                    {% for user in blacklist %}
+                                                        <tr>
+                                                            <td>
+                                                                <div class="message-avatar">
+                                                                    <a href="{{ path('profile' ,{'userId' : user.id}) }}">
+                                                                    {% if user.userinfo.avatar %}
+                                                                        <img class="img-circle" src="{{ asset('bundles/images/users/avatars/') }}{{user.userinfo.avatar}}" alt="" title="" />
+                                                                    {% elseif user.userinfo.sex %}
+                                                                        <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                    {% else %}
+                                                                        <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                    {% endif %}
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td class="conversation-user-info">
+                                                                {% if user.userinfo.firstname and  user.userinfo.lastname%}
+                                                                    <div class="message-from-title"><a href="{{ path('profile' ,{'userId' : user.id}) }}">{{user.userinfo.firstname}}{{user.userinfo.lastname}}</a></div>
+                                                                {% else %}
+                                                                    <div class="message-from-title"><a href="{{ path('profile' ,{'userId' : user.id}) }}">{{user.email}}</a></div>
+                                                                {% endif%}
+                                                            </td>
+                                                            <td>
+                                                                <a class="message-delete" title="{% trans %}Noņemt no melnā saraksta{% endtrans %}" href="{{ path('account_userblacklist' ,{'userId' : user.id}) }}" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties noņemt lietotāju no melnā saraksta{% endtrans %}?')) return false;"></a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                            {% else %}
+                                                <div class="page-no-data">{% trans %}Melnais saraksts ir tukšs{% endtrans %}.</div>
+                                            {% endif %}
+                                       </div>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Melnais saraksts{% endtrans %}</h1></div>
+                       {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                            <div class="row advert-category-adverts">
+                                <div class="col-lg-12 col-md-12">
+                                   <div class="account-advert-block-content userprofile-maindata">
+                                       <div class="meet-friends-block">
+                                           {% if blacklist %}
+                                                <table class="messages-table table table-striped friends-table">
+                                                    {% for user in blacklist %}
+                                                        <tr>
+                                                            <td>
+                                                                <div class="message-avatar">
+                                                                    <a href="{{ path('profileLocale' ,{'_locale' : app.request.locale,'userId' : user.id}) }}">
+                                                                    {% if user.userinfo.avatar %}
+                                                                        <img class="img-circle" src="{{ asset('bundles/images/users/avatars/') }}{{user.userinfo.avatar}}" alt="" title="" />
+                                                                    {% elseif user.userinfo.sex %}
+                                                                        <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                    {% else %}
+                                                                        <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                    {% endif %}
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                            <td class="conversation-user-info">
+                                                                {% if user.userinfo.firstname and  user.userinfo.lastname%}
+                                                                    <div class="message-from-title"><a href="{{ path('profileLocale' ,{'_locale' : app.request.locale,'userId' : user.id}) }}">{{user.userinfo.firstname}}{{user.userinfo.lastname}}</a></div>
+                                                                {% else %}
+                                                                    <div class="message-from-title"><a href="{{ path('profileLocale' ,{'_locale' : app.request.locale,'userId' : user.id}) }}">{{user.email}}</a></div>
+                                                                {% endif%}
+                                                            </td>
+                                                            <td>
+                                                                <a class="message-delete" title="{% trans %}Noņemt no melnā saraksta{% endtrans %}" href="{{ path('account_userblacklistLocale' ,{'_locale' : app.request.locale,'userId' : user.id}) }}" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties noņemt lietotāju no melnā saraksta{% endtrans %}?')) return false;"></a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                            {% else %}
+                                                <div class="page-no-data">{% trans %}Melnais saraksts ir tukšs{% endtrans %}.</div>
+                                            {% endif %}
+                                       </div>
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock%}

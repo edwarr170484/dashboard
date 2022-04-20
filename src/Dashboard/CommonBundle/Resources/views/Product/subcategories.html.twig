@@ -1,0 +1,45 @@
+<div class="advert-categoryes">
+    {% if category.parent %}
+        <div class="advert-categories-parent"><i class="fa fa-chevron-left" aria-hidden="true"></i>
+<a onclick="selectCategory({{ category.parent.id }}, '{{ locale.code }}')">{{ category.title }}</a></div>
+    {% else %}
+        <div class="advert-categories-parent"><i class="fa fa-chevron-left" aria-hidden="true"></i>
+<a onclick="selectCategory(0, '{{ locale.code }}')">{{ category.title }}</a></div>
+    {% endif %}
+    <ul class="list-unstyled advert-categories">
+        {% for category in category.children %}
+            <li class="advert-category">
+                <div class="categoryList">
+                    {% if category.children | length > 0 %}
+                    <a class="addadvert-category-item advert-category-name" data-category="{{ category.id }}" onclick="selectCategory({{ category.id }}, '{{ locale.code }}')">
+                        {% if category.translations | length > 0 %}
+                            {% for translation in category.translations %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.value }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}        
+                            {{ category.title }}
+                        {% endif %}
+                    </a>
+                    {% else %}
+                    <a class="addadvert-category-item advert-category-name" data-category="{{ category.id }}" onclick="showFilters($(this),{{ category.id }}, '{{ locale.code }}')">
+                        {% if category.translations | length > 0 %}
+                            {% for translation in category.translations %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.value }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}        
+                            {{ category.title }}
+                        {% endif %}
+                    </a>    
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>        
+
+
+

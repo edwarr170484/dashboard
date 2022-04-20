@@ -1,0 +1,8 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Спасибо за регистрацию!</h3>
+<p>Для подтверждения регистрации Вам необходимо в течение двух суток пройти по указанной ссылке: 
+    <a href="{{absolute_url(path('register_confirm', {key: key})) }}">{{absolute_url(path('register_confirm', {key: key})) }}</a></p>
+<p>Если Вы не регистрировались на сайте и получили это письмо случайно, просто проигнорируйте его.</p>
+
+
+

@@ -1,0 +1,28 @@
+{% for child in category.children %}
+    <tr class="subcat-{{ category.id }}">
+        <td><input name="category[]" value="{{ child.id }}" type="checkbox" class="checkbox-item" /></td>
+        <td>
+            {% for i in 0..spaces %}&nbsp;{% endfor %}
+            <input style="width:30px;border:1px solid #e2e7eb" name="sortorder[{{ child.id }}]" value="{{ child.sortorder }}" />&nbsp;
+            {% if child.children | length > 0 %}
+                <a data-category="{{ category.id }}" href="javascript:void(0)" onclick="getChildCategories({{ child.id }}, $(this), {{ spaces * 2 }} )">{{ child.title }} <b class="caret"></b></a>
+            {% else %}
+                {{ child.title }}
+            {% endif %}
+        </td>
+        <td>
+            {{ child.name }}
+        </td>
+        <td>{{ child.product | length }}</td>
+        <td><input type="checkbox" name="isactive[{{ child.id }}]" value="1" {% if child.isActive == 1 %}checked="checked"{% endif %} /></td>
+        <td>
+            <a class="btn btn-success" href="{{ path('admin_product_category_edit',{ categoryId : child.id }) }}">
+                <i class="fa fa-pencil" title="Редактировать категорию"></i>
+            </a>
+            <a class="btn btn-danger" href="{{ path('admin_product_category',{ categoryId : child.id }) }}" 
+                                              onclick="if(!confirm('Вы уверены, что хотите удалить категорию?'))return false;">
+                        <i class="fa fa-times" title="Удалить категорию"></i>
+            </a>
+        </td>
+    </tr>
+{% endfor %}

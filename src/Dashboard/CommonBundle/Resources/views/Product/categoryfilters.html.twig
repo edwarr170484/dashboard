@@ -1,0 +1,202 @@
+{% if category.filters | length > 0 %}
+    {% for filter in category.filters if filter.isSearch == 1%}
+        {% if filter.type == 'select' %}
+            <div class="col-lg-4 col-md-4 search-box">
+                <select name="filter[{{ filter.id }}]" class="hidden-input" id="filter{{ filter.id }}">
+                    <option value="0">
+                        {% if filter.translations | length > 0 %}
+                            {% for translation in filter.translations %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.value }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}        
+                            {{ filter.name }}
+                        {% endif %}
+                        - {% trans %}Viss{% endtrans %}
+                    </option>
+                    {% for value in filter.values %}
+                        <option value="{{ value.id }}">
+                            {% if value.translations | length > 0 %}
+                                {% for translation in value.translations %}
+                                    {% if translation.locale.id == locale.id %}
+                                        {{ translation.value }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}        
+                                {{ value.value }}
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>    
+        {% endif %}
+        {% if filter.type == 'radio' %}
+            <div class="col-lg-4 col-md-4 search-box">
+                <div class="filter-box-title">
+                    {% if filter.translations | length > 0 %}
+                        {% for translation in filter.translations %}
+                            {% if translation.locale.id == locale.id %}
+                                {{ translation.value }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}        
+                        {{ filter.name }}
+                    {% endif %}
+                </div>
+                {% for value in filter.values %}
+                    <div class="radio-block">
+                        <input name="filter[{{ filter.id }}]" type="checkbox" value="{{ value.id }}" class="hidden-input" />
+                        {% if value.translations | length > 0 %}
+                            {% for translation in value.translations %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.value }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}        
+                            {{ value.value }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if filter.type == 'checkbox' %}
+            <div class="col-lg-4 col-md-4 search-box">
+                <div class="filter-box-title">
+                    {% if filter.translations | length > 0 %}
+                        {% for translation in filter.translations %}
+                            {% if translation.locale.id == locale.id %}
+                                {{ translation.value }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}        
+                        {{ filter.name }}
+                    {% endif %}
+                </div>
+                {% for value in filter.values %}
+                    <div class="checkbox-block">
+                        <input name="filter[{{ filter.id }}][]" type="checkbox" value="{{ value.id }}" class="custom-checkbox" />
+                        {% if value.translations | length > 0 %}
+                            {% for translation in value.translations %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.value }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}        
+                            {{ value.value }}
+                        {% endif %} 
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}                
+    {% endfor %}
+    <div class="col-lg-12">
+        <div class="row">
+            {% for filter in category.filters if filter.type == 'region_select' and filter.isSearch == 1 %}
+                <div class="col-lg-4 col-md-4 search-box">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    {% if filter.translations | length > 0 %}
+                                        {% for translation in filter.translations %}
+                                            {% if translation.locale.id == locale.id %}
+                                                {{ translation.value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}        
+                                        {{ filter.name }}
+                                    {% endif %}
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <select name="filterRangeList[{{ filter.id }}][]" class="custom-select">
+                                        <option value="0">{% trans %}no{% endtrans %}</option>
+                                        {% for value in filter.values %}
+                                            <option value="{{ value.id }}">
+                                                {% if value.translations | length > 0 %}
+                                                    {% for translation in value.translations %}
+                                                        {% if translation.locale.id == locale.id %}
+                                                            {{ translation.value }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}        
+                                                    {{ value.value }}
+                                                {% endif %}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 col-md-6">
+                                    <select name="filterRangeList[{{ filter.id }}][]" class="custom-select">
+                                        <option value="0">{% trans %}līdz pat{% endtrans %}</option>
+                                        {% for value in filter.values %}
+                                            <option value="{{ value.id }}">
+                                                {% if value.translations | length > 0 %}
+                                                    {% for translation in value.translations %}
+                                                        {% if translation.locale.id == locale.id %}
+                                                            {{ translation.value }}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% else %}        
+                                                    {{ value.value }}
+                                                {% endif %}
+                                            </option>
+                                        {% endfor %}
+                                    </select>                                                    
+                                </div>
+                            </div>
+                        </div>
+            {% endfor %}
+            {% for filter in category.filters if filter.type == 'selectable' and filter.isSearch == 1 %}
+                <div class="col-lg-4 search-box">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    {% if filter.translations | length > 0 %}
+                                        {% for translation in filter.translations %}
+                                            {% if translation.locale.id == locale.id %}
+                                                {{ translation.value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}        
+                                        {{ filter.name }}
+                                    {% endif %}
+                                </div>
+                                <div class="col-lg-5 col-md-5">
+                                    <input name="filterSelectable[{{ filter.id }}][]" type="text" class="form-control" placeholder="{% trans %}no{% endtrans %}"/>
+                                </div>
+                                <div class="col-lg-2 col-md-2 hidden-xs hidden-sm" style="padding-top:8px;text-align:center;padding-left:0;padding-right:0;">
+                                    &ndash; 
+                                </div>
+                                <div class="col-lg-5 col-md-5">
+                                    <input name="filterSelectable[{{ filter.id }}][]" type="text" class="form-control" placeholder="{% trans %}līdz pat{% endtrans %}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% if category.isShowPriceFilter %}
+                <div class="col-lg-4 search-box">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    {% trans %}Cena{% endtrans %}
+                                </div>
+                                <div class="col-lg-5 col-md-5">
+                                    <input name="filterSelectablePrice[0][]" type="text" class="form-control" placeholder="{% trans %}no{% endtrans %}" />
+                                </div>
+                                <div class="col-lg-2 col-md-2 hidden-xs hidden-sm" style="padding-top:8px;text-align:center;padding-left:0;padding-right:0;">
+                                    &ndash; 
+                                </div>
+                                <div class="col-lg-5 col-md-5">
+                                    <input name="filterSelectablePrice[0][]" type="text" class="form-control" placeholder="{% trans %}līdz pat{% endtrans %}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %} 
+        </div>
+    </div>
+{% endif %}   

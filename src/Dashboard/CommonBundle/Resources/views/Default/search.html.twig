@@ -1,0 +1,141 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{{ page.metaTagTitle }}{% endblock %}
+{% block metatags %}
+    <meta content="{{ page.metaTagDescription }}" name="description" />
+    <meta content="{{ page.metaTagAuthor }}" name="author" />
+    <meta content="{{ page.metaTagRobots }}" name="robots" />
+    <meta content="{{ page.metaTagKeywords }}" name="keywords" />
+{% endblock %}
+
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %} 
+                        <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li><a href="">{{ page.title }}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li><a href="">{{ page.title }}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+	<div class="row content-row">
+		<div class="col-lg-9 col-md-9 left-column">
+			<div class="content-block-header"><h1>{{ page.title }}</h1></div>
+                        <div class="mainpage-search-block category-search">
+				<div class="search-form-block">
+                                    {% include 'DashboardCommonBundle:Parts:searchfilters.html.twig' with {'allcategories' : allcategories, 'locale' : locale, 'allcities' : allcities,'regionFilterForm' : regionFilterForm} %}	
+				</div>
+			</div>
+                        {% if premiumProducts %}
+                            <div class="row category-premium-adverts-block">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="premium-adverts category-premium-adverts">
+                                        <div class="content-block-header premium-block-header"><h1>{% trans %}Premium reklāmas{% endtrans %}</h1></div>
+                                        {% include 'DashboardCommonBundle:Parts:productitem.html.twig' with {'products' : premiumProducts, 'locale' : locale} %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="hidden-sm hidden-xs">
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'centerpage'})) }}
+			</div>
+                        {% if products | length > 0 %}
+                            <div class="category-product-mainfilters">
+                                <div class="company-filter">
+                                  <!--  <ul class="list-unstyled list-inline">
+                                        <li class="active companyFilterItem"><a href="javascript:;">{% trans %}Viss{% endtrans %}</a></li>
+                                        <li class="companyFilterItem" data-company=""><a href="javascript:;">{% trans %}Privāts{% endtrans %}</a></li>
+                                        <li class="companyFilterItem" data-company=""><a href="javascript:;">{% trans %}Uzņēmuma profils{% endtrans %}</a></li>
+                                    </ul>-->
+                                </div>
+                                <div class="main-product-filters">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            {% if locale.isDefault %}
+                                                <a href="?sortorder=dateAdded&order=DESC">
+                                            {% else %}
+                                                <a href="?sortorder=dateAdded&order=DESC">
+                                            {% endif %}
+                                                <div class="main-product-filters-updown">
+                                                    <div class="main-product-links-updown">
+                                                        <div><i class="fa fa-caret-up" aria-hidden="true"></i></div>
+                                                        <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                                                    </div>
+                                                    <div class="main-product-filter-updown">
+                                                        {% trans %}Pēc datuma{% endtrans %}
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            {% if locale.isDefault %}
+                                                <a href="?sortorder=price&order=ASC">
+                                            {% else %}
+                                                <a href="?sortorder=price&order=ASC">
+                                            {% endif %}
+                                                <div class="main-product-filters-updown">
+                                                    <div class="main-product-links-updown">
+                                                        <div><i class="fa fa-caret-up" aria-hidden="true"></i></div>
+                                                        <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                                                    </div>
+                                                    <div class="main-product-filter-updown">
+                                                        {% trans %}Pēc cenas{% endtrans %}
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="template {% if view == 'table' %}active{% endif %}" data-pattern="table">
+                                                <i class="fa fa-th" aria-hidden="true"></i></a>
+                                        </li>
+                                        <!--<li>
+                                            <a href="javascript:void(0)" class="template {% if view == 'list' %}active{% endif %}" data-pattern="list"><i class="fa fa-list" aria-hidden="true"></i></a>
+                                        </li>-->
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row advert-category-adverts">
+                                <div class="col-lg-12 col-md-12">
+                                        <div class="premium-adverts table">
+                                            {% if products | length > 0 %}
+                                                {% include 'DashboardCommonBundle:Parts:productitem.html.twig' with {'products' : products, 'locale' : locale} %}
+                                            {% endif %}
+                                        </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="page-no-data">{% trans %}Nekas netika atrasts pēc jūsu pieprasījuma{% endtrans %}</div>
+                        {% endif %}
+		</div>
+		<div class="col-lg-3 col-md-3 right-column">
+                    <div class="advertise-block hidden-sm hidden-xs" id="bannersSticky">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
+                    </div>
+                    <div class="advertise-block hidden-lg hidden-md">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
+                    </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

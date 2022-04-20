@@ -1,0 +1,7 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Пользователь сайта gribupardot.sunweb.by пожаловался на объявление.</h3>
+<p>
+    Пользователь <strong>{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</strong> пожаловался на объявление на сайте gribupardot.sunweb.by 
+    <h3><a href="{{ absolute_url(path('product', {'productId' : product.id,'productName' : product.translit})) }}">{{ product.name }}</a></h3>
+    Вы можете обработать жалобу в <a href="{{  absolute_url(path("admin_complaint")) }}">системе управления сайтом</a> gribupardot.sunweb.by.
+</p>

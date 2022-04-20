@@ -1,0 +1,7 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Пользователь сайта gribupardot.sunweb.by поделился с Вами информацией об объявлении!</h3>
+<p>
+    Пользователь <a href="{{ absolute_url(path('profile', {'userId' : user.id})) }}"><strong>{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</strong></a> отправил Вам ссылку на объявление на сайте gribupardot.sunweb.by.
+    <div><img src="{{ absolute_url(asset('bundles/images/products/' ~ product.mainfoto )) }}" style="width:250px;"></div>
+    <h3><a href="{{ absolute_url(path('product', {'productId' : product.id,'productName' : product.translit})) }}">{{ product.name }}</a></h3>
+</p>

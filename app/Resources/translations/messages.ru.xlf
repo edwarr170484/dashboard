@@ -1,0 +1,1871 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="lv" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source><![CDATA[<h1>Наш <b>автопарк</b></h1>]]></source>
+                <target><![CDATA[<h1>Наш <b>автопарк</b></h1>]]></target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Uz kontu</source>
+                <target>На счету</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>Pierakstieties</source>
+                <target>Вход</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>Reģistrācijas</source>
+                <target>Регистрация</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Visa Latvija</source>
+                <target>Вся Латвия</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>Pievienot reklāmu</source>
+                <target>Добавить объявление</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>SITE MEKLĒŠANA</source>
+                <target>ПОИСК ПО САЙТУ</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>Reklāmu kategorijas</source>
+                <target>Категории объявлений</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>Nav atrasta neviena kategorija</source>
+                <target>Категории не найдены</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>Premium sludinājumi</source>
+                <target>Премиум объявления</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>Informācija</source>
+                <target>Информация</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>Pakalpojumi</source>
+                <target>Услуги</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>Mans konts</source>
+                <target>Аккаунт</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>Attīstība</source>
+                <target>Разработка</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>Izvēlies savu atrašanās vietu</source>
+                <target>Выберите Ваше расположение</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>Izvēlieties reģionu</source>
+                <target>Выберите регион</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>Pilsēta/volost</source>
+                <target>Город/Район</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>Lietotāja līgums</source>
+                <target>Пользовательское соглашение</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>Aizvērt</source>
+                <target>Закрыть</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>Viss</source>
+                <target>Все</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>Mājas</source>
+                <target>Главная</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>Filtru ielāde</source>
+                <target>Загрузка фильтров</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>Nē</source>
+                <target>Нет</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>C FOTO</source>
+                <target>C ФОТО</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>Б/У</source>
+                <target>Б/У</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>MEKLĒT</source>
+                <target>ПОИСК</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>Privāts</source>
+                <target>Частные</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>Uzņēmuma profils</source>
+                <target>Компании</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>Pēc datuma</source>
+                <target>По дате</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>Pēc cenas</source>
+                <target>По цене</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>Šajā kategorijā vēl nav nevienas reklāmas</source>
+                <target>В этой категории пока нет объявлений</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>Sūtiet man vēstules kopiju</source>
+                <target>Отправить мне копию письма</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>Hosted by</source>
+                <target>Размещено</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>Skatījumi</source>
+                <target>Просмотров</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>kopā</source>
+                <target>всего</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>šodien</source>
+                <target>сегодня</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>Nosacījums</source>
+                <target>Состояние</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>Jauns</source>
+                <target>Новое</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>Reklāmas numurs</source>
+                <target>Номер объявления</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>Sazinieties ar īpašnieku</source>
+                <target>Написать владельцу</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>Pastāsti draugam</source>
+                <target>Сообщить другу</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>Sūdzas</source>
+                <target>Пожаловаться</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>Pievienot favorītiem</source>
+                <target>В избранное</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>Jūs esat šīs reklāmas īpašnieks un jūs nevarat nosūtīt ziņu sev</source>
+                <target>Вы являетесь владельцем этого объявления и не можете отправить сообщение самому себе</target>
+            </trans-unit>
+            <trans-unit id="45">
+                <source>Jūsu vārds</source>
+                <target>Ваше имя</target>
+            </trans-unit>
+            <trans-unit id="46">
+                <source>Jūsu e-pasts</source>
+                <target>Ваш email</target>
+            </trans-unit>
+            <trans-unit id="47">
+                <source>Jūsu tālrunis</source>
+                <target>Ваш телефон</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>Lai nosūtītu ziņas, jums ir</source>
+                <target>Для отправки сообщений Вы должны</target>
+            </trans-unit>
+            <trans-unit id="49">
+                <source>piesakieties</source>
+                <target>войти</target>
+            </trans-unit>
+            <trans-unit id="50">
+                <source>vai</source>
+                <target>или</target>
+            </trans-unit>
+            <trans-unit id="51">
+                <source>reģistrēties</source>
+                <target>зарегистрироваться</target>
+            </trans-unit>
+            <trans-unit id="52">
+                <source>Jūs esat šīs reklāmas īpašnieks un jūs nevarat viņam iesniegt sūdzību</source>
+                <target>Вы являетесь владельцем этого объявления и не можете на него пожаловаться</target>
+            </trans-unit>
+            <trans-unit id="53">
+                <source>Līdzīgas reklāmas</source>
+                <target>Похожие объявления</target>
+            </trans-unit>
+            <trans-unit id="54">
+                <source>Cena</source>
+                <target>Цена</target>
+            </trans-unit>
+            <trans-unit id="55">
+                <source>PASŪTĪT</source>
+                <target>ЗАКАЗАТЬ</target>
+            </trans-unit>
+            <trans-unit id="56">
+                <source>KONTAKT PERSONA</source>
+                <target>КОНТАКТНОЕ ЛИЦО</target>
+            </trans-unit>
+            <trans-unit id="57">
+                <source>Vērtējums</source>
+                <target>Рейтинг</target>
+            </trans-unit>
+            <trans-unit id="58">
+                <source>Pārdevēja atsauksmes</source>
+                <target>Отзывы о продавце</target>
+            </trans-unit>
+            <trans-unit id="59">
+                <source>Visas reklāmas</source>
+                <target>Все объявления</target>
+            </trans-unit>
+            <trans-unit id="60">
+                <source>Rādīt istabu</source>
+                <target>Показать номер</target>
+            </trans-unit>
+            <trans-unit id="61">
+                <source>Uzrakstiet ziņu</source>
+                <target>Написать сообщение</target>
+            </trans-unit>
+            <trans-unit id="62">
+                <source>pilsēta</source>
+                <target>город</target>
+            </trans-unit>
+            <trans-unit id="63">
+                <source>SELL ĀTRI</source>
+                <target>ПРОДАТЬ БЫСТРО</target>
+            </trans-unit>
+            <trans-unit id="64">
+                <source>Preču pasūtīšana</source>
+                <target>Заказ товара</target>
+            </trans-unit>
+            <trans-unit id="65">
+                <source>Nosūtīt ziņu</source>
+                <target>Отправить сообщение</target>
+            </trans-unit>
+            <trans-unit id="66">
+                <source>Nekas netika atrasts pēc jūsu pieprasījuma</source>
+                <target>По Вашему запросу ничего не найдено</target>
+            </trans-unit>
+            <trans-unit id="67">
+                <source>Kategorija</source>
+                <target>Категория</target>
+            </trans-unit>
+            <trans-unit id="68">
+                <source>Rediģēt</source>
+                <target>Изменить</target>
+            </trans-unit>
+            <trans-unit id="69">
+                <source>Izvēlieties kategoriju</source>
+                <target>Выбрать категорию</target>
+            </trans-unit>
+            <trans-unit id="70">
+                <source>Izvēlieties</source>
+                <target>Выбрать</target>
+            </trans-unit>
+            <trans-unit id="71">
+                <source>NĒ</source>
+                <target>НЕТ</target>
+            </trans-unit>
+            <trans-unit id="72">
+                <source>JAUNS</source>
+                <target>НОВОЕ</target>
+            </trans-unit>
+            <trans-unit id="73">
+                <source>Atrašanās vieta</source>
+                <target>Регион</target>
+            </trans-unit>
+            <trans-unit id="74">
+                <source>Tips</source>
+                <target>Тип</target>
+            </trans-unit>
+            <trans-unit id="75">
+                <source>Pārdošana</source>
+                <target>Продам</target>
+            </trans-unit>
+            <trans-unit id="76">
+                <source>Reklāmas ielādes iespējas</source>
+                <target>Загрузка опций для объявления</target>
+            </trans-unit>
+            <trans-unit id="77">
+                <source>Reklāmas nosaukums</source>
+                <target>Название объявления</target>
+            </trans-unit>
+            <trans-unit id="78">
+                <source>Apraksts</source>
+                <target>Описание</target>
+            </trans-unit>
+            <trans-unit id="79">
+                <source>Bildes</source>
+                <target>Фотографии</target>
+            </trans-unit>
+            <trans-unit id="80">
+                <source>Dzēst attēlu</source>
+                <target>Удалить изображение</target>
+            </trans-unit>
+            <trans-unit id="81">
+                <source>Header photo</source>
+                <target>Заглавное фото</target>
+            </trans-unit>
+            <trans-unit id="82">
+                <source>Uzziniet vairāk</source>
+                <target>Подробнее</target>
+            </trans-unit>
+            <trans-unit id="83">
+                <source>Kā pareizi norādīt cenu</source>
+                <target>Как правильно указать цену</target>
+            </trans-unit>
+            <trans-unit id="84">
+                <source>Aizvērt</source>
+                <target>Закрыть</target>
+            </trans-unit>
+            <trans-unit id="85">
+                <source>Publicēt</source>
+                <target>Опубликовать</target>
+            </trans-unit>
+            <trans-unit id="86">
+                <source><![CDATA[<span>Regulāra tirdzniecība</span>]]></source>
+                <target><![CDATA[<span>Обычная продажа</span>]]></target>
+            </trans-unit>
+            <trans-unit id="87">
+                <source><![CDATA[<span>Augstākā izmitināšana - %price% &euro;</span>]]></source>
+                <target><![CDATA[<span>Премиум размещение - %price% &euro;</span>]]></target>
+            </trans-unit>
+            <trans-unit id="88">
+                <source><![CDATA[<span>Iezīmējiet reklāmu - %price% &euro;</span>]]></source>
+                <target><![CDATA[<span>Выделить объявление - %price% &euro;</span>]]></target>
+            </trans-unit>
+            <trans-unit id="89">
+                <source><![CDATA[<div class="agreement-text">*Es piekrītu pakalpojuma <a href="" data-toggle="modal" data-target="#userAgreementModal"> lietošanas noteikumiem </a>, kā arī manu datu pārsūtīšanai un apstrādei uz gribupardot.sunweb.by. Es apstiprinu savu vairākumu un atbildību par reklāmas izvietošanu.</div>]]></source>
+                <target><![CDATA[<div class="agreement-text">* Я соглашаюсь с <a href="" data-toggle="modal" data-target="#userAgreementModal">правилами использования</a> сервиса, а также с передачей и обработкой моих данных в gribupardot.sunweb.by. Я подтверждаю мое совершеннолетие и ответственность за размещение объявления.</div>]]></target>
+            </trans-unit>
+            <trans-unit id="90">
+                <source>Noklikšķiniet, lai ielādētu attēlus, jūs varat izvēlēties vairākus. Kopējais attēlu skaits nedrīkst pārsniegt</source>
+                <target>Кликните для загрузки изображений, можно выбрать несколько. Общее количество изображений не должно превышать</target>
+            </trans-unit>
+            <trans-unit id="91">
+                <source>Iekraušanas laikā radās kļūda. Mēģiniet vēlreiz. Derīgi paplašinājumi: jpg, jpeg, png, gif.</source>
+                <target>Ошибка при загрузке файла. Попробуйте еще раз. Допустимые расширения: jpg, jpeg, png, gif.</target>
+            </trans-unit>
+            <trans-unit id="92">
+                <source>Jūs nevarat augšupielādēt vairāk kā</source>
+                <target>Вы не можете загрузить больше, чем</target>
+            </trans-unit>
+            <trans-unit id="93">
+                <source>attēli</source>
+                <target>изображений</target>
+            </trans-unit>
+            <trans-unit id="94">
+                <source>Reklāmas iespējas</source>
+                <target>Опции для объявления</target>
+            </trans-unit>
+            <trans-unit id="95">
+                <source>Rediģēt reklāmu</source>
+                <target>Редактировать объявление</target>
+            </trans-unit>
+            <trans-unit id="96">
+                <source>Saglabājiet</source>
+                <target>Сохранить</target>
+            </trans-unit>
+            <trans-unit id="97">
+                <source>Lietotāja konts</source>
+                <target>Личный кабинет пользователя</target>
+            </trans-unit>
+            <trans-unit id="98">
+                <source>Pievienot naudu savam seifam</source>
+                <target>Пополнить кошелек</target>
+            </trans-unit>
+            <trans-unit id="99">
+                <source>Maksas pakalpojumi</source>
+                <target>Оплаченные услуги</target>
+            </trans-unit>
+            <trans-unit id="100">
+                <source>Operāciju vēsture</source>
+                <target>История операций</target>
+            </trans-unit>
+            <trans-unit id="101">
+                <source>Uz kontu</source>
+                <target>На счету</target>
+            </trans-unit>
+            <trans-unit id="102">
+                <source>Manas reklāmas</source>
+                <target>Мои объявления</target>
+            </trans-unit>
+            <trans-unit id="103">
+                <source>parādīt visu</source>
+                <target>показать все</target>
+            </trans-unit>
+            <trans-unit id="104">
+                <source>Tas paliek</source>
+                <target>Осталось</target>
+            </trans-unit>
+            <trans-unit id="105">
+                <source>dienas</source>
+                <target>дней</target>
+            </trans-unit>
+            <trans-unit id="106">
+                <source>Pagarināt</source>
+                <target>Продлить</target>
+            </trans-unit>
+            <trans-unit id="107">
+                <source>Rediģēt</source>
+                <target>Редактировать</target>
+            </trans-unit>
+            <trans-unit id="108">
+                <source>STILL</source>
+                <target>ЕЩЕ</target>
+            </trans-unit>
+            <trans-unit id="109">
+                <source>Izņem no pārdošanas</source>
+                <target>Снять с продажи</target>
+            </trans-unit>
+            <trans-unit id="110">
+                <source>Noņemt</source>
+                <target>Удалить</target>
+            </trans-unit>
+            <trans-unit id="111">
+                <source>Jūs vēl neesat pievienojis nevienu reklāmu</source>
+                <target>Вы пока не добавили ни одного объявления</target>
+            </trans-unit>
+            <trans-unit id="112">
+                <source>Piedāvātās reklāmas</source>
+                <target>Избранные объявления</target>
+            </trans-unit>
+            <trans-unit id="113">
+                <source>Vai tiešām vēlaties noņemt šo reklāmu no izlases</source>
+                <target>Вы действительно хотите убрать это объявление из избранных</target>
+            </trans-unit>
+            <trans-unit id="114">
+                <source>Noņemt no izlases</source>
+                <target>Убрать из избранных</target>
+            </trans-unit>
+            <trans-unit id="115">
+                <source>Amati</source>
+                <target>Сообщения</target>
+            </trans-unit>
+            <trans-unit id="116">
+                <source>Lietotājs ir dzēsts</source>
+                <target>Пользователь был удален</target>
+            </trans-unit>
+            <trans-unit id="117">
+                <source>nosūtīts</source>
+                <target>отправлено</target>
+            </trans-unit>
+            <trans-unit id="118">
+                <source>Nav jaunu ziņojumu</source>
+                <target>Новых сообщений нет</target>
+            </trans-unit>
+            <trans-unit id="119">
+                <source>Manas reklāmas</source>
+                <target>Мои объявления</target>
+            </trans-unit>
+            <trans-unit id="120">
+                <source>Par moderāciju</source>
+                <target>На модерации</target>
+            </trans-unit>
+            <trans-unit id="121">
+                <source>Par korekciju</source>
+                <target>На корректировке</target>
+            </trans-unit>
+            <trans-unit id="122">
+                <source>Pašreizējais</source>
+                <target>Текущие</target>
+            </trans-unit>
+            <trans-unit id="123">
+                <source>Pabeigts</source>
+                <target>Завершенные</target>
+            </trans-unit>
+            <trans-unit id="124">
+                <source>Slēdzenē</source>
+                <target>В блокировке</target>
+            </trans-unit>
+            <trans-unit id="125">
+                <source>no jaunajiem</source>
+                <target>новых</target>
+            </trans-unit>
+            <trans-unit id="126">
+                <source>Pieprasījumi</source>
+                <target>Заявки</target>
+            </trans-unit>
+            <trans-unit id="127">
+                <source>Mana rezervācija</source>
+                <target>Мои заказы</target>
+            </trans-unit>
+            <trans-unit id="128">
+                <source>Atsauksmes</source>
+                <target>Отзывы</target>
+            </trans-unit>
+            <trans-unit id="129">
+                <source>Mana atsauksme</source>
+                <target>Мои отзывы</target>
+            </trans-unit>
+            <trans-unit id="130">
+                <source>Atsauksmes par mani</source>
+                <target>Отзывы обо мне</target>
+            </trans-unit>
+            <trans-unit id="131">
+                <source>Seifs</source>
+                <target>Кошелек</target>
+            </trans-unit>
+            <trans-unit id="132">
+                <source>Papildināšana</source>
+                <target>Пополнение</target>
+            </trans-unit>
+            <trans-unit id="133">
+                <source>Maksas pakalpojumi</source>
+                <target>Оплаченные услуги</target>
+            </trans-unit>
+            <trans-unit id="134">
+                <source>Pirkt papildu slotus</source>
+                <target>Купить дополнительные слоты</target>
+            </trans-unit>
+            <trans-unit id="135">
+                <source>Konta vēsture</source>
+                <target>История счета</target>
+            </trans-unit>
+            <trans-unit id="136">
+                <source>Melnais saraksts</source>
+                <target>Черный список</target>
+            </trans-unit>
+            <trans-unit id="137">
+                <source>Iestatījumi</source>
+                <target>Настройки</target>
+            </trans-unit>
+            <trans-unit id="138">
+                <source>Izrakstīties</source>
+                <target>Выйти</target>
+            </trans-unit>
+            <trans-unit id="139">
+                <source>Referral sistēma</source>
+                <target>Реферальная система</target>
+            </trans-unit>
+            <trans-unit id="140">
+                <source>Reklāmas par korekciju</source>
+                <target>Объявления на корректировке</target>
+            </trans-unit>
+            <trans-unit id="141">
+                <source>Vai tiešām vēlaties dzēst šo reklāmu</source>
+                <target>Вы действительно хотите удалить это объявление</target>
+            </trans-unit>
+            <trans-unit id="142">
+                <source>Iemesls</source>
+                <target>Причина</target>
+            </trans-unit>
+            <trans-unit id="143">
+                <source>Nav reklāmu par pielāgojumu</source>
+                <target>Нет объявлений на корректировке</target>
+            </trans-unit>
+            <trans-unit id="144">
+                <source>Pašreizējās reklāmas</source>
+                <target>Текущие объявления</target>
+            </trans-unit>
+            <trans-unit id="145">
+                <source>Pabeigtas reklāmas</source>
+                <target>Завершенные объявления</target>
+            </trans-unit>
+            <trans-unit id="146">
+                <source>Nav pabeigtu reklāmu</source>
+                <target>Нет завершенных объявлений</target>
+            </trans-unit>
+            <trans-unit id="147">
+                <source>Bloķētās reklāmas</source>
+                <target>Заблокированные объявления</target>
+            </trans-unit>
+            <trans-unit id="148">
+                <source>Iesniegt par moderāciju</source>
+                <target>Подать на модерацию</target>
+            </trans-unit>
+            <trans-unit id="149">
+                <source>Nav bloķētu reklāmu</source>
+                <target>Нет заблокированных объявлений</target>
+            </trans-unit>
+            <trans-unit id="150">
+                <source>Mani sludinājumi</source>
+                <target>Мои сообщения</target>
+            </trans-unit>
+            <trans-unit id="151">
+                <source>Dialogu saraksts</source>
+                <target>Список диалогов</target>
+            </trans-unit>
+            <trans-unit id="152">
+                <source>Vai tiešām vēlaties dzēst korespondenci</source>
+                <target>Вы уверены, что хотите удалить переписку</target>
+            </trans-unit>
+            <trans-unit id="153">
+                <source>Jūs vēl neesat sācis sarunu</source>
+                <target>Вы пока не начали ни одной беседы</target>
+            </trans-unit>
+            <trans-unit id="154">
+                <source>Saņemtie pasūtījumi</source>
+                <target>Полученные заказы</target>
+            </trans-unit>
+            <trans-unit id="155">
+                <source>Sīkāka informācija</source>
+                <target>Детали</target>
+            </trans-unit>
+            <trans-unit id="156">
+                <source>Pievienošanas datums</source>
+                <target>Дата добавления</target>
+            </trans-unit>
+            <trans-unit id="157">
+                <source>Statuss</source>
+                <target>Статус</target>
+            </trans-unit>
+            <trans-unit id="158">
+                <source>Darbības</source>
+                <target>Действия</target>
+            </trans-unit>
+            <trans-unit id="159">
+                <source>Istaba</source>
+                <target>Номер</target>
+            </trans-unit>
+            <trans-unit id="160">
+                <source>Reklāma</source>
+                <target>Объявление</target>
+            </trans-unit>
+            <trans-unit id="161">
+                <source>Noņemts</source>
+                <target>Удалено</target>
+            </trans-unit>
+            <trans-unit id="162">
+                <source>Lietotājs</source>
+                <target>Пользователь</target>
+            </trans-unit>
+            <trans-unit id="163">
+                <source>Lietotājs ir dzēsts</source>
+                <target>Пользователь был удален</target>
+            </trans-unit>
+            <trans-unit id="164">
+                <source>Tālruņa numurs</source>
+                <target>Телефон</target>
+            </trans-unit>
+            <trans-unit id="165">
+                <source>Komentārs</source>
+                <target>Комментарий</target>
+            </trans-unit>
+            <trans-unit id="166">
+                <source>Pabeigts</source>
+                <target>Завершен</target>
+            </trans-unit>
+            <trans-unit id="167">
+                <source>Vai tiešām vēlaties dzēst pasūtījumu</source>
+                <target>Вы уверены, что хотите удалить заказ</target>
+            </trans-unit>
+            <trans-unit id="168">
+                <source>Jūs vēl neesat saņēmis pasūtījumus</source>
+                <target>Вы еще не получили ни одного заказа</target>
+            </trans-unit>
+            <trans-unit id="169">
+                <source>Rīkojumi veikti</source>
+                <target>Сделанные заказы</target>
+            </trans-unit>
+            <trans-unit id="170">
+                <source>Atstājiet atbildi</source>
+                <target>Оставить отзыв</target>
+            </trans-unit>
+            <trans-unit id="171">
+                <source>Atstājiet atsauksmi par</source>
+                <target>Оставить отзыв на пользователя</target>
+            </trans-unit>
+            <trans-unit id="172">
+                <source>Neitrāls</source>
+                <target>Нейтральная</target>
+            </trans-unit>
+            <trans-unit id="173">
+                <source>Izvēlieties opciju</source>
+                <target>Выберите вариант</target>
+            </trans-unit>
+            <trans-unit id="174">
+                <source>Izvēlieties</source>
+                <target>Выбрать</target>
+            </trans-unit>
+            <trans-unit id="175">
+                <source>viss</source>
+                <target>все</target>
+            </trans-unit>
+            <trans-unit id="176">
+                <source>pozitīvs</source>
+                <target>положительные</target>
+            </trans-unit>
+            <trans-unit id="177">
+                <source>negatīvs</source>
+                <target>отрицательные</target>
+            </trans-unit>
+            <trans-unit id="178">
+                <source>neitrāla</source>
+                <target>нейтральные</target>
+            </trans-unit>
+            <trans-unit id="179">
+                <source>Atsauksmes man</source>
+                <target>Отзывы на меня</target>
+            </trans-unit>
+            <trans-unit id="180">
+                <source>Reklāma ir noņemta</source>
+                <target>Объявление было удалено</target>
+            </trans-unit>
+            <trans-unit id="181">
+                <source>Šī ir atbilde uz atsauksmi</source>
+                <target>Это ответ на отзыв</target>
+            </trans-unit>
+            <trans-unit id="182">
+                <source>Vai tiešām vēlaties izdzēst atsauksmi</source>
+                <target>Вы действительно хотите удалить отзыв</target>
+            </trans-unit>
+            <trans-unit id="183">
+                <source>Parādīts ar</source>
+                <target>Отображать по</target>
+            </trans-unit>
+            <trans-unit id="184">
+                <source>atbilde</source>
+                <target>ответить</target>
+            </trans-unit>
+            <trans-unit id="185">
+                <source>Mēnesis</source>
+                <target>Месяц</target>
+            </trans-unit>
+            <trans-unit id="186">
+                <source>Neviens komentārs vēl nav pievienots</source>
+                <target>Пока не добавлено ни одного отзыва</target>
+            </trans-unit>
+            <trans-unit id="187">
+                <source>Atbildiet uz lietotāju atsauksmēm</source>
+                <target>Ответить на отзыв пользователя</target>
+            </trans-unit>
+            <trans-unit id="188">
+                <source>Atbildes novērtējums</source>
+                <target>Ответная оценка</target>
+            </trans-unit>
+            <trans-unit id="189">
+                <source>Ievadiet summu</source>
+                <target>Введите сумму</target>
+            </trans-unit>
+            <trans-unit id="190">
+                <source>Izvēlieties maksājuma veidu</source>
+                <target>Выберите способ оплаты</target>
+            </trans-unit>
+            <trans-unit id="191">
+                <source>PILNĪGA</source>
+                <target>ПОПОЛНИТЬ</target>
+            </trans-unit>
+            <trans-unit id="192">
+                <source>Es ģenerē maksājuma veidlapu</source>
+                <target>Генерирую платежную форму</target>
+            </trans-unit>
+            <trans-unit id="193">
+                <source>Maksas pakalpojumi</source>
+                <target>Оплаченные услуги</target>
+            </trans-unit>
+            <trans-unit id="194">
+                <source>Pakalpojums</source>
+                <target>Услуга</target>
+            </trans-unit>
+            <trans-unit id="195">
+                <source>Aktivizēšanas datums</source>
+                <target>Дата активации</target>
+            </trans-unit>
+            <trans-unit id="196">
+                <source>Beigu datums</source>
+                <target>Дата окончания</target>
+            </trans-unit>
+            <trans-unit id="197">
+                <source>Summa</source>
+                <target>Сумма</target>
+            </trans-unit>
+            <trans-unit id="198">
+                <source>Nav maksas pakalpojumu</source>
+                <target>Нет оплаченных услуг</target>
+            </trans-unit>
+            <trans-unit id="199">
+                <source>Pirkt papildu slotus</source>
+                <target>Купить дополнительные слоты</target>
+            </trans-unit>
+            <trans-unit id="200">
+                <source>Pašlaik jūsu reklāmu skaits ir</source>
+                <target>В настоящее время количество Ваших объявлений равно</target>
+            </trans-unit>
+            <trans-unit id="201">
+                <source>Jums ir ierobežots bezmaksas reklāmu skaits, kas ir vienāds ar</source>
+                <target>Для Вас установлен лимит бесплатных объявлений, который равен</target>
+            </trans-unit>
+            <trans-unit id="202">
+                <source>Jums jau ir papildu slots daudzumā</source>
+                <target>У Вас уже есть дополнительные слоты в количестве</target>
+            </trans-unit>
+            <trans-unit id="203">
+                <source>Izmantojot zemāk esošo veidlapu, varat iegādāties papildu reklāmas laika nišas savām reklāmām</source>
+                <target>С помощью расположенной ниже формы Вы можете приобрести дополнительные слоты для Ваших объявлений</target>
+            </trans-unit>
+            <trans-unit id="204">
+                <source>Viena laika niša</source>
+                <target>Стоимость одного слота</target>
+            </trans-unit>
+            <trans-unit id="205">
+                <source>Datums</source>
+                <target>Дата</target>
+            </trans-unit>
+            <trans-unit id="206">
+                <source>Darbība</source>
+                <target>Действие</target>
+            </trans-unit>
+            <trans-unit id="207">
+                <source>Konta atlikums</source>
+                <target>Баланс счета</target>
+            </trans-unit>
+            <trans-unit id="208">
+                <source>Nav uzskaitīti darījumi</source>
+                <target>Нет операций посчету</target>
+            </trans-unit>
+            <trans-unit id="209">
+                <source>Jūs varat arī nosūtīt atsauksmju saiti uz savu draugu</source>
+                <target>Вы также можете выслать реферальную ссылку Вашему другу</target>
+            </trans-unit>
+            <trans-unit id="210">
+                <source>kopēt starpliktuvē</source>
+                <target>скопировать в буфер</target>
+            </trans-unit>
+            <trans-unit id="211">
+                <source>Jūsu draugi</source>
+                <target>Ваши друзья</target>
+            </trans-unit>
+            <trans-unit id="212">
+                <source>Noņemt no draugiem</source>
+                <target>Убрать из друзей</target>
+            </trans-unit>
+            <trans-unit id="213">
+                <source>Vai tiešām vēlaties noņemt lietotāju no saviem draugiem</source>
+                <target>Вы уверены, что хотите убрать пользователя из друзей</target>
+            </trans-unit>
+            <trans-unit id="214">
+                <source>Jūs vēl neesat uzaicinājis draugus</source>
+                <target>Вы пока не приглашали друзей</target>
+            </trans-unit>
+            <trans-unit id="215">
+                <source>Noņemt no melnā saraksta</source>
+                <target>Убрать из черного списка</target>
+            </trans-unit>
+            <trans-unit id="216">
+                <source>Vai tiešām vēlaties noņemt lietotāju no melnā saraksta</source>
+                <target>Вы уверены, что хотите убрать пользователя из черного списка</target>
+            </trans-unit>
+            <trans-unit id="217">
+                <source>Melnais saraksts ir tukšs</source>
+                <target>Черный список пуст</target>
+            </trans-unit>
+            <trans-unit id="218">
+                <source>Mani dati</source>
+                <target>Мои данные</target>
+            </trans-unit>
+            <trans-unit id="219">
+                <source>fio</source>
+                <target>фио</target>
+            </trans-unit>
+            <trans-unit id="220">
+                <source>Sekss</source>
+                <target>Пол</target>
+            </trans-unit>
+            <trans-unit id="221">
+                <source>mob. tālrunis</source>
+                <target>моб. телефон</target>
+            </trans-unit>
+            <trans-unit id="222">
+                <source>e-pasts</source>
+                <target>эл. почта</target>
+            </trans-unit>
+            <trans-unit id="223">
+                <source>saņemt e-pasta paziņojumus</source>
+                <target>получать уведомления на почту</target>
+            </trans-unit>
+            <trans-unit id="224">
+                <source>dzimšanas diena</source>
+                <target>день рождения</target>
+            </trans-unit>
+            <trans-unit id="225">
+                <source>Diena</source>
+                <target>день</target>
+            </trans-unit>
+            <trans-unit id="226">
+                <source>Gads</source>
+                <target>Год</target>
+            </trans-unit>
+            <trans-unit id="227">
+                <source>iemiesojums</source>
+                <target>аватар</target>
+            </trans-unit>
+            <trans-unit id="228">
+                <source>mainīt</source>
+                <target>изменить</target>
+            </trans-unit>
+            <trans-unit id="229">
+                <source>nomainīt paroli</source>
+                <target>смена пароля</target>
+            </trans-unit>
+            <trans-unit id="230">
+                <source>Jauna parole</source>
+                <target>Новый пароль</target>
+            </trans-unit>
+            <trans-unit id="231">
+                <source>Apstipriniet paroli</source>
+                <target>Подтвердите пароль</target>
+            </trans-unit>
+            <trans-unit id="232">
+                <source>Piesakieties savā kontā</source>
+                <target>Вход в личный кабинет</target>
+            </trans-unit>
+            <trans-unit id="233">
+                <source>Ievadiet savu e-pasta adresi un paroli, lai pieteiktos</source>
+                <target>Введите адрес электронной почты и пароль для входа в систему</target>
+            </trans-unit>
+            <trans-unit id="234">
+                <source>aizmirsu paroli</source>
+                <target>забыли пароль</target>
+            </trans-unit>
+            <trans-unit id="235">
+                <source>parole</source>
+                <target>пароль</target>
+            </trans-unit>
+            <trans-unit id="236">
+                <source>Atceries mani</source>
+                <target>Запомнить меня</target>
+            </trans-unit>
+            <trans-unit id="237">
+                <source>Ieiet vietnē</source>
+                <target>Войти на сайт</target>
+            </trans-unit>
+            <trans-unit id="238">
+                <source>jauna lietotāja reģistrācija</source>
+                <target>регистрация нового пользователя</target>
+            </trans-unit>
+            <trans-unit id="239">
+                <source>Pierakstieties, izmantojot Vkontakte</source>
+                <target>Войти через вконтакте</target>
+            </trans-unit>
+            <trans-unit id="240">
+                <source>Ja jums ir profils sociālajā tīklā VKontakte, varat to izmantot, lai ievadītu</source>
+                <target>Если у Вас есть профиль в социальной сети ВКонтакте, можете использовать его для входа</target>
+            </trans-unit>
+            <trans-unit id="241">
+                <source>Pierakstieties ar Vkontakte</source>
+                <target>Войти через ВКонтакте</target>
+            </trans-unit>
+            <trans-unit id="242">
+                <source>Pierakstieties ar Facebook</source>
+                <target>Войти через Facebook</target>
+            </trans-unit>
+            <trans-unit id="243">
+                <source>Ja jums ir profils pakalpojumā Facebook, varat to izmantot, lai pierakstītos</source>
+                <target>Если у Вас есть профиль в социальной сети Facebook, можете использовать его для входа</target>
+            </trans-unit>
+            <trans-unit id="244">
+                <source>Droši savienojumi, izmantojot SSL tehnoloģiju</source>
+                <target>Безопасные соединения с использованием технологии SSL</target>
+            </trans-unit>
+            <trans-unit id="245">
+                <source>Jauna lietotāja reģistrācija</source>
+                <target>Регистрация нового пользователя</target>
+            </trans-unit>
+            <trans-unit id="246">
+                <source>Reģistrācijas forma</source>
+                <target>Регистрация</target>
+            </trans-unit>
+            <trans-unit id="247">
+                <source>Jūs paātrinājāt reģistrēties. Saite uz reģistrācijas apstiprinājumu tiek nosūtīta uz norādīto adresi. Pārbaudiet pastu. Ja jūs nesaņemat vēstuli, lūdzu rakstiet mums pie</source>
+                <target>Вы упешно зарегистрировались. Ссылка на подтверждение регистрации отправлена по указанному адресу. Проверьте почту. Если вам не пришло письмо, напишите пожалуйста нам на</target>
+            </trans-unit>
+            <trans-unit id="248">
+                <source>Lai reģistrētos sistēmā, aizpildiet norādītos laukus</source>
+                <target>Чтобы зарегистрироваться в системе заполните представленные поля</target>
+            </trans-unit>
+            <trans-unit id="249">
+                <source>Reģistrējies</source>
+                <target>Зарегистрироваться</target>
+            </trans-unit>
+            <trans-unit id="250">
+                <source>Atjaunot piekļuvi</source>
+                <target>Восстановление доступа</target>
+            </trans-unit>
+            <trans-unit id="251">
+                <source>Atjaunot piekļuvi</source>
+                <target>Восстановление доступа</target>
+            </trans-unit>
+            <trans-unit id="252">
+                <source>Paroles atjaunošanas norādījumi tiek nosūtīti uz norādīto e-pastu. Pārbaudiet pastu.</source>
+                <target>Инструкции по восстановлению пароля высланы на указанный email. Проверьте почту.</target>
+            </trans-unit>
+            <trans-unit id="253">
+                <source>Ievadiet e-pasta adresi, kuru izmantojāt, lai reģistrētos sistēmā. Mēs nosūtīsim norādījumus, kā atjaunot piekļuvi šai adresei</source>
+                <target>Введите адрес электронной почты, который был использован при регистрации в системе. Мы вышлем инструкции по восстановлению доступа на этот адрес</target>
+            </trans-unit>
+            <trans-unit id="254">
+                <source><![CDATA[<strong> Kļūda! </ strong> Šis e-pasts nav reģistrēts sistēmā.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Такой email не зарегистрирован в системе.]]></target>
+            </trans-unit>
+            <trans-unit id="255">
+                <source>Pievienojiet attēlu</source>
+                <target>Прикрепить изображение</target>
+            </trans-unit>
+            <trans-unit id="256">
+                <source>Ienākošie zvani</source>
+                <target>Входящие</target>
+            </trans-unit>
+            <trans-unit id="257">
+                <source>Atzīmēt kā</source>
+                <target>Отметить выбранное как</target>
+            </trans-unit>
+            <trans-unit id="258">
+                <source>lasīt</source>
+                <target>прочитанное</target>
+            </trans-unit>
+            <trans-unit id="259">
+                <source>noņemt</source>
+                <target>удалить</target>
+            </trans-unit>
+            <trans-unit id="260">
+                <source>Vai tiešām vēlaties dzēst šo ziņojumu</source>
+                <target>Вы уверены, что хотите удалить сообщение</target>
+            </trans-unit>
+            <trans-unit id="261">
+                <source>Izejošais</source>
+                <target>Исходящие</target>
+            </trans-unit>
+            <trans-unit id="262">
+                <source>Atlasiet visu</source>
+                <target>Выбрать все</target>
+            </trans-unit>
+            <trans-unit id="263">
+                <source>Atlasīts</source>
+                <target>Выбранное</target>
+            </trans-unit>
+            <trans-unit id="264">
+                <source>Netika atrasts izejošais ziņojums</source>
+                <target>Исходящих сообщений не найдено</target>
+            </trans-unit>
+            <trans-unit id="265">
+                <source>Grozs</source>
+                <target>Корзина</target>
+            </trans-unit>
+            <trans-unit id="266">
+                <source>Grozs ir tukšs</source>
+                <target>Корзина пуста</target>
+            </trans-unit>
+            <trans-unit id="267">
+                <source>Pieejamo bezmaksas reklāmu limits ir izsmelts</source>
+                <target>Исчерпан лимит доступных бесплатных объявлений</target>
+            </trans-unit>
+            <trans-unit id="268">
+                <source>Reklāmas par moderāciju</source>
+                <target>Объявления на модерации</target>
+            </trans-unit>
+            <trans-unit id="269">
+                <source>Nav moderēšanas reklāmu</source>
+                <target>Нет объявлений на модерацию</target>
+            </trans-unit>
+            <trans-unit id="270">
+                <source>Lietotāja profils</source>
+                <target>Профиль пользователя</target>
+            </trans-unit>
+            <trans-unit id="271">
+                <source>Lietotāju reklāmas</source>
+                <target>Объявления пользователя</target>
+            </trans-unit>
+            <trans-unit id="272">
+                <source>Pievienot bloku sarakstam</source>
+                <target>Добавить в черный список</target>
+            </trans-unit>
+            <trans-unit id="273">
+                <source>Lietotāju pārskati</source>
+                <target>Отзывы пользователя</target>
+            </trans-unit>
+            <trans-unit id="274">
+                <source>Parādīt visas atsauksmes</source>
+                <target>Показать все отзывы</target>
+            </trans-unit>
+            <trans-unit id="275">
+                <source>Šis lietotājs nav atbildējis nevienai atsauksmei</source>
+                <target>Этот пользователь не оставил ни одного отзыва</target>
+            </trans-unit>
+            <trans-unit id="276">
+                <source>Lietotāju reklāmas</source>
+                <target>Объявления пользователя</target>
+            </trans-unit>
+            <trans-unit id="277">
+                <source>Šim lietotājam nav nevienas reklāmas</source>
+                <target>У этого пользователя нет объявлений</target>
+            </trans-unit>
+            <trans-unit id="278">
+                <source>Lietotāju atsauksmes</source>
+                <target>Отзывы на пользователя</target>
+            </trans-unit>
+            <trans-unit id="279">
+                <source>Nav atsauksmju</source>
+                <target>Нет ни одного отзыва</target>
+            </trans-unit>
+            <trans-unit id="280">
+                <source>Augstākā izmitināšana</source>
+                <target>Премиум размещение</target>
+            </trans-unit>
+            <trans-unit id="281">
+                <source>Jūsu reklāma tiks rādīta visredzamākajā vietā vietnē - virs parastajām reklāmām meklēšanas rezultātu lapās, norādot veidlapā norādīto dienu skaitu (bet ne vairāk kā</source>
+                <target>Ваше объявление будет  показываться на самом заметном месте сайта — над обычными объявлениями на страницах результатов поиска в течение того количества дней, которое Вы укажете в форме(но не больше</target>
+            </trans-unit>
+            <trans-unit id="282">
+                <source>Pakalpojuma izmaksas</source>
+                <target>Стоимость услуги</target>
+            </trans-unit>
+            <trans-unit id="283">
+                <source>dienā</source>
+                <target>в сутки</target>
+            </trans-unit>
+            <trans-unit id="284">
+                <source>Jūsu pašreizējam kontam nav pietiekami daudz līdzekļu pakalpojuma piemērošanai</source>
+                <target>На Вашем текущем счете недостаточно средств для применения услуги</target>
+            </trans-unit>
+            <trans-unit id="285">
+                <source><![CDATA[Varat <a href=""> papildināt savu kuponu </a> un pēc tam mēģināt vēlreiz]]></source>
+                <target><![CDATA[Вы можете <a href="">пополнить кошелек</a> и затем попробовать снова]]></target>
+            </trans-unit>
+            <trans-unit id="286">
+                <source>Dienu skaits</source>
+                <target>Количество дней</target>
+            </trans-unit>
+            <trans-unit id="287">
+                <source>Pieteikties pakalpojumam</source>
+                <target>Применить услугу</target>
+            </trans-unit>
+            <trans-unit id="288">
+                <source>Iezīmējiet reklāmu</source>
+                <target>Выделить объявление</target>
+            </trans-unit>
+            <trans-unit id="289">
+                <source>meklēšanas rezultātu lapā tiek atzīmēta ar īpašu ikonu un parādīta ar atšķirīgu reklāmas dice krāsu skalu, atšķirībā no standarta fona</source>
+                <target>показываться на странице результатов поиска, оно отмечатся особой иконкой и отображаются другой цветовой гаммой плашки объявления, в отличие от стандартного фона</target>
+            </trans-unit>
+            <trans-unit id="290">
+                <source>BONUS Šajā gadījumā tas meklēšanas rezultātos pieaugs uz pirmo vietu par brīvu</source>
+                <target>BONUS При этом оно поднимется на первое место в результатах поиска бесплатно</target>
+            </trans-unit>
+            <trans-unit id="291">
+                <source>Paaugstināt un paplašināt reklāmu</source>
+                <target>Поднять и продлить объявление</target>
+            </trans-unit>
+            <trans-unit id="292">
+                <source>Paaugstināt reklāmu</source>
+                <target>Поднять объявление</target>
+            </trans-unit>
+            <trans-unit id="293">
+                <source>Jūsu reklāma paaugstināsies meklēšanas rezultātu augšdaļā, it kā tā tikko tiktu iesniegta vietnei</source>
+                <target>Ваше объявление поднимется на первое место в результатах поиска, как если бы оно было только что подано на сайт</target>
+            </trans-unit>
+            <trans-unit id="294">
+                <source>BONUS Nākamajā dienā tajā pašā laikā tas atkal tiks pacelts bez maksas</source>
+                <target>BONUS На следующий день, в это же время, оно будет поднято ещё раз бесплатно</target>
+            </trans-unit>
+            <trans-unit id="295">
+                <source>Atjaunot reklāmu</source>
+                <target>Продлить объявление</target>
+            </trans-unit>
+            <trans-unit id="296">
+                <source>Maksimālais katras reklāmas izvietošanas laiks uz kuģa</source>
+                <target>Максимальный срок размещения каждого объявления на доске</target>
+            </trans-unit>
+            <trans-unit id="297">
+                <source>Ja jūsu reklāmas termiņš beigsies (mazāk nekā 3 dienas pirms beigām), tad ar šī pakalpojuma palīdzību jūs varat pagarināt paziņojumu, bet uz laiku, kas nepārsniedz</source>
+                <target>Если срок Вашего объявления подходит к концу (составляет меньше 3 дней до окончания), то с помощью этой услуги Вы можете продлить свое объявление, но на срок, не более</target>
+            </trans-unit>
+            <trans-unit id="298">
+                <source>Jūsu reklāma pašlaik ir aktīva, tādēļ to nevar izmantot</source>
+                <target>Ваше объявление на данный момент является активным, поэтому для него не может быть применена услуга проделния</target>
+            </trans-unit>
+            <trans-unit id="299">
+                <source>Maksājumu iespējas</source>
+                <target>Параметры платежа</target>
+            </trans-unit>
+            <trans-unit id="300">
+                <source>Maksājuma summa</source>
+                <target>Сумма платежа</target>
+            </trans-unit>
+            <trans-unit id="301">
+                <source>Maksājuma veids</source>
+                <target>Метод платежа</target>
+            </trans-unit>
+            <trans-unit id="302">
+                <source><![CDATA[<strong>Kļūda!</strong>%message%.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> %message%.]]></target>
+            </trans-unit>
+            <trans-unit id="303">
+                <source><![CDATA[<strong>Kļūda!</strong> Pilnībā aizpildiet savu profilu <a href="/account/settings"> personīgā konta iestatījumos</a>.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Заполните свой профиль полностью в <a href="/account/settings">настройках личного кабинета</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="304">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs neesat izvēlējies savu reklāmu kategoriju.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не выбрали категорию объявления.]]></target>
+            </trans-unit>
+            <trans-unit id="305">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs neesat izvēlējies reklāmas tipu.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не выбрали тип объявления.]]></target>
+            </trans-unit>
+            <trans-unit id="306">
+                <source><![CDATA[<strong>Kļūda!</strong> Reklāmas apraksts nedrīkst būt tukšs.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Описание объявления не может быть пустым.]]></target>
+            </trans-unit>
+            <trans-unit id="307">
+                <source><![CDATA[<strong>Kļūda!</strong> Pakalpojumam ir jāpieņem <a href="" data-toggle="modal" data-target="#userAgreementModal"> pakalpojumu sniegšanas noteikumi</a>.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Необходимо принять <a href="" data-toggle="modal" data-target="#userAgreementModal">правилами использования</a> сервисом.]]></target>
+            </trans-unit>
+            <trans-unit id="308">
+                <source><![CDATA[<strong>Kļūda!</strong> Jums ir jāizvēlas reklāmas izvietojuma veids (Normāls, Premium, Dedicated).]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Необходимо выбрать тип размещения объявления(Обычное, Премиум, Выделенное).]]></target>
+            </trans-unit>
+            <trans-unit id="309">
+                <source><![CDATA[<strong>Informācija:</strong> jūsu kontam nav pietiekami daudz naudas prēmiju izvietošanai. Reklāmu pievienoja kā parasti.]]></source>
+                <target><![CDATA[<strong>Информация!</strong> На Вашем счету недостаточно средств для премиум размещения. Объявление добавлено как обычное.]]></target>
+            </trans-unit>
+            <trans-unit id="310">
+                <source><![CDATA[<strong>Kļūda!</strong> Šī nav jūsu reklāma un jūs to nevarat rediģēt.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Это не Ваше объявление и Вы не можете его радактировать.]]></target>
+            </trans-unit>
+            <trans-unit id="311">
+                <source><![CDATA[<strong>Informācija!</strong> Pakalpojums %mess1% jau ir saistīts ar šo reklāmu,%mess2% derīguma termiņš. Jaunu pakalpojumu var aktivizēt tikai pēc pašreizējā pakalpojuma beigām.]]></source>
+                <target><![CDATA[<strong>Информация!</strong> К этому объявлению уже подключена услуга %mess1% срок окончания действия которой %mess2%. Новую услугу можно активировать только после окончания действия текущей услуги.]]></target>
+            </trans-unit>
+            <trans-unit id="312">
+                <source><![CDATA[<strong>Gatavs!</strong> Izmaiņas ir saglabātas.]]></source>
+                <target><![CDATA[<strong>Выполнено!</strong> Изменения сохранены.]]></target>
+            </trans-unit>
+            <trans-unit id="313">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Jūsu reklāma ir atjaunota.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Объявление продлено.]]></target>
+            </trans-unit>
+            <trans-unit id="314">
+                <source><![CDATA[<strong>Kļūda!</strong> Šo reklāmu nevar nodot tālāk. Varbūt tas nepastāv vai tas jums nepieder.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Это объявление нельзя продилть. Возможно его не существует или оно не принадлежит Вам.]]></target>
+            </trans-unit>
+            <trans-unit id="315">
+                <source><![CDATA[<strong>Informācija!</strong> Jūsu konts nav verificēts. Pārejiet uz saiti e-pasta ziņojumā, kas jums tika nosūtīts reģistrācijas citā kontātiks dzēsta 2 dienu laikā. Ja jūs neesat saņēmis vēstuli, lūdzu, rakstiet mums pa pastu <a href="mailto:%mess%">% mess% </a>.]]></source>
+                <target><![CDATA[<strong>Информация!</strong> Ваш аккаунт не подтвержден. Перейдите по ссылке в письме, которое было отправлено Вам при регистрации иначе аккаунт будет удален в течение 2-х суток. Если вам не пришло письмо, напишите пожалуйста нам на <a href="mailto:%mess%">%mess%</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="316">
+                <source><![CDATA[<strong>Panākumi!</strong> Jūsu pasūtījums ir nosūtīts reklāmas īpašniekam. Viņš sazināsies ar tevi cik drīz vien iespējams.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Ваш заказ отправлено владельцу объявления. Он свяжется с Вами в ближайшее время.]]></target>
+            </trans-unit>
+            <trans-unit id="317">
+                <source><![CDATA[<strong>Kļūda! </strong> Šī reklāma pieder jums. Jūs nevarat pasūtīt sevi.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Это объявление принадлежит Вам. Вы не можете заказывать сами у себя.]]></target>
+            </trans-unit>
+            <trans-unit id="318">
+                <source><![CDATA[<strong>Kļūda!</strong> Šis lietotājs ir pievienojis jūs melnajam sarakstam.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Этот пользователь добавил Вас в черный список.]]></target>
+            </trans-unit>
+            <trans-unit id="319">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Augstāk minēto ziņojumu nosūtīja reklāmas īpašniekam.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Выше сообщение отправлено владельцу объявления.]]></target>
+            </trans-unit>
+            <trans-unit id="320">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat nosūtīt ziņu sev.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не можете отправить сообщение самому себе.]]></target>
+            </trans-unit>
+            <trans-unit id="321">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Ziņojums tika nosūtīts draugam norādītajā e-pasta adresē.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Сообщение отправлено другу на указанный электронный адрес.]]></target>
+            </trans-unit>
+            <trans-unit id="322">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Jūsu sūdzība ir reģistrēta un drīz tiks pārskatīta.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Ваша жалоба зарегистрирована и будет рассмотрена в ближайшее время.]]></target>
+            </trans-unit>
+            <trans-unit id="323">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat sūdzēties par savu reklāmu.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не можете жаловаться на свое объявление.]]></target>
+            </trans-unit>
+            <trans-unit id="324">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Jūsu ziņa ir nosūtīta.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Ваше сообщение отправлено.]]></target>
+            </trans-unit>
+            <trans-unit id="325">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat ziņot sev.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не можете писать сообщения себе.]]></target>
+            </trans-unit>
+            <trans-unit id="326">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Jūsu ziņa ir nosūtīta vietnes administrācijai un drīz tiks pārskatīta.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Ваше сообщение отправлено администрации сайта и будет рассмотрено в ближайшее время.]]></target>
+            </trans-unit>
+            <trans-unit id="327">
+                <source><![CDATA[<strong>Kļūda!</strong> Nederīgi formas dati. Iespējams, ka jūs nepareizi norādījāt captcha.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Неверные данные формы. Возможно вы неверно указали капчу.]]></target>
+            </trans-unit>
+            <trans-unit id="328">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūsu pašreizējā kontā nav pietiekami daudz naudas, lai iegādātos pieprasīto vietu skaitu.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> На Вашем текущем счете недостаточно средств для покупки запрошенного количества слотов.]]></target>
+            </trans-unit>
+            <trans-unit id="329">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Tagad jūs varat ievietot %mess% papildu reklāmas.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Теперь вы можете разместить %mess% дополнительных объявлений.]]></target>
+            </trans-unit>
+            <trans-unit id="330">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs jau esat iesniedzis atsauksmi par šo atsauksmi.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы уже отправляли ответ на этот отзыв.]]></target>
+            </trans-unit>
+            <trans-unit id="331">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Atbilde tika nosūtīta.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Ответный отзыв отправлен.]]></target>
+            </trans-unit>
+            <trans-unit id="332">
+                <source><![CDATA[<strong>Kļūda!</strong> Šī ir jūsu atsauksme. Jūs to nevarat dzēst.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Это Ваш ответный отзыв. Вы не можете его удалить.]]></target>
+            </trans-unit>
+            <trans-unit id="333">
+                <source><![CDATA[<strong>Gatavs!</strong> Atsauksme ir dzēsta veiksmīgi.]]></source>
+                <target><![CDATA[<strong>Выполнено!</strong> Отзыв успешно удален.]]></target>
+            </trans-unit>
+            <trans-unit id="334">
+                <source><![CDATA[<strong>Kļūda!</strong> Nevar izdzēst atsauksmi.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Невозможно удалить отзыв.]]></target>
+            </trans-unit>
+            <trans-unit id="335">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūsu kontā nav pietiekami daudz līdzekļu, lai aktivizētu pakalpojumu.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> На Вашем счету недостаточно средств для активации услуги.]]></target>
+            </trans-unit>
+            <trans-unit id="336">
+                <source><![CDATA[<strong>Kļūda!</strong> Pakalpojuma %message% jau ir saistīts ar šo reklāmu. Jūs varat pagarināt pašreizējo pakalpojumu vai piemērot citu pēc pašreizējās darbības beigām.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> К этому объявлению уже подключена услуга %message%. Вы можете продлить текущую услугу или применить другую после окончания действия текущей.]]></target>
+            </trans-unit>
+            <trans-unit id="337">
+                <source><![CDATA[<strong>Gatavs!</strong> Pakalpojums ir veiksmīgi paplašināts.]]></source>
+                <target><![CDATA[<strong>Выполнено!</strong> Услуга успешно продлена.]]></target>
+            </trans-unit>
+            <trans-unit id="338">
+                <source><![CDATA[<strong>Gatavs!</strong> Pakalpojums ir veiksmīgi aktivizēts.]]></source>
+                <target><![CDATA[<strong>Выполнено!</strong> Услуга успешно активирована.]]></target>
+            </trans-unit>
+            <trans-unit id="339">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs neesat apstiprinājis captcha.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не подтвердили капчу.]]></target>
+            </trans-unit>
+            <trans-unit id="340">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs neesat aizpildījis e-pasta adresi.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не заполнили поле email.]]></target>
+            </trans-unit>
+            <trans-unit id="341">
+                <source><![CDATA[<strong>Kļūda!</strong> Jums ir jāpiekrīt lietotāja līguma noteikumiem.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы должны принять условия пользовательского соглашения.]]></target>
+            </trans-unit>
+            <trans-unit id="342">
+                <source><![CDATA[<strong>Kļūda!</strong> E-pasts %message% jau ir reģistrēts sistēmā. Ja aizmirsāt savu paroli, varat to <a href="/restore">atjaunot</a>.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Email %message% уже зарегистрирован в системе. Если Вы забыли пароль, Вы можете его <a href="/restore">восстановить</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="343">
+                <source><![CDATA[<strong>Informācija!</strong> Lai pievienotu reklāmas, aizpildiet savu profilu.]]></source>
+                <target><![CDATA[<strong>Информация!</strong> Заполните свой профиль для того, чтобы добавлять объявления.]]></target>
+            </trans-unit>
+            <trans-unit id="344">
+                <source><![CDATA[<strong>Kļūda!</strong> Attēls neatbilst prasībām. Derīgi paplašinājumi: jpg, jpeg, png, gif. Maksimālais izmērs ir 2 MB. Ziņojums tika nosūtīts bez attēla.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Изображение не соответствует требованиям. Допустимые расширения: jpg, jpeg, png, gif. Максимальный размер - 2Мб. Сообщение отправлено без изображения.]]></target>
+            </trans-unit>
+            <trans-unit id="345">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Saruna tika dzēsta.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Беседа удалена.]]></target>
+            </trans-unit>
+            <trans-unit id="346">
+                <source><![CDATA[<strong>Gatavs!</strong> Lietotāja dati tika veiksmīgi saglabāti.]]></source>
+                <target><![CDATA[<strong>Выполнено!</strong> Данные пользователя успешно сохранены.]]></target>
+            </trans-unit>
+            <trans-unit id="347">
+                <source><![CDATA[<strong>Gatavs!</strong> Parole ir veiksmīgi atjaunināta.]]></source>
+                <target><![CDATA[<strong>Выполнено!</strong> Пароль успешно обновлен.]]></target>
+            </trans-unit>
+            <trans-unit id="348">
+                <source><![CDATA[<strong>Nav ieviests!</strong> Neizdevās atjaunināt paroli.]]></source>
+                <target><![CDATA[<strong>Не выполнено!</strong> Не удалось обновить пароль.]]></target>
+            </trans-unit>
+            <trans-unit id="349">
+                <source><![CDATA[<strong>Veiksmīgi!</strong> Šī reklāma ir pārvietota uz Izpildīto sadaļu.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Объявление было перенесено в раздел завершенных.]]></target>
+            </trans-unit>
+            <trans-unit id="350">
+                <source><![CDATA[<strong>Gatavs!</strong> Šī reklāma ir noņemta no sadaļas Izlase.]]></source>
+                <target><![CDATA[<strong>Выполнено!</strong> Объявление удалено из раздела Избранные.]]></target>
+            </trans-unit>
+            <trans-unit id="351">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs jau esat nosūtījis atsauksmi šim reklāmdevējam par šo reklāmu.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы уже отправляли отзыв этому продавцу по этому объявлению.]]></target>
+            </trans-unit>
+            <trans-unit id="352">
+                <source><![CDATA[<strong>Panākumi!</strong> Jūsu atsauksmes nosūtīta pārdevējam.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Ваш отзыв был отправлен продавцу.]]></target>
+            </trans-unit>
+            <trans-unit id="353">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat atstāt atsauksmes par sevi.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не можете оставлять отзывы на самого себя.]]></target>
+            </trans-unit>
+            <trans-unit id="354">
+                <source><![CDATA[<strong>Kļūda!</strong> Atbildes nav nosūtītas. Jūs vēlaties atstāt atsauksmi par esošu reklāmu.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Отзыв не отправлен. Вы хотите оставить отзыв на несуществующее объявление.]]></target>
+            </trans-unit>
+            <trans-unit id="355">
+                <source><![CDATA[<strong>Gatavs!</strong> Pasūtījums ir veiksmīgi izdzēsts.]]></source>
+                <target><![CDATA[<strong>Выполнено!</strong> Заказ успешно удален.]]></target>
+            </trans-unit>
+            <trans-unit id="356">
+                <source><![CDATA[<strong>Kļūda!</strong> Lietotājs jums ir iekļauts melnajā sarakstā. Jūs nevarat nosūtīt ziņojumu.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Пользователь внес Вас в черный список. Отправка сообщения невозможна.]]></target>
+            </trans-unit>
+            <trans-unit id="357">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat rakstīt ziņojumus sev.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не можете писать сообщения самому себе.]]></target>
+            </trans-unit>
+            <trans-unit id="358">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Lietotājs ir noņemts no saviem draugiem.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Пользователь удален из Ваших друзей.]]></target>
+            </trans-unit>
+            <trans-unit id="359">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat izdzēst draugu no saviem draugiem.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Невозможно удалить пользователя из друзей.]]></target>
+            </trans-unit>
+            <trans-unit id="360">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Uzaicinājums tika veiksmīgi nosūtīts uz norādīto pastkasti.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Приглашение успешно отправлено на указанный почтовый ящик.]]></target>
+            </trans-unit>
+            <trans-unit id="361">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Šī reklāma ir noņemta.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Объявление было удалено.]]></target>
+            </trans-unit>
+            <trans-unit id="362">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat izdzēst savu reklāmu.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не можете удалить не свое объявление.]]></target>
+            </trans-unit>
+            <trans-unit id="363">
+                <source><![CDATA[<strong>Kļūda!</strong> Šo reklāmu nepastāv.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Такого объявления не существует.]]></target>
+            </trans-unit>
+            <trans-unit id="364">
+                <source><![CDATA[<strong>Kļūda!</strong> Jūs nevarat pievienot sevi melnajam sarakstam.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Вы не можете добавить в черный список самого себя.]]></target>
+            </trans-unit>
+            <trans-unit id="365">
+                <source><![CDATA[<strong>Veiksmīga!</strong> Lietotājs ir noņemts no jūsu melnā saraksta.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Пользователь удален из Вашего черного списка.]]></target>
+            </trans-unit>
+            <trans-unit id="366">
+                <source><![CDATA[<strong>Panākumi!</strong> Lietotājs ir pievienots jūsu melnajam sarakstam.]]></source>
+                <target><![CDATA[<strong>Успешно!</strong> Пользователь добавлен в Ваш черный список.]]></target>
+            </trans-unit>
+            <trans-unit id="367">
+                <source><![CDATA[<strong>Kļūda!</strong> Šajā datubāzē nav šāda lietotāja.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Такого пользователя нет в базе.]]></target>
+            </trans-unit>
+            <trans-unit id="368">
+                <source>Maksa par pakalpojuma aktivizēšanu</source>
+                <target>Списание средств за активацию услуги</target>
+            </trans-unit>
+            <trans-unit id="369">
+                <source>Izrakstīts</source>
+                <target>Списано</target>
+            </trans-unit>
+            <trans-unit id="370">
+                <source>Sūdzību skaits par reklāmu ir vairāk nekā 10</source>
+                <target>Количество жалоб на объявление больше 10</target>
+            </trans-unit>
+            <trans-unit id="371">
+                <source>Iegādāties %message% no reklāmas papildu vietām</source>
+                <target>Покупка %message% дополнительных слотов для объявлений</target>
+            </trans-unit>
+            <trans-unit id="372">
+                <source>Naudas līdzekļu uzskaite reģistrācijai. Kredīts 10</source>
+                <target>Зачисление средств за регистрацию. Зачислено 10</target>
+            </trans-unit>
+            <trans-unit id="373">
+                <source>Kredītiestādes, lai piesaistītu jaunu lietotāju. Kredīts 10</source>
+                <target>Зачисление средств за то, что привели нового пользователя. Зачислено 10</target>
+            </trans-unit>
+            <trans-unit id="374">
+                <source>Jūs esat veiksmīgi apstiprinājis reģistrāciju. Tagad jūs varat pieteikties, izmantojot zemāk esošo veidlapu.</source>
+                <target>Вы успешно подтвердили регистрацию. Теперь вы можете войти в систему, используя форму ниже.</target>
+            </trans-unit>
+            <trans-unit id="375">
+                <source>Apstiprinājuma atslēga ir beidzies. Jums ir jāaizpilda reģistrācijas procedūra vēlreiz.</source>
+                <target>Ключ подтверждения просрочен. Вам необходимо пройти процедуру регистрации еще раз.</target>
+            </trans-unit>
+            <trans-unit id="376">
+                <source>Apstiprinājuma atslēga nav derīga. Varbūt tas beidzās vai neeksistē. Mēģiniet reģistrēties vēlreiz.</source>
+                <target>Ключ подтверждения указан невено. Возможно он был просрочен либо не существует. Попробуйте пройти процедуру регистрации еще раз.</target>
+            </trans-unit>
+            <trans-unit id="377">
+                <source>Pabeigts</source>
+                <target>Завершен</target>
+            </trans-unit>
+            <trans-unit id="378">
+                <source>Pasūtījuma statuss ir mainīts. Iemesls</source>
+                <target>Статус заказа изменен. Причина</target>
+            </trans-unit>
+            <trans-unit id="379">
+                <source>Pasūtījuma statuss ir mainīts</source>
+                <target>Статус заказа изменен</target>
+            </trans-unit>
+            <trans-unit id="380">
+                <source>Nederīgs pasūtījuma statuss</source>
+                <target>Неверный статус заказа</target>
+            </trans-unit>
+            <trans-unit id="381">
+                <source>Nederīgs pasūtījuma ID</source>
+                <target>Неверный идентификатор заказа</target>
+            </trans-unit>
+            <trans-unit id="382">
+                <source>Šī reklāma jau ir pievienota jūsu favorites</source>
+                <target>Это объявление уже добавлено к Вам в Избранные</target>
+            </trans-unit>
+            <trans-unit id="383">
+                <source>Drauga e-pasts: *</source>
+                <target>Email друга: *</target>
+            </trans-unit>
+            <trans-unit id="384">
+                <source>Drauga vārds: *</source>
+                <target>Имя друга: *</target>
+            </trans-unit>
+            <trans-unit id="385">
+                <source>SŪTĪT</source>
+                <target>ОТПРАВИТЬ</target>
+            </trans-unit>
+            <trans-unit id="386">
+                <source>Jūsu vārds: *</source>
+                <target>Ваше имя: *</target>
+            </trans-unit>
+            <trans-unit id="387">
+                <source>Pamatojums: *</source>
+                <target>Обоснование: *</target>
+            </trans-unit>
+            <trans-unit id="388">
+                <source>Jūsu e-pasts: *</source>
+                <target>Ваш email: *</target>
+            </trans-unit>
+            <trans-unit id="389">
+                <source>Ziņojuma priekšmets: *</source>
+                <target>Тема сообщения: *</target>
+            </trans-unit>
+            <trans-unit id="390">
+                <source>Sludinājuma teksts: *</source>
+                <target>Текст сообщения: *</target>
+            </trans-unit>
+            <trans-unit id="391">
+                <source>Vietnes lietotāja konta papildināšana</source>
+                <target>Пополнение счета пользователя сайта</target>
+            </trans-unit>
+            <trans-unit id="392">
+                <source>Naudas līdzekļu ieskaitīšana kontā. Kredīts</source>
+                <target>Зачисление средств на счет. Зачислено</target>
+            </trans-unit>
+            <trans-unit id="393">
+                <source>Slotu skaits: *</source>
+                <target>Количество слотов: *</target>
+            </trans-unit>
+            <trans-unit id="394">
+                <source>e-pasts</source>
+                <target>эл. почта</target>
+            </trans-unit>
+            <trans-unit id="395">
+                <source>Atjaunot</source>
+                <target>Восстановить</target>
+            </trans-unit>
+            <trans-unit id="396">
+                <source>Sūtīt</source>
+                <target>Отправить</target>
+            </trans-unit>
+            <trans-unit id="397">
+                <source><![CDATA[<strong>Kļūda!</strong> Email %mess% pieder citam lietotājam.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Email %mess% принадлежит другому пользователю.]]></target>
+            </trans-unit>
+            <trans-unit id="398">
+                <source>Jūsu e-pasts</source>
+                <target>Ваш E-MAIL</target>
+            </trans-unit>
+            <trans-unit id="399">
+                <source>ziņa</source>
+                <target>сообщение</target>
+            </trans-unit>
+            <trans-unit id="400">
+                <source>Kontakt tālrunis: *</source>
+                <target>Контактный телефон:*</target>
+            </trans-unit>
+            <trans-unit id="401">
+                <source>Komentēt pasūtījumu</source>
+                <target>Комментарий к заказу</target>
+            </trans-unit>
+            <trans-unit id="402">
+                <source>Sūtīt pasūtījumu</source>
+                <target>Отправить заказ</target>
+            </trans-unit>
+            <trans-unit id="403">
+                <source>Sūtiet man vēstules kopiju</source>
+                <target>Отправить мне копию письма</target>
+            </trans-unit>
+            <trans-unit id="404">
+                <source>Pasūtīt pakalpojumu</source>
+                <target>Заказать услугу</target>
+            </trans-unit>
+            <trans-unit id="405">
+                <source>Jūsu atbilde:</source>
+                <target>Ваш ответ:</target>
+            </trans-unit>
+            <trans-unit id="406">
+                <source>Neitrāls</source>
+                <target>Нейтральная</target>
+            </trans-unit>
+            <trans-unit id="407">
+                <source>Pozitīvs</source>
+                <target>Положительная</target>
+            </trans-unit>
+            <trans-unit id="408">
+                <source>Negatīvs</source>
+                <target>Отрицательная</target>
+            </trans-unit>
+            <trans-unit id="409">
+                <source>Jūsu atsauksmes:</source>
+                <target>Ваш отзыв:</target>
+            </trans-unit>
+            <trans-unit id="410">
+                <source>Preču novērtējums:</source>
+                <target>Оценка товара:</target>
+            </trans-unit>
+            <trans-unit id="411">
+                <source>Pārdevēja reitings:</source>
+                <target>Оценка продавца:</target>
+            </trans-unit>
+            <trans-unit id="412">
+                <source>paziņojums</source>
+                <target>уведомления</target>
+            </trans-unit>
+            <trans-unit id="413">
+                <source>vārds</source>
+                <target>имя</target>
+            </trans-unit>
+            <trans-unit id="414">
+                <source>uzvārds</source>
+                <target>фамилия</target>
+            </trans-unit>
+            <trans-unit id="415">
+                <source>patronimisks</source>
+                <target>отчество</target>
+            </trans-unit>
+            <trans-unit id="416">
+                <source>Vīrietis sieviete</source>
+                <target>Мужской</target>
+            </trans-unit>
+            <trans-unit id="417">
+                <source>Sieviešu</source>
+                <target>Женский</target>
+            </trans-unit>
+            <trans-unit id="418">
+                <source>dzimums</source>
+                <target>пол</target>
+            </trans-unit>
+            <trans-unit id="419">
+                <source>Valsts</source>
+                <target>Страна</target>
+            </trans-unit>
+            <trans-unit id="420">
+                <source>Janvāris</source>
+                <target>Январь</target>
+            </trans-unit>
+            <trans-unit id="421">
+                <source>Februāris</source>
+                <target>Февраль</target>
+            </trans-unit>
+            <trans-unit id="422">
+                <source>Marts</source>
+                <target>Март</target>
+            </trans-unit>
+            <trans-unit id="423">
+                <source>Aprīlis</source>
+                <target>Апрель</target>
+            </trans-unit>
+            <trans-unit id="424">
+                <source>Maijs</source>
+                <target>Май</target>
+            </trans-unit>
+            <trans-unit id="425">
+                <source>Jūnijs</source>
+                <target>Июнь</target>
+            </trans-unit>
+            <trans-unit id="426">
+                <source>Jūlijs</source>
+                <target>Июль</target>
+            </trans-unit>
+            <trans-unit id="427">
+                <source>Augusts</source>
+                <target>Август</target>
+            </trans-unit>
+            <trans-unit id="428">
+                <source>Septembris</source>
+                <target>Сентябрь</target>
+            </trans-unit>
+            <trans-unit id="429">
+                <source>Oktobris</source>
+                <target>Октябрь</target>
+            </trans-unit>
+            <trans-unit id="430">
+                <source>Novembris</source>
+                <target>Ноябрь</target>
+            </trans-unit>
+            <trans-unit id="431">
+                <source>Decembris</source>
+                <target>Декабрь</target>
+            </trans-unit>
+            <trans-unit id="432">
+                <source>apstipriniet paroli</source>
+                <target>подтвердить пароль</target>
+            </trans-unit>
+            <trans-unit id="433">
+                <source>pieņemt paziņojumus no vietnes</source>
+                <target>принимать уведомления от сайта</target>
+            </trans-unit>
+            <trans-unit id="434">
+                <source><![CDATA[es piekrītu <a href="" data-toggle="modal" data-target="#userAgreementModal"> lietotāja līgumam </a>]]></source>
+                <target><![CDATA[я принимаю <a href="" data-toggle="modal" data-target="#userAgreementModal">пользовательское соглашение</a>]]></target>
+            </trans-unit>
+            <trans-unit id="435">
+                <source>PIRKTIESIESIES</source>
+                <target>КУПИТЬ</target>
+            </trans-unit>
+            <trans-unit id="436">
+                <source>Teksta meklēšana</source>
+                <target>Текст поиска</target>
+            </trans-unit>
+            <trans-unit id="437">
+                <source>Izvēlieties kategoriju</source>
+                <target>Выберите категорию</target>
+            </trans-unit>
+            <trans-unit id="438">
+                <source>Draugi</source>
+                <target>Друзья</target>
+            </trans-unit>
+            <trans-unit id="439">
+                <source><![CDATA[<strong>Kļūda!</strong> Tālruņa numuram ir jābūt tikai 8 cipariem.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Номер телефона должен содержать только 8 цифр.]]></target>
+            </trans-unit>
+            <trans-unit id="440">
+                <source>Pievienot fotoattēlu</source>
+                <target>Добавить фото</target>
+            </trans-unit>
+            <trans-unit id="441">
+                <source>no</source>
+                <target>от</target>
+            </trans-unit>
+            <trans-unit id="442">
+                <source>līdz pat</source>
+                <target>до</target>
+            </trans-unit>
+            <trans-unit id="443">
+                <source>Foto nosaukums</source>
+                <target>Название фото</target>
+            </trans-unit>
+            <trans-unit id="444">
+                <source>Termiņš</source>
+                <target>Срок подачи</target>
+            </trans-unit>
+            <trans-unit id="445">
+                <source>Nedēļa</source>
+                <target>Неделя</target>
+            </trans-unit>
+            <trans-unit id="446">
+                <source>2 nedēļas</source>
+                <target>2 недели</target>
+            </trans-unit>
+            <trans-unit id="447">
+                <source>Mēnesis</source>
+                <target>Месяц</target>
+            </trans-unit>
+            <trans-unit id="448">
+                <source>3 mēneši</source>
+                <target>3 месяца</target>
+            </trans-unit>
+            <trans-unit id="449">
+                <source>Vai tiešām vēlaties noņemt šo reklāmu</source>
+                <target>Вы действительно хотите снять это объявление</target>
+            </trans-unit>
+            <trans-unit id="450">
+                <source><![CDATA[<strong>Kļūda!</strong> Aizpildiet visus laukus, kas atzīmēti ar *.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Заполните все поля, обозначенные символом *.]]></target>
+            </trans-unit>
+            <trans-unit id="451">
+                <source>Lai pievienotu reklāmu saviem favorītiem, jums jāievada jūsu personiskais kabinets</source>
+                <target>Для добавления объявления в избранные необходимо войти в личный кабинет</target>
+            </trans-unit>
+            <trans-unit id="452">
+                <source>Reklāma ir pievienota favorītiem</source>
+                <target>Объявление добавлено в избранные</target>
+            </trans-unit>
+            <trans-unit id="453">
+                <source><![CDATA[<strong>Kļūda!</strong> Pilnībā aizpildiet savu profilu <a href="/%locale%/account/settings"> personīgā konta iestatījumos</a>.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Заполните свой профиль полностью в <a href="/%locale%/account/settings">настройках личного кабинета</a>.]]></target>
+            </trans-unit>
+            <trans-unit id="454">
+                <source>Reklāma</source>
+                <target>Объявление</target>
+            </trans-unit>
+            <trans-unit id="455">
+                <source><![CDATA[<div class='review-ocenka select review-ocenka0'></div><div>Neitrāls</div>]]></source>
+                <target><![CDATA[<div class='review-ocenka select review-ocenka0'></div><div>Нейтрально</div>]]></target>
+            </trans-unit>
+            <trans-unit id="456">
+                <source><![CDATA[<div class='review-ocenka select review-ocenka1'></div><div>Pozitīvs</div>]]></source>
+                <target><![CDATA[<div class='review-ocenka select review-ocenka1'></div><div>Положительно</div>]]></target>
+            </trans-unit>
+            <trans-unit id="457">
+                <source><![CDATA[<div class='review-ocenka select review-ocenka-1'></div><div>Negatīvs</div>]]></source>
+                <target><![CDATA[<div class='review-ocenka select review-ocenka-1'></div><div>Отрицательно</div>]]></target>
+            </trans-unit>
+            <trans-unit id="458">
+                <source>Sludinājuma novērtējums:</source>
+                <target>Оценка объявления:</target>
+            </trans-unit>
+            <trans-unit id="459">
+                <source>Pozitīvs</source>
+                <target>Положительная</target>
+            </trans-unit>
+            <trans-unit id="460">
+                <source>Negatīvs</source>
+                <target>Отрицательная</target>
+            </trans-unit>
+            <trans-unit id="461">
+                <source>Lietotāja vērtējums:</source>
+                <target>Оценка пользователя:</target>
+            </trans-unit>
+            <trans-unit id="462">
+                <source>Lasīt</source>
+                <target>Прочитать</target>
+            </trans-unit>
+            <trans-unit id="463">
+                <source>ne vairāk kā 3000 simboli</source>
+                <target>не более 3000 символов</target>
+            </trans-unit>
+            <trans-unit id="464">
+                <source>Aizpildiet obligātos laukus. Tie ir norādīti ar simbolu *</source>
+                <target>Заполните обязательные поля. Они обозначены символом *</target>
+            </trans-unit>
+            <trans-unit id="465">
+                <source>Apraksts nedrīkst pārsniegt 3000 rakstzīmes</source>
+                <target>Описание не должно превышать 3000 символов</target>
+            </trans-unit>
+            <trans-unit id="466">
+                <source><![CDATA[<strong>Kļūda!</strong> Apraksts nedrīkst pārsniegt 3000 rakstzīmes.]]></source>
+                <target><![CDATA[<strong>Ошибка!</strong> Описание не должно превышать 3000 символов.]]></target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

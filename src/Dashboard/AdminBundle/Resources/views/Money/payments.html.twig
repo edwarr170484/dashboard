@@ -1,0 +1,29 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Способы оплаты{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Способы оплаты</li>
+    </ol>
+    <h1 class="page-header">Способы оплаты <small>Насройка способов оплаты услуг сайта</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

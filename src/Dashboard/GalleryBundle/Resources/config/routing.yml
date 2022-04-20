@@ -1,0 +1,9 @@
+dashboard_gallery_admin_index:
+    path:     /admin/galleries
+    defaults: { _controller: DashboardGalleryBundle:Gallery:gallery }
+dashboard_gallery_admin_edit:
+    path:     /admin/gallery/edit/{galleryId}
+    defaults: { _controller: DashboardGalleryBundle:Gallery:edit, galleryId: 0 }
+dashboard_gallery_admin_delete:
+    path:     /admin/gallery/delete/{galleryId}
+    defaults: { _controller: DashboardGalleryBundle:Gallery:delete, galleryId: 0 }

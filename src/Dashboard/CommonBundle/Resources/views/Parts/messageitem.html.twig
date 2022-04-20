@@ -1,0 +1,69 @@
+{% for message in messages %}
+    <div class="col-lg-6 col-md-6 message-item">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                {% if message.userFrom %}
+                    {% if locale.isDefault %}
+                        <a href="{{ path('profile', {'userId' : message.userFrom.id}) }}">
+                    {% else %}
+                        <a href="{{ path('profileLocale', {'_locale' : locale.code,'userId' : message.userFrom.id}) }}">
+                    {% endif %}
+                        {% if message.userFrom.userinfo.avatar %}
+                            <img class="img-circle" src="{{ asset('bundles/images/users/avatars/' ~ message.userFrom.userinfo.avatar) }}" alt="" title="" width="100px" height="100px"/>
+                        {% elseif message.userFrom.userinfo.sex %}
+                            <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ message.userFrom.userinfo.sex ~ '.png') }}" alt="" title="" />
+                        {% else %}
+                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                        {% endif %}  
+                    </a>
+                {% else %}
+                    <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                {% endif %}
+            </div>
+            <div class="col-lg-9 col-md-9 message-info">
+                {% if message.userFrom %}
+                    <div class="message-from-title">
+                        {% if locale.isDefault %}
+                            <a href="{{ path('profile', {'userId' : message.userFrom.id}) }}">
+                        {% else %}
+                            <a href="{{ path('profileLocale', {'_locale' : locale.code,'userId' : message.userFrom.id}) }}">
+                        {% endif %}
+                            {{message.userFrom.userinfo.firstname}} {{message.userFrom.userinfo.lastname}}
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="message-from-title">
+                        {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                    </div>
+                {% endif %}
+                {% if message.product %}
+                    <div class="message-product-title">
+                        {% if locale.isDefault %}
+                            <a href="{{ path('product', {'productId' : message.product.id,'productName' : message.product.translit}) }}">{{ message.product.name }}</a>
+                        {% else %}
+                            <a href="{{ path('productLocale', {'_locale' : locale.code,'productId' : message.product.id,'productName' : message.product.translit}) }}">{{ message.product.name }}</a>
+                        {% endif %}    
+                    </div>
+                {% else %}
+                    <div class="message-product-title">{{ message.subject }}</div>
+                {% endif %}
+                <div class="message-preview">
+                    {{ message.message | raw}}
+                    {% if message.image %}
+                        <img src="/bundles/images/messages/{{message.image}}" alt="" title="" width="100%" />
+                    {% endif %}
+                </div>
+                {% if message.conversation %}
+                    {% if locale.isDefault %}
+                        <a class="message-button-answer" href="{{ path('account_message_edit',{'conversationId' : message.conversation.id}) }}">
+                            {% trans %}atbilde{% endtrans %}</a>
+                    {% else %}
+                        <a class="message-button-answer" href="{{ path('account_message_editLocale',{'_locale' : locale.code, 'conversationId' : message.conversation.id}) }}">
+                            {% trans %}atbilde{% endtrans %}</a>
+                    {% endif %}    
+                {% endif %}
+                <span class="message-datetime">{% trans %}nosūtīts{% endtrans %}<br/>{{ message.sentDate | date("d.m.Y")}}</span>
+            </div>
+        </div>
+    </div>
+{% endfor %}

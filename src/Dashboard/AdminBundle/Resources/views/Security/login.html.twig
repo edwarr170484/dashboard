@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8" />
+	<title>Вход в панель администратора</title>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="" name="description" />
+	<meta content="" name="author" />
+	
+	<!-- ================== BEGIN BASE CSS STYLE ================== -->
+	<link href="http://fonts.googleapis.com/css-family=Open+Sans-300,400,600,700.css" rel="stylesheet">
+	
+        <link href="{{ asset('bundles/Admin/assets/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css') }}"  rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/css/animate.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/css/style.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/css/style-responsive.min.css') }}" rel="stylesheet" />
+	<link href="{{ asset('bundles/Admin/assets/css/theme/default.css') }}" rel="stylesheet" id="theme" />
+	<!-- ================== END BASE CSS STYLE ================== -->
+</head>
+<body>
+<script>
+            
+            var loginCaptcha;
+            
+            var onloadCallback = function() {
+              loginCaptcha = grecaptcha.render('loginCaptcha', {
+                'sitekey' : '6Lc6wCkTAAAAAHoOUvGPxIsIVZ67R09ZYGhmILND'
+              });
+            };
+
+</script>
+	<!-- begin #page-loader -->
+	<div id="page-loader" class="fade in"><span class="spinner"></span></div>
+	<!-- end #page-loader -->
+	
+	<div class="login-cover">
+	    <div class="login-cover-image"><img src="{{ asset('bundles/Admin/assets/img/login-bg/bg-2.jpg') }}" alt="" /></div>
+	    <div class="login-cover-bg"></div>
+	</div>
+	<!-- begin #page-container -->
+	<div id="page-container" class="fade">
+	    <!-- begin login -->
+        <div class="login login-v2" data-pageload-addclass="animated flipInX">
+            <!-- begin brand -->
+            <div class="login-header">
+                <div class="brand">
+                    <img src="{{ asset('bundles/Default/img/logotype.png') }}" alt="" />
+                </div>
+            </div>
+            <!-- end brand -->
+            <div class="login-content">
+                <form action="{{path('admin_login')}}" method="POST" class="margin-bottom-0">
+                    {% if error %}
+                        <div class="form-group m-b-20">
+                                <div class="alert alert-danger">
+                                    <button class="close-alert" data-dismiss="alert" type="button">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    {{ error.message | replace({"Bad credentials." : "Неверный логин или пароль"}) }}
+                                </div>
+                        </div>
+                    {% endif %}
+                    <div class="form-group m-b-20">
+                        <input type="text" class="form-control input-lg" placeholder="Email Address" name="_username" value="{{last_username}}" required />
+                    </div>
+                    <div class="form-group m-b-20">
+                        <input type="password" class="form-control input-lg" placeholder="Password" name="_password" required />
+                    </div>
+                    <div class="checkbox m-b-20">
+                        <label>
+                            <input type="checkbox" id="remember_me" name="_remember_me" checked="checked"> Запомнить меня
+                        </label>
+                    </div>
+                    {% if app.session.get('loginerror') %}
+                        <div class="form-group m-b-20"><div class="g-recaptcha" id="loginCaptcha"></div></div>
+                    {% endif %}
+                    <div class="login-buttons">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                        <button type="submit" class="btn btn-success btn-block btn-lg">Войти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end login -->
+	</div>
+	<!-- end page container -->
+	
+	<!-- ================== BEGIN BASE JS ================== -->
+	<script src="{{ asset('bundles/Admin/assets/plugins/jquery/jquery-1.9.1.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/jquery/jquery-migrate-1.1.0.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/jquery-ui/ui/minified/jquery-ui.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+	<!--[if lt IE 9]>
+		<script src="{{ asset('bundles/Admin/assets/crossbrowserjs/html5shiv.js') }}"></script>
+		<script src="{{ asset('bundles/Admin/assets/crossbrowserjs/respond.min.js') }}"></script>
+		<script src="{{ asset('bundles/Admin/assets/crossbrowserjs/excanvas.min.js') }}"></script>
+	<![endif]-->
+	<script src="{{ asset('bundles/Admin/assets/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/plugins/jquery-cookie/jquery.cookie.js') }}"></script>
+	<!-- ================== END BASE JS ================== -->
+	
+	<!-- ================== BEGIN PAGE LEVEL JS ================== -->
+	<script src="{{ asset('bundles/Admin/assets/js/login-v2.demo.min.js') }}"></script>
+	<script src="{{ asset('bundles/Admin/assets/js/apps.min.js') }}"></script>
+	<!-- ================== END PAGE LEVEL JS ================== -->
+        <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit'></script>
+	<script>
+		$(document).ready(function() {
+			App.init();
+			LoginV2.init();
+		});
+	</script>
+</body>
+</html>

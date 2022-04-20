@@ -1,0 +1,110 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Pievienot naudu savam seifam{% endtrans%}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans%}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans%}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-4 col-md-4">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-8 col-md-8">
+            <div class="account-purchase-menu">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            {% if  app.request.locale == 'lv' %}
+                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% else %}
+                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block">
+                        <div class="account-block-header"><h1>{% trans %}Pievienot naudu savam seifam{% endtrans%}</h1></div>
+                       {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block account-block  account-block">
+                            <div class="meet-friends-block userprofile-maindata">
+                                <div class="service-block-form account-settings-forms">
+                                   <!-- <div class="account-block-content-notfound">
+                                        В настоящее время возможность пополнения кошелька отключена в связи с проведением технических работ на сервере. </br>
+                                        Мы постараемся как можно быстрее решить все проблемы и вернуть услугу. </br>
+                                        Для того, чтобы задать вопрос администрации сайта gribupardot.sunweb.by, можете воспользоваться <a href="{{ path('contact') }}">формой обратной связи</a>.
+                                    </div>-->
+                                    <form class="form-horizontal" method="post" name="friend" onsubmit="generatePaymentForm('{{ locale.code }}');return false;">
+                                        <div class="form-group">
+                                            <label class="col-md-12 "><label class="required" for="friend_email">{% trans %}Ievadiet summu{% endtrans %}: *</label></label>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" required="required" name="paymentAmount" id="friend_email">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-12 "><label class="required" for="friend_email">{% trans %}Izvēlieties maksājuma veidu{% endtrans %}: *</label></label>
+                                            <div class="col-md-6">
+                                                <div class="position-relative">
+                                                    <div class="div-select">Liqpay</div>
+                                                    <div class="div-select-options ">    
+                                                        <div data-selected="1" data-value="Liqpay" class="select-option">Liqpay</div>
+                                                    </div>
+                                                    <select class="form-control hidden-input" required="required" name="paymentMethod">                               
+                                                        <option selected="selected" value="Liqpay">Liqpay</option>                
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="send-tab-form" id="payment_form_save" type="submit">{% trans %}PILNĪGA{% endtrans %}</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="load-payment-form"><i class="fa fa-spinner fa-pulse fa-fw"></i> {% trans %}Es ģenerē maksājuma veidlapu{% endtrans %}...</div>
+                            </div>
+                        </div>
+                        <div class="account-selected-advert-block account-block" id="payment-form"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}
+

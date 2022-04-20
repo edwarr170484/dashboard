@@ -1,0 +1,622 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Lietotāja konts{% endtrans %}{% endblock %}
+
+{% form_theme reviewAnswerForm _self %}
+
+{%- block choice_widget -%}
+<div class="div-select-options">
+    {%- set options = choices -%}
+    {% for group_label, choice in options %}
+    <div class="select-option" data-value="{{ choice.value }}" {% if choice is selectedchoice(value) %}data-selected="1"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</div>
+    {% endfor %}
+</div>
+<select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? placeholder|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {% for group_label, choice in options %}
+            {%- if choice is iterable -%}
+                <optgroup label="{{ choice_translation_domain is same as(false) ? group_label : group_label|trans({}, choice_translation_domain) }}">
+                    {% set options = choice %}
+                    {{- block('choice_widget_options') -}}
+                </optgroup>
+            {%- else -%}
+                {% set attr = choice.attr %}
+                <option value="{{ choice.value }}" {{ block('attributes') }}{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice_translation_domain is same as(false) ? choice.label : choice.label|trans({}, choice_translation_domain) }}</option>
+            {%- endif -%}
+        {% endfor %}
+</select>
+{%- endblock choice_widget -%}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_review')}}">{% trans %}Atsauksmes{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_reviewLocale',{'_locale' : app.request.locale})}}">{% trans %}Atsauksmes{% endtrans %}</a></li>
+                    {% endif %}
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-5 col-md-5">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-7 col-md-7">
+            <div class="account-purchase-menu">
+                <div class="row">
+                    <div class="col-lg-9 col-md-9">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            {% if  app.request.locale == 'lv' %}
+                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% else %}
+                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Atsauksmes{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                            {% if myreviews or targetReviews%}
+                            <div class="review-menu">
+                                <ul class="list-unstyled list-inline">
+                                    <li>{% trans %}Izvēlieties{% endtrans %}</li>
+                                    <li class="review-menu-action active">
+                                        <a href="javascript:void(0)" onclick="selectAllReviews($(this))">{% trans %}viss{% endtrans %}({{ plusReviews + minusReviews + neitralReviews }})</a>
+                                    </li>
+                                    <li class="review-menu-action">
+                                        <a href="javascript:void(0)" onclick="selectReviews(1, $(this))">{% trans %}pozitīvs{% endtrans %}({{ plusReviews }})</a>
+                                    </li>
+                                    <li class="review-menu-action">
+                                        <a href="javascript:void(0)" onclick="selectReviews(-1, $(this))">{% trans %}negatīvs{% endtrans %}({{ minusReviews }})</a>
+                                    </li>
+                                    <li class="review-menu-action">
+                                        <a href="javascript:void(0)" onclick="selectReviews(0, $(this))">{% trans %}neitrāla{% endtrans %}({{ neitralReviews }})</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <ul class="nav nav-tabs review-nav-tabs" role="tablist">
+                                  <li role="presentation" class="active"><a href="#my" aria-controls="home" role="tab" data-toggle="tab">{% trans %}Mana atsauksme{% endtrans %}</a></li>
+                                  <li role="presentation"><a href="#onme" aria-controls="profile" role="tab" data-toggle="tab">{% trans %}Atsauksmes man{% endtrans %}</a></li>
+                                </ul>
+                                <!-- Tab panes -->
+                                {% if app.request.locale == 'lv' %}
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active reviews-tab-pane" id="my">
+                                        <div class="account-reviews-block">
+                                            {% if myreviews %}
+                                                {% for myreview in myreviews %}
+                                                    <div class="account-review-block review-status{{ myreview.status }}">
+                                                        <div class="row">
+                                                            <div class="col-lg-2 col-md-2 review-user-rating">
+                                                                <div class="review-rating-cover">
+                                                                    <div class="review-ocenka review-ocenka{{ myreview.status }}"></div>
+                                                                    {% if myreview.targetUser %}
+                                                                            <div class="review-user-avatar">
+                                                                                <a href="{{ path('profile', {'userId' : myreview.targetUser.id}) }}">
+                                                                                    {% if myreview.targetUser.userinfo.avatar %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/' ~ myreview.targetUser.userinfo.avatar) }}" alt="" title="" />
+                                                                                    {% elseif myreview.targetUser.userinfo.sex %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ myreview.targetUser.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                    {% else %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                    {% endif %}
+                                                                                </a>
+                                                                                <!--<div class="user-online"></div>-->
+                                                                            </div>    
+                                                                    {% else %}
+                                                                        <div class="review-user-avatar"> 
+                                                                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" /> 
+                                                                        </div>   
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-9">
+                                                                <div class="row">
+                                                                    {% if myreview.targetUser %}
+                                                                        <div class="col-lg-6">
+                                                                            <a href="{{ path('profile', {'userId' : myreview.targetUser.id}) }}"><div class="review-from-name">{{ myreview.targetUser.userinfo.firstname }} {{ myreview.targetUser.userinfo.lastname }}</div></a>
+                                                                            <div class="review-from-rating">{% trans %}Vērtējums{% endtrans %}: <span>{{ myreview.targetUser.userinfo.rating }} %</span></div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if myreview.product %}
+                                                                        <div class="col-lg-6">
+                                                                            <div class="review-product"><a href="{{ path('product', {'productId' : myreview.product.id, 'productName' : myreview.product.translit }) }}">{{ myreview.product.name }}</a></div>
+                                                                            <div class="review-dateadded"><div>{{ myreview.dateAdded | date("d.m.Y в H:i") }}</div></div>        
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Reklāma ir noņemta{% endtrans %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-md-12 review-message">
+                                                                        {{ myreview.reviewText }}
+                                                                    </div>
+                                                                    {% if myreview.answer %}
+                                                                        <div class="col-lg-12 col-md-12 review-answer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-4 review-answer-status review-answer-status{{ myreview.answer.status }}">{% trans %}Atbildes novērtējums{% endtrans %}: </div>
+                                                                                <div class="col-md-8 review-answer-text">{{ myreview.answer.reviewText }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if myreview.answerTo %}
+                                                                        <div class="col-lg-12 col-md-12 review-answer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12"><strong>{% trans %}Šī ir atbilde uz atsauksmi{% endtrans %}:</strong>  {{ myreview.answerTo.reviewText }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-1 col-md-1">
+                                                                <a class="message-delete" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties izdzēst atsauksmi{% endtrans %}?'))return false;" href="{{ path('account_review', {'reviewId' : myreview.id}) }}"></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>    
+                                                {% endfor%}
+                                                {% if myreviews | length > 1220 %}
+                                                    <div class="row review-block-bottom">
+                                                       <div class="col-lg-4 show-number-filter">
+                                                           <div class="row">
+                                                               <div class="col-lg-7 show-number-label">{% trans %}Parādīts ar{% endtrans %}:</div>
+                                                               <div class="col-lg-5">
+                                                                   <div class="div-select show-number">20</div>
+                                                                   <div class="div-select-options show-number" data-select="birthdaymonth">
+                                                                        <div class="select-option" data-value="20">20</div>
+                                                                        <div class="select-option" data-value="40">40</div>
+                                                                        <div class="select-option" data-value="60">60</div>
+                                                                        <div class="select-option" data-value="80">80</div>
+                                                                   </div>
+                                                                   <select id="birthdaymonth" class="form-control hidden-input" placeholder="{% trans %}Mēnesis{% endtrans %}" name="">
+                                                                        <option value="20">20</option>
+                                                                        <option value="40">40</option>
+                                                                        <option value="60">60</option>
+                                                                        <option value="80">80</option>
+                                                                   </select>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-lg-8 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">4</a></li>
+                                                                <li><a href="">5</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>    
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane reviews-tab-pane" id="onme">
+                                        <div class="account-reviews-block">
+                                        {% if targetReviews %}
+                                            {% for targetReview in targetReviews %}
+                                                    <div class="account-review-block review-status{{ targetReview.status }}">
+                                                        <div class="row">
+                                                            <div class="col-lg-2 col-md-2 review-user-rating">
+                                                                <div class="review-rating-cover">
+                                                                    <div class="review-ocenka review-ocenka{{ targetReview.status }}"></div>                                                                   
+                                                                    {% if targetReview.user %}
+                                                                            <div class="review-user-avatar">
+                                                                                <a href="{{ path('profile', {'userId' : targetReview.user.id}) }}">
+                                                                                    {% if targetReview.user.userinfo.avatar %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/' ~ targetReview.user.userinfo.avatar) }}" alt="" title="" />
+                                                                                    {% elseif targetReview.user.userinfo.sex %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ targetReview.user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                    {% else %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                    {% endif %}
+                                                                                    <!--<div class="user-online"></div>-->
+                                                                                </a>
+                                                                            </div>    
+                                                                    {% else %}
+                                                                        <div class="review-user-avatar"> 
+                                                                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" /> 
+                                                                        </div>   
+                                                                    {% endif %}
+                                                                </div>
+                                                                {% if not targetReview.answer %}
+                                                                    {% if targetReview.product %}
+                                                                        <div><a href="" class="reviewModalOpen" data-target="#reviewModal" data-toggle="modal" data-product="{{ targetReview.product.id }}" data-review="{{ targetReview.id }}">{% trans %}atbilde{% endtrans %}</a></div>
+                                                                    {% else %}
+                                                                        <div><a href="" class="reviewModalOpen" data-target="#reviewModal" data-toggle="modal" data-product="0" data-review="{{ targetReview.id }}">{% trans %}atbilde{% endtrans %}</a></div>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-lg-10 col-md-10">
+                                                                <div class="row">
+                                                                    {% if targetReview.user %}
+                                                                        <div class="col-lg-6">
+                                                                            <a href="{{ path('profile', {'userId' : targetReview.user.id}) }}"><div class="review-from-name">{{ targetReview.user.userinfo.firstname }} {{ targetReview.user.userinfo.lastname }}</div></a>
+                                                                            <div class="review-from-rating">рейтинг: <span>{{ targetReview.user.userinfo.rating }} %</span></div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}.
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if targetReview.product %}
+                                                                        <div class="col-lg-6">
+                                                                            <div class="review-product"><a href="{{ path('product', {'productId' : targetReview.product.id, 'productName' : targetReview.product.translit }) }}">{{ targetReview.product.name }}</a></div>
+                                                                            <div class="review-dateadded"><div>{{ targetReview.dateAdded | date("d.m.Y в H:i") }}</div></div>        
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Reklāma ir noņemta{% endtrans %}.
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-md-12 review-message">
+                                                                        {{ targetReview.reviewText }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>     
+                                            {% endfor %}
+                                            {% if targetReviews | length > 1220 %}
+                                                    <div class="row review-block-bottom">
+                                                       <div class="col-lg-4 show-number-filter">
+                                                           <div class="row">
+                                                               <div class="col-lg-7 show-number-label">{% trans %}Parādīts ar{% endtrans %}:</div>
+                                                               <div class="col-lg-5">
+                                                                   <div class="div-select show-number">20</div>
+                                                                   <div class="div-select-options show-number" data-select="birthdaymonth">
+                                                                        <div class="select-option" data-value="20">20</div>
+                                                                        <div class="select-option" data-value="40">40</div>
+                                                                        <div class="select-option" data-value="60">60</div>
+                                                                        <div class="select-option" data-value="80">80</div>
+                                                                   </div>
+                                                                   <select id="birthdaymonth" class="form-control hidden-input" placeholder="{% trans %}Mēnesis{% endtrans %}" name="">
+                                                                        <option value="20">20</option>
+                                                                        <option value="40">40</option>
+                                                                        <option value="60">60</option>
+                                                                        <option value="80">80</option>
+                                                                   </select>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-lg-8 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">4</a></li>
+                                                                <li><a href="">5</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                        {% endif %}           
+                                        </div>      
+                                    </div>
+                                </div>
+                                {% else %}
+                                    <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active reviews-tab-pane" id="my">
+                                        <div class="account-reviews-block">
+                                            {% if myreviews %}
+                                                {% for myreview in myreviews %}
+                                                    <div class="account-review-block review-status{{ myreview.status }}">
+                                                        <div class="row">
+                                                            <div class="col-lg-2 col-md-2 review-user-rating">
+                                                                <div class="review-rating-cover">
+                                                                    <div class="review-ocenka review-ocenka{{ myreview.status }}"></div>
+                                                                    {% if myreview.targetUser %}
+                                                                            <div class="review-user-avatar">
+                                                                                <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : myreview.targetUser.id}) }}">
+                                                                                    {% if myreview.targetUser.userinfo.avatar %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/' ~ myreview.targetUser.userinfo.avatar) }}" alt="" title="" />
+                                                                                    {% elseif myreview.targetUser.userinfo.sex %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ myreview.targetUser.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                    {% else %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                    {% endif %}
+                                                                                </a>
+                                                                                <!--<div class="user-online"></div>-->
+                                                                            </div>    
+                                                                    {% else %}
+                                                                        <div class="review-user-avatar"> 
+                                                                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" /> 
+                                                                        </div>   
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9 col-md-9">
+                                                                <div class="row">
+                                                                    {% if myreview.targetUser %}
+                                                                        <div class="col-lg-6">
+                                                                            <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : myreview.targetUser.id}) }}"><div class="review-from-name">{{ myreview.targetUser.userinfo.firstname }} {{ myreview.targetUser.userinfo.lastname }}</div></a>
+                                                                            <div class="review-from-rating">{% trans %}Vērtējums{% endtrans %}: <span>{{ myreview.targetUser.userinfo.rating }} %</span></div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if myreview.product %}
+                                                                        <div class="col-lg-6">
+                                                                            <div class="review-product"><a href="{{ path('productLocale', {'_locale' : app.request.locale,'productId' : myreview.product.id, 'productName' : myreview.product.translit }) }}">{{ myreview.product.name }}</a></div>
+                                                                            <div class="review-dateadded"><div>{{ myreview.dateAdded | date("d.m.Y в H:i") }}</div></div>        
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Reklāma ir noņemta{% endtrans %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-md-12 review-message">
+                                                                        {{ myreview.reviewText }}
+                                                                    </div>
+                                                                    {% if myreview.answer %}
+                                                                        <div class="col-lg-12 col-md-12 review-answer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-4 review-answer-status review-answer-status{{ myreview.answer.status }}">{% trans %}Atbildes novērtējums{% endtrans %}: </div>
+                                                                                <div class="col-md-8 review-answer-text">{{ myreview.answer.reviewText }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if myreview.answerTo %}
+                                                                        <div class="col-lg-12 col-md-12 review-answer">
+                                                                            <div class="row">
+                                                                                <div class="col-md-12"><strong>{% trans %}Šī ir atbilde uz atsauksmi{% endtrans %}:</strong>  {{ myreview.answerTo.reviewText }}</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-1 col-md-1">
+                                                                <a class="message-delete" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties izdzēst atsauksmi{% endtrans %}?'))return false;" href="{{ path('account_reviewLocale', {'_locale' : app.request.locale,'reviewId' : myreview.id}) }}"></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>    
+                                                {% endfor%}
+                                                {% if myreviews | length > 1220 %}
+                                                    <div class="row review-block-bottom">
+                                                       <div class="col-lg-4 show-number-filter">
+                                                           <div class="row">
+                                                               <div class="col-lg-7 show-number-label">{% trans %}Parādīts ar{% endtrans %}:</div>
+                                                               <div class="col-lg-5">
+                                                                   <div class="div-select show-number">20</div>
+                                                                   <div class="div-select-options show-number" data-select="birthdaymonth">
+                                                                        <div class="select-option" data-value="20">20</div>
+                                                                        <div class="select-option" data-value="40">40</div>
+                                                                        <div class="select-option" data-value="60">60</div>
+                                                                        <div class="select-option" data-value="80">80</div>
+                                                                   </div>
+                                                                   <select id="birthdaymonth" class="form-control hidden-input" placeholder="{% trans %}Mēnesis{% endtrans %}" name="">
+                                                                        <option value="20">20</option>
+                                                                        <option value="40">40</option>
+                                                                        <option value="60">60</option>
+                                                                        <option value="80">80</option>
+                                                                   </select>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-lg-8 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">4</a></li>
+                                                                <li><a href="">5</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>    
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane reviews-tab-pane" id="onme">
+                                        <div class="account-reviews-block">
+                                        {% if targetReviews %}
+                                            {% for targetReview in targetReviews %}
+                                                    <div class="account-review-block review-status{{ targetReview.status }}">
+                                                        <div class="row">
+                                                            <div class="col-lg-2 col-md-2 review-user-rating">
+                                                                <div class="review-rating-cover">
+                                                                    <div class="review-ocenka review-ocenka{{ targetReview.status }}"></div>                                                                   
+                                                                    {% if targetReview.user %}
+                                                                            <div class="review-user-avatar">
+                                                                                <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : targetReview.user.id}) }}">
+                                                                                    {% if targetReview.user.userinfo.avatar %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/' ~ targetReview.user.userinfo.avatar) }}" alt="" title="" />
+                                                                                    {% elseif targetReview.user.userinfo.sex %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ targetReview.user.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                    {% else %}
+                                                                                        <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                    {% endif %}
+                                                                                    <!--<div class="user-online"></div>-->
+                                                                                </a>
+                                                                            </div>    
+                                                                    {% else %}
+                                                                        <div class="review-user-avatar"> 
+                                                                            <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" /> 
+                                                                        </div>   
+                                                                    {% endif %}
+                                                                </div>
+                                                                {% if not targetReview.answer %}
+                                                                    {% if targetReview.product %}
+                                                                        <div><a href="" class="reviewModalOpen" data-target="#reviewModal" data-toggle="modal" data-product="{{ targetReview.product.id }}" data-review="{{ targetReview.id }}">{% trans %}atbilde{% endtrans %}</a></div>
+                                                                    {% else %}
+                                                                        <div><a href="" class="reviewModalOpen" data-target="#reviewModal" data-toggle="modal" data-product="0" data-review="{{ targetReview.id }}">{% trans %}atbilde{% endtrans %}</a></div>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col-lg-10 col-md-10">
+                                                                <div class="row">
+                                                                    {% if targetReview.user %}
+                                                                        <div class="col-lg-6">
+                                                                            <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : targetReview.user.id}) }}"><div class="review-from-name">{{ targetReview.user.userinfo.firstname }} {{ targetReview.user.userinfo.lastname }}</div></a>
+                                                                            <div class="review-from-rating">рейтинг: <span>{{ targetReview.user.userinfo.rating }} %</span></div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}.
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if targetReview.product %}
+                                                                        <div class="col-lg-6">
+                                                                            <div class="review-product"><a href="{{ path('productLocale', {'_locale' : app.request.locale,'productId' : targetReview.product.id, 'productName' : targetReview.product.translit }) }}">{{ targetReview.product.name }}</a></div>
+                                                                            <div class="review-dateadded"><div>{{ targetReview.dateAdded | date("d.m.Y в H:i") }}</div></div>        
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="col-lg-6">
+                                                                            {% trans %}Reklāma ir noņemta{% endtrans %}.
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 col-md-12 review-message">
+                                                                        {{ targetReview.reviewText }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>     
+                                            {% endfor %}
+                                            {% if targetReviews | length > 1220 %}
+                                                    <div class="row review-block-bottom">
+                                                       <div class="col-lg-4 show-number-filter">
+                                                           <div class="row">
+                                                               <div class="col-lg-7 show-number-label">{% trans %}Parādīts ar{% endtrans %}:</div>
+                                                               <div class="col-lg-5">
+                                                                   <div class="div-select show-number">20</div>
+                                                                   <div class="div-select-options show-number" data-select="birthdaymonth">
+                                                                        <div class="select-option" data-value="20">20</div>
+                                                                        <div class="select-option" data-value="40">40</div>
+                                                                        <div class="select-option" data-value="60">60</div>
+                                                                        <div class="select-option" data-value="80">80</div>
+                                                                   </div>
+                                                                   <select id="birthdaymonth" class="form-control hidden-input" placeholder="{% trans %}Mēnesis{% endtrans %}" name="">
+                                                                        <option value="20">20</option>
+                                                                        <option value="40">40</option>
+                                                                        <option value="60">60</option>
+                                                                        <option value="80">80</option>
+                                                                   </select>
+                                                               </div>
+                                                           </div>
+                                                       </div>
+                                                       <div class="col-lg-8 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">4</a></li>
+                                                                <li><a href="">5</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                        {% endif %}           
+                                        </div>      
+                                    </div>
+                                </div>
+                                {% endif %}
+                              </div>
+                              {% else %}
+                                  <div class="account-block-content-notfound">{% trans %}Neviens komentārs vēl nav pievienots{% endtrans %}</div>
+                              {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="regionModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {{ form_start(reviewAnswerForm, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    <h4 class="modal-title" id="regionModalLabel">{% trans %}Atbildiet uz lietotāju atsauksmēm{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(reviewAnswerForm.status) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                            <div class="position-relative">
+                                <div class="div-select">{% trans %}Neitrāls{% endtrans %}</div>
+                                {{ form_widget(reviewAnswerForm.status)}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 col-md-4 control-label">{{ form_label(reviewAnswerForm.reviewText) }}</label>
+                        <div class="col-lg-8 col-md-8">
+                            {{ form_widget(reviewAnswerForm.reviewText) }}
+                        </div>
+                    </div> 
+                </div>
+                <div class="modal-footer">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8">
+                        {{ form_widget(reviewAnswerForm.save,{'type' : 'submit'}) }}
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                {{ form_end(reviewAnswerForm) }}
+            </div>
+        </div>
+</div>
+{% endblock%}

@@ -1,0 +1,23 @@
+{% for item in items %}
+    <div class="panel panel-inverse overflow-hidden">
+        <div class="panel-heading">
+            {% if item.children | length > 0 %}
+                <h3 class="panel-title">
+                    <a href="#collapse{{ item.id }}" class="accordion-toggle accordion-toggle-styled collapsed" aria-expanded="false">
+                        <i class="fa fa-plus-circle pull-right"></i> 
+                        {{ item.title }}
+                    </a>
+                </h3>
+            {% else %}
+                <h3 class="panel-title">
+                    <input class="productCategoryChange" value="{{ item.id }}" type="radio" name="productCategory" {% if category == item.id %}checked="checked"{% endif %}/> {{ item.title }}
+                </h3>
+            {% endif%}
+        </div>
+        <div class="panel-collapse" id="collapse{{ item.id }}" aria-expanded="false" style="display:none">
+            <div class="panel-body">
+               {{ include ('DashboardAdminBundle:Product:productcategoryitem.html.twig', {items : item.children, category : item.id}) }}
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,6 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Уважаемый, {{ product.user.userinfo.firstname }} {{ product.user.userinfo.lastname }}!</h3>
+<p>
+    Ваше объявление <strong><a href="{{ absolute_url(path('editproduct',{'productId' : product.id})) }}">{{ product.name }}</a></strong>  на портале gribupardot.sunweb.by не прошло модерацию.
+    Причина: {{ reason }}.
+</p>

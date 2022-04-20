@@ -1,0 +1,7 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Вам пришло новое сообщение!</h3>
+<p>
+    Пользователь <strong>{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</strong> оставил для Вас новое сообщение на сайте gribupardot.sunweb.by, 
+    которое Вы можете прочитать в своем <a href="{{ absolute_url(path('account_messages')) }}">личном кабинете</a>. 
+</p>
+

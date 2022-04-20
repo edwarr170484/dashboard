@@ -1,0 +1,12 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: localhost
+    database_port: 3306
+    database_name: dashboard
+    database_user: root
+    database_password: 
+    mailer_transport: smtp
+    mailer_host: mail.gribupardot.sunweb.by
+    mailer_user: admin@gribupardot.sunweb.by
+    mailer_password: adsc89o9o2qwdacs
+    secret: fb0c2ff0e3ab5015366ac2624854a800

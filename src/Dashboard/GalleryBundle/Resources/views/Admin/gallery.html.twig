@@ -1,0 +1,74 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Галереи{% endtrans %}{% endblock %}
+
+{% block body %} 
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Галереи</li>
+    </ol>
+    <h1 class="page-header">Галереи <small>Работа с галереями сайта</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('dashboard_gallery_admin_edit') }}">Добавить галерею</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Галереи</h4>
+                </div>
+                <div class="panel-body">
+                    {%if galleries %}
+                        <form action="{{ path('dashboard_gallery_admin_index')}}" method="POST" name="deleteSelected" id="deleteSelected">
+                            <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>{% trans %}Название{% endtrans %}</th>
+                                                <th>{% trans %}Изображений{% endtrans %}</th>
+                                                <th>{% trans %}Порядок{% endtrans %}</th>
+                                                <th>{% trans %}Действия{% endtrans %}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                                {% for gallery in galleries %}
+                                                    <tr>
+                                                        <td>{{ gallery.name }}</td>
+                                                        <td>{{ gallery.items | length }}</td>
+                                                        <td>{{ gallery.sort }}</td>
+                                                        <td>
+                                                            <a class="btn btn-success" href="{{ path('dashboard_gallery_admin_edit',{galleryId: gallery.id}) }}">
+                                                                <i class="fa fa-pencil" title="Редактировать галерею"></i>
+                                                            </a>
+                                                            <a class="btn btn-danger" href="{{ path('dashboard_gallery_admin_delete',{galleryId: gallery.id}) }}" 
+                                                                                      onclick="if(!confirm('Вы уверены, что хотите удалить галерею?'))return false;">
+                                                                <i class="fa fa-times" title="Удалить галерею"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+
+                                        </tbody>
+                            </table>
+                        </form>
+                    {% else %}
+                        Галерей пока не добавлено
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>      
+{% endblock %}

@@ -1,0 +1,254 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% form_theme formMessage _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block textarea_widget -%}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+{%- endblock textarea_widget -%}
+
+{%- block button_row -%}
+    <button class="message-button-answer" type="submit">{{form_label(form)}}</button>
+{%- endblock button_row -%}
+
+{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Amati{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_messages')}}">{% trans %}Amati{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}">{% trans %}Amati{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-4 col-md-4">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-8 col-md-8">
+            <div class="account-purchase-menu">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            {% if  app.request.locale == 'lv' %}
+                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% else %}
+                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if app.request.locale == 'lv' %}
+            <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Mani sludinājumi{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content editmessage-conversation-block">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        {% if message.userFrom %}
+                                            <div class="row conversation-message-row" {% if message.userFrom.id != user.id %} style="padding-left:45px" {% endif %}>
+                                        {% else %}
+                                            <div class="row conversation-message-row">
+                                        {% endif %}
+                                            <div class="col-lg-1 col-md-1">
+                                                {% if message.userFrom %}
+                                                    <a href="{{ path('profile', {'userId' : message.userFrom.id}) }}">
+                                                        {% if message.userFrom.userinfo.avatar %}
+                                                            <img class="img-circle" width="40px" height="40px" src="{{ asset('bundles/images/users/avatars/' ~ message.userFrom.userinfo.avatar) }}" alt="" title="" />
+                                                        {% elseif message.userFrom.userinfo.sex %}
+                                                            <img class="img-circle" width="40px" height="40px" src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ message.userFrom.userinfo.sex ~ '.png') }}{{message.userFrom.userinfo.avatar}}" alt="" title="" />
+                                                        {% else %}
+                                                            <img class="img-circle" width="40px" height="40px" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                        {% endif %}
+                                                    </a>
+                                                {% else %}
+                                                    <img class="img-circle" width="40px" height="40px" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">
+                                                {% if message.userFrom  %}
+                                                    <a href="{{ path('profile', {'userId' : message.userFrom.id}) }}">
+                                                        <div class="message-from-title">
+                                                            {{ message.userFrom.userinfo.firstname}} {{ message.userFrom.userinfo.lastname}}
+                                                        </div>
+                                                    </a>
+                                                    <div class="message-message-text">
+                                                        {{ message.message | raw}}
+                                                        {% if message.product %}
+                                                            <div> <strong>{% trans %}Reklāma{% endtrans %}: </strong> <a href="{{ path('product', {'productId' : message.product.id,'productName' : message.product.translit}) }}">{{ message.product.name }}</a></div>
+                                                        {% endif %}
+                                                        {% if message.image %}
+                                                            <a href="/bundles/images/messages/{{message.image}}" data-lightbox="image-{{ message.id }}"><img src="/bundles/images/messages/{{message.image}}" alt="" title="" /></a>
+                                                        {% endif %}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="message-from-title">
+                                                        {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-lg-2 col-md-2">
+                                                <div class="message-date">
+                                                    {{ message.sentDate | date("d.m.Y")}}
+                                                </div>
+                                            </div>
+                                        </div>    
+                                    {% endfor %}
+                                {% endif %}
+                            </div>  
+                            {% if conversation.userOne and conversation.userTwo %}
+                                <div class="row send-message-form">
+                                    {{ form_start(formMessage, {'method':'POST','multipart':true}) }}
+                                        <div class="col-lg-9 col-md-9">
+                                            {{ form_widget(formMessage.message)}}
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="send-message-file">
+                                                        {{ form_widget(formMessage.image)}}
+                                                        <span>{% trans %}Pievienojiet attēlu{% endtrans %}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3">
+                                            {{ form_widget(formMessage.save,{'type' : 'submit'})}}
+                                        </div>
+                                    {{ form_end(formMessage) }}
+                                </div>
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        {% else %}
+            <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Mani sludinājumi{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content editmessage-conversation-block">
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        {% if message.userFrom %}
+                                            <div class="row conversation-message-row" {% if message.userFrom.id != user.id %} style="padding-left:45px" {% endif %}>
+                                        {% else %}
+                                            <div class="row conversation-message-row">
+                                        {% endif %}
+                                            <div class="col-lg-1 col-md-1">
+                                                {% if message.userFrom %}
+                                                    <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : message.userFrom.id}) }}">
+                                                        {% if message.userFrom.userinfo.avatar %}
+                                                            <img class="img-circle" width="40px" height="40px" src="{{ asset('bundles/images/users/avatars/' ~ message.userFrom.userinfo.avatar) }}" alt="" title="" />
+                                                        {% elseif message.userFrom.userinfo.sex %}
+                                                            <img class="img-circle" width="40px" height="40px" src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ message.userFrom.userinfo.sex ~ '.png') }}{{message.userFrom.userinfo.avatar}}" alt="" title="" />
+                                                        {% else %}
+                                                            <img class="img-circle" width="40px" height="40px" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                        {% endif %}
+                                                    </a>
+                                                {% else %}
+                                                    <img class="img-circle" width="40px" height="40px" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">
+                                                {% if message.userFrom  %}
+                                                    <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : message.userFrom.id}) }}">
+                                                        <div class="message-from-title">
+                                                            {{ message.userFrom.userinfo.firstname}} {{ message.userFrom.userinfo.lastname}}
+                                                        </div>
+                                                    </a>
+                                                    <div class="message-message-text">
+                                                        {{ message.message | raw}}
+                                                        {% if message.product %}
+                                                            <div> <strong>{% trans %}Reklāma{% endtrans %}: </strong> <a href="{{ path('productLocale', {'_locale' : app.request.locale,'productId' : message.product.id,'productName' : message.product.translit}) }}">{{ message.product.name }}</a></div>
+                                                        {% endif %}
+                                                        {% if message.image %}
+                                                            <a href="/bundles/images/messages/{{message.image}}" data-lightbox="image-{{ message.id }}"><img src="/bundles/images/messages/{{message.image}}" alt="" title="" /></a>
+                                                        {% endif %}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="message-from-title">
+                                                        {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-lg-2 col-md-2">
+                                                <div class="message-date">
+                                                    {{ message.sentDate | date("d.m.Y")}}
+                                                </div>
+                                            </div>
+                                        </div>    
+                                    {% endfor %}
+                                {% endif %}
+                            </div>  
+                            {% if conversation.userOne and conversation.userTwo %}
+                                <div class="row send-message-form">
+                                    {{ form_start(formMessage, {'method':'POST','multipart':true}) }}
+                                        <div class="col-lg-9 col-md-9">
+                                            {{ form_widget(formMessage.message)}}
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6">
+                                                    <div class="send-message-file">
+                                                        {{ form_widget(formMessage.image)}}
+                                                        <span>{% trans %}Pievienojiet attēlu{% endtrans %}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-3">
+                                            {{ form_widget(formMessage.save,{'type' : 'submit'})}}
+                                        </div>
+                                    {{ form_end(formMessage) }}
+                                </div>
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        {% endif %}
+</div>
+{% endblock%}
+

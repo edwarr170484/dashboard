@@ -1,0 +1,83 @@
+security:
+    encoders:
+        Dashboard\CommonBundle\Entity\User: 
+            algorithm: bcrypt
+        Dashboard\CommonBundle\Entity\User: 
+            algorithm: bcrypt
+                
+    role_hierarchy:
+        ROLE_ADMIN:       [ROLE_USER, ROLE_SELLER]
+        ROLE_SELLER:      ROLE_SELLER
+
+    providers:
+        admin_db_provider:
+            entity:
+                class: DashboardCommonBundle:User
+                property: username
+                
+        seller_db_provider:
+            entity:
+                class: DashboardCommonBundle:User
+                property: username
+            
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        admin:
+            pattern:      ^/admin
+            anonymous: ~
+            form_login:
+                csrf_token_generator: security.csrf.token_manager
+                provider: admin_db_provider 
+                login_path: /admin/login
+                check_path: /admin/login
+                default_target_path: /admin
+            logout:
+                path:   /admin/logout
+                target: /  
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 86400 
+                path:     /
+        main:
+            pattern:      ^/
+            anonymous: ~
+            form_login:
+                csrf_token_generator: security.csrf.token_manager
+                provider: seller_db_provider 
+                login_path: /login
+                check_path: /login
+                default_target_path: /account
+                use_referer: true
+            oauth:
+                resource_owners:
+                    vkontakte:           "/connect/check-vkontakte"
+                    facebook:            "/connect/check-facebook" 
+                login_path:        /connect
+                failure_path:      /connect
+                default_target_path: /account/settings
+                oauth_user_provider:
+                    service: my_project.oauth.user_provider
+            logout:
+                path:   /logout
+                target: /
+                invalidate_session: true
+            remember_me:
+                secret:   '%secret%'
+                lifetime: 86400 
+                path:     /
+                
+    access_control:
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/restore, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connect/check-vkontakte, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connect/check-facebook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account, roles: ROLE_SELLER }
+        
+        

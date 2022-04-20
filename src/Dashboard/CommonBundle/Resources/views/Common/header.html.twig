@@ -1,0 +1,204 @@
+<nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>  
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div id="navbar" class="navbar-collapse collapse top-collapsed-menu">
+            <div class="select-languages">
+                <div class="select-language">
+                    <div class="select-language-option-main">
+                        {% for item in locales %}
+                            {% if item.id == locale.id %}
+                                {% if item.isDefault %}
+                                    <a href="javascript:void(0)" class="locale-change">{{ item.name }}</a>
+                                {% else %}
+                                    <a href="javascript:void(0)" class="locale-change">{{ item.name }}</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="select-language-options">
+                        {% for item in locales %}
+                            {% if item.id != locale.id %}
+                                <div class="select-language-option">
+                                    {% if item.isDefault %}
+                                        <a href="{{ uri }}" class="locale-change">{{ item.name }}</a>
+                                    {% else %}
+                                        <a href="/{{ item.code }}{{ uri }}" class="locale-change">{{ item.name }}</a>
+                                    {% endif %}
+                                </div>  
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <ul class="nav navbar-nav navbar-right loginned-top-info">
+                <li>
+                    {% if app.user.userinfo.firstname or  app.user.userinfo.lastname %}
+                        {% if  app.request.locale == 'lv' %}
+                            <a href="{{path('account')}}">{{ app.user.userinfo.firstname }} {{app.user.userinfo.lastname}}</a>
+                        {% else %}
+                            <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{{ app.user.userinfo.firstname }} {{app.user.userinfo.lastname}}</a>
+                        {% endif %}
+                       
+                    {% elseif app.user.vkID %}
+                        {% if  app.request.locale == 'lv' %}
+                            <a href="{{path('account')}}">{{ app.user.vkID }}</a>
+                        {% else %}
+                            <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{{ app.user.vkID }}</a>
+                        {% endif %}
+                    {% elseif app.user.fbID %} 
+                        {% if  app.request.locale == 'lv' %}
+                            <a href="{{path('account')}}">{{ app.user.fbID }}</a>
+                        {% else %}
+                            <a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{{ app.user.fbID }}</a>
+                        {% endif %}
+                    {% endif %}
+                </li>
+                {% if messagesNew | length > 0 %}
+                    {% if  app.request.locale == 'lv' %}
+                        <li><a href="{{path('account_messages')}}" class="top-info-message">{{ messagesNew | length }}</a></li>
+                    {% else %}
+                        <li><a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}" class="top-info-message">{{ messagesNew | length }}</a></li>
+                    {% endif %}
+                {% endif %}
+                <li><a class="top-info-purchase">{% trans %}Uz kontu{% endtrans %}: {{ user.userpurse.balanse }} {{ settings.currency.name }}</a></li>
+                <li><a href="{{path('logout')}}" class="top-info-logout"></a></li>
+            </ul>
+        </div>
+        {% else %}
+        <div id="navbar" class="navbar-collapse collapse top-collapsed-menu">
+            <div class="select-languages">
+                <div class="select-language">
+                    <div class="select-language-option-main">
+                        {% for item in locales %}
+                            {% if item.id == locale.id %}
+                                {% if item.isDefault %}
+                                    <a href="javascript:void(0)" class="locale-change">{{ item.name }}</a>
+                                {% else %}
+                                    <a href="javascript:void(0)" class="locale-change">{{ item.name }}</a>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="select-language-options">
+                        {% for item in locales %}
+                            {% if item.id != locale.id %}
+                                <div class="select-language-option">
+                                    {% if item.isDefault %}
+                                        <a href="{{ uri }}" class="locale-change">{{ item.name }}</a>
+                                    {% else %}
+                                        <a href="/{{ item.code }}{{ uri }}" class="locale-change">{{ item.name }}</a>
+                                    {% endif %}
+                                </div>  
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                {% if  app.request.locale == 'lv' %}   
+                    <li><a href="{{path('login')}}">{% trans %}Pierakstieties{% endtrans %}</a></li>
+                    <li><a href="{{path('register')}}">{% trans %}Reģistrācijas{% endtrans %}</a></li>
+                {% else %}
+                    <li><a href="{{path('loginLocale',{'_locale' : app.request.locale})}}">{% trans %}Pierakstieties{% endtrans %}</a></li>
+                    <li><a href="{{path('registerLocale',{'_locale' : app.request.locale})}}">{% trans %}Reģistrācijas{% endtrans %}</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %} 
+      </div>
+    </nav>
+	<div class="container">
+		<div class="row header-functions">
+			<div class="col-lg-3 col-md-3 siteLogo">
+                            {% if settings.siteLogo %}
+                                {% if  app.request.locale == 'lv' %}
+                                    <a href="{{ path('main') }}">
+                                        <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                                    </a>
+                                {% else %}
+                                    <a href="{{ path('mainLocale',{'_locale' : app.request.locale}) }}">
+                                        <img src="{{ asset('bundles/images/site/') }}{{ settings.siteLogo }}" alt="" title="" />
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+			</div>
+			<div class="col-lg-6 col-md-6">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    {% if  app.request.locale == 'lv' %}
+                                        <form action="{{ path('search') }}" method="post">
+                                    {% else %}
+                                        <form action="{{ path('searchLocale',{'_locale' : app.request.locale}) }}" method="post">
+                                    {% endif %}
+                                        <div class="header-search-box position-relative clearfix">
+                                            <input name="searchText" type="text" placeholder="{% trans %}SITE MEKLĒŠANA{% endtrans %}..." {% if app.request.get('searchText') %} value="{{ app.request.get('searchText')}}" {% endif %} />
+                                            <a data-toggle="modal" data-target="#regionModal" class="top-select-region">
+                                                {% if sessionCity %}
+                                                    {{ sessionCity.name }}
+                                                {% else %}
+                                                    {% if sessionRegion %}
+                                                        {{ sessionRegion.name }}
+                                                    {% else %}
+                                                        {% trans %}Visa Latvija{% endtrans %}
+                                                    {% endif %}
+                                                {% endif %}
+                                            </a>
+                                            <input type="submit" class="header-search-button" value="" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+			</div>
+			<div class="col-lg-3 col-md-3 header-add-button-block hidden-sm hidden-xs">
+                            {% if  app.request.locale == 'lv' %}
+                                {% if app.user %}
+                                    <a href="{{path('addproduct')}}" class="header-add-button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+    {% trans %}Pievienot reklāmu{% endtrans %}</a>
+                                {% else %}
+                                    <a href="{{path('login')}}" class="header-add-button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+    {% trans %}Pievienot reklāmu{% endtrans %}</a>
+                                {% endif %}
+                            {% else %}
+                                {% if app.user %}
+                                    <a href="{{path('addproductLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+    {% trans %}Pievienot reklāmu{% endtrans %}</a>
+                                {% else %}
+                                    <a href="{{path('loginLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+    {% trans %}Pievienot reklāmu{% endtrans %}</a>
+                                {% endif %}
+                            {% endif %}
+			</div>
+                        <div class="col-lg-3 col-md-3 header-add-button-block hidden-lg hidden-md">
+                            {% if  app.request.locale == 'lv' %}
+                                {% if app.user %}
+                                    <a href="{{path('addproduct')}}" class="header-add-button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+    {% trans %}Pievienot reklāmu{% endtrans %}</a>
+                                {% else %}
+                                    <a href="{{path('login')}}" class="header-add-button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+    {% trans %}Pievienot reklāmu{% endtrans %}</a>
+                                {% endif %}
+                            {% else %}
+                                {% if app.user %}
+                                    <a href="{{path('addproductLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+    {% trans %}Pievienot reklāmu{% endtrans %}</a>
+                                {% else %}
+                                    <a href="{{path('loginLocale',{'_locale' : app.request.locale})}}" class="header-add-button pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i>
+    {% trans %}Pievienot reklāmu{% endtrans %}</a>
+                                {% endif %}
+                            {% endif %}
+			</div>
+		</div>
+                {% for flashMessage in app.session.flashbag.get('notice_header') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+	</div>	

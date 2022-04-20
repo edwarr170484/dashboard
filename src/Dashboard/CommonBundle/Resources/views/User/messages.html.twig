@@ -1,0 +1,330 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Amati{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_messages')}}">{% trans %}Amati{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}">{% trans %}Amati{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-4 col-md-4">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-8 col-md-8">
+            <div class="account-purchase-menu">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            {% if  app.request.locale == 'lv' %}
+                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% else %}
+                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if  app.request.locale == 'lv' %}
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Mani sludinājumi{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                               <div class="message-table-menu">
+                                    <!--<div class="row">
+                                        <div class="col-lg-6 col-md-6">
+
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 message-table-menu-select-links">
+                                            Отметить выбранное как <a href="javascript:;" onclick="$('input[name=\'action\']').val('status');document.deleteMessages.submit()"  class="message-table-menu-readed">прочитанное</a> или <a href="javascript:;" onclick="$('input[name=\'action\']').val('delete');document.deleteMessages.submit()" class="message-table-menu-delete-link">удалить</a>.
+                                        </div>
+                                    </div>-->
+                                </div>
+                                <div class="messages-table-block">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                      <li role="presentation" class="active">
+                                          <a href="#conversations" aria-controls="inbox" role="tab" data-toggle="tab">{% trans %}Dialogu saraksts{% endtrans %}</a>
+                                      </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active" id="conversations">
+                                            {% if conversations %}
+                                                <table class="messages-table table">
+                                                    {% for conversation in conversations %}
+                                                        <tr> 
+                                                            <td>
+                                                                {% set newMessages = 0 %}
+                                                                {% for message in conversation.messages %}
+                                                                    {% if message.userTo.id == user.id and message.isNew == 1 and message.userOwner.id == user.id %}
+                                                                        {% set newMessages = newMessages + 1 %}
+                                                                    {% endif %}
+                                                                {% endfor%}  
+                                                                {% if newMessages > 0 %}
+                                                                    + {{ newMessages }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="conversation-user-avatar">
+                                                                {% if conversation.userOne.id == user.id %}
+                                                                    <div class="message-avatar">
+                                                                        {% if conversation.userTwo %}
+                                                                        <a href="{{ path('profile', {'userId' : conversation.userTwo.id}) }}">
+                                                                            {% if conversation.userTwo.userinfo.avatar %}
+                                                                                <img class="img-circle" src="{{ asset('bundles/images/users/avatars/' ~ conversation.userTwo.userinfo.avatar) }}" alt="" title="" />
+                                                                            {% elseif conversation.userTwo.userinfo.sex %}
+                                                                                <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ conversation.userTwo.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                            {% else %}
+                                                                                <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                            {% endif %}
+                                                                        </a>
+                                                                        {% else %}
+                                                                            <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="message-avatar">
+                                                                        {% if conversation.userOne %}
+                                                                            <a href="{{ path('profile', {'userId' : conversation.userOne.id}) }}">
+                                                                                {% if conversation.userOne.userinfo.avatar %}
+                                                                                    <img class="img-circle" src="{{ asset('bundles/images/users/avatars/' ~ conversation.userOne.userinfo.avatar) }}" alt="" title="" />
+                                                                                {% elseif conversation.userOne.userinfo.sex %}
+                                                                                    <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ conversation.userOne.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                {% else %}
+                                                                                    <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                {% endif %}
+                                                                            </a>
+                                                                        {% else %}
+                                                                            <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="conversation-user-info">
+                                                                {% if conversation.userOne.id == user.id %}
+                                                                    <div class="message-from-title">
+                                                                        {% if conversation.userTwo %}
+                                                                            <a href="{{ path('profile', {'userId' : conversation.userTwo.id}) }}">
+                                                                                {{ conversation.userTwo.userinfo.firstname }} {{ conversation.userTwo.userinfo.lastname }}
+                                                                            </a>
+                                                                        {% else %}
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                        {% endif %}
+                                                                    </div>    
+                                                                {% else %}
+                                                                    <div class="message-from-title">
+                                                                        {% if conversation.userOne %}
+                                                                            <a href="{{ path('profile', {'userId' : conversation.userOne.id}) }}">
+                                                                                {{conversation.userOne.userinfo.firstname}} {{conversation.userOne.userinfo.lastname}}
+                                                                            </a>
+                                                                        {% else %}
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ path('account_message_edit',{'conversationId' : conversation.id}) }}" class="message-button-answer">{% trans %}Lasīt{% endtrans %}</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="message-delete" href="{{ path('account_conversation_delete',{'conversationId' : conversation.id}) }}" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties dzēst korespondenci{% endtrans %}?')) return false;"></a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                {% if pagination %}
+                                                    <div class="row">
+                                                        <div class="col-lg-12 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% else%}
+                                                {% trans %}Jūs vēl neesat sācis sarunu{% endtrans %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                  </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        {% else %}
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Mani sludinājumi{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                               <div class="message-table-menu">
+                                    <!--<div class="row">
+                                        <div class="col-lg-6 col-md-6">
+
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 message-table-menu-select-links">
+                                            Отметить выбранное как <a href="javascript:;" onclick="$('input[name=\'action\']').val('status');document.deleteMessages.submit()"  class="message-table-menu-readed">прочитанное</a> или <a href="javascript:;" onclick="$('input[name=\'action\']').val('delete');document.deleteMessages.submit()" class="message-table-menu-delete-link">удалить</a>.
+                                        </div>
+                                    </div>-->
+                                </div>
+                                <div class="messages-table-block">
+                                    <ul class="nav nav-tabs" role="tablist">
+                                      <li role="presentation" class="active">
+                                          <a href="#conversations" aria-controls="inbox" role="tab" data-toggle="tab">{% trans %}Dialogu saraksts{% endtrans %}</a>
+                                      </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane active" id="conversations">
+                                            {% if conversations %}
+                                                <table class="messages-table table">
+                                                    {% for conversation in conversations %}
+                                                        <tr> 
+                                                            <td>
+                                                                {% set newMessages = 0 %}
+                                                                {% for message in conversation.messages %}
+                                                                    {% if message.userTo.id == user.id and message.isNew == 1 and message.userOwner.id == user.id %}
+                                                                        {% set newMessages = newMessages + 1 %}
+                                                                    {% endif %}
+                                                                {% endfor%}  
+                                                                {% if newMessages > 0 %}
+                                                                    + {{ newMessages }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="conversation-user-avatar">
+                                                                {% if conversation.userOne.id == user.id %}
+                                                                    <div class="message-avatar">
+                                                                        {% if conversation.userTwo %}
+                                                                        <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : conversation.userTwo.id}) }}">
+                                                                            {% if conversation.userTwo.userinfo.avatar %}
+                                                                                <img class="img-circle" src="{{ asset('bundles/images/users/avatars/' ~ conversation.userTwo.userinfo.avatar) }}" alt="" title="" />
+                                                                            {% elseif conversation.userTwo.userinfo.sex %}
+                                                                                <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ conversation.userTwo.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                            {% else %}
+                                                                                <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                            {% endif %}
+                                                                        </a>
+                                                                        {% else %}
+                                                                            <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% else %}
+                                                                    <div class="message-avatar">
+                                                                        {% if conversation.userOne %}
+                                                                            <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : conversation.userOne.id}) }}">
+                                                                                {% if conversation.userOne.userinfo.avatar %}
+                                                                                    <img class="img-circle" src="{{ asset('bundles/images/users/avatars/' ~ conversation.userOne.userinfo.avatar) }}" alt="" title="" />
+                                                                                {% elseif conversation.userOne.userinfo.sex %}
+                                                                                    <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ conversation.userOne.userinfo.sex ~ '.png') }}" alt="" title="" />
+                                                                                {% else %}
+                                                                                    <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                                {% endif %}
+                                                                            </a>
+                                                                        {% else %}
+                                                                            <img class="img-circle" src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td class="conversation-user-info">
+                                                                {% if conversation.userOne.id == user.id %}
+                                                                    <div class="message-from-title">
+                                                                        {% if conversation.userTwo %}
+                                                                            <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : conversation.userTwo.id}) }}">
+                                                                                {{ conversation.userTwo.userinfo.firstname }} {{ conversation.userTwo.userinfo.lastname }}
+                                                                            </a>
+                                                                        {% else %}
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                        {% endif %}
+                                                                    </div>    
+                                                                {% else %}
+                                                                    <div class="message-from-title">
+                                                                        {% if conversation.userOne %}
+                                                                            <a href="{{ path('profileLocale', {'_locale' : app.request.locale,'userId' : conversation.userOne.id}) }}">
+                                                                                {{conversation.userOne.userinfo.firstname}} {{conversation.userOne.userinfo.lastname}}
+                                                                            </a>
+                                                                        {% else %}
+                                                                            {% trans %}Lietotājs ir dzēsts{% endtrans %}
+                                                                        {% endif %}
+                                                                    </div>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ path('account_message_editLocale',{'_locale' : app.request.locale,'conversationId' : conversation.id}) }}" class="message-button-answer">{% trans %}Lasīt{% endtrans %}</a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="message-delete" href="{{ path('account_conversation_delete',{'conversationId' : conversation.id}) }}" onclick="if(!confirm('{% trans %}Vai tiešām vēlaties dzēst korespondenci{% endtrans %}?')) return false;"></a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </table>
+                                                {% if pagination %}
+                                                    <div class="row">
+                                                        <div class="col-lg-12 padination">
+                                                            <ul class="list-unstyled list-inline pull-right">
+                                                                <li class="current"><a href="">1</a></li>
+                                                                <li><a href="">2</a></li>
+                                                                <li><a href="">3</a></li>
+                                                                <li><a href="">></a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% else%}
+                                                {% trans %}Jūs vēl neesat sācis sarunu{% endtrans %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                  </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock%}

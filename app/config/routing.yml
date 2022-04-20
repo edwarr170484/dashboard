@@ -1,0 +1,29 @@
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /connect
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /connect
+vkontakte_login:
+    path: /connect/check-vkontakte
+    
+dashboard_admin:
+    resource: "@DashboardAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+dashboard_common:
+    resource: "@DashboardCommonBundle/Controller/"
+    type:     annotation
+    prefix:   /
+dashboard_gallery:
+    resource: "@DashboardGalleryBundle/Resources/config/routing.yml"
+    prefix:   /
+
+
+
+
+

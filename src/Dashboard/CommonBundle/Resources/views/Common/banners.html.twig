@@ -1,0 +1,12 @@
+{% if banners %}
+    {% for banner in banners%}
+        {% if banner.code %}
+            {{ banner.code | raw }}
+        {% elseif banner.link or banner.image %}
+        <a href="{{ banner.link }}" class="banner-link">
+            <img src="{{ asset('bundles/images/banners/') }}{{ banner.image }}" alt="{{ banner.title }}" title="{{ banner.title }}" />
+        </a>  
+        {% endif %}
+    {% endfor %}
+{% endif %}
+

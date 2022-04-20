@@ -1,0 +1,10 @@
+<img src="{{ absolute_url(asset('bundles/Default/img/logotype.png')) }}">
+<h3>Статус заказа был изменен продавцом!</h3>
+<p>
+    Статус Вашего заказа №{{ order.id }} был изменен на <strong>{{ orderStatus }}</strong>.
+    {% if comment %}
+        <br/><strong>Причина: </strong>{{ comment }}    
+    {% endif %}
+    <br/>
+    Вы можете отслеживать статус Вашего заказа в <a href="{{  absolute_url(path("account")) }}">личном кабинете</a> на портале gribupardot.sunweb.by.
+</p>

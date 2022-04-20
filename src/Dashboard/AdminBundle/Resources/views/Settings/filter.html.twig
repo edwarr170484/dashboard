@@ -1,0 +1,76 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Фильтры{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Фильтры</li>
+    </ol>
+    <h1 class="page-header">Фильтры <small>Редактирование фильтров для категорий объявлений</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="{{ path('admin_filters_edit') }}">Добавить фильтр</a></li>
+                            <li><a href="#" onclick="document.deleteSelected.submit();">Сохранить</a></li>
+                            <li><a href="javascript:void(0)" onclick="if(confirm('Вы действительно хотите удалить отмеченные фильтры?'))document.deleteSelected.submit(); else return false;">Удалить отмеченные</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Фильтры</h4>
+                </div>
+                <div class="panel-body">
+                    {%if filters %}
+                        <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th><input type="checkbox" class="selectAllItems" /></th>
+                                            <th>Название</th>
+                                            <th>Привязанных категорий</th>
+                                            <th>Значений</th>
+                                            <th>Действия</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <form action="{{ path('admin_filters')}}" method="POST" name="deleteSelected" id="deleteSelected">
+                                            {% for filter in filters %}
+                                                <tr>
+                                                    <td><input name="filterIds[]" value="{{ filter.id }}" type="checkbox" class="checkbox-item" /></td>
+                                                    <td>
+                                                        {{ filter.name }}
+                                                    </td>
+                                                    <td>{{ filter.categories | length }}</td>
+                                                    <td>{{ filter.values | length }}</td>
+                                                    <td>
+                                                        <a class="btn btn-success" href="{{ path('admin_filters_edit',{ 'filterId' : filter.id }) }}">
+                                                            <i class="fa fa-pencil" title="Редактировать фильтр"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </form>
+                                    </tbody>
+                        </table>
+                    {% else %}
+                        Фильтров пока не добавлено
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,431 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{{ category.metaTagTitle }}{% endblock %}
+{% block metatags %}
+    <meta content="{{ category.metaTagDescription }}" name="description" />
+    <meta content="{{ category.metaTagAuthor }}" name="author" />
+    <meta content="{{ category.metaTagRobots }}" name="robots" />
+    <meta content="{{ category.metaTagKeywords }}" name="keywords" />
+{% endblock %}
+
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category,'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  locale.isDefault %}
+                        <li class="arrow"><a href="{{ path('main') }}">{% trans %}Mājas{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="{{ path('mainLocale',{'_locale' : locale.code}) }}">{% trans %}Mājas{% endtrans %}</a></li>
+                    {% endif %}
+                    {% if categories %}
+                        {% for cat in categories %}
+                            <li class="arrow">
+                                {% if  locale.isDefault %}
+                                    <a href="{{ path('category', {'_locale' : locale.code,'categoryName' : cat.name }) }}">
+                                {% else %}
+                                    <a href="{{ path('categoryLocale', {'_locale' : locale.code,'categoryName' : cat.name }) }}">
+                                {% endif %}
+                                    {% if cat.translations | length > 0 %}
+                                        {% for translation in cat.translations %}
+                                            {% if translation.locale.id == locale.id %}
+                                                {{ translation.value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}        
+                                        {{ cat.title}}
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+<div class="container">
+	<div class="row content-row">
+		<div class="col-lg-9 col-md-9 left-column">
+			<div class="content-block-header">
+                            <h1>
+                                {% if category.translations | length > 0 %}
+                                    {% for translation in category.translations %}
+                                        {% if translation.locale.id == locale.id %}
+                                            {{ translation.value }}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}        
+                                    {{ category.title }}
+                                {% endif %}
+                            </h1>
+                        </div>
+                        {% if category.children | length > 0 %}
+                            <div class="row subcategoryes">
+                                <div class="col-lg-12 col-md-12 col-sm-12 allsubcats">
+                                    <ul class="list-unstyled subcategoryes-block list-inline">
+                                        {% for child in category.children %}
+                                            <li class="col-lg-4 col-md-4 col-sm-4">
+                                                {% if locale.isDefault %}
+                                                    <a href="{{ path('category', {'categoryName' : child.name }) }}">
+                                                {% else %}
+                                                    <a href="{{ path('categoryLocale', {'_locale' : locale.code,'categoryName' : child.name }) }}">
+                                                {% endif %}
+                                                    {% if child.translations | length > 0 %}
+                                                        {% for translation in child.translations %}
+                                                            {% if translation.locale.id == locale.id %}
+                                                                {{ translation.value }}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}        
+                                                        {{ child.title }}
+                                                    {% endif %}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>    
+                        {% endif %}
+                        <div class="mainpage-search-block category-search">
+                            <div class="search-form-block">
+				{% include 'DashboardCommonBundle:Parts:categoryfilters.html.twig' with {'category' : category, 'locale' : locale, 'filters' : filters, 'filtersRangeList' : filtersRangeList, 'filterSelectable' : filterSelectable, 'filterSelectablePrice' : filterSelectablePrice, 'allcities' : allcities, 'regionFilterForm' : regionFilterForm} %}	
+                            </div>
+			</div>
+                        {% if premiumProducts %}
+                            <div class="row category-premium-adverts-block">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="premium-adverts category-premium-adverts">
+                                        <div class="content-block-header premium-block-header"><h1>{% trans %}Premium reklāmas{% endtrans %}</h1></div>
+                                        {% include 'DashboardCommonBundle:Parts:productitem.html.twig' with {'products' : premiumProducts, 'locale' : locale} %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="hidden-sm hidden-xs" style="text-align:center;">
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'centerpage'})) }}
+			</div>
+                        {% if products | length > 0 %}
+                            <div class="category-product-mainfilters">
+                                <div class="company-filter">
+                                  <!--  <ul class="list-unstyled list-inline">
+                                        <li class="active companyFilterItem"><a href="javascript:;">{% trans %}Viss{% endtrans %}</a></li>
+                                        <li class="companyFilterItem" data-company=""><a href="javascript:;">{% trans %}Privāts{% endtrans %}</a></li>
+                                        <li class="companyFilterItem" data-company=""><a href="javascript:;">{% trans %}Uzņēmuma profils{% endtrans %}</a></li>
+                                    </ul>-->
+                                </div>
+                                <div class="main-product-filters">
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            {% if locale.isDefault %}
+                                                <a href="{{ path('category',{'categoryName' : category.name}) }}?sortorder=dateAdded&order=DESC">
+                                            {% else %}
+                                                <a href="{{ path('categoryLocale',{'_locale' : locale.code,'categoryName' : category.name}) }}?sortorder=dateAdded&order=DESC">
+                                            {% endif %}
+                                                <div class="main-product-filters-updown">
+                                                    <div class="main-product-links-updown">
+                                                        <div><i class="fa fa-caret-up" aria-hidden="true"></i></div>
+                                                        <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                                                    </div>
+                                                    <div class="main-product-filter-updown">
+                                                        {% trans %}Pēc datuma{% endtrans %}
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            {% if locale.isDefault %}
+                                                <a href="{{ path('category',{'categoryName' : category.name}) }}?sortorder=price&order=ASC">
+                                            {% else %}
+                                                <a href="{{ path('categoryLocale',{'_locale' : locale.code,'categoryName' : category.name}) }}?sortorder=price&order=ASC">
+                                            {% endif %}
+                                                <div class="main-product-filters-updown">
+                                                    <div class="main-product-links-updown">
+                                                        <div><i class="fa fa-caret-up" aria-hidden="true"></i></div>
+                                                        <div><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+                                                    </div>
+                                                    <div class="main-product-filter-updown">
+                                                        {% trans %}Pēc cenas{% endtrans %}
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="template {% if view == 'table' %}active{% endif %}" data-pattern="table">
+                                                <i class="fa fa-th" aria-hidden="true"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0)" class="template {% if view == 'list' %}active{% endif %}" data-pattern="list"><i class="fa fa-list" aria-hidden="true"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>   
+                            <div class="row advert-category-adverts">
+                                <div class="col-lg-12 col-md-12">
+                                        <div class="premium-adverts {{ view }}">
+                                            {% if products | length > 0 %}
+                                                {% include 'DashboardCommonBundle:Parts:productitem.html.twig' with {'products' : products, 'locale' : locale} %}
+                                            {% endif %}
+                                            <table cellpadding="7">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{% trans %}Reklāma{% endtrans %}</th>
+                                                        {% if category.filters %}
+                                                            {% set i = 0 %}
+                                                            {% for filter in category.filters if i != 4 %}
+                                                                {% if filter.isShowCard %}
+                                                                    <th class="center"> 
+                                                                        {% if filter.translations | length > 0 %}
+                                                                                {% for translation in filter.translations %}
+                                                                                    {% if translation.locale.id == locale.id %}
+                                                                                        {{ translation.value }}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                        {% else %}        
+                                                                            {{ filter.name }}
+                                                                        {% endif %}
+                                                                    </th>
+                                                                    {% set i = i + 1 %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        <th class="center">{% trans %}Cena{% endtrans %}</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% if products | length > 0 %}
+                                                        {% for product in products %}
+                                                            {% if locale.isDefault %}
+                                                                {% set href = path('product', {'productId' : product.id,'productName' : product.translit}) %}
+                                                            {% else %}
+                                                                {% set href = path('productLocale', {'_locale' : locale.code,'productId' : product.id,'productName' : product.translit})%}
+                                                            {% endif %}
+                                                            <tr class="premium-advert {% if product.viewselected or product.viewpremium %} active {% endif %}">
+                                                                <td>
+                                                                    <div class="product-image-block">
+                                                                    {% if product.filters %}
+                                                                        {% set selltype = 0 %}
+                                                                        {% for filter in product.filters %}
+                                                                            {% if filter.filter.isSelltype %}
+                                                                                {% set selltype = filter %}
+                                                                            {% endif %}
+                                                                        {% endfor %}
+                                                                    {% else %}
+                                                                        {% set selltype = 0 %}
+                                                                    {% endif %}
+                                                                    {%if selltype %}
+                                                                        <div class="advert-type sell">
+                                                                            {% if selltype.translations | length > 0 %}
+                                                                                {% for translation in selltype.translations %}
+                                                                                    {% if translation.locale.id == locale.id %}
+                                                                                        {{ translation.value }}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% else %}
+                                                                                {{ selltype.value}}
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    <div class="product-image">
+                                                                        <a href="{{ href }}">
+                                                                            {% if product.mainfoto %}
+                                                                                <img src="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                            {% else %}
+                                                                                {% if product.fotos | length > 0 %}
+                                                                                    <img src="{{ asset('bundles/images/products/') }}{{ product.fotos[0].foto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                                {% else %}
+                                                                                    <img src="{{ asset('bundles/images/products/thumbs/bez-foto-thumb.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                                                                                {% endif %}
+                                                                            {% endif %}
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="product-image-list">
+                                                                        <div class="advert-add-info">
+                                                                            <div class="advert-name" style="padding-left:0;">
+                                                                                <a href="{{ href }}">
+                                                                                    {{ product.name | slice(0, 60)}}
+                                                                                    
+                                                                                </a>
+                                                                            </div>
+                                                                            <div class="advert-town">
+                                                                                {% if product.city %}
+                                                                                    <div class="advert-town">
+                                                                                        {% if product.city.translations | length > 0 %}
+                                                                                            {% for translation in product.city.translations %}
+                                                                                                {% if translation.locale.id == locale.id %}
+                                                                                                    {{ translation.value }}
+                                                                                                {% endif %}
+                                                                                            {% endfor %}
+                                                                                        {% else %}
+                                                                                            {{ product.city.name }}
+                                                                                        {% endif %}
+                                                                                    </div>
+                                                                                {% else %}
+                                                                                    <div class="advert-town">{% trans %}Visa Latvija{% endtrans %}</div>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
+                                                                </td>
+                                                                {% if category.filters %}
+                                                                    {% set i = 0 %}
+                                                                    {% for filter in category.filters if i != 4 %}
+                                                                        {% if filter.isShowCard %}
+                                                                            {% if product.filters %}
+                                                                                {% set marker = 0 %}
+                                                                                {% for productFilter in product.filters %}
+                                                                                    {% if productFilter.filter.id == filter.id %}
+                                                                                        <td>
+                                                                                            <div class="product-additional-filter">
+                                                                                                {% if productFilter.translations | length > 0 %}
+                                                                                                    {% for translation in productFilter.translations %}
+                                                                                                        {% if translation.locale.id == locale.id %}
+                                                                                                            {{ translation.value | slice(0, 60)}}
+                                                                                                        {% endif %}
+                                                                                                    {% endfor %}
+                                                                                                {% else %}        
+                                                                                                    {{ productFilter.value | slice(0, 60)}}
+                                                                                                {% endif %}
+                                                                                            </div>
+                                                                                        </td>
+                                                                                        {% set marker = 1 %}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+                                                                            {% endif %}
+                                                                            {% if marker == 0 %}
+                                                                                <td>
+                                                                                    <div class="product-additional-filter">
+                                                                                        -
+                                                                                    </div>
+                                                                                </td>
+                                                                            {% endif %}
+                                                                            {% set i = i + 1 %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                                <td>
+                                                                    {% if product.price %}
+                                                                        <div class="advert-price">
+                                                                            <span>{{ product.price }} {{ settings.currency.name }}</span>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="advert-price">
+                                                                            <span>0 {{ settings.currency.name }}</span>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>
+                                                                    {% if product.reviews | length > 0 %}
+                                                                            {{ product.reviews | length }} <img src="{{ asset('bundles/Default/img/cloud.png') }}" alt="" title="" />&nbsp
+                                                                        {% endif %}
+                                                                        {% if app.user %}
+                                                                            {% if app.user.favoriteProducts | length > 0 %}
+                                                                                {% set occupied = 0 %}
+                                                                                {% for fav in app.user.favoriteProducts %}
+                                                                                    {% if product.id == fav.productId  %}
+                                                                                        {% set occupied = 1 %}
+                                                                                    {% endif %}
+                                                                                {% endfor %}
+
+                                                                                {% if occupied %}
+                                                                                    <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                                                                                {% else %}
+                                                                                    <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                                                {% endif %}
+
+                                                                            {% else %}
+                                                                                {{ product.ratingLikes }} <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                                            {% endif %}
+                                                                        {% else %}
+                                                                            {{ product.ratingLikes }} <a href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                                                        {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="page-no-data">{% trans %}Šajā kategorijā vēl nav nevienas reklāmas{% endtrans %}</div>
+                        {% endif %}
+                        {% if pagination and products | length > 0 %}
+                            <div class="row">
+                                <div class="col-lg-12 padination">
+                                    {{ pagination | raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+		</div>
+		<div class="col-lg-3 col-md-3 right-column hidden-sm hidden-xs" id="bannersSticky">
+                    <script type="text/javascript">(function() {
+  if (window.pluso)if (typeof window.pluso.start == "function") return;
+  if (window.ifpluso==undefined) { window.ifpluso = 1;
+    var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+    s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+    s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+    var h=d[g]('body')[0];
+    h.appendChild(s);
+  }})();</script>
+<div class="pluso" data-background="transparent" data-options="medium,round,line,horizontal,nocounter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email"></div>
+                    <div class="advertise-block">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'rightcolumn'})) }}
+                    </div>
+                    <div class="right-column-text-block">
+                        {% if category.descriptions | length > 0 %}
+                            {% for translation in category.descriptions %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.description | raw }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {{ category.description | raw}}
+                        {% endif %}
+                    </div>
+		</div>
+                <div class="col-lg-3 col-md-3 right-column hidden-lg hidden-md">
+                    <script type="text/javascript">(function() {
+  if (window.pluso)if (typeof window.pluso.start == "function") return;
+  if (window.ifpluso==undefined) { window.ifpluso = 1;
+    var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+    s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+    s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+    var h=d[g]('body')[0];
+    h.appendChild(s);
+  }})();</script>
+<div class="pluso" data-background="transparent" data-options="medium,round,line,horizontal,nocounter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email"></div>
+                    <div class="advertise-block">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'category' : category, 'position' : 'rightcolumn'})) }}
+                    </div>
+                    <div class="right-column-text-block">
+                        {% if category.descriptions | length > 0 %}
+                            {% for translation in category.descriptions %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.description | raw }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {{ category.description | raw}}
+                        {% endif %}
+                    </div>
+		</div>
+	</div>
+</div>
+{% endblock %}

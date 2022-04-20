@@ -1,0 +1,252 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% form_theme formMain _self %}
+
+{% form_theme formPassword _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block button_row -%}
+    <button class="message-button-answer" type="submit">{{form_label(form)}}</button>
+{%- endblock button_row -%}
+
+{%- block checkbox_widget -%}
+    {%- for attrname, attrvalue in attr -%}
+        {%- if attrname in ['id'] -%}
+            <div class="div-checkbox small-margin {% if checked %} active {% endif %}" data-checkbox="{{ attrvalue }}"></div>
+        {%- endif -%}
+    {%- endfor -%}
+        
+    <input type="checkbox" {{ block('widget_attributes') }} value="1" {% if checked %} checked="checked"{% endif %} />
+{%- endblock checkbox_widget -%}
+
+{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Iestatījumi{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_settings')}}">{% trans %}Iestatījumi{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li><a href="{{path('account_settingsLocale',{'_locale' : app.request.locale})}}">{% trans %}Iestatījumi{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-4 col-md-4">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-8 col-md-8">
+            <div class="account-purchase-menu">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            {% if  app.request.locale == 'lv' %}
+                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% else %}
+                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{% trans %}Mani dati{% endtrans %}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                            <div class="account-settings-forms">
+                                <div class="account-settings-form-block">
+                                    {{ form_start(formMain, {'method':'POST','multipart':true,'attr': {'class': 'form-horizontal userSettingsForm'}}) }}
+                                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}fio{% endtrans %}</label>
+                                            <div class="col-sm-3">
+                                                {{ form_widget(formMain.userinfo.lastname) }}
+                                            </div>
+                                            <div class="col-sm-3">
+                                                {{ form_widget(formMain.userinfo.firstname) }}
+                                            </div>
+                                            <div class="col-sm-3">
+                                                {{ form_widget(formMain.userinfo.midname) }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}Atrašanās vieta{% endtrans %}/{% trans %}Pilsēta/volost{% endtrans %}</label>
+                                            <div class="col-sm-3">
+                                                {{ form_widget(formMain.userinfo.region, {'id':'region'})}}
+                                                <script>
+                                                    $('#region').change(function() {
+                                                        var $form = $('.userSettingsForm');
+                                                        var data = {};
+                                                        data[$('#region').attr('name')] = $('#region').val();
+
+                                                        $.ajax({
+                                                            url : $form.attr('action'),
+                                                            type: $form.attr('method'),
+                                                            data : data,
+                                                                success: function(html) {
+                                                                    $('#settingsCity').html($(html).find('#settingsCity').html());
+                                                                    $('#city').customSelect();
+                                                                }
+                                                        });
+                                                    });
+                                                </script>
+                                            </div>
+                                            <div class="col-sm-3" id="settingsCity">
+                                                {{ form_widget(formMain.userinfo.city, {'id':'city'})}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{{ form_label(formMain.userinfo.sex) }}</label>
+                                            <div class="col-sm-5">
+                                                {{ form_widget(formMain.userinfo.sex) }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}mob. tālrunis{% endtrans %}</label>
+                                            <div class="col-sm-5">
+                                                {{ form_widget(formMain.userinfo.phone) }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}e-pasts{% endtrans %}</label>
+                                            <div class="col-sm-5">
+                                                {{ form_widget(formMain.email, {'required' : 'required'})}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}saņemt e-pasta paziņojumus{% endtrans %}</label>
+                                            <div class="col-sm-5">
+                                                {{ form_widget(formMain.alerts, {'id':'alerts'})}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}dzimšanas diena{% endtrans %}</label>
+                                            <div class="col-sm-5">
+                                                <div class="row">
+                                                    <div class="col-lg-4 col-md-4">
+                                                        {{ form_widget(formMain.userinfo.birthdayday, {'id':'birthdayday'})}}
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4">
+                                                        {{ form_widget(formMain.userinfo.birthdaymonth, {'id':'birthdaymonth'})}}
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4">
+                                                        {{ form_widget(formMain.userinfo.birthdayyear, {'id':'birthdayyear'})}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}iemiesojums{% endtrans %}</label>
+                                            <div class="col-sm-5 account-settings-forms-avatar">
+                                                {% if avatar %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/') }}{{avatar}}" alt="" title="" />
+                                                {% elseif formMain.userinfo.vars.value.sex %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar-' ~ formMain.userinfo.vars.value.sex ~ '.png') }}" alt="" title="" />
+                                                {% else %}
+                                                    <img src="{{ asset('bundles/images/users/avatars/no-avatar.png') }}" alt="" title="" />
+                                                {% endif %}
+                                                {{ form_widget(formMain.userinfo.avatarNew) }}
+                                                {{ form_widget(formMain.userinfo.avatar) }}
+                                                <a class="change-avatar">{% trans %}mainīt{% endtrans %}</a>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label"></label>
+                                            <div class="col-sm-5">
+                                                {{ form_widget(formMain.save,{'type' : 'submit'})}}
+                                            </div>
+                                        </div>
+                                        {{ form_end(formMain)}}
+                                </div>
+                                {% if user.vkID or user.fbID %}
+                                   <!-- <div class="account-settings-form-block">
+                                        <div class="account-settings-form-block-header">связанные аккаунты в социальных сетях</div>
+                                        <div class="account-settings-form-block-description"></div>
+                                        <div class="row">
+                                            <div class="col-lg-9 col-md-9">
+                                                <table class="account-settings-socials">
+                                                    {% if user.vkID %}
+                                                        <tr>
+                                                            <td><i class="fa fa-vk" aria-hidden="true" style="font-size: 30px"></i></td>
+                                                            <td>Vkontakte</td>
+                                                            <td><a href="https://vk.com/id{{ user.vkID }}" target="_blank">{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</a></td>
+                                                        </tr>
+                                                    {% endif %}
+                                                    {% if user.fbID %}
+                                                        <tr>
+                                                            <td><i class="fa fa-facebook" aria-hidden="true" style="font-size: 30px"></i></td>
+                                                            <td>Facebook</td>
+                                                            <td><a href="https://facebook.com/profile.php?id={{ user.fbID }}" target="_blank">{{ user.userinfo.firstname }} {{ user.userinfo.lastname }}</a></td>
+                                                        </tr>
+                                                    {% endif %}
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                {% endif %}
+                                <div class="account-settings-form-block">
+                                    <div class="account-settings-form-block-header">{% trans %}nomainīt paroli{% endtrans %}</div>
+                                    <div class="account-settings-form-block-description"></div>
+                                    {{ form_start(formPassword, {'method':'POST','attr': {'class': 'form-horizontal'}}) }}
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}Jauna parole{% endtrans %}</label>
+                                            <div class="col-sm-5">
+                                               {{ form_widget(formPassword.passwordNew) }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{% trans %}Apstipriniet paroli{% endtrans %}</label>
+                                            <div class="col-sm-5">
+                                                {{ form_widget(formPassword.passwordConfirm) }}
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label"></label>
+                                            <div class="col-sm-5">
+                                                {{ form_widget(formPassword.save,{'type' : 'submit'})}}
+                                            </div>
+                                        </div>
+                                    {{ form_end(formPassword)}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock%}

@@ -1,0 +1,151 @@
+{% if product.filters %}
+    {% set selltype = 0 %}
+    {% for filter in product.filters %}
+        {% if filter.filter.isSelltype %}
+            {% set selltype = filter %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% set selltype = 0 %}
+{% endif %}
+{%if selltype %}
+    <div class="advert-type sell">
+        {% if selltype.translations | length > 0 %}
+            {% for translation in selltype.translations %}
+                {% if translation.locale.id == locale.id %}
+                    {{ translation.value }}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {{ selltype.value}}
+        {% endif %}
+    </div>
+{% endif %}
+<div class="premium-advert {% if product.viewselected or product.viewpremium %} active {% endif %}">
+    <div class="product-image-block">
+        <div class="product-image">
+            <a href="{{ href }}">
+                {% if product.mainfoto %}
+                    <img src="{{ asset('bundles/images/products/') }}{{ product.mainfoto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                {% else %}
+                    {% if product.fotos | length > 0 %}
+                        <img src="{{ asset('bundles/images/products/') }}{{ product.fotos[0].foto }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                    {% else %}
+                        <img src="{{ asset('bundles/images/products/thumbs/bez-foto-thumb.png') }}" alt="{{ product.name }}" title="{{ product.name }}" />
+                    {% endif %}
+                {% endif %}
+            </a>
+        </div>
+        <div class="product-image-list">
+            <div class="advert-add-info">
+                <div class="advert-name" style="padding-left:0;"><a href="{{ href }}">{{ product.name | slice(0, 60)}}</a></div>
+                <div class="advert-town">
+                    {% if product.city %}
+                        <div class="advert-town">
+                            {% if product.city.translations | length > 0 %}
+                                {% for translation in product.city.translations %}
+                                    {% if translation.locale.id == locale.id %}
+                                        {{ translation.value }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {{ product.city.name }}
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="advert-town">{% trans %}Visa Latvija{% endtrans %}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if product.category.filters %}
+            <div class="product-additional-filters">
+            {% set i = 0 %}
+            {% for filter in product.category.filters if i != 4 %}
+                {% if filter.isShowCard %}
+                    {% if product.filters %}
+                        {% set marker = 0 %}
+                        {% for productFilter in product.filters %}
+                            {% if productFilter.filter.id == filter.id %}
+                                <div class="product-additional-filter">
+                                    {% if productFilter.translations | length > 0 %}
+                                        {% for translation in productFilter.translations %}
+                                            {% if translation.locale.id == locale.id %}
+                                                {{ translation.value }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}        
+                                        {{ productFilter.value }}
+                                    {% endif %}
+                                </div>
+                                {% set marker = 1 %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if marker == 0 %}
+                        <div class="product-additional-filter">
+                            -
+                        </div>
+                    {% endif %}
+                    {% set i = i + 1 %}
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="advert-name">
+        <a href="{{ href }}">{{ product.name | slice(0, 60) }}</a>
+    </div>
+    {% if product.price %}
+        <div class="advert-price">
+            <span>{{ product.price }} {{ settings.currency.name }}</span>
+        </div>
+    {% else %}
+        <div class="advert-price">
+            <span>0 {{ settings.currency.name }}</span>
+        </div>
+    {% endif %}
+    <div class="advert-add-info">
+        {% if product.city %}
+            <div class="advert-town">
+                {% if product.city.translations | length > 0 %}
+                    {% for translation in product.city.translations %}
+                        {% if translation.locale.id == locale.id %}
+                            {{ translation.value }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {{ product.city.name }}
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="advert-town">{% trans %}Visa Latvija{% endtrans %}</div>
+        {% endif %}
+        <div class="advert-rating">
+            {% if product.reviews | length > 0 %}
+                {{ product.reviews | length }} <img src="{{ asset('bundles/Default/img/cloud.png') }}" alt="" title="" />&nbsp
+            {% endif %}
+            {% if app.user %}
+                {% if app.user.favoriteProducts | length > 0 %}
+                    {% set occupied = 0 %}
+                    {% for fav in app.user.favoriteProducts %}
+                        {% if product.id == fav.productId  %}
+                            {% set occupied = 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if occupied %}
+                        <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                    {% else %}
+                        <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                    {% endif %}
+                    
+                {% else %}
+                    {{ product.ratingLikes }} <a onclick="addFavoriteProduct({{ product.id }},'{{ locale.code }}', $(this))" href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                {% endif %}
+            {% else %}
+                {{ product.ratingLikes }} <a href="javascript:void(0)" title="{% trans %}Pievienot favorītiem{% endtrans %}" class="productFavorite"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+            {% endif %}
+        </div>
+    </div>
+</div>

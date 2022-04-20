@@ -1,0 +1,199 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{{ page.metaTagTitle }}{% endblock %}
+{% block metatags %}
+    <meta content="{{ page.metaTagDescription }}" name="description" />
+    <meta content="{{ page.metaTagAuthor }}" name="author" />
+    <meta content="{{ page.metaTagRobots }}" name="robots" />
+    <meta content="{{ page.metaTagKeywords }}" name="keywords" />
+{% endblock %}
+
+{% block topbanner %}
+    <div class="topBanner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 topBannerBlock">
+                    {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'toppage'})) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+<!-- Carousel
+    ================================================== -->
+{% if slider %}
+<div id="myCarousel" class="carousel slide visible-lg visible-md" data-ride="carousel" data-interval="10000">
+    <div class="carousel-inner" role="listbox">
+        {% set i = 0%}
+        {% for slide in slider.items %}
+            <div class="item {% if i == 0 %}active{% endif %}">
+                <img class="first-slide" src="{{ asset('bundles/images/gallery/') }}{{ slide.image }}" alt="{{ slide.alt }}" title="{{ slide.title}}" />
+                {% if slide.description %}
+                    <div class="slider-text">
+                        <div class="container">
+                            {{ slide.description | raw }}
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="mainSliderCover"></div>
+            </div>   
+            {% set i = i + 1%}
+        {% endfor %}
+    </div>
+    <div class="slider-indicators">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ol class="carousel-indicators">
+                        {% set i = 0%}
+                        {% for slide in slider.items %}
+                            <li data-target="#myCarousel" data-slide-to="{{ i }}" {% if i == 0 %}class="active"{% endif %}></li>
+                            {% set i = i + 1%}
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+        <span></span>
+    </a>
+    <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+        <span></span>
+    </a>                
+</div>
+<div class="slider-bottom-line visible-lg visible-md"></div>
+{% endif %}    
+
+<div class="container">
+	<div class="row content-row">
+		<div class="col-lg-9 col-md-9">
+			<div class="content-block-header"><h1>{% trans %}Reklāmu kategorijas{% endtrans %}</h1></div>
+                        {% if categories %}
+                            <div class="advert-categoryes">
+                                    <ul class="list-unstyled advert-categories">
+                                        {% for category in categories %}
+                                            <li class="advert-category">
+                                                <div class="categoryImage">
+                                                    <div>
+                                                        <img src="{{ asset('bundles/images/category/' ~ category.image) }}" alt="" title="" />
+                                                    </div>
+                                                </div>
+                                                <div class="categoryList">
+                                                    {% if  app.request.locale == 'lv' %}   
+                                                        <a href="{{ path('category', {'categoryName' : category.name }) }}" class="advert-category-name">
+                                                            {% if category.translations | length > 0 %}
+                                                                {% for translation in category.translations %}
+                                                                    {% if translation.locale.id == locale.id %}
+                                                                        {{ translation.value }}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% else %}        
+                                                                {{ category.title }}
+                                                            {% endif %}
+                                                        </a>
+                                                        {% if category.children | length > 0 %}
+                                                            <ul class="list-unstyled advert-category-subcategoryes">
+                                                                {% set i = 0%}
+                                                                {% for child in category.children %}
+                                                                    {% if i < 10 %}
+                                                                        <li>
+                                                                            <a href="{{ path('category', {'categoryName' : child.name }) }}">
+                                                                                {% if child.translations | length > 0 %}
+                                                                                    {% for translation in child.translations %}
+                                                                                        {% if translation.locale.id == locale.id %}
+                                                                                            {{ translation.value }}
+                                                                                        {% endif %}
+                                                                                    {% endfor %}
+                                                                                {% else %}        
+                                                                                    {{ child.title }}
+                                                                                {% endif %}
+                                                                            </a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                    {% set i = i + 1 %}
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <a href="{{ path('categoryLocale', {'categoryName' : category.name, '_locale' : app.request.locale }) }}" class="advert-category-name">
+                                                            {% if category.translations | length > 0 %}
+                                                                {% for translation in category.translations %}
+                                                                    {% if translation.locale.id == locale.id %}
+                                                                        {{ translation.value }}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% else %}        
+                                                                {{ category.title }}
+                                                            {% endif %}
+                                                        </a>
+                                                        {% if category.children | length > 0 %}
+                                                            <ul class="list-unstyled advert-category-subcategoryes">
+                                                                {% set i = 0%}
+                                                                {% for child in category.children %}
+                                                                    {% if i < 10 %}
+                                                                        <li>
+                                                                            <a href="{{ path('categoryLocale', {'categoryName' : child.name, '_locale' : app.request.locale }) }}">
+                                                                                {% if child.translations | length > 0 %}
+                                                                                    {% for translation in child.translations %}
+                                                                                        {% if translation.locale.id == locale.id %}
+                                                                                            {{ translation.value }}
+                                                                                        {% endif %}
+                                                                                    {% endfor %}
+                                                                                {% else %}        
+                                                                                    {{ child.title }}
+                                                                                {% endif %}
+                                                                            </a>
+                                                                        </li>
+                                                                    {% endif %}
+                                                                    {% set i = i + 1 %}
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                            </div>    
+                        {% else %}
+                            <div class="page-no-data">{% trans %}Nav atrasta neviena kategorija{% endtrans %}</div>
+                        {% endif %}
+			<div class="hidden-sm hidden-xs" style="text-align:center;">
+                            {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'centerpage'})) }}
+			</div>
+                        <div class="mainpage-search-block page-content">{{ page.text | raw }}</div>
+		</div>
+		<div class="col-lg-3 col-md-3">
+                    <script type="text/javascript">(function() {
+  if (window.pluso)if (typeof window.pluso.start == "function") return;
+  if (window.ifpluso==undefined) { window.ifpluso = 1;
+    var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+    s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+    s.src = ('https:' == window.location.protocol ? 'https' : 'http')  + '://share.pluso.ru/pluso-like.js';
+    var h=d[g]('body')[0];
+    h.appendChild(s);
+  }})();</script>
+<div class="pluso" data-background="transparent" data-options="medium,round,line,horizontal,nocounter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email"></div>
+                    <div class="advertise-block hidden-sm hidden-xs" id="bannersSticky">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
+                    </div>
+                    <div class="advertise-block hidden-lg hidden-md">
+                        {{ render(controller('DashboardCommonBundle:Default:getBanners',{'page' : page,'position' : 'rightcolumn'})) }}
+                    </div>
+		</div>
+	</div>
+        {% if prmiumProducts %}            
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="content-block-header"><h1>{% trans %}Premium reklāmas{% endtrans %}</h1></div>
+                    <div class="premium-adverts">
+                        {% include 'DashboardCommonBundle:Parts:productitem.html.twig' with {'products' : prmiumProducts, 'locale' : locale} %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+</div>
+{% endblock %}

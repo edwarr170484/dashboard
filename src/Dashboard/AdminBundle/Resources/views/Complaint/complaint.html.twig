@@ -1,0 +1,85 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% block title %}{% trans %} Панель управления - Жалобы{% endtrans %}{% endblock %}
+
+{% block body %}
+<div id="content" class="content">
+    <ol class="breadcrumb pull-right">
+        <li><a href="{{ path('admin_main') }}">Главная</a></li>
+        <li class="active">Жалобы</li>
+    </ol>
+    <h1 class="page-header">Жалобы <small>Жалобы пользователей на объявления</small></h1>
+    <div class="row">
+        <div class="col-md-12 ui-sortable">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+            {% endfor %}
+            <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                <div class="panel-heading ui-sortable-handle">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-success btn-xs" type="button">Действия</button>
+                        <button data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button">
+                            <span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu">
+                            <li><a href="#" onclick="document.deleteSelected.submit();">Сохранить</a></li>
+                        </ul>
+                    </div>
+                    <h4 class="panel-title">Жалобы пользователей</h4>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        {% if complaints %}
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Дата добавления</th>
+                                        <th>Причина</th>
+                                        <th>Пользователь</th>
+                                        <th>Продукт</th>
+                                        <th>Статус</th>
+                                        <th>Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <form action="{{ path('admin_settings_banners')}}" method="POST" name="deleteSelected" id="deleteSelected">
+                                            {% for complaint in complaints %}
+                                                <tr {% if complaint.status == 0 %}class="active"{% endif %}>
+                                                    <td>{{ complaint.dateAdded | date("d.m.Y в H:i")}}</td>
+                                                    <td>{{ complaint.reason }}</td>
+                                                    <td><a href="{{ path('admin_user_edit', {'userId' : complaint.user.id}) }}">{{ complaint.user.userinfo.firstname }} {{ complaint.user.userinfo.lastname }}</a></td>
+                                                    <td>
+                                                        <a href="{{ path('admin_product_edit', {'productId' : complaint.product.id}) }}">{{ complaint.product.name }}</a>
+                                                    </td>
+                                                    <td>
+                                                        <select name="status" onchange="changeComplaintStatus($(this),{{ complaint.id }})" class="form-control">
+                                                            <option value="0" {% if complaint.status == 0 %}selected="selected"{% endif %}>Не обработан</option>
+                                                            <option value="1" {% if complaint.status == 1 %}selected="selected"{% endif %}>Обработан</option>
+                                                        </select>
+                                                        <div class="change-order-status-result"><i class="fa fa-spin fa-spinner fa-2x"></i></div>
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-danger" href="{{ path('admin_complaint',{'complaintId' : complaint.id }) }}" 
+                                                                                  onclick="if(!confirm('Вы уверены, что хотите удалить жалобу?'))return false;">
+                                                            <i class="fa fa-times" title="Удалить жалобу"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </form>
+                                </tbody>
+                            </table>
+                        {% else %}
+                            Жалоб не найдено
+                        {% endif%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

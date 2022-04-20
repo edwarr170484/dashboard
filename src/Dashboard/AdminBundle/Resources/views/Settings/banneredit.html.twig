@@ -1,0 +1,193 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme bannerForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{%- block _banner_categories_widget -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple and (attr.size is not defined or attr.size <= 1) -%}
+        {% set required = false %}
+    {%- endif -%}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {%- if placeholder is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+        {%- endif -%}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('_banner_categories_entry_row') -}}
+            {%- if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif -%}
+        {%- endif -%}
+        {%- set options = choices -%}
+        {{- block('_banner_categories_entry_row') -}}
+    </select>
+{%- endblock -%}
+
+{%- block _banner_categories_entry_row -%}
+    {% for choice in options %}
+        {%- set parent = '' %}
+        {% if choice.data.children | length > 0 and choice.data.parent is null %}
+            <option style="font-weight:bold" value="{{ choice.data.id }}" {% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.data.title }}</option>
+            {%- set options = choice.data.children -%}
+            {%- set parent = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' -%}
+            {{- block('_banner_categories_entry_subrow') -}}
+        {% endif %}
+    {% endfor %}
+{%- endblock -%}
+
+{%- block _banner_categories_entry_subrow -%}
+    {%- set parent1 = parent %}
+    {% for choice in options %}
+        {% set selected = '' %}
+        {% if banner.categories %}
+            {% for category in banner.categories %}
+                {% if category.id == choice.id %}
+                    {% set selected = 'selected="selected"' %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if choice.children | length > 0 %}
+            <option style="font-weight:bold" value="{{ choice.id }}" {{ selected }}>{{ parent1 | raw }}{{ choice.title }}</option>
+            {%- set options = choice.children -%}
+            {%- set parent = parent1 ~ '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' -%}
+            {{- block('_banner_categories_entry_subrow') -}}
+        {% else %}
+            <option value="{{ choice.id }}" {{ selected }}>{{ parent1 | raw }}{{ choice.title }}</option>
+        {% endif %}
+    {% endfor %}
+{%- endblock -%}
+
+{% block title %}{% trans %} Панель управления - Редактировать баннер{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_settings_banners') }}">Баннеры</a></li>
+            <li class="active">Редактировать баннер</li>
+        </ol>
+        <h1 class="page-header">Баннеры <small>Редактировать баннер</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация о баннере</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(bannerForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#category">Категории</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#pages">Страницы</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(bannerForm.title)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(bannerForm.title)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(bannerForm.link)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(bannerForm.link)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(bannerForm.code)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(bannerForm.code)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(bannerForm.position)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(bannerForm.position)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(bannerForm.dateFrom)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(bannerForm.dateFrom)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(bannerForm.dateTo)}}</label>
+                                    <div class="col-md-9">
+                                        {{ form_widget(bannerForm.dateTo)}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 ">{{ form_label(bannerForm.imageNew)}}</label>
+                                    <div class="col-md-9">
+                                        {% if bannerForm.vars.value.image %}
+                                            <div class="category-image m-b-15">
+                                                <img src="{{ asset('bundles/images/banners/')}}{{ bannerForm.vars.value.image }}" alt="" title="" />
+                                            </div>
+                                        {% endif %}
+                                        {{ form_widget(bannerForm.imageNew)}}
+                                    </div>
+                                </div> 
+                            </div>
+                            <div id="category" class="tab-pane fade">
+                                <div class="form-group">
+                                    <label class="col-md-12 ">{{ form_label(bannerForm.categories)}}</label>
+                                    <div class="col-md-12">
+                                        {{ form_widget(bannerForm.categories,{'banner' : banner})}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="pages" class="tab-pane fade">
+                                {{ form_widget(bannerForm.pages)}}
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="pull-right">{{ form_widget(bannerForm.save,{'type' : 'submit'})}}</div>
+                                </div>
+                            </div> 
+                        </div>
+                        {{ form_end(bannerForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

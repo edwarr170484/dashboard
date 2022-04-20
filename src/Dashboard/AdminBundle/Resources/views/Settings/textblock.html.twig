@@ -1,0 +1,79 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme textblockForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block title %}{% trans %} Панель управления - Настройки сайта{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li class="active">Текстовые блоки</li>
+        </ol>
+        <h1 class="page-header">Текстовые блоки <small>Текстовые блоки для страниц сайта</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Текстовые блоки</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(textblockForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ form_label(textblockForm.howToSetPrice) }}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(textblockForm.howToSetPrice) }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">{{ form_label(textblockForm.userAgreement) }}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(textblockForm.userAgreement) }}
+                                </div>
+                            </div> 
+                            <div class="form-group">
+                                <label class="col-md-3 ">{{ form_label(textblockForm.save)}}</label>
+                                <div class="col-md-9">
+                                    {{ form_widget(textblockForm.save,{'type' : 'submit'})}}
+                                </div>
+                            </div>  
+                        {{ form_end(textblockForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,10 @@
+{% for product in products %}
+    {% if locale.isDefault %}
+        {% set href = path('product', {'productId' : product.id,'productName' : product.translit}) %}
+    {% else %}
+        {% set href = path('productLocale', {'_locale' : locale.code,'productId' : product.id,'productName' : product.translit})%}
+    {% endif %}
+    <tr>
+        {% include 'DashboardCommonBundle:Parts:product.html.twig' with {'product' : product, 'locale' : locale, 'href' : href} %}
+    </tr>
+{% endfor %}

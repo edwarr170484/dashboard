@@ -1,0 +1,111 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% block title %}{% trans %}Lietotāja konts{% endtrans %} - {% trans %}Manas reklāmas{% endtrans %}{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account')}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account_products')}}">{% trans %}Manas reklāmas{% endtrans %}</a></li>
+                        <li><a href="{{path('account_products_correct')}}">{% trans %}Reklāmas par korekciju{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('accountLocale',{'_locale' : app.request.locale})}}">{% trans %}Lietotāja konts{% endtrans %}</a></li>
+                        <li class="arrow"><a href="{{path('account_productsLocale',{'_locale' : app.request.locale})}}">{% trans %}Manas reklāmas{% endtrans %}</a></li>
+                        <li><a href="{{path('account_products_correctLocale',{'_locale' : app.request.locale})}}">{% trans %}Reklāmas par korekciju{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row content-row">
+        <div class="col-lg-4 col-md-4">
+            <div class="account-block-header"><h1>{% trans %}Lietotāja konts{% endtrans %}</h1></div>
+        </div>
+        <div class="col-lg-8 col-md-8">
+            <div class="account-purchase-menu">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            {% if  app.request.locale == 'lv' %}
+                                <li><a href="{{path('account_userpurse_payment')}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_history') }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% else %}
+                                <li><a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Pievienot naudu savam seifam{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                                <li><a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Operāciju vēsture{% endtrans %}</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <ul class="list-unstyled list-inline account-purchase-menu-list">
+                            <li class="right">{% trans %}Uz kontu{% endtrans %}: <strong>{{ user.userpurse.balanse }}</strong> {{ settings.currency.name }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="row account-main-content-block">
+                {{ render(controller('DashboardCommonBundle:User:getSidebar')) }}
+                <div class="col-ld-9 col-md-9 account-block-content">
+                    <div class="account-advert-block account-block">
+                        <div class="account-block-header"><h1>{{ title }}</h1></div>
+                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                            <div class="notice-message">
+                                {{ flashMessage | raw }}
+                            </div>                             
+                        {% endfor %}
+                        <div class="account-advert-block-content">
+                            <div class="row advert-category-adverts">
+                                <div class="col-lg-12 col-md-12">
+                                        {% if products %}
+                                            <div class="premium-adverts">
+                                            {% for product in products %}
+                                                <div class="advert-frame" id="advert_frame_{{ product.id}}">
+                                                    {% if locale.isDefault %}
+                                                        {% set href = path('product', {'productId' : product.id,'productName' : product.translit}) %}
+                                                    {% else %}
+                                                        {% set href = path('productLocale', {'_locale' : locale.code,'productId' : product.id,'productName' : product.translit})%}
+                                                    {% endif %}
+                                                    {% include 'DashboardCommonBundle:Parts:product.html.twig' with {'product' : product, 'locale' : locale, 'href' : href} %}                                                    
+                                                    <div class="advert-functions-block">
+                                                        <ul class="list-unstyled advert-functions-list">
+                                                            {% if product.correctReason %}
+                                                                <li><strong>{% trans %}Iemesls{% endtrans %}: </strong>{{ product.correctReason }} </li>
+                                                            {% endif %}
+                                                            {% if locale.isDefault %}
+                                                                <li><a href="{{ path('editproduct',{'productId' : product.id}) }}">{% trans %}Rediģēt{% endtrans %}</a></li>
+                                                                <li><a href="{{ path('account_products_blocked', {'productId' : product.id}) }}" onclick="if(confirm('{% trans %}Vai tiešām vēlaties dzēst šo reklāmu{% endtrans %}?')){return true;}else {return false;}">{% trans %}Noņemt{% endtrans %}</a></li>
+                                                            {% else %}
+                                                                <li><a href="{{ path('editproductLocale',{'_locale' : locale.code,'productId' : product.id}) }}">{% trans %}Rediģēt{% endtrans %}</a></li>
+                                                                <li><a href="{{ path('account_products_blockedLocale', {'_locale' : locale.code,'productId' : product.id}) }}" onclick="if(confirm('{% trans %}Vai tiešām vēlaties dzēst šo reklāmu{% endtrans %}?')){return true;}else {return false;}">{% trans %}Noņemt{% endtrans %}</a></li>
+                                                            {% endif %}
+                                                        </ul>
+                                                    </div>
+                                                </div>       
+                                            {% endfor%}
+                                            </div>
+                                        {% else %}
+                                            <div class="account-block-content-notfound">{% trans %}Nav reklāmu par pielāgojumu{% endtrans %}.</div>
+                                        {% endif%}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock%}
+
+

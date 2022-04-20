@@ -1,0 +1,153 @@
+<div id="sidebar" class="sidebar">
+    <div data-scrollbar="true" data-height="100%">
+        <ul class="nav">
+            <li class="nav-profile">
+                {% if user.userinfo.avatar %}
+                    <div class="image">
+                        <a href="javascript:;"><img src="{{ asset('bundles/images/users/avatars/') }}{{ user.userinfo.avatar }}" alt="" /></a>
+                    </div>
+                {% else %}
+                    <div class="image">
+                        <a href="javascript:;"><img src="{{ asset('bundles/Default/img/avatar.png') }}" alt="" /></a>
+                    </div>
+                {% endif %}
+                <div class="info">
+                    {{ user.userinfo.firstname }} {{ user.userinfo.lastname }}
+                    <small>Администратор сайта</small>
+                </div>
+            </li>
+        </ul>
+        <ul class="nav">
+            <li class="nav-header">Меню</li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-file-code-o"></i>
+                    <span>Страницы</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_pages') }}">Служебные шаблоны</a></li>
+                    <li><a href="{{ path('admin_userpages') }}">Пользовтельские страницы</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-laptop"></i>
+                    <span>Объявления</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_product_category') }}">Категории</a></li>
+                    <li><a href="{{ path('admin_product') }}">Объявления</a></li>
+                    {% if settings.isModerate %}
+                        <li><a href="{{ path('admin_product_confirm') }}">Объявления на модерацию</a></li>
+                    {% endif %}
+                    <li><a href="{{ path('admin_product_correct') }}">Объявления на корректировке</a></li>
+                    <li><a href="{{ path('admin_product_blocked') }}">Заблокированные объявления</a></li>
+                    <li><a href="{{ path('admin_filters') }}">Фильтры</a></li>
+                    <!--<li><a href="{{ path('admin_settings_selltype') }}">Типы объявлений</a></li>-->
+                    <li><a href="{{ path('admin_settings_mark') }}">Оценки объявлениям</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-cart-plus"></i>
+                    <span>Заказы</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_settings_orderstatus') }}">Статусы заказов</a></li>
+                </ul>
+            </li>
+            
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-cubes"></i>
+                    <span>Модули</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_settings_banners') }}">Баннеры</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-cog"></i>
+                    <span>Настройки</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_settings') }}">Настройки</a></li>
+                    <li><a href="{{ path('dashboard_gallery_admin_index') }}">Галереи</a></li>
+                    <li><a href="{{ path('admin_settings_region') }}">Города и регионы</a></li>
+                    
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-comment"></i>
+                    <span>Локализация</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('localeAdmin') }}">Языки сайта</a></li>
+                    <li><a href="{{ path('currencyBoard') }}">Валюты сайта</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-users"></i>
+                    <span>Пользователи</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_roles') }}">Группы пользователей</a></li>
+                    <li><a href="{{ path('admin_users') }}">Пользователи</a></li>
+                    <li><a href="{{ path('admin_user_settings') }}">Настройки пользователей</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="javascript:;">
+                    <b class="caret pull-right"></b>
+                    <i class="fa fa-usd"></i>
+                    <span>Платежные системы</span>
+                </a>
+                <ul class="sub-menu">
+                    <li><a href="{{ path('admin_payment_liqpay') }}">Liqpay</a></li>
+                </ul>
+            </li>
+            <li class="has-sub">
+                <a href="{{ path('admin_complaint') }}">
+                    <i class="fa fa-file-text-o"></i>
+                    <span>Жалобы</span>
+                </a>
+            </li>
+            <li class="has-sub">
+                <a href="{{ path('admin_service') }}">
+                    <i class="fa fa-money"></i>
+                    <span>Услуги</span>
+                </a>
+            </li>
+            <li class="has-sub">
+                <a href="{{ path('admin_messages') }}">
+                    <i class="fa fa-envelope"></i>
+                    <span>Сообщения</span>
+                </a>
+            </li>
+            <li class="has-sub">
+                <a href="{{ path('admin_delivery') }}">
+                    <i class="fa fa-rss"></i>
+                    <span>Рассылка</span>
+                </a>
+            </li>
+            <li class="has-sub">
+                <a href="{{ path('admin_clear_cache') }}">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Очистить кеш сайта</span>
+                </a>
+            </li>
+            <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
+        </ul>
+    </div>
+</div>
+<div class="sidebar-bg"></div>

@@ -1,0 +1,235 @@
+{% extends 'DashboardCommonBundle:Common:base.html.twig' %}
+
+{% form_theme registerForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block checkbox_widget -%}
+    {%- for attrname, attrvalue in attr -%}
+        {%- if attrname in ['id'] -%}
+            <div class="register-form-checkbox active" data-checkbox="{{ attrvalue }}">
+                <div class="register-form-checkbox-area"></div>
+            </div>
+        {%- endif -%}
+    {%- endfor -%}   
+    {{ (translation_domain is same as(false) ? label | raw : label |trans({}, translation_domain) | raw) }}
+    <input type="checkbox" {{ block('widget_attributes') }} value="1" checked="checked" />
+{%- endblock checkbox_widget -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        {%- for error in errors -%}
+            <div class="form-group">
+                <div class="col-lg-1"></div>
+                <div class="col-sm-12 col-md-11">
+                    <div class="alert alert-danger">
+                        <button class="close-alert" data-dismiss="alert" type="button">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        {{ error.message }}
+                    </div>
+                </div>
+            </div>
+        {%- endfor -%}
+    {%- endif -%}
+{%- endblock form_errors -%}
+
+{% block title %}{% trans %}Jauna lietotāja reģistrācija{% endtrans %}{% endblock %}
+
+{% block body %}
+<script>
+            
+            var registerCaptcha;
+            
+            var onloadCallback = function() {
+              registerCaptcha = grecaptcha.render('registerCaptcha', {
+                'sitekey' : '6Lc6wCkTAAAAAHoOUvGPxIsIVZ67R09ZYGhmILND'
+              });
+            };
+
+</script>
+<nav class="navbar navbar-default">
+      <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <ul class="list-unstyled list-inline breadscrumbs">
+                    {% if  app.request.locale == 'lv' %}
+                        <li class="arrow"><a href="/">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Jauna lietotāja reģistrācija{% endtrans %}</a></li>
+                    {% else %}
+                        <li class="arrow"><a href="/{{ app.request.locale }}">{% trans %}Mājas{% endtrans %}</a></li>
+                        <li><a href="">{% trans %}Jauna lietotāja reģistrācija{% endtrans %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+      </div>
+</nav>
+{% if  app.request.locale == 'lv' %}
+<div class="register-login-page-cover">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 register-form-block">
+                <div class="row-register-form-inner-block">
+                    <div class="col-lg-6 col-md-6">
+                        {% if success %}
+                           <div class="register-block">
+                                <h1 class="register-block-header">{% trans %}Reģistrācijas forma{% endtrans %}</h1>
+                                <div class="register-block-description confirm-restore">
+                                    {% trans %}Jūs paātrinājāt reģistrēties. Saite uz reģistrācijas apstiprinājumu tiek nosūtīta uz norādīto adresi. Pārbaudiet pastu. Ja jūs nesaņemat vēstuli, lūdzu rakstiet mums pie{% endtrans %} <a href="mailto:{{ settings.adminEmail }}">{{ settings.adminEmail }}</a>.
+                                </div>
+                                <div class="register-form-forms confirm-restore-password"></div>
+                                <a href="{{path('register')}}" class="register-new-user">{% trans %}jauna lietotāja reģistrācija{% endtrans %}</a>
+                                
+                            </div>   
+                        {% else %}
+                            <div class="register-block">
+                                <h1 class="register-block-header">{% trans %}Reģistrācijas forma{% endtrans %}</h1>
+                                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                                            <div class="notice-message">
+                                                {{ flashMessage | raw }}
+                                            </div>                             
+                                        {% endfor %}
+                                        {{form_errors(registerForm)}}
+                                <div class="register-block-description">
+                                    {% trans %}Lai reģistrētos sistēmā, aizpildiet norādītos laukus{% endtrans %}
+                                </div>
+                                <div class="register-form-forms">
+                                    {{ form_start(registerForm, {'method':'POST'}) }}
+                                        {{ form_widget(registerForm.email) }}
+                                        {{ form_widget(registerForm.link) }}
+                                        <div class="register-password-block">
+                                            {{ form_widget(registerForm.password.first) }}
+                                        </div>
+                                        <div class="register-password-block">
+                                            {{ form_widget(registerForm.password.second) }}
+                                            {{ form_errors(registerForm) }}
+                                        </div>
+                                        <div class="register-form-checkbox-block first">
+                                            {{ form_widget(registerForm.alerts, {'id':'alerts'}) }}
+                                        </div>
+                                        <div class="register-form-checkbox-block">
+                                            {{ form_widget(registerForm.termsAccept, {'id':'termsAccept', 'text' : ''}) }}
+                                        </div>
+                                        {% if settings.isShowCaptcha %}
+                                            <div class="register-password-block">
+                                                <div class="g-recaptcha" id="registerCaptcha"></div>
+                                            </div>
+                                        {% endif %}
+                                        <button type="submit">{% trans %}Reģistrējies{% endtrans %}</button>
+                                    {{ form_end(registerForm)}}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6 col-md-6 register-right-block">
+                        <h1 class="register-block-header">{% trans %}Pierakstieties ar Vkontakte{% endtrans %}</h1>
+                        <div class="register-block-description">
+                            {% trans %}Ja jums ir profils sociālajā tīklā VKontakte, varat to izmantot, lai ievadītu{% endtrans %}
+                        </div> 
+                        <div class="oauth-link">
+                            <a href="/connect/vkontakte" class="oauth vkontakte">{% trans %}Pierakstieties ar Vkontakte{% endtrans %}</a>
+                        </div>
+                        <h1 class="register-block-header">{% trans %}Pierakstieties ar Facebook{% endtrans %}</h1>
+                        <div class="register-block-description">
+                            {% trans %}Ja jums ir profils pakalpojumā Facebook, varat to izmantot, lai pierakstītos{% endtrans %}
+                        </div> 
+                        <div class="oauth-link">
+                            <a href="/connect/facebook" class="oauth facebook">{% trans %}Pierakstieties ar Facebook{% endtrans %}</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 ssl-login-message">
+                        <i class="fa fa-lock" aria-hidden="true"></i> {% trans %}Droši savienojumi, izmantojot SSL tehnoloģiju{% endtrans %} 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+{% else %}
+<div class="register-login-page-cover">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 register-form-block">
+                <div class="row-register-form-inner-block">
+                    <div class="col-lg-6 col-md-6">
+                        {% if success %}
+                           <div class="register-block">
+                                <h1 class="register-block-header">{% trans %}Reģistrācijas forma{% endtrans %}</h1>
+                                <div class="register-block-description confirm-restore">
+                                    {% trans %}Jūs paātrinājāt reģistrēties. Saite uz reģistrācijas apstiprinājumu tiek nosūtīta uz norādīto adresi. Pārbaudiet pastu. Ja jūs nesaņemat vēstuli, lūdzu rakstiet mums pie{% endtrans %} <a href="mailto:{{ settings.adminEmail }}">{{ settings.adminEmail }}</a>.
+                                </div>
+                                <div class="register-form-forms confirm-restore-password"></div>
+                                <a href="{{path('registerLocale',{'_locale' : app.request.locale})}}" class="register-new-user">{% trans %}jauna lietotāja reģistrācija{% endtrans %}</a>
+                                
+                            </div>   
+                        {% else %}
+                            <div class="register-block">
+                                <h1 class="register-block-header">{% trans %}Reģistrācijas forma{% endtrans %}</h1>
+                                        {% for flashMessage in app.session.flashbag.get('notice') %}
+                                            <div class="notice-message">
+                                                {{ flashMessage | raw }}
+                                            </div>                             
+                                        {% endfor %}
+                                        {{form_errors(registerForm)}}
+                                <div class="register-block-description">
+                                    {% trans %}Lai reģistrētos sistēmā, aizpildiet norādītos laukus{% endtrans %}
+                                </div>
+                                <div class="register-form-forms">
+                                    {{ form_start(registerForm, {'method':'POST'}) }}
+                                        {{ form_widget(registerForm.email) }}
+                                        {{ form_widget(registerForm.link) }}
+                                        <div class="register-password-block">
+                                            {{ form_widget(registerForm.password.first) }}
+                                        </div>
+                                        <div class="register-password-block">
+                                            {{ form_widget(registerForm.password.second) }}
+                                            {{ form_errors(registerForm) }}
+                                        </div>
+                                        <div class="register-form-checkbox-block first">
+                                            {{ form_widget(registerForm.alerts, {'id':'alerts'}) }}
+                                        </div>
+                                        <div class="register-form-checkbox-block">
+                                            {{ form_widget(registerForm.termsAccept, {'id':'termsAccept', 'text' : ''}) }}
+                                        </div>
+                                        {% if settings.isShowCaptcha %}
+                                        <div class="register-password-block">
+                                            <div class="g-recaptcha" id="registerCaptcha"></div>
+                                        </div>
+                                        {% endif %}
+                                        <button type="submit">{% trans %}Reģistrējies{% endtrans %}</button>
+                                    {{ form_end(registerForm)}}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-6 col-md-6 register-right-block">
+                        <h1 class="register-block-header">{% trans %}Pierakstieties ar Vkontakte{% endtrans %}</h1>
+                        <div class="register-block-description">
+                            {% trans %}Ja jums ir profils sociālajā tīklā VKontakte, varat to izmantot, lai ievadītu{% endtrans %}
+                        </div> 
+                        <div class="oauth-link">
+                            <a href="/connect/vkontakte" class="oauth vkontakte">{% trans %}Pierakstieties ar Vkontakte{% endtrans %}</a>
+                        </div>
+                        <h1 class="register-block-header">{% trans %}Pierakstieties ar Facebook{% endtrans %}</h1>
+                        <div class="register-block-description">
+                            {% trans %}Ja jums ir profils pakalpojumā Facebook, varat to izmantot, lai pierakstītos{% endtrans %}
+                        </div> 
+                        <div class="oauth-link">
+                            <a href="/connect/facebook" class="oauth facebook">{% trans %}Pierakstieties ar Facebook{% endtrans %}</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 ssl-login-message">
+                        <i class="fa fa-lock" aria-hidden="true"></i> {% trans %}Droši savienojumi, izmantojot SSL tehnoloģiju{% endtrans %} 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+{% endif %}
+  
+{% endblock %}

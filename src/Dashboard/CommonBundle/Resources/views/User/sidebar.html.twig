@@ -1,0 +1,112 @@
+{% if  app.request.locale == 'lv' %}
+<div class="col-ld-3 col-md-3">
+    <ul class="list-unstyled account-menu-list">
+        <li>
+            <a href="{{ path('account_products') }}">{% trans %}Manas reklāmas{% endtrans %} ({{ allProducts | length }})</a>
+            <ul>
+                {% if settings.isModerate %}
+                    <li>- <a href="{{ path('account_products_confirm') }}">{% trans %}Par moderāciju{% endtrans %} ({{ confirmProducts | length }})</a></li>
+                {% endif %}
+                <li>- <a href="{{ path('account_products_correct') }}">{% trans %}Par korekciju{% endtrans %} ({{ correctProducts | length }})</a></li>
+                <li>- <a href="{{ path('account_products_current') }}">{% trans %}Pašreizējais{% endtrans %} ({{ currentProducts | length}})</a></li>
+                <li>- <a href="{{ path('account_products_stopped') }}">{% trans %}Pabeigts{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
+                <li>- <a href="{{ path('account_products_blocked') }}">{% trans %}Slēdzenē{% endtrans %}  ({{ blockedProducts | length }})</a></li>
+            </ul>
+        </li>
+        <li><a href="{{ path('account_favproducts') }}">{% trans %}Piedāvātās reklāmas{% endtrans %}</a></li>
+        <li class="list-divider"></li>
+        <li><a href="{{path('account_messages')}}">{% trans %}Amati{% endtrans %}
+            {% if newMessages > 0%}
+                - <span class="list-item-notice"> {{ newMessages }}</span>
+            {% endif %}
+            </a>
+        </li>
+        <li class="list-divider"></li>
+        <li><a href="{{ path('account_orders') }}">{% trans %}Pieprasījumi{% endtrans %}
+            {% if orderReceived | length > 0 %}
+                - <span class="list-item-notice"> {{ orderReceived | length }}</span>
+            {% endif %}
+            </a></li>
+        <li><a href="{{ path('account_myorders') }}">{% trans %}Mana rezervācija{% endtrans %}
+                {% if orderBanned | length >0 %}
+                    - <span class="list-item-notice"><i class="fa fa-ban" aria-hidden="true"></i> {{ orderBanned | length }}</span>
+                {% endif %}
+            </a></li>
+        <li><a href="{{ path('account_review') }}">{% trans %}Atsauksmes{% endtrans %}</a>
+            <ul>
+                <li>- <a href="{{ path('account_myreview') }}">{% trans %}Mana atsauksme{% endtrans %}</a></li>
+                <li>- <a href="{{ path('account_targetreview') }}">{% trans %}Atsauksmes par mani{% endtrans %}</a></li>
+            </ul>
+        </li>
+        <!--<li><a href="">{% trans %}Seifs{% endtrans %}</a>
+            <ul>
+                <li>- <a href="{{path('account_userpurse_payment')}}">{% trans %}Papildināšana{% endtrans %}</a></li>
+                <li>- <a href="{{ path('account_product_services') }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                <li>- <a href="{{ path('account_buyslots') }}">{% trans %}Pirkt papildu slotus{% endtrans %}</a></li>
+                <li>- <a href="{{ path('account_userpurse_history') }}">{% trans %}Konta vēsture{% endtrans %}</a></li>
+            </ul>
+        </li>-->
+        <li><a href="{{ path('account_friends') }}">{% trans %}Referral sistēma{% endtrans %}</a></li>
+        <li><a href="{{ path('account_userblacklist') }}">{% trans %}Melnais saraksts{% endtrans %}</a></li>
+        <li><a href="{{path('account_settings')}}">{% trans %}Iestatījumi{% endtrans %}</a></li>
+        <li class="list-divider"></li>
+        <li><a href="{{path('logout')}}" class="register-block-close">{% trans %}Izrakstīties{% endtrans %}</a></li>
+    </ul>
+</div>
+{% else %}
+<div class="col-ld-3 col-md-3">
+    <ul class="list-unstyled account-menu-list">
+        <li>
+            <a href="{{ path('account_productsLocale',{'_locale' : app.request.locale}) }}">{% trans %}Manas reklāmas{% endtrans %} ({{ allProducts | length }})</a>
+            <ul>
+                {% if settings.isModerate %}
+                    <li>- <a href="{{ path('account_products_confirmLocale',{'_locale' : app.request.locale}) }}">{% trans %}Par moderāciju{% endtrans %} ({{ confirmProducts | length }})</a></li>
+                {% endif %}
+                <li>- <a href="{{ path('account_products_correctLocale',{'_locale' : app.request.locale}) }}">{% trans %}Par korekciju{% endtrans %} ({{ correctProducts | length }})</a></li>
+                <li>- <a href="{{ path('account_products_currentLocale',{'_locale' : app.request.locale}) }}">{% trans %}Pašreizējais{% endtrans %} ({{ currentProducts | length}})</a></li>
+                <li>- <a href="{{ path('account_products_stoppedLocale',{'_locale' : app.request.locale}) }}">{% trans %}Pabeigts{% endtrans %}  ({{ stoppedProducts | length }})</a></li>
+                <li>- <a href="{{ path('account_products_blockedLocale',{'_locale' : app.request.locale}) }}">{% trans %}Slēdzenē{% endtrans %}  ({{ blockedProducts | length }})</a></li>
+            </ul>
+        </li>
+        <li><a href="{{ path('account_favproductsLocale',{'_locale' : app.request.locale}) }}">{% trans %}Piedāvātās reklāmas{% endtrans %}</a></li>
+        <li class="list-divider"></li>
+        <li><a href="{{path('account_messagesLocale',{'_locale' : app.request.locale})}}">{% trans %}Amati{% endtrans %}
+            {% if newMessages > 0%}
+                - <span class="list-item-notice"> {{ newMessages }}</span>
+            {% endif %}
+            </a>
+        </li>
+        <li class="list-divider"></li>
+        <li><a href="{{ path('account_ordersLocale',{'_locale' : app.request.locale}) }}">{% trans %}Pieprasījumi{% endtrans %}
+            {% if orderReceived | length > 0 %}
+                - <span class="list-item-notice"> {{ orderReceived | length }}</span>
+            {% endif %}
+            </a></li>
+        <li><a href="{{ path('account_myordersLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mana rezervācija{% endtrans %}
+                {% if orderBanned | length >0 %}
+                    - <span class="list-item-notice"><i class="fa fa-ban" aria-hidden="true"></i> {{ orderBanned | length }}</span>
+                {% endif %}
+            </a></li>
+        <li><a href="{{ path('account_reviewLocale',{'_locale' : app.request.locale}) }}">{% trans %}Atsauksmes{% endtrans %}</a>
+            <ul>
+                <li>- <a href="{{ path('account_myreviewLocale',{'_locale' : app.request.locale}) }}">{% trans %}Mana atsauksme{% endtrans %}</a></li>
+                <li>- <a href="{{ path('account_targetreviewLocale',{'_locale' : app.request.locale}) }}">{% trans %}Atsauksmes par mani{% endtrans %}</a></li>
+            </ul>
+        </li>
+        <!--<li><a href="">{% trans %}Seifs{% endtrans %}</a>
+            <ul>
+                <li>- <a href="{{path('account_userpurse_paymentLocale',{'_locale' : app.request.locale})}}">{% trans %}Papildināšana{% endtrans %}</a></li>
+                <li>- <a href="{{ path('account_product_servicesLocale',{'_locale' : app.request.locale}) }}">{% trans %}Maksas pakalpojumi{% endtrans %}</a></li>
+                <li>- <a href="{{ path('account_buyslotsLocale',{'_locale' : app.request.locale}) }}">{% trans %}Pirkt papildu slotus{% endtrans %}</a></li>
+                <li>- <a href="{{ path('account_userpurse_historyLocale',{'_locale' : app.request.locale}) }}">{% trans %}Konta vēsture{% endtrans %}</a></li>
+            </ul>
+        </li>-->
+        <li><a href="{{ path('account_friendsLocale',{'_locale' : app.request.locale}) }}">{% trans %}Referral sistēma{% endtrans %}</a></li>
+        <li><a href="{{ path('account_userblacklistLocale',{'_locale' : app.request.locale}) }}">{% trans %}Melnais saraksts{% endtrans %}</a></li>
+        <li><a href="{{path('account_settingsLocale',{'_locale' : app.request.locale})}}">{% trans %}Iestatījumi{% endtrans %}</a></li>
+        <li class="list-divider"></li>
+        <li><a href="{{path('logout')}}" class="register-block-close">{% trans %}Izrakstīties{% endtrans %}</a></li>
+    </ul>
+</div>
+{% endif %}
+

@@ -1,0 +1,12 @@
+<div class="account-block-header"><h1>{% trans %}Maksājumu iespējas{% endtrans %}</h1></div>
+<div class="account-selected-advert-block-content">
+    <div class="row advert-category-adverts">
+        <div class="col-lg-12 col-md-12 paymen-details">
+            <div class="paymentAmount"><strong>{% trans %}Maksājuma summa{% endtrans %}:</strong> {{ paymentAmount }} {{ paymentCurrency }}</div>
+            <div class="paymentMethod"><strong>{% trans %}Maksājuma veids{% endtrans %}:</strong> {{ paymentMethod }}</div>
+            <div class="paymentForm">
+                {{ html | raw }}
+            </div>
+        </div>
+    </div>
+</div>

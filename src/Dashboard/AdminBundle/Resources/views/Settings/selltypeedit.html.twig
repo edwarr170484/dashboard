@@ -1,0 +1,122 @@
+{% extends 'DashboardAdminBundle:Common:adminbase.html.twig' %}
+
+{% form_theme selltypeForm _self %}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple -%}
+
+{%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {% if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        {{ translation_domain is same as(false) ? label : label|trans({}, translation_domain) }}
+    {%- endif -%}
+{%- endblock form_label -%}
+
+{% block _selltype_translations_widget %}
+    <table class="table table-bordered table-translations">
+        <thead>
+            <tr>
+                <th>{% trans %}Локализация{% endtrans %}</th>
+                <th>{% trans %}Перевод{% endtrans %}</th>
+                <th>{% trans %}Действия{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+                {{ form_widget(form) }}
+        </tbody>
+    </table> 
+{% endblock %}
+
+{% block _selltype_translations_entry_row %}
+    <tr>
+        <td>{{ form_widget(form.locale)}}</td>
+        <td>{{ form_widget(form.value)}}{{ form_widget(form.selltype)}}</td>
+        <td><button class="btn btn-danger" onclick="if(!confirm('Вы уверены, что хотите удалить перевод?'))return false;else $(this).parent().parent().remove()">
+                <i class="fa fa-times" title="Удалить перевод для языка"></i>
+            </button> 
+        </td>
+    </tr>
+{% endblock %}
+
+{% block title %}{% trans %} Панель управления - Редактировать тип объявлений{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div id="content" class="content">
+        <ol class="breadcrumb pull-right">
+            <li><a href="{{ path('admin_main') }}">Главная</a></li>
+            <li><a href="{{ path('admin_settings_selltype') }}">Типы объявлений</a></li>
+            <li class="active">Тип объявлений</li>
+        </ol>
+        <h1 class="page-header">Тип объявлений <small>Редактировать тип объявлений</small></h1>
+        <div class="row">
+            <div class="col-md-12 ui-sortable">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="notice-message">
+                        {{ flashMessage | raw }}
+                    </div>                             
+                {% endfor %}
+                <div data-sortable-id="table-basic-7" class="panel panel-inverse">
+                    <div class="panel-heading ui-sortable-handle">
+                        <h4 class="panel-title">Информация о типе объявлений</h4>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_start(selltypeForm, {'attr' : {'class' : 'form-horizontal'}})}}
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#maininfo">Основная информация</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#translations">Переводы</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="maininfo" class="tab-pane fade active in">
+                                <div class="form-group">
+                                    <label>{{ form_label(selltypeForm.title)}}</label>
+                                    {{ form_widget(selltypeForm.title)}}
+                                </div>
+                            </div>
+                            <div id="translations" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                         <button class="btn btn-sm btn-success m-b-15" id="add-translation" type="button"><i class="fa fa-plus" aria-hidden="true"></i>
+ Добавить перевод</button>
+                                        {{ form_widget(selltypeForm.translations,{'id' : 'object_translations'})}}
+                                        {% if selltypeForm.translations | length <= 0 %}
+                                            Переводы не добавлены
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-group">
+                            <label>{{ form_label(selltypeForm.save)}}</label>
+                            <div>
+                                {{ form_widget(selltypeForm.save,{'type' : 'submit'})}}
+                            </div>
+                        </div> 
+                        {{ form_end(selltypeForm)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

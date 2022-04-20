@@ -1,0 +1,38 @@
+<div class="advert-categoryes">
+    <ul class="list-unstyled advert-categories">
+        {% for category in items %}
+            <li class="advert-category">
+                <div class="categoryList">
+                    {% if category.children | length > 0 %}
+                    <a class="addadvert-category-item advert-category-name" data-category="{{ category.id }}" onclick="selectCategory({{ category.id }}, '{{ locale.code }}')">
+                        {% if category.translations | length > 0 %}
+                            {% for translation in category.translations %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.value }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}        
+                            {{ category.title }}
+                        {% endif %}
+                    </a>
+                    {% else %}
+                    <a class="addadvert-category-item advert-category-name" data-category="{{ category.id }}" onclick="showFilters($(this),{{ category.id }}, '{{ locale.code }}')">
+                        {% if category.translations | length > 0 %}
+                            {% for translation in category.translations %}
+                                {% if translation.locale.id == locale.id %}
+                                    {{ translation.value }}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}        
+                            {{ category.title }}
+                        {% endif %}
+                    </a>    
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>        
+
+
+
